@@ -441,19 +441,25 @@ class ProyekController extends Controller
         // dd($dataProyek);
         
         $newForecast = Forecast::where("kode_proyek", "=", $newProyek->kode_proyek)->where("periode_prognosa", "=", $bulans)->whereYear("created_at", "=", $years)->first();
-        if (isset($newForecast)) {
+        if (empty($newForecast)) {
+            $newForecast = new Forecast();
+            $newForecast->kode_proyek = $newProyek->kode_proyek;
+            $newForecast->rkap_forecast = $newProyek->nilai_rkap;
+            $newForecast->month_rkap = $newProyek->bulan_pelaksanaan;
+            $newForecast->periode_prognosa = $bulans;
+            $newForecast->save();
             // if (isset($newProyek->bulan_ri_perolehan) && isset($newProyek->nilai_perolehan) && $newProyek->stage > 7 ) {
             //     $newForecast->month_realisasi = $newProyek->bulan_ri_perolehan;
             //     // dump($newForecast, "bulan ri");
             //     // dd($newProyek);
             //     $newForecast->save();
             // };
-            if (isset($newProyek->bulan_pelaksanaan) && isset($newProyek->nilai_rkap) ) {
-                $newForecast->rkap_forecast = $newProyek->nilai_rkap;
-                $newForecast->month_rkap = $newProyek->bulan_pelaksanaan;
-                // dd($newForecast, "bulan rkap");
-                $newForecast->save();
-            };
+            // if (isset($newProyek->bulan_pelaksanaan) && isset($newProyek->nilai_rkap) ) {
+            //     $newForecast->rkap_forecast = $newProyek->nilai_rkap;
+            //     $newForecast->month_rkap = $newProyek->bulan_pelaksanaan;
+            //     // dd($newForecast, "bulan rkap");
+            //     $newForecast->save();
+            // };
         }
         // $newProyek->kursreview_terkontrak = $dataProyek["kurs-review-terkontrak"];
         $newProyek->nomor_terkontrak = $dataProyek["nomor-terkontrak"];
