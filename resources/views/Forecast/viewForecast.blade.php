@@ -1330,7 +1330,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                 @endif
                                                                                             @php
                                                                                                 $is_data_found = false;
-                                                                                                $total_ok = (int) str_replace(',', '', $proyek->nilai_rkap)/ $per_sejuta;
+                                                                                                $total_ok += (int) str_replace(',', '', $proyek->nilai_rkap)/ $per_sejuta;
                                                                                                 $month_counter++;
                                                                                             @endphp
                                                                                         @endfor
@@ -1668,7 +1668,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                 @endif
                                                                                             @php
                                                                                                 $is_data_found = false;
-                                                                                                $total_ok = (int) str_replace(',', '', $proyek->nilai_rkap)/ $per_sejuta;
+                                                                                                $total_ok += (int) str_replace(',', '', $proyek->nilai_rkap)/ $per_sejuta;
                                                                                                 $month_counter++;
                                                                                             @endphp
                                                                                         @endfor
