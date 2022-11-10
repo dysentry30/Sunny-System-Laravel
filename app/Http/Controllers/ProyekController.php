@@ -1129,7 +1129,10 @@ class ProyekController extends Controller
         
         if(!empty($forecasts)) {
             foreach ($forecasts as $f) {
-                $f->delete();
+                // $f->delete();
+                $f->nilai_forecast = 0;
+                $f->realisasi_forecast = 0;
+                $f->save();
             }
         }
         // if(!empty($historyForecasts)) {
