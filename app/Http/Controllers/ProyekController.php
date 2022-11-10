@@ -1135,6 +1135,7 @@ class ProyekController extends Controller
                 $f->save();
             }
         }
+        $cancelProyek->nilai_perolehan = 0;
         // if(!empty($historyForecasts)) {
         //     foreach ($historyForecasts as $hf) {
         //         $hf->delete();
