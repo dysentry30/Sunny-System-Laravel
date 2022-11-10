@@ -233,7 +233,7 @@ Route::middleware(["web"])->group(function () {
                 $p->data_ok = $data_ok;
                 $total_realisasi += (int) $p->realisasi_forecast;
                 unset($p->kode_proyek, $p->nama_proyek, $p->jenis_proyek, $p->unit_kerja, $p->nilai_perolehan, $p->is_cancel, $p->stage, $p->tipe_proyek);
-                unset($p->month_forecast, $p->nilai_forecast, $p->periode_prognosa);
+                unset($p->month_forecast, $p->nilai_forecast, $p->periode_prognosa, $p->realisasi_forecast);
                 // $p->nilai_forecast = $p->forecasts->sum("nilai_forecast");
                 // $p->rkap_forecast = $p->forecasts->sum("rkap_forecast");
                 // $p->realisasi_forecast = $p->forecasts->sum("realisasi_forecast");
