@@ -484,7 +484,7 @@ class CustomerController extends Controller
             $is_exist_customer_sap->tax_number_category = $data["tax-number-category"];
             $is_exist_customer_sap->tax_number = $data["tax-number"];
             $is_exist_customer_sap->bank_country_key = $data["bank-country-key"];
-            $is_exist_customer_sap->id_customer = $data["bank-keys"];
+            $is_exist_customer_sap->bank_keys = $data["bank-keys"];
             $is_exist_customer_sap->account_no = $data["account-no"];
             $is_exist_customer_sap->account_holder_name = $data["account-holder-name"];
             $is_exist_customer_sap->partner_function = $data["partner-function"];
@@ -523,7 +523,7 @@ class CustomerController extends Controller
             $customer_sap->tax_number_category = $data["tax-number-category"];
             $customer_sap->tax_number = $data["tax-number"];
             $customer_sap->bank_country_key = $data["bank-country-key"];
-            $customer_sap->id_customer = $data["bank-keys"];
+            $customer_sap->bank_keys = $data["bank-keys"];
             $customer_sap->account_no = $data["account-no"];
             $customer_sap->account_holder_name = $data["account-holder-name"];
             $customer_sap->partner_function = $data["partner-function"];
