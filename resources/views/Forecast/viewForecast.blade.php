@@ -1133,9 +1133,6 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                     @if ($forecast->month_forecast == $month_counter)
                                                                                                         <!--begin::Nilai OK-->
                                                                                                         @if ($month_counter == (int) $forecast->month_rkap)
-                                                                                                            @php
-                                                                                                                $total_ok = $forecast->rkap_forecast;
-                                                                                                            @endphp
                                                                                                             <td data-column-ok-bulanan="{{ $month_counter }}" data-dop="{{$dop->dop}}"
                                                                                                                 data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}" data-unit-kerja="{{$unitKerja->unit_kerja}}">
                                                                                                                 {{ number_format($forecast->rkap_forecast, 0, ".", ".")}}
@@ -1454,9 +1451,6 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                         @if ($forecast->month_forecast == $month_counter)
                                                                                                             <!--begin::Nilai OK-->
                                                                                                             @if ($month_counter == (int) $forecast->month_rkap)
-                                                                                                                @php
-                                                                                                                    $total_ok = $forecast->rkap_forecast;
-                                                                                                                @endphp
                                                                                                                 <td data-column-ok-bulanan="{{ $month_counter }}" data-dop="{{$dop->dop}}"
                                                                                                                     data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}" data-unit-kerja="{{$unitKerja->unit_kerja}}">
                                                                                                                     {{ number_format($forecast->rkap_forecast, 0, ".", ".")}}
