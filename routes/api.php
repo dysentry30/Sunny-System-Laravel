@@ -152,10 +152,10 @@ Route::middleware(["web"])->group(function () {
 
             // $forecasts = Forecast::with(["Proyek"])->get(["*"])->unique("kode_proyek");
             // $forecasts = Forecast::where("periode_prognosa", '=', (int) $prognosa)->whereYear("created_at", "=", $tahun)->get();
-            $proyeks = Proyek::where("unit_kerja", "=", $request->unitkerjaid)->get(["nama_proyek", "stage", "kode_proyek", "unit_kerja", "jenis_proyek", "tipe_proyek", "nilai_perolehan", "is_cancel"]);
+            $proyeks = Proyek::where("unit_kerja", "=", $request->unitkerjaid)->get(["nama_proyek", "stage", "kode_proyek", "unit_kerja", "jenis_proyek", "tipe_proyek", "nilai_perolehan", "is_cancel"])->where("stage", "!=", 7)->where("is_cancel", "!=", true);
             
             $proyeks = $proyeks->map(function ($p) use ($periode) {
-                if($p->tipe_proyek == "R" && ($p->stage != 7 || !$p->is_cancel)) {
+                if($p->tipe_proyek == "R") {
                     // if (str_contains($p->kode_proyek, "KD")) {
                     //     $p->spk_code = Illuminate\Support\Facades\DB::table('proyek_code_crm')->where("kode_proyek", "=", $p->kode_proyek)->first()->kode_proyek_crm ?? $p->kode_proyek;
                     //     // Illuminate\Support\Facades\DB::table('proyek_code_crm')->where("kode_proyek", "=", $p->kode_proyek)->dump();
@@ -191,7 +191,7 @@ Route::middleware(["web"])->group(function () {
                         }
                     }
                 // $total_realisasi += $p->nilai_perolehan;
-                } else if($p->stage != 8 || $p->stage != 7 || !$p->is_cancel) {
+                } else {
                     // if (str_contains($p->kode_proyek, "KD")) {
                     //     $p->spk_code = Illuminate\Support\Facades\DB::table('proyek_code_crm')->where("kode_proyek", "=", $p->kode_proyek)->first()->kode_proyek_crm ?? $p->kode_proyek;
                     //     // Illuminate\Support\Facades\DB::table('proyek_code_crm')->where("kode_proyek", "=", $p->kode_proyek)->dump();
