@@ -757,8 +757,10 @@ class ForecastController extends Controller
                 $newClass->rkap_forecast = $ph->sum(function($f) {
                     return (int) $f->rkap_forecast;
                 });
-                $newClass->nilai_forecast = $ph->sum(function($f) {
-                    return (int) $f->nilai_forecast;
+                $newClass->nilai_forecast = $ph->sum(function($f) use($ph) {
+                    if($ph->stage != 7 && !$ph->is_cancel) {
+                        return (int) $f->nilai_forecast;
+                    }
                 });
                 $newClass->realisasi_forecast = $ph->sum(function($f) {
                     return (int) $f->realisasi_forecast;
