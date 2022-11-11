@@ -576,7 +576,7 @@ class ProyekController extends Controller
 
         // dd($dataProyek);
         // if ($dataProyek["nilai-perolehan"] != null && $newProyek->stage == 8 && $dataProyek["bulan-ri-perolehan"] != null){
-        if (!empty($newProyek->bulan_ri_perolehan) && !empty($newProyek->nilai_perolehan) && $newProyek->stage > 7 ){
+        if (!empty($newProyek->bulan_ri_perolehan) && !empty($newProyek->nilai_perolehan) && $newProyek->stage == 8 ){
             $editForecast = Forecast::where("kode_proyek", "=", $newProyek->kode_proyek)->where("periode_prognosa", "=", $bulans)->whereYear("created_at", "=", $years)->first();
             if (!empty($editForecast)) {
                 // $editForecast->month_forecast = $dataProyek["month-forecast"];
@@ -584,7 +584,7 @@ class ProyekController extends Controller
                 $editForecast->realisasi_forecast = (int) str_replace('.', '', $dataProyek["nilai-perolehan"]);
                 $editForecast->month_realisasi = (int) $newProyek->bulan_ri_perolehan;
                 $editForecast->save();
-                // if (isset($newProyek->bulan_ri_perolehan) && isset($newProyek->nilai_perolehan) && $newProyek->stage > 7 ){
+                // if (isset($newProyek->bulan_ri_perolehan) && isset($newProyek->nilai_perolehan) && $newProyek->stage == 8 ){
                 // } else {
                 // }
             } else {
@@ -944,7 +944,7 @@ class ProyekController extends Controller
             $porsi->delete();
         }
 
-        if ($joProyek->nilai_perolehan != null && $joProyek->stage > 7) {
+        if ($joProyek->nilai_perolehan != null && $joProyek->stage == 8) {
             $nilaiPerolehan = (int) str_replace('.', '', $joProyek->nilai_perolehan);
             $kontrakKeseluruhan = ($nilaiPerolehan * 100) / $joProyek->porsi_jo;
 
@@ -1476,7 +1476,7 @@ class ProyekController extends Controller
         $proyek = Proyek::find($dataPorsiJO["porsi-kode-proyek"]);
         $proyek->porsi_jo = $dataPorsiJO["sisa-input"];
         
-        if ($proyek->nilai_perolehan != null && $proyek->stage > 7) {
+        if ($proyek->nilai_perolehan != null && $proyek->stage == 8) {
             $nilaiPerolehan = (int) str_replace('.', '', $proyek->nilai_perolehan);
             $kontrakKeseluruhan = ($nilaiPerolehan * 100) / $proyek->porsi_jo;
 
