@@ -759,6 +759,7 @@ class ForecastController extends Controller
                 });
                 $newClass->nilai_forecast = $ph->sum(function($f) {
                     if($f->stage != 7 && !$f->is_cancel) {
+                        dd($f);
                         return (int) $f->nilai_forecast;
                     }
                 });
