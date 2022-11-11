@@ -758,8 +758,7 @@ class ForecastController extends Controller
                     return (int) $f->rkap_forecast;
                 });
                 $newClass->nilai_forecast = $ph->sum(function($f) {
-                    if($f->stage != 7 && !$f->is_cancel) {
-                        dd($f);
+                    if($f->stage != 7 || !$f->is_cancel) {
                         return (int) $f->nilai_forecast;
                     }
                 });
