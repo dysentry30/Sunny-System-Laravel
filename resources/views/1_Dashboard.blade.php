@@ -1327,25 +1327,7 @@
         
                                                                     <!--begin::Nilai Forecast-->
                                                                     <td class="text-end">
-                                                                        {{-- @php
-                                                                            $nilaiForecast = 0;
-                                                                            foreach ($paretoRi->Forecasts as $forecast)
-                                                                            if ($forecast->nilai_forecast != "") {
-                                                                                $nilaiForecast += $forecast->nilai_forecast;
-                                                                            }
-                                                                        @endphp --}}
-                                                                        {{-- {{ number_format($nilaiForecast, 0, '.', ',') }} --}}
-                                                                        {{-- @foreach ($paretoRi->Forecasts as $forecast)
-                                                                                {{ $forecast->nilai_forecast }};
-                                                                                @endforeach --}}
-                                                                        {{-- {{ number_format($paretoRi->forecast, 0, '.', ',') }} --}}
-                                                                        {{-- @php
-                                                                            $total_forecast = $paretoRi->Forecasts->sum(function($f) {
-                                                                                return (int) $f->nilai_forecast;
-                                                                            })
-                                                                        @endphp --}}
                                                                         <small>
-                                                                            {{-- @dump($sisaForecast->first) --}}
                                                                             {{ number_format((int)$paretoRi->realisasi_forecast, 0, '.', '.') ?? '-' }}
                                                                         </small>
                                                                         {{-- {{ number_format((int) str_replace('.', '', $proyek->nilai_perolehan), 0, '.', '.') }} --}}
