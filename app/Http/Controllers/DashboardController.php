@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use stdClass;
+use Carbon\Carbon;
+use App\Models\Dop;
+use App\Models\Proyek;
+use App\Models\Forecast;
+use App\Models\UnitKerja;
+use Illuminate\Http\Request;
 use App\Models\ClaimManagements;
 use App\Models\ContractManagements;
-use App\Models\Dop;
-use App\Models\Forecast;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use App\Models\Proyek;
-use App\Models\UnitKerja;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class DashboardController extends Controller
 {
@@ -61,8 +62,8 @@ class DashboardController extends Controller
             $claims = ClaimManagements::join("proyeks", "proyeks.kode_proyek", "=", "claim_managements.kode_proyek")->get();
             $unitKerja = UnitKerja::orderBy('unit_kerja')->get()->whereNotIn("divcode", ["B", "C", "D", "8"]);
             // dd($unitKerja);
-            $proyeks = Proyek::with(['UnitKerja', 'ContractManagements'])->get();
-            $paretoProyeks = Proyek::with(['UnitKerja', 'ContractManagements'])->orderByDesc('nilai_perolehan')->get();
+            $proyeks = Proyek::with(['Forecasts', 'UnitKerja', 'ContractManagements'])->get();
+            $paretoProyeks = Proyek::with(['Forecasts', 'UnitKerja', 'ContractManagements'])->where("proyeks.jenis_proyek", "!=", "I")->get();
             $contracts = ContractManagements::join("proyeks", "proyeks.kode_proyek", "=", "contract_managements.project_id")->get();
             $dops = Dop::orderBy('dop')->get();
             // $dopJoin = Dop::join("proyeks", "dops.dop", "=", "proyeks.dop")->get();
@@ -86,9 +87,9 @@ class DashboardController extends Controller
         } else {
             if ($unit_kerja_user instanceof \Illuminate\Support\Collection) {
                 $contracts = ContractManagements::join("proyeks", "proyeks.kode_proyek", "=", "contract_managements.project_id")->get();
-                $proyeks = Proyek::with(['UnitKerja', 'ContractManagements'])->get();
-                $paretoProyeks = Proyek::with(['UnitKerja', 'ContractManagements'])->orderByDesc('nilai_perolehan')->paginate(25);
-                $claims = ClaimManagements::join("proyeks", "proyeks.kode_proyek", "=", "claim_managements.kode_proyek")->get();
+                $proyeks = Proyek::with(['Forecasts', 'UnitKerja', 'ContractManagements'])->get();
+                $paretoProyeks = Proyek::with(['Forecasts', 'UnitKerja', 'ContractManagements'])->where("proyeks.jenis_proyek", "!=", "I")->get()->whereIn("unit_kerja", $unit_kerja_user->toArray());
+                $claims = ClaimManagements::join("proyeks", "proyeks.kode_proyek", "=", "claim_managements.kode_proyek")->get()->whereIn("unit_kerja", $unit_kerja_user->toArray());
                 $unitKerja = UnitKerja::get()->whereIn("divcode", $unit_kerja_user->toArray());
                 // $nilaiHistoryForecast = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("history_forecast.periode_prognosa", "=", $request->get("periode-prognosa") != "" ? (string) $request->get("periode-prognosa") : date("m"))->whereYear("history_forecast.created_at", "=", (string) $request->get("tahun-history") != "" ? (string) $request->get("tahun-history") : date("Y"))->get()->whereIn("unit_kerja", $unit_kerja_user->toArray());
                 $nilaiHistoryForecast = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("proyeks.jenis_proyek", "!=", "I")->where("forecasts.periode_prognosa", "=", $request->get("periode-prognosa") != "" ? (string) $request->get("periode-prognosa") : date("m"))->get()->whereIn("unit_kerja", $unit_kerja_user->toArray());
@@ -100,11 +101,13 @@ class DashboardController extends Controller
                     $claims = $claims->where("unit_kerja", $request->get("unit-kerja"));
                     $proyeks = $proyeks->where("unit_kerja", $request->get("unit-kerja"));
                     $contracts = $contracts->where("unit_kerja", $request->get("unit-kerja"));
+                    $paretoProyeks = $paretoProyeks->where("unit_kerja", $request->get("unit-kerja"));
                 } else if (!empty($request->get("dop"))) {
                     $nilaiHistoryForecast = $nilaiHistoryForecast->where("dop", $request->get("dop"));
                     $claims = $claims->where("dop", $request->get("dop"));
                     $proyeks = $proyeks->where("dop", $request->get("dop"));
                     $contracts = $contracts->where("dop", $request->get("dop"));
+                    $paretoProyeks = $paretoProyeks->where("dop", $request->get("dop"));
                     // dd($proyeks);
                     // dd($nilaiHistoryForecast, $claims, $proyeks, $contracts);
                 } else {
@@ -112,11 +115,12 @@ class DashboardController extends Controller
                     $claims = $claims->whereIn("unit_kerja", $unit_kerja_user->toArray());
                     $proyeks = $proyeks->whereIn("unit_kerja", $unit_kerja_user->toArray());
                     $contracts = $contracts->whereIn("unit_kerja", $unit_kerja_user->toArray());
+                    $paretoProyeks = $paretoProyeks->whereIn("unit_kerja", $unit_kerja_user->toArray());
                 }
             } else {
                 $contracts = ContractManagements::join("proyeks", "proyeks.kode_proyek", "=", "contract_managements.project_id")->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->get();
                 $proyeks = Proyek::with(['UnitKerja', 'ContractManagements'])->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->get();
-                $paretoProyeks = Proyek::with(['UnitKerja', 'ContractManagements'])->orderByDesc('nilai_perolehan')->paginate(25);
+                $paretoProyeks = Proyek::with(['Forecasts', 'UnitKerja', 'ContractManagements'])->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->get();
                 $claims = ClaimManagements::join("proyeks", "proyeks.kode_proyek", "=", "claim_managements.kode_proyek")->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->get();
                 $unitKerja = UnitKerja::where("divcode", "=", Auth::user()->unit_kerja)->get();
                 // $nilaiHistoryForecast = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->where("history_forecast.periode_prognosa", "=", $request->get("periode-prognosa") != "" ? (string) $request->get("periode-prognosa") : date("m"))->whereYear("history_forecast.created_at", "=", (string) $request->get("tahun-history") != "" ? (string) $request->get("tahun-history") : date("Y"))->get();
@@ -389,7 +393,52 @@ class DashboardController extends Controller
 
         //begin::Pareto
         // $paretoProyek = $proyeks->sortByDesc('forecast');
-        $paretoProyek = $paretoProyeks->sortByDesc('nilai_perolehan');
+        $sisaProyek = $paretoProyeks->where('stage','!=', 8)->where('stage','!=', 7)->where('is_cancel','!=', true);
+        $totalNilaiSisaPareto = 0;
+        $sisaForecast = $sisaProyek->map(function($pp) use(&$totalNilaiSisaPareto) {
+            $class = new stdClass();
+
+            $class->nilai_forecast = $pp->Forecasts->sum(function($f) {
+                return (int) $f->nilai_forecast;
+            });
+            $class->month_forecast = $pp->Forecasts->max(function($f) {
+                return (int) $f->month_forecast;
+            });
+            $class->unit_kerja = $pp->UnitKerja->unit_kerja;
+            $class->stage = $pp->stage;
+            $class->nama_proyek = $pp->nama_proyek;
+            $class->kode_proyek = $pp->kode_proyek;
+            $class->tipe_proyek = $pp->tipe_proyek;
+            $class->bulan_pelaksanaan = $pp->bulan_pelaksanaan;
+            $totalNilaiSisaPareto += $class->nilai_forecast;
+            
+            return $class;
+        });
+        $sisaForecast = $sisaForecast->sortByDesc("nilai_forecast");
+        // dd($totalNilaiSisaPareto);
+        
+        $paretoRealisasi = $paretoProyeks->where('stage','=', 8);
+        $totalNilaiRealisasiPareto = 0;
+        $realisasiForecast = $paretoRealisasi->map(function($pp) use(&$totalNilaiRealisasiPareto){
+            $classRi = new stdClass();
+            $classRi->realisasi_forecast = $pp->Forecasts->sum(function($f) {
+                return (int) $f->realisasi_forecast;
+            });
+            $classRi->month_realisasi = $pp->Forecasts->max(function($f) {
+                return (int) $f->month_realisasi;
+            });
+            $classRi->unit_kerja = $pp->UnitKerja->unit_kerja;
+            $classRi->stage = $pp->stage;
+            $classRi->nama_proyek = $pp->nama_proyek;
+            $classRi->kode_proyek = $pp->kode_proyek;
+            $classRi->tipe_proyek = $pp->tipe_proyek;
+            $classRi->bulan_pelaksanaan = $pp->bulan_pelaksanaan;
+            $totalNilaiRealisasiPareto += $classRi->realisasi_forecast;
+
+            return $classRi;
+        });
+        $realisasiForecast = $realisasiForecast->sortByDesc("realisasi_forecast");
+        // dd($sisaForecast);
         $paretoClaim = $claims->where("jenis_claim", "=", "Claim")->groupBy("kode_proyek");
         $paretoAntiClaim = $claims->where("jenis_claim", "=", "Anti Claim")->groupBy("kode_proyek");
         $paretoAsuransi = $claims->where("jenis_claim", "=", "Claim Asuransi")->groupBy("kode_proyek");
@@ -472,7 +521,7 @@ class DashboardController extends Controller
         }
         // End :: SUMBER DANA REALISASI
 
-        return view('1_Dashboard', compact(["pasarDini", "pasarPotensial", "stagePrakualifikasi", "stageTender", "stagePerolehan", "stageMenang", "stageKalah", "stageTerkontrak", "top_proyeks_close_this_month", "proyek_kalah_cancel_tidak_lulus_pq", "totalRealisasiSumberDana", "totalRKAPSumberDana", "claim_status_array", "anti_claim_status_array", "claim_asuransi_status_array", "nilaiForecastArray", "nilaiRkapArray", "nilaiRealisasiArray", "nilaiForecastTriwunalArray", "year", "month", "proses", "menang", "kalah", "prakualifikasi", "prosesTender", "terkontrak", "pelaksanaan", "serahTerima", "closing", "proyeks", "paretoProyek", "paretoClaim", "paretoAntiClaim", "paretoAsuransi", "kategoriunitKerja", "nilaiOkKumulatif", "nilaiRealisasiKumulatif", "nilaiTerkontrak", "nilaiTerendah", "jumlahMenang", "jumlahKalah", "nilaiMenang", "nilaiKalah", "unitKerja", "unit_kerja_get", "dop_get", "dops"]));
+        return view('1_Dashboard', compact(["totalNilaiSisaPareto", "totalNilaiRealisasiPareto", "realisasiForecast", "sisaForecast", "pasarDini", "pasarPotensial", "stagePrakualifikasi", "stageTender", "stagePerolehan", "stageMenang", "stageKalah", "stageTerkontrak", "top_proyeks_close_this_month", "proyek_kalah_cancel_tidak_lulus_pq", "totalRealisasiSumberDana", "totalRKAPSumberDana", "claim_status_array", "anti_claim_status_array", "claim_asuransi_status_array", "nilaiForecastArray", "nilaiRkapArray", "nilaiRealisasiArray", "nilaiForecastTriwunalArray", "year", "month", "proses", "menang", "kalah", "prakualifikasi", "prosesTender", "terkontrak", "pelaksanaan", "serahTerima", "closing", "proyeks", "paretoClaim", "paretoAntiClaim", "paretoAsuransi", "kategoriunitKerja", "nilaiOkKumulatif", "nilaiRealisasiKumulatif", "nilaiTerkontrak", "nilaiTerendah", "jumlahMenang", "jumlahKalah", "nilaiMenang", "nilaiKalah", "unitKerja", "unit_kerja_get", "dop_get", "dops"]));
     }
 
     /**
