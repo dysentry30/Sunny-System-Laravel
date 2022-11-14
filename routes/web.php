@@ -1780,7 +1780,7 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
                 "d:UsrTanggalSPKEkternal" => $p->tglspk_internal,
                 "d:UsrTanggalKontrak" => $p->tanggal_terkontrak,
                 "d:UsrNilaiKontrakKeseluruhan" => $p->nilai_kontrak_keseluruhan,
-                "d:UsrKodeProyek" => DB::table("proyek_code_crm")->where("nama_proyek_crm", 'like', $p->nama_proyek)->first()->kode_proyek_crm ?? $p->kode_proyek,
+                "d:UsrKodeProyek" => DB::table("proyek_code_crm")->where("nama_proyek_crm", '=', $p->nama_proyek)->first()->kode_proyek_crm ?? $p->kode_proyek,
             ],
         ];
         // $p->ap_id = "";
