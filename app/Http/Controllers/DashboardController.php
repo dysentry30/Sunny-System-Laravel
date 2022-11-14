@@ -410,7 +410,7 @@ class DashboardController extends Controller
             $class->kode_proyek = $pp->kode_proyek;
             $class->tipe_proyek = $pp->tipe_proyek;
             $class->bulan_pelaksanaan = $pp->bulan_pelaksanaan;
-            $totalNilaiSisaPareto += $class->nilai_forecast;
+            $totalNilaiSisaPareto += (int) $class->nilai_forecast;
             
             return $class;
         });
@@ -433,7 +433,7 @@ class DashboardController extends Controller
             $classRi->kode_proyek = $pp->kode_proyek;
             $classRi->tipe_proyek = $pp->tipe_proyek;
             $classRi->bulan_pelaksanaan = $pp->bulan_pelaksanaan;
-            $totalNilaiRealisasiPareto += $classRi->realisasi_forecast;
+            $totalNilaiRealisasiPareto += (int) $classRi->realisasi_forecast;
 
             return $classRi;
         });
