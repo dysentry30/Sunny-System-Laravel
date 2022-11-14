@@ -51,6 +51,11 @@
                                 <div class="d-flex align-items-center py-1">
 
                                     <!--begin::Button-->
+                                    {{-- <button type="button" class="btn btn-sm btn-light btn-active-success me-3" onclick="getKodeNasabah(this)" id="get-kode-nasabah">
+                                        Get Kode Nasabah</button> --}}
+                                    <!--end::Button-->
+
+                                    <!--begin::Button-->
                                     <button type="submit" class="btn btn-sm btn-primary" id="customer-edit-save" style="background-color:#008CB4;">
                                         Save</button>
                                     <!--end::Button-->
@@ -5303,6 +5308,22 @@
             }
             exportExcelBtn.setAttribute("href", `/download/${results.href}`);
         }
+
+        // BEGIN :: GET KODE NASABAH
+        async function getKodeNasabah(e) {
+            const data = {
+                accountID: "test",
+            };
+            const getKodeNasabahRes = await fetch("http://nasabah.wika.co.id/index.php/mod_excel/post_json_crm", {
+                method: "POST",
+                header: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+            }).then(res => res.json());
+            console.log(getKodeNasabahRes);
+        }
+        // END :: GET KODE NASABAH
     </script>
     {{-- END :: CONVERT DATA TO TABLE --}}
 
