@@ -991,13 +991,6 @@
                                             <!--begin::column-->
                                             <td class="text-start">
                                                 <small>
-                                                    {{ $proyek->jenis_terkontrak ?? "-" }}
-                                                </small>
-                                            </td>
-                                            <!--end::column-->
-                                            <!--begin::column-->
-                                            <td class="text-start">
-                                                <small>
                                                     {{ $proyek->sistem_bayar ?? "-" }}
                                                 </small>
                                             </td>
@@ -1026,7 +1019,58 @@
                                             <!--begin::column-->
                                             <td class="text-start">
                                                 <small>
-                                                    {{ $proyek->bulan_ri_perolehan ?? "-" }}
+                                                    @switch($proyek->bulan_ri_perolehan)
+                                                        @case('1')
+                                                            Januari
+                                                        @break
+
+                                                        @case('2')
+                                                            Februari
+                                                        @break
+
+                                                        @case('3')
+                                                            Maret
+                                                        @break
+
+                                                        @case('4')
+                                                            April
+                                                        @break
+
+                                                        @case('5')
+                                                            Mei
+                                                        @break
+
+                                                        @case('6')
+                                                            Juni
+                                                        @break
+
+                                                        @case('7')
+                                                            Juli
+                                                        @break
+
+                                                        @case('8')
+                                                            Agustus
+                                                        @break
+
+                                                        @case('9')
+                                                            September
+                                                        @break
+
+                                                        @case('10')
+                                                            Oktober
+                                                        @break
+
+                                                        @case('11')
+                                                            November
+                                                        @break
+
+                                                        @case('12')
+                                                            Desember
+                                                        @break
+
+                                                        @default
+                                                            *Belum Ditentukan
+                                                    @endswitch
                                                 </small>
                                             </td>
                                             <!--end::column-->
@@ -1055,6 +1099,13 @@
                                             <td class="text-start">
                                                 <small>
                                                     {{ $proyek->tanggal_akhir_terkontrak ?? "-" }}
+                                                </small>
+                                            </td>
+                                            <!--end::column-->
+                                            <!--begin::column-->
+                                            <td class="text-start">
+                                                <small>
+                                                    {{ $proyek->tanggal_selesai_pho ?? "-" }}
                                                 </small>
                                             </td>
                                             <!--end::column-->
