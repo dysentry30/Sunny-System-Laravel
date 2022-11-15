@@ -911,7 +911,7 @@ class CustomerController extends Controller
     }
 
     public function getKodeNasabah(Request $request) {
-        $response = Http::post("http://nasabah.wika.co.id/index.php/mod_excel/post_json_crm", $request->all())->body();
+        $response = Http::post("http://nasabah.wika.co.id/index.php/mod_excel/post_json_crm_dev", $request->all())->body();
         return response($response);
     }
 
