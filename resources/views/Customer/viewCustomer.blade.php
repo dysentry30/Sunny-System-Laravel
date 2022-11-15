@@ -5375,10 +5375,11 @@
             } else {
                 data.tipe_perusahaan = "BUT";
             }
-            const getKodeNasabahRes = await fetch("http://nasabah.wika.co.id/index.php/mod_excel/post_json_crm_dev", {
+            const getKodeNasabahRes = await fetch("/customer/get-kode-nasabah", {
                 method: "POST",
-                header: {
+                headers: {
                     "Content-Type": "application/json",
+                    "X-CSRF-Token": "{{csrf_token()}}"
                 },
                 body: JSON.stringify(data),
             }).then(res => res.json());
