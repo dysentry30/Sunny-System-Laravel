@@ -5375,7 +5375,7 @@
             } else {
                 data.tipe_perusahaan = "BUT";
             }
-            const getKodeNasabahRes = await fetch("http://nasabah.wika.co.id/index.php/mod_excel/post_json_crm_dev", {
+            const getKodeNasabahRes = await fetch("https://nasabah.wika.co.id/index.php/mod_excel/post_json_crm_dev", {
                 method: "POST",
                 header: {
                     "Content-Type": "application/json",
