@@ -315,6 +315,9 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     // Get nilai Laba Rugi  
     Route::post('/customer/get-nilai-laba-rugi', [CustomerController::class, 'getNilaiLabaRugiCustomer']);
+    
+    // Get kode nasabah  
+    Route::post('/customer/get-kode-nasabah', [CustomerController::class, 'getKodeNasabah']);
 
     // Begin :: get Kabupaten
     Route::get('/get-kabupaten/{id}', function ($id) {

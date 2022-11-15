@@ -910,6 +910,11 @@ class CustomerController extends Controller
         $dokumen->save();
     }
 
+    public function getKodeNasabah(Request $request) {
+        $response = Http::post("http://nasabah.wika.co.id/index.php/mod_excel/post_json_crm", $request->all())->body();
+        return response($response);
+    }
+
     public function getFullMonth($month)
     {
         switch ($month) {
