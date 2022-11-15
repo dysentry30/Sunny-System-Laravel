@@ -395,13 +395,12 @@ class DashboardController extends Controller
         // $paretoProyek = $proyeks->sortByDesc('forecast');
         $sisaProyek = $paretoProyeks->where('stage','!=', 8)->where('stage','!=', 7)->where('is_cancel','!=', true);
         $totalNilaiSisaPareto = 0;
-        $sisaForecast = $sisaProyek->map(function($pp) use(&$totalNilaiSisaPareto) {
+        $sisaForecast = $sisaProyek->map(function($pp) use(&$totalNilaiSisaPareto, $month) {
             $class = new stdClass();
-
-            $class->nilai_forecast = $pp->Forecasts->sum(function($f) {
+            $class->nilai_forecast = $pp->Forecasts->where("periode_prognosa", "=", $month)->sum(function($f) {
                 return (int) $f->nilai_forecast;
             });
-            $class->month_forecast = $pp->Forecasts->max(function($f) {
+            $class->month_forecast = $pp->Forecasts->where("periode_prognosa", "=", $month)->max(function($f) {
                 return (int) $f->month_forecast;
             });
             $class->unit_kerja = $pp->UnitKerja->unit_kerja;
@@ -419,12 +418,12 @@ class DashboardController extends Controller
         
         $paretoRealisasi = $paretoProyeks->where('stage','=', 8);
         $totalNilaiRealisasiPareto = 0;
-        $realisasiForecast = $paretoRealisasi->map(function($pp) use(&$totalNilaiRealisasiPareto){
+        $realisasiForecast = $paretoRealisasi->map(function($pp) use(&$totalNilaiRealisasiPareto, $month){
             $classRi = new stdClass();
-            $classRi->realisasi_forecast = $pp->Forecasts->sum(function($f) {
+            $classRi->realisasi_forecast = $pp->Forecasts->where("periode_prognosa", "=", $month)->sum(function($f) {
                 return (int) $f->realisasi_forecast;
             });
-            $classRi->month_realisasi = $pp->Forecasts->max(function($f) {
+            $classRi->month_realisasi = $pp->Forecasts->where("periode_prognosa", "=", $month)->max(function($f) {
                 return (int) $f->month_realisasi;
             });
             $classRi->unit_kerja = $pp->UnitKerja->unit_kerja;

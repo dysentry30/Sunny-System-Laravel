@@ -51,8 +51,16 @@
                                 <div class="d-flex align-items-center py-1">
 
                                     <!--begin::Button-->
-                                    {{-- <button type="button" class="btn btn-sm btn-light btn-active-success me-3" onclick="getKodeNasabah(this)" id="get-kode-nasabah">
-                                        Get Kode Nasabah</button> --}}
+                                    @if ($customer->kode_nasabah)
+                                        <div class="" data-bs-toggle="tooltip" data-bs-html="true" 
+                                        data-bs-title="<b>Kode Nasabah</b> sudah didapatkan" >
+                                            <button type="button"  class="btn disabled btn-sm btn-light btn-active-success me-3" onclick="getKodeNasabah(this)" id="get-kode-nasabah">
+                                                Get Kode Nasabah</button>
+                                        </div>
+                                    @else 
+                                        <button type="button" class="btn btn-sm btn-light btn-active-success me-3" onclick="getKodeNasabah(this)" id="get-kode-nasabah">
+                                            Get Kode Nasabah</button>
+                                    @endif
                                     <!--end::Button-->
 
                                     <!--begin::Button-->
@@ -382,7 +390,7 @@
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
-                                                                    <input type="text" class="form-control form-control-solid" name="kodenasabah-company" value="{{ $customer->kode_nasabah }}"
+                                                                    <input type="text" class="form-control form-control-solid" id="kode-nasabah" name="kodenasabah-company" value="{{ $customer->kode_nasabah }}"
                                                                         placeholder="Kode Nasabah" />
                                                                     <!--end::Input-->
                                                                 </div>
@@ -2394,7 +2402,7 @@
                                                                                     <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2">{{ $proyekClosed[0] }}</span>
                                                                                     <!--end::Amount-->
                                                                                     <!--begin::Subtitle-->
-                                                                                    <span class="text-white pt-1 fs-12">Proyek Opportunity</span>
+                                                                                    <span class="text-white pt-1 fs-12">Opportunity</span>
                                                                                     <!--end::Subtitle-->
                                                                                 </div>
                                                                                 <!--end::Title-->
@@ -5309,19 +5317,82 @@
             exportExcelBtn.setAttribute("href", `/download/${results.href}`);
         }
 
+        const pic = JSON.parse(`{!! $customer->pic->takeWhile(function ($item) {
+                                    return !empty($item);
+                                })->toJson() !!}`)[0];
+        console.log(pic);
         // BEGIN :: GET KODE NASABAH
         async function getKodeNasabah(e) {
+            const npwp = "{{$customer->npwp_company}}";
+            if(pic == undefined || npwp == "") {
+                Toast.fire({
+                    html: "Field PIC is empty",
+                    icon: "error",
+                });
+                return;
+            }
             const data = {
-                accountID: "test",
+                nmnasabah: "{{$customer->name}}",
+                alamat: "{{$customer->address_1}}",
+                kota: "{{$customer->kota_kabupaten}}",
+                email: "{{$customer->email}}",
+                ext: "-",
+                telepon: "{{$customer->phone_number}}",
+                fax: ".",
+                npwp: npwp,
+                nama_kontak: pic.nama_pic,
+                jenisperusahaan: "{{$customer->jenis_instansi}}",
+                jabatan: pic.jabatan_pic,
+                email1: pic.email_pic,
+                telpon1: pic.phone_pic,
+                handphone: pic.phone_pic,
+                tipe_perusahaan: "-",
+                tipe_lain_perusahaan: "-",
+                cotid: "11"
             };
-            const getKodeNasabahRes = await fetch("http://nasabah.wika.co.id/index.php/mod_excel/post_json_crm", {
+            
+            // switch(data.jenisperusahaan) {
+            //     case this.includes("Pemerintah"):
+            // }
+            if(data.jenisperusahaan.includes("Pemerintah")) {
+                data.jenisperusahaan = "Pemerintah";
+            } else if(data.jenisperusahaan.includes("BUMD")) {
+                data.jenisperusahaan = "BUMD";
+            } else if(data.jenisperusahaan.includes("BUMN")) {
+                data.jenisperusahaan = "BUMN";
+            } else {
+                data.jenisperusahaan = "lainnya";
+            }
+            
+            if(data.nmnasabah.includes("Kementerian") || data.nmnasabah.includes("Pemerintah")){
+                data.tipe_perusahaan = "Pemerintah";
+            } else if(data.nmnasabah.includes("PT")) {
+                data.tipe_perusahaan = "PT";
+            } else if(data.nmnasabah.includes("CV")) {
+                data.tipe_perusahaan = "CV";
+            } else if(data.nmnasabah.includes("LTD")) {
+                data.tipe_perusahaan = "LTD";
+            } else {
+                data.tipe_perusahaan = "BUT";
+            }
+            const getKodeNasabahRes = await fetch("http://nasabah.wika.co.id/index.php/mod_excel/post_json_crm_dev", {
                 method: "POST",
                 header: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify(data),
             }).then(res => res.json());
-            console.log(getKodeNasabahRes);
+            if(getKodeNasabahRes.status) {
+                document.querySelector("#kode-nasabah").value = getKodeNasabahRes.kode_nasabah;
+                document.querySelector("#customer-edit-save").click();
+                return;
+            } else {
+                Toast.fire({
+                    html: getKodeNasabahRes.msg,
+                    icon: "error",
+                });
+                return;
+            }
         }
         // END :: GET KODE NASABAH
     </script>
