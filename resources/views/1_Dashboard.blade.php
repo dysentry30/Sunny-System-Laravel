@@ -1108,7 +1108,7 @@
                                                 Pareto Realisasi
                                             </h1>
                                             <h3 class="text-center fw-bolder pb-8">
-                                                Total Sisa Forecast : {{  number_format((int) $totalNilaiRealisasiPareto, 0, '.', '.') }}
+                                                Total Pareto Realisasi : {{  number_format((int) $totalNilaiRealisasiPareto, 0, '.', '.') }}
                                             </h3>
 
                                             <!--begin::Table pareto proyek  -->
