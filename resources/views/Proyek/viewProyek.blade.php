@@ -1537,9 +1537,9 @@
                                                         <h3 class="fw-bolder m-0" id="HeadDetail"
                                                             style="font-size:14px;">Nilai RKAP Awal &nbsp;
                                                             <i onclick="hideColumn()" id="hide-button"
-                                                                style="display: none" class="bi bi-arrows-collapse"></i><i
+                                                                class="bi bi-arrows-collapse"></i><i
                                                                 onclick="showColumn()" id="show-button"
-                                                                class="bi bi-arrows-expand"></i>
+                                                                style="display: none" class="bi bi-arrows-expand"></i>
                                                         </h3>
                                                         <script>
                                                             function hideColumn() {
@@ -1555,7 +1555,7 @@
                                                             }
                                                         </script>
                                                         <br>
-                                                        <div id="divRkapAwal" style="display:none">
+                                                        <div id="divRkapAwal">
                                                             <!--End::Title Biru Form: Nilai RKAP Awal-->
 
                                                             <!--begin::Row Kanan+Kiri-->
