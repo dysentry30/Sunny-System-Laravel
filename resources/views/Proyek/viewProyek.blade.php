@@ -3774,7 +3774,7 @@
                                                                     <!--Begin::Input-->
                                                                     <input type="text"
                                                                         class="form-control form-control-solid {{ ($proyek->mata_uang_review == null && $proyek->mata_uang_awal == null) ? 'text-danger' : '' }}"
-                                                                        value="{{ $proyek->mata_uang_review ?? $proyek->mata_uang_awal '*Mata Uang Belum Ditentukan' }}"
+                                                                        value="{{ $proyek->mata_uang_review ?? $proyek->mata_uang_awal ?? '*Mata Uang Belum Ditentukan' }}"
                                                                         readonly />
                                                                     <!--end::Input-->
                                                                 </div>
