@@ -496,7 +496,7 @@ class DashboardController extends Controller
         // Begin :: SUMBER DANA RKAP
         $totalRKAPSumberDana = collect();
         $total_RKAP_keseluruhan = 0;
-        $proyeksGroupBySumberDana = $proyeks->where("sumber_dana", "!=", "")->sortBy("sumber_dana")->groupBy("sumber_dana");
+        $proyeksGroupBySumberDana = $proyeks->where("kategori", "!=", "")->sortBy("kategori")->groupBy("kategori");
         foreach ($proyeksGroupBySumberDana as $sumber_dana => $proyeks_sumber_dana) {
             $total_rkap = 0;
             // $sumber_dana_model = SumberDana::
