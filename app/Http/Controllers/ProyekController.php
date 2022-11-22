@@ -161,7 +161,7 @@ class ProyekController extends Controller
         $newProyek->unit_kerja = $dataProyek["unit-kerja"];
         $newProyek->jenis_proyek = $dataProyek["jenis-proyek"];
         $newProyek->tipe_proyek = $dataProyek["tipe-proyek"];
-        $newProyek->nilai_rkap = (int) str_replace('.', '', $dataProyek["nilai-rkap"]);
+        // $newProyek->nilai_rkap = (int) str_replace('.', '', $dataProyek["nilai-rkap"]);
         // $newProyek->sumber_dana = $dataProyek["sumber-dana"];
         $newProyek->tahun_perolehan = $dataProyek["tahun-perolehan"];
         $newProyek->bulan_pelaksanaan = $dataProyek["bulan-pelaksanaan"];

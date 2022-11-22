@@ -88,6 +88,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index']);
 
+    Route::get('/dashboard-ccm', [DashboardController::class, 'dashboardCCM']);
+
     Route::get('/dashboard/filter/{prognosa}/{type}/{month}', [DashboardController::class, 'getDataFilterPoint']);
 
     Route::get('/dashboard/filter/{prognosa}/{type}/{month}/{unit_kerja}', [DashboardController::class, 'getDataFilterPoint']);
@@ -102,7 +104,9 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     Route::get('/dashboard/monitoring-proyek/{tipe}', [DashboardController::class, "getDataMonitoringProyek"]);
 
-    Route::get('/dashboard/monitoring-proyek/{tipe}/{filter}', [DashboardController::class, "getDataMonitoringProyek"]);
+    Route::get('/dashboard/monitoring-proyek/{tipe}/{periode}', [DashboardController::class, "getDataMonitoringProyek"]);
+
+    Route::get('/dashboard/monitoring-proyek/{tipe}/{periode}/{filter}', [DashboardController::class, "getDataMonitoringProyek"]);
 
     Route::get('/dashboard/terendah-terkontrak/{tipe}', [DashboardController::class, "getDataTerendahTerkontrak"]);
 

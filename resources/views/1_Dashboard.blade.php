@@ -132,8 +132,7 @@
                                             <!--begin:::Tab item Forecast Internal-->
                                             @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
                                                 <li class="nav-item">
-                                                    <a onclick="showCCM()" class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true"
-                                                        data-bs-toggle="tab" href="#kt_view_dashboard_ccm"
+                                                    <a onclick="showCCM()" class="nav-link text-active-primary pb-4"  href="/dashboard-ccm"
                                                         style="font-size:14px;">Dashboard CCM</a>
                                                 </li>
                                             @endif
@@ -722,7 +721,7 @@
                                     <hr>
                                     
                                     <div class="row">
-                                        <figure class="col highcharts-figure">
+                                        <figure class="col-6 p-0 highcharts-figure">
                                             <div class="" id="sumber-dana-rkap">
                                                 <!--begin::INDEX NILAI-->
                                                 <!--end::INDEX NILAI-->
@@ -761,7 +760,7 @@
                                             </div>
                                         </figure>
                                         {{-- <span class="vr" style="padding: 0.5px"></span> --}}
-                                        <figure class="col highcharts-figure">
+                                        <figure class="col-6 p-0 highcharts-figure">
                                             <div class="" id="sumber-dana-realisasi">
                                                 <!--begin::INDEX NILAI-->
                                                 <!--end::INDEX NILAI-->
@@ -841,7 +840,7 @@
                                     <div class="row">
 
                                         
-                                        <div class="col px-8 py-12" id="pareto-proyek">
+                                        <div class="col-6 px-2" id="pareto-proyek">
                                             <h1 class="text-center fw-bolder">
                                                 Pareto Sisa Target Proyek
                                             </h1>
@@ -1103,7 +1102,7 @@
                                             <!--end::Table pareto proyek-->
                                         </div>
 
-                                        <div class="col px-8 py-12" id="pareto-proyek">
+                                        <div class="col-6 px-2" id="pareto-proyek">
                                             <h1 class="text-center fw-bolder">
                                                 Pareto Realisasi
                                             </h1>
@@ -1686,7 +1685,7 @@
             },
 
             series: [{
-                    name: 'Nilai OK ' + nilaiRkap[11].toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."),
+                    name: 'Nilai OK RKAP ' + nilaiRkap[11].toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."),
                     data: nilaiRkap,
                 },
                 {
@@ -2024,9 +2023,9 @@
                 name: "Proyek Stage",
                 colorByPoint: true,
                 data: [{
-                        name: "Proses : " + {{ $proses }},
+                        name: "Tender Diikuti : " + {{ $proses }},
                         y: {{ $proses }},
-                        drilldown: "Proses",
+                        drilldown: "Tender Diikuti",
                     },
                     {
                         name: "Menang : " + {{ $menang }},
@@ -2123,6 +2122,7 @@
     </script>
     <script>
         const sebaranSumberDanaRealisasi = JSON.parse('{!! $totalRealisasiSumberDana->toJson() !!}');
+        console.log(sebaranSumberDanaRealisasi);
         Highcharts.chart('sumber-dana-realisasi', {
             chart: {
                 type: 'pie',
@@ -2356,12 +2356,12 @@
                 name: "",
                 colorByPoint: true,
                 data: [{
-                        name: "Proyek Menang : " + {{ $jumlahMenang }},
+                        name: "Proyek Menang Tender : " + {{ $jumlahMenang }},
                         y: {{ $jumlahMenang }},
                         x: "Menang : " + {{ $presentaseMenang }},
                     },
                     {
-                        name: "Proyek Kalah : " + {{ $jumlahKalah }},
+                        name: "Proyek Kalah Tender : " + {{ $jumlahKalah }},
                         y: {{ $jumlahKalah }},
                         x: "Kalah : " + {{ $presentaseKalah }},
                     }
@@ -2443,12 +2443,12 @@
                 name: "",
                 colorByPoint: true,
                 data: [{
-                        name: "Nilai Menang : " + "{{ number_format($nilaiMenang, 0, ',' , ',' ) }}",
+                        name: "Nilai Menang Tender: " + "{{ number_format($nilaiMenang, 0, ',' , ',' ) }}",
                         y: {{ $nilaiMenang }},
                         x: "Menang : " + {{ $presentaseNilaiMenang }},
                     },
                     {
-                        name: "Nilai Kalah : " + "{{ number_format($nilaiKalah, 0, ',' , ',' ) }}",
+                        name: "Nilai Kalah Tender: " + "{{ number_format($nilaiKalah, 0, ',' , ',' ) }}",
                         y: {{ $nilaiKalah }},
                         x: "Kalah : " + {{ $presentaseNilaiKalah }},
                     }
@@ -2791,17 +2791,17 @@
                 getDataTable("#datatable", "#forecast-line", url, type, prognosa, month);
                 
 
-                const table = document.querySelector("#datatable");
-                const chartLine = document.querySelector("#forecast-line");
-                hideTable(table, chartLine);
+                // const table = document.querySelector("#datatable");
+                // const chartLine = document.querySelector("#forecast-line");
+                // hideTable("#datatable", "#forecast-line");
 
-                // Toggle Fullscreen
-                table.style.backgroundColor = "white";
-                if (getFullscreenElement()) {
-                    table.requestFullscreen();
-                    table.webkitRequestFullScreen();
-                    table.msRequestFullscreen();
-                }
+                // // Toggle Fullscreen
+                // table.style.backgroundColor = "white";
+                // if (getFullscreenElement()) {
+                //     table.requestFullscreen();
+                //     table.webkitRequestFullScreen();
+                //     table.msRequestFullscreen();
+                // }
 
             });
         })
@@ -2867,7 +2867,7 @@
         // END :: point trigger nilai realisasi
 
         async function getDataTable(tableElt, chartElt, url, type, prognosa, month = new Date("now")) {
-            let {href, data: filterRes} = await fetch(url).then(res =>res.json());
+            let {href, data: filterRes, periode} = await fetch(url).then(res =>res.json());
             const table = document.querySelector(tableElt);
             const exportExcelBtn = table.querySelector("#export-excel-btn");
             const thead = table.querySelector("#table-line-head");
@@ -3025,7 +3025,7 @@
                 table.style.display = "";
                 const chartLine = document.querySelector(chartElt);
                 chartLine.style.display = "none";
-            } else if (type == "NilaiOK") {
+            } else if (type == "NilaiOKRKAP") {
                 let tbodyHTML = ``;
                 let totalNilaiOk = 0;
 
@@ -3035,6 +3035,7 @@
                     '<th>Status Pasar</th>' +
                     '<th>Stage</th>' +
                     '<th>Unit Kerja</th>' +
+                    '<th>Tipe Proyek</th>' +
                     '<th>Bulan</th>' +
                     `<th class="text-end">Nilai OK</th>`
                 '</tr>';
@@ -3125,6 +3126,15 @@
                             bulan = "Bulan Unknown"
                             break;
                     }
+                    let tipeProyek = "";
+                    switch(filter.tipe_proyek) {
+                        case "P":
+                            tipeProyek = "Non-Retail"
+                            break;
+                        case "R":
+                            tipeProyek = "Retail"
+                            break;
+                    }
 
                     tbodyHTML += `<tr>
                             <!--begin::Email-->
@@ -3147,6 +3157,12 @@
                             <!--begin::Unit Kerja-->
                             <td>
                                 ${filter.unit_kerja}
+                            </td>
+                            <!--end::Unit Kerja-->
+
+                            <!--begin::Unit Kerja-->
+                            <td>
+                                ${tipeProyek}
                             </td>
                             <!--end::Unit Kerja-->
 
@@ -3609,7 +3625,7 @@
                 table.style.display = "";
                 const chartLine = document.querySelector(chartElt);
                 chartLine.style.display = "none";
-            } else if(type == "Proyek Menang" || type == "Proyek Kalah" ) {
+            } else if(type == "Proyek Menang Tender" || type == "Proyek Kalah Tender" ) {
                 let tbodyHTML = ``;
                 let totalNilaiLainnya = 0;
 
@@ -3672,7 +3688,7 @@
                     }
                     let getMonth = filter.bulan_pelaksanaan;
                     let bulan = "";
-                    if(filter.bulan_ri_perolehan) {
+                    if(type == "Proyek Menang Tender") {
                         getMonth = filter.bulan_ri_perolehan;
                     } else {
                         getMonth = filter.bulan_pelaksanaan;
@@ -3719,6 +3735,12 @@
                             bulan = "-"
                             break;
                     }
+                    let nilai = 0;
+                    if(type == "Proyek Menang Tender") {
+                        nilai = filter.nilai_perolehan;
+                    } else {
+                        nilai = filter.hps_pagu;
+                    }
                     const unitKerja = typeof filter.unit_kerja == "object" ? filter.unit_kerja.unit_kerja : filter.unit_kerja 
                     tbodyHTML += `<tr>
 
@@ -3753,7 +3775,7 @@
 
                             <!--begin::Nilai Forecast-->
                             <td class="text-end">
-                                ${Intl.NumberFormat(["id"]).format(filter.nilai_perolehan ?? 0)}
+                                ${Intl.NumberFormat(["id"]).format(nilai)}
                             </td>
                             <!--end::Nilai Forecast-->
                             </tr>`;
@@ -3767,7 +3789,7 @@
                 table.style.display = "";
                 const chartLine = document.querySelector(chartElt);
                 chartLine.style.display = "none";
-            } else if(type == "Nilai Menang" || type == "Nilai Kalah" ) {
+            } else if(type == "Nilai Menang Tender" || type == "Nilai Kalah Tender" ) {
                 let tbodyHTML = ``;
                 let totalNilaiLainnya = 0;
 
@@ -3829,7 +3851,7 @@
                     }
                     let getMonth = filter.bulan_pelaksanaan;
                     let bulan = "";
-                    if(filter.bulan_ri_perolehan) {
+                    if(type == "Nilai Menang Tender") {
                         getMonth = filter.bulan_ri_perolehan;
                     } else {
                         getMonth = filter.bulan_pelaksanaan;
@@ -3876,6 +3898,12 @@
                             bulan = "-"
                             break;
                     }
+                    let nilai = 0;
+                    if(type == "Nilai Menang Tender") {
+                        nilai = filter.nilai_perolehan;
+                    } else {
+                        nilai = filter.hps_pagu;
+                    }
                     const unitKerja = typeof filter.unit_kerja == "object" ? filter.unit_kerja.unit_kerja : filter.unit_kerja 
                     tbodyHTML += `<tr>
 
@@ -3910,7 +3938,7 @@
 
                             <!--begin::Nilai Forecast-->
                             <td class="text-end">
-                                ${Intl.NumberFormat(["id"]).format(filter.nilai_perolehan ?? 0)}
+                                ${Intl.NumberFormat(["id"]).format(nilai)}
                             </td>
                             <!--end::Nilai Forecast-->
                             </tr>`;
@@ -3926,6 +3954,12 @@
                 chartLine.style.display = "none";
             } else if(type.trim() == "Terendah" || type.trim() == "Terkontrak" ) {
                 let tbodyHTML = ``;
+                let bulanText = '';
+                if(type.trim() == "Terkontrak") {
+                    bulanText = "Bulan RI";
+                } else {
+                    bulanText = "Bulan RA";
+                }
                 // console.log(type);
                 let totalNilaiLainnya = 0;
 
@@ -3935,7 +3969,8 @@
                     '<th>Status Pasar</th>' +
                     '<th>Stage</th>' +
                     '<th>Unit Kerja</th>' +
-                    '<th>Bulan</th>' +
+                    '<th>Tipe Proyek</th>' +
+                    '<th>'+bulanText+'</th>' +
                     `<th class="text-end">Nilai ${type}</th>`
                 '</tr>';
                 [filterRes].forEach(filtering => {
@@ -4028,6 +4063,21 @@
                             bulan = "-"
                             break;
                     }
+                    let tipeProyek = "";
+                    switch(filter.tipe_proyek) {
+                        case "P":
+                            tipeProyek = "Non-Retail"
+                            break;
+                        case "R":
+                            tipeProyek = "Retail"
+                            break;
+                    }
+                    // let nilai = 0;
+                    // if(type.trim() == "Terkontrak") {
+                    //     nilai = 0;
+                    // } else {
+
+                    // }
                     const unitKerja = typeof filter.unit_kerja == "object" ? filter.unit_kerja.unit_kerja : filter.unit_kerja 
                     tbodyHTML += `<tr>
 
@@ -4054,6 +4104,12 @@
                             </td>
                             <!--end::Unit Kerja-->
 
+                            <!--begin::Unit Kerja-->
+                            <td>
+                                ${tipeProyek}
+                            </td>
+                            <!--end::Unit Kerja-->
+
                             <!--begin::Bulan-->
                             <td>
                                 ${bulan}
@@ -4062,7 +4118,7 @@
 
                             <!--begin::Nilai Forecast-->
                             <td class="text-end">
-                                ${Intl.NumberFormat(["id"]).format(filter.forecasts[0].realisasi_forecast ?? 0)}
+                                ${Intl.NumberFormat(["id"]).format(filter.nilai_perolehan)}
                             </td>
                             <!--end::Nilai Forecast-->
                             </tr>`;
@@ -4076,19 +4132,22 @@
                 table.style.display = "";
                 const chartLine = document.querySelector(chartElt);
                 chartLine.style.display = "none";
-            } else if(type.trim() == "Prakualifikasi" || type.trim() == "Menang" || type.trim() == "Proses" || type.trim() == "Kalah dan Cancel") {
+            } else if(type.trim() == "Prakualifikasi" || type.trim() == "Menang" || type.trim() == "Tender Diikuti" || type.trim() == "Kalah dan Cancel") {
                 let tbodyHTML = ``;
                 let totalNilaiLainnya = 0;
-
+                let textBulan = "Bulan RA";
+                if(type.trim() == "Menang") textBulan = "Bulan RI";
                 let theadHTML =
                 '<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">' +
                     '<th>Nama Proyek</th>' +
                     '<th>Status Pasar</th>' +
                     '<th>Stage</th>' +
                     '<th>Unit Kerja</th>' +
-                    '<th>Bulan</th>' +
+                    '<th>Tipe Proyek</th>' +
+                    '<th>'+ textBulan +'</th>' +
                     `<th class="text-end">Nilai ${type}</th>`
                 '</tr>';
+                console.log(filterRes);
                 [filterRes].forEach(filtering => {
                     for(let filter in filtering) {
                     filter = filtering[filter];
@@ -4136,19 +4195,33 @@
                     let getBulanColumn = filter.bulan_pelaksanaan;
                     let nilai = 0;
                     switch (type.trim()) {
-                        case "Proses":
-                            nilai = filter.penawaran_tender ?? 0;
+                        case "Tender Diikuti":
+                            nilai = filter.hps_pagu ?? 0;
                             break;
                         case "Prakualifikasi":
+                            if(filter.tipe_proyek == "R") continue;
                             nilai = filter.hps_pagu ?? 0;
                             break;
                         case "Kalah dan Cancel":
                             nilai = filter.hps_pagu ?? 0;
                             break;
                         case "Menang":
-                            if(filter.forecasts[0]?.month_realisasi) {
-                                nilai = filter.forecasts[0].realisasi_forecast ?? 0;
-                                getBulanColumn = filter.forecasts[0]?.month_realisasi;
+                            const forecasts = filter.forecasts.sort((a, b) => {
+                                return a.month_realisasi - b.month_realisasi;
+                            });
+                            
+                            let forecastLength = forecasts.length ?? 0;
+                            // forecasts.reduce((prev, next) => console.log({prev, next}));
+                            getBulanColumn = forecasts[forecastLength - 1].month_realisasi ?? 0;
+                            if(filter.tipe_proyek == "R") {
+                                // menghitung total nilai realisasi
+                                forecasts.forEach((item) => {
+                                    if(item.periode_prognosa == periode) {
+                                        nilai += Number(item.realisasi_forecast);
+                                    }
+                                });
+                            } else {
+                                nilai = forecasts[forecastLength - 1].realisasi_forecast ?? 0;
                             }
                             break;
                         default:
@@ -4196,6 +4269,15 @@
                             bulan = "-"
                             break;
                     }
+                    let tipeProyek = "";
+                    switch(filter.tipe_proyek) {
+                        case "P":
+                            tipeProyek = "Non-Retail"
+                            break;
+                        case "R":
+                            tipeProyek = "Retail"
+                            break;
+                    }
                     const unitKerja = typeof filter.unit_kerja == "object" ? filter.unit_kerja.unit_kerja : filter.unit_kerja 
                     tbodyHTML += `<tr>
 
@@ -4222,6 +4304,12 @@
                             </td>
                             <!--end::Unit Kerja-->
 
+                            <!--begin::Unit Kerja-->
+                            <td>
+                                ${tipeProyek}
+                            </td>
+                            <!--end::Unit Kerja-->
+
                             <!--begin::Bulan-->
                             <td>
                                 ${bulan}
@@ -4230,7 +4318,7 @@
 
                             <!--begin::Nilai Forecast-->
                             <td class="text-end">
-                                ${Intl.NumberFormat((["id"])).format(nilai)}
+                                ${Intl.NumberFormat((["id"])).format(isNaN(nilai) ? 0 : nilai)}
                             </td>
                             <!--end::Nilai Forecast-->
                             </tr>`;
@@ -4392,11 +4480,11 @@
             const table = document.querySelector(tableElt);
             const chartLine = document.querySelector(chartElt);
             // const forecastFigure = document.querySelector(".highcharts-figure");
-            if (getFullscreenElement()) {
-                forecast1.fullscreen.toggle();
-            } else {
-                document.exitFullscreen();
-            }
+            // if (getFullscreenElement()) {
+            //     forecast1.fullscreen.toggle();
+            // } else {
+            //     document.exitFullscreen();
+            // }
             // table.exitFullscreen();
             table.style.display = "none";
             chartLine.style.display = "";
@@ -4415,12 +4503,14 @@
     <!--Begin::Clickable Monitoring Proyek-->
     <script>
         const monitoringProyekPie = document.querySelectorAll("#monitoring-proyek .highcharts-point");
+        const date = new Date().getMonth() + 1;
+        const prognosa = periodePrognosa.value != "" ? periodePrognosa.value : date;
         monitoringProyekPie.forEach(point => {
             point.addEventListener("click", async e => {
-                const tipe = point.parentElement.getAttribute("aria-label").replaceAll(/[^a-z][^A-Z]|proyek stage|\./gi, "");
-                let url = `/dashboard/monitoring-proyek/${tipe}`;
+                const tipe = point.parentElement.getAttribute("aria-label").replaceAll(/[^a-z][^A-Z]|proyek stage|\./gi, "").trim();
+                let url = `/dashboard/monitoring-proyek/${tipe}/${prognosa}`;
                 if(isFilterActive) {
-                    url = `/dashboard/monitoring-proyek/${tipe}/${filterGet}`;
+                    url = `/dashboard/monitoring-proyek/${tipe}/${prognosa}/${filterGet}`;
                 }
                 getDataTable("#datatable-monitoring-proyek", "#monitoring-proyek", url, tipe, 9);
                 

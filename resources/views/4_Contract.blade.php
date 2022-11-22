@@ -474,13 +474,13 @@
                                                     </td>
                                                 </tr>
                                             @endforelse
-                                            @if ($proyeks_pelaksanaan_closing_proyek->count() < 1)
+                                            {{-- @if ($proyeks_pelaksanaan_closing_proyek->count() < 1)
                                                 <tr>
                                                     <td colspan="3">
                                                         <p class="text-center bg-gray-200">Data proyek tidak ditemukan</p>
                                                     </td>
                                                 </tr>
-                                            @endif
+                                            @endif --}}
                                         </tbody>
                                     </table>
                                     <!--end::Table -->
