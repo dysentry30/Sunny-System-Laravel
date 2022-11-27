@@ -730,12 +730,12 @@ class ForecastController extends Controller
         $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
         if (!Auth::user()->check_administrator) {
             if ($unit_kerja_user instanceof Collection) {
-                $historyForecast = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->select(["proyeks.nama_proyek", "unit_kerjas.divcode", "proyeks.dop", "unit_kerjas.unit_kerja", "history_forecast.*"])->where("history_forecast.periode_prognosa", "=", (int) date("m"))->whereYear("history_forecast.created_at", "=", (int) date("Y"))->get()->whereIn("divcode", $unit_kerja_user->toArray())->groupBy(["dop", "unit_kerja"]);
+                $historyForecast = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->select(["proyeks.nama_proyek", "unit_kerjas.divcode", "proyeks.dop", "unit_kerjas.unit_kerja", "history_forecast.*", "history_forecast.created_at"])->whereYear("history_forecast.created_at", "=", (int) date("Y"))->get()->whereIn("divcode", $unit_kerja_user->toArray())->groupBy(["dop", "unit_kerja"]);
             } else {
-                $historyForecast = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->select(["proyeks.nama_proyek", "unit_kerjas.divcode", "proyeks.dop", "unit_kerjas.unit_kerja", "history_forecast.*"])->where("history_forecast.periode_prognosa", "=", (int) date("m"))->whereYear("history_forecast.created_at", "=", (int) date("Y"))->get()->where("divcode", "=", $unit_kerja_user)->groupBy(["dop", "unit_kerja"]);
+                $historyForecast = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->select(["proyeks.nama_proyek", "unit_kerjas.divcode", "proyeks.dop", "unit_kerjas.unit_kerja", "history_forecast.*", "history_forecast.created_at"])->whereYear("history_forecast.created_at", "=", (int) date("Y"))->get()->where("divcode", "=", $unit_kerja_user)->groupBy(["dop", "unit_kerja"]);
             }
         } else {
-            $historyForecast = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->select(["proyeks.nama_proyek", "unit_kerjas.divcode", "proyeks.dop", "unit_kerjas.unit_kerja", "history_forecast.*"])->where("history_forecast.periode_prognosa", "=", (int) date("m"))->whereYear("history_forecast.created_at", "=", (int) date("Y"))->get()->groupBy(["dop", "unit_kerja"]);
+            $historyForecast = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->select(["proyeks.nama_proyek", "unit_kerjas.divcode", "proyeks.dop", "unit_kerjas.unit_kerja", "history_forecast.*", "history_forecast.created_at"])->whereYear("history_forecast.created_at", "=", (int) date("Y"))->get()->groupBy(["dop", "unit_kerja"]);
         }
         $is_user_unit_kerja = $historyForecast->contains(function ($h) use ($unit_kerja_user) {
             return $h->contains(function ($p) use ($unit_kerja_user) {
@@ -758,6 +758,7 @@ class ForecastController extends Controller
                 $newClass->nilai_forecast = $ph->sum("nilai_forecast");
                 $newClass->realisasi_forecast = $ph->sum("realisasi_forecast");
                 $newClass->periode_prognosa = $ph->avg("periode_prognosa");
+                $newClass->created_at = $ph->first()->created_at;
                 if($ph->contains(function($history) { return $history->is_approved_1 == null;})) {
                     $newClass->is_approved_1 = null;
                 }else if($ph->contains(function($history) { return  $history->is_approved_1 == "f";})) {

@@ -591,12 +591,13 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post('/forecast', [ForecastController::class, 'getAllData']);
     Route::post('/forecast/unit-kerja', [ForecastController::class, 'getAllDataUnitKerjas']);
     Route::get('/request-approval-history', [ForecastController::class, 'requestApprovalHistoryView']);
+    Route::get('/request-approval-history/{periode}/{tahun}', [ForecastController::class, 'requestApprovalHistoryView']);
     // to NEW page 
     // Route::get('/proyek/new', [ProyekController::class, 'new']);
 
     Route::post('/history/request-unlock', function (Request $request) {
         $unit_kerja = UnitKerja::where("unit_kerja", "=", $request->unit_kerja)->first();
-        $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->select(["history_forecast.*", "proyeks.unit_kerja"])->where("proyeks.unit_kerja", "=", $unit_kerja->divcode)->where("history_forecast.periode_prognosa", "=", (int) date("m"))->whereYear("history_forecast.created_at", "=", (int) date("Y"))->get();
+        $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->select(["history_forecast.*", "proyeks.unit_kerja"])->where("proyeks.unit_kerja", "=", $unit_kerja->divcode)->whereYear("history_forecast.created_at", "=", (int) date("Y"))->get();
         $history_forecasts->each(function ($h) {
             $h->is_request_unlock = "f";
             $h->save();
@@ -607,7 +608,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     Route::post('/history/unlock', function (Request $request) {
         $unit_kerja = UnitKerja::where("unit_kerja", "=", $request->unit_kerja)->first();
-        $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->select(["history_forecast.*", "proyeks.unit_kerja"])->where("proyeks.unit_kerja", "=", $unit_kerja->divcode)->where("history_forecast.periode_prognosa", "=", (int) date("m"))->whereYear("history_forecast.created_at", "=", (int) date("Y"))->get();
+        $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->select(["history_forecast.*", "proyeks.unit_kerja"])->where("proyeks.unit_kerja", "=", $unit_kerja->divcode)->whereYear("history_forecast.created_at", "=", (int) date("Y"))->get();
         $history_forecasts->each(function ($h) {
             $h->is_request_unlock = "t";
             $h->save();
@@ -621,7 +622,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post('/forecast/set-lock/unit-kerja', function (Request $request) {
         $data = $request->all();
         $unit_kerja = UnitKerja::where("unit_kerja", "=", $data["unit_kerja"])->first();
-        $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->select(["history_forecast.*", "proyeks.unit_kerja"])->where("proyeks.unit_kerja", "=", $unit_kerja->divcode)->where("history_forecast.periode_prognosa", "=", (int) date("m"))->whereYear("history_forecast.created_at", "=", (int) date("Y"))->get();
+        $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->select(["history_forecast.*", "proyeks.unit_kerja"])->where("proyeks.unit_kerja", "=", $unit_kerja->divcode)->whereYear("history_forecast.created_at", "=", (int) date("Y"))->get();
         $history_forecasts->each(function ($h) use ($data) {
             $h->is_approved_1 = (bool) $data["is_approved"] ? "t" : "f";
             $h->save();
@@ -892,16 +893,16 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $data = $request->all();
         if (isset($data["unit_kerja"])) {
             $unit_kerja = UnitKerja::where("unit_kerja", "=", $data["unit_kerja"])->first();
-            $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("proyeks.unit_kerja", $unit_kerja->divcode)->where("periode_prognosa", "=", (int) date("m"))->select("history_forecast.*")->get();
+            $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("proyeks.unit_kerja", $unit_kerja->divcode)->select("history_forecast.*")->get();
         } else {
             $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(
                 ",",
                 Auth::user()->unit_kerja
             )) : Auth::user()->unit_kerja;
             if ($unit_kerja_user instanceof \Illuminate\Support\Collection) {
-                $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("periode_prognosa", "=", $data["periode_prognosa"])->get()->whereIn("unit_kerja", $unit_kerja_user->toArray());
+                $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->whereIn("unit_kerja", $unit_kerja_user->toArray());
             } else {
-                $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("proyeks.unit_kerja", $unit_kerja_user)->where("periode_prognosa", "=", $data["periode_prognosa"])->get();
+                $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("proyeks.unit_kerja", $unit_kerja_user);
             }
         }
         // if (Auth::user()->check_administrator) {
