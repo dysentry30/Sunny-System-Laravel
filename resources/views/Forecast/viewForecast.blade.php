@@ -143,10 +143,10 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                 <!--end:::Tab item Forecast S/D-->
 
                                                 <!--begin:::Tab Request Aprroval History-->
-                                                {{-- <li class="nav-item">
+                                                <li class="nav-item">
                                                     <a class="nav-link text-active-primary pb-4" href="/request-approval-history"
                                                         style="font-size:14px;">Request Approval History</a>
-                                                </li> --}}
+                                                </li>
                                                 <!--end:::Tab Request Aprroval History-->
                                             </ul>
                                         </div>
