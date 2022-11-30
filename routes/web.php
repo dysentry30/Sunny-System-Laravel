@@ -52,6 +52,7 @@ use Illuminate\Support\Facades\File;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
+use Termwind\Components\Dd;
 
 /*
 |--------------------------------------------------------------------------
@@ -1064,6 +1065,14 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $provinsi = Provinsi::all();
         return view("/MasterData/Provinsi", compact(["provinsi"]));
     });
+
+    // Master Data Provinsi
+    Route::get('/industry-sector', function (Request $request) {
+        // $provinsi = Provinsi::all();
+        $industrySector = json_decode(Http::get("https://fioridev.wika.co.id/ywikasd002/industry-sector?sap-client=200"));
+        dd($industrySector);
+        return view("/MasterData/Provinsi", compact(["industrySector"]));
+    });
     //End :: Master Data
 
 
@@ -1672,7 +1681,7 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
                     "content" => [
                         "properties" => [
                             // "Description" => $p->negara == 'Indonesia' ? "ID" : '',
-                            "Description" => $data_negara->where("country", "=", $p->negara)->first()->abbreviation,
+                            "Description" => $data_negara->where("country", "=", $p->negara)->first()->abbreviation ?? "ID",
                         ]
                     ]
                 ]
