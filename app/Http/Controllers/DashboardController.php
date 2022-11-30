@@ -1205,7 +1205,7 @@ class DashboardController extends Controller
         $stage = null;
         switch ($tipe) {
             case "Terendah":
-                $proyeks = $proyeks->whereIn("stage", [5, 6, 9])->filter(function ($p) {
+                $proyeks = $proyeks->filter(function ($p) {
                     return ($p->stage == 5 && $p->peringkat_wika == "Peringkat 1") || $p->stage == 6 || $p->stage == 9;
                 })->sortByDesc("nilai_perolehan", SORT_NUMERIC)->values();
                 break;
