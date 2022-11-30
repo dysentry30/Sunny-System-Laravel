@@ -173,7 +173,7 @@
                                                             style="z-index: 99; top:5px;">
                                                             @php
                                                                 $month = "";
-                                                                switch ($historyUnitKerjas->first()->periode_prognosa) {
+                                                                switch ($historyUnitKerjas->first()->first()->periode_prognosa) {
                                                                     case 1:
                                                                         $month = "Januari";
                                                                         break;
@@ -213,233 +213,235 @@
                                                                 }
                                                             @endphp
                                                             {{-- <h4 class="h4">{{ $dop }} - Periode {{$month}} {{Carbon\Carbon::parse($historyUnitKerjas->first()->created_at, "UTC")->translatedFormat("F")}}</h4> --}}
-                                                            <h4 class="h4">{{ $dop }} - {{$historyUnitKerjas->first()->created_at->translatedFormat("Y")}}</h4>
+                                                            <h4 class="h4">{{ $dop }} - {{$historyUnitKerjas->first()->first()->created_at->translatedFormat("Y")}}</h4>
                                                         </div>
                                                         @foreach ($historyUnitKerjas as $unit_kerja => $unit_kerja_history)
-                                                            <div class="row mb-5">
-                                                                <div class="col">
-                                                                    <div
-                                                                        class="card border shadow-sm bg-body border-dashed">
-                                                                        <div class="card-body">
-                                                                            <div
-                                                                                class="row d-flex align-items-center justify-content-between w-100">
-                                                                                <div class="col-9 text-wrap">
-                                                                                    <div
-                                                                                        class="d-flex align-items-center mb-3">
-                                                                                        <div class="col-6">
-                                                                                            <div class="row">
-                                                                                                <div class="col text-end">
-                                                                                                    <span>Unit Kerja:
-                                                                                                    </span>
+                                                            @foreach ($unit_kerja_history as $periode => $history)
+                                                                <div class="row mb-5">
+                                                                    <div class="col">
+                                                                        <div
+                                                                            class="card border shadow-sm bg-body border-dashed">
+                                                                            <div class="card-body">
+                                                                                <div
+                                                                                    class="row d-flex align-items-center justify-content-between w-100">
+                                                                                    <div class="col-9 text-wrap">
+                                                                                        <div
+                                                                                            class="d-flex align-items-center mb-3">
+                                                                                            <div class="col-6">
+                                                                                                <div class="row">
+                                                                                                    <div class="col text-end">
+                                                                                                        <span>Unit Kerja:
+                                                                                                        </span>
+                                                                                                    </div>
+                                                                                                    <div class="col">
+                                                                                                        <span><b>{{ $unit_kerja }}</b></span>
+                                                                                                    </div>
                                                                                                 </div>
-                                                                                                <div class="col">
-                                                                                                    <span><b>{{ $unit_kerja }}</b></span>
-                                                                                                </div>
-                                                                                            </div>
 
-                                                                                            @php
-                                                                                                switch ($unit_kerja_history->periode_prognosa) {
-                                                                                                    case 1:
-                                                                                                        $month = "Januari";
-                                                                                                        break;
-                                                                                                    case 2:
-                                                                                                        $month = "Februari";
-                                                                                                        break;
-                                                                                                    case 3:
-                                                                                                        $month = "Maret";
-                                                                                                        break;
-                                                                                                    case 4:
-                                                                                                        $month = "April";
-                                                                                                        break;
-                                                                                                    case 5:
-                                                                                                        $month = "Mei";
-                                                                                                        break;
-                                                                                                    case 6:
-                                                                                                        $month = "Juni";
-                                                                                                        break;
-                                                                                                    case 7:
-                                                                                                        $month = "Juli";
-                                                                                                        break;
-                                                                                                    case 8:
-                                                                                                        $month = "Agustus";
-                                                                                                        break;
-                                                                                                    case 9:
-                                                                                                        $month = "September";
-                                                                                                        break;
-                                                                                                    case 10:
-                                                                                                        $month = "Oktober";
-                                                                                                        break;
-                                                                                                    case 11:
-                                                                                                        $month = "November";
-                                                                                                        break;
-                                                                                                    case 12:
-                                                                                                        $month = "Desember";
-                                                                                                        break;
-                                                                                                }
-                                                                                            @endphp
+                                                                                                @php
+                                                                                                    switch ($history->periode_prognosa) {
+                                                                                                        case 1:
+                                                                                                            $month = "Januari";
+                                                                                                            break;
+                                                                                                        case 2:
+                                                                                                            $month = "Februari";
+                                                                                                            break;
+                                                                                                        case 3:
+                                                                                                            $month = "Maret";
+                                                                                                            break;
+                                                                                                        case 4:
+                                                                                                            $month = "April";
+                                                                                                            break;
+                                                                                                        case 5:
+                                                                                                            $month = "Mei";
+                                                                                                            break;
+                                                                                                        case 6:
+                                                                                                            $month = "Juni";
+                                                                                                            break;
+                                                                                                        case 7:
+                                                                                                            $month = "Juli";
+                                                                                                            break;
+                                                                                                        case 8:
+                                                                                                            $month = "Agustus";
+                                                                                                            break;
+                                                                                                        case 9:
+                                                                                                            $month = "September";
+                                                                                                            break;
+                                                                                                        case 10:
+                                                                                                            $month = "Oktober";
+                                                                                                            break;
+                                                                                                        case 11:
+                                                                                                            $month = "November";
+                                                                                                            break;
+                                                                                                        case 12:
+                                                                                                            $month = "Desember";
+                                                                                                            break;
+                                                                                                    }
+                                                                                                @endphp
 
-                                                                                            <div class="row">
-                                                                                                <div class="col text-end">
-                                                                                                    <span>Bulan Otorisasi:
-                                                                                                    </span>
-                                                                                                </div>
-                                                                                                <div class="col">
-                                                                                                    <span><b>{{ $month }}</b></span>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                        <div class="col-6">
-                                                                                            <div class="row">
-                                                                                                <div class="col">
-                                                                                                    <div
-                                                                                                        class="d-flex align-items-center">
-                                                                                                        <div class="col-4">
-                                                                                                            <span>Nilai
-                                                                                                                RKAP:
-                                                                                                            </span>
-                                                                                                        </div>
-                                                                                                        <div class="col">
-                                                                                                            <span><b>Rp.
-                                                                                                                    <span
-                                                                                                                        class="text-end">{{ number_format($unit_kerja_history->rkap_forecast, 0, '.', '.') }}</span></b></span>
-                                                                                                        </div>
+                                                                                                <div class="row">
+                                                                                                    <div class="col text-end">
+                                                                                                        <span>Bulan Otorisasi:
+                                                                                                        </span>
+                                                                                                    </div>
+                                                                                                    <div class="col">
+                                                                                                        <span><b>{{ $month }}</b></span>
                                                                                                     </div>
                                                                                                 </div>
                                                                                             </div>
-                                                                                            <div class="row">
-                                                                                                <div class="col">
-                                                                                                    <div
-                                                                                                        class="d-flex align-items-center">
-                                                                                                        <div class="col-4">
-                                                                                                            <span>Nilai
-                                                                                                                Forecast:
-                                                                                                            </span>
-                                                                                                        </div>
-                                                                                                        <div class="col">
-                                                                                                            <span><b>Rp.
-                                                                                                                    <span
-                                                                                                                        class="text-end">{{ number_format($unit_kerja_history->nilai_forecast, 0, '.', '.') }}</span></b></span>
+                                                                                            <div class="col-6">
+                                                                                                <div class="row">
+                                                                                                    <div class="col">
+                                                                                                        <div
+                                                                                                            class="d-flex align-items-center">
+                                                                                                            <div class="col-4">
+                                                                                                                <span>Nilai
+                                                                                                                    RKAP:
+                                                                                                                </span>
+                                                                                                            </div>
+                                                                                                            <div class="col">
+                                                                                                                <span><b>Rp.
+                                                                                                                        <span
+                                                                                                                            class="text-end">{{ number_format($history->rkap_forecast, 0, '.', '.') }}</span></b></span>
+                                                                                                            </div>
                                                                                                         </div>
                                                                                                     </div>
                                                                                                 </div>
-                                                                                            </div>
-                                                                                            <div class="row">
-                                                                                                <div class="col">
-                                                                                                    <div
-                                                                                                        class="d-flex align-items-center">
-                                                                                                        <div class="col-4">
-                                                                                                            <span>Nilai
-                                                                                                                Realisasi:
-                                                                                                            </span>
+                                                                                                <div class="row">
+                                                                                                    <div class="col">
+                                                                                                        <div
+                                                                                                            class="d-flex align-items-center">
+                                                                                                            <div class="col-4">
+                                                                                                                <span>Nilai
+                                                                                                                    Forecast:
+                                                                                                                </span>
+                                                                                                            </div>
+                                                                                                            <div class="col">
+                                                                                                                <span><b>Rp.
+                                                                                                                        <span
+                                                                                                                            class="text-end">{{ number_format($history->nilai_forecast, 0, '.', '.') }}</span></b></span>
+                                                                                                            </div>
                                                                                                         </div>
-                                                                                                        <div class="col">
-                                                                                                            <span><b>Rp.
-                                                                                                                    <span
-                                                                                                                        class="text-end">{{ number_format($unit_kerja_history->realisasi_forecast, 0, '.', '.') }}</span></b></span>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class="row">
+                                                                                                    <div class="col">
+                                                                                                        <div
+                                                                                                            class="d-flex align-items-center">
+                                                                                                            <div class="col-4">
+                                                                                                                <span>Nilai
+                                                                                                                    Realisasi:
+                                                                                                                </span>
+                                                                                                            </div>
+                                                                                                            <div class="col">
+                                                                                                                <span><b>Rp.
+                                                                                                                        <span
+                                                                                                                            class="text-end">{{ number_format($history->realisasi_forecast, 0, '.', '.') }}</span></b></span>
+                                                                                                            </div>
                                                                                                         </div>
                                                                                                     </div>
                                                                                                 </div>
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
-                                                                                </div>
-                                                                                <div class="col-3">
-                                                                                    @if (Auth::user()->check_administrator || str_contains(Auth::user()->name, "PIC"))
-                                                                                        @if ($unit_kerja_history->is_approved_1 == "t")
-                                                                                            <div
-                                                                                                class="d-flex flex-row justify-content-evenly align-items-center w-100">
-                                                                                                <button type="button"
-                                                                                                    class="btn btn-sm btn-success text-white disabled"
-                                                                                                    style="background-color: rgb(17, 179, 17)">Approved</button>
-                                                                                                @if ($unit_kerja_history->is_request_unlock == "f")
-                                                                                                    <form action=""></form>
-                                                                                                    <form action="/history/unlock" onsubmit="requestUnlock()" class="mt-4" method="POST">
-                                                                                                        @csrf
-                                                                                                        <input type="hidden" name="unit_kerja" value="{{$unit_kerja}}">
-                                                                                                        <button type="submit"
-                                                                                                            class="btn btn-sm btn-active-primary text-white"
-                                                                                                            style="background-color:#008CB4;">Unlock Forecast</button>
-                                                                                                    </form>
-                                                                                                @endif
-                                                                                            </div>
-                                                                                        @elseif($unit_kerja_history->is_approved_1 == "f")
-                                                                                            <div
-                                                                                                class="d-flex flex-row justify-content-evenly align-items-center w-100">
-                                                                                                <button type="button"
-                                                                                                    class="btn btn-sm btn-danger text-white disabled">Approval ditolak</button>
-                                                                                            </div>
-                                                                                        @else
-                                                                                            <div
-                                                                                                class="d-flex flex-row justify-content-evenly align-items-center w-100">
-                                                                                                <button type="button"
-                                                                                                    onclick="confirmAction(this, '{{ $unit_kerja }}', true)"
-                                                                                                    class="btn btn-sm btn-active-primary text-white"
-                                                                                                    style="background-color:#008CB4;">Approve</button>
-                                                                                                <button type="button"
-                                                                                                    onclick="confirmAction(this, '{{ $unit_kerja }}', false)"
-                                                                                                    class="btn btn-sm btn-light btn-active-danger">Cancel</button>
-                                                                                            </div>
-                                                                                        @endif
-                                                                                    @else
-                                                                                        @if ($unit_kerja_history->is_approved_1 == "t")
-                                                                                            <div
-                                                                                                class="d-flex flex-row justify-content-evenly align-items-center w-100">
-                                                                                                <button type="button"
-                                                                                                    class="btn btn-sm btn-success text-white disabled"
-                                                                                                    style="background-color: rgb(17, 179, 17)">Approved</button>
-                                                                                                <form action=""></form>
-                                                                                                @if($unit_kerja_history->is_request_unlock == "f")
+                                                                                    <div class="col-3">
+                                                                                        @if (Auth::user()->check_administrator || str_contains(Auth::user()->name, "PIC"))
+                                                                                            @if ($history->is_approved_1 == "t")
+                                                                                                <div
+                                                                                                    class="d-flex flex-row justify-content-evenly align-items-center w-100">
                                                                                                     <button type="button"
-                                                                                                        class="btn btn-sm btn-active-primary text-white disabled ms-7"
-                                                                                                        style="background-color:#008CB4;">Menunggu Approval Unlock...</button>
-                                                                                                @elseif($unit_kerja_history->is_request_unlock == "t")
-                                                                                                    <form action="/forecast/set-unlock" onsubmit="requestUnlock()" class="mt-4" method="POST">
+                                                                                                        class="btn btn-sm btn-success text-white disabled"
+                                                                                                        style="background-color: rgb(17, 179, 17)">Approved</button>
+                                                                                                    @if ($history->is_request_unlock == "f")
+                                                                                                        <form action=""></form>
+                                                                                                        <form action="/history/unlock" onsubmit="requestUnlock()" class="mt-4" method="POST">
+                                                                                                            @csrf
+                                                                                                            <input type="hidden" name="unit_kerja" value="{{$unit_kerja}}">
+                                                                                                            <button type="submit"
+                                                                                                                class="btn btn-sm btn-active-primary text-white"
+                                                                                                                style="background-color:#008CB4;">Unlock Forecast</button>
+                                                                                                        </form>
+                                                                                                    @endif
+                                                                                                </div>
+                                                                                            @elseif($history->is_approved_1 == "f")
+                                                                                                <div
+                                                                                                    class="d-flex flex-row justify-content-evenly align-items-center w-100">
+                                                                                                    <button type="button"
+                                                                                                        class="btn btn-sm btn-danger text-white disabled">Approval ditolak</button>
+                                                                                                </div>
+                                                                                            @else
+                                                                                                <div
+                                                                                                    class="d-flex flex-row justify-content-evenly align-items-center w-100">
+                                                                                                    <button type="button"
+                                                                                                        onclick="confirmAction(this, '{{ $unit_kerja }}', true)"
+                                                                                                        class="btn btn-sm btn-active-primary text-white"
+                                                                                                        style="background-color:#008CB4;">Approve</button>
+                                                                                                    <button type="button"
+                                                                                                        onclick="confirmAction(this, '{{ $unit_kerja }}', false)"
+                                                                                                        class="btn btn-sm btn-light btn-active-danger">Cancel</button>
+                                                                                                </div>
+                                                                                            @endif
+                                                                                        @else
+                                                                                            @if ($history->is_approved_1 == "t")
+                                                                                                <div
+                                                                                                    class="d-flex flex-row justify-content-evenly align-items-center w-100">
+                                                                                                    <button type="button"
+                                                                                                        class="btn btn-sm btn-success text-white disabled"
+                                                                                                        style="background-color: rgb(17, 179, 17)">Approved</button>
+                                                                                                    <form action=""></form>
+                                                                                                    @if($history->is_request_unlock == "f")
+                                                                                                        <button type="button"
+                                                                                                            class="btn btn-sm btn-active-primary text-white disabled ms-7"
+                                                                                                            style="background-color:#008CB4;">Menunggu Approval Unlock...</button>
+                                                                                                    @elseif($history->is_request_unlock == "t")
+                                                                                                        <form action="/forecast/set-unlock" onsubmit="requestUnlock()" class="mt-4" method="POST">
+                                                                                                            @csrf
+                                                                                                            <input type="hidden" name="unit_kerja" value="{{$unit_kerja}}">
+                                                                                                            <button type="submit"
+                                                                                                            onclick="confirmDeleteHistory(this); return false"
+                                                                                                            class="btn btn-sm btn-danger text-white"
+                                                                                                            style="background-color:#008CB4;">Hapus History</button>
+                                                                                                        </form>
+                                                                                                    @else
+                                                                                                        <form action="/history/request-unlock" onsubmit="requestUnlock()" class="mt-4" method="POST">
+                                                                                                            @csrf
+                                                                                                            <input type="hidden" name="unit_kerja" value="{{$unit_kerja}}">
+                                                                                                            <button type="submit"
+                                                                                                                class="btn btn-sm btn-active-primary text-white"
+                                                                                                                style="background-color:#008CB4;">Request Unlock</button>
+                                                                                                        </form>
+                                                                                                    @endif 
+                                                                                                </div>
+                                                                                            @elseif($history->is_approved_1 == "f")
+                                                                                                <div
+                                                                                                    class="d-flex flex-row justify-content-evenly align-items-center w-100">
+                                                                                                    <button type="button"
+                                                                                                        class="btn btn-sm btn-danger text-white disabled">Approval ditolak</button>
+                                                                                                    <form action=""></form>
+                                                                                                    <form action="/forecast/set-unlock"class="mt-4" method="POST">
                                                                                                         @csrf
                                                                                                         <input type="hidden" name="unit_kerja" value="{{$unit_kerja}}">
                                                                                                         <button type="submit"
-                                                                                                        onclick="confirmDeleteHistory(this); return false"
-                                                                                                        class="btn btn-sm btn-danger text-white"
+                                                                                                        class="btn btn-sm btn-active-primary text-white"
                                                                                                         style="background-color:#008CB4;">Hapus History</button>
                                                                                                     </form>
-                                                                                                @else
-                                                                                                    <form action="/history/request-unlock" onsubmit="requestUnlock()" class="mt-4" method="POST">
-                                                                                                        @csrf
-                                                                                                        <input type="hidden" name="unit_kerja" value="{{$unit_kerja}}">
-                                                                                                        <button type="submit"
-                                                                                                            class="btn btn-sm btn-active-primary text-white"
-                                                                                                            style="background-color:#008CB4;">Request Unlock</button>
-                                                                                                    </form>
-                                                                                                @endif 
-                                                                                            </div>
-                                                                                        @elseif($unit_kerja_history->is_approved_1 == "f")
-                                                                                            <div
-                                                                                                class="d-flex flex-row justify-content-evenly align-items-center w-100">
-                                                                                                <button type="button"
-                                                                                                    class="btn btn-sm btn-danger text-white disabled">Approval ditolak</button>
-                                                                                                <form action=""></form>
-                                                                                                <form action="/forecast/set-unlock"class="mt-4" method="POST">
-                                                                                                    @csrf
-                                                                                                    <input type="hidden" name="unit_kerja" value="{{$unit_kerja}}">
-                                                                                                    <button type="submit"
-                                                                                                    class="btn btn-sm btn-active-primary text-white"
-                                                                                                    style="background-color:#008CB4;">Hapus History</button>
-                                                                                                </form>
-                                                                                            </div>
-                                                                                        @else
-                                                                                            <div
-                                                                                                class="d-flex flex-row justify-content-evenly align-items-center w-100">
-                                                                                                <button type="button"
-                                                                                                    class="btn btn-sm btn-active-primary text-white disabled"
-                                                                                                    style="background-color:#008CB4;">Menunggu untuk approval...</button>
-                                                                                            </div>
+                                                                                                </div>
+                                                                                            @else
+                                                                                                <div
+                                                                                                    class="d-flex flex-row justify-content-evenly align-items-center w-100">
+                                                                                                    <button type="button"
+                                                                                                        class="btn btn-sm btn-active-primary text-white disabled"
+                                                                                                        style="background-color:#008CB4;">Menunggu untuk approval...</button>
+                                                                                                </div>
+                                                                                            @endif
                                                                                         @endif
-                                                                                    @endif
+                                                                                    </div>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
+                                                            @endforeach
                                                         @endforeach
                                                     </div>
                                                     <hr>
