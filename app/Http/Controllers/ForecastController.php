@@ -730,13 +730,14 @@ class ForecastController extends Controller
         $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
         if (!Auth::user()->check_administrator) {
             if ($unit_kerja_user instanceof Collection) {
-                $historyForecast = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->select(["proyeks.nama_proyek", "unit_kerjas.divcode", "proyeks.dop", "unit_kerjas.unit_kerja", "history_forecast.*", "history_forecast.created_at", "proyeks.stage", "proyeks.is_cancel"])->whereYear("history_forecast.created_at", "=", (int) date("Y"))->get()->whereIn("divcode", $unit_kerja_user->toArray())->groupBy(["dop", "unit_kerja"]);
+                $historyForecast = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->select(["proyeks.nama_proyek", "unit_kerjas.divcode", "proyeks.dop", "unit_kerjas.unit_kerja", "history_forecast.*", "history_forecast.created_at", "proyeks.stage", "proyeks.is_cancel"])->whereYear("history_forecast.created_at", "=", (int) date("Y"))->get()->whereIn("divcode", $unit_kerja_user->toArray())->groupBy(["dop", "unit_kerja", "periode_prognosa"]);
             } else {
-                $historyForecast = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->select(["proyeks.nama_proyek", "unit_kerjas.divcode", "proyeks.dop", "unit_kerjas.unit_kerja", "history_forecast.*", "history_forecast.created_at", "proyeks.stage", "proyeks.is_cancel"])->whereYear("history_forecast.created_at", "=", (int) date("Y"))->get()->where("divcode", "=", $unit_kerja_user)->groupBy(["dop", "unit_kerja"]);
+                $historyForecast = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->select(["proyeks.nama_proyek", "unit_kerjas.divcode", "proyeks.dop", "unit_kerjas.unit_kerja", "history_forecast.*", "history_forecast.created_at", "proyeks.stage", "proyeks.is_cancel"])->whereYear("history_forecast.created_at", "=", (int) date("Y"))->get()->where("divcode", "=", $unit_kerja_user)->groupBy(["dop", "unit_kerja", "periode_prognosa"]);
             }
         } else {
-            $historyForecast = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->select(["proyeks.nama_proyek", "unit_kerjas.divcode", "proyeks.dop", "unit_kerjas.unit_kerja", "history_forecast.*", "history_forecast.created_at", "proyeks.stage", "proyeks.is_cancel"])->whereYear("history_forecast.created_at", "=", (int) date("Y"))->get()->groupBy(["dop", "unit_kerja"]);
+            $historyForecast = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->select(["proyeks.nama_proyek", "unit_kerjas.divcode", "proyeks.dop", "unit_kerjas.unit_kerja", "history_forecast.*", "history_forecast.created_at", "proyeks.stage", "proyeks.is_cancel"])->whereYear("history_forecast.created_at", "=", (int) date("Y"))->get()->groupBy(["dop", "unit_kerja", "periode_prognosa"]);
         }
+        // dd($historyForecast);
         $is_user_unit_kerja = $historyForecast->contains(function ($h) use ($unit_kerja_user) {
             return $h->contains(function ($p) use ($unit_kerja_user) {
                 if(!empty($unit_kerja_user)) {
@@ -752,38 +753,40 @@ class ForecastController extends Controller
             });
         });
         $historyForecast = $historyForecast->map(function ($h) {
-            return $h->map(function ($ph) {
-                $newClass = new stdClass();
-                $newClass->rkap_forecast = $ph->sum(function($f) {
-                    return (int) $f->rkap_forecast;
-                });
-                $newClass->nilai_forecast = $ph->sum(function($f) {
-                    if($f->stage != 7 || !$f->is_cancel || !empty($f->is_cancel)) {
-                        return (int) $f->nilai_forecast;
+            return $h->map(function ($histories) {
+                return $histories->map(function($ph) {
+                    $newClass = new stdClass();
+                    $newClass->rkap_forecast = $ph->sum(function($f) {
+                        return (int) $f->rkap_forecast;
+                    });
+                    $newClass->nilai_forecast = $ph->sum(function($f) {
+                        if($f->stage != 7 || !$f->is_cancel || !empty($f->is_cancel)) {
+                            return (int) $f->nilai_forecast;
+                        }
+                    });
+                    $newClass->realisasi_forecast = $ph->sum(function($f) {
+                        return (int) $f->realisasi_forecast;
+                    });
+                    $newClass->periode_prognosa = (int) $ph->avg(function($f) {
+                        return (int) $f->periode_prognosa;
+                    });
+                    $newClass->created_at = $ph->first()->created_at;
+                    if($ph->contains(function($history) { return $history->is_approved_1 == null;})) {
+                        $newClass->is_approved_1 = null;
+                    }else if($ph->contains(function($history) { return  $history->is_approved_1 == "f";})) {
+                        $newClass->is_approved_1 = "f";
+                    } else {
+                        $newClass->is_approved_1 = "t";
                     }
+                    if($ph->contains(function($history) { return $history->is_request_unlock == null;})) {
+                        $newClass->is_request_unlock = null;
+                    }else if($ph->contains(function($history) { return  $history->is_request_unlock == "f";})) {
+                        $newClass->is_request_unlock = "f";
+                    } else {
+                        $newClass->is_request_unlock = "t";
+                    }
+                    return $newClass;
                 });
-                $newClass->realisasi_forecast = $ph->sum(function($f) {
-                    return (int) $f->realisasi_forecast;
-                });
-                $newClass->periode_prognosa = (int) $ph->avg(function($f) {
-                    return (int) $f->periode_prognosa;
-                });
-                $newClass->created_at = $ph->first()->created_at;
-                if($ph->contains(function($history) { return $history->is_approved_1 == null;})) {
-                    $newClass->is_approved_1 = null;
-                }else if($ph->contains(function($history) { return  $history->is_approved_1 == "f";})) {
-                    $newClass->is_approved_1 = "f";
-                } else {
-                    $newClass->is_approved_1 = "t";
-                }
-                if($ph->contains(function($history) { return $history->is_request_unlock == null;})) {
-                    $newClass->is_request_unlock = null;
-                }else if($ph->contains(function($history) { return  $history->is_request_unlock == "f";})) {
-                    $newClass->is_request_unlock = "f";
-                } else {
-                    $newClass->is_request_unlock = "t";
-                }
-                return $newClass;
             });
         });
         // dd($historyForecast);
