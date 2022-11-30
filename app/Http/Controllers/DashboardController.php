@@ -313,7 +313,7 @@ class DashboardController extends Controller
 
         $nilaiProyekTerkontrak = $nilaiHistoryForecast->where("stage", "=" , 8)->where("is_cancel", "=", false);
         $proyeksTerendahTerkontrak = $nilaiHistoryForecast->filter(function($p) {
-            return $p->stage == 6 || ($p->stage == 5 && $p->peringkat == "Peringkat 1") || $p->is_cancel == false;
+            return $p->stage == 6 || ($p->stage == 5 && $p->peringkat_wika == "Peringkat 1") || $p->is_cancel == false;
         });
         // $proyeksTerendahTerkontrak = $proyeks->where("is_cancel", "=", false)->where("stage", "!=", 7);
         foreach ($nilaiProyekTerkontrak as $t) {
@@ -336,8 +336,8 @@ class DashboardController extends Controller
             //     $nilaiRealisasiForecast == 0;
             // }
         }
-        // $nilaiTerkontrak = $nilaiTerkontrak / $per;
-        // $nilaiTerendah = $nilaiTerendah / $per;
+        $nilaiTerkontrak = $nilaiTerkontrak / $per;
+        $nilaiTerendah = $nilaiTerendah / $per;
         //End::Terendah Terkontrak
 
         //Begin::Competitive Index
