@@ -312,7 +312,9 @@ class DashboardController extends Controller
         $nilaiTerendah = 0;
 
         $nilaiProyekTerkontrak = $nilaiHistoryForecast->where("stage", "=" , 8)->where("is_cancel", "=", false);
-        $proyeksTerendahTerkontrak = $nilaiHistoryForecast->where("stage", "=" , 6)->where("is_cancel", "=", false);
+        $proyeksTerendahTerkontrak = $nilaiHistoryForecast->filter(function($p) {
+            return $p->stage == 6 || ($p->stage == 5 && $p->peringkat == "Peringkat 1") && $p->is_cancel == false;
+        });
         // $proyeksTerendahTerkontrak = $proyeks->where("is_cancel", "=", false)->where("stage", "!=", 7);
         foreach ($nilaiProyekTerkontrak as $t) {
             // if ($realisasi->month_realisasi == $i && !$forecast->is_cancel) {
@@ -330,23 +332,6 @@ class DashboardController extends Controller
             //     $nilaiRealisasiForecast == 0;
             // }
         }
-        // foreach ($proyeksTerendahTerkontrak as $proyek) {
-        //     $stg = $proyek->stage;
-        //     if ($stg == 8) {
-        //         $nilaiTerkontrak += $proyek->Forecasts->where("periode_prognosa", "=", $month)->sum(function($f) {
-        //             return (int) $f->realisasi_forecast;
-        //         });
-        //         // if($proyek->tipe_proyek == "R") {
-        //         // } else {
-        //         // }
-        //         // $nilaiTerkontrak += (int) str_replace(",", "", $proyek->nilai_perolehan);
-        //     } else if ($stg == 6 || ($stg == 5 && $proyek->peringkat_wika == "Peringkat 1")) {
-        //         $nilaiTerendah += $proyek->Forecasts->where("periode_prognosa", "=", $month)->sum(function($f) {
-        //             return (int) $f->realisasi_forecast;
-        //         });
-        //     };
-        //     // dump($nilaiTerendah, $nilaiTerkontrak);
-        // };
         //End::Terendah Terkontrak
 
         //Begin::Competitive Index
