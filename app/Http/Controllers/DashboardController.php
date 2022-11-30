@@ -319,7 +319,9 @@ class DashboardController extends Controller
         foreach ($nilaiProyekTerkontrak as $t) {
             // if ($realisasi->month_realisasi == $i && !$forecast->is_cancel) {
                 // dump($realisasi->realisasi_forecast);
-                $nilaiTerkontrak += (int) $t->realisasi_forecast;
+                if(!empty($t->month_realisasi)) {
+                    $nilaiTerkontrak += (int) $t->realisasi_forecast;
+                }
             // } else {
             //     $nilaiRealisasiForecast == 0;
             // }
@@ -327,13 +329,15 @@ class DashboardController extends Controller
         foreach ($proyeksTerendahTerkontrak as $t) {
             // if ($realisasi->month_realisasi == $i && !$forecast->is_cancel) {
                 // dump($realisasi->realisasi_forecast);
-                $nilaiTerendah += (int) $t->realisasi_forecast;
+                if(!empty($t->month_realisasi)) {
+                    $nilaiTerendah += (int) $t->realisasi_forecast;
+                }
             // } else {
             //     $nilaiRealisasiForecast == 0;
             // }
         }
-        $nilaiTerkontrak = $nilaiTerkontrak / $per;
-        $nilaiTerendah = $nilaiTerendah / $per;
+        // $nilaiTerkontrak = $nilaiTerkontrak / $per;
+        // $nilaiTerendah = $nilaiTerendah / $per;
         //End::Terendah Terkontrak
 
         //Begin::Competitive Index
