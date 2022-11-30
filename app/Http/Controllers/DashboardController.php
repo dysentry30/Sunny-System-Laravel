@@ -313,7 +313,13 @@ class DashboardController extends Controller
         foreach ($proyeks as $proyek) {
             $stg = $proyek->stage;
             if ($stg == 8) {
-                $nilaiTerkontrak += (int) str_replace(",", "", $proyek->nilai_perolehan);
+                if($proyek->tipe_proyek == "R") {
+                    $nilaiTerkontrak += $proyek->Forecasts->sum(function($f) {
+                        return (int) $f->realisasi_forecast;
+                    });
+                } else {
+                    $nilaiTerkontrak += (int) str_replace(",", "", $proyek->nilai_perolehan);
+                }
             } else if ($stg == 6 || ($stg == 5 && $proyek->peringkat_wika == "Peringkat 1")) {
                 $nilaiTerendah += (int) str_replace(",", "", $proyek->nilai_perolehan);
             };
