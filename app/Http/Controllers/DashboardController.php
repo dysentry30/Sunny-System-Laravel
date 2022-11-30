@@ -314,7 +314,7 @@ class DashboardController extends Controller
             $stg = $proyek->stage;
             if ($stg == 8) {
                 if($proyek->tipe_proyek == "R") {
-                    $nilaiTerkontrak += $proyek->Forecasts->sum(function($f) {
+                    $nilaiTerkontrak += $proyek->Forecasts->where("periode_prognosa", "=", $month)->sum(function($f) {
                         return (int) $f->realisasi_forecast;
                     });
                 } else {
