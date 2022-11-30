@@ -1239,17 +1239,17 @@ class DashboardController extends Controller
             $new_class->status_pasdin = $p->status_pasdin;
 
             return $new_class;
-        })->where("nilai_perolehan", "!=", 0)->each(function($p) use($sheet, $row, $tipe) {
+        })->where("nilai_perolehan", "!=", 0)->each(function($p) use($sheet, &$row, $tipe) {
             $sheet->setCellValue('A' . $row, $p->nama_proyek);
             $sheet->setCellValue('B' . $row, $p->status_pasdin);
             $sheet->setCellValue('C' . $row, $this->getProyekStage($p->stage));
             $sheet->setCellValue('D' . $row, $p->unitKerja);
             $sheet->setCellValue('E' . $row, $p->tipe_proyek);
             if($tipe == "Terendah") {
-                $sheet->setCellValue('F' . $row, $p->bulan_pelaksanaan);
+                $sheet->setCellValue('F' . $row, $this->getFullMonth($p->bulan_pelaksanaan));
                 $p->bulan = $p->bulan_pelaksanaan;
             } else {
-                $sheet->setCellValue('F' . $row, $p->bulan_ri_perolehan);
+                $sheet->setCellValue('F' . $row, $this->getFullMonth($p->bulan_ri_perolehan));
                 $p->bulan = $p->bulan_ri_perolehan;
             }
             $sheet->setCellValue('G' . $row, $p->nilai_perolehan);
@@ -1576,7 +1576,7 @@ class DashboardController extends Controller
     }
 
 
-    public function getFullMonth($month)
+    public static function getFullMonth($month)
     {
         switch ($month) {
             case 1:
