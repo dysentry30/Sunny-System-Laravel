@@ -3977,7 +3977,7 @@
                     for(let filter in filtering) {
                     filter = filtering[filter];
                     let stage = "";
-                    totalNilaiLainnya += Number(filter.nilai_perolehan || filter.nilai_rkap);
+                    totalNilaiLainnya += Number(filter.nilai_perolehan);
                     switch (Number(filter.stage)) {
                         case 0:
                             stage = "Cancel";
@@ -4022,7 +4022,7 @@
                     //     // console.log(filter);
                     //     nilaiTerendahTerkontrak = 0;
                     // }
-                    switch (Number(filter.forecasts[0]?.month_realisasi)) {
+                    switch (Number(filter.bulan)) {
                         case 1:
                             bulan = "Januari";
                             break;
@@ -4064,21 +4064,21 @@
                             break;
                     }
                     let tipeProyek = "";
-                    switch(filter.tipe_proyek) {
-                        case "P":
-                            tipeProyek = "Non-Retail"
-                            break;
-                        case "R":
-                            tipeProyek = "Retail"
-                            break;
-                    }
+                    // switch(filter.tipe_proyek) {
+                    //     case "P":
+                    //         tipeProyek = "Non-Retail"
+                    //         break;
+                    //     case "R":
+                    //         tipeProyek = "Retail"
+                    //         break;
+                    // }
                     // let nilai = 0;
                     // if(type.trim() == "Terkontrak") {
                     //     nilai = 0;
                     // } else {
 
                     // }
-                    const unitKerja = typeof filter.unit_kerja == "object" ? filter.unit_kerja.unit_kerja : filter.unit_kerja 
+                    // const unitKerja = typeof filter.unit_kerja == "object" ? filter.unit_kerja.unit_kerja : filter.unit_kerja 
                     tbodyHTML += `<tr>
 
                             <!--begin::Email-->
@@ -4100,13 +4100,13 @@
 
                             <!--begin::Unit Kerja-->
                             <td>
-                                ${unitKerja}
+                                ${filter.unitKerja}
                             </td>
                             <!--end::Unit Kerja-->
 
                             <!--begin::Unit Kerja-->
                             <td>
-                                ${tipeProyek}
+                                ${filter.tipe_proyek}
                             </td>
                             <!--end::Unit Kerja-->
 

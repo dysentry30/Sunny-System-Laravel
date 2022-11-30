@@ -1183,12 +1183,15 @@ class DashboardController extends Controller
         $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
         if (!Auth::user()->check_administrator) {
             if ($filter != false) {
-                $proyeks = Proyek::with(["UnitKerja", "Forecasts"])->where("unit_kerja", "=", $filter)->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "nilai_perolehan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "hps_pagu", "bulan_ri_perolehan", "tipe_proyek"]);
+                // $proyeks = Proyek::with(["UnitKerja", "Forecasts"])->where("unit_kerja", "=", $filter)->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "nilai_perolehan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "hps_pagu", "bulan_ri_perolehan", "tipe_proyek"]);
+                $proyeks = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("jenis_proyek", "!=", "I")->where("forecasts.periode_prognosa", "=", (int) date("m"))->get()->whereNotIn("unit_kerja", ["B", "C", "D", "8"]);
             } else {
                 if ($unit_kerja_user instanceof \Illuminate\Support\Collection) {
-                    $proyeks = Proyek::with(["UnitKerja", "Forecasts"])->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "nilai_perolehan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "hps_pagu", "bulan_ri_perolehan", "tipe_proyek"])->whereIn("unit_kerja", $unit_kerja_user->toArray());
+                    // $proyeks = Proyek::with(["UnitKerja", "Forecasts"])->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "nilai_perolehan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "hps_pagu", "bulan_ri_perolehan", "tipe_proyek"])->whereIn("unit_kerja", $unit_kerja_user->toArray());
+                    $proyeks = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("jenis_proyek", "!=", "I")->where("forecasts.periode_prognosa", "=", (int) date("m"))->get()->whereNotIn("unit_kerja", ["B", "C", "D", "8"])->whereIn("unit_kerja", $unit_kerja_user->toArray());
                 } else {
-                    $proyeks = Proyek::with(["UnitKerja", "Forecasts"])->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "nilai_perolehan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "hps_pagu", "bulan_ri_perolehan", "tipe_proyek"])->where("unit_kerja", $unit_kerja_user);
+                    // $proyeks = Proyek::with(["UnitKerja", "Forecasts"])->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "nilai_perolehan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "hps_pagu", "bulan_ri_perolehan", "tipe_proyek"])->where("unit_kerja", $unit_kerja_user);
+                    $proyeks = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("jenis_proyek", "!=", "I")->where("forecasts.periode_prognosa", "=", (int) date("m"))->get()->whereNotIn("unit_kerja", ["B", "C", "D", "8"])->where("unit_kerja", $unit_kerja_user);
                 }
             }
         } else {
@@ -1208,36 +1211,46 @@ class DashboardController extends Controller
                 break;
             case "Terkontrak":
                 $stage = 8;
-                $proyeks = $proyeks->where("stage", "=", $stage)->sortByDesc("nilai_perolehan", SORT_NUMERIC)->values();
+                $proyeks = $proyeks->where("stage", "=", $stage)->where("is_cancel", "!=", true)->sortByDesc("nilai_perolehan", SORT_NUMERIC)->values();
                 break;
         }
         // dd($proyeks);
         
         $row = 2;
-        $proyeks->each(function ($p) use (&$row, $sheet, $tipe) {
-            $tipe_proyek = "";
-            $nilai_perolehan = 0;
+        $proyeks = $proyeks->where("month_realisasi", "!=", null);
+        $proyeks = $proyeks->map(function ($p) use (&$row, $sheet, $tipe) {
+            $new_class = new stdClass();
+            $new_class->nilai_perolehan = 0;
+            $new_class->kode_proyek = $p->kode_proyek;
+            $new_class->nama_proyek = $p->nama_proyek;
+            
             if($p->tipe_proyek == "R") {
-                $nilai_perolehan = $p->Forecasts->sum(function($f) {
-                    return (int) $f->realisasi_forecast;
-                });
-                $tipe_proyek = "Retail";
+                $new_class->nilai_perolehan += (int) $p->realisasi_forecast;
+                $new_class->tipe_proyek = "Retail";
             } else {
-                $nilai_perolehan = $p->nilai_perolehan;
-                $tipe_proyek = "Non-Retail";
+                $new_class->nilai_perolehan += (int) $p->realisasi_forecast;
+                $new_class->tipe_proyek = "Non-Retail";
             }
+            $new_class->bulan = $p->month_realisasi;
+            $new_class->unitKerja = UnitKerja::find($p->unit_kerja)->unit_kerja;
+            // $new_class->unitKerja = $p->unit_kerja;
+            $new_class->stage = $p->stage;
+            $new_class->status_pasdin = $p->status_pasdin;
+
+
             $sheet->setCellValue('A' . $row, $p->nama_proyek);
             $sheet->setCellValue('B' . $row, $p->status_pasdin);
             $sheet->setCellValue('C' . $row, $this->getProyekStage($p->stage));
             $sheet->setCellValue('D' . $row, $this->getUnitKerjaProyek($p->unit_kerja));
-            $sheet->setCellValue('E' . $row, $tipe_proyek);
+            $sheet->setCellValue('E' . $row, $new_class->tipe_proyek);
             if($tipe == "Terendah") {
                 $sheet->setCellValue('F' . $row, $p->bulan_pelaksanaan);
             } else {
                 $sheet->setCellValue('F' . $row, $p->bulan_ri_perolehan);
             }
-            $sheet->setCellValue('G' . $row, $nilai_perolehan);
+            $sheet->setCellValue('G' . $row, $new_class->nilai_perolehan);
             $row++;
+            return $new_class;
         });
         $writer = new Xlsx($spreadsheet);
         $file_name = "$tipe-" . date('dmYHis') . ".xlsx";
