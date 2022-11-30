@@ -662,7 +662,7 @@
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
-                                    <input type="text" class="form-control form-control-solid" data-max-char="40" id="nama-proyek"
+                                    <input type="text" class="form-control form-control-solid char.counter" data-max-char="40" id="nama-proyek"
                                         name="nama-proyek" value="{{ old('nama-proyek') }}" placeholder="Nama Proyek" />
                                     <div class="d-flex flex-row justify-content-end">
                                         <small class="">0/40</small>

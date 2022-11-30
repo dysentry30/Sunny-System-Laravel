@@ -1689,7 +1689,7 @@
             if(maxChar) {
                 item.addEventListener("input", e => {
                     const lengthChar = item.value.length;
-                    if(lengthChar >= maxChar) {
+                    if(lengthChar > maxChar) {
                         // console.log(item.value);
                         const newValue = item.value.split("");
                         newValue.pop();
