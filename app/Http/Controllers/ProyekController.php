@@ -378,7 +378,7 @@ class ProyekController extends Controller
         $newProyek->status_pasdin  = $dataProyek["status-pasardini"];
         $newProyek->info_asal_proyek  = $dataProyek["info-proyek"];
         $newProyek->laporan_kualitatif_pasdin = $dataProyek["laporan-kualitatif-pasdin"];
-        $newProyek->nama_pendek_proyek = $dataProyek["short-name"];
+        // $newProyek->nama_pendek_proyek = $dataProyek["short-name"];
 
         // form PASAR POTENSIAL
         $newProyek->negara = $dataProyek["negara"];
