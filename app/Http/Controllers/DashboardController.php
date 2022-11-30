@@ -313,13 +313,13 @@ class DashboardController extends Controller
 
         $nilaiProyekTerkontrak = $nilaiHistoryForecast->where("stage", "=" , 8)->where("is_cancel", "=", false);
         $proyeksTerendahTerkontrak = $nilaiHistoryForecast->filter(function($p) {
-            return $p->stage == 6 || ($p->stage == 5 && $p->peringkat == "Peringkat 1") && $p->is_cancel == false;
+            return $p->stage == 6 || ($p->stage == 5 && $p->peringkat == "Peringkat 1") || $p->is_cancel == false;
         });
         // $proyeksTerendahTerkontrak = $proyeks->where("is_cancel", "=", false)->where("stage", "!=", 7);
         foreach ($nilaiProyekTerkontrak as $t) {
             // if ($realisasi->month_realisasi == $i && !$forecast->is_cancel) {
                 // dump($realisasi->realisasi_forecast);
-                $nilaiTerkontrak += (int) $t->realisasi_forecast / $per;
+                $nilaiTerkontrak += (int) $t->realisasi_forecast;
             // } else {
             //     $nilaiRealisasiForecast == 0;
             // }
@@ -327,11 +327,13 @@ class DashboardController extends Controller
         foreach ($proyeksTerendahTerkontrak as $t) {
             // if ($realisasi->month_realisasi == $i && !$forecast->is_cancel) {
                 // dump($realisasi->realisasi_forecast);
-                $nilaiTerendah += (int) $t->realisasi_forecast / $per;
+                $nilaiTerendah += (int) $t->realisasi_forecast;
             // } else {
             //     $nilaiRealisasiForecast == 0;
             // }
         }
+        $nilaiTerkontrak = $nilaiTerkontrak / $per;
+        $nilaiTerendah = $nilaiTerendah / $per;
         //End::Terendah Terkontrak
 
         //Begin::Competitive Index
