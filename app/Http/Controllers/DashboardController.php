@@ -310,18 +310,21 @@ class DashboardController extends Controller
         //Begin::Terendah Terkontrak
         $nilaiTerkontrak = 0;
         $nilaiTerendah = 0;
-        foreach ($proyeks as $proyek) {
+        $proyeksTerendahTerkontrak = $proyeks->where("is_cancel", "=", false)->where("stage", "!=", 7);
+        foreach ($proyeksTerendahTerkontrak as $proyek) {
             $stg = $proyek->stage;
             if ($stg == 8) {
-                if($proyek->tipe_proyek == "R") {
-                    $nilaiTerkontrak += $proyek->Forecasts->where("periode_prognosa", "=", $month)->sum(function($f) {
-                        return (int) $f->realisasi_forecast;
-                    });
-                } else {
-                    $nilaiTerkontrak += (int) str_replace(",", "", $proyek->nilai_perolehan);
-                }
+                $nilaiTerkontrak += $proyek->Forecasts->where("periode_prognosa", "=", $month)->sum(function($f) {
+                    return (int) $f->realisasi_forecast;
+                });
+                // if($proyek->tipe_proyek == "R") {
+                // } else {
+                // }
+                // $nilaiTerkontrak += (int) str_replace(",", "", $proyek->nilai_perolehan);
             } else if ($stg == 6 || ($stg == 5 && $proyek->peringkat_wika == "Peringkat 1")) {
-                $nilaiTerendah += (int) str_replace(",", "", $proyek->nilai_perolehan);
+                $nilaiTerendah += $proyek->Forecasts->where("periode_prognosa", "=", $month)->sum(function($f) {
+                    return (int) $f->realisasi_forecast;
+                });
             };
             // dump($nilaiTerendah, $nilaiTerkontrak);
         };
