@@ -312,10 +312,10 @@ class DashboardController extends Controller
         $nilaiTerendah = 0;
 
         $nilaiProyekTerkontrak = $nilaiHistoryForecast->where("stage", "=" , 8)->where("is_cancel", "=", false);
-        $proyeksTerendahTerkontrak = $nilaiHistoryForecast->filter(function($p) {
-            return $p->stage == 6 || ($p->stage == 5 && $p->peringkat_wika == "Peringkat 1") || $p->is_cancel == false;
-        });
-        // $proyeksTerendahTerkontrak = $proyeks->where("is_cancel", "=", false)->where("stage", "!=", 7);
+        $nilaiProyekTerendah = $nilaiHistoryForecast->filter(function($p) {
+            return ($p->stage == 6 || ($p->stage == 5 && $p->peringkat_wika == "Peringkat 1") || $p->stage == 9);
+        })->where("is_cancel", "=", false);
+        // $nilaiProyekTerendah = $proyeks->where("is_cancel", "=", false)->where("stage", "!=", 7);
         foreach ($nilaiProyekTerkontrak as $t) {
             // if ($realisasi->month_realisasi == $i && !$forecast->is_cancel) {
                 // dump($realisasi->realisasi_forecast);
@@ -326,7 +326,7 @@ class DashboardController extends Controller
             //     $nilaiRealisasiForecast == 0;
             // }
         }
-        foreach ($proyeksTerendahTerkontrak as $t) {
+        foreach ($nilaiProyekTerendah as $t) {
             // if ($realisasi->month_realisasi == $i && !$forecast->is_cancel) {
                 // dump($realisasi->realisasi_forecast);
                 if(!empty($t->month_realisasi)) {
@@ -1195,7 +1195,8 @@ class DashboardController extends Controller
                 }
             }
         } else {
-            $proyeks = Proyek::with(["UnitKerja", "Forecasts"])->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "nilai_perolehan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "hps_pagu", "bulan_ri_perolehan", "tipe_proyek"]);
+            $proyeks = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("jenis_proyek", "!=", "I")->where("forecasts.periode_prognosa", "=", (int) date("m"))->get()->whereNotIn("unit_kerja", ["B", "C", "D", "8"]);
+            // $proyeks = Proyek::with(["UnitKerja", "Forecasts"])->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "nilai_perolehan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "hps_pagu", "bulan_ri_perolehan", "tipe_proyek"]);
         }
         // $proyeks = $proyeks->filter(function ($p) {
         //     return $p->Forecasts->filter(function ($f) {
