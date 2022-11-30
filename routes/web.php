@@ -1668,7 +1668,9 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
                 "entry" => [
                     "content" => [
                         "properties" => [
-                            "Description" => (isset($p->Provinsi) || !empty($p->Provinsi)) ? $p->provinsi : Provinsi::all()->where("province_name", "=", $p->provinsi)->first()->province_id ?? $p->provinsi,
+                            "Description" => (isset($p->Provinsi) || !empty($p->Provinsi)) ? $p->provinsi : Provinsi::all()->filter(function($prov) use($p) {
+                                return str_contains($prov->province_name, $p->provinsi);
+                            })->first()->province_id ?? $p->provinsi,
                         ]
                     ]
                 ]
