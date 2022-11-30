@@ -69,6 +69,11 @@
             font-weight: bold;
         }
 
+        [role="progressbar"] {
+            /* transition: all 1.5s cubic-bezier(0.165, 0.840, 0.440, 1.000); */
+            transition: width 1s ease-in-out;
+        }
+
     </style>
 
     <div class="background-blur"></div>
@@ -105,19 +110,19 @@
                                             <!--begin:::Tab Item Tab Pane-->
                                             <li class="nav-item">
                                                 <a class="nav-link text-active-primary pb-4 {{ str_contains(Request::Path(), 'dashboard') ? 'active' : '' }}"
-                                                    href="/dashboard-ccm" style="font-size:14px;">Head Office</a>
+                                                    href="/dashboard-ccm/perolehan-kontrak" style="font-size:14px;">Perolehan Kontrak</a>
                                             </li>
                                             <!--end:::Tab Item Tab Pane-->
                                             <!--begin:::Tab Item Tab Pane-->
                                             <li class="nav-item">
                                                 <a class="nav-link text-active-primary pb-4"
-                                                    href="/dashboard-ccm" style="font-size:14px;">Division</a>
+                                                    href="/dashboard-ccm/pelaksanaan-kontrak" style="font-size:14px;">Pelaksanaan Kontrak</a>
                                             </li>
                                             <!--end:::Tab Item Tab Pane-->
                                             <!--begin:::Tab Item Tab Pane-->
                                             <li class="nav-item">
                                                 <a class="nav-link text-active-primary pb-4"
-                                                    href="/dashboard-ccm" style="font-size:14px;">Project</a>
+                                                    href="/dashboard-ccm/pemeliharaan-kontrak" style="font-size:14px;">Pemeliharaan Kontrak</a>
                                             </li>
                                             <!--end:::Tab Item Tab Pane-->
                                         </ul>
@@ -252,12 +257,52 @@
                         <div class="row mx-3">
                             <!--begin::Card column-->
                             <div class="col-8">
+                                {{-- Begin :: Filter --}}
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-4">
+                                                <select onchange="selectFilter(this)" id="dop" name="dop"
+                                                        class="form-select form-select-solid w-auto"
+                                                        style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
+                                                        data-placeholder="Direktorat" data-select2-id="select2-data-dop" tabindex="-1"
+                                                        aria-hidden="true">
+                                                        <option value="" selected></option>
+                                                        @foreach ($dops as $dop)
+                                                            <option value="{{ $dop->dop }}" {{ $dop_get == $dop->dop ? 'selected' : '' }} >{{ $dop->dop }}</option>
+                                                        @endforeach
+                                                </select>
+                                            </div>
+
+                                            <div class="col-4">
+                                                <select onchange="selectFilter(this)" id="unit-kerja" name="unit-kerja"
+                                                        class="form-select form-select-solid w-auto"
+                                                        style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
+                                                        data-placeholder="Unit Kerja" data-select2-id="select2-data-unit-kerja" tabindex="-1"
+                                                        aria-hidden="true">
+                                                        <option value="" selected></option>
+                                                        @foreach ($unit_kerjas as $unit_kerjas)
+                                                            <option value="{{ $unit_kerjas->divcode }}" {{ $unit_kerja_get == $unit_kerjas->divcode ? 'selected' : '' }} >{{ $unit_kerjas->unit_kerja }}</option>
+                                                        @endforeach
+                                                </select>
+                                            </div>
+
+                                            <div class="col">
+                                                <form action="" method="GET">
+                                                    <button type="submit" class="btn btn-secondary">Reset</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{-- End :: Filter --}}
+                                <br>
                                 <!--begin::Card body-->
                                 <div class="row">
                                     <!--begin::Card column-->
                                     <div class="col-6">
                                             <!--begin::COLUMN CHART-->
-                                            <div id="donut-chart-2"></div>
+                                            <div id="contract-stage"></div>
                                             <!-- data table is inserted here -->
                                             <!--end::COLUMN CHART-->
                                     </div>
@@ -265,7 +310,27 @@
                                     <div class="col-6">
                                             <!--begin::PIE CHART-->
                                             <figure class="highcharts-figure">
-                                                <div id="donut-chart"></div>
+                                                <div id="contract-divisi"></div>
+                                                <!-- data table is inserted here -->
+                                            </figure>
+                                            <!--end::PIE CHART-->
+                                    </div>
+                                    <!--end::Card column-->
+                                </div>
+
+                                <div class="row">
+                                    <!--begin::Card column-->
+                                    <div class="col-6">
+                                            <!--begin::COLUMN CHART-->
+                                            <div id="contract-classification"></div>
+                                            <!-- data table is inserted here -->
+                                            <!--end::COLUMN CHART-->
+                                    </div>
+                                    <!--end-begin::Card column-->
+                                    <div class="col-6">
+                                            <!--begin::PIE CHART-->
+                                            <figure class="highcharts-figure">
+                                                <div id="contract-jo"></div>
                                                 <!-- data table is inserted here -->
                                             </figure>
                                             <!--end::PIE CHART-->
@@ -289,10 +354,10 @@
                                                     <!--begin::Title-->
                                                     <div class="card-title d-flex flex-column">
                                                         <!--begin::Amount-->
-                                                        <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2">78 Items</span>
+                                                        <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2" id="data-items">78 Items</span>
                                                         <!--end::Amount-->
                                                         <!--begin::Subtitle-->
-                                                        <span class="text-white opacity-75 pt-1 fw-semibold fs-6">EPC</span>
+                                                        <span class="text-white opacity-75 pt-1 fw-semibold fs-6">Sasaran</span>
                                                         <!--end::Subtitle-->
                                                     </div>
                                                     <!--end::Title-->
@@ -304,10 +369,10 @@
                                                     <div class="d-flex align-items-center flex-column mt-3 w-100">
                                                         <div class="d-flex justify-content-between fw-bold fs-6 text-white opacity-75 w-100 mt-auto mb-2">
                                                             <span>41 Pending</span>
-                                                            <span>52%</span>
+                                                            <span id="data-persen">52%</span>
                                                         </div>
                                                         <div class="h-8px mx-3 w-100 bg-white bg-opacity-50 rounded">
-                                                            <div class="bg-white rounded h-8px" role="progressbar" style="width: 52%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                                            <div class="bg-white rounded h-8px" role="progressbar" style="width: 0%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
                                                         </div>
                                                     </div>
                                                     <!--end::Progress-->
@@ -329,10 +394,10 @@
                                                     <!--begin Items::Title-->
                                                     <div class="card-title d-flex flex-column">
                                                         <!--begin::Amount-->
-                                                        <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2">35 Items</span>
+                                                        <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2" id="data-items">35 Items</span>
                                                         <!--end::Amount-->
                                                         <!--begin::Subtitle-->
-                                                        <span class="text-white opacity-75 pt-1 fw-semibold fs-6">DG</span>
+                                                        <span class="text-white opacity-75 pt-1 fw-semibold fs-6">Cadangan</span>
                                                         <!--end::Subtitle-->
                                                     </div>
                                                     <!--end::Title-->
@@ -344,10 +409,10 @@
                                                     <div class="d-flex align-items-center flex-column mt-3 w-100">
                                                         <div class="d-flex justify-content-between fw-bold fs-6 text-white opacity-75 w-100 mt-auto mb-2">
                                                             <span>3 Pending</span>
-                                                            <span>8%</span>
+                                                            <span id="data-persen">8%</span>
                                                         </div>
                                                         <div class="h-8px mx-3 w-100 bg-white bg-opacity-50 rounded">
-                                                            <div class="bg-white rounded h-8px" role="progressbar" style="width: 8%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                                            <div class="bg-white rounded h-8px" role="progressbar" style="width: 0%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
                                                         </div>
                                                     </div>
                                                     <!--end::Progress-->
@@ -369,10 +434,10 @@
                                                     <!--begin::Title-->
                                                     <div class="card-title d-flex flex-column">
                                                         <!--begin::Amount-->
-                                                        <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2">45 Items</span>
+                                                        <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2" id="data-items">45 Items</span>
                                                         <!--end::Amount-->
                                                         <!--begin::Subtitle-->
-                                                        <span class="text-white opacity-75 pt-1 fw-semibold fs-6">DSU</span>
+                                                        <span class="text-white opacity-75 pt-1 fw-semibold fs-6">Potensi</span>
                                                         <!--end::Subtitle-->
                                                     </div>
                                                     <!--end::Title-->
@@ -384,10 +449,88 @@
                                                     <div class="d-flex align-items-center flex-column mt-3 w-100">
                                                         <div class="d-flex justify-content-between fw-bold fs-6 text-white opacity-75 w-100 mt-auto mb-2">
                                                             <span>5 Pending</span>
-                                                            <span>11%</span>
+                                                            <span id="data-persen">11%</span>
                                                         </div>
                                                         <div class="h-8px mx-3 w-100 bg-white bg-opacity-50 rounded">
-                                                            <div class="bg-white rounded h-8px" role="progressbar" style="width: 11%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                                            <div class="bg-white rounded h-8px" role="progressbar" style="width: 0%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                                        </div>
+                                                    </div>
+                                                    <!--end::Progress-->
+                                                </div>
+                                                <!--end::Card body-->
+                                            </div>
+                                            <!--end::Card widget 20-->
+                                        </div>
+                                        <!--end::Card body-->
+                                    </div>
+                                    <!--end::Card column-->
+
+                                    <div class="row">
+                                        <!--begin::Card body-->
+                                        <div class="card-body pt-0">
+                                            <!--begin::Card widget 20-->
+                                            <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90 mb-5 mb-xl-10" style="background-color: #c34424;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                                <!--begin::Header-->
+                                                <div class="card-header pt-5">
+                                                    <!--begin::Title-->
+                                                    <div class="card-title d-flex flex-column">
+                                                        <!--begin::Amount-->
+                                                        <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2" id="data-items">45 Items</span>
+                                                        <!--end::Amount-->
+                                                        <!--begin::Subtitle-->
+                                                        <span class="text-white opacity-75 pt-1 fw-semibold fs-6">Tender Review</span>
+                                                        <!--end::Subtitle-->
+                                                    </div>
+                                                    <!--end::Title-->
+                                                </div>
+                                                <!--end::Header-->
+                                                <!--begin::Card body-->
+                                                <div class="card-body d-flex align-items-end pt-0">
+                                                    <!--begin::Progress-->
+                                                    <div class="d-flex align-items-center flex-column mt-3 w-100">
+                                                        <div class="d-flex justify-content-between fw-bold fs-6 text-white opacity-75 w-100 mt-auto mb-2">
+                                                            <span id="data-persen">11%</span>
+                                                        </div>
+                                                        <div class="h-8px mx-3 w-100 bg-white bg-opacity-50 rounded">
+                                                            <div class="bg-white rounded h-8px" role="progressbar" style="width: 0%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                                        </div>
+                                                    </div>
+                                                    <!--end::Progress-->
+                                                </div>
+                                                <!--end::Card body-->
+                                            </div>
+                                            <!--end::Card widget 20-->
+                                        </div>
+                                        <!--end::Card body-->
+                                    </div>
+                                    <!--end::Card column-->
+
+                                    <!--end-begin::Card column-->
+                                    <div class="row">
+                                        <!--begin::Card body-->
+                                        <div class="card-body pt-0">
+                                            <!--begin::Card widget 20-->
+                                            <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90 mb-5 mb-xl-10" style="background-color: #1fb026;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                                <!--begin::Header-->
+                                                <div class="card-header pt-5">
+                                                    <!--begin::Title-->
+                                                    <div class="card-title d-flex flex-column">
+                                                        <!--begin::Amount-->
+                                                        <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2">Success Rate</span>
+                                                        <!--end::Amount-->
+                                                    </div>
+                                                    <!--end::Title-->
+                                                </div>
+                                                <!--end::Header-->
+                                                <!--begin::Card body-->
+                                                <div class="card-body d-flex align-items-end pt-0">
+                                                    <!--begin::Progress-->
+                                                    <div class="d-flex align-items-center flex-column mt-3 w-100">
+                                                        <div class="d-flex justify-content-between fw-bold fs-6 text-white opacity-75 w-100 mt-auto mb-2">
+                                                            <span id="data-persen">{{$success_rate}}%</span>
+                                                        </div>
+                                                        <div class="h-8px mx-3 w-100 bg-white bg-opacity-50 rounded">
+                                                            <div class="bg-white rounded h-8px" role="progressbar" style="width: 0%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
                                                         </div>
                                                     </div>
                                                     <!--end::Progress-->
@@ -403,21 +546,61 @@
                                 <!--end::Card Status-->
                             </div>
                             <!--end::Card column-->
+                            {{-- Begin :: Total Tender --}}
+                            <div class="row">
+                                <!--begin::Card body-->
+                                <div class="card-body pt-0">
+                                    <!--begin::Card widget 20-->
+                                    <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90 mb-5 mb-xl-10" style="background-color: #ae1b22;background-image:url('/media/patterns/vector-1.png');background-repeat: repeat;background-size: auto;">
+                                        <!--begin::Header-->
+                                        <div class="card-header py-5">
+                                            <!--begin::Title-->
+                                            <div class="card-title d-flex flex-column">
+                                                <!--begin::Amount-->
+                                                <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2" id="data-items">45 Items</span>
+                                                <!--end::Amount-->
+                                                <!--begin::Subtitle-->
+                                                <span class="text-white opacity-75 pt-1 fw-semibold fs-6">Data Collection</span>
+                                                <!--end::Subtitle-->
+                                            </div>
+                                            <!--end::Title-->
+                                        </div>
+                                        <!--end::Header-->
+                                        <!--begin::Card body-->
+                                        {{-- <div class="card-body d-flex align-items-end pt-0">
+                                            <!--begin::Progress-->
+                                            <div class="d-flex align-items-center flex-column mt-3 w-100">
+                                                <div class="d-flex justify-content-between fw-bold fs-6 text-white opacity-75 w-100 mt-auto mb-2">
+                                                    <span id="data-persen">11%</span>
+                                                </div>
+                                                <div class="h-8px mx-3 w-100 bg-white bg-opacity-50 rounded">
+                                                    <div class="bg-white rounded h-8px" role="progressbar" style="width: 0%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                                </div>
+                                            </div>
+                                            <!--end::Progress-->
+                                        </div> --}}
+                                        <!--end::Card body-->
+                                    </div>
+                                    <!--end::Card widget 20-->
+                                </div>
+                                <!--end::Card body-->
+                            </div>
+                            {{-- End :: Total Tender --}}
                         </div>
                         <!--end::Card Diagram Column dan Donut-->
-                        <br>
+                        
                         <!--begin::Card Line col-12-->
                         <div class="row mx-3">
                             <!--begin::Card column-->
-                            <div class="col-12">
+                            <div class="col">
                                 <!--begin::Card body-->
                                 <div class="card-body pt-0">
                                     <!--begin::LINE CHART-->
                                     <figure class="highcharts-figure">
-                                        <div class="chart-outer" id="table-line">
-                                            <div id="chart-line" style="width: 70%; padding-right: 10px; overflow: unset;"></div>
+                                        <div id="chart-line"></div>
+                                        {{-- <div class="chart-outer" id="table-line">
                                             <!-- data table is inserted here -->
-                                        </div>
+                                        </div> --}}
                                     </figure>
                                     <!--end::LINE CHART-->
                                 </div>
@@ -466,18 +649,19 @@
 {{-- End::Main --}}
 @section('js-script')
 
-    <!--begin::Highchart Donut-->
+    <!--begin::Highchart Donut Kontrak By Stage-->
     <script>
-        Highcharts.chart('donut-chart-2', {
+        const kontrakByStage = JSON.parse('{!! $kontrak_by_stage->toJson() !!}');
+        Highcharts.chart('contract-stage', {
             chart: {
                 type: 'pie',
                 options3d: {
                     enabled: true,
-                    alpha: 5
+                    alpha: 5,
                 }
             },
             title: {
-                text: 'Contract By Stage',
+                text: 'Kontrak Berdasarkan Stage',
                 style: {
                     fontWeight: 'bold',
                     fontSize: '20px'
@@ -489,82 +673,14 @@
             tooltip: {
                 headerFormat: '<span style="font-size:15px">{point.key}</span><table>',
                 pointFormat: '<tr><td style="padding:0">{series.name}: </td>' +
-                    '<td style="padding:0"><b>&nbsp;{point.y:.1f}</b></td></tr>',
+                    '<td style="padding:0"><b>&nbsp;{point.y}</b></td></tr>',
                 footerFormat: '</table>',
                 shared: true,
                 useHTML: true
             },
             plotOptions: {
                 pie: {
-                    innerSize: 150,
-                    depth: 5,
-                    showInLegend: true,
-                    dataLabels: {
-                        enabled: false,
-                    }
-                }
-            },
-            legend: {
-                layout: 'horizontal',
-                align: 'center',
-                verticalAlign: 'bottom',
-                format : '<b>{point.key}</b><br>',
-                itemStyle: {
-                    fontSize:'15px',
-                },
-            },
-            credits: {
-                enabled: false
-            },
-            exporting: {
-                showTable: true,
-                allowHTML: true
-            },
-            series: [{
-                name: 'Medals',
-                data: [
-                    ['Tender', 3],
-                    ['Signed', 2],
-                    ['Executed', 7],
-                    ['Maintenance', 3],
-                    ['Delayed', 1]
-                ]
-            }]
-        });
-    </script>
-    <!--end::Highchart Donut-->
-
-    <!--begin::Highchart Donut-->
-    <script>
-        Highcharts.chart('donut-chart', {
-            chart: {
-                type: 'pie',
-                options3d: {
-                    enabled: true,
-                    alpha: 5
-                }
-            },
-            title: {
-                text: 'Contract By Division',
-                style: {
-                    fontWeight: 'bold',
-                    fontSize: '20px'
-                }
-            },
-            subtitle: {
-                // text: '3D donut in Highcharts'
-            },
-            tooltip: {
-                headerFormat: '<span style="font-size:15px">{point.key}</span><table>',
-                pointFormat: '<tr><td style="padding:0">{series.name}: </td>' +
-                    '<td style="padding:0"><b>&nbsp;{point.y:.1f}</b></td></tr>',
-                footerFormat: '</table>',
-                shared: true,
-                useHTML: true
-            },
-            plotOptions: {
-                pie: {
-                    innerSize: 200,
+                    innerSize: 180,
                     depth: 5,
                     showInLegend: false,
                     dataLabels: {
@@ -585,23 +701,262 @@
                 enabled: false
             },
             exporting: {
-                showTable: true,
+                showTable: false,
                 allowHTML: true
             },
             series: [{
-                name: 'Medals',
+                name: 'Kontrak',
+                data: kontrakByStage,
+            }]
+        });
+    </script>
+    <!--end::Highchart Donut Kontrak By Stage-->
+
+    <!--begin::Highchart Donut Kontrak By Divisi-->
+    <script>
+        const divisiChart = JSON.parse('{!! $divisi->toJson() !!}');
+        Highcharts.chart('contract-divisi', {
+            chart: {
+                type: 'pie',
+                options3d: {
+                    enabled: true,
+                    alpha: 5
+                }
+            },
+            title: {
+                text: 'Kontrak Berdasarkan Divisi',
+                style: {
+                    fontWeight: 'bold',
+                    fontSize: '20px'
+                }
+            },
+            subtitle: {
+                // text: '3D donut in Highcharts'
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:15px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>&nbsp;{point.y}</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                pie: {
+                    innerSize: 150,
+                    depth: 5,
+                    showInLegend: false,
+                    dataLabels: {
+                        enabled: true,
+                    }
+                }
+            },
+            legend: {
+                layout: 'horizontal',
+                align: 'center',
+                verticalAlign: 'bottom',
+                format : '<b>{point.key}</b><br>',
+                itemStyle: {
+                    fontSize:'15px',
+                },
+            },
+            credits: {
+                enabled: false
+            },
+            exporting: {
+                showTable: false,
+                allowHTML: true
+            },
+            series: [{
+                name: 'Kontrak',
+                data: divisiChart,
+            }]
+        });
+    </script>
+    <!--end::Highchart Donut Kontrak By Divisi-->
+
+    <!--begin::Highchart Donut Kontrak Klasifikasi-->
+    <script>
+        Highcharts.chart('contract-classification', {
+            chart: {
+                type: 'pie',
+                options3d: {
+                    enabled: true,
+                    alpha: 5
+                }
+            },
+            title: {
+                text: 'Klasifikasi Kontrak',
+                style: {
+                    fontWeight: 'bold',
+                    fontSize: '20px'
+                }
+            },
+            subtitle: {
+                // text: '3D donut in Highcharts'
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:15px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>&nbsp;{point.y}</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                pie: {
+                    innerSize: 150,
+                    depth: 5,
+                    showInLegend: false,
+                    dataLabels: {
+                        enabled: true,
+                    }
+                }
+            },
+            legend: {
+                layout: 'horizontal',
+                align: 'center',
+                verticalAlign: 'bottom',
+                format : '<b>{point.key}</b><br>',
+                itemStyle: {
+                    fontSize:'15px',
+                },
+            },
+            credits: {
+                enabled: false
+            },
+            exporting: {
+                showTable: false,
+                allowHTML: true
+            },
+            series: [{
+                name: 'Kontrak',
                 data: [
-                    ['DSU', 8],
-                    ['EPC', 16],
-                    ['DG', 12]
+                    ['Sasaran', 8],
+                    ['Cadangan', 16],
+                    ['Potensi', 12]
                 ]
             }]
         });
     </script>
-    <!--end::Highchart Donut-->
+    <!--end::Highchart Donut Kontrak Klasifikasi-->
+
+    <!--begin::Highchart Donut Kontrak JO dan Non-JO -->
+    <script>
+        const JONonJOCounter = JSON.parse('{!! $JO_Non_JO_counter->toJson() !!}');
+        Highcharts.chart('contract-jo', {
+            chart: {
+                type: 'pie',
+                options3d: {
+                    enabled: true,
+                    alpha: 5
+                }
+            },
+            title: {
+                text: 'Kontrak JO & Non-JO',
+                style: {
+                    fontWeight: 'bold',
+                    fontSize: '20px'
+                }
+            },
+            subtitle: {
+                // text: '3D donut in Highcharts'
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:15px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>&nbsp;{point.y}</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                pie: {
+                    innerSize: 150,
+                    depth: 5,
+                    showInLegend: false,
+                    dataLabels: {
+                        enabled: true,
+                    }
+                }
+            },
+            legend: {
+                layout: 'horizontal',
+                align: 'center',
+                verticalAlign: 'bottom',
+                format : '<b>{point.key}</b><br>',
+                itemStyle: {
+                    fontSize:'15px',
+                },
+            },
+            credits: {
+                enabled: false
+            },
+            exporting: {
+                showTable: false,
+                allowHTML: true
+            },
+            series: [{
+                name: 'Kontrak',
+                data: JONonJOCounter
+            }]
+        });
+    </script>
+    <!--end::Highchart Donut Kontrak JO dan Non-JO -->
+    
+    <!--begin::Highchart Block Nilai Tender -->
+    <script>
+        const nilaiTender = JSON.parse('{!! $nilai_tender_proyeks->toJson() !!}');
+        Highcharts.chart('chart-line', {
+            chart: {
+                type: 'column',
+            },
+            title: {
+                text: 'Nilai Tender',
+                style: {
+                    fontWeight: 'bold',
+                    fontSize: '20px'
+                }
+            },
+            xAxis: {
+                type: 'category'
+            },
+            subtitle: {
+                // text: '3D donut in Highcharts'
+            },
+            tooltip: {
+                // headerFormat: '<span style="font-size:15px">{point.key}</span><table>',
+                // pointFormat: '<tr><td style="padding:0">Nilai Tender: </td>' +
+                //     '<td style="padding:0"><b>&nbsp;{point.y}</b></td></tr>',
+                // footerFormat: '</table>',
+                // shared: true,
+                // useHTML: true
+                headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b><br/>'
+            },
+            legend: {
+                enabled: false,
+            },
+            credits: {
+                enabled: false
+            },
+            exporting: {
+                showTable: false,
+                allowHTML: true
+            },
+            series: [
+                {
+                    name: "Nilai Tender",
+                    colorByPoint: true,
+                    data: nilaiTender,
+                },
+            ]
+        });
+    </script>
+    <!--end::Highchart Block Nilai Tender -->
 
     <!--begin::Highchart Line-->
-    <script>
+    {{-- <script>
         Highcharts.chart('chart-line', {
             title: {
                 text: 'Completion Rate Items VO, Claim & Anti Claims',
@@ -696,7 +1051,57 @@
             }
 
             });
-    </script>
+    </script> --}}
     <!--end::Highchart Line-->
+
+    {{-- Begin :: Animation Progress Bar --}}
+    <script>
+        function animateProgressBar() {
+            const progressbarElts = document.querySelectorAll("div[role='progressbar']");
+            progressbarElts.forEach(item => {
+                const dataPersen = item.parentElement.parentElement.querySelector("#data-persen");
+                let width = Number(dataPersen.innerText.replace("%", ""));
+                item.style.width = width + "%";
+            });
+        }
+        animateProgressBar();
+    </script>
+    {{-- End :: Animation Progress Bar --}}
+
+    {{-- Begin :: Animation Counter Number --}}
+    <script>
+        function animateCounterNumber(selector, lastPrefix) {
+            const animateCounterElts = document.querySelectorAll(`${selector}`);
+            animateCounterElts.forEach(item => {
+                let data = Number(item.innerText.replace(lastPrefix, ""));
+                item.innerText = `0${lastPrefix}`;
+                let i = 0;
+                const interval = setInterval(() => {
+                    if(i == data) clearInterval(interval);
+                    item.innerText = `${i++}${lastPrefix}`;
+                }, 15);
+            });
+        }
+        animateCounterNumber("#data-persen", "%");
+        animateCounterNumber("#data-items", " Items");
+    </script>
+    {{-- End :: Animation Counter Number --}}
+
+    {{-- Begin :: Select Filter Dropdown --}}
+    <script>
+        function selectFilter(e) {
+            const value = e.value;
+            const type = e.getAttribute("id");
+            let url = "";
+            if(type == "dop") {
+                url = `/dashboard-ccm/perolehan-kontrak?dop=${value}`;
+            } else {
+                url = `/dashboard-ccm/perolehan-kontrak?unit-kerja=${value}`;
+            }
+            window.location.href = url;
+            return;
+        }
+    </script>
+    {{-- End :: Select Filter Dropdown --}}
 
 @endsection

@@ -311,7 +311,7 @@
                                             <!--begin::Nilai OK-->
                                             <td class="text-end">
                                                 <small>
-                                                    {{ number_format($proyek->UsrNilaiKontrakKeseluruhan, 0, ',', ',') ?? '-' }}
+                                                    {{ number_format($proyek->UsrNilaiKontrakKeseluruhan, 0, '.', '.') ?? '-' }}
                                                 </small>
                                             </td>
                                             <!--end::Nilai OK-->
@@ -319,7 +319,7 @@
                                             <!--begin::Forecast-->
                                             <td class="text-end">
                                                 <small>
-                                                    {{ number_format($proyek->UsrPrognosa, 0, ',', ',') ?? '-' }}
+                                                    {{ number_format($proyek->UsrPrognosa, 0, '.', '.') ?? '-' }}
                                                 </small>
                                             </td>
                                             <!--end::Forecast-->
@@ -327,7 +327,7 @@
                                             <!--begin::Realisasi-->
                                             <td class="text-end">
                                                 <small>
-                                                    {{ number_format($proyek->UsrNilaiPerolehan, 0, ',', ',') ?? '-' }}
+                                                    {{ number_format($proyek->UsrNilaiPerolehan, 0, '.', '.') ?? '-' }}
                                                 </small>
                                             </td>
                                             <!--end::Realisasi-->

@@ -50,7 +50,7 @@
                                 <!--end::Button-->
 
                                 <!--begin::Button-->
-                                <a href="/contract-management" class="btn btn-sm btn-primary" id="cloedButton"
+                                <a href="/claim-management" class="btn btn-sm btn-primary" id="cloedButton"
                                     style="background-color:#f3f6f9;margin-left:10px;color: black;">
                                     Close</a>
                                 <!--end::Button-->
@@ -81,19 +81,19 @@
                                                 <div class="form-group">
                                                     <div id="stage-button" class="stage-list">
                                                         <a href="#" role="link"
-                                                            class="stage-button color-is-default stage-is-done"
+                                                            class="stage-button clicked-stage color-is-default stage-is-done"
                                                             style="outline: 0px; cursor: pointer;" stage="1">
                                                             Draft
                                                         </a>
                                                         @if ($claimContract->stages > 1)
                                                             <a href="#" role="link"
-                                                                class="stage-button color-is-default stage-is-done"
+                                                                class="stage-button clicked-stage color-is-default stage-is-done"
                                                                 style="outline: 0px; cursor: pointer;" stage="2">
                                                                 Diajukan
                                                             </a>
                                                         @else
                                                             <a href="#" role="link"
-                                                                class="stage-button color-is-default stage-is-not-active"
+                                                                class="stage-button clicked-stage color-is-default stage-is-not-active"
                                                                 style="outline: 0px; cursor: pointer;" stage="2">
                                                                 Diajukan
                                                             </a>
@@ -101,31 +101,52 @@
 
                                                         @if ($claimContract->stages > 2)
                                                             <a href="#" role="link"
-                                                                class="stage-button color-is-default stage-is-done"
+                                                                class="stage-button clicked-stage color-is-default stage-is-done"
                                                                 style="outline: 0px; cursor: pointer;" stage="3">
                                                                 Negoisasi
                                                             </a>
                                                         @else
                                                             <a href="#" role="link"
-                                                                class="stage-button color-is-default stage-is-not-active"
+                                                                class="stage-button clicked-stage color-is-default stage-is-not-active"
                                                                 style="outline: 0px; cursor: pointer;" stage="3">
                                                                 Negoisasi
                                                             </a>
                                                         @endif
 
-                                                        @if ($claimContract->stages > 3)
+                                                        @if ($claimContract->stages == 4)
+                                                        <a href="#" role="link"
+                                                            class="stage-button stage-dropdown color-is-default stage-is-done"
+                                                            style="outline: 0px; cursor: pointer;" data-bs-toggle="dropdown" aria-expanded="false">
+                                                            <div class="d-flex justify-content-between align-items-center">
+                                                                <span class="text-white me-3">Disetujui</span>
+                                                                <i class="bi bi-caret-down-fill text-white"></i>
+                                                            </div>
+                                                        </a>
+                                                    @else
+                                                        @if ($claimContract->stages > 4)
                                                             <a href="#" role="link"
-                                                                class="stage-button color-is-default stage-is-done"
-                                                                style="outline: 0px; cursor: pointer;" stage="4">
-                                                                Disetujui
+                                                                class="stage-button stage-dropdown color-is-danger stage-is-done"
+                                                                style="outline: 0px; cursor: pointer;" data-bs-toggle="dropdown" aria-expanded="false">
+                                                                <div class="d-flex justify-content-between align-items-center">
+                                                                    <span class="text-white me-3">Tidak Disetujui</span>
+                                                                    <i class="bi bi-caret-down-fill text-white"></i>
+                                                                </div>
                                                             </a>
                                                         @else
                                                             <a href="#" role="link"
-                                                                class="stage-button color-is-default stage-is-not-active"
-                                                                style="outline: 0px; cursor: pointer;" stage="4">
-                                                                Disetujui
+                                                                class="stage-button stage-dropdown color-is-default stage-is-not-active"
+                                                                style="outline: 0px; cursor: pointer;" data-bs-toggle="dropdown" aria-expanded="false">
+                                                                <div class="d-flex justify-content-between align-items-center">
+                                                                    <span class="text-white me-3">Disetujui</span>
+                                                                    <i class="bi bi-caret-down-fill text-white"></i>
+                                                                </div>
                                                             </a>
                                                         @endif
+                                                    @endif
+                                                    <ul class="dropdown-menu">
+                                                        <li><a href="#" class="dropdown-item clicked-stage" stage="4">Disetujui</a></li>
+                                                        <li><a href="#" class="dropdown-item clicked-stage" stage="5">Tidak Disetujui</a></li>
+                                                    </ul>
                                                         {{-- <form action=""></form>
                                                         <form action="/claim/stage/save" class="d-flex" style="position: relative;width: 100%;" method="POST" onsubmit="confirmAction(this); return false;">
                                                             @csrf
@@ -184,9 +205,7 @@
                                                             <!--begin::Input-->
 
                                                             <a href="#" class="btn btn-sm mx-3"
-                                                                style="background: transparent;width:1rem;height:2.3rem;"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#kt_modal_calendar_start"><i
+                                                                onclick="showCalendarModal(this)"><i
                                                                     class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center"
                                                                     style="color: #008cb4"></i></a>
                                                             <input type="Date"
@@ -332,7 +351,7 @@
                                                                     class="form-control form-control-solid"
                                                                     name="total-claim" id="total-claim"
                                                                     onkeyup="reformatNumber(this)"
-                                                                    value="{{ old('total-claim') ?? number_format($claimContract->nilai_claim, 0, ',', ',') }}"
+                                                                    value="{{ old('total-claim') ?? number_format($claimContract->nilai_claim, 0, '.', '.') }}"
                                                                     placeholder="Type number here...">
                                                             @else
                                                                 <input type="text"
@@ -374,12 +393,14 @@
                                                                 data-placeholder="Pilih Jenis Claim"
                                                                 data-select2-id="select2-data-jenis-claim" tabindex="-1"
                                                                 aria-hidden="true">
+                                                                <option value="" selected></option>
                                                                 @isset($claimContract)
                                                                     <option
                                                                         value="{{ $claimContract->jenis_claim ?? 'Claim' }}"
                                                                         selected>
                                                                         {{ $claimContract->jenis_claim ?? 'Claim' }}</option>
                                                                 @else
+                                                                    <option value="VO">VO</option>
                                                                     <option value="Claim">Claim</option>
                                                                     <option value="Anti Claim">Anti Claim</option>
                                                                     <option value="Claim Asuransi">Claim Asuransi</option>
@@ -530,7 +551,7 @@
                                                                                 @endforeach
                                                                             </td>
                                                                             <td class="text-gray-600">
-                                                                                {{ number_format($claim_contrat_draft->pengajuan_biaya, 0, ',', ',') }}
+                                                                                {{ number_format($claim_contrat_draft->pengajuan_biaya, 0, '.', '.') }}
                                                                             </td>
                                                                             <td class="text-gray-600">
                                                                                 {{ Carbon\Carbon::parse($claim_contrat_draft->pengajuan_waktu_eot)->translatedFormat('d F Y') }}
@@ -774,7 +795,7 @@
                                                                             </td>
 
                                                                             <td class="text-gray-600">
-                                                                                {{ number_format($draft_addendum->biaya_disetujui, 0, ',', ',') }}
+                                                                                {{ number_format($draft_addendum->biaya_disetujui, 0, '.', '.') }}
                                                                             </td>
 
                                                                             <td class="text-gray-600">
@@ -1541,7 +1562,7 @@
 
     {{-- begin::Calendar --}}
     <!--begin::Modal - Calendar Start -->
-    <div class="modal fade" id="kt_modal_calendar_start" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
+    {{-- <div class="modal fade" id="kt_modal_calendar_start" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
         <!--begin::Modal dialog-->
         <div class="modal-dialog modal-dialog-centered mw-300px">
             <!--begin::Modal content-->
@@ -1549,7 +1570,7 @@
                 <!--begin::Modal header-->
                 <div class="modal-header">
                     <!--begin::Modal title-->
-                    <h2>Approval Date</h2>
+                    <h2>Tanggal Pengajuan</h2>
                     <!--end::Modal title-->
                     <!--begin::Close-->
                     <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
@@ -1570,52 +1591,61 @@
                 <!--end::Modal header-->
                 <!--begin::Modal body-->
                 <div class="modal-body py-lg-6 px-lg-6">
-
+                    @php
+                        $current_year = (int) date("y");
+                        $year = 0;
+                    @endphp
                     <!--begin:: Calendar-->
                     <div class="fv-row mb-5">
                         <div class="calendar" id="approval-date">
                             <div class="calendar__opts">
-                                <select name="calendar__month" onchange="monthCalendar(this)" id="calendar__month">
-                                    <option value="1" selected>Jan</option>
-                                    <option value="2">Feb</option>
-                                    <option value="3">Mar</option>
-                                    <option value="4">Apr</option>
-                                    <option value="5">May</option>
-                                    <option value="6">Jun</option>
-                                    <option value="7">Jul</option>
-                                    <option value="8">Aug</option>
-                                    <option value="9">Sep</option>
-                                    <option value="10">Oct</option>
-                                    <option value="11">Nov</option>
-                                    <option value="12">Dec</option>
-                                </select>
-
-                                <select name="calendar__year" id="calendar__year">
-                                    <option>2017</option>
-                                    <option>2018</option>
-                                    <option>2019</option>
-                                    <option selected>2020</option>
-                                    <option>2021</option>
-                                    <option>2022</option>
-                                </select>
+                                <div class="col-6">
+                                    <select name="calendar__month" onchange="monthCalendar(this)" id="calendar__month">
+                                        <option value="1" selected>Jan</option>
+                                        <option value="2">Feb</option>
+                                        <option value="3">Mar</option>
+                                        <option value="4">Apr</option>
+                                        <option value="5">May</option>
+                                        <option value="6">Jun</option>
+                                        <option value="7">Jul</option>
+                                        <option value="8">Aug</option>
+                                        <option value="9">Sep</option>
+                                        <option value="10">Oct</option>
+                                        <option value="11">Nov</option>
+                                        <option value="12">Dec</option>
+                                    </select>
+                                </div>
+                                <div class="col- 6">
+                                    <select name="calendar__year" id="calendar__year">
+                                        @for ($i = 1; $i < $current_year; $i++)
+                                            
+                                            <option>2017</option>
+                                        @endfor
+                                        <option>2018</option>
+                                        <option>2019</option>
+                                        <option selected>2020</option>
+                                        <option>2021</option>
+                                        <option>2022</option>
+                                    </select>
+                                </div>
                             </div>
 
                             <div class="calendar__body">
-                                {{-- <div class="calendar__days">
-                                <div>M</div>
-                                <div>T</div>
-                                <div>W</div>
-                                <div>T</div>
-                                <div>F</div>
-                                <div>S</div>
-                                <div>S</div>
-                            </div> --}}
+                                <div class="calendar__days">
+                                    <div>M</div>
+                                    <div>T</div>
+                                    <div>W</div>
+                                    <div>T</div>
+                                    <div>F</div>
+                                    <div>S</div>
+                                    <div>S</div>
+                                </div>
 
                                 <div class="calendar__dates">
-                                    {{-- <div class="calendar__date calendar__date--grey"><span>27</span></div>
-                                <div class="calendar__date calendar__date--grey"><span>28</span></div>
-                                <div class="calendar__date calendar__date--grey"><span>29</span></div>
-                                <div class="calendar__date calendar__date--grey"><span>30</span></div> --}}
+                                    <div class="calendar__date calendar__date--grey"><span>27</span></div>
+                                    <div class="calendar__date calendar__date--grey"><span>28</span></div>
+                                    <div class="calendar__date calendar__date--grey"><span>29</span></div>
+                                    <div class="calendar__date calendar__date--grey"><span>30</span></div>
                                     <div class="calendar__date"><span>1</span></div>
                                     <div class="calendar__date"><span>2</span></div>
                                     <div class="calendar__date"><span>3</span></div>
@@ -1679,7 +1709,7 @@
             <!--end::Modal body-->
         </div>
         <!--end::Modal content-->
-    </div>
+    </div> --}}
 
     {{-- start:: Modal - Import Pasal --}}
     <div class="modal fade" id="kt_modal_import_pasal" tabindex="-1" aria-hidden="true">
@@ -2138,7 +2168,7 @@
 
         // end::Script adding pasal
 
-        const stageActions = document.querySelectorAll(".stage-button");
+        const stageActions = document.querySelectorAll(".clicked-stage");
         let prevStage = "{{ $claimContract->stages ?? 0 }}";
         stageActions.forEach((stageAction, i) => {
             stageAction.addEventListener("click", async e => {
@@ -2236,7 +2266,14 @@
                                 }
                             }
                             prevStage = stage;
-                            // window.location.reload();
+                            Toast.fire({
+                                icon: "success",
+                                timer: 2000,
+                                html: "<b>Update Stage berhasil</b><br><small>tunggu 2 detik untuk me-refresh otomatis</small>",
+                            });
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 2000);
                         }
                     }
                 })

@@ -77,53 +77,73 @@
                                             <div id="stage-button" class="stage-list">
                                                 @isset($addendumContract)
                                                     <a href="#" role="link"
-                                                        class="stage-button color-is-default stage-is-done"
+                                                        class="stage-button clicked-stage color-is-default stage-is-done"
                                                         style="outline: 0px; cursor: pointer;" stage="1">
-                                                        Draft
+                                                        <div class="d-flex align-items-center text-white">Draft</div>
                                                     </a>
                                                     @if ($addendumContract->stages > 1)
                                                         <a href="#" role="link"
-                                                            class="stage-button color-is-default stage-is-done"
+                                                            class="stage-button clicked-stage color-is-default stage-is-done"
                                                             style="outline: 0px; cursor: pointer;" stage="2">
-                                                            Diajukan
+                                                            <div class="d-flex align-items-center text-white">Diajukan</div>
                                                         </a>
                                                     @else
                                                         <a href="#" role="link"
-                                                            class="stage-button color-is-default stage-is-not-active"
+                                                            class="stage-button clicked-stage color-is-default stage-is-not-active"
                                                             style="outline: 0px; cursor: pointer;" stage="2">
-                                                            Diajukan
+                                                            <div class="d-flex align-items-center text-white">Diajukan</div>
                                                         </a>
                                                     @endif
 
                                                     @if ($addendumContract->stages > 2)
                                                         <a href="#" role="link"
-                                                            class="stage-button color-is-default stage-is-done"
+                                                            class="stage-button clicked-stage color-is-default stage-is-done"
                                                             style="outline: 0px; cursor: pointer;" stage="3">
-                                                            Negoisasi
+                                                            <div class="d-flex align-items-center text-white">Negoisasi</div>
                                                         </a>
                                                     @else
                                                         <a href="#" role="link"
-                                                            class="stage-button color-is-default stage-is-not-active"
+                                                            class="stage-button clicked-stage color-is-default stage-is-not-active"
                                                             style="outline: 0px; cursor: pointer;" stage="3">
-                                                            Negoisasi
+                                                            <div class="d-flex align-items-center text-white">Negoisasi</div>
                                                         </a>
                                                     @endif
-
-                                                    @if ($addendumContract->stages > 3)
+                                                    {{-- @dd($addendumContract->stages) --}}
+                                                    @if ($addendumContract->stages == 4)
                                                         <a href="#" role="link"
-                                                            class="stage-button color-is-default stage-is-done"
-                                                            style="outline: 0px; cursor: pointer;" stage="4">
-                                                            Disetujui
+                                                            class="stage-button stage-dropdown color-is-default stage-is-done"
+                                                            style="outline: 0px; cursor: pointer;" data-bs-toggle="dropdown" aria-expanded="false">
+                                                            <div class="d-flex justify-content-between align-items-center">
+                                                                <span class="text-white me-3">Disetujui</span>
+                                                                <i class="bi bi-caret-down-fill text-white"></i>
+                                                            </div>
                                                         </a>
                                                     @else
-                                                        <a href="#" role="link"
-                                                            class="stage-button color-is-default stage-is-not-active"
-                                                            style="outline: 0px; cursor: pointer;" stage="4">
-                                                            Disetujui
-                                                        </a>
+                                                        @if ($addendumContract->stages > 4)
+                                                            <a href="#" role="link"
+                                                                class="stage-button stage-dropdown color-is-danger stage-is-done"
+                                                                style="outline: 0px; cursor: pointer;" data-bs-toggle="dropdown" aria-expanded="false">
+                                                                <div class="d-flex justify-content-between align-items-center">
+                                                                    <span class="text-white me-3">Tidak Disetujui</span>
+                                                                    <i class="bi bi-caret-down-fill text-white"></i>
+                                                                </div>
+                                                            </a>
+                                                        @else
+                                                            <a href="#" role="link"
+                                                                class="stage-button stage-dropdown color-is-default stage-is-not-active"
+                                                                style="outline: 0px; cursor: pointer;" data-bs-toggle="dropdown" aria-expanded="false">
+                                                                <div class="d-flex justify-content-between align-items-center">
+                                                                    <span class="text-white me-3">Disetujui</span>
+                                                                    <i class="bi bi-caret-down-fill text-white"></i>
+                                                                </div>
+                                                            </a>
+                                                        @endif
                                                     @endif
-
-                                                    @if ($addendumContract->stages > 4)
+                                                    <ul class="dropdown-menu">
+                                                        <li><a href="#" class="dropdown-item clicked-stage" stage="4">Disetujui</a></li>
+                                                        <li><a href="#" class="dropdown-item clicked-stage" stage="5">Tidak Disetujui</a></li>
+                                                    </ul>
+                                                    {{-- @if ($addendumContract->stages > 4)
                                                         <a href="#" role="link"
                                                             class="stage-button color-is-default stage-is-done"
                                                             style="outline: 0px; cursor: pointer;" stage="5">
@@ -135,7 +155,7 @@
                                                             style="outline: 0px; cursor: pointer;" stage="5">
                                                             Amandemen
                                                         </a>
-                                                    @endif
+                                                    @endif --}}
                                                 @else
                                                     <a href="#" role="link"
                                                         class="stage-button color-is-default stage-is-done"
@@ -298,8 +318,7 @@
                                                                     id="start-date-modal">&plus;</a> --}}
                                                             <a href="#" class="btn btn-sm mx-3"
                                                                 style="background: transparent;width:1rem;height:2.3rem;"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#kt_modal_calendar_start"><i
+                                                                onclick="showCalendarModal(this)"><i
                                                                     class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center"
                                                                     style="color: #008cb4"></i></a>
                                                             <!--end::Label-->
@@ -398,7 +417,7 @@
                                                         </li>
                                                     @endif
 
-                                                    @if ($addendumContract->stages > 4)
+                                                    @if ($addendumContract->stages == 4 && $addendumContract->stages != 5)
                                                         <li class="nav-item" role="presentation">
                                                             <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab"
                                                                 href="#kt_user_amandemen" style="font-size:14px;"
@@ -502,7 +521,7 @@
                                                                                 @endif
 
                                                                                 <td class="text-gray-600">
-                                                                                    {{ number_format($draft_addendum->pengajuan_biaya, 0, ',', ',') }}
+                                                                                    {{ number_format($draft_addendum->pengajuan_biaya, 0, '.', '.') }}
                                                                                 </td>
 
                                                                                 <td class="text-gray-600">
@@ -751,7 +770,7 @@
                                                                                 </td>
 
                                                                                 <td class="text-gray-600">
-                                                                                    {{ number_format($draft_addendum->biaya_disetujui, 0, ',', ',') }}
+                                                                                    {{ number_format($draft_addendum->biaya_disetujui, 0, '.', '.') }}
                                                                                 </td>
 
                                                                                 <td class="text-gray-600">
@@ -833,7 +852,7 @@
                                                                                 </td>
 
                                                                                 <td class="text-gray-600">
-                                                                                    {{ number_format($draft_addendum->biaya_amandemen, 0, ',', ',') }}
+                                                                                    {{ number_format($draft_addendum->biaya_amandemen, 0, '.', '.') }}
                                                                                 </td>
 
                                                                                 <td class="text-gray-600">
@@ -1067,8 +1086,7 @@
                                                                         id="start-date-modal">&plus;</a> --}}
                                                                 <a href="#" class="btn btn-sm mx-3"
                                                                     style="background: transparent;width:1rem;height:2.3rem;"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#kt_modal_calendar_start"><i
+                                                                    onclick="showCalendarModal(this)"><i
                                                                         class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center"
                                                                         style="color: #008cb4"></i></a>
                                                             </label>
@@ -2162,7 +2180,7 @@
 
         // end::Script adding pasal
 
-        const stages = document.querySelectorAll(".stage-button");
+        const stages = document.querySelectorAll(".clicked-stage");
         let prevStep = Number("{{ $addendumContract->stages ?? 1 }}");
         const idAddendum = "{{ $addendumContract->id_addendum ?? 0 }}";
         stages.forEach((stage, i) => {
@@ -2191,8 +2209,33 @@
                     });
                     // toasterBoots.show()
                     if (step > 1) {
-                        stage.classList.add("stage-is-done");
-                        stage.classList.remove("stage-is-not-active");
+                        const stageElt = document.querySelector(".stage-dropdown");
+                        const spanText = stageElt.querySelector("span");
+                        if(step > 3) {
+                            if(step == 5) {
+                                spanText.innerText = "Tidak Disetujui";
+                                stageElt.classList.add("stage-is-done");
+                                stageElt.classList.add("color-is-danger");
+                                stageElt.classList.remove("stage-is-not-active");
+                                stageElt.classList.remove("color-is-default");
+                            } else {
+                                spanText.innerText = "Disetujui";
+                                stageElt.classList.add("stage-is-done");
+                                stageElt.classList.add("color-is-default");
+                                stageElt.classList.remove("color-is-danger");
+                                stageElt.classList.remove("stage-is-not-active");
+                            }
+                        } else {
+                            if(prevStep == 5 || prevStep == 4) {
+                                spanText.innerText = "Disetujui";
+                                stageElt.classList.remove("stage-is-done");
+                                stageElt.classList.remove("color-is-danger");
+                                stageElt.classList.add("stage-is-not-active");
+                                stageElt.classList.add("color-is-default");
+                            }
+                            stage.classList.add("stage-is-done");
+                            stage.classList.remove("stage-is-not-active");
+                        }
                         // stages[i++].classList.remove("stage-is-done");
                         // stages[i++].classList.add("stage-is-not-active");
 
@@ -2200,41 +2243,79 @@
                         const tabListElt = document.querySelector("#tab-list");
                         let title = "";
                         let hrefModal = "";
+                        let htmltabList = "";
                         switch (step) {
                             case 1:
                                 title = "Draft"
                                 hrefModal = "kt_user_view_overview_attachment"
+                                htmltabList = `
+                                    <li class="nav-item" role="presentation">
+                                        <a class="nav-link text-active-primary pb-4"
+                                            data-bs-toggle="tab"
+                                            href="#${hrefModal}"
+                                            style="font-size:14px;" aria-selected="false"
+                                            role="tab" stage="${step}">${title}</a>
+                                    </li>
+                                `;
                                 break;
 
                             case 2:
                                 title = "Diajukan"
                                 hrefModal = "kt_user_diajukan"
+                                htmltabList = `
+                                    <li class="nav-item" role="presentation">
+                                        <a class="nav-link text-active-primary pb-4"
+                                            data-bs-toggle="tab"
+                                            href="#${hrefModal}"
+                                            style="font-size:14px;" aria-selected="false"
+                                            role="tab" stage="${step}">${title}</a>
+                                    </li>
+                                `;
                                 break;
 
                             case 3:
                                 title = "Negoisasi"
                                 hrefModal = "kt_user_negoisasi"
+                                htmltabList = `
+                                    <li class="nav-item" role="presentation">
+                                        <a class="nav-link text-active-primary pb-4"
+                                            data-bs-toggle="tab"
+                                            href="#${hrefModal}"
+                                            style="font-size:14px;" aria-selected="false"
+                                            role="tab" stage="${step}">${title}</a>
+                                    </li>
+                                `;
                                 break;
 
                             case 4:
                                 title = "Disetujui"
                                 hrefModal = "kt_user_disetujui"
-                                break;
-
-                            case 5:
+                                htmltabList = `
+                                    <li class="nav-item" role="presentation">
+                                        <a class="nav-link text-active-primary pb-4"
+                                            data-bs-toggle="tab"
+                                            href="#${hrefModal}"
+                                            style="font-size:14px;" aria-selected="false"
+                                            role="tab" stage="${step}">${title}</a>
+                                    </li>
+                                `;
                                 title = "Amandemen"
                                 hrefModal = "kt_user_amandemen"
+                                htmltabList += `
+                                    <li class="nav-item" role="presentation">
+                                        <a class="nav-link text-active-primary pb-4"
+                                            data-bs-toggle="tab"
+                                            href="#${hrefModal}"
+                                            style="font-size:14px;" aria-selected="false"
+                                            role="tab" stage="${step}">${title}</a>
+                                    </li>
+                                `;
                                 break;
+
+                            // case 5:
+                            //     break;
                         }
-                        let htmltabList = `
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link text-active-primary pb-4"
-                                    data-bs-toggle="tab"
-                                    href="#${hrefModal}"
-                                    style="font-size:14px;" aria-selected="false"
-                                    role="tab" stage="${step}">${title}</a>
-                            </li>
-                        `;
+                        
 
 
                         const isTabExist = tabListElt.querySelector(`.nav-item > a[stage="${step}"]`);
@@ -2258,19 +2339,24 @@
                             stages[i].classList.add("stage-is-not-active");
                             const tabListEltRemove = document.querySelector(
                                 `#tab-list > .nav-item > a[stage="${i + 1}"]`);
-                            tabListEltRemove.parentElement.remove();
+                            if(tabListEltRemove) {
+                                tabListEltRemove.parentElement.remove();
+                            }
                         }
                     }
                     prevStep = step;
                     Toast.fire({
                         icon: "success",
-                        text: "Update Stage berhasil diperbarui",
+                        html: "<b>Update Stage berhasil</b><br><small>tunggu 3 detik untuk me-refresh otomatis</small>",
                     });
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 3000);
                 } else {
                     toaster.classList.add("text-bg-danger");
                     Toast.fire({
                         icon: "error",
-                        text: "Update Stage gagal diperbarui, pastikan anda membuat addendum terlebih dahulu!",
+                        html: "Update Stage gagal diperbarui, pastikan anda membuat addendum terlebih dahulu!",
                     });
                     // document.querySelector(".toast-body").innerText = setStage.msg;
                     // toasterBoots.show()

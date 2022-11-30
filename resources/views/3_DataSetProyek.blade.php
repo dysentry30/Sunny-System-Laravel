@@ -681,9 +681,14 @@
 
                                             <!--begin::Forecast-->
                                             <td class="text-end">
+                                                @php
+                                                    $total_forecast = $proyek->Forecasts->sum(function($f) {
+                                                        return (int) $f->nilai_forecast;
+                                                    })
+                                                @endphp
                                                 <small>
                                                     {{-- {{ $proyek->forecast }} --}}
-                                                    {{ number_format((int)$proyek->forecast, 0, '.', '.') ?? '-' }}
+                                                    {{ number_format((int)$total_forecast, 0, '.', '.') ?? '-' }}
                                                 </small>
                                             </td>
                                             <!--end::Forecast-->
@@ -1187,48 +1192,48 @@
     
     <script>
         $(document).ready(function() {
-        $('#example').DataTable( {
-            initComplete: function(settings, json) {
-                const btns = document.querySelectorAll(".dt-buttons .dt-button");
-                btns.forEach(btn => {
-                    btn.classList.add("btn");
-                    btn.classList.add("btn-active-primary");
-                });
-                // const btnsCollection = document.querySelectorAll("div.dt-button-collection button.dt-button.active");
-                // console.log(btnsCollection);
-                // btnsCollection.forEach(btn => {
-                //     btn.classList.add("btn");
-                //     btn.classList.add("btn-active-primary");
-                // });
-            },
-            dom: 'lBfrtip',
-            stateSave : true,
-            scrollX : true,
-            // iDisplayLength : 25,
-            // pageLength : 500,
-            // lengthMenu: [[5, 10, 20, -1], [5, 10, 20, 'Todos']],
-            buttons: [
-                {
-                    extend: 'copyHtml5',
-                    exportOptions: {
-                        columns: [ 0, ':visible' ]
-                    }
+            $('#example').DataTable( {
+                initComplete: function(settings, json) {
+                    const btns = document.querySelectorAll(".dt-buttons .dt-button");
+                    btns.forEach(btn => {
+                        btn.classList.add("btn");
+                        btn.classList.add("btn-active-primary");
+                    });
+                    // const btnsCollection = document.querySelectorAll("div.dt-button-collection button.dt-button.active");
+                    // console.log(btnsCollection);
+                    // btnsCollection.forEach(btn => {
+                    //     btn.classList.add("btn");
+                    //     btn.classList.add("btn-active-primary");
+                    // });
                 },
-                {
-                    extend: 'excelHtml5',
-                    exportOptions: {
-                        columns: ':visible'
-                    }
-                },
-                {
-                    extend: 'pdfHtml5',
-                    exportOptions: {
-                        columns: [ 0, 1, 2, 5 ]
-                    }
-                },
-                'colvis'
-            ]
-        } );
+                dom: 'lBfrtip',
+                stateSave : true,
+                scrollX : true,
+                // iDisplayLength : 25,
+                // pageLength : 500,
+                // lengthMenu: [[5, 10, 20, -1], [5, 10, 20, 'Todos']],
+                buttons: [
+                    {
+                        extend: 'copyHtml5',
+                        exportOptions: {
+                            columns: [ 0, ':visible' ]
+                        }
+                    },
+                    {
+                        extend: 'excelHtml5',
+                        exportOptions: {
+                            columns: ':visible'
+                        }
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        exportOptions: {
+                            columns: [ 0, 1, 2, 5 ]
+                        }
+                    },
+                    'colvis'
+                ]
+            } );
     } );
     </script>
     <!--end::Javascript-->

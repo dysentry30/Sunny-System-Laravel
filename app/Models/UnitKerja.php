@@ -11,6 +11,9 @@ class UnitKerja extends Model
     use HasFactory;
     use Sortable;
 
+    protected $primaryKey = "divcode";
+    protected $keyType = "string";
+
     public $sortable = [
         'nomor_unit', 'unit_kerja', 'divcode', 'dop', 'company', 'divisi', 'is_active'
     ];

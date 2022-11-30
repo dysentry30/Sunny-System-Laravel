@@ -953,6 +953,28 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
+                                                                        <span class="required">Nama Pendek Proyek</span>
+                                                                    </label>
+                                                                    <!--end::Label-->
+                                                                    <!--begin::Input-->
+                                                                    <input type="text"
+                                                                        class="form-control form-control-solid char-counter"
+                                                                        data-max-char="40"
+                                                                        id="short-name" name="short-name"
+                                                                        value="{{ $proyek->nama_pendek_proyek }}" />
+                                                                        <div class="d-flex flex-row justify-content-end">
+                                                                            <small class="">0/40</small>
+                                                                        </div>
+                                                                    <!--end::Input-->
+                                                                </div>
+                                                                <!--end::Input group-->
+                                                            </div>
+
+                                                            <div class="col-6">
+                                                                <!--begin::Input group Website-->
+                                                                <div class="fv-row mb-7">
+                                                                    <!--begin::Label-->
+                                                                    <label class="fs-6 fw-bold form-label mt-3">
                                                                         <span class="required">Kode Proyek <i
                                                                                 class="bi bi-lock"></i></span>
                                                                     </label>
@@ -1814,7 +1836,7 @@
                                                                         <option value=""></option>
                                                                         @foreach ($data_negara as $negara)
                                                                             @if ($negara->country == $proyek->negara)
-                                                                                <option value="{{ $negara->country }}"
+                                                                                <option value="{{ $negara->abbreviation }}"
                                                                                     selected>{{ $negara->country }}
                                                                                 </option>
                                                                             @else
@@ -1917,9 +1939,9 @@
                                                                         value="{{ $statusPasar }}" readonly />
                                                                     <!--end::Input-->
                                                                     <!--begin::Label-->
-                                                                    {{-- <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <label class="fs-6 fw-bold form-label mt-3">
                                                                         <span>Provinsi</span>
-                                                                    </label> --}}
+                                                                    </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
                                                                     {{-- <input type="text"
@@ -1927,18 +1949,18 @@
                                                                         id="provinsi" name="provinsi"
                                                                         value="{{ $proyek->provinsi }}"
                                                                         placeholder="Provinsi" /> --}}
-                                                                    {{-- <select name="provinsi" id="provinsi" class="form-select form-select-solid"
+                                                                    <select name="provinsi" id="provinsi" class="form-select form-select-solid"
                                                                         data-control="select2" data-hide-search="false" 
                                                                         data-placeholder="Pilih Provinsi">
                                                                         <option value=""></option>
-                                                                        @foreach ($data_provinsi as $provinsi)
-                                                                            @if ($provinsi->id == $proyek->provinsi)
-                                                                                <option value="{{$provinsi->id}}" selected>{{ucwords(strtolower($provinsi->name))}}</option>
+                                                                        @foreach ($provinsi as $prov)
+                                                                            @if ($prov->province_id  == $proyek->provinsi)
+                                                                                <option value="{{$prov->province_id }}" selected>{{ucwords(strtolower($prov->province_name))}}</option>
                                                                             @else
-                                                                                <option value="{{$provinsi->id}}">{{ucwords(strtolower($provinsi->name))}}</option>
+                                                                                <option value="{{$prov->province_id }}">{{ucwords(strtolower($prov->province_name))}}</option>
                                                                             @endif
                                                                         @endforeach
-                                                                    </select> --}}
+                                                                    </select>
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
@@ -2066,6 +2088,34 @@
                                                             <!--End begin::Col-->
                                                         </div>
                                                         <!--End begin::Row-->
+
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>Longitude</span>
+                                                                </label>
+                                                                <!--begin::Input-->
+                                                                <input type="text"
+                                                                class="form-control form-control-solid"
+                                                                id="longitude" name="longitude"
+                                                                value="{{ $proyek->longitude }}"
+                                                                placeholder="Longitude" />
+                                                                <!--end::Input-->
+                                                            </div>
+
+                                                            <div class="col">
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>Latitude</span>
+                                                                </label>
+                                                                <!--begin::Input-->
+                                                                <input type="text"
+                                                                class="form-control form-control-solid"
+                                                                id="latitude" name="latitude"
+                                                                value="{{ $proyek->latitude }}"
+                                                                placeholder="Latitude" />
+                                                                <!--end::Input-->
+                                                            </div>
+                                                        </div>
 
 
                                                         <!--Begin::Title Biru Form: Kriteria pasar-->

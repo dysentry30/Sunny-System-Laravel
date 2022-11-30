@@ -34,7 +34,7 @@ class Proyek extends Model
 
     public function Dop()
     {
-        return $this->hasOne(Dop::class);
+        return $this->hasOne(Dop::class, "dop", "dop");
     }
 
     // public function Sbu()
@@ -115,5 +115,10 @@ class Proyek extends Model
     public function RiskTenderProyek()
     {
         return $this->hasMany(RiskTenderProyek::class, "kode_proyek");
+    }
+
+    public function Provinsi()
+    {
+        return $this->hasOne(Provinsi::class, "province_id", "provinsi");
     }
 }

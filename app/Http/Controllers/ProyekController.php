@@ -33,6 +33,7 @@ use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 use App\Models\DokumenPrakualifikasi;
 use App\Models\JenisProyek;
+use App\Models\Provinsi;
 use App\Models\TipeProyek;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
@@ -273,6 +274,7 @@ class ProyekController extends Controller
         $kriteriapasar = KriteriaPasar::all()->unique("kategori");
         $kriteriapasarproyek = $kriteriaProyek;
         $teams = $teamProyek;
+        $provinsi = Provinsi::all();
         $pesertatender = PesertaTender::where("kode_proyek", "=", $kode_proyek)->get();
         $proyekberjalans = ProyekBerjalans::where("kode_proyek", "=", $kode_proyek)->get()->first();
         // $historyForecast = $historyForecast;
@@ -283,7 +285,7 @@ class ProyekController extends Controller
             return view(
                 'Proyek/viewProyek',
                 ["proyek" => $proyek, "proyeks" => Proyek::all()],
-                compact(['companies', 'sumberdanas', 'dops', 'sbus', 'unitkerjas', 'customers', 'users', 'kriteriapasar', 'kriteriapasarproyek', 'teams', 'pesertatender', 'proyekberjalans', 'historyForecast', 'porsiJO', 'data_negara', 'mataUang'])
+                compact(['companies', 'sumberdanas', 'dops', 'sbus', 'unitkerjas', 'customers', 'users', 'kriteriapasar', 'kriteriapasarproyek', 'teams', 'pesertatender', 'proyekberjalans', 'historyForecast', 'porsiJO', 'data_negara', 'mataUang', "provinsi"])
                 // [
                 //     'companies' => Company::all(),
                 //     'sumberdanas' => SumberDana::all(),
@@ -306,7 +308,7 @@ class ProyekController extends Controller
         } else {
             $periodePrognosa = $periodePrognosa == "" ? (int) date("m") : $periodePrognosa;
             $tabPane = "";
-            return view('Proyek/viewProyekRetail', ["proyek" => $proyek, "proyeks" => Proyek::all()], compact(["periodePrognosa", 'companies', 'sumberdanas', 'dops', 'sbus', 'unitkerjas', 'customers', 'users', 'kriteriapasar', 'kriteriapasarproyek', 'teams', 'pesertatender', 'proyekberjalans', 'historyForecast', 'porsiJO', 'data_negara', 'tabPane']));
+            return view('Proyek/viewProyekRetail', ["proyek" => $proyek, "proyeks" => Proyek::all()], compact(["periodePrognosa", 'companies', 'sumberdanas', 'dops', 'sbus', 'unitkerjas', 'customers', 'users', 'kriteriapasar', 'kriteriapasarproyek', 'teams', 'pesertatender', 'proyekberjalans', 'historyForecast', 'porsiJO', 'data_negara', 'tabPane', "provinsi"]));
             // return redirect()->back();
         }
     }
@@ -376,11 +378,12 @@ class ProyekController extends Controller
         $newProyek->status_pasdin  = $dataProyek["status-pasardini"];
         $newProyek->info_asal_proyek  = $dataProyek["info-proyek"];
         $newProyek->laporan_kualitatif_pasdin = $dataProyek["laporan-kualitatif-pasdin"];
+        $newProyek->nama_pendek_proyek = $dataProyek["short-name"];
 
         // form PASAR POTENSIAL
         $newProyek->negara = $dataProyek["negara"];
         $newProyek->sbu = $dataProyek["sbu"];
-        // $newProyek->provinsi = $dataProyek["provinsi"];
+        $newProyek->provinsi = $dataProyek["provinsi"];
         $newProyek->klasifikasi = $dataProyek["klasifikasi"];
         $newProyek->status_pasar = $dataProyek["status-pasar"];
         $newProyek->sub_klasifikasi = $dataProyek["sub-klasifikasi"];
@@ -499,6 +502,8 @@ class ProyekController extends Controller
         $newProyek->piutang = str_replace('.', '', $dataProyek["piutang-performance"]);
         $newProyek->laba = str_replace('.', '', $dataProyek["laba-performance"]);
         $newProyek->rugi = str_replace('.', '', $dataProyek["rugi-performance"]);
+        $newProyek->latitude = $dataProyek["latitude"];
+        $newProyek->longitude = $dataProyek["longitude"];
 
         $idCustomer = $dataProyek["customer"];
 
@@ -723,7 +728,7 @@ class ProyekController extends Controller
         // // form PASAR POTENSIAL
         // $newProyek->negara = $dataProyek["negara"];
         // $newProyek->sbu = $dataProyek["sbu"];
-        // // $newProyek->provinsi = $dataProyek["provinsi"];
+        // $newProyek->provinsi = $dataProyek["provinsi"];
         // $newProyek->klasifikasi = $dataProyek["klasifikasi"];
         // $newProyek->status_pasar = $dataProyek["status-pasar"];
         // $newProyek->sub_klasifikasi = $dataProyek["sub-klasifikasi"];
@@ -788,7 +793,7 @@ class ProyekController extends Controller
         // if ($dataProyek["nilai-perolehan"] != null && $dataProyek["porsi-jo"] != null) {
         //     $nilaiPerolehan = (int) str_replace('.', '', $dataProyek["nilai-perolehan"]);
         //     $kontrakKeseluruhan = ($nilaiPerolehan * 100) / $dataProyek["porsi-jo"];
-        //     $nilaiKontrakKeseluruhan = number_format($kontrakKeseluruhan, 0, ',', ',');
+        //     $nilaiKontrakKeseluruhan = number_format($kontrakKeseluruhan, 0, '.', '.');
 
         //     $newProyek->nilai_kontrak_keseluruhan = $nilaiKontrakKeseluruhan;
         // }
