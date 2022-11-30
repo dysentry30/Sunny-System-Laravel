@@ -327,6 +327,7 @@ class DashboardController extends Controller
             // }
         }
         foreach ($nilaiProyekTerendah as $t) {
+            // dd($nilaiProyekTerendah);
             // if ($realisasi->month_realisasi == $i && !$forecast->is_cancel) {
                 // dump($realisasi->realisasi_forecast);
                 if(!empty($t->month_realisasi)) {
