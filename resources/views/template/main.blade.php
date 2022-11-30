@@ -22,7 +22,8 @@
     <link href="{{ asset('/bootstrap/bootstrap.min.css') }}" rel="stylesheet">
     {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css"> --}}
     {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css"> --}}
-    <link rel="stylesheet" href="{{ asset('/bootstrap/bootstrap-icons.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('/bootstrap/bootstrap-icons.css') }}"> --}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
     <!-- end::Bootstrap CSS -->
 
     <!-- begin::Froala CSS -->
@@ -284,6 +285,7 @@
                             str_contains(Request::Path(), 'user') ||
                             str_contains(Request::Path(), 'kriteria-pasar') ||
                             str_contains(Request::Path(), 'industry-owner') ||
+                            str_contains(Request::Path(), 'industry-sector') ||
                             str_contains(Request::Path(), 'team-proyek') ? 'background-color:#008CB4' : '' }}">
 
                                     <a class="menu-link" id="collapse-button" style="color:white; padding-left:20px;"
@@ -492,6 +494,23 @@
                                                 <!--end::Svg Icon-->
                                             </span>
                                             <span class="menu-title" style="font-size: 16px; padding-left: 10px">Provinsi</span>
+                                        </a>
+                                    </div>
+                                    <!--end::Menu Colapse-->
+                                    @endif
+
+                                    @if (auth()->user()->check_administrator)
+                                    <!--begin::Menu Colapse-->
+                                    <div id="#kt_aside_menu" data-kt-menu="true"
+                                        style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'industry-sector' ? 'background-color:#008CB4' : '' }}">
+                                        <a class="menu-link " href="/industry-sector" style="color:white; padding-left:20px;">
+                                            <span class="menu-icon">
+                                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                                {{-- <i class="bi bi-buildings text-white"></i> --}}
+                                                <i class="bi bi-buildings-fill text-white"></i>
+                                                <!--end::Svg Icon-->
+                                            </span>
+                                            <span class="menu-title" style="font-size: 16px; padding-left: 10px">Industry Sector</span>
                                         </a>
                                     </div>
                                     <!--end::Menu Colapse-->
