@@ -319,7 +319,7 @@ class DashboardController extends Controller
         foreach ($nilaiProyekTerkontrak as $t) {
             // if ($realisasi->month_realisasi == $i && !$forecast->is_cancel) {
                 // dump($realisasi->realisasi_forecast);
-                $nilaiTerkontrak += (int) $t->realisasi_forecast;
+                $nilaiTerkontrak += (int) $t->realisasi_forecast / $per;
             // } else {
             //     $nilaiRealisasiForecast == 0;
             // }
@@ -327,7 +327,7 @@ class DashboardController extends Controller
         foreach ($proyeksTerendahTerkontrak as $t) {
             // if ($realisasi->month_realisasi == $i && !$forecast->is_cancel) {
                 // dump($realisasi->realisasi_forecast);
-                $nilaiTerendah += (int) $t->realisasi_forecast;
+                $nilaiTerendah += (int) $t->realisasi_forecast / $per;
             // } else {
             //     $nilaiRealisasiForecast == 0;
             // }
