@@ -1197,9 +1197,14 @@ class DashboardController extends Controller
         $row = 2;
         $proyeks->each(function ($p) use (&$row, $sheet, $tipe) {
             $tipe_proyek = "";
+            $nilai_perolehan = 0;
             if($p->tipe_proyek == "R") {
+                $nilai_perolehan = $p->Forecasts->sum(function($f) {
+                    return (int) $f->realisasi_forecast;
+                });
                 $tipe_proyek = "Retail";
             } else {
+                $nilai_perolehan = $p->nilai_perolehan;
                 $tipe_proyek = "Non-Retail";
             }
             $sheet->setCellValue('A' . $row, $p->nama_proyek);
@@ -1212,7 +1217,7 @@ class DashboardController extends Controller
             } else {
                 $sheet->setCellValue('F' . $row, $p->bulan_ri_perolehan);
             }
-            $sheet->setCellValue('G' . $row, $p->nilai_perolehan);
+            $sheet->setCellValue('G' . $row, $nilai_perolehan);
             $row++;
         });
         $writer = new Xlsx($spreadsheet);
