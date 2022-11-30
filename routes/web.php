@@ -43,6 +43,7 @@ use App\Http\Controllers\MataUangController;
 use App\Http\Controllers\TipeProyekController;
 use App\Models\JenisProyek;
 use App\Models\MataUang;
+use App\Models\Provinsi;
 use App\Models\ProyekBerjalans;
 use App\Models\Sbu;
 use BeyondCode\LaravelWebSockets\Facades\WebSocketsRouter;
@@ -88,7 +89,11 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index']);
 
-    Route::get('/dashboard-ccm', [DashboardController::class, 'dashboardCCM']);
+    Route::get('/dashboard-ccm/perolehan-kontrak', [DashboardController::class, 'dashboard_perolehan_kontrak']);
+
+    Route::get('/dashboard-ccm/pelaksanaan-kontrak', [DashboardController::class, 'dashboard_pelaksanaan_kontrak']);
+
+    Route::get('/dashboard-ccm/pemeliharaan-kontrak', [DashboardController::class, 'dashboard_pemeliharaan_kontrak']);
 
     Route::get('/dashboard/filter/{prognosa}/{type}/{month}', [DashboardController::class, 'getDataFilterPoint']);
 
@@ -1049,6 +1054,12 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $industryOwners = IndustryOwner::all();
         return view("/MasterData/IndustryOwner", compact(["industryOwners"]));
     });
+
+    // Master Data Provinsi
+    Route::get('/provinsi', function (Request $request) {
+        $provinsi = Provinsi::all();
+        return view("/MasterData/Provinsi", compact(["provinsi"]));
+    });
     //End :: Master Data
 
 
@@ -1644,18 +1655,20 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
                 "entry" => [
                     "content" => [
                         "properties" => [
-                            "Description" => "ID-JK",
+                            "Description" => isset($p->Provinsi) ? $p->provinsi : Provinsi::where("province_name", "=", $p->provinsi)->first()->province_id ?? "",
                         ]
                     ]
                 ]
             ]
         ];
+        $data_negara = collect(json_decode(Storage::get("/public/data/country.json")));
         $p->UsrNegara = [
             "inline" => [
                 "entry" => [
                     "content" => [
                         "properties" => [
-                            "Description" => $p->negara == 'Indonesia' ? "ID" : '',
+                            // "Description" => $p->negara == 'Indonesia' ? "ID" : '',
+                            "Description" => $data_negara->where("country", "=", $p->negara)->first()->abbreviation,
                         ]
                     ]
                 ]
@@ -1788,6 +1801,8 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
                 "d:UsrTanggalKontrak" => $p->tanggal_terkontrak,
                 "d:UsrNilaiKontrakKeseluruhan" => $p->nilai_kontrak_keseluruhan,
                 "d:UsrKodeProyek" => DB::table("proyek_code_crm")->where("kode_proyek", '=', $p->kode_proyek)->first()->kode_proyek_crm ?? $p->kode_proyek,
+                "d:UsrLongitude" => $p->longitude,
+                "d:UsrLatitude" => $p->latitude,
             ],
         ];
         // $p->ap_id = "";
@@ -1856,7 +1871,7 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
         unset($p->jenis_proyek, $p->unit_kerja, $p->kode_proyek, $p->tanggal_mulai_terkontrak, $p->tanggal_akhir_terkontrak, $p->id);
         unset($p->tanggal_selesai_pho, $p->tanggal_selesai_fho, $p->nama_proyek, $p->nospk_external, $p->porsi_jo, $p->nilai_kontrak_keseluruhan);
         unset($p->nilai_kontrak_keseluruhan, $p->nilai_valas_review, $p->tanggal_terkontrak, $p->nilai_perolehan, $p->kurs_review, $p->klasifikasi_terkontrak);
-        unset($p->nomor_terkontrak, $p->tglspk_internal);
+        unset($p->nomor_terkontrak, $p->tglspk_internal, $p->provinsi, $p->sumber_dana);
         unset($p->provinsi, $p->negara, $p->sistem_bayar, $p->sumber_dana, $p->sbu, $p->jenis_terkontrak, $p->lokasi_tender, $p->mata_uang_review, $p->mata_uang_awal);
         return $p;
     });

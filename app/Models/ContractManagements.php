@@ -27,6 +27,11 @@ class ContractManagements extends Model
         return $this->hasMany(DraftContracts::class, "id_contract");
     }
 
+    public function ClaimManagements()
+    {
+        return $this->hasMany(ClaimManagements::class, "id_contract");
+    }
+
     public function reviewProjects()
     {
         return $this->hasMany(ReviewContracts::class, "id_contract");

@@ -559,7 +559,7 @@
                                                     <span class="">Nilai Kontrak Awal: </span>
                                                 </div>
                                                 <div class="text-dark text-start">
-                                                    <b>{{ number_format($contract->value ?? 0, 0, '.', '.') }}</b>
+                                                    <b>{{ number_format($contract->project->nilai_rkap ?? 0, 0, '.', '.') }}</b>
                                                 </div>
                                             </div>
                                             <!--begin::Input group Website-->
@@ -648,17 +648,14 @@
         <div class="card-body pt-5">
             <!--begin:::Tabs-->
             <ul class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-8">
+                <!--begin:::Tab item Informasi Perusahaan-->
+                <li class="nav-item">
+                    <a class="nav-link text-active-primary pb-4 active" data-bs-toggle="tab"
+                        href="#kt_user_view_overview_tab" style="font-size:14px;">Perolehan</a>
+                </li>
+                <!--end:::Tab item Informasi Perusahaan-->
+
                 @if ($contract->stages > 0)
-
-                    <!--begin:::Tab item Informasi Perusahaan-->
-                    <li class="nav-item">
-                        <a class="nav-link text-active-primary pb-4 active" data-bs-toggle="tab"
-                            href="#kt_user_view_overview_tab" style="font-size:14px;">Perolehan</a>
-                    </li>
-                    <!--end:::Tab item Informasi Perusahaan-->
-                @endif
-
-                @if ($contract->stages > 1)
                     <!--begin:::Tab item History-->
                     <li class="nav-item">
                         <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true" data-bs-toggle="tab"
@@ -668,7 +665,7 @@
 
                 @endif
 
-                @if ($contract->stages > 2)
+                @if ($contract->stages > 1)
                     <!--begin:::Tab item Atachment & Notes-->
                     <li class="nav-item">
                         <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true" data-bs-toggle="tab"
@@ -678,7 +675,7 @@
 
                 @endif
 
-                @if ($contract->stages > 3)
+                @if ($contract->stages > 2)
                     <!--begin:::Tab item Atachment & Notes-->
                     <li class="nav-item">
                         <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true" data-bs-toggle="tab"
@@ -689,7 +686,7 @@
 
                 @endif
 
-                @if ($contract->stages > 4)
+                @if ($contract->stages > 3)
                     <!--begin:::Tab item Atachment & Notes-->
                     <li class="nav-item">
                         <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true" data-bs-toggle="tab"
@@ -5752,7 +5749,7 @@ aria-hidden="true">
     });
 
     const proyekStage = Number("{{ $contract->stages ?? 0 }}");
-    const tabContent = document.querySelector(`.nav li:nth-child(${proyekStage}) a`);
+    const tabContent = document.querySelector(`.nav li:nth-child(${proyekStage + 1}) a`);
     const tabBoots = new bootstrap.Tab(tabContent, {});
     tabBoots.show();
 

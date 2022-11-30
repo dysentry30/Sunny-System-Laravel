@@ -94,7 +94,7 @@
                                             <span class="">Total OK Review: </span>
                                         </div>
                                         <div class="text-dark text-start">
-                                            <b>{{ number_format($total_ok_review, 0, ',', ',') ?? '' }}</b>
+                                            <b>{{ number_format($total_ok_review, 0, '.', '.') ?? '' }}</b>
                                         </div>
                                     </div>
                                     <!--begin::Input group Website-->
@@ -136,7 +136,7 @@
                                                 <span class="">Total OK Awal: </span>
                                             </div>
                                             <div class="text-dark text-start">
-                                                <b>{{ number_format($total_ok_awal, 0, ',', ',') }}</b>
+                                                <b>{{ number_format($total_ok_awal, 0, '.', '.') }}</b>
                                             </div>
                                         </div>
                                         <!--begin::Input group Website-->
@@ -172,7 +172,7 @@
                                                 <span class="">Total Forecast: </span>
                                             </div>
                                             <div class="text-dark text-start">
-                                                <b>{{ number_format($total_forecast, 0, ',', ',') ?? 0 }}</b>
+                                                <b>{{ number_format($total_forecast, 0, '.', '.') ?? 0 }}</b>
                                             </div>
                                         </div>
                                         <!--end::Input group Name-->
@@ -184,7 +184,7 @@
                                                 <span class="">Total Realisasi: </span>
                                             </div>
                                             <div class="text-dark text-start">
-                                                <b>{{ number_format($total_realisasi, 0, ',', ',') }}</b>
+                                                <b>{{ number_format($total_realisasi, 0, '.', '.') }}</b>
                                             </div>
                                         </div>
                                         <!--begin::Input group Website-->

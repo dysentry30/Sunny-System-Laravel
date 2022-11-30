@@ -375,7 +375,7 @@ class ProyekController extends Controller
         if ($dataProyek["nilai-perolehan"] != null && $dataProyek["porsi-jo"] != null) {
             $nilaiPerolehan = (int) str_replace(',', '', $dataProyek["nilai-perolehan"]);
             $kontrakKeseluruhan = ($nilaiPerolehan * 100) / $dataProyek["porsi-jo"];
-            $nilaiKontrakKeseluruhan = number_format($kontrakKeseluruhan, 0, ',', ',');
+            $nilaiKontrakKeseluruhan = number_format($kontrakKeseluruhan, 0, '.', '.');
 
             $newProyek->nilai_kontrak_keseluruhan = $nilaiKontrakKeseluruhan;
         }

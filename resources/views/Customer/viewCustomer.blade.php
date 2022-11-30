@@ -4015,11 +4015,11 @@
                 name: "Laba / Rugi",
                 colorByPoint: true,
                 data: [{
-                        name: "Laba : " + "{{ number_format($nilaiLaba, 0, ',', ',') }}",
+                        name: "Laba : " + "{{ number_format($nilaiLaba, 0, '.', '.') }}",
                         y: nilaiLaba,
                     },
                     {
-                        name: "Rugi : " + "{{ number_format($nilaiRugi, 0, ',', ',') }}",
+                        name: "Rugi : " + "{{ number_format($nilaiRugi, 0, '.', '.') }}",
                         y: nilaiRugi,
                     }
                 ]

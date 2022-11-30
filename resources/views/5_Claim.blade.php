@@ -133,6 +133,13 @@
                                 <!--begin:::Tab item Claim-->
                                 <li class="nav-item">
                                     <a class="nav-link text-active-primary pb-4 active" data-bs-toggle="tab"
+                                        href="#kt_user_view_claim_VO" style="font-size:14px;">VO</a>
+                                </li>
+                                <!--end:::Tab item Claim-->
+
+                                <!--begin:::Tab item Claim-->
+                                <li class="nav-item">
+                                    <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab"
                                         href="#kt_user_view_claim" style="font-size:14px;">Claim</a>
                                 </li>
                                 <!--end:::Tab item Claim-->
@@ -159,7 +166,7 @@
                                 <div class="tab-content" id="myTabContent">
 
 <!--begin:::Tab Claim-->
-                                <div class="tab-pane fade show active" id="kt_user_view_claim" role="tabpanel">
+                                <div class="tab-pane fade" id="kt_user_view_claim" role="tabpanel">
                                     <!--begin::Table Claim-->
                                     <table class="table align-middle table-row-dashed fs-6 gy-2"
                                         id="kt_proyek_table">
@@ -308,6 +315,60 @@
                                                         <!--begin::Action-->
                                                         <td>
                                                             <a href="/contract-management/view/{{ $proyekAsuransis->id_contract }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekAsuransis->id_contract }}</a>
+                                                        </td>
+                                                        <!--end::Action-->
+                                                    </tr>
+                                            @empty
+                                                <tr class="bg-gray-100 text-center">
+                                                    <td colspan="4">Data Klaim tidak ditemukan</td>
+                                                </tr>
+                                            @endforelse
+                                        </tbody>
+                                    </table>
+                                    <!--end::Table -->
+                                </div>
+<!--end:::Tab pane Claim Asuransi-->
+
+<!--begin:::Tab Jenis VO-->
+                                <div class="tab-pane fade show active" id="kt_user_view_claim_VO" role="tabpanel">
+                                    <!--begin::Table Claim-->
+                                    <table class="table align-middle table-row-dashed fs-6 gy-2"
+                                        id="kt_proyek_table">
+                                        <!--begin::Table head-->
+                                        <thead>
+                                            <!--begin::Table row-->
+                                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                <th class="min-w-auto">@sortablelink('kode_proyek','Kode Proyek')</th>
+                                                <th class="min-w-auto">Nama Proyek</th>
+                                                <th class="min-w-auto">Unit Kerja</th>
+                                                <th class="min-w-auto">@sortablelink('id_contract','ID Contract')</th>
+                                                {{-- <th class="min-w-auto">Total</th> --}}
+                                            </tr>
+                                            <!--end::Table row-->
+                                        </thead>
+                                        <!--end::Table head-->
+                                        <!--begin::Table body-->
+                                        <tbody class="fw-bold text-gray-600">
+                                            @forelse ($proyekVos as $proyekVo)
+                                                    <tr>
+                                                        <!--begin::Name-->
+                                                        <td>
+                                                            <a href="/claim-management/proyek/{{ $proyekVo->kode_proyek }}/VO" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekVo->kode_proyek }}</a>
+                                                        </td>
+                                                        <!--end::Name-->
+                                                        <!--begin::Name Proyek-->
+                                                        <td>
+                                                            {{ $proyekVo->project->nama_proyek }}
+                                                        </td>
+                                                        <!--end::Name Proyek-->
+                                                        <!--begin::Unit Kerja-->
+                                                        <td>
+                                                            {{ $proyekVo->project->UnitKerja->unit_kerja }}
+                                                        </td>
+                                                        <!--end::Unit Kerja-->
+                                                        <!--begin::Action-->
+                                                        <td>
+                                                            <a href="/contract-management/view/{{ $proyekVo->id_contract }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekVo->id_contract }}</a>
                                                         </td>
                                                         <!--end::Action-->
                                                     </tr>

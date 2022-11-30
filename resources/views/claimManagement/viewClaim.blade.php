@@ -133,7 +133,7 @@
                                         <!--begin:::Tab Jenis Claim-->
                                         <div class="tab-pane fade show active" id="kt_user_view_claim" role="tabpanel">
                                             <!--begin::Table Claim-->
-                                            <table class="table align-middle table-row-dashed fs-6 gy-2"
+                                            <table class="table table-row-dashed fs-6 gy-2"
                                                 id="kt_proyek_table">
                                                 <!--begin::Table head-->
                                                 <thead>
@@ -157,326 +157,115 @@
                                                 <!--begin::Table body-->
                                                 <tbody class="fw-bold text-gray-600">
                                                     @foreach ($proyekClaims as $claim)
-                                                        @if ($claim->jenis_claim == 'Claim')
-                                                            <tr class="align-middle">
+                                                        <tr class="align-middle">
 
-                                                                <!--begin::Name=-->
-                                                                <td>
-                                                                    <a class="text-hover-primary text-gray-500"
-                                                                        href="/claim-management/view/{{ $claim->id_claim }}">{{ $claim->id_claim }}</a>
-                                                                </td>
-                                                                <!--end::Name=-->
-                                                                <!--begin::Email=-->
-                                                                <td>
-                                                                    {{ $proyek->kode_proyek }}
-                                                                </td>
-                                                                <!--end::Email=-->
-                                                                <!--begin::Company=-->
-                                                                <td>
-                                                                    {{ $proyek->nama_proyek }}
-                                                                    {{-- {{ $proyek->kode_proyek }} --}}
-                                                                </td>
-                                                                <!--end::Company=-->
+                                                            <!--begin::Name=-->
+                                                            <td>
+                                                                <a class="text-hover-primary text-gray-500"
+                                                                    href="/claim-management/view/{{ $claim->id_claim }}">{{ $claim->id_claim }}</a>
+                                                            </td>
+                                                            <!--end::Name=-->
+                                                            <!--begin::Email=-->
+                                                            <td>
+                                                                {{ $proyek->kode_proyek }}
+                                                            </td>
+                                                            <!--end::Email=-->
+                                                            <!--begin::Company=-->
+                                                            <td>
+                                                                {{ $proyek->nama_proyek }}
+                                                                {{-- {{ $proyek->kode_proyek }} --}}
+                                                            </td>
+                                                            <!--end::Company=-->
 
-                                                                <!--begin::Company=-->
-                                                                <td>
-                                                                    {{ $proyek->UnitKerja->unit_kerja }}
-                                                                    {{-- {{ $proyek->kode_proyek }} --}}
-                                                                </td>
-                                                                <!--end::Company=-->
+                                                            <!--begin::Company=-->
+                                                            <td>
+                                                                {{ $proyek->UnitKerja->unit_kerja }}
+                                                                {{-- {{ $proyek->kode_proyek }} --}}
+                                                            </td>
+                                                            <!--end::Company=-->
 
-                                                                <!--begin::Company=-->
-                                                                <td>
-                                                                    {{ $proyek->UnitKerja->unit_kerja }}
-                                                                    {{-- {{ $proyek->kode_proyek }} --}}
-                                                                </td>
-                                                                <!--end::Company=-->
+                                                            <!--begin::Company=-->
+                                                            <td>
+                                                                {{ $proyek->UnitKerja->unit_kerja }}
+                                                                {{-- {{ $proyek->kode_proyek }} --}}
+                                                            </td>
+                                                            <!--end::Company=-->
 
-                                                                @if (!empty($claim->claimContractDrafts[0]))
-                                                                    <!--begin::Action=-->
-                                                                    <td>
-                                                                        {{ $claim->claimContractDrafts[0]->uraian_perubahan }}
-                                                                    </td>
-                                                                    <!--end::Action=-->
-                                                                @else
-                                                                    <td class="text-danger">
+                                                            @if (!empty($claim->claimContractDrafts[0]))
+                                                                <!--begin::Action=-->
+                                                                <td>
+                                                                    {{ $claim->claimContractDrafts[0]->uraian_perubahan }}
+                                                                </td>
+                                                                <!--end::Action=-->
+                                                            @else
+                                                                <td class="text-break text-start text-danger text-truncate" style="max-width: 120px">
+                                                                    <small class="badge badge-light-danger">
                                                                         Kosong
-                                                                    </td>
-                                                                @endif
-                                                                <!--begin::Approval-->
-
-                                                                <!--end::Approval-->
-                                                                <!--begin::PIC=-->
-                                                                @if (!empty($claim->claimContractDiajukan[0]))
-                                                                    <!--begin::Action=-->
-                                                                    <td>
-                                                                        {{ $claim->claimContractDiajukan[0]->tanggal_diajukan }}
-                                                                    </td>
-                                                                    <!--end::Action=-->
-                                                                @else
-                                                                    <td class="text-danger">
-                                                                        Kosong
-                                                                    </td>
-                                                                @endif
-
-                                                                <!--begin::PIC=-->
-                                                                <td>
-                                                                    {{ number_format($claim->nilai_claim, 0, ',', ',') }}
+                                                                    </small>
                                                                 </td>
-                                                                <!--end::PIC=-->
+                                                            @endif
+                                                            <!--begin::Approval-->
 
-                                                                <!--begin::PIC=-->
+                                                            <!--end::Approval-->
+                                                            <!--begin::PIC=-->
+                                                            @if (!empty($claim->claimContractDiajukan[0]))
+                                                                <!--begin::Action=-->
                                                                 <td>
+                                                                    {{ $claim->claimContractDiajukan[0]->tanggal_diajukan }}
+                                                                </td>
+                                                                <!--end::Action=-->
+                                                            @else
+                                                                <td class="text-break text-start text-danger" style="max-width: 120px">
+                                                                    <small class="badge badge-light-danger">
+                                                                        Kosong
+                                                                    </small>
+                                                                </td>
+                                                            @endif
+
+                                                            <!--begin::PIC=-->
+                                                            <td>
+                                                                {{ number_format($claim->nilai_claim, 0, '.', '.') }}
+                                                            </td>
+                                                            <!--end::PIC=-->
+
+                                                            <!--begin::PIC=-->
+                                                            <td class="text-break text-start {{$claim->stage > 3 ? "text-success" : "text-primary"}}">
+                                                                <small class="badge {{$claim->stage > 3 ? "badge-light-success" : "badge-light-primary"}}">
                                                                     @switch($claim->stages)
                                                                         @case(1)
                                                                             Draft
                                                                         @break
-
+    
                                                                         @case(2)
                                                                             Diajukan
                                                                         @break
-
+    
                                                                         @case(3)
                                                                             Negosiasi
                                                                         @break
-
+    
                                                                         @case(4)
                                                                             Disetujui
                                                                         @break
-
+    
                                                                         @default
                                                                     @endswitch
-                                                                </td>
+                                                                </small>
+                                                            </td>
 
-                                                                <!--begin::Action=-->
-                                                                <td>
-                                                                    <form action="/claim-management/delete"
-                                                                        style="height: 1.5rem" method="POST">
-                                                                        @csrf
-                                                                        <button type="submit" name="delete-claim"
-                                                                            class="btn btn-sm btn-flex btn-light btn-active-primary fw-bolder">Delete</button>
-                                                                        <input type="hidden"
-                                                                            value="{{ $claim->id_claim }}" name="id-claim">
-                                                                    </form>
-                                                                </td>
-                                                                <!--end::Action=-->
-                                                            </tr>
-                                                        @endif
-                                                    @endforeach
-                                                    @foreach ($proyekClaims as $claim)
-                                                        @if ($claim->jenis_claim == 'Claim Asuransi')
-                                                            <tr class="align-middle">
-
-                                                                <!--begin::Name=-->
-                                                                <td>
-                                                                    <a class="text-hover-primary text-gray-500"
-                                                                        href="/claim-management/view/{{ $claim->id_claim }}">{{ $claim->id_claim }}</a>
-                                                                </td>
-                                                                <!--end::Name=-->
-                                                                <!--begin::Email=-->
-                                                                <td>
-                                                                    {{ $proyek->kode_proyek }}
-                                                                </td>
-                                                                <!--end::Email=-->
-                                                                <!--begin::Company=-->
-                                                                <td>
-                                                                    {{ $proyek->nama_proyek }}
-                                                                    {{-- {{ $proyek->kode_proyek }} --}}
-                                                                </td>
-                                                                <!--end::Company=-->
-
-                                                                <!--begin::Company=-->
-                                                                <td>
-                                                                    {{ $proyek->UnitKerja->unit_kerja }}
-                                                                    {{-- {{ $proyek->kode_proyek }} --}}
-                                                                </td>
-                                                                <!--end::Company=-->
-
-                                                                <!--begin::Company=-->
-                                                                <td>
-                                                                    {{ $proyek->UnitKerja->unit_kerja }}
-                                                                    {{-- {{ $proyek->kode_proyek }} --}}
-                                                                </td>
-                                                                <!--end::Company=-->
-
-                                                                @if (!empty($claim->claimContractDrafts[0]))
-                                                                    <!--begin::Action=-->
-                                                                    <td>
-                                                                        {{ $claim->claimContractDrafts[0]->uraian_perubahan }}
-                                                                    </td>
-                                                                    <!--end::Action=-->
-                                                                @else
-                                                                    <td class="text-danger">
-                                                                        Kosong
-                                                                    </td>
-                                                                @endif
-                                                                <!--begin::Approval-->
-
-                                                                <!--end::Approval-->
-                                                                <!--begin::PIC=-->
-                                                                @if (!empty($claim->claimContractDiajukan[0]))
-                                                                    <!--begin::Action=-->
-                                                                    <td>
-                                                                        {{ $claim->claimContractDiajukan[0]->tanggal_diajukan }}
-                                                                    </td>
-                                                                    <!--end::Action=-->
-                                                                @else
-                                                                    <td class="text-danger">
-                                                                        Kosong
-                                                                    </td>
-                                                                @endif
-
-                                                                <!--begin::PIC=-->
-                                                                <td>
-                                                                    {{ number_format($claim->nilai_claim, 0, ',', ',') }}
-                                                                </td>
-                                                                <!--end::PIC=-->
-
-                                                                <!--begin::PIC=-->
-                                                                <td>
-                                                                    @switch($claim->stages)
-                                                                        @case(1)
-                                                                            Draft
-                                                                        @break
-
-                                                                        @case(2)
-                                                                            Diajukan
-                                                                        @break
-
-                                                                        @case(3)
-                                                                            Negosiasi
-                                                                        @break
-
-                                                                        @case(4)
-                                                                            Disetujui
-                                                                        @break
-
-                                                                        @default
-                                                                    @endswitch
-                                                                </td>
-
-                                                                <!--begin::Action=-->
-                                                                <td>
-                                                                    <form action="/claim-management/delete"
-                                                                        style="height: 1.5rem" method="POST">
-                                                                        @csrf
-                                                                        <button type="submit" name="delete-claim"
-                                                                            class="btn btn-sm btn-flex btn-light btn-active-primary fw-bolder">Delete</button>
-                                                                        <input type="hidden"
-                                                                            value="{{ $claim->id_claim }}" name="id-claim">
-                                                                    </form>
-                                                                </td>
-                                                                <!--end::Action=-->
-                                                            </tr>
-                                                        @endif
-                                                    @endforeach
-                                                    @foreach ($proyekClaims as $claim)
-                                                        @if ($claim->jenis_claim == 'Anti Claim')
-                                                            <tr class="align-middle">
-
-                                                                <!--begin::Name=-->
-                                                                <td>
-                                                                    <a class="text-hover-primary text-gray-500"
-                                                                        href="/claim-management/view/{{ $claim->id_claim }}">{{ $claim->id_claim }}</a>
-                                                                </td>
-                                                                <!--end::Name=-->
-                                                                <!--begin::Email=-->
-                                                                <td>
-                                                                    {{ $proyek->kode_proyek }}
-                                                                </td>
-                                                                <!--end::Email=-->
-                                                                <!--begin::Company=-->
-                                                                <td>
-                                                                    {{ $proyek->nama_proyek }}
-                                                                    {{-- {{ $proyek->kode_proyek }} --}}
-                                                                </td>
-                                                                <!--end::Company=-->
-
-                                                                <!--begin::Company=-->
-                                                                <td>
-                                                                    {{ $proyek->UnitKerja->unit_kerja }}
-                                                                    {{-- {{ $proyek->kode_proyek }} --}}
-                                                                </td>
-                                                                <!--end::Company=-->
-
-                                                                <!--begin::Company=-->
-                                                                <td>
-                                                                    {{ $proyek->UnitKerja->unit_kerja }}
-                                                                    {{-- {{ $proyek->kode_proyek }} --}}
-                                                                </td>
-                                                                <!--end::Company=-->
-
-                                                                @if (!empty($claim->claimContractDrafts[0]))
-                                                                    <!--begin::Action=-->
-                                                                    <td>
-                                                                        {{ $claim->claimContractDrafts[0]->uraian_perubahan }}
-                                                                    </td>
-                                                                    <!--end::Action=-->
-                                                                @else
-                                                                    <td class="text-danger">
-                                                                        Kosong
-                                                                    </td>
-                                                                @endif
-                                                                <!--begin::Approval-->
-
-                                                                <!--end::Approval-->
-                                                                <!--begin::PIC=-->
-                                                                @if (!empty($claim->claimContractDiajukan[0]))
-                                                                    <!--begin::Action=-->
-                                                                    <td>
-                                                                        {{ $claim->claimContractDiajukan[0]->tanggal_diajukan }}
-                                                                    </td>
-                                                                    <!--end::Action=-->
-                                                                @else
-                                                                    <td class="text-danger">
-                                                                        Kosong
-                                                                    </td>
-                                                                @endif
-
-                                                                <!--begin::PIC=-->
-                                                                <td>
-                                                                    {{ number_format($claim->nilai_claim, 0, ',', ',') }}
-                                                                </td>
-                                                                <!--end::PIC=-->
-
-                                                                <!--begin::PIC=-->
-                                                                <td>
-                                                                    @switch($claim->stages)
-                                                                        @case(1)
-                                                                            Draft
-                                                                        @break
-
-                                                                        @case(2)
-                                                                            Diajukan
-                                                                        @break
-
-                                                                        @case(3)
-                                                                            Negosiasi
-                                                                        @break
-
-                                                                        @case(4)
-                                                                            Disetujui
-                                                                        @break
-
-                                                                        @default
-                                                                    @endswitch
-                                                                </td>
-
-                                                                <!--begin::Action=-->
-                                                                <td>
-                                                                    <form action="/claim-management/delete"
-                                                                        style="height: 1.5rem" method="POST">
-                                                                        @csrf
-                                                                        <button type="submit" name="delete-claim"
-                                                                            class="btn btn-sm btn-flex btn-light btn-active-primary fw-bolder">Delete</button>
-                                                                        <input type="hidden"
-                                                                            value="{{ $claim->id_claim }}"
-                                                                            name="id-claim">
-                                                                    </form>
-                                                                </td>
-                                                                <!--end::Action=-->
-                                                            </tr>
-                                                        @endif
+                                                            <!--begin::Action=-->
+                                                            <td>
+                                                                <form action="/claim-management/delete"
+                                                                    style="height: 1.5rem" method="POST">
+                                                                    @csrf
+                                                                    <button type="submit" name="delete-claim"
+                                                                        class="btn btn-sm btn-flex btn-light btn-active-primary fw-bolder">Delete</button>
+                                                                    <input type="hidden"
+                                                                        value="{{ $claim->id_claim }}" name="id-claim">
+                                                                </form>
+                                                            </td>
+                                                            <!--end::Action=-->
+                                                        </tr>
                                                     @endforeach
                                                 </tbody>
                                             </table>

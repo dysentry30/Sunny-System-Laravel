@@ -52,14 +52,20 @@ class ClaimController extends Controller
                 return preg_match("/^$filter/", $data[$column]);
             });
             
+            $proyekVos = $claims->where('jenis_claim', '=', "VO")->filter(function($data) use($column, $filter) {
+                return preg_match("/^$filter/", $data[$column]);
+            });
+            
         } else {
             $proyekClaim = $claims->where('jenis_claim', '=', "Claim");
 
             $proyekAnti = $claims->where('jenis_claim', '=', "Anti Claim");
 
             $proyekAsuransi = $claims->where('jenis_claim', '=', "Claim Asuransi");
+
+            $proyekVos = $claims->where('jenis_claim', '=', "VO");
         }
-        return view("5_Claim", compact(["proyekClaim", "proyekAnti", "proyekAsuransi", "column", "filter"]));
+        return view("5_Claim", compact(["proyekVos" ,"proyekClaim", "proyekAnti", "proyekAsuransi", "column", "filter"]));
     }
 
     public function viewClaim($id_proyek, $jenis_claim)
@@ -67,12 +73,12 @@ class ClaimController extends Controller
         $proyek = Proyek::find($id_proyek);
         $claim = $proyek->ClaimManagements;
         $jenis_claim = str_replace('-', ' ', $jenis_claim);
-        $proyekClaim = [];
-        foreach ($claim as $claims) {
-            if ($claims->jenis_claim == $jenis_claim) {
-                array_push($proyekClaim, $claims);
-            }
-        }
+        $proyekClaim = $claim->where("jenis_claim", "=", $jenis_claim);
+        // foreach ($claim as $claims) {
+        //     if ($claims->jenis_claim == $jenis_claim) {
+        //         array_push($proyekClaim, $claims);
+        //     }
+        // }
 
         // dd($jenis_claim);
 
