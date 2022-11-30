@@ -1271,9 +1271,10 @@ class ProyekController extends Controller
                 $request->stage = 5;
             }
         };
-        
+
         if (!$request->is_ajax) {
             $data = $request->all();
+            
             // Check kalo variable di bawah ini ada
             if (!empty($data["stage-menang"]) && $data["stage-menang"] == "Menang") {
                 if ($proyekStage->nilai_perolehan == 0) {
@@ -1293,6 +1294,17 @@ class ProyekController extends Controller
                 
                 $request->stage = 7;
             } elseif (!empty($data["stage-terkontrak"]) && $data["stage-terkontrak"] == "Terkontrak") {
+
+                // Begin :: Ngirim data ke nasabah online WIKA
+                $data_nasabah_online = collect([
+                    "devid" => "YMMI002",
+                    "packageid"=> "123456789KKK00000000000001",
+                    "cocode"=> "A000",
+                    "prctr"=> "",
+                    "timestamp"=> "20221013100000",
+                ]);
+                // End :: Ngirim data ke nasabah online WIKA
+
                 // dd($proyekStage->nilai_perolehan, $proyekStage->porsi_jo, $proyekStage->nilai_kontrak_keseluruhan);
                 if ($proyekStage->nilai_perolehan != null && $proyekStage->porsi_jo != null) {
                     $nilaiPerolehan = (int) str_replace('.', '', $proyekStage->nilai_perolehan);
