@@ -947,7 +947,7 @@
 
                                                         <!--begin::Row Kanan+Kiri-->
                                                         <div class="row fv-row">
-                                                            <!--begin::Col-->
+                                                            {{-- <!--begin::Col-->
                                                             <div class="col-6">
                                                                 <!--begin::Input group Website-->
                                                                 <div class="fv-row mb-7">
@@ -968,7 +968,7 @@
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
-                                                            </div>
+                                                            </div> --}}
 
                                                             <div class="col-6">
                                                                 <!--begin::Input group Website-->
