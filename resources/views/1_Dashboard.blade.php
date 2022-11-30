@@ -4332,7 +4332,7 @@
                 table.style.display = "";
                 const chartLine = document.querySelector(chartElt);
                 chartLine.style.display = "none";
-            } else if(type.trim() == "Loan" || type.trim() == "Pemerintah-Asing" || type.trim() == "Swasta-Asing" || type.trim() == "Swasta-Nasional" || type.trim() == "APBD" || type.trim() == "APBN" || type.trim() == "INVS" || type.trim() == "BUMN-BUMD") {
+            } else if(type.trim() == "Loan" || type.trim() == "Pemerintah" || type.trim() == "Swasta" || type.trim() == "BUMN") {
                 let tbodyHTML = ``;
                 let totalNilaiLainnya = 0;
 

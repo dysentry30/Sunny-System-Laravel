@@ -1209,51 +1209,55 @@ class DashboardController extends Controller
             case "Terendah":
                 $proyeks = $proyeks->filter(function ($p) {
                     return ($p->stage == 5 && $p->peringkat_wika == "Peringkat 1") || $p->stage == 6 || $p->stage == 9;
-                })->sortByDesc("nilai_perolehan", SORT_NUMERIC)->values();
+                });
                 break;
             case "Terkontrak":
                 $stage = 8;
-                $proyeks = $proyeks->where("stage", "=", $stage)->where("is_cancel", "!=", true)->sortByDesc("nilai_perolehan", SORT_NUMERIC)->values();
+                $proyeks = $proyeks->where("stage", "=", $stage)->where("is_cancel", "!=", true);
                 break;
         }
         $row = 2;
-        $proyeks = $proyeks->where("month_realisasi", "!=", null);
-        $proyeks = $proyeks->map(function ($p) {
-            $new_class = new stdClass();
-            $new_class->nilai_perolehan = 0;
-            $new_class->kode_proyek = $p->kode_proyek;
-            $new_class->nama_proyek = $p->nama_proyek;
-            
-            if($p->tipe_proyek == "R") {
-                $new_class->nilai_perolehan += (int) $p->realisasi_forecast;
-                $new_class->tipe_proyek = "Retail";
-            } else {
-                $new_class->nilai_perolehan += (int) $p->realisasi_forecast;
-                $new_class->tipe_proyek = "Non-Retail";
-            }
-            $new_class->unitKerja = UnitKerja::find($p->unit_kerja)->unit_kerja;
-            // $new_class->unitKerja = $p->unit_kerja;
-            $new_class->bulan_pelaksanaan = $p->bulan_pelaksanaan;
-            $new_class->bulan_ri_perolehan = $p->bulan_ri_perolehan;
-            $new_class->stage = $p->stage;
-            $new_class->status_pasdin = $p->status_pasdin;
+        $proyeks = $proyeks->where("month_realisasi", "!=", null)->groupBy("kode_proyek");
+        $proyeks = $proyeks->map(function ($kp) {
+            return $kp->map(function($p) {
+                $new_class = new stdClass();
+                $new_class->nilai_perolehan = 0;
+                $new_class->kode_proyek = $p->kode_proyek;
+                $new_class->nama_proyek = $p->nama_proyek;
+                
+                if($p->tipe_proyek == "R") {
+                    $new_class->nilai_perolehan += (int) $p->realisasi_forecast;
+                    $new_class->tipe_proyek = "Retail";
+                } else {
+                    $new_class->nilai_perolehan += (int) $p->realisasi_forecast;
+                    $new_class->tipe_proyek = "Non-Retail";
+                }
+                $new_class->unitKerja = UnitKerja::find($p->unit_kerja)->unit_kerja;
+                // $new_class->unitKerja = $p->unit_kerja;
+                $new_class->bulan_pelaksanaan = $p->bulan_pelaksanaan;
+                $new_class->bulan_ri_perolehan = $p->bulan_ri_perolehan;
+                $new_class->stage = $p->stage;
+                $new_class->status_pasdin = $p->status_pasdin;
 
-            return $new_class;
-        })->where("nilai_perolehan", "!=", 0)->each(function($p) use($sheet, &$row, $tipe) {
-            $sheet->setCellValue('A' . $row, $p->nama_proyek);
-            $sheet->setCellValue('B' . $row, $p->status_pasdin);
-            $sheet->setCellValue('C' . $row, $this->getProyekStage($p->stage));
-            $sheet->setCellValue('D' . $row, $p->unitKerja);
-            $sheet->setCellValue('E' . $row, $p->tipe_proyek);
-            if($tipe == "Terendah") {
-                $sheet->setCellValue('F' . $row, $this->getFullMonth($p->bulan_pelaksanaan));
-                $p->bulan = $p->bulan_pelaksanaan;
-            } else {
-                $sheet->setCellValue('F' . $row, $this->getFullMonth($p->bulan_ri_perolehan));
-                $p->bulan = $p->bulan_ri_perolehan;
-            }
-            $sheet->setCellValue('G' . $row, $p->nilai_perolehan);
-            $row++;
+                return $new_class;
+            });
+        })->where("nilai_perolehan", "!=", 0)->each(function($kp) use($sheet, &$row, $tipe) {
+            return $kp->each(function($p) use($sheet, &$row, $tipe) {
+                $sheet->setCellValue('A' . $row, $p->nama_proyek);
+                $sheet->setCellValue('B' . $row, $p->status_pasdin);
+                $sheet->setCellValue('C' . $row, $this->getProyekStage($p->stage));
+                $sheet->setCellValue('D' . $row, $p->unitKerja);
+                $sheet->setCellValue('E' . $row, $p->tipe_proyek);
+                if($tipe == "Terendah") {
+                    $sheet->setCellValue('F' . $row, $this->getFullMonth($p->bulan_pelaksanaan));
+                    $p->bulan = $p->bulan_pelaksanaan;
+                } else {
+                    $sheet->setCellValue('F' . $row, $this->getFullMonth($p->bulan_ri_perolehan));
+                    $p->bulan = $p->bulan_ri_perolehan;
+                }
+                $sheet->setCellValue('G' . $row, $p->nilai_perolehan);
+                $row++;
+            });
         });
         $writer = new Xlsx($spreadsheet);
         $file_name = "$tipe-" . date('dmYHis') . ".xlsx";
