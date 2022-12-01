@@ -261,38 +261,34 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="row">
-                                            <div class="col-4">
-                                                <select onchange="selectDOP(this)" id="dop" name="dop"
+                                            <div class="col-3">
+                                                <select onchange="selectFilter(this)" id="dop" name="dop"
                                                         class="form-select form-select-solid w-auto"
                                                         style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
                                                         data-placeholder="Direktorat" data-select2-id="select2-data-dop" tabindex="-1"
                                                         aria-hidden="true">
-                                                        {{-- <option value="" {{$dop_get == "" ? "selected" : ""}}></option> --}}
                                                         <option value="" selected></option>
                                                         @foreach ($dops as $dop)
-                                                            {{-- <option value="{{ $dop->dop }}" {{ $dop_get == $dop->dop ? 'selected' : '' }} >{{ $dop->dop }}</option> --}}
-                                                            <option value="{{ $dop->dop }}" >{{ $dop->dop }}</option>
+                                                            <option value="{{ $dop->dop }}" {{ $dop_get == $dop->dop ? 'selected' : '' }} >{{ $dop->dop }}</option>
                                                         @endforeach
                                                 </select>
                                             </div>
 
-                                            <div class="col-4">
-                                                <select onchange="selectDOP(this)" id="unit-kerja" name="unit-kerja"
+                                            <div class="col-3">
+                                                <select onchange="selectFilter(this)" id="unit-kerja" name="unit-kerja"
                                                         class="form-select form-select-solid w-auto"
                                                         style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
                                                         data-placeholder="Unit Kerja" data-select2-id="select2-data-unit-kerja" tabindex="-1"
                                                         aria-hidden="true">
-                                                        {{-- <option value="" {{$dop_get == "" ? "selected" : ""}}></option> --}}
                                                         <option value="" selected></option>
                                                         @foreach ($unit_kerjas as $unit_kerjas)
-                                                            {{-- <option value="{{ $unit_kerjas->divcode }}" {{ $unit_kerjas_get == $unit_kerjas->divcode ? 'selected' : '' }} >{{ $unit_kerjas->unit_kerja }}</option> --}}
-                                                            <option value="{{ $unit_kerjas->divcode }}" >{{ $unit_kerjas->unit_kerja }}</option>
+                                                            <option value="{{ $unit_kerjas->divcode }}" {{ $unit_kerja_get == $unit_kerjas->divcode ? 'selected' : '' }} >{{ $unit_kerjas->unit_kerja }}</option>
                                                         @endforeach
                                                 </select>
                                             </div>
 
-                                            <div class="col-4">
-                                                <select onchange="selectDOP(this)" id="proyek" name="proyek"
+                                            <div class="col-3">
+                                                <select onchange="selectFilter(this)" id="proyek" name="proyek"
                                                         class="form-select form-select-solid w-auto"
                                                         style="margin-right: 2rem;" data-control="select2" data-hide-search="false"
                                                         data-placeholder="Proyek" data-select2-id="select2-data-proyek" tabindex="-1"
@@ -300,10 +296,15 @@
                                                         {{-- <option value="" {{$dop_get == "" ? "selected" : ""}}></option> --}}
                                                         <option value="" selected></option>
                                                         @foreach ($proyeks as $proyek)
-                                                            {{-- <option value="{{ $proyek->divcode }}" {{ $proyek_get == $proyek->divcode ? 'selected' : '' }} >{{ $proyek->unit_kerja }}</option> --}}
-                                                            <option value="{{ $proyek->kode_proyek }}" >{{ $proyek->nama_proyek }} ({{$proyek->kode_proyek}})</option>
+                                                            <option value="{{ $proyek->divcode }}" {{ $proyek_get == $proyek->divcode ? 'selected' : '' }} >{{ $proyek->unit_kerja }}</option>
+                                                            {{-- <option value="{{ $proyek->kode_proyek }}" >{{ $proyek->nama_proyek }} ({{$proyek->kode_proyek}})</option> --}}
                                                         @endforeach
                                                 </select>
+                                            </div>
+                                            <div class="col-3">
+                                                <form action="" method="GET">
+                                                    <button type="submit" class="btn btn-secondary">Reset</button>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>
@@ -1172,55 +1173,74 @@
 
     {{-- Begin :: Animation Progress Bar --}}
     <script>
-        function animateProgressBar() {
-            const progressbarElts = document.querySelectorAll("div[role='progressbar']");
-            console.log(progressbarElts);
-            progressbarElts.forEach(item => {
-                const dataPersen = item.parentElement.parentElement.querySelector("#data-persen");
-                let width = Number(dataPersen.innerText.replace("%", ""));
-                item.style.width = width + "%";
-            });
-        }
+        // function animateProgressBar() {
+        //     const progressbarElts = document.querySelectorAll("div[role='progressbar']");
+        //     console.log(progressbarElts);
+        //     progressbarElts.forEach(item => {
+        //         const dataPersen = item.parentElement.parentElement.querySelector("#data-persen");
+        //         let width = Number(dataPersen.innerText.replace("%", ""));
+        //         item.style.width = width + "%";
+        //     });
+        // }
         animateProgressBar();
     </script>
     {{-- End :: Animation Progress Bar --}}
 
     {{-- Begin :: Animation Counter Number --}}
     <script>
-        function animateCounterNumber(selector, firstPrefix = "", lastPrefix = "") {
-            const animateCounterElts = document.querySelectorAll(`${selector}`);
-            animateCounterElts.forEach(item => {
-                let data;
-                if(firstPrefix != ""){
-                    data = Number(item.innerText.replaceAll(firstPrefix, "").replaceAll(".", ""));
-                } else {
-                    data = Number(item.innerText.replaceAll(lastPrefix, ""));
-                }
-                item.innerText = `${firstPrefix}0${lastPrefix}`;
-                let i = 0;
-                const interval = setInterval(() => {
-                    if(i == data || i >= data) {
-                        clearInterval(interval);
-                        if(firstPrefix == "Rp. "){
-                            data = Intl.NumberFormat(["id"]).format(data);
-                        }
-                        item.innerText = `${firstPrefix}${data}${lastPrefix}`;
-                        return;
-                    };
-                    if(firstPrefix == "Rp. "){
-                        // i+= Math.floor((data / 15) + data);
-                        i+= Math.floor(data/15);
-                        item.innerText = `${firstPrefix}${Intl.NumberFormat(["id"]).format(i)}${lastPrefix}`;
-                    } else {
-                        i++;
-                        item.innerText = `${firstPrefix}${i}${lastPrefix}`;
-                    }
-                }, 15);
-            });
-        }
+        // function animateCounterNumber(selector, firstPrefix = "", lastPrefix = "") {
+        //     const animateCounterElts = document.querySelectorAll(`${selector}`);
+        //     animateCounterElts.forEach(item => {
+        //         let data;
+        //         if(firstPrefix != ""){
+        //             data = Number(item.innerText.replaceAll(firstPrefix, "").replaceAll(".", ""));
+        //         } else {
+        //             data = Number(item.innerText.replaceAll(lastPrefix, ""));
+        //         }
+        //         item.innerText = `${firstPrefix}0${lastPrefix}`;
+        //         let i = 0;
+        //         const interval = setInterval(() => {
+        //             if(i == data || i >= data) {
+        //                 clearInterval(interval);
+        //                 if(firstPrefix == "Rp. "){
+        //                     data = Intl.NumberFormat(["id"]).format(data);
+        //                 }
+        //                 item.innerText = `${firstPrefix}${data}${lastPrefix}`;
+        //                 return;
+        //             };
+        //             if(firstPrefix == "Rp. "){
+        //                 // i+= Math.floor((data / 15) + data);
+        //                 i+= Math.floor(data/15);
+        //                 item.innerText = `${firstPrefix}${Intl.NumberFormat(["id"]).format(i)}${lastPrefix}`;
+        //             } else {
+        //                 i++;
+        //                 item.innerText = `${firstPrefix}${i}${lastPrefix}`;
+        //             }
+        //         }, 15);
+        //     });
+        // }
         animateCounterNumber("#data-persen", "", "%");
         animateCounterNumber("#data-items", "Rp. ");
     </script>
     {{-- End :: Animation Counter Number --}}
+
+    {{-- Begin :: Select Filter Dropdown --}}
+    <script>
+        function selectFilter(e) {
+            const value = e.value;
+            const type = e.getAttribute("id");
+            let url = "";
+            if(type == "dop") {
+                url = `/dashboard-ccm/pelaksanaan-kontrak?dop=${value}`;
+            } else if(type == "unit-kerja") {
+                url = `/dashboard-ccm/pelaksanaan-kontrak?unit-kerja=${value}`;
+            } else {
+                url = `/dashboard-ccm/pelaksanaan-kontrak?kode-proyek=${value}`;
+            }
+            window.location.href = url;
+            return;
+        }
+    </script>
+    {{-- End :: Select Filter Dropdown --}}
 
 @endsection

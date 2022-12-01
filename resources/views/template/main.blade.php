@@ -1371,6 +1371,59 @@
     <script src="{{ asset('/js/custom/apps/chat/chat.js') }}"></script>
     <script src="{{ asset('/js/custom/modals/create-app.js') }}"></script>
     <script src="{{ asset('/js/custom/modals/upgrade-plan.js') }}"></script>
+
+    {{-- Begin :: Animation Progress Bar --}}
+    <script>
+        function animateProgressBar() {
+            const progressbarElts = document.querySelectorAll("div[role='progressbar']");
+            progressbarElts.forEach(item => {
+                const dataPersen = item.parentElement.parentElement.querySelector("#data-persen");
+                let width = Number(dataPersen.innerText.replace("%", ""));
+                item.style.width = width + "%";
+            });
+        }
+        animateProgressBar();
+    </script>
+    {{-- End :: Animation Progress Bar --}}
+
+    {{-- Begin :: Animation Counter Number --}}
+    <script>
+        function animateCounterNumber(selector, firstPrefix = "", lastPrefix = "") {
+            const animateCounterElts = document.querySelectorAll(`${selector}`);
+            animateCounterElts.forEach(item => {
+                let data;
+                if(firstPrefix != ""){
+                    data = Number(item.innerText.replaceAll(firstPrefix, "").replaceAll(".", ""));
+                } else {
+                    data = Number(item.innerText.replaceAll(lastPrefix, ""));
+                }
+                item.innerText = `${firstPrefix}0${lastPrefix}`;
+                let i = 0;
+                const interval = setInterval(() => {
+                    if(i == data || i >= data) {
+                        clearInterval(interval);
+                        if(firstPrefix == "Rp. "){
+                            data = Intl.NumberFormat(["id"]).format(data);
+                        }
+                        item.innerText = `${firstPrefix}${data}${lastPrefix}`;
+                        return;
+                    };
+                    i+= Math.floor(data/15);
+                    if(firstPrefix == "Rp. "){
+                        // i+= Math.floor((data / 15) + data);
+                        item.innerText = `${firstPrefix}${Intl.NumberFormat(["id"]).format(i)}${lastPrefix}`;
+                    } else {
+                        // i++;
+                        item.innerText = `${firstPrefix}${i}${lastPrefix}`;
+                    }
+                }, 25);
+            });
+        }
+        // animateCounterNumber("#data-persen", "", "%");
+        // animateCounterNumber("#data-items", "Rp. ");
+    </script>
+    {{-- End :: Animation Counter Number --}}
+
     @yield('js-script')
 
     <script>
