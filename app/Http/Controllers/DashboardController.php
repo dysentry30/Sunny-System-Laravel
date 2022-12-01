@@ -1671,15 +1671,15 @@ class DashboardController extends Controller
                 $forecasts = Forecast::where("periode_prognosa", "=", $month - 1)->whereYear("created_at", "=", $year)->get();
             }
             // dd($forecasts);
-            // $forecasts->each(function($f) use($month) {
-            //     $new_forecast = $f->replicate();
-            //     // dd($f);
-            //     $new_forecast->created_at = now();
-            //     $new_forecast->updated_at = now();
-            //     $new_forecast->periode_prognosa = $month;
-            //     $new_forecast->save();
-            //     // dd($new_forecast);
-            // });
+            $forecasts->each(function($f) use($month) {
+                $new_forecast = $f->replicate();
+                // dd($f);
+                $new_forecast->created_at = now();
+                $new_forecast->updated_at = now();
+                $new_forecast->periode_prognosa = $month;
+                $new_forecast->save();
+                // dd($new_forecast);
+            });
         }
     }
 
