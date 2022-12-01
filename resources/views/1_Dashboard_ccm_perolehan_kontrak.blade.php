@@ -368,7 +368,7 @@
                                                     <!--begin::Progress-->
                                                     <div class="d-flex align-items-center flex-column mt-3 w-100">
                                                         <div class="d-flex justify-content-between fw-bold fs-6 text-white opacity-75 w-100 mt-auto mb-2">
-                                                            <span>41 Pending</span>
+                                                            {{-- <span>41 Pending</span> --}}
                                                             <span id="data-persen">52%</span>
                                                         </div>
                                                         <div class="h-8px mx-3 w-100 bg-white bg-opacity-50 rounded">
@@ -408,7 +408,7 @@
                                                     <!--begin::Progress-->
                                                     <div class="d-flex align-items-center flex-column mt-3 w-100">
                                                         <div class="d-flex justify-content-between fw-bold fs-6 text-white opacity-75 w-100 mt-auto mb-2">
-                                                            <span>3 Pending</span>
+                                                            {{-- <span>3 Pending</span> --}}
                                                             <span id="data-persen">8%</span>
                                                         </div>
                                                         <div class="h-8px mx-3 w-100 bg-white bg-opacity-50 rounded">
@@ -448,7 +448,7 @@
                                                     <!--begin::Progress-->
                                                     <div class="d-flex align-items-center flex-column mt-3 w-100">
                                                         <div class="d-flex justify-content-between fw-bold fs-6 text-white opacity-75 w-100 mt-auto mb-2">
-                                                            <span>5 Pending</span>
+                                                            {{-- <span>5 Pending</span> --}}
                                                             <span id="data-persen">11%</span>
                                                         </div>
                                                         <div class="h-8px mx-3 w-100 bg-white bg-opacity-50 rounded">
@@ -516,6 +516,7 @@
                                                     <!--begin::Title-->
                                                     <div class="card-title d-flex flex-column">
                                                         <!--begin::Amount-->
+                                                        <span id="data-persen" class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2">{{$success_rate}}%</span>
                                                         <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2">Success Rate</span>
                                                         <!--end::Amount-->
                                                     </div>
@@ -527,7 +528,7 @@
                                                     <!--begin::Progress-->
                                                     <div class="d-flex align-items-center flex-column mt-3 w-100">
                                                         <div class="d-flex justify-content-between fw-bold fs-6 text-white opacity-75 w-100 mt-auto mb-2">
-                                                            <span id="data-persen">{{$success_rate}}%</span>
+                                                            <span id="data-persen" style="display: none">{{$success_rate}}%</span>
                                                         </div>
                                                         <div class="h-8px mx-3 w-100 bg-white bg-opacity-50 rounded">
                                                             <div class="bg-white rounded h-8px" role="progressbar" style="width: 0%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
@@ -557,7 +558,7 @@
                                             <!--begin::Title-->
                                             <div class="card-title d-flex flex-column">
                                                 <!--begin::Amount-->
-                                                <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2" id="data-items">45 Items</span>
+                                                <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2" id="data-items">{{$proyeks->count()}} Items</span>
                                                 <!--end::Amount-->
                                                 <!--begin::Subtitle-->
                                                 <span class="text-white opacity-75 pt-1 fw-semibold fs-6">Data Collection</span>
@@ -680,7 +681,7 @@
             },
             plotOptions: {
                 pie: {
-                    innerSize: 180,
+                    innerSize: 130,
                     depth: 5,
                     showInLegend: false,
                     dataLabels: {
@@ -1056,34 +1057,35 @@
 
     {{-- Begin :: Animation Progress Bar --}}
     <script>
-        function animateProgressBar() {
-            const progressbarElts = document.querySelectorAll("div[role='progressbar']");
-            progressbarElts.forEach(item => {
-                const dataPersen = item.parentElement.parentElement.querySelector("#data-persen");
-                let width = Number(dataPersen.innerText.replace("%", ""));
-                item.style.width = width + "%";
-            });
-        }
+        // function animateProgressBar() {
+        //     const progressbarElts = document.querySelectorAll("div[role='progressbar']");
+        //     progressbarElts.forEach(item => {
+        //         const dataPersen = item.parentElement.parentElement.querySelector("#data-persen");
+        //         let width = Number(dataPersen.innerText.replace("%", ""));
+        //         item.style.width = width + "%";
+        //     });
+        // }
         animateProgressBar();
     </script>
     {{-- End :: Animation Progress Bar --}}
 
     {{-- Begin :: Animation Counter Number --}}
     <script>
-        function animateCounterNumber(selector, lastPrefix) {
-            const animateCounterElts = document.querySelectorAll(`${selector}`);
-            animateCounterElts.forEach(item => {
-                let data = Number(item.innerText.replace(lastPrefix, ""));
-                item.innerText = `0${lastPrefix}`;
-                let i = 0;
-                const interval = setInterval(() => {
-                    if(i == data) clearInterval(interval);
-                    item.innerText = `${i++}${lastPrefix}`;
-                }, 15);
-            });
-        }
-        animateCounterNumber("#data-persen", "%");
-        animateCounterNumber("#data-items", " Items");
+        // function animateCounterNumber(selector, lastPrefix) {
+        //     const animateCounterElts = document.querySelectorAll(`${selector}`);
+        //     animateCounterElts.forEach(item => {
+        //         let data = Number(item.innerText.replace(lastPrefix, ""));
+        //         item.innerText = `0${lastPrefix}`;
+        //         let i = 0;
+        //         const interval = setInterval(() => {
+        //             if(i == data || ) clearInterval(interval);
+        //             i += Math.floor(data/15);
+        //             item.innerText = `${i}${lastPrefix}`;
+        //         }, 15);
+        //     });
+        // }
+        animateCounterNumber("#data-persen", "", "%");
+        animateCounterNumber("#data-items", "", " Items");
     </script>
     {{-- End :: Animation Counter Number --}}
 

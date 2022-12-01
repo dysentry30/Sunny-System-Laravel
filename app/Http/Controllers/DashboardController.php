@@ -601,11 +601,11 @@ class DashboardController extends Controller
 
         // Begin :: Kontrak Berdasarkan Stage Chart
         $on_going_counter = $proyeks->where(function ($p) {
-            return !empty($p->ContractManagements) && $p->ContractManagements->stages < 3 && !$p->is_cancel;
+            return $p->stage < 6 && !$p->is_cancel;
             // dd($p->ContractManagements);
         })->count();
         $win_counter = $proyeks->where(function ($p) {
-            return !empty($p->ContractManagements) && ($p->ContractManagements->stages >= 3 || $p->stage == 8) && !$p->is_cancel;
+            return ($p->stage == 8 || $p->stage == 6 || $p->stage == 9) && !$p->is_cancel;
             // dd($p->ContractManagements);
         })->count();
         $lose_counter = $proyeks->where(function ($p) {
@@ -670,7 +670,7 @@ class DashboardController extends Controller
         // End :: Success Rate
 
 
-        return view("1_Dashboard_ccm_perolehan_kontrak", compact(["dops", "unit_kerjas", "dop_get", "unit_kerja_get", "kontrak_by_stage", "divisi", "JO_Non_JO_counter", "nilai_tender_proyeks", "success_rate"]));
+        return view("1_Dashboard_ccm_perolehan_kontrak", compact(["proyeks", "dops", "unit_kerjas", "dop_get", "unit_kerja_get", "kontrak_by_stage", "divisi", "JO_Non_JO_counter", "nilai_tender_proyeks", "success_rate"]));
     }
 
     public function dashboard_pelaksanaan_kontrak(Request $request)
@@ -679,7 +679,7 @@ class DashboardController extends Controller
         $unit_kerjas = UnitKerja::all();
         $dop_get = $request->query("dop") ?? "";
         $unit_kerja_get = $request->query("unit-kerja") ?? "";
-        $proyek_get = $request->query("proyek") ?? "";
+        $proyek_get = $request->query("kode-proyek") ?? "";
 
         $proyeks = Proyek::all();
         if ($dop_get != "") {
@@ -730,7 +730,7 @@ class DashboardController extends Controller
 
 
 
-        return view("1_Dashboard_ccm_pelaksanaan_kontrak", compact(["dops", "unit_kerjas", "proyeks", "pemilik_pekerjaan", "kategori_kontrak", "jenis_kontrak"]));
+        return view("1_Dashboard_ccm_pelaksanaan_kontrak", compact(["dops", "unit_kerjas", "proyeks", "pemilik_pekerjaan", "kategori_kontrak", "jenis_kontrak", "dop_get", "unit_kerja_get", "proyek_get"]));
     }
 
     public function dashboard_pemeliharaan_kontrak(Request $request)
