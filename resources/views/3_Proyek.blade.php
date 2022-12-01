@@ -516,9 +516,12 @@
                                             <!--begin::Forecast-->
                                             <td class="text-end">
                                                 @php
-                                                    $total_forecast = $proyek->Forecasts->sum(function($f) {
+                                                    $total_forecast = $proyek->Forecasts->filter(function($f) {
+                                                        $date = date_create($f->created_at);
+                                                        return $f->periode_prognosa == (int) date("m") && date_format($date, "Y") == date("Y");
+                                                    })->sum(function($f) {
                                                         return (int) $f->nilai_forecast;
-                                                    })
+                                                    });
                                                 @endphp
                                                 <small>
                                                     {{-- {{ $proyek->forecast }} --}}
