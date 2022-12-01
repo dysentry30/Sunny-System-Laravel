@@ -3001,11 +3001,15 @@
                                                         <br>
 
                                                         <!--Begin::Title Biru Form: Risk Peserta Tender-->
+                                                        {{-- <h6 class="fw-bolder m-0" id="HeadDetail"
+                                                            style="font-size:14px;">
+                                                        </h6> --}}
                                                         <br>
-                                                        <h3 class="fw-bolder m-0" id="HeadDetail"
+                                                        <h3 class="fw-bolder m-0 required" id="HeadDetail"
                                                             style="font-size:14px;">Risk Peserta Tender
                                                         </h3>
-                                                        <br>
+                                                        <small><a class="text-active-primary text-gray" href="https://crm.wika.co.id/faqs/104625_RiskTender_Input-Kosong.rev.xlsx">Download Template Risk Tender</a></small>
+                                                        <br><br>
                                                         <div class="w-50">
                                                             <input onchange="this.form.submit()" type="file"
                                                                 class="form-control form-control-sm form-input-solid"
