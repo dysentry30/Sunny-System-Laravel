@@ -795,26 +795,6 @@
                         <!--begin::Row Kanan+Kiri-->
                         <div class="row fv-row">
                             <!--begin::Col-->
-                            <div id="div-rkap" class="col-6">
-                                <!--begin::Input group Website-->
-                                <div class="fv-row mb-7">
-                                    <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span>Nilai OK (Exclude Ppn)</span>
-                                    </label>
-                                    <!--end::Label-->
-                                    <!--begin::Input-->
-                                    <input type="text" class="form-control form-control-solid reformat"
-                                        id="nilai-rkap" name="nilai-rkap" value="{{ old('nilai-rkap') }}"
-                                        placeholder="Nilai OK (Exclude Ppn)" />
-                                    @error('nilai-rkap')
-                                        <h6 class="text-danger fw-normal">{{ $message }}</h6>
-                                    @enderror
-                                    <!--end::Input-->
-                                </div>
-                                <!--end::Input group-->
-                            </div>
-                            <!--End begin::Col-->
                             <div class="col-6">
                                 <!--begin::Input group Website-->
                                 <div class="fv-row mb-7" id="input-jo-detail" style="display: none;">
@@ -837,6 +817,26 @@
                                         @endforeach --}}
                                     </select>
                                     @error('kategori-jo')
+                                        <h6 class="text-danger fw-normal">{{ $message }}</h6>
+                                    @enderror
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End begin::Col-->
+                            <div id="div-rkap" class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span>Nilai OK (Exclude Ppn)</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text" class="form-control form-control-solid reformat"
+                                        id="nilai-rkap" name="nilai-rkap" value="{{ old('nilai-rkap') }}"
+                                        placeholder="Nilai OK (Exclude Ppn)" />
+                                    @error('nilai-rkap')
                                         <h6 class="text-danger fw-normal">{{ $message }}</h6>
                                     @enderror
                                     <!--end::Input-->
