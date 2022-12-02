@@ -1790,13 +1790,13 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
         $jenis_proyek = 0;
         switch($p->jenis_proyek) {
             case "I" :
-                $jenis_proyek = 20;
+                $jenis_proyek = "Internal";
                 break;
             case "N" :
-                $jenis_proyek = 10;
+                $jenis_proyek = "Non JO";
                 break;
             case "J" :
-                $jenis_proyek = $p->jenis_jo;
+                $jenis_proyek = "JO Portion Member";
                 break;
         }
         $p->UsrJenis = [
@@ -1804,7 +1804,7 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
                 "entry" => [
                     "content" => [
                         "properties" => [
-                            // "Name" => JenisProyek::find($p->jenis_proyek)->jenis_proyek ?? "",
+                            "Name" => JenisProyek::find($p->jenis_proyek)->jenis_proyek ?? "",
                             "Name" => $jenis_proyek ?? "",
                         ]
                     ]
