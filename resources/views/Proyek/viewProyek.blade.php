@@ -1088,7 +1088,7 @@
                                                                     <!--begin::Input-->
                                                                     {{-- @isset($proyek->jenis_proyek) --}}
                                                                     {{-- @dump($proyek->jenis_proyek) --}}
-                                                                    <select id="jenis-proyek" name="jenis-proyek"
+                                                                    <select id="jenis-proyek" onchange="tampilJOCategory(this)" name="jenis-proyek"
                                                                         class="form-select form-select-solid"
                                                                         data-control="select2" data-hide-search="true"
                                                                         data-placeholder="Pilih Jenis Proyek"
@@ -1103,6 +1103,35 @@
                                                                             {{ $proyek->jenis_proyek == 'J' ? 'selected' : '' }}>
                                                                             JO</option>
                                                                     </select>
+                                                                    <input type="hidden" name="jo-category" id="jo-category" value="">
+                                                                    @php
+                                                                        $jenis_jo = "";
+                                                                        switch ($proyek->jenis_jo) {
+                                                                            case 30:
+                                                                                $jenis_jo = "JO Integrated Leader";
+                                                                                break;
+                                                                            case 31:
+                                                                                $jenis_jo = "JO Integrated Member";
+                                                                                break;
+                                                                            case 40:
+                                                                                $jenis_jo = "JO Portion Leader";
+                                                                                break;
+                                                                            case 41:
+                                                                                $jenis_jo = "JO Portion Member";
+                                                                                break;
+                                                                            case 50:
+                                                                                $jenis_jo = "JO Mix Integrated - Portion";
+                                                                                break;
+                                                                            default:
+                                                                                $jenis_jo = "Proyek ini bukan JO";
+                                                                                break;
+                                                                        }
+                                                                    @endphp
+                                                                    @if(!empty($proyek->jenis_jo))
+                                                                        <small>JO Category: <b>{{ $jenis_jo }}</b></small>
+                                                                    @else 
+                                                                        <small>JO Category: <b class="text-danger">{{ $jenis_jo }}</b></small>
+                                                                    @endif
                                                                     {{-- @endisset --}}
                                                                     {{-- <input type="text"
                                                                         class="form-control form-control-solid"
@@ -4187,6 +4216,12 @@
                                                                         <option value="Unit Price"
                                                                             {{ $proyek->jenis_terkontrak == 'Unit Price' ? 'selected' : '' }}>
                                                                             Unit Price</option>
+                                                                        <option value="Fixed Price"
+                                                                            {{ $proyek->jenis_terkontrak == 'Fixed Price' ? 'selected' : '' }}>
+                                                                            Fixed Price</option>
+                                                                        <option value="Lumsump+Unit Price"
+                                                                            {{ $proyek->jenis_terkontrak == 'Lumsump+Unit Price' ? 'selected' : '' }}>
+                                                                            Lumsump+Unit Price</option>
                                                                     </select>
                                                                     <!--end::Input-->
                                                                 </div>
@@ -6787,6 +6822,81 @@
     </form>
     <!--end::modal PORSI JO-->
 
+    {{-- Begin :: Modal Jenis Proyek JO Detail --}}
+    <div class="modal fade" id="kt_modal_jo_detail" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-800px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                {{-- <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Pilih JO: </h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <i class="bi bi-x-lg"></i>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div> --}}
+                <!--end::Modal header-->
+
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
+
+
+                    <!--begin::Row Kanan+Kiri-->
+                    <div class="row fv-row">
+                        <!--begin::Col-->
+                        <div class="col">
+                            <!--begin::Input group Website-->
+                            <div class="fv-row">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label">
+                                    <span><b>Pilih JO:</b></span>
+                                    {{-- <span><b id="max-porsi" value="{{ $proyek->porsi_jo }}">Max Porsi JO : {{ $proyek->porsi_jo }}% </b></span> --}}
+                                </label>
+                                <select id="detail-jo" name="detail-jo" class="form-select form-select-solid select2-hidden-accessible" data-control="select2" data-hide-search="true" data-placeholder="Pilih Jenis JO" readonly="" tabindex="-1" aria-hidden="true" data-select2-id="select2-data-jenis-jo">
+                                    <option value="" selected></option>
+                                    <option value="30">JO Integrated Leader</option>
+                                    <option value="31">JO Integrated Member</option>
+                                    <option value="40">JO Portion Leader</option>
+                                    <option value="41">JO Portion Member</option>
+                                    <option value="50">JO Mix Integrated - Portion</option>
+                                </select>
+                                <!--end::Label-->
+                                <!--begin::Label-->
+                                {{-- <label class="fs-6 fw-bold form-label mt-3">
+                            <span><b>Sisa Porsi JO : {{ $proyek->porsi_jo }} - </b>
+                                <b id="selisih-porsi">0</b>
+                                <b id="sisa-porsi"> = {{ $proyek->porsi_jo }}%</b></span>
+                        </label> --}}
+                                <!--end::Label-->
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                    </div>
+                    <!--End::Row Kanan+Kiri-->
+
+                </div>
+                <div class="modal-footer">
+
+                    <button type="button" onclick="changeValueJODetail(this)" class="btn btn-sm btn-light btn-active-primary text-white"
+                        id="jo_detail_save" style="background-color:#008CB4">Save</button>
+
+                </div>
+                <!--end::Modal body-->
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+    </div>
+    {{-- End :: Modal Jenis Proyek JO Detail --}}
+
     <!--begin::edit PORSI JO-->
     @foreach ($porsiJO as $porsi)
         <form action="/proyek/porsi-jo/{{ $porsi->id }}/edit" method="post" enctype="multipart/form-data">
@@ -7460,4 +7570,30 @@
         }
     </script>
     {{-- End:: Disabled Submit Button When Submitting --}}
+
+    {{-- Begin :: JO Detail Modal Pop Up --}}
+    <script>
+        const modalJODetail = new bootstrap.Modal("#kt_modal_jo_detail", {});
+        function tampilJOCategory(e) {
+            const valueJO = e.value;
+            if(valueJO == "J") {
+                modalJODetail.show();
+            }
+        }
+    </script>
+    {{-- End :: JO Detail Modal Pop Up --}}
+
+    {{-- Begin :: JO Detail Save --}}
+    <script>
+        function changeValueJODetail(e) {
+            const selectJOElt = e.parentElement.parentElement.querySelector("select");
+            const valueJODetail = {value: selectJOElt.value, text: selectJOElt.options[selectJOElt.selectedIndex].text};
+            const inputJODetail = document.querySelector("#jo-category");
+            const textJODetail = inputJODetail.parentElement.querySelector("small");
+            inputJODetail.value = valueJODetail.value;
+            textJODetail.innerHTML = `JO Category: <b>${valueJODetail.text}</b>`;
+            modalJODetail.hide();
+        }
+    </script>
+    {{-- End :: JO Detail Save --}}
 @endsection

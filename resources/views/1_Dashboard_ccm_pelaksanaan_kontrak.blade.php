@@ -430,7 +430,7 @@
                                                     <!--begin::Progress-->
                                                     <div class="d-flex align-items-center flex-column mt-3 w-100">
                                                         <div class="d-flex justify-content-between fw-bold fs-6 text-white opacity-75 w-100 mt-auto mb-2">
-                                                            <span>3 Items</span>
+                                                            {{-- <span>3 Items</span> --}}
                                                             <span id="data-persen">8%</span>
                                                         </div>
                                                         <div class="h-8px mx-3 w-100 bg-white bg-opacity-50 rounded">
@@ -470,7 +470,7 @@
                                                     <!--begin::Progress-->
                                                     <div class="d-flex align-items-center flex-column mt-3 w-100">
                                                         <div class="d-flex justify-content-between fw-bold fs-6 text-white opacity-75 w-100 mt-auto mb-2">
-                                                            <span>5 Items</span>
+                                                            {{-- <span>5 Items</span> --}}
                                                             <span id="data-persen">11%</span>
                                                         </div>
                                                         <div class="h-8px mx-3 w-100 bg-white bg-opacity-50 rounded">
@@ -511,7 +511,7 @@
                                                     <!--begin::Progress-->
                                                     <div class="d-flex align-items-center flex-column mt-3 w-100">
                                                         <div class="d-flex justify-content-between fw-bold fs-6 text-white opacity-75 w-100 mt-auto mb-2">
-                                                            <span>5 Items</span>
+                                                            {{-- <span>5 Items</span> --}}
                                                             <span id="data-persen">11%</span>
                                                         </div>
                                                         <div class="h-8px mx-3 w-100 bg-white bg-opacity-50 rounded">
@@ -551,7 +551,7 @@
                                                     <!--begin::Progress-->
                                                     <div class="d-flex align-items-center flex-column mt-3 w-100">
                                                         <div class="d-flex justify-content-between fw-bold fs-6 text-white opacity-75 w-100 mt-auto mb-2">
-                                                            <span>5 Items</span>
+                                                            {{-- <span>5 Items</span> --}}
                                                             <span id="data-persen">11%</span>
                                                         </div>
                                                         <div class="h-8px mx-3 w-100 bg-white bg-opacity-50 rounded">
@@ -608,13 +608,15 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <th>VO</th>
-                                                    <td>10</td>
-                                                    <td class="text-end">Rp. 500.000.000</td>
-                                                    <td>10%</td>
-                                                </tr>
-                                                <tr>
+                                                @foreach ($nilai_perubahan_table as $perubahan)
+                                                    <tr>
+                                                        <th>{{$perubahan->jenis_claim}}</th>
+                                                        <td>{{$perubahan->total_proyek}}</td>
+                                                        <td class="text-end">{{$perubahan->total_nilai}}</td>
+                                                        <td>{{$perubahan->total_persen}}</td>
+                                                    </tr>
+                                                @endforeach
+                                                {{-- <tr>
                                                     <th>Klaim</th>
                                                     <td>10</td>
                                                     <td class="text-end">Rp. 500.000.000</td>
@@ -631,7 +633,7 @@
                                                     <td>10</td>
                                                     <td class="text-end">Rp. 500.000.000</td>
                                                     <td>10%</td>
-                                                </tr>
+                                                </tr> --}}
                                                 <tr class="text-bg-dark">
                                                     <th scope="row">Total Nilai</th>
                                                     <th>40</th>
@@ -1011,13 +1013,10 @@
     
     <!--begin::Highchart Block Nilai Tender -->
     <script>
+        const nilaiTender = JSON.parse('{!! $nilai_tender_proyeks->toJson() !!}');
         Highcharts.chart('chart-line', {
             chart: {
                 type: 'column',
-                options3d: {
-                    enabled: true,
-                    alpha: 5
-                }
             },
             title: {
                 text: 'Nilai Tender',
@@ -1056,16 +1055,7 @@
                 {
                     name: "Nilai Tender",
                     colorByPoint: true,
-                    data: [
-                        {
-                            name: "Divisi Infra 1",
-                            y: 1999123058123,
-                        },
-                        {
-                            name: "Divisi Infra 2",
-                            y: 2999123058123,
-                        },
-                    ]
+                    data: nilaiTender
                 },
             ]
         });
@@ -1173,52 +1163,12 @@
 
     {{-- Begin :: Animation Progress Bar --}}
     <script>
-        // function animateProgressBar() {
-        //     const progressbarElts = document.querySelectorAll("div[role='progressbar']");
-        //     console.log(progressbarElts);
-        //     progressbarElts.forEach(item => {
-        //         const dataPersen = item.parentElement.parentElement.querySelector("#data-persen");
-        //         let width = Number(dataPersen.innerText.replace("%", ""));
-        //         item.style.width = width + "%";
-        //     });
-        // }
         animateProgressBar();
     </script>
     {{-- End :: Animation Progress Bar --}}
 
     {{-- Begin :: Animation Counter Number --}}
     <script>
-        // function animateCounterNumber(selector, firstPrefix = "", lastPrefix = "") {
-        //     const animateCounterElts = document.querySelectorAll(`${selector}`);
-        //     animateCounterElts.forEach(item => {
-        //         let data;
-        //         if(firstPrefix != ""){
-        //             data = Number(item.innerText.replaceAll(firstPrefix, "").replaceAll(".", ""));
-        //         } else {
-        //             data = Number(item.innerText.replaceAll(lastPrefix, ""));
-        //         }
-        //         item.innerText = `${firstPrefix}0${lastPrefix}`;
-        //         let i = 0;
-        //         const interval = setInterval(() => {
-        //             if(i == data || i >= data) {
-        //                 clearInterval(interval);
-        //                 if(firstPrefix == "Rp. "){
-        //                     data = Intl.NumberFormat(["id"]).format(data);
-        //                 }
-        //                 item.innerText = `${firstPrefix}${data}${lastPrefix}`;
-        //                 return;
-        //             };
-        //             if(firstPrefix == "Rp. "){
-        //                 // i+= Math.floor((data / 15) + data);
-        //                 i+= Math.floor(data/15);
-        //                 item.innerText = `${firstPrefix}${Intl.NumberFormat(["id"]).format(i)}${lastPrefix}`;
-        //             } else {
-        //                 i++;
-        //                 item.innerText = `${firstPrefix}${i}${lastPrefix}`;
-        //             }
-        //         }, 15);
-        //     });
-        // }
         animateCounterNumber("#data-persen", "", "%");
         animateCounterNumber("#data-items", "Rp. ");
     </script>

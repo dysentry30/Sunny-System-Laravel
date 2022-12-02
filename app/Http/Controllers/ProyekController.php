@@ -166,6 +166,7 @@ class ProyekController extends Controller
         // $newProyek->sumber_dana = $dataProyek["sumber-dana"];
         $newProyek->tahun_perolehan = $dataProyek["tahun-perolehan"];
         $newProyek->bulan_pelaksanaan = $dataProyek["bulan-pelaksanaan"];
+        $newProyek->jenis_jo = $dataProyek["kategori-jo"];
 
         //auto filled by required 
         $newProyek->bulan_awal = $dataProyek["bulan-pelaksanaan"];
@@ -378,6 +379,11 @@ class ProyekController extends Controller
         $newProyek->status_pasdin  = $dataProyek["status-pasardini"];
         $newProyek->info_asal_proyek  = $dataProyek["info-proyek"];
         $newProyek->laporan_kualitatif_pasdin = $dataProyek["laporan-kualitatif-pasdin"];
+        if($newProyek->jenis_proyek == "J") {
+            $newProyek->jenis_jo = $dataProyek["jo-category"];
+        } else {
+            $newProyek->jenis_jo = null;
+        }
         // $newProyek->nama_pendek_proyek = $dataProyek["short-name"];
 
         // form PASAR POTENSIAL
@@ -705,6 +711,11 @@ class ProyekController extends Controller
         $newProyek->sumber_dana = $dataProyek["sumber-dana"];
         $newProyek->jenis_proyek = $dataProyek["jenis-proyek"];
         $newProyek->tipe_proyek = $dataProyek["tipe-proyek"];
+        if($newProyek->jenis_proyek == "J") {
+            $newProyek->jenis_jo = $dataProyek["jo-category"];
+        } else {
+            $newProyek->jenis_jo = null;
+        }
 
         // $newProyek->pic = $dataProyek["pic"];
         $newProyek->bulan_pelaksanaan = $dataProyek["bulan-pelaksanaan"];

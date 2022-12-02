@@ -680,6 +680,8 @@ class DashboardController extends Controller
         $dop_get = $request->query("dop") ?? "";
         $unit_kerja_get = $request->query("unit-kerja") ?? "";
         $proyek_get = $request->query("kode-proyek") ?? "";
+        $claims = ClaimManagements::all();
+        // dd($claims);
 
         $proyeks = Proyek::all();
         if ($dop_get != "") {
@@ -710,7 +712,7 @@ class DashboardController extends Controller
         // End :: Pemilik Pekerjaan
 
         // Begin :: Changes Overview
-        $kategori_kontrak = ClaimManagements::all()->groupBy("jenis_claim")->map(function ($c, $key) {
+        $kategori_kontrak = $claims->groupBy("jenis_claim")->map(function ($c, $key) {
             return [$key, $c->count()];
         })->values();
         // End :: Changes Overview
@@ -728,9 +730,47 @@ class DashboardController extends Controller
         })->values();
         // End :: Jenis Kontrak
 
+        // Begin :: Nilai Tender Chart
+        $nilai_tender_proyeks = $proyeks->groupBy("unit_kerja");
+        $nilai_tender_proyeks = $nilai_tender_proyeks->map(function ($p, $key) {
+            $nilai_tender = $p->sum(function ($s) {
+                return (int) $s->nilai_perolehan;
+            });
+            return ["name" => UnitKerja::find($key)->unit_kerja, "y" => $nilai_tender];
+        })->values();
+        // End :: Nilai Tender Chart
+        
+        // Begin :: Table Nilai Perubahan
+        $total_nilai_perubahan = $claims->map(function($c) {
+            $nilai = $c->sum(function($p) {
+                return (int) $p->nilai_claim;
+            });
+            $new_class = new stdClass();
+            // $new_class->jenis_claim = $key;
+            $new_class->total_nilai = "Rp. " . number_format($nilai, 0, ".", ".");
+            $new_class->total_proyek = 10;
+            $new_class->total_persen = "20%";
+            return $new_class;
+            // return (int) $c->nilai_claim;
+        });
+        $nilai_perubahan_table = $claims->groupBy("jenis_claim")->map(function ($c, $key) {
+            $nilai = $c->sum(function($p) {
+                return (int) $p->nilai_claim;
+            });
+            $new_class = new stdClass();
+            $new_class->jenis_claim = $key;
+            $new_class->total_nilai = "Rp. " . number_format($nilai, 0, ".", ".");
+            $new_class->total_proyek = 10;
+            $new_class->total_persen = "20%";
+            return $new_class;
+        })->values();
+        // dd($nilai_perubahan_table);
+        // dd($nilai_perubahan_table);
+        // End :: Table Nilai Perubahan
 
 
-        return view("1_Dashboard_ccm_pelaksanaan_kontrak", compact(["dops", "unit_kerjas", "proyeks", "pemilik_pekerjaan", "kategori_kontrak", "jenis_kontrak", "dop_get", "unit_kerja_get", "proyek_get"]));
+
+        return view("1_Dashboard_ccm_pelaksanaan_kontrak", compact(["dops", "unit_kerjas", "proyeks", "pemilik_pekerjaan", "kategori_kontrak", "jenis_kontrak", "dop_get", "unit_kerja_get", "proyek_get", "nilai_tender_proyeks", "total_nilai_perubahan", "nilai_perubahan_table"]));
     }
 
     public function dashboard_pemeliharaan_kontrak(Request $request)

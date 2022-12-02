@@ -722,7 +722,7 @@
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
-                                    <select id="jenis-proyek" name="jenis-proyek" class="form-select form-select-solid"
+                                    <select id="jenis-proyek" onchange="tampilJOCategory(this)" name="jenis-proyek" class="form-select form-select-solid"
                                         data-control="select2" data-hide-search="true" data-placeholder="Jenis Proyek">
                                         {{-- <option selected></option>
                                         <option value="I" {{ old('jenis-proyek') == 'I' ? 'selected' : '' }}>
@@ -817,25 +817,28 @@
                             <!--End begin::Col-->
                             <div class="col-6">
                                 <!--begin::Input group Website-->
-                                <div class="fv-row mb-7">
+                                <div class="fv-row mb-7" id="input-jo-detail" style="display: none;">
                                     <!--begin::Label-->
-                                    {{-- <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Sumber Dana</span>
-                                    </label> --}}
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span class="required">Kategori JO</span>
+                                    </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
-                                    {{-- <select id="sumber-dana" name="sumber-dana" class="form-select form-select-solid"
-                                        data-control="select2" data-hide-search="true" data-placeholder="Sumber Dana">
-                                        <option></option>
-                                        @foreach ($sumberdanas as $sumberdana)
+                                    <select id="kategori-jo" name="kategori-jo" class="form-select form-select-solid"
+                                        data-control="select2" data-hide-search="true" data-placeholder="Pilih JO">
+                                        <option selected></option>
+                                        <option value="30" {{ old('kategori-jo') == "30"  ? 'selected' : '' }}>JO Integrated Leader</option>
+                                        <option value="31" {{ old('kategori-jo') == "31" ? 'selected' : '' }}>JO Integrated Member</option>
+                                        <option value="40" {{ old('kategori-jo') == "40" ? 'selected' : '' }}>JO Portion Leader</option>
+                                        <option value="41" {{ old('kategori-jo') == "41" ? 'selected' : '' }}>JO Portion Member</option>
+                                        <option value="50" {{ old('kategori-jo') == "50" ? 'selected' : '' }}>JO Mix Integrated - Portion</option>
+                                        {{-- @foreach ($sumberdanas as $sumberdana)
                                             <option value="{{ $sumberdana->nama_sumber }}"
-                                                {{ old('sumber-dana') == $sumberdana->nama_sumber ? 'selected' : '' }}>
-                                                {{ $sumberdana->nama_sumber }}</option>
-                                        @endforeach
+                                        @endforeach --}}
                                     </select>
-                                    @error('sumber-dana')
+                                    @error('kategori-jo')
                                         <h6 class="text-danger fw-normal">{{ $message }}</h6>
-                                    @enderror --}}
+                                    @enderror
                                     <!--end::Input-->
                                 </div>
                                 <!--end::Input group-->
@@ -1052,6 +1055,37 @@
         }
     }
 </script>
+
+{{-- Begin :: JO Detail Modal Pop Up --}}
+<script>
+    const modalJODetail = document.querySelector("#input-jo-detail");
+    const inputSelectJODetailElt = modalJODetail.querySelector("#kategori-jo");
+    function tampilJOCategory(e) {
+        const valueJO = e.value;
+        if(valueJO == "J") {
+            modalJODetail.style.display = "";
+            inputSelectJODetailElt.disabled = "";
+        } else {
+            modalJODetail.style.display = "none";
+            inputSelectJODetailElt.disabled = "true";
+        }
+    }
+</script>
+{{-- End :: JO Detail Modal Pop Up --}}
+
+{{-- Begin :: JO Detail Save --}}
+{{-- <script>
+    function changeValueJODetail(e) {
+        const selectJOElt = e.parentElement.parentElement.querySelector("select");
+        const valueJODetail = {value: selectJOElt.value, text: selectJOElt.options[selectJOElt.selectedIndex].text};
+        const inputJODetail = document.querySelector("#jo-category");
+        const textJODetail = inputJODetail.parentElement.querySelector("small");
+        inputJODetail.value = valueJODetail.value;
+        textJODetail.innerHTML = `JO Category: <b>${valueJODetail.text}</b>`;
+        modalJODetail.hide();
+    }
+</script> --}}
+{{-- End :: JO Detail Save --}}
 @endsection
 
 <!--end::Main-->
