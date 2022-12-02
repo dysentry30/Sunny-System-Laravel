@@ -1104,7 +1104,7 @@
                                                                             JO</option>
                                                                     </select>
                                                                     <input type="hidden" name="jo-category" id="jo-category" value="">
-                                                                    @php
+                                                                    {{-- @php
                                                                         $jenis_jo = "";
                                                                         switch ($proyek->jenis_jo) {
                                                                             case 30:
@@ -1131,7 +1131,7 @@
                                                                         <small>JO Category: <b>{{ $jenis_jo }}</b></small>
                                                                     @else 
                                                                         <small>JO Category: <b class="text-danger">{{ $jenis_jo }}</b></small>
-                                                                    @endif
+                                                                    @endif --}}
                                                                     {{-- @endisset --}}
                                                                     {{-- <input type="text"
                                                                         class="form-control form-control-solid"
@@ -1188,6 +1188,73 @@
                                                                 </div>
                                                                 <!--end::Input group-->
                                                             </div>
+                                                            <div class="col-6">
+                                                                <!--begin::Input group Website-->
+                                                                <div class="fv-row mb-7">
+                                                                    <!--begin::Label-->
+                                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                                        <span class="required">Kategori JO<i
+                                                                                class="bi bi-key"></i></span>
+                                                                    </label>
+                                                                    <!--end::Label-->
+                                                                    <!--begin::Input-->
+                                                                    {{-- @php
+                                                                        $years = $proyek->tahun_perolehan;
+                                                                    @endphp --}}
+                                                                    {{-- @for ($i = 2021; $i < $years + 20; $i++)
+                                                                        <option value="{{ $i }}" {{ $years == $i ? 'selected' : '' }}>
+                                                                            {{ $i }}</option>
+                                                                    @endfor --}}
+                                                                    @php
+                                                                        $jenis_jo = "";
+                                                                        switch ($proyek->jenis_jo) {
+                                                                            case 30:
+                                                                                $jenis_jo = "JO Integrated Leader";
+                                                                                break;
+                                                                            case 31:
+                                                                                $jenis_jo = "JO Integrated Member";
+                                                                                break;
+                                                                            case 40:
+                                                                                $jenis_jo = "JO Portion Leader";
+                                                                                break;
+                                                                            case 41:
+                                                                                $jenis_jo = "JO Portion Member";
+                                                                                break;
+                                                                            case 50:
+                                                                                $jenis_jo = "JO Mix Integrated - Portion";
+                                                                                break;
+                                                                            default:
+                                                                                $jenis_jo = "Proyek ini bukan JO";
+                                                                                break;
+                                                                        }
+                                                                    @endphp
+                                                                    <input type="text"
+                                                                        class="form-control form-control-solid"
+                                                                        name="preview-kategori-JO"
+                                                                        value="{{ $jenis_jo }}"
+                                                                        disabled
+                                                                        />
+                                                                    <!--begin::Input-->
+                                                                    {{-- <select id="tahun-perolehan" name="tahun-perolehan"
+                                                                        class="form-select form-select-solid select2-hidden-accessible"
+                                                                        data-control="select2" data-hide-search="true" data-placeholder="Tahun"
+                                                                        data-select2-id="select2-data-tahun" tabindex="-1" aria-hidden="true" {{ auth()->user()->check_administrator ? '' : 'disabled'}}>
+                                                                        @for ($i = 2021; $i < $years + 20; $i++)
+                                                                            <option value="{{ $i }}" {{ $years == $i ? 'selected' : '' }}>
+                                                                                {{ $i }}</option>
+                                                                        @endfor
+                                                                    </select> --}}
+                                                                    <!--end::Input-->
+                                                                </div>
+                                                                <!--end::Input group-->
+                                                            </div>
+                                                            
+                                                        </div>
+                                                        <!--End::Row Kanan+Kiri-->
+
+
+                                                        <!--begin::Row Kanan+Kiri-->
+                                                        <div class="row fv-row">
                                                             <!--End begin::Col-->
                                                             <div class="col-6">
                                                                 <!--begin::Input group Website-->
@@ -1246,12 +1313,6 @@
                                                                 <!--end::Input group-->
                                                             </div>
                                                             <!--End::Col-->
-                                                        </div>
-                                                        <!--End::Row Kanan+Kiri-->
-
-
-                                                        <!--begin::Row Kanan+Kiri-->
-                                                        <div class="row fv-row">
                                                             <!--begin::Col-->
                                                             <div class="col-6">
                                                                 <!--begin::Input group Website-->
