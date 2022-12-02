@@ -4205,7 +4205,7 @@
                                                                             {{ $proyek->jenis_terkontrak == 'Design & Build' ? 'selected' : '' }}>
                                                                             Design & Build</option> --}}
                                                                         <option value="Lumpsum"
-                                                                            {{ $proyek->jenis_terkontrak == 'Lumpsum' ? 'selected' : '' }}>
+                                                                            {{ ($proyek->jenis_terkontrak == 'Lumpsum' || $proyek->jenis_terkontrak == 'Design & Build') ? 'selected' : '' }}>
                                                                             Lumpsum</option>
                                                                         {{-- <option value="OM"
                                                                             {{ $proyek->jenis_terkontrak == 'OM' ? 'selected' : '' }}>
@@ -4214,7 +4214,7 @@
                                                                             {{ $proyek->jenis_terkontrak == 'Turnkey' ? 'selected' : '' }}>
                                                                             Turnkey</option>
                                                                         <option value="Unit Price"
-                                                                            {{ $proyek->jenis_terkontrak == 'Unit Price' ? 'selected' : '' }}>
+                                                                            {{ ($proyek->jenis_terkontrak == 'Unit Price' || $proyek->jenis_terkontrak == 'OM') ? 'selected' : '' }}>
                                                                             Unit Price</option>
                                                                         <option value="Fixed Price"
                                                                             {{ $proyek->jenis_terkontrak == 'Fixed Price' ? 'selected' : '' }}>
