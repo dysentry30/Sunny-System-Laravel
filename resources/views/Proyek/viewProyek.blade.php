@@ -4201,15 +4201,15 @@
                                                                         <option value="Cost-Plus"
                                                                             {{ $proyek->jenis_terkontrak == 'Cost-Plus' ? 'selected' : '' }}>
                                                                             Cost-Plus</option>
-                                                                        <option value="Design & Build"
+                                                                        {{-- <option value="Design & Build"
                                                                             {{ $proyek->jenis_terkontrak == 'Design & Build' ? 'selected' : '' }}>
-                                                                            Design & Build</option>
+                                                                            Design & Build</option> --}}
                                                                         <option value="Lumpsum"
                                                                             {{ $proyek->jenis_terkontrak == 'Lumpsum' ? 'selected' : '' }}>
                                                                             Lumpsum</option>
-                                                                        <option value="OM"
+                                                                        {{-- <option value="OM"
                                                                             {{ $proyek->jenis_terkontrak == 'OM' ? 'selected' : '' }}>
-                                                                            OM</option>
+                                                                            OM</option> --}}
                                                                         <option value="Turnkey"
                                                                             {{ $proyek->jenis_terkontrak == 'Turnkey' ? 'selected' : '' }}>
                                                                             Turnkey</option>
