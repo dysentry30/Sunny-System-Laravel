@@ -625,7 +625,7 @@
                                                         <br><br>
 
                                                         <!--begin::Data SAP-->
-                                                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;display:none;">SAP
+                                                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">SAP
                                                             <i onclick="hideColumn(this, '#divSAP')" id="hide-button" style="display: none" class="bi bi-arrows-collapse"></i><i
                                                                 onclick="showColumn(this, '#divSAP')" id="show-button" class="bi bi-arrows-expand"></i>
                                                         </h3>

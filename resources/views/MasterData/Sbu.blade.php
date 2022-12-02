@@ -418,6 +418,14 @@
                                         <option value="Transportasi"
                                             {{ old('klasifikasi') == 'Transportasi' ? 'selected' : '' }}>Transportasi
                                         </option>
+                                        <option value="Investasi"
+                                            {{ old('klasifikasi') == 'Investasi' ? 'selected' : '' }}>Investasi</option>
+                                        <option value="Industri"
+                                            {{ old('klasifikasi') == 'Industri' ? 'selected' : '' }}>Industri
+                                        </option>
+                                        <option value="Realty & Property"
+                                            {{ old('klasifikasi') == 'Realty & Property' ? 'selected' : '' }}>Realty & Property
+                                        </option>
                                     </select>
                                     @error('klasifikasi')
                                         <h6 class="text-danger fw-normal">{{ $message }}</h6>

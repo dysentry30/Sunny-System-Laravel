@@ -1694,7 +1694,7 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
             case "CPF (Turn key)":
                 $sistem_bayar = "CP02";
                 break;
-                case "Monthly":
+            case "Monthly":
                 $sistem_bayar = "CP01";
                 break;
         };
@@ -1731,15 +1731,21 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
                 $jenis_terkontrak = "JKT02";
                 break;
             case "Design & Build":
-                $jenis_terkontrak = "JKT03";
+                $jenis_terkontrak = "JKT06";
                 break;
             case "OM":
-                $jenis_terkontrak = "JKT04";
+                $jenis_terkontrak = "JKT05";
                 break;
             case "Unit Price":
                 $jenis_terkontrak = "JKT05";
                 break;
             case "Lumpsum":
+                $jenis_terkontrak = "JKT06";
+                break;
+            case "Fixed Price":
+                $jenis_terkontrak = "JKT05";
+                break;
+            case "Lumpsum+":
                 $jenis_terkontrak = "JKT06";
                 break;
         };
@@ -1781,13 +1787,25 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
                 ]
             ]
         ];
-
+        $jenis_proyek = 0;
+        switch($p->jenis_proyek) {
+            case "I" :
+                $jenis_proyek = 20;
+                break;
+            case "N" :
+                $jenis_proyek = 10;
+                break;
+            case "J" :
+                $jenis_proyek = $p->jenis_jo;
+                break;
+        }
         $p->UsrJenis = [
             "inline" => [
                 "entry" => [
                     "content" => [
                         "properties" => [
-                            "Name" => JenisProyek::find($p->jenis_proyek)->jenis_proyek ?? "",
+                            // "Name" => JenisProyek::find($p->jenis_proyek)->jenis_proyek ?? "",
+                            "Name" => $jenis_proyek ?? "",
                         ]
                     ]
                 ]
