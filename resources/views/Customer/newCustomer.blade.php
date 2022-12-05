@@ -596,7 +596,7 @@
 																				<th class="min-w-auto">Kode Proyek</th>
 																				<th class="min-w-auto">Unit kerja</th>
 																				<th class="min-w-auto">Jenis Proyek</th>
-																				<th class="min-w-auto">Nama PIC</th>
+                                                                                <th class="min-w-auto">Nama PIC</th>
 																				<th class="min-w-auto">Nilai OK</th>
 																			</tr>
 																			<!--end::Table row-->

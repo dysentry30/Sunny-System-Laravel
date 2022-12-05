@@ -521,9 +521,13 @@
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
                                                                     <input type="text"
-                                                                        class="form-control form-control-solid"
+                                                                        class="form-control form-control-solid char-counter"
+                                                                        data-max-char="40"
                                                                         id="nama-proyek" name="nama-proyek"
                                                                         value="{{ $proyek->nama_proyek }}" />
+                                                                    <div class="d-flex flex-row justify-content-end">
+                                                                        <small class="">0/40</small>
+                                                                    </div>
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->

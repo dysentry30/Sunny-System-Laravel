@@ -515,6 +515,23 @@
                                     </div>
                                     <!--end::Menu Colapse-->
                                     @endif
+
+                                    @if (auth()->user()->check_administrator)
+                                    <!--begin::Menu Colapse-->
+                                    <div id="#kt_aside_menu" data-kt-menu="true"
+                                        style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'language' ? 'background-color:#008CB4' : '' }}">
+                                        <a class="menu-link " href="/language" style="color:white; padding-left:20px;">
+                                            <span class="menu-icon">
+                                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                                {{-- <i class="bi bi-buildings text-white"></i> --}}
+                                                <i class="bi bi-translate text-white"></i>
+                                                <!--end::Svg Icon-->
+                                            </span>
+                                            <span class="menu-title" style="font-size: 16px; padding-left: 10px">Language</span>
+                                        </a>
+                                    </div>
+                                    <!--end::Menu Colapse-->
+                                    @endif
                                 </div>
                                 <!--end::Colapse-->
                                 <!--end::Svg Icon-->
@@ -1758,17 +1775,28 @@
         charCounterElts.forEach(item => {
             const textNumberElt = item.parentElement.querySelector(".d-flex small");
             const maxChar = Number(item.getAttribute("data-max-char"));
-            if(maxChar) {
+            if(maxChar && !item.value) {
                 item.addEventListener("input", e => {
-                    const lengthChar = item.value.length;
-                    if(lengthChar >= maxChar) {
+                    let lengthChar = item.value.length;
+                    if(lengthChar > maxChar) {
                         // console.log(item.value);
                         const newValue = item.value.split("");
                         newValue.pop();
                         item.value = newValue.join("");
+                        lengthChar = item.value.length;
                     }
                     textNumberElt.innerText = `${lengthChar}/${maxChar}`;
                 });
+            }else if(item.value) {
+                let lengthChar = item.value.length;
+                if(lengthChar > maxChar) {
+                    // console.log(item.value);
+                    const newValue = item.value.split("");
+                    newValue.pop();
+                    item.value = newValue.join("");
+                    lengthChar = item.value.length;
+                }
+                textNumberElt.innerText = `${lengthChar}/${maxChar}`;
             } else {
                 console.error("You implement char counter. Make sure each field has data-max-char attribute");
             }

@@ -132,7 +132,7 @@
                                             <!--begin:::Tab item Forecast Internal-->
                                             @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
                                                 <li class="nav-item">
-                                                    <a onclick="showCCM()" class="nav-link text-active-primary pb-4"  href="/dashboard-ccm"
+                                                    <a onclick="showCCM()" class="nav-link text-active-primary pb-4"  href="/dashboard-ccm/perolehan-kontrak"
                                                         style="font-size:14px;">Dashboard CCM</a>
                                                 </li>
                                             @endif

@@ -54,7 +54,7 @@ class Proyek extends Model
 
     public function Customer()
     {
-        return $this->hasOne(Customer::class);
+        return $this->hasOne(Customer::class, "id_customer", "id_customer");
     }
     
     public function ContractManagements()

@@ -741,7 +741,7 @@ class DashboardController extends Controller
         // End :: Nilai Tender Chart
         
         // Begin :: Table Nilai Perubahan
-        $total_nilai_perubahan = $claims->map(function($c) {
+        $total_nilai_perubahan = $claims->groupBy("jenis_claim")->map(function($c) {
             $nilai = $c->sum(function($p) {
                 return (int) $p->nilai_claim;
             });

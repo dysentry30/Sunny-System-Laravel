@@ -51,8 +51,7 @@
                                 <div class="d-flex align-items-center py-1">
 
                                     <!--begin::Button-->
-                                    @if ($customer->kode_nasabah)
-                                        <div class="" data-bs-toggle="tooltip" data-bs-html="true" 
+                                    @if ($customer->kode_nasabah)shgle="tooltip" data-bs-html="true" 
                                         data-bs-title="<b>Kode Nasabah</b> sudah didapatkan" >
                                             <button type="button"  class="btn disabled btn-sm btn-light btn-active-success me-3" onclick="getKodeNasabah(this)" id="get-kode-nasabah">
                                                 Get Kode Nasabah</button>
@@ -239,6 +238,32 @@
                                                         <!--end::Input-->
                                                     </div>
                                                     <!--end::Input group-->
+
+                                                    <!--begin::Input group Kode Pos-->
+                                                    <div class="fv-row mb-7">
+                                                        <!--begin::Label-->
+                                                        <label class="fs-6 fw-bold form-label mt-3 required">
+                                                            <span>Kode Pos</span>
+                                                        </label>
+                                                        <!--end::Label-->
+                                                        <!--begin::Input-->
+                                                        <input type="text" class="form-control form-control-solid" value="{{ $customer->kode_pos }}" name="kode-pos"/>
+                                                        <!--end::Input-->
+                                                    </div>
+                                                    <!--end::Input group-->
+
+                                                    <!--begin::Input group Kode Pos-->
+                                                    {{-- <div class="fv-row mb-7">
+                                                        <!--begin::Label-->
+                                                        <label class="fs-6 fw-bold form-label mt-3 required">
+                                                            <span>Tax Number</span>
+                                                        </label>
+                                                        <!--end::Label-->
+                                                        <!--begin::Input-->
+                                                        <input type="text" class="form-control form-control-solid" name="tax-number">{{ $customer->tax_number }}</input>
+                                                        <!--end::Input-->
+                                                    </div> --}}
+                                                    <!--end::Input group-->
                                             </div>
                                             <!--end::Card body-->
                                         </div>
@@ -365,7 +390,7 @@
                                                         <!--begin::Row-->
                                                         <div class="row fv-row">
                                                             <!--begin::Col-->
-                                                            <div class="col-6">
+                                                            {{-- <div class="col-6">
                                                                 <!--begin::Input group Website-->
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
@@ -379,7 +404,7 @@
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
-                                                            </div>
+                                                            </div> --}}
                                                             <!--End begin::Col-->
                                                             <div class="col-6">
                                                                 <!--begin::Input group Website-->
@@ -506,6 +531,31 @@
                                                             </div>
                                                             <!--End begin::Col-->
 
+                                                            <div class="row">
+                                                                <div class="col">
+                                                                    <!--begin::Label-->
+                                                                    <label class="fs-6 fw-bold form-label mt-3 required">
+                                                                        <span class="">Industry Sector</span>
+                                                                    </label>
+                                                                    <!--end::Label-->
+                                                                    <select name="industry-sector" id="industry-sector" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
+                                                                            data-placeholder="Pilih Industry Sector">
+                                                                        <option value=""></option>
+                                                                        @foreach ($industrySectors as $is)
+                                                                            @if ($is->id_industry_sector == $customer->industry_sector)
+                                                                                <option value="{{ $is->id_industry_sector }}" selected>
+                                                                                    {{ ucwords(strtolower($is->description)) }}
+                                                                                </option>
+                                                                            @else
+                                                                                <option value="{{ $is->id_industry_sector }}">
+                                                                                    {{ ucwords(strtolower($is->description)) }}
+                                                                                </option>
+                                                                            @endif
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+
                                                             <!--begin::Fungsi Select Provinsi-->
                                                             <script>
                                                                 function selectNegara(e) {
@@ -550,6 +600,56 @@
                                                         <br>
                                                         <br>
                                                         <br>
+
+                                                        <!--begin::Data SAP-->
+                                                        <h3 class="fw-bolder m-0 required" id="HeadDetail" style="font-size:14px;">Legal
+                                                        </h3>
+
+                                                        <div id="divLegal">
+                                                            <!--end::Data SAP-->
+                                                            <!--begin::Row-->
+                                                            <div class="row fv-row">
+                                                                <!--begin::Col-->
+                                                                <div class="col-6">
+                                                                    <!--begin::Input group Website-->
+                                                                    <div class="fv-row mb-7">
+                                                                        <!--begin::Label-->
+                                                                        <label class="fs-6 fw-bold form-label mt-3">
+                                                                            <span class="">No NPWP</span>
+                                                                        </label>
+                                                                        <!--end::Label-->
+                                                                        <!--begin::Input-->
+                                                                        <input type="text" class="form-control form-control-solid" name="npwp-company" value="{{ $customer->npwp_company }}"
+                                                                            placeholder="NPWP" />
+                                                                        <!--end::Input-->
+                                                                    </div>
+                                                                    <!--end::Input group-->
+                                                                </div>
+                                                                <!--End begin::Col-->
+
+                                                                <!--begin::Col-->
+                                                                <div class="col-6">
+                                                                    <!--begin::Input group Website-->
+                                                                    <div class="fv-row mb-7">
+                                                                        <!--begin::Label-->
+                                                                        <label class="fs-6 fw-bold form-label mt-3">
+                                                                            <span class="">Alamat NPWP</span>
+                                                                        </label>
+                                                                        <!--end::Label-->
+                                                                        <!--begin::Input-->
+                                                                        <textarea class="form-control form-control-solid" name="npwp-address"
+                                                                            placeholder="Alamat NPWP">{{ $customer->npwp_address }}</textarea>
+                                                                        <!--end::Input-->
+                                                                    </div>
+                                                                    <!--end::Input group-->
+                                                                </div>
+                                                                <!--End begin::Col-->
+
+                                                            </div>
+                                                            <!--End begin::Row-->
+                                                        </div>
+
+                                                        <br><br>
 
                                                         <!--begin::INPUT PIC-->
                                                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
