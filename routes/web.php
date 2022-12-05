@@ -76,6 +76,7 @@ Route::get('/', [UserController::class, 'welcome'])->middleware("userNotAuth");
 
 Route::post('/login', [UserController::class, 'authen']);
 
+Route::get('/logout', [UserController::class, 'logout']);
 
 // Route::post('/createUser', [UserController::class, 'testLogin']);
 // end :: Login
@@ -87,7 +88,6 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     // Route::middleware(["admin", "adminKontrak", "userSales"])->group(function () {
     // });
-    Route::get('/logout', [UserController::class, 'logout']);
 
     Route::get('/dashboard', [DashboardController::class, 'index']);
 
@@ -1062,7 +1062,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     });
 
     // Master Data Provinsi
-    Route::get('/provinsi', function (Request $request) {
+    Route::get('/negara', function (Request $request) {
         $provinsi = Provinsi::all();
         return view("/MasterData/Provinsi", compact(["provinsi"]));
     });
@@ -1328,7 +1328,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $paretoProyeks->each(function ($proyek) use ($sheet, &$counter) {
             $sheet->setCellValue("A" . $counter, $proyek->nama_proyek);
             $sheet->setCellValue("B" . $counter, $proyek->unit_kerja);
-            $sheet->setCellValue("C" . $counter, Dashboard::getProyekStage($proyek->stage));
+            $sheet->setCellValue("C" . $counter, DashboardController::getProyekStage($proyek->stage));
             $sheet->setCellValue("D" . $counter, $proyek->forecast);
             $counter++;
         });
