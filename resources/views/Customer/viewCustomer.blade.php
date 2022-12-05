@@ -51,7 +51,8 @@
                                 <div class="d-flex align-items-center py-1">
 
                                     <!--begin::Button-->
-                                    @if ($customer->kode_nasabah)shgle="tooltip" data-bs-html="true" 
+                                    @if ($customer->kode_nasabah)
+                                        <div class="" data-bs-toggle="tooltip" data-bs-html="true" 
                                         data-bs-title="<b>Kode Nasabah</b> sudah didapatkan" >
                                             <button type="button"  class="btn disabled btn-sm btn-light btn-active-success me-3" onclick="getKodeNasabah(this)" id="get-kode-nasabah">
                                                 Get Kode Nasabah</button>
