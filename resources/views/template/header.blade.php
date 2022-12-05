@@ -356,7 +356,11 @@
                                 </div>
                                 <ul class="dropdown-menu pt-6" aria-labelledby="dropdownMenuButton1">
                                     <a href="/user/view/{{Auth::user()->id}}" class="btn btn-sm dropdown-item rounded-0 mb-3">Profile</a>
-                                    <a href="/logout" class="btn btn-sm dropdown-item rounded-0 mb-3">Logout</a>
+                                    @if (!empty(Auth::user()))
+                                        <a href="/" class="btn btn-sm dropdown-item rounded-0 mb-3">Logout</a>
+                                    @else
+                                        <a href="/logout" class="btn btn-sm dropdown-item rounded-0 mb-3">Logout</a>
+                                    @endif
                                     {{-- <form action="/logout" method="post" class="form" id="kt_sign_in_form">
                                         @csrf
                                         <button type="submit" class="btn btn-active-primary dropdown-item rounded-0">Logout</button>
