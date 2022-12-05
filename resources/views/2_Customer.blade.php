@@ -488,6 +488,78 @@
                             <!--end::Input group-->
                         </div>
                         <!--End::Col-->
+
+                        <!--begin::Input group Kode Pos-->
+                        <div class="fv-row mb-7">
+                            <div class="col">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3 required">
+                                    <span>Kode Pos</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" class="form-control form-control-solid" placeholder="Kode Pos" name="kode-pos"/>
+                                <!--end::Input-->
+                            </div>
+
+                            <div class="col">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3 required">
+                                    <span class="">Industry Sector</span>
+                                </label>
+                                <!--end::Label-->
+                                <select name="industry-sector" id="industry-sector" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
+                                        data-placeholder="Pilih Industry Sector">
+                                    <option value="" selected></option>
+                                    @foreach ($industrySectors as $is)
+                                        <option value="{{ $is->id_industry_sector }}">
+                                            {{ ucwords(strtolower($is->description)) }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <!--begin::Row-->
+                        <div class="row fv-row">
+                            <!--begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span class="">No NPWP</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text" class="form-control form-control-solid" name="npwp-company"
+                                        placeholder="NPWP" />
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End begin::Col-->
+
+                            <!--begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span class="">Alamat NPWP</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <textarea class="form-control form-control-solid" name="npwp-address"
+                                        placeholder="Alamat NPWP"></textarea>
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End begin::Col-->
+
+                        </div>
+                        <!--End begin::Row-->
+                        <!--end::Input group-->
                     </div>
                     <!--End::Row Kanan+Kiri-->
                     <div class="modal-footer">

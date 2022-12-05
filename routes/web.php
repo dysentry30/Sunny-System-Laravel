@@ -41,6 +41,7 @@ use App\Http\Controllers\ContractManagementsController;
 use App\Http\Controllers\JenisProyekController;
 use App\Http\Controllers\MataUangController;
 use App\Http\Controllers\TipeProyekController;
+use App\Models\IndustrySector;
 use App\Models\JenisProyek;
 use App\Models\MataUang;
 use App\Models\Provinsi;
@@ -75,7 +76,6 @@ Route::get('/', [UserController::class, 'welcome'])->middleware("userNotAuth");
 
 Route::post('/login', [UserController::class, 'authen']);
 
-Route::get('/logout', [UserController::class, 'logout']);
 
 // Route::post('/createUser', [UserController::class, 'testLogin']);
 // end :: Login
@@ -87,6 +87,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     // Route::middleware(["admin", "adminKontrak", "userSales"])->group(function () {
     // });
+    Route::get('/logout', [UserController::class, 'logout']);
 
     Route::get('/dashboard', [DashboardController::class, 'index']);
 
@@ -1066,12 +1067,12 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         return view("/MasterData/Provinsi", compact(["provinsi"]));
     });
 
-    // Master Data Provinsi
+    // Master Data Industry Sector
     Route::get('/industry-sector', function (Request $request) {
         // $provinsi = Provinsi::all();
-        $industrySector = json_decode(Http::get("https://fioridev.wika.co.id/ywikasd002/industry-sector?sap-client=200"));
-        dd($industrySector);
-        return view("/MasterData/Provinsi", compact(["industrySector"]));
+        // $industrySector = json_decode(Http::get("https://fioridev.wika.co.id/ywikasd002/industry-sector?sap-client=200"));
+        $industrySector = IndustrySector::all();
+        return view("/MasterData/IndustrySectors", compact(["industrySector"]));
     });
     //End :: Master Data
 

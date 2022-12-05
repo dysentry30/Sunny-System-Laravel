@@ -16,6 +16,7 @@ use Illuminate\support\Facades\DB;
 use App\Models\CustomerAttachments;
 use App\Models\CustomerSAP;
 use App\Models\IndustryOwner;
+use App\Models\IndustrySector;
 use App\Models\StrukturAttachment;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -112,7 +113,9 @@ class CustomerController extends Controller
             }
         }
 
-        return view('2_Customer', compact(["results", "column", "filter", "sort", "all_customer"]));
+        $industrySectors = IndustrySector::all();
+
+        return view('2_Customer', compact(["results", "column", "filter", "sort", "all_customer", "industrySectors"]));
     }
 
     // public function index (Request $request) 
@@ -172,6 +175,11 @@ class CustomerController extends Controller
         $newCustomer->email = $data["email"];
         $newCustomer->phone_number = $data["phone-number"];
         $newCustomer->website = $data["website"];
+        $newCustomer->kode_pos = $data["kode-pos"];
+        $newCustomer->industry_sector = $data["industry-sector"];
+        $newCustomer->npwp_company = $data["npwp-company"];
+        $newCustomer->npwp_address = $data["npwp-address"];
+
 
         // form company information
         // $newCustomer->jenis_instansi = $data["jenis-instansi"];
@@ -213,6 +221,7 @@ class CustomerController extends Controller
         $area_proyeks = collect();
         $per = 1000000;
         $industryOwners = IndustryOwner::all();
+        $industrySectors = IndustrySector::all();
 
         // foreach($proyeks as $p) {
         //     $p = Proyek::find($p->kode_proyek);
@@ -381,7 +390,7 @@ class CustomerController extends Controller
             "proyekOngoing" => $proyekOngoing,
             "proyekClosed" => $proyekClosed,
             "area_proyeks" => $area_proyeks,
-        ], compact("namaUnit", "labaProyek", "rugiProyek", "piutangProyek", "proyekOpportunity", "industryOwners"));
+        ], compact("namaUnit", "labaProyek", "rugiProyek", "piutangProyek", "proyekOpportunity", "industryOwners", "industrySectors"));
     }
 
     public function saveEdit(
@@ -428,15 +437,19 @@ class CustomerController extends Controller
         $editCustomer->email = $data["email"];
         $editCustomer->phone_number = $data["phone-number"];
         $editCustomer->website = $data["website"];
+        // $editCustomer->tax_number = $data["npwp_company"];
+        $editCustomer->kode_pos = $data["kode-pos"];
 
         // form company information
         $editCustomer->jenis_instansi = $data["jenis-instansi"];
         $editCustomer->kode_pelanggan = $data["kodepelanggan-company"];
         $editCustomer->npwp_company = $data["npwp-company"];
+        $editCustomer->npwp_address = $data["npwp-address"];
         $editCustomer->kode_nasabah = $data["kodenasabah-company"];
         $editCustomer->negara = $data["negara"];
         $editCustomer->provinsi = $data["provinsi"];
         $editCustomer->kota_kabupaten = $data["kabupaten"];
+        $editCustomer->industry_sector = $data["industry-sector"];
         // $editCustomer->journey_company = $data["journey-company"];
         // $editCustomer->segmentation_company = $data["segmentation-company"];
         // $editCustomer->name_pic = $data["name-pic"];
