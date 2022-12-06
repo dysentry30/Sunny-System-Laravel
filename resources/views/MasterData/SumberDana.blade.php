@@ -356,7 +356,7 @@
                                         data-hide-search="true" data-placeholder="Kategori">
                                         <option></option>
                                         <option value="BUMN">BUMN</option>
-                                        <option value="BUMN">BUMD</option>  
+                                        <option value="BUMD">BUMD</option>  
                                         <option value="Investasi">Investasi</option>
                                         <option value="Loan">Loan</option>
                                         <option value="Pemerintah">Pemerintah</option>
@@ -616,13 +616,14 @@
                                         <select name="kategori"
                                             class="form-select rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0"
                                             data-control="select2" data-hide-search="true" data-placeholder="Kategori">
-                                            <option value="{{ $sumberdanas->kategori }}">{{ $sumberdanas->kategori }}
-                                            </option>
-                                            <option value="BUMN">BUMN</option>
-                                            <option value="Investasi">Investasi</option>
-                                            <option value="Loan">Loan</option>
-                                            <option value="Pemerintah">Pemerintah</option>
-                                            <option value="Swasta">Swasta</option>
+                                            <option {{ $sumberdanas->kategori == "BUMN" ? "selected" : "" }} value="BUMN">BUMN</option>
+                                            <option {{ $sumberdanas->kategori == "BUMN" ? "selected" : "" }} value="BUMN">BUMD</option>  
+                                            <option {{ $sumberdanas->kategori == "Investasi" ? "selected" : "" }} value="Investasi">Investasi</option>
+                                            <option {{ $sumberdanas->kategori == "Loan" ? "selected" : "" }} value="Loan">Loan</option>
+                                            <option {{ $sumberdanas->kategori == "Pemerintah" ? "selected" : "" }} value="Pemerintah">Pemerintah</option>
+                                            <option {{ $sumberdanas->kategori == "Swasta" ? "selected" : "" }} value="Swasta">Swasta</option>
+                                            <option {{ $sumberdanas->kategori == "Penyertaan Modal Negara" ? "selected" : "" }} value="Penyertaan Modal Negara">Penyertaan Modal Negara</option>
+                                            <option {{ $sumberdanas->kategori == "Lain-lain" ? "selected" : "" }} value="Lain-lain">Lain-lain</option>
                                         </select>
                                         <!--end::Input-->
                                     </div>
