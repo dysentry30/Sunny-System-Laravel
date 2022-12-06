@@ -1080,6 +1080,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         try {
             // $industrySector = collect(json_decode(Http::get("https://fioridev.wika.co.id/ywikasd002/industry-sector?sap-client=200")));
             $industrySector = collect(json_decode(Http::withoutVerifying()->get("https://fioridev.wika.co.id/ywikasd002/industry-sector?sap-client=200")));
+            dd($industrySector);
             // $industrySector = collect([
             //     "devid" => "",
             //     "packageid" => "EB2618CE98301EDD96FCF101025538F9",
