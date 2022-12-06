@@ -9,6 +9,6 @@ class IndustrySector extends Model
 {
     use HasFactory;
     protected $table = "industry_sectors";
-    protected $primaryKey = "id_industry_sectors";
+    protected $primaryKey = "id_industry_sector";
     protected $keyType = "string";
 }

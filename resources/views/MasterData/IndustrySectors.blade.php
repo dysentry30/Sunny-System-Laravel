@@ -3,7 +3,7 @@
 {{-- End::Extend Header --}}
 
 {{-- Begin::Title --}}
-@section('title', 'Jenis Proyek')
+@section('title', 'Industry Sector')
 {{-- End::Title --}}
 
 <!--begin::Main-->
@@ -52,10 +52,9 @@
                                 <div class="d-flex align-items-center py-1">
 
                                     <!--begin::Button-->
-                                    <a href="#" class="btn btn-sm btn-primary w-80px" data-bs-toggle="modal"
-                                        data-bs-target="#kt_modal_create" id="kt_toolbar_primary_button"
+                                    <a href="#" onclick="getIndustrySector()" class="btn btn-sm btn-primary py-3"
                                         style="background-color:#008CB4; padding: 6px">
-                                        New</a>
+                                        Get Industry Sector</a>
 
                                 </div>
                                 <!--end::Actions-->
@@ -207,7 +206,7 @@
 
 
     <!--begin::Modal-->
-    <form action="/jenis-proyek/save" method="post" enctype="multipart/form-data">
+    {{-- <form action="/jenis-proyek/save" method="post" enctype="multipart/form-data">
         @csrf
 
 
@@ -291,7 +290,7 @@
             <!--end::Modal dialog-->
         </div>
         <!--end::Modal - Create App-->
-    </form>
+    </form> --}}
     <!--end::Modals-->
     
     {{-- <!--begin::Modal EDIT-->
@@ -436,6 +435,30 @@
 @section('js-script')
     <!--begin::Javascript-->
     
+    <script>
+        async function getIndustrySector() {
+            const {status, data} = await fetch("/industry-sector/get", {
+                "headers": {
+                    "X-Requested-With": "XMLHttpRequest",
+                }
+            }).then(res => res.json());
+            if(status) {
+                console.log(status);
+                Toast.fire({
+                    text: data.msg,
+                    icon: "success",
+                    timer: 5000,
+                });
+            } else {
+                console.log(status);
+                Toast.fire({
+                    text: data.msg,
+                    icon: "error",
+                    timer: 5000,
+                });
+            }
+        }
+    </script>
     
 @endsection
 
