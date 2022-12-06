@@ -1321,7 +1321,7 @@ class ProyekController extends Controller
                     }
                     
                     if($error_msg->isNotEmpty()) {
-                        Alert::html("Error", "Untuk pindah ke stage terkontrak, pastikan pada <b>Customer</b> dengan field <b>" . $error_msg->join(", ", " dan ") . "</b> terisi!", "error");
+                        Alert::html("Error", "Untuk pindah ke stage terkontrak, pastikan di <b>Customer</b> dengan field <b>" . $error_msg->join(", ", " dan ") . "</b> terisi!", "error");
                         return redirect()->back();
                     }
                 } else if(empty($customer)) {
