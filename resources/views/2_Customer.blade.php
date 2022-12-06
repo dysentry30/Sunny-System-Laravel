@@ -370,7 +370,7 @@
                             <div class="fv-row mb-7">
                                 <!--begin::Label-->
                                 <label class="fs-6 fw-bold form-label mt-3">
-                                    <span class="required">Email</span>
+                                    <span class="">Email</span>
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
@@ -395,7 +395,7 @@
                             <div class="fv-row mb-7">
                                 <!--begin::Label-->
                                 <label class="fs-6 fw-bold form-label mt-3">
-                                    <span class="required">Phone Number</span>
+                                    <span class="">Phone Number</span>
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
@@ -493,7 +493,7 @@
                         <div class="fv-row mb-7">
                             <div class="col">
                                 <!--begin::Label-->
-                                <label class="fs-6 fw-bold form-label mt-3 required">
+                                <label class="fs-6 fw-bold form-label mt-3 ">
                                     <span>Kode Pos</span>
                                 </label>
                                 <!--end::Label-->
@@ -504,7 +504,7 @@
 
                             <div class="col">
                                 <!--begin::Label-->
-                                <label class="fs-6 fw-bold form-label mt-3 required">
+                                <label class="fs-6 fw-bold form-label mt-3 ">
                                     <span class="">Industry Sector</span>
                                 </label>
                                 <!--end::Label-->

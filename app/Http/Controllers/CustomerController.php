@@ -406,16 +406,16 @@ class CustomerController extends Controller
         ];
         $rules = [
             "name-customer" => "required",
-            "email" => "required",
-            "phone-number" => "required",
+            // "email" => "required",
+            // "phone-number" => "required",
         ];
         $validation = Validator::make($data, $rules, $messages);
         $validation->validate();
         if ($validation->fails()) {
             // Alert::error('Error', "Pelanggan Gagal Dibuat, Periksa Kembali !");
             $request->old("name-customer");
-            $request->old("email");
-            $request->old("phone-number");
+            // $request->old("email");
+            // $request->old("phone-number");
             return redirect()->back();
         }
 
