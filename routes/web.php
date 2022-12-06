@@ -1080,7 +1080,16 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         try {
             // $industrySector = collect(json_decode(Http::get("https://fioridev.wika.co.id/ywikasd002/industry-sector?sap-client=200")));
             $industrySector = collect(json_decode(Http::withOptions(["verify"=>false])->get("https://fioridev.wika.co.id/ywikasd002/industry-sector?sap-client=200")));
-            dd($industrySector);
+            if($industrySector->isEmpty()) {
+                $data = [
+                    "status" => false,
+                    "data" => [
+                        "msg" => "Data tidak ditemukan!",
+                    ],
+                ];
+                return response()->json($data, 500);
+            }
+            // dd($industrySector);
             // $industrySector = collect([
             //     "devid" => "",
             //     "packageid" => "EB2618CE98301EDD96FCF101025538F9",
