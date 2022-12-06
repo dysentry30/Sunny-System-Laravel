@@ -1365,7 +1365,7 @@ class ProyekController extends Controller
                         // "timestamp" => "20221013100000",
                         "timestamp" => date("y") . date("m") . date("d") . "10000",
                         "data" => [
-                            "BPARTNER" => "T100000002",
+                            "BPARTNER" => "$customer->kode_nasabah",
 
                             "GROUPING" => "$sap->bp_grouping",
 
