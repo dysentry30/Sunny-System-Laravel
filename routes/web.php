@@ -326,7 +326,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     // Get nilai Laba Rugi  
     Route::post('/customer/get-nilai-laba-rugi', [CustomerController::class, 'getNilaiLabaRugiCustomer']);
-    
+
     // Get kode nasabah  
     Route::post('/customer/get-kode-nasabah', [CustomerController::class, 'getKodeNasabah']);
 
@@ -702,7 +702,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                     $history_forecast->nilai_forecast = $forecast->nilai_forecast ?? "0";
                     $history_forecast->month_forecast = $forecast->month_forecast;
                     // $history_forecast->rkap_forecast = str_replace(".", "", (int) $current_proyek->nilai_rkap ?? 0) ?? 0;
-                    if(!empty($forecast->rkap_forecast)) {
+                    if (!empty($forecast->rkap_forecast)) {
                         $history_forecast->rkap_forecast = $forecast->rkap_forecast ?? "0";
                     } else {
                         $history_forecast->rkap_forecast = "0";
@@ -1073,6 +1073,256 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         // $industrySector = json_decode(Http::get("https://fioridev.wika.co.id/ywikasd002/industry-sector?sap-client=200"));
         $industrySector = IndustrySector::all();
         return view("/MasterData/IndustrySectors", compact(["industrySector"]));
+    });
+
+    Route::get('/industry-sector/get', function (Request $request) {
+        // $provinsi = Provinsi::all();
+        try {
+            // $industrySector = collect(json_decode(Http::get("https://fioridev.wika.co.id/ywikasd002/industry-sector?sap-client=200")));
+            $industrySector = collect(json_decode(Http::get("https://fioridev.wika.co.id/ywikasd002/industry-sector?sap-client=200")));
+            // $industrySector = collect([
+            //     "devid" => "",
+            //     "packageid" => "EB2618CE98301EDD96FCF101025538F9",
+            //     "cocode" => "A000",
+            //     "prctr" => "",
+            //     "timestamp" => "20221104022229",
+            //     "data" => [
+            //         [
+            //             "braco" => "0001",
+            //             "vtext" => "Industry code 01"
+            //         ],
+            //         [
+            //             "braco" => "Z01",
+            //             "vtext" => "Telekomuni:Infrastru"
+            //         ],
+            //         [
+            //             "braco" => "Z02",
+            //             "vtext" => "Farmasi"
+            //         ],
+            //         [
+            //             "braco" => "Z03",
+            //             "vtext" => "Jalan Tol"
+            //         ],
+            //         [
+            //             "braco" => "Z04",
+            //             "vtext" => "Makanan & Minuman"
+            //         ],
+            //         [
+            //             "braco" => "Z05",
+            //             "vtext" => "Telekomuni:Jasa tele"
+            //         ],
+            //         [
+            //             "braco" => "Z06",
+            //             "vtext" => "Jasa Kesehatan"
+            //         ],
+            //         [
+            //             "braco" => "Z07",
+            //             "vtext" => "CPO"
+            //         ],
+            //         [
+            //             "braco" => "Z08",
+            //             "vtext" => "AngktnLaut:Kontainer"
+            //         ],
+            //         [
+            //             "braco" => "Z09",
+            //             "vtext" => "AngktnLaut:Penyebran"
+            //         ],
+            //         [
+            //             "braco" => "Z10",
+            //             "vtext" => "AngktnLaut:Tanker"
+            //         ],
+            //         [
+            //             "braco" => "Z11",
+            //             "vtext" => "Gula"
+            //         ],
+            //         [
+            //             "braco" => "Z12",
+            //             "vtext" => "Pertambangan Nikel"
+            //         ],
+            //         [
+            //             "braco" => "Z13",
+            //             "vtext" => "Industri Nikel"
+            //         ],
+            //         [
+            //             "braco" => "Z14",
+            //             "vtext" => "Ketenagalistrikan"
+            //         ],
+            //         [
+            //             "braco" => "Z15",
+            //             "vtext" => "Pakan Ternak"
+            //         ],
+            //         [
+            //             "braco" => "Z16",
+            //             "vtext" => "Perdagangan Besar"
+            //         ],
+            //         [
+            //             "braco" => "Z17",
+            //             "vtext" => "Perdagangan Ritel"
+            //         ],
+            //         [
+            //             "braco" => "Z18",
+            //             "vtext" => "Perkebunan Lainnya"
+            //         ],
+            //         [
+            //             "braco" => "Z19",
+            //             "vtext" => "Petrokimia Hulu"
+            //         ],
+            //         [
+            //             "braco" => "Z20",
+            //             "vtext" => "Pulp & Paper"
+            //         ],
+            //         [
+            //             "braco" => "Z21",
+            //             "vtext" => "Pupuk"
+            //         ],
+            //         [
+            //             "braco" => "Z22",
+            //             "vtext" => "Rokok"
+            //         ],
+            //         [
+            //             "braco" => "Z23",
+            //             "vtext" => "Konstruksi Infrastru"
+            //         ],
+            //         [
+            //             "braco" => "Z24",
+            //             "vtext" => "Multifinance"
+            //         ],
+            //         [
+            //             "braco" => "Z25",
+            //             "vtext" => "Otomotif"
+            //         ],
+            //         [
+            //             "braco" => "Z26",
+            //             "vtext" => "PropResidnsial:Apart"
+            //         ],
+            //         [
+            //             "braco" => "Z27",
+            //             "vtext" => "PropResidnsial:Perum"
+            //         ],
+            //         [
+            //             "braco" => "Z28",
+            //             "vtext" => "Retail Telekomunikas"
+            //         ],
+            //         [
+            //             "braco" => "Z29",
+            //             "vtext" => "Furniture"
+            //         ],
+            //         [
+            //             "braco" => "Z30",
+            //             "vtext" => "Angkutan Darat"
+            //         ],
+            //         [
+            //             "braco" => "Z31",
+            //             "vtext" => "Industri Elektro"
+            //         ],
+            //         [
+            //             "braco" => "Z32",
+            //             "vtext" => "Batu Bara"
+            //         ],
+            //         [
+            //             "braco" => "Z33",
+            //             "vtext" => "Hulu Gas"
+            //         ],
+            //         [
+            //             "braco" => "Z34",
+            //             "vtext" => "Hulu Minyak"
+            //         ],
+            //         [
+            //             "braco" => "Z35",
+            //             "vtext" => "Alat Berat"
+            //         ],
+            //         [
+            //             "braco" => "Z36",
+            //             "vtext" => "Perikanan"
+            //         ],
+            //         [
+            //             "braco" => "Z37",
+            //             "vtext" => "Karet."
+            //         ],
+            //         [
+            //             "braco" => "Z38",
+            //             "vtext" => "Semen"
+            //         ],
+            //         [
+            //             "braco" => "Z39",
+            //             "vtext" => "Angkutan Udara."
+            //         ],
+            //         [
+            //             "braco" => "Z40",
+            //             "vtext" => "Prop:Pusat Perbelanj"
+            //         ],
+            //         [
+            //             "braco" => "Z41",
+            //             "vtext" => "Prhotelan Bintang4&5"
+            //         ],
+            //         [
+            //             "braco" => "Z42",
+            //             "vtext" => "Prhotelan Bintang123"
+            //         ],
+            //         [
+            //             "braco" => "Z43",
+            //             "vtext" => "Prdagangn Besar Tele"
+            //         ],
+            //         [
+            //             "braco" => "Z44",
+            //             "vtext" => "AngktnLaut: Tug&barg"
+            //         ],
+            //         [
+            //             "braco" => "Z45",
+            //             "vtext" => "Angktn Laut: Penunja"
+            //         ],
+            //         [
+            //             "braco" => "Z46",
+            //             "vtext" => "Baja"
+            //         ],
+            //         [
+            //             "braco" => "Z47",
+            //             "vtext" => "Plastik."
+            //         ],
+            //         [
+            //             "braco" => "Z48",
+            //             "vtext" => "Tekstil&Produk Tekst"
+            //         ],
+            //         [
+            //             "braco" => "Z49",
+            //             "vtext" => "Prop:Perkantoran"
+            //         ],
+            //         [
+            //             "braco" => "Z50",
+            //             "vtext" => "Jasa Pengemb SDM"
+            //         ]
+            //     ]
+            // ]);
+            $industrySector = collect($industrySector["data"])->mapInto(\Illuminate\Support\Collection::class);
+            // dd($industrySector);
+            $industrySector->each(function($i) {
+                $is_industry_sector_exist = IndustrySector::find($i["braco"]);
+                if(empty($is_industry_sector_exist)) {
+                    $new_industry_sector = new IndustrySector();
+                    $new_industry_sector->id_industry_sector = $i["braco"];
+                    $new_industry_sector->description = $i["vtext"];
+                    $new_industry_sector->save();
+                }
+            });
+
+            $data = [
+                "status" => true,
+                "data" => [
+                    "msg" => "Get Industry Sector berhasil"
+                ],
+            ];
+            return response()->json($data);
+        } catch (Exception $e) {
+            $data = [
+                "status" => false,
+                "data" => [
+                    "msg" => $e->getMessage(),
+                ],
+            ];
+            return response()->json($data, 500);
+        }
+        // $industrySector = IndustrySector::all();
+        // return view("/MasterData/IndustrySectors", compact(["industrySector"]));
     });
     //End :: Master Data
 
@@ -1634,7 +1884,7 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
         unset($p->Forecasts);
         return $is_forecast_exist;
     });
-    
+
     // if (isset($request->unitkerjaid)) {
     //     // $proyeks = Proyek::where("unit_kerja", "=", $request->unitkerjaid)->where("tahun_perolehan", "=", $periode[0])->where("bulan_pelaksanaan", "=", $periode[1])->get(["nama_proyek", "kode_proyek", "unit_kerja", "jenis_proyek", "stage", "tanggal_mulai_terkontrak", "tanggal_akhir_terkontrak"]);
     // } else {
@@ -1750,7 +2000,7 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
                 $jenis_terkontrak = "JKT06";
                 break;
         };
-        
+
         $p->UsrJenisKontrak = [
             "inline" => [
                 "entry" => [
@@ -1763,7 +2013,7 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
             ]
         ];
 
-        if(!empty($p->SumberDana->kode_sumber) && $p->SumberDana->kode_sumber == "Loan") $p->SumberDana->kode_sumber = "LOAN";
+        if (!empty($p->SumberDana->kode_sumber) && $p->SumberDana->kode_sumber == "Loan") $p->SumberDana->kode_sumber = "LOAN";
 
         $p->UsrSumberDanaL = [
             "inline" => [
@@ -1789,14 +2039,14 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
             ]
         ];
         $jenis_proyek = 0;
-        switch($p->jenis_proyek) {
-            case "I" :
+        switch ($p->jenis_proyek) {
+            case "I":
                 $jenis_proyek = "Internal";
                 break;
-            case "N" :
+            case "N":
                 $jenis_proyek = "Non JO";
                 break;
-            case "J" :
+            case "J":
                 $jenis_proyek = "JO Portion Member";
                 break;
         }
@@ -1816,38 +2066,38 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
         $kode_sap = "";
         $kategori = "";
         $sbu = $p->Sbu ?? null;
-        if(!empty($sbu)) {
-            if(str_contains($sbu->kode_sbu, "A0") || str_contains($sbu->kode_sbu, "B0")) {
+        if (!empty($sbu)) {
+            if (str_contains($sbu->kode_sbu, "A0") || str_contains($sbu->kode_sbu, "B0")) {
                 $kategori = "Sipil";
-            } else if(str_contains($sbu->kode_sbu, "C0") || str_contains($sbu->kode_sbu, "D0")) {
+            } else if (str_contains($sbu->kode_sbu, "C0") || str_contains($sbu->kode_sbu, "D0")) {
                 $kategori = "EPC";
-            } else if(str_contains($sbu->kode_sbu, "E0")) {
+            } else if (str_contains($sbu->kode_sbu, "E0")) {
                 $kategori = "Gedung";
             }
-    
-            if($p->klasifikasi_terkontrak == "Mega Proyek" && $kategori == "Gedung") {
+
+            if ($p->klasifikasi_terkontrak == "Mega Proyek" && $kategori == "Gedung") {
                 $kode_sap = "Y1 - Proyek Mega K. Gedung";
-            } else if($p->klasifikasi_terkontrak == "Proyek Besar" && $kategori == "Gedung") {
+            } else if ($p->klasifikasi_terkontrak == "Proyek Besar" && $kategori == "Gedung") {
                 $kode_sap = "Y2 - Proyek Besar K. Gedung";
-            } else if($p->klasifikasi_terkontrak == "Proyek Menengah" && $kategori == "Gedung") {
+            } else if ($p->klasifikasi_terkontrak == "Proyek Menengah" && $kategori == "Gedung") {
                 $kode_sap = "Y3 - Proyek Menengah K. Gedung";
-            } else if($p->klasifikasi_terkontrak == "Proyek Kecil" && $kategori == "Gedung") {
+            } else if ($p->klasifikasi_terkontrak == "Proyek Kecil" && $kategori == "Gedung") {
                 $kode_sap = "Y4 - Proyek Kecil K. Gedung";
-            } else if($p->klasifikasi_terkontrak == "Mega Proyek" && $kategori == "Sipil") {
+            } else if ($p->klasifikasi_terkontrak == "Mega Proyek" && $kategori == "Sipil") {
                 $kode_sap = "Z1 - Proyek Mega K. Gedung";
-            } else if($p->klasifikasi_terkontrak == "Proyek Besar" && $kategori == "Sipil") {
+            } else if ($p->klasifikasi_terkontrak == "Proyek Besar" && $kategori == "Sipil") {
                 $kode_sap = "Z2 - Proyek Besar K. Gedung";
-            } else if($p->klasifikasi_terkontrak == "Proyek Menengah" && $kategori == "Sipil") {
+            } else if ($p->klasifikasi_terkontrak == "Proyek Menengah" && $kategori == "Sipil") {
                 $kode_sap = "Z3 - Proyek Menengah K. Gedung";
-            } else if($p->klasifikasi_terkontrak == "Proyek Kecil" && $kategori == "Sipil") {
+            } else if ($p->klasifikasi_terkontrak == "Proyek Kecil" && $kategori == "Sipil") {
                 $kode_sap = "Z4 - Proyek Kecil K. Gedung";
-            } else if($p->klasifikasi_terkontrak == "Mega Proyek" && $kategori == "EPC") {
+            } else if ($p->klasifikasi_terkontrak == "Mega Proyek" && $kategori == "EPC") {
                 $kode_sap = "Z5 - Proyek Mega K. Gedung";
-            } else if($p->klasifikasi_terkontrak == "Proyek Besar" && $kategori == "EPC") {
+            } else if ($p->klasifikasi_terkontrak == "Proyek Besar" && $kategori == "EPC") {
                 $kode_sap = "Z6 - Proyek Besar K. Gedung";
-            } else if($p->klasifikasi_terkontrak == "Proyek Menengah" && $kategori == "EPC") {
+            } else if ($p->klasifikasi_terkontrak == "Proyek Menengah" && $kategori == "EPC") {
                 $kode_sap = "Z7 - Proyek Menengah K. Gedung";
-            } else if($p->klasifikasi_terkontrak == "Proyek Kecil" && $kategori == "EPC") {
+            } else if ($p->klasifikasi_terkontrak == "Proyek Kecil" && $kategori == "EPC") {
                 $kode_sap = "Z8 - Proyek Kecil K. Gedung";
             }
         }
@@ -1950,7 +2200,7 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
     $data = $proyeks->toArray();
     $taken_date = Carbon\Carbon::now()->translatedFormat("d F Y H:i:s");
     // creating object of SimpleXMLElement
-    $xml_data = new SimpleXMLElement('<?xml version="1.0" encoding="utf-8"?> <feed xml:base="https://crm.wika.co.id/detail-proyek-xml" xmlns="http://www.w3.org/2005/Atom" xmlns:d="http://schemas.microsoft.com/ado/2007/08/dataservices" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:georss="http://www.georss.org/georss" xmlns:gml="http://www.opengis.net/gml"> <title type="text">OpportunityCollection</title> <updated>'. $taken_date .'</updated> </feed>');
+    $xml_data = new SimpleXMLElement('<?xml version="1.0" encoding="utf-8"?> <feed xml:base="https://crm.wika.co.id/detail-proyek-xml" xmlns="http://www.w3.org/2005/Atom" xmlns:d="http://schemas.microsoft.com/ado/2007/08/dataservices" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:georss="http://www.georss.org/georss" xmlns:gml="http://www.opengis.net/gml"> <title type="text">OpportunityCollection</title> <updated>' . $taken_date . '</updated> </feed>');
     // <id>https://crm.wika.co.id/api/detail-proyek-xml</id> 
     // function call to convert array to xml
     $data = arrayToXML($data, $xml_data);
