@@ -356,7 +356,7 @@
                                 </div>
                                 <ul class="dropdown-menu pt-6" aria-labelledby="dropdownMenuButton1">
                                     <a href="/user/view/{{Auth::user()->id}}" class="btn btn-sm dropdown-item rounded-0 mb-3">Profile</a>
-                                    @if (!empty(Auth::user()))
+                                    @if (empty(Auth::user()))
                                         <a href="/" class="btn btn-sm dropdown-item rounded-0 mb-3">Logout</a>
                                     @else
                                         <a href="/logout" class="btn btn-sm dropdown-item rounded-0 mb-3">Logout</a>
