@@ -1304,7 +1304,30 @@ class ProyekController extends Controller
 
                 $request->stage = 7;
             } elseif (!empty($data["stage-terkontrak"]) && $data["stage-terkontrak"] == "Terkontrak") {
-                $customer = $proyekStage->ProyekBerjalan->Customer;
+                $customer = $proyekStage->ProyekBerjalan->Customer ?? null;
+                if(!empty($customer)) {
+                    $error_msg = collect();
+                    if(empty($customer->email)) {
+                        $error_msg->push("Email");
+                    }
+                    if(empty($customer->kode_pos)) {
+                        $error_msg->push("Kode Pos");
+                    }
+                    if(empty($customer->phone_number)) {
+                        $error_msg->push("Phone Number");
+                    }
+                    if(empty($customer->industry_sector)) {
+                        $error_msg->push("Industry Sector");
+                    }
+                    
+                    if($error_msg->isNotEmpty()) {
+                        Alert::html("Error", "Untuk pindah ke stage terkontrak, pastikan pada <b>Customer</b> dengan field <b>" . $error_msg->join(", ", " dan ") . "</b> terisi!", "error");
+                        return redirect()->back();
+                    }
+                } else if(empty($customer)) {
+                    Alert::html("Error", "Untuk pindah ke stage terkontrak, pastikan field <b>Customer</b> sudah terpilih!", "error");
+                    return redirect()->back();
+                }
                 $sap = $customer->sap;
                 $pic = $customer->pic;
                 // dump($sap, $pic);
