@@ -76,7 +76,7 @@ Route::get('/', [UserController::class, 'welcome'])->middleware("userNotAuth");
 
 Route::post('/login', [UserController::class, 'authen']);
 
-Route::get('/logout', [UserController::class, 'logout']);
+Route::get('/logout', [UserController::class, 'logout'])->middleware("userAuth");
 
 // Route::post('/createUser', [UserController::class, 'testLogin']);
 // end :: Login

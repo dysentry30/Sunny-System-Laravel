@@ -617,7 +617,7 @@
                                             class="form-select rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0"
                                             data-control="select2" data-hide-search="true" data-placeholder="Kategori">
                                             <option {{ $sumberdanas->kategori == "BUMN" ? "selected" : "" }} value="BUMN">BUMN</option>
-                                            <option {{ $sumberdanas->kategori == "BUMN" ? "selected" : "" }} value="BUMN">BUMD</option>  
+                                            <option {{ $sumberdanas->kategori == "BUMD" ? "selected" : "" }} value="BUMD">BUMD</option>  
                                             <option {{ $sumberdanas->kategori == "Investasi" ? "selected" : "" }} value="Investasi">Investasi</option>
                                             <option {{ $sumberdanas->kategori == "Loan" ? "selected" : "" }} value="Loan">Loan</option>
                                             <option {{ $sumberdanas->kategori == "Pemerintah" ? "selected" : "" }} value="Pemerintah">Pemerintah</option>

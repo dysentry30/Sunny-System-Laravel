@@ -1788,6 +1788,17 @@
                     textNumberElt.innerText = `${lengthChar}/${maxChar}`;
                 });
             }else if(item.value) {
+                item.addEventListener("input", e => {
+                    let lengthChar = item.value.length;
+                    if(lengthChar > maxChar) {
+                        // console.log(item.value);
+                        const newValue = item.value.split("");
+                        newValue.pop();
+                        item.value = newValue.join("");
+                        lengthChar = item.value.length;
+                    }
+                    textNumberElt.innerText = `${lengthChar}/${maxChar}`;
+                });
                 let lengthChar = item.value.length;
                 if(lengthChar > maxChar) {
                     // console.log(item.value);
