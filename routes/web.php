@@ -1813,6 +1813,45 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
             ]
         ];
 
+        $kode_sap = "";
+        $kategori = "";
+        $sbu = $p->Sbu ?? null;
+        if(!empty($sbu)) {
+            if(str_contains($sbu->kode_sbu, "A0") || str_contains($sbu->kode_sbu, "B0")) {
+                $kategori = "Sipil";
+            } else if(str_contains($sbu->kode_sbu, "C0") || str_contains($sbu->kode_sbu, "D0")) {
+                $kategori = "EPC";
+            } else if(str_contains($sbu->kode_sbu, "E0")) {
+                $kategori = "Gedung";
+            }
+    
+            if($p->klasifikasi_terkontrak == "Mega Proyek" && $kategori == "Gedung") {
+                $kode_sap = "Y1 - Proyek Mega K. Gedung";
+            } else if($p->klasifikasi_terkontrak == "Proyek Besar" && $kategori == "Gedung") {
+                $kode_sap = "Y2 - Proyek Besar K. Gedung";
+            } else if($p->klasifikasi_terkontrak == "Proyek Menengah" && $kategori == "Gedung") {
+                $kode_sap = "Y3 - Proyek Menengah K. Gedung";
+            } else if($p->klasifikasi_terkontrak == "Proyek Kecil" && $kategori == "Gedung") {
+                $kode_sap = "Y4 - Proyek Kecil K. Gedung";
+            } else if($p->klasifikasi_terkontrak == "Mega Proyek" && $kategori == "Sipil") {
+                $kode_sap = "Z1 - Proyek Mega K. Gedung";
+            } else if($p->klasifikasi_terkontrak == "Proyek Besar" && $kategori == "Sipil") {
+                $kode_sap = "Z2 - Proyek Besar K. Gedung";
+            } else if($p->klasifikasi_terkontrak == "Proyek Menengah" && $kategori == "Sipil") {
+                $kode_sap = "Z3 - Proyek Menengah K. Gedung";
+            } else if($p->klasifikasi_terkontrak == "Proyek Kecil" && $kategori == "Sipil") {
+                $kode_sap = "Z4 - Proyek Kecil K. Gedung";
+            } else if($p->klasifikasi_terkontrak == "Mega Proyek" && $kategori == "EPC") {
+                $kode_sap = "Z5 - Proyek Mega K. Gedung";
+            } else if($p->klasifikasi_terkontrak == "Proyek Besar" && $kategori == "EPC") {
+                $kode_sap = "Z6 - Proyek Besar K. Gedung";
+            } else if($p->klasifikasi_terkontrak == "Proyek Menengah" && $kategori == "EPC") {
+                $kode_sap = "Z7 - Proyek Menengah K. Gedung";
+            } else if($p->klasifikasi_terkontrak == "Proyek Kecil" && $kategori == "EPC") {
+                $kode_sap = "Z8 - Proyek Kecil K. Gedung";
+            }
+        }
+
         // $sign = ":";
         $p->content = [
             "m:properties" => [
@@ -1835,6 +1874,7 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
                 "d:UsrKodeProyek" => DB::table("proyek_code_crm")->where("kode_proyek", '=', $p->kode_proyek)->first()->kode_proyek_crm ?? $p->kode_proyek,
                 "d:UsrLongitude" => $p->longitude,
                 "d:UsrLatitude" => $p->latitude,
+                "d:UsrKatsap" => $kode_sap,
             ],
         ];
         // $p->ap_id = "";
