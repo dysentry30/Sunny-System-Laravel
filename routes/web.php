@@ -1725,7 +1725,7 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
         ];
 
         switch ($p->jenis_terkontrak) {
-            case "Cost-Plus":
+            case "Cost-Plus/Provisional Sum":
                 $jenis_terkontrak = "JKT01";
                 break;
             case "Turnkey":

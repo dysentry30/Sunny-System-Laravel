@@ -356,10 +356,13 @@
                                         data-hide-search="true" data-placeholder="Kategori">
                                         <option></option>
                                         <option value="BUMN">BUMN</option>
+                                        <option value="BUMN">BUMD</option>  
                                         <option value="Investasi">Investasi</option>
                                         <option value="Loan">Loan</option>
                                         <option value="Pemerintah">Pemerintah</option>
                                         <option value="Swasta">Swasta</option>
+                                        <option value="Penyertaan Modal Negara">Penyertaan Modal Negara</option>
+                                        <option value="Lain-lain">Lain-lain</option>
                                     </select>
                                     <!--end::Input-->
                                 </div>

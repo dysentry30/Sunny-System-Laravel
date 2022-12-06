@@ -4263,9 +4263,9 @@
                                                                         data-control="select2" data-hide-search="true"
                                                                         data-placeholder="Jenis Kontrak">
                                                                         <option></option>
-                                                                        <option value="Cost-Plus"
-                                                                            {{ $proyek->jenis_terkontrak == 'Cost-Plus' ? 'selected' : '' }}>
-                                                                            Cost-Plus</option>
+                                                                        <option value="Cost-Plus/Provisional Sum"
+                                                                            {{ $proyek->jenis_terkontrak == 'Cost-Plus/Provisional Sum' ? 'selected' : '' }}>
+                                                                            Cost-Plus/Provisional Sum</option>
                                                                         {{-- <option value="Design & Build"
                                                                             {{ $proyek->jenis_terkontrak == 'Design & Build' ? 'selected' : '' }}>
                                                                             Design & Build</option> --}}
