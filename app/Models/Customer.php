@@ -48,4 +48,9 @@ class Customer extends Model
         return $this->hasMany(CustomerPic::class, "id_customer");
     }
 
+    public function sap()
+    {
+        return $this->hasOne(CustomerSAP::class, "id_customer", "id_customer");
+    }
+
 }

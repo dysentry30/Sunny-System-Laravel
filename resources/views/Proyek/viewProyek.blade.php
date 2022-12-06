@@ -1325,6 +1325,9 @@
                                                                     <label class="fs-6 fw-bold form-label mt-3">
                                                                         <span>Sumber Dana</span>
                                                                     </label>
+                                                                    @php
+                                                                        $sumberdanas = $sumberdanas->sortBy("created_at");
+                                                                    @endphp
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
                                                                     <select id="sumber-dana" name="sumber-dana"
@@ -3100,7 +3103,7 @@
                                                         </h6> --}}
                                                         <br>
                                                         <h3 class="fw-bolder m-0 required" id="HeadDetail"
-                                                            style="font-size:14px;">Risk Peserta Tender
+                                                            style="font-size:14px;">Risk Tender
                                                         </h3>
                                                         <small><a class="text-active-primary text-gray" href="https://crm.wika.co.id/faqs/104625_RiskTender_Input-Kosong.rev.xlsx">Download Template Risk Tender</a></small>
                                                         <br><br>
