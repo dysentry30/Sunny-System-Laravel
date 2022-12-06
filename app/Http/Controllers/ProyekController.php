@@ -1305,6 +1305,10 @@ class ProyekController extends Controller
                 $request->stage = 7;
             } elseif (!empty($data["stage-terkontrak"]) && $data["stage-terkontrak"] == "Terkontrak") {
                 $customer = $proyekStage->ProyekBerjalan->Customer;
+                $sap = $customer->sap;
+                $pic = $customer->pic;
+                // dump($sap, $pic);
+                // dd();
                 if(empty($customer)) {
                     Alert::error("Error", "Pastikan Customer terisi!");
                     return redirect()->back();
@@ -1321,12 +1325,12 @@ class ProyekController extends Controller
                     "telepon" => "$customer->phone_number",
                     "fax" => ".",
                     "npwp" => "$customer->npwp_company",
-                    "nama_kontak" => "$customer->name_pic",
-                    "jenisperusahaa" => "$customer->jenis_instansi",
-                    "jabatan" => "",
-                    "email1" => "$customer->email_pic",
-                    "telpon1" => "$customer->phone_number_pic",
-                    "handphone" => "$customer->phone_number_pic",
+                    "nama_kontak" => "$pic->nama_pic",
+                    "jenisperusahaan" => "$customer->jenis_instansi",
+                    "jabatan" => "$pic->jabatan_pic",
+                    "email1" => "$pic->email_pic",
+                    "telpon1" => "$pic->phone_number_pic",
+                    "handphone" => "$pic->phone_number_pic",
                     "tipe_perusahaan" => "-",
                     "tipe_lain_perusahaan" => "-",
                     "cotid" => "11",
@@ -1340,7 +1344,7 @@ class ProyekController extends Controller
                         "data" => [
                             "BPARTNER" => "T100000002",
 
-                            "GROUPING" => "ZN01",
+                            "GROUPING" => "$sap->bp_grouping",
 
                             "LVORM" => "",
 
@@ -1348,13 +1352,13 @@ class ProyekController extends Controller
 
                             "NAME" => "$customer->name",
 
-                            "TITLELETTER" => "WASKITA",
+                            "TITLELETTER" => "$sap->search_term_1",
 
-                            "SEARCHTERM1" => "WASKITA",
+                            "SEARCHTERM1" => "$sap->search_term_1",
 
-                            "SEARCHTERM2" => "WASKITA",
+                            "SEARCHTERM2" => "$sap->search_term_2",
 
-                            "STREET" => "$customer->address",
+                            "STREET" => "$sap->street",
 
                             "HOUSE_NO" => "NO123",
 
@@ -1390,9 +1394,9 @@ class ProyekController extends Controller
 
                             "IDENTIFICATION" => [
 
-                                "TAXTYPE" => "ID1",
+                                "TAXTYPE" => "$sap->tax_number_category",
 
-                                "TAXNUMBER" => "$customer->npwp_company"
+                                "TAXNUMBER" => "$sap->tax_number"
                             ],
 
                             "BANK" => [
