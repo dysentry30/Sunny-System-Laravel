@@ -1079,7 +1079,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         // $provinsi = Provinsi::all();
         try {
             // $industrySector = collect(json_decode(Http::get("https://fioridev.wika.co.id/ywikasd002/industry-sector?sap-client=200")));
-            $industrySector = collect(json_decode(Http::withOptions(["verify"=>false])->get("https://fioridev.wika.co.id/ywikasd002/industry-sector?sap-client=200")));
+            $industrySector = collect(json_decode(Http::withOptions(["verify"=>false])->get("https://fioridev.wika.co.id/ywikasd002/industry-sector?sap-client=310")));
             if($industrySector->isEmpty()) {
                 $data = [
                     "status" => false,
