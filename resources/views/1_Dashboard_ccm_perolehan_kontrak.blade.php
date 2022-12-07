@@ -294,7 +294,7 @@
 
                         <br>
 
-                        <!--begin::Title-->
+                        {{-- <!--begin::Title-->
                         <div class="row mx-3">
                             <!--begin::Card column-->
                             <div class="col">
@@ -313,7 +313,7 @@
                                                             <!--begin::Title-->
                                                             <div class="card-title w-100">
                                                                 <!--begin::Subtitle-->
-                                                                <span class="text-white pt-1 fw-semibold fs-3 mx-auto">Tender Classification</span>
+                                                                <span class="text-white pt-1 fw-semibold fs-3 mx-auto">Classification</span>
                                                                 <!--end::Subtitle-->
                                                             </div>
                                                             <!--end::Title-->
@@ -366,6 +366,25 @@
                             </div>
                             <!--end::Card column-->
                         </div>
+                        <!--end::Title--> --}}
+
+                        <!--begin::Title-->
+                        <div class="row mb-4">
+                            <div class="col-2 ms-10 me-0">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 5px;" class="card-body bg-secondary">
+                                    <h2 class="m-0 ms-8 text-center">Classification</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col me-6">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 5px" class="card-body bg-secondary">
+                                    <h2 class="m-0 text-center">Tender Status</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                        </div>
                         <!--end::Title-->
 
                         <!--begin::Card Diagram Column dan Donut-->
@@ -375,7 +394,7 @@
                                 <div class="row">
                                     <div class="col-2">
                                         <!--begin::Card Status-->
-                                        <div class="col mx-3">
+                                        <div class="col ms-3 me-0">
                                             <!--begin::Card column-->
                                             <div class="row">
                                                 <!--begin::Card body-->
@@ -531,156 +550,161 @@
                                         <!--end::Card Status-->
                                     </div>
                                     <div class="col-2">
-                                        <div class="row">
-                                            <!--begin::Card body-->
-                                            <div class="card-body pt-0">
-                                                <!--begin::Card widget 20-->
-                                                <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #017EB8;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
-                                                    <!--begin::Header-->
-                                                    <div class="card-header pt-5">
-                                                        <!--begin::Title-->
-                                                        <div class="card-title d-flex flex-column">
-                                                            <!--begin::Amount-->
-                                                            <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2" id="data-items">78</span>
-                                                            <!--end::Amount-->
-                                                            <!--begin::Subtitle-->
-                                                            <span class="text-white opacity-75 pt-1 fw-semibold fs-3">On Going</span>
-                                                            <!--end::Subtitle-->
+                                        <!--begin::Card Status-->
+                                        <div class="col ms-6 ">
+                                            <!--begin::Card column-->
+                                            <div class="row ">
+                                                <!--begin::Card body-->
+                                                <div class="card-body pt-0">
+                                                    <!--begin::Card widget 20-->
+                                                    <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #017EB8;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                                        <!--begin::Header-->
+                                                        <div class="card-header pt-5">
+                                                            <!--begin::Title-->
+                                                            <div class="card-title d-flex flex-column">
+                                                                <!--begin::Amount-->
+                                                                <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2" id="data-items">78</span>
+                                                                <!--end::Amount-->
+                                                                <!--begin::Subtitle-->
+                                                                <span class="text-white opacity-75 pt-1 fw-semibold fs-3">On Going</span>
+                                                                <!--end::Subtitle-->
+                                                            </div>
+                                                            <!--end::Title-->
                                                         </div>
-                                                        <!--end::Title-->
-                                                    </div>
-                                                    <!--end::Header-->
-                                                    <!--begin::Card body-->
-                                                    <div class="card-body d-flex align-items-end pt-0">
-                                                        
-                                                    </div>
-                                                    <!--end::Card body-->
-                                                </div>
-                                                <!--end::Card widget 20-->
-                                            </div>
-                                            <!--end::Card body-->
-                                        </div>
-                                        <!--end-begin::Card column-->
-                                        <div class="row">
-                                            <!--begin::Card body-->
-                                            <div class="card-body pt-0">
-                                                <!--begin::Card widget 20-->
-                                                <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #28B3AC;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
-                                                    <!--begin::Header-->
-                                                    <div class="card-header pt-5">
-                                                        <!--begin Items::Title-->
-                                                        <div class="card-title d-flex flex-column">
-                                                            <!--begin::Amount-->
-                                                            <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2" id="data-items">12</span>
-                                                            <!--end::Amount-->
-                                                            <!--begin::Subtitle-->
-                                                            <span class="text-white opacity-75 pt-1 fw-semibold fs-3">Cancel</span>
-                                                            <!--end::Subtitle-->
+                                                        <!--end::Header-->
+                                                        <!--begin::Card body-->
+                                                        <div class="card-body d-flex align-items-end pt-0">
+                                                            
                                                         </div>
-                                                        <!--end::Title-->
+                                                        <!--end::Card body-->
                                                     </div>
-                                                    <!--end::Header-->
-                                                    <!--begin::Card body-->
-                                                    <div class="card-body d-flex align-items-end pt-0">
-                                                        
-                                                    </div>
-                                                    <!--end::Card body-->
+                                                    <!--end::Card widget 20-->
                                                 </div>
-                                                <!--end::Card widget 20-->
+                                                <!--end::Card body-->
                                             </div>
-                                            <!--end::Card body-->
-                                        </div>
-                                        <!--end-begin::Card column-->
-                                        <div class="row">
-                                            <!--begin::Card body-->
-                                            <div class="card-body pt-0">
-                                                <!--begin::Card widget 20-->
-                                                <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #F7AD1A;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
-                                                    <!--begin::Header-->
-                                                    <div class="card-header pt-5">
-                                                        <!--begin::Title-->
-                                                        <div class="card-title d-flex flex-column">
-                                                            <!--begin::Amount-->
-                                                            <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2" id="data-items">55</span>
-                                                            <!--end::Amount-->
-                                                            <!--begin::Subtitle-->
-                                                            <span class="text-white opacity-75 pt-1 fw-semibold fs-3">Win</span>
-                                                            <!--end::Subtitle-->
+                                            <!--end-begin::Card column-->
+                                            <div class="row">
+                                                <!--begin::Card body-->
+                                                <div class="card-body pt-0">
+                                                    <!--begin::Card widget 20-->
+                                                    <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #28B3AC;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                                        <!--begin::Header-->
+                                                        <div class="card-header pt-5">
+                                                            <!--begin Items::Title-->
+                                                            <div class="card-title d-flex flex-column">
+                                                                <!--begin::Amount-->
+                                                                <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2" id="data-items">12</span>
+                                                                <!--end::Amount-->
+                                                                <!--begin::Subtitle-->
+                                                                <span class="text-white opacity-75 pt-1 fw-semibold fs-3">Cancel</span>
+                                                                <!--end::Subtitle-->
+                                                            </div>
+                                                            <!--end::Title-->
                                                         </div>
-                                                        <!--end::Title-->
-                                                    </div>
-                                                    <!--end::Header-->
-                                                    <!--begin::Card body-->
-                                                    <div class="card-body d-flex align-items-end pt-0">
-                                                        
-                                                    </div>
-                                                    <!--end::Card body-->
-                                                </div>
-                                                <!--end::Card widget 20-->
-                                            </div>
-                                            <!--end::Card body-->
-                                        </div>
-                                        <!--end::Card column-->
-                                        <div class="row">
-                                            <!--begin::Card body-->
-                                            <div class="card-body pt-0">
-                                                <!--begin::Card widget 20-->
-                                                <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #c34424;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
-                                                    <!--begin::Header-->
-                                                    <div class="card-header pt-5">
-                                                        <!--begin::Title-->
-                                                        <div class="card-title d-flex flex-column">
-                                                            <!--begin::Amount-->
-                                                            <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2" id="data-items">21</span>
-                                                            <!--end::Amount-->
-                                                            <!--begin::Subtitle-->
-                                                            <span class="text-white opacity-75 pt-1 fw-semibold fs-3">Lose</span>
-                                                            <!--end::Subtitle-->
+                                                        <!--end::Header-->
+                                                        <!--begin::Card body-->
+                                                        <div class="card-body d-flex align-items-end pt-0">
+                                                            
                                                         </div>
-                                                        <!--end::Title-->
+                                                        <!--end::Card body-->
                                                     </div>
-                                                    <!--end::Header-->
-                                                    <!--begin::Card body-->
-                                                    <div class="card-body d-flex align-items-end pt-0">
-                                                        
-                                                    </div>
-                                                    <!--end::Card body-->
+                                                    <!--end::Card widget 20-->
                                                 </div>
-                                                <!--end::Card widget 20-->
+                                                <!--end::Card body-->
                                             </div>
-                                            <!--end::Card body-->
-                                        </div>
-                                        <!--end-begin::Card column-->
-                                        <div class="row">
-                                            <!--begin::Card body-->
-                                            <div class="card-body pt-0">
-                                                <!--begin::Card widget 20-->
-                                                <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #ae1b22;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
-                                                    <!--begin::Header-->
-                                                    <div class="card-header pt-5">
-                                                        <!--begin::Title-->
-                                                        <div class="card-title d-flex flex-column">
-                                                            <!--begin::Amount-->
-                                                            <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2" id="data-persen">{{$success_rate}}%</span>
-                                                            <!--end::Amount-->
-                                                            <!--begin::Subtitle-->
-                                                            <span class="text-white opacity-75 pt-1 fw-semibold fs-3">Success Rate</span>
-                                                            <!--end::Subtitle-->
+                                            <!--end-begin::Card column-->
+                                            <div class="row">
+                                                <!--begin::Card body-->
+                                                <div class="card-body pt-0">
+                                                    <!--begin::Card widget 20-->
+                                                    <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #F7AD1A;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                                        <!--begin::Header-->
+                                                        <div class="card-header pt-5">
+                                                            <!--begin::Title-->
+                                                            <div class="card-title d-flex flex-column">
+                                                                <!--begin::Amount-->
+                                                                <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2" id="data-items">55</span>
+                                                                <!--end::Amount-->
+                                                                <!--begin::Subtitle-->
+                                                                <span class="text-white opacity-75 pt-1 fw-semibold fs-3">Win</span>
+                                                                <!--end::Subtitle-->
+                                                            </div>
+                                                            <!--end::Title-->
                                                         </div>
-                                                        <!--end::Title-->
+                                                        <!--end::Header-->
+                                                        <!--begin::Card body-->
+                                                        <div class="card-body d-flex align-items-end pt-0">
+                                                            
+                                                        </div>
+                                                        <!--end::Card body-->
                                                     </div>
-                                                    <!--end::Header-->
-                                                    <!--begin::Card body-->
-                                                    <div class="card-body d-flex align-items-end pt-0">
-                                                        
-                                                    </div>
-                                                    <!--end::Card body-->
+                                                    <!--end::Card widget 20-->
                                                 </div>
-                                                <!--end::Card widget 20-->
+                                                <!--end::Card body-->
                                             </div>
-                                            <!--end::Card body-->
+                                            <!--end::Card column-->
+                                            <div class="row">
+                                                <!--begin::Card body-->
+                                                <div class="card-body pt-0">
+                                                    <!--begin::Card widget 20-->
+                                                    <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #c34424;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                                        <!--begin::Header-->
+                                                        <div class="card-header pt-5">
+                                                            <!--begin::Title-->
+                                                            <div class="card-title d-flex flex-column">
+                                                                <!--begin::Amount-->
+                                                                <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2" id="data-items">21</span>
+                                                                <!--end::Amount-->
+                                                                <!--begin::Subtitle-->
+                                                                <span class="text-white opacity-75 pt-1 fw-semibold fs-3">Lose</span>
+                                                                <!--end::Subtitle-->
+                                                            </div>
+                                                            <!--end::Title-->
+                                                        </div>
+                                                        <!--end::Header-->
+                                                        <!--begin::Card body-->
+                                                        <div class="card-body d-flex align-items-end pt-0">
+                                                            
+                                                        </div>
+                                                        <!--end::Card body-->
+                                                    </div>
+                                                    <!--end::Card widget 20-->
+                                                </div>
+                                                <!--end::Card body-->
+                                            </div>
+                                            <!--end-begin::Card column-->
+                                            <div class="row">
+                                                <!--begin::Card body-->
+                                                <div class="card-body pt-0">
+                                                    <!--begin::Card widget 20-->
+                                                    <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #ae1b22;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                                        <!--begin::Header-->
+                                                        <div class="card-header pt-5">
+                                                            <!--begin::Title-->
+                                                            <div class="card-title d-flex flex-column">
+                                                                <!--begin::Amount-->
+                                                                <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2" id="data-persen">{{$success_rate}}%</span>
+                                                                <!--end::Amount-->
+                                                                <!--begin::Subtitle-->
+                                                                <span class="text-white opacity-75 pt-1 fw-semibold fs-3">Success Rate</span>
+                                                                <!--end::Subtitle-->
+                                                            </div>
+                                                            <!--end::Title-->
+                                                        </div>
+                                                        <!--end::Header-->
+                                                        <!--begin::Card body-->
+                                                        <div class="card-body d-flex align-items-end pt-0">
+                                                            
+                                                        </div>
+                                                        <!--end::Card body-->
+                                                    </div>
+                                                    <!--end::Card widget 20-->
+                                                </div>
+                                                <!--end::Card body-->
+                                            </div>
+                                            <!--end::Card column-->
                                         </div>
-                                        <!--end::Card column-->
+                                        <!--end::Card Status-->
                                     </div>
                                     <div class="col-8">
                                         <!--begin::Card column-->
