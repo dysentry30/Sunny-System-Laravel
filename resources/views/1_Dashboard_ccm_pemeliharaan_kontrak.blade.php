@@ -133,113 +133,6 @@
                             <!--begin::Actions-->
                             <div class="d-flex align-items-center py-1">
                                 <!--begin::Wrapper-->
-                                {{-- <div class="me-4">
-                                    <!--begin::Menu-->
-                                    <a href="#"
-                                        class="btn btn-sm btn-flex btn-light btn-active-primary fw-bolder"
-                                        data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
-                                        <!--begin::Svg Icon | path: icons/duotune/general/gen031.svg-->
-                                        <span class="svg-icon svg-icon-5 svg-icon-gray-500 me-1">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                viewBox="0 0 24 24" fill="none">
-                                                <path
-                                                    d="M19.0759 3H4.72777C3.95892 3 3.47768 3.83148 3.86067 4.49814L8.56967 12.6949C9.17923 13.7559 9.5 14.9582 9.5 16.1819V19.5072C9.5 20.2189 10.2223 20.7028 10.8805 20.432L13.8805 19.1977C14.2553 19.0435 14.5 18.6783 14.5 18.273V13.8372C14.5 12.8089 14.8171 11.8056 15.408 10.964L19.8943 4.57465C20.3596 3.912 19.8856 3 19.0759 3Z"
-                                                    fill="black" />
-                                            </svg>
-                                        </span>
-                                        <!--end::Svg Icon-->Filter
-                                    </a>
-                                    <!--begin::Menu 1-->
-                                    <div class="menu menu-sub menu-sub-dropdown w-250px w-md-300px"
-                                        data-kt-menu="true" id="kt_menu_6155ac804a1c2">
-                                        <!--begin::Header-->
-                                        <div class="px-7 py-5">
-                                            <div class="fs-5 text-dark fw-bolder">Filter Options</div>
-                                        </div>
-                                        <!--end::Header-->
-                                        <!--begin::Menu separator-->
-                                        <div class="separator border-gray-200"></div>
-                                        <!--end::Menu separator-->
-                                        <!--begin::Form-->
-                                        <div class="px-7 py-5">
-                                            <!--begin::Input group-->
-                                            <div class="mb-10">
-                                                <!--begin::Label-->
-                                                <label class="form-label fw-bold">Status:</label>
-                                                <!--end::Label-->
-                                                <!--begin::Input-->
-                                                <div>
-                                                    <select class="form-select form-select-solid"
-                                                        data-kt-select2="true" data-placeholder="Select option"
-                                                        data-dropdown-parent="#kt_menu_6155ac804a1c2"
-                                                        data-allow-clear="true">
-                                                        <option></option>
-                                                        <option value="1">Approved</option>
-                                                        <option value="2">Pending</option>
-                                                        <option value="2">In Process</option>
-                                                        <option value="2">Rejected</option>
-                                                    </select>
-                                                </div>
-                                                <!--end::Input-->
-                                            </div>
-                                            <!--end::Input group-->
-                                            <!--begin::Input group-->
-                                            <div class="mb-10">
-                                                <!--begin::Label-->
-                                                <label class="form-label fw-bold">Member Type:</label>
-                                                <!--end::Label-->
-                                                <!--begin::Options-->
-                                                <div class="d-flex">
-                                                    <!--begin::Options-->
-                                                    <label
-                                                        class="form-check form-check-sm form-check-custom form-check-solid me-5">
-                                                        <input class="form-check-input" type="checkbox"
-                                                            value="1" />
-                                                        <span class="form-check-label">Author</span>
-                                                    </label>
-                                                    <!--end::Options-->
-                                                    <!--begin::Options-->
-                                                    <label
-                                                        class="form-check form-check-sm form-check-custom form-check-solid">
-                                                        <input class="form-check-input" type="checkbox"
-                                                            value="2" checked="checked" />
-                                                        <span class="form-check-label">Customer</span>
-                                                    </label>
-                                                    <!--end::Options-->
-                                                </div>
-                                                <!--end::Options-->
-                                            </div>
-                                            <!--end::Input group-->
-                                            <!--begin::Input group-->
-                                            <div class="mb-10">
-                                                <!--begin::Label-->
-                                                <label class="form-label fw-bold">Notifications:</label>
-                                                <!--end::Label-->
-                                                <!--begin::Switch-->
-                                                <div
-                                                    class="form-check form-switch form-switch-sm form-check-custom form-check-solid">
-                                                    <input class="form-check-input" type="checkbox" value=""
-                                                        name="notifications" checked="checked" />
-                                                    <label class="form-check-label">Enabled</label>
-                                                </div>
-                                                <!--end::Switch-->
-                                            </div>
-                                            <!--end::Input group-->
-                                            <!--begin::Actions-->
-                                            <div class="d-flex justify-content-end">
-                                                <button type="reset"
-                                                    class="btn btn-sm btn-light btn-active-light-primary me-2"
-                                                    data-kt-menu-dismiss="true">Reset</button>
-                                                <button type="submit" class="btn btn-sm btn-primary"
-                                                    data-kt-menu-dismiss="true">Apply</button>
-                                            </div>
-                                            <!--end::Actions-->
-                                        </div>
-                                        <!--end::Form-->
-                                    </div>
-                                    <!--end::Menu 1-->
-                                    <!--end::Menu-->
-                                </div> --}}
                                 <!--end::Wrapper-->
                             </div>
                             <!--end::Actions-->
@@ -252,333 +145,61 @@
                     <!--begin::Body Dashboard-->
                     <div id="dashboard-body" style="overflow-x: hidden" class="mt-3">
 
-
-                        <!--begin::Card Diagram Column dan Donut-->
-                        <div class="row mx-3">
-                            <!--begin::Card column-->
-                            <div class="col-8">
-                                {{-- Begin :: Filter --}}
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-4">
-                                                <select onchange="selectDOP(this)" id="dop" name="dop"
-                                                        class="form-select form-select-solid w-auto"
-                                                        style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
-                                                        data-placeholder="Direktorat" data-select2-id="select2-data-dop" tabindex="-1"
-                                                        aria-hidden="true">
-                                                        {{-- <option value="" {{$dop_get == "" ? "selected" : ""}}></option> --}}
-                                                        <option value="" selected></option>
-                                                        @foreach ($dops as $dop)
-                                                            {{-- <option value="{{ $dop->dop }}" {{ $dop_get == $dop->dop ? 'selected' : '' }} >{{ $dop->dop }}</option> --}}
-                                                            <option value="{{ $dop->dop }}" >{{ $dop->dop }}</option>
-                                                        @endforeach
-                                                </select>
-                                            </div>
-
-                                            <div class="col-4">
-                                                <select onchange="selectDOP(this)" id="unit-kerja" name="unit-kerja"
-                                                        class="form-select form-select-solid w-auto"
-                                                        style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
-                                                        data-placeholder="Unit Kerja" data-select2-id="select2-data-unit-kerja" tabindex="-1"
-                                                        aria-hidden="true">
-                                                        {{-- <option value="" {{$dop_get == "" ? "selected" : ""}}></option> --}}
-                                                        <option value="" selected></option>
-                                                        @foreach ($unit_kerjas as $unit_kerjas)
-                                                            {{-- <option value="{{ $unit_kerjas->divcode }}" {{ $unit_kerjas_get == $unit_kerjas->divcode ? 'selected' : '' }} >{{ $unit_kerjas->unit_kerja }}</option> --}}
-                                                            <option value="{{ $unit_kerjas->divcode }}" >{{ $unit_kerjas->unit_kerja }}</option>
-                                                        @endforeach
-                                                </select>
-                                            </div>
-
-                                            <div class="col-4">
-                                                <select onchange="selectDOP(this)" id="proyek" name="proyek"
-                                                        class="form-select form-select-solid w-auto"
-                                                        style="margin-right: 2rem;" data-control="select2" data-hide-search="false"
-                                                        data-placeholder="Proyek" data-select2-id="select2-data-proyek" tabindex="-1"
-                                                        aria-hidden="true">
-                                                        {{-- <option value="" {{$dop_get == "" ? "selected" : ""}}></option> --}}
-                                                        <option value="" selected></option>
-                                                        @foreach ($proyeks as $proyek)
-                                                            {{-- <option value="{{ $proyek->divcode }}" {{ $proyek_get == $proyek->divcode ? 'selected' : '' }} >{{ $proyek->unit_kerja }}</option> --}}
-                                                            <option value="{{ $proyek->kode_proyek }}" >{{ $proyek->nama_proyek }} ({{$proyek->kode_proyek}})</option>
-                                                        @endforeach
-                                                </select>
-                                            </div>
+                        <!--Begin :: Filter-->
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <select onchange="selectDOP(this)" id="dop" name="dop"
+                                                    class="form-select form-select-solid w-auto"
+                                                    style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
+                                                    data-placeholder="Direktorat" data-select2-id="select2-data-dop" tabindex="-1"
+                                                    aria-hidden="true">
+                                                    {{-- <option value="" {{$dop_get == "" ? "selected" : ""}}></option> --}}
+                                                    <option value="" selected></option>
+                                                    @foreach ($dops as $dop)
+                                                        {{-- <option value="{{ $dop->dop }}" {{ $dop_get == $dop->dop ? 'selected' : '' }} >{{ $dop->dop }}</option> --}}
+                                                        <option value="{{ $dop->dop }}" >{{ $dop->dop }}</option>
+                                                    @endforeach
+                                            </select>
                                         </div>
-                                    </div>
-                                </div>
-                                {{-- End :: Filter --}}
-                                <br>
-                                <!--begin::Card body-->
-                                <div class="row">
-                                    <!--begin::Card column-->
-                                    <div class="col-6">
-                                            <!--begin::COLUMN CHART-->
-                                            <div id="contract-stage"></div>
-                                            <!-- data table is inserted here -->
-                                            <!--end::COLUMN CHART-->
-                                    </div>
-                                    <!--end-begin::Card column-->
-                                    <div class="col-6">
-                                            <!--begin::PIE CHART-->
-                                            <figure class="highcharts-figure">
-                                                <div id="contract-divisi"></div>
-                                                <!-- data table is inserted here -->
-                                            </figure>
-                                            <!--end::PIE CHART-->
-                                    </div>
-                                    <!--end::Card column-->
-                                </div>
 
-                                <div class="row">
-                                    <!--begin::Card column-->
-                                    <div class="col-6">
-                                            <!--begin::COLUMN CHART-->
-                                            <div id="contract-classification"></div>
-                                            <!-- data table is inserted here -->
-                                            <!--end::COLUMN CHART-->
-                                    </div>
-                                    <!--end-begin::Card column-->
-                                    <div class="col-6">
-                                            <!--begin::PIE CHART-->
-                                            <figure class="highcharts-figure">
-                                                <div id="contract-jo"></div>
-                                                <!-- data table is inserted here -->
-                                            </figure>
-                                            <!--end::PIE CHART-->
-                                    </div>
-                                    <!--end::Card column-->
-                                </div>
-                                <!--end::Card body-->
-                                <div class="row">
-                                    <!--begin::Card column-->
-                                    <div class="col-6">
-                                        <!--begin::COLUMN CHART-->
-                                        <div id="changes-status"></div>
-                                        <!-- data table is inserted here -->
-                                        <!--end::COLUMN CHART-->
-                                    </div>
-                                    <div class="col-6">
-                                            <!--begin::COLUMN CHART-->
-                                            <div id="kso"></div>
-                                            <!-- data table is inserted here -->
-                                            <!--end::COLUMN CHART-->
+                                        <div class="col-4">
+                                            <select onchange="selectDOP(this)" id="unit-kerja" name="unit-kerja"
+                                                    class="form-select form-select-solid w-auto"
+                                                    style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
+                                                    data-placeholder="Unit Kerja" data-select2-id="select2-data-unit-kerja" tabindex="-1"
+                                                    aria-hidden="true">
+                                                    {{-- <option value="" {{$dop_get == "" ? "selected" : ""}}></option> --}}
+                                                    <option value="" selected></option>
+                                                    @foreach ($unit_kerjas as $unit_kerjas)
+                                                        {{-- <option value="{{ $unit_kerjas->divcode }}" {{ $unit_kerjas_get == $unit_kerjas->divcode ? 'selected' : '' }} >{{ $unit_kerjas->unit_kerja }}</option> --}}
+                                                        <option value="{{ $unit_kerjas->divcode }}" >{{ $unit_kerjas->unit_kerja }}</option>
+                                                    @endforeach
+                                            </select>
+                                        </div>
+
+                                        <div class="col-4">
+                                            <select onchange="selectDOP(this)" id="proyek" name="proyek"
+                                                    class="form-select form-select-solid w-auto"
+                                                    style="margin-right: 2rem;" data-control="select2" data-hide-search="false"
+                                                    data-placeholder="Proyek" data-select2-id="select2-data-proyek" tabindex="-1"
+                                                    aria-hidden="true">
+                                                    {{-- <option value="" {{$dop_get == "" ? "selected" : ""}}></option> --}}
+                                                    <option value="" selected></option>
+                                                    @foreach ($proyeks as $proyek)
+                                                        {{-- <option value="{{ $proyek->divcode }}" {{ $proyek_get == $proyek->divcode ? 'selected' : '' }} >{{ $proyek->unit_kerja }}</option> --}}
+                                                        <option value="{{ $proyek->kode_proyek }}" >{{ $proyek->nama_proyek }} ({{$proyek->kode_proyek}})</option>
+                                                    @endforeach
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <!--end-begin::Card column-->
-                            <div class="col-4">
-                                <!--begin::Card Status-->
-                                <div class="col mx-3">
-                                    <!--begin::Card column-->
-                                    <div class="row">
-                                        <!--begin::Card body-->
-                                        <div class="card-body pt-0">
-                                            <!--begin::Card widget 20-->
-                                            <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90 mb-5 mb-xl-10" style="background-color: #017EB8;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
-                                                <!--begin::Header-->
-                                                <div class="card-header pt-5">
-                                                    <!--begin::Title-->
-                                                    <div class="card-title d-flex flex-column">
-                                                        <!--begin::Amount-->
-                                                        <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2" id="data-items">Rp. 500.000.000</span>
-                                                        <!--end::Amount-->
-                                                        <!--begin::Subtitle-->
-                                                        <span class="text-white opacity-75 pt-1 fw-semibold fs-6">Total Nilai Perubahan</span>
-                                                        <!--end::Subtitle-->
-                                                    </div>
-                                                    <!--end::Title-->
-                                                </div>
-                                                <!--end::Header-->
-                                                <!--begin::Card body-->
-                                                <div class="card-body d-flex align-items-end pt-0">
-                                                    <!--begin::Progress-->
-                                                    <div class="d-flex align-items-center flex-column mt-3 w-100">
-                                                        <div class="d-flex justify-content-between fw-bold fs-6 text-white opacity-75 w-100 mt-auto mb-2">
-                                                            <span id="data-persen">52%</span>
-                                                        </div>
-                                                        <div class="h-8px mx-3 w-100 bg-white bg-opacity-50 rounded">
-                                                            <div class="bg-white rounded h-8px" role="progressbar" style="width: 0%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                                                        </div>
-                                                    </div>
-                                                    <!--end::Progress-->
-                                                </div>
-                                                <!--end::Card body-->
-                                            </div>
-                                            <!--end::Card widget 20-->
-                                        </div>
-                                        <!--end::Card body-->
-                                    </div>
-                                    <!--end-begin::Card column-->
-                                    <div class="row">
-                                        <!--begin::Card body-->
-                                        <div class="card-body pt-0">
-                                            <!--begin::Card widget 20-->
-                                            <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90 mb-5 mb-xl-10" style="background-color: #28B3AC;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
-                                                <!--begin::Header-->
-                                                <div class="card-header pt-5">
-                                                    <!--begin Items::Title-->
-                                                    <div class="card-title d-flex flex-column">
-                                                        <!--begin::Amount-->
-                                                        <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2" id="data-items">Rp. 500.000.000</span>
-                                                        <!--end::Amount-->
-                                                        <!--begin::Subtitle-->
-                                                        <span class="text-white opacity-75 pt-1 fw-semibold fs-6">VO</span>
-                                                        <!--end::Subtitle-->
-                                                    </div>
-                                                    <!--end::Title-->
-                                                </div>
-                                                <!--end::Header-->
-                                                <!--begin::Card body-->
-                                                <div class="card-body d-flex align-items-end pt-0">
-                                                    <!--begin::Progress-->
-                                                    <div class="d-flex align-items-center flex-column mt-3 w-100">
-                                                        <div class="d-flex justify-content-between fw-bold fs-6 text-white opacity-75 w-100 mt-auto mb-2">
-                                                            <span>3 Items</span>
-                                                            <span id="data-persen">8%</span>
-                                                        </div>
-                                                        <div class="h-8px mx-3 w-100 bg-white bg-opacity-50 rounded">
-                                                            <div class="bg-white rounded h-8px" role="progressbar" style="width: 0%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                                                        </div>
-                                                    </div>
-                                                    <!--end::Progress-->
-                                                </div>
-                                                <!--end::Card body-->
-                                            </div>
-                                            <!--end::Card widget 20-->
-                                        </div>
-                                        <!--end::Card body-->
-                                    </div>
-                                    <!--end-begin::Card column-->
-                                    <div class="row">
-                                        <!--begin::Card body-->
-                                        <div class="card-body pt-0">
-                                            <!--begin::Card widget 20-->
-                                            <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90 mb-5 mb-xl-10" style="background-color: #F7AD1A;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
-                                                <!--begin::Header-->
-                                                <div class="card-header pt-5">
-                                                    <!--begin::Title-->
-                                                    <div class="card-title d-flex flex-column">
-                                                        <!--begin::Amount-->
-                                                        <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2" id="data-items">Rp. 500.000.000</span>
-                                                        <!--end::Amount-->
-                                                        <!--begin::Subtitle-->
-                                                        <span class="text-white opacity-75 pt-1 fw-semibold fs-6">Klaim</span>
-                                                        <!--end::Subtitle-->
-                                                    </div>
-                                                    <!--end::Title-->
-                                                </div>
-                                                <!--end::Header-->
-                                                <!--begin::Card body-->
-                                                <div class="card-body d-flex align-items-end pt-0">
-                                                    <!--begin::Progress-->
-                                                    <div class="d-flex align-items-center flex-column mt-3 w-100">
-                                                        <div class="d-flex justify-content-between fw-bold fs-6 text-white opacity-75 w-100 mt-auto mb-2">
-                                                            <span>5 Items</span>
-                                                            <span id="data-persen">11%</span>
-                                                        </div>
-                                                        <div class="h-8px mx-3 w-100 bg-white bg-opacity-50 rounded">
-                                                            <div class="bg-white rounded h-8px" role="progressbar" style="width: 0%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                                                        </div>
-                                                    </div>
-                                                    <!--end::Progress-->
-                                                </div>
-                                                <!--end::Card body-->
-                                            </div>
-                                            <!--end::Card widget 20-->
-                                        </div>
-                                        <!--end::Card body-->
-                                    </div>
-                                    <!--end::Card column-->
+                        <!--End :: Filter-->
 
-                                    <div class="row">
-                                        <!--begin::Card body-->
-                                        <div class="card-body pt-0">
-                                            <!--begin::Card widget 20-->
-                                            <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90 mb-5 mb-xl-10" style="background-color: #ae1b60;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
-                                                <!--begin::Header-->
-                                                <div class="card-header pt-5">
-                                                    <!--begin::Title-->
-                                                    <div class="card-title d-flex flex-column">
-                                                        <!--begin::Amount-->
-                                                        <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2" id="data-items">Rp. 500.000.000</span>
-                                                        <!--end::Amount-->
-                                                        <!--begin::Subtitle-->
-                                                        <span class="text-white opacity-75 pt-1 fw-semibold fs-6">Anti Klaim</span>
-                                                        <!--end::Subtitle-->
-                                                    </div>
-                                                    <!--end::Title-->
-                                                </div>
-                                                <!--end::Header-->
-                                                <!--begin::Card body-->
-                                                <div class="card-body d-flex align-items-end pt-0">
-                                                    <!--begin::Progress-->
-                                                    <div class="d-flex align-items-center flex-column mt-3 w-100">
-                                                        <div class="d-flex justify-content-between fw-bold fs-6 text-white opacity-75 w-100 mt-auto mb-2">
-                                                            <span>5 Items</span>
-                                                            <span id="data-persen">11%</span>
-                                                        </div>
-                                                        <div class="h-8px mx-3 w-100 bg-white bg-opacity-50 rounded">
-                                                            <div class="bg-white rounded h-8px" role="progressbar" style="width: 0%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                                                        </div>
-                                                    </div>
-                                                    <!--end::Progress-->
-                                                </div>
-                                                <!--end::Card body-->
-                                            </div>
-                                            <!--end::Card widget 20-->
-                                        </div>
-                                        <!--end::Card body-->
-                                    </div>
-                                    <!--end::Card column-->
+                        <br>
 
-                                    <!--end-begin::Card column-->
-                                    <div class="row">
-                                        <!--begin::Card body-->
-                                        <div class="card-body pt-0">
-                                            <!--begin::Card widget 20-->
-                                            <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90 mb-5 mb-xl-10" style="background-color: #1fb026;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
-                                                <!--begin::Header-->
-                                                <div class="card-header pt-5">
-                                                    <!--begin::Title-->
-                                                    <div class="card-title d-flex flex-column">
-                                                        <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2" id="data-items">Rp. 500.000.000</span>
-                                                        <!--begin::Amount-->
-                                                        <span class="text-white opacity-75 pt-1 fw-semibold fs-6">Asuransi</span>
-                                                        <!--end::Amount-->
-                                                    </div>
-                                                    <!--end::Title-->
-                                                </div>
-                                                <!--end::Header-->
-                                                <!--begin::Card body-->
-                                                <div class="card-body d-flex align-items-end pt-0">
-                                                    <!--begin::Progress-->
-                                                    <div class="d-flex align-items-center flex-column mt-3 w-100">
-                                                        <div class="d-flex justify-content-between fw-bold fs-6 text-white opacity-75 w-100 mt-auto mb-2">
-                                                            <span>5 Items</span>
-                                                            <span id="data-persen">11%</span>
-                                                        </div>
-                                                        <div class="h-8px mx-3 w-100 bg-white bg-opacity-50 rounded">
-                                                            <div class="bg-white rounded h-8px" role="progressbar" style="width: 0%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                                                        </div>
-                                                    </div>
-                                                    <!--end::Progress-->
-                                                </div>
-                                                <!--end::Card body-->
-                                            </div>
-                                            <!--end::Card widget 20-->
-                                        </div>
-                                        <!--end::Card body-->
-                                    </div>
-                                    <!--end::Card column-->
-                                </div>
-                                <!--end::Card Status-->
-                            </div>
-                            <!--end::Card column-->
-                        </div>
-                        <!--end::Card Diagram Column dan Donut-->
-                       
                         <!--begin::Card Line col-12-->
                         <div class="row mx-3">
                             <!--begin::Card column-->
@@ -600,8 +221,158 @@
                         </div>
                         <!--end::Card Line col-12-->
 
+                        <!--begin::Title-->
+                        <div class="mb-4">
+                            <div class="col-12">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-secondary">
+                                    <h2 class="m-0 text-center">Resume <i class="h2 px-1">Outstanding</i> CCM</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                        </div>
+                        <!--end::Title-->
+
+                        <!--begin::Card Diagram Column dan Donut-->
+                        <div class="row mx-3">
+                            <!--begin::Card body-->
+                            <div class="row">
+                                <!--begin::Card column-->
+                                <div class="col-4">
+                                        <!--begin::COLUMN CHART-->
+                                        <div id="contract-stage">
+                                            <!-- data table is inserted here -->
+                                        </div>
+                                        <!--end::COLUMN CHART-->
+                                </div>
+                                <!--end-begin::Card column-->
+                                <div class="col-4">
+                                        <!--begin::PIE CHART-->
+                                        <div id="kso">
+                                            <!-- data table is inserted here -->
+                                        </div>
+                                        <!--end::PIE CHART-->
+                                </div>
+                                <!--end-begin::Card column-->
+                                <div class="col-4">
+                                        <!--begin::PIE CHART-->
+                                            <div id="contract-classification">
+                                                <!-- data table is inserted here -->
+                                            </div>
+                                        <!--end::PIE CHART-->
+                                </div>
+                                <!--end::Card column-->
+                            </div>
+                            <!--end::Card body-->
+                            <!--begin::Card body-->
+                            {{-- <div class="row">
+                                <!--begin::Card column-->
+                                <div class="col-6">
+                                        <!--begin::COLUMN CHART-->
+                                        <div id="contract-classification"></div>
+                                        <!-- data table is inserted here -->
+                                        <!--end::COLUMN CHART-->
+                                </div>
+                                <!--end-begin::Card column-->
+                                <div class="col-6">
+                                        <!--begin::PIE CHART-->
+                                            <div id="contract-jo"></div>
+                                            <!-- data table is inserted here -->
+                                        <!--end::PIE CHART-->
+                                </div>
+                                <!--end::Card column-->
+                            </div> --}}
+                            <!--end::Card body-->
+                        </div>
+                        <!--end::Card Diagram Column dan Donut-->
+
+                        <br>
+
+                        <!--begin::Card Diagram Column dan Donut-->
+                        <div class="row mx-3">
+                            <!--begin::Card body-->
+                            <div class="row">
+                                <!--begin::Card column-->
+                                <div class="col-6">
+                                    <!--begin::COLUMN CHART-->
+                                    <div id="contract-divisi"></div>
+                                    <!-- data table is inserted here -->
+                                    <!--end::COLUMN CHART-->
+                                </div>
+                                <div class="col-6">
+                                    <!--begin::COLUMN CHART-->
+                                    <div id="changes-status"></div>
+                                    <!-- data table is inserted here -->
+                                    <!--end::COLUMN CHART-->
+                                </div>
+                            </div>
+                            <!--end::Card body-->
+                        </div>
+                        <!--end::Card Diagram Column dan Donut-->
+
+                        <br>
+
+                        <!--begin::Title-->
+                        <div class="row mb-4">
+                            <div class="col-9">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-warning">
+                                    <h2 class="m-0 text-center">TOTAL NILAI : Rp 2.850.000.000.000</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col-3">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-warning">
+                                    <h2 class="m-0 text-center">18,6 %</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                        </div>
+                        <!--end::Title-->
+
+                        <!--begin::Table Body-->
+                        {{-- @foreach ($nilai_perubahan_table as $table) --}}
+                        <div class="row mb-4">
+                            <div class="col-3">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-warning">
+                                    {{-- <h2 class="m-0 text-center">{{ $table->jenis_claim }}</h2> --}}
+                                    <h2 class="m-0 text-center">VO</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col-1">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-secondary">
+                                    {{-- <h2 class="m-0 text-center">{{ $table->total_proyek }}</h2> --}}
+                                    <h2 class="m-0 text-center">12</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col-5">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-secondary">
+                                    {{-- <h2 class="m-0 text-center">{{ $table->total_nilai }}</h2> --}}
+                                    <h2 class="m-0 text-center">Rp 1.140.000.000.000</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col-3">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-secondary">
+                                    {{-- <h2 class="m-0 text-center">{{ $table->total_persen }}</h2> --}}
+                                    <h2 class="m-0 text-center">7,2 %</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                        </div>
+                        {{-- @endforeach --}}
+                        <!--end::Table Body-->
+
                     </div>
                     <!--end::Body Dashboard-->
+                    
                     <!--end::Content-->
 
                 </div>
@@ -643,7 +414,7 @@
     <script>
         Highcharts.chart('contract-stage', {
             chart: {
-                height: 250,
+                // height: 250,
                 type: 'pie',
                 options3d: {
                     enabled: true,
@@ -670,7 +441,7 @@
             },
             plotOptions: {
                 pie: {
-                    innerSize: 80,
+                    innerSize: 150,
                     depth: 5,
                     showInLegend: false,
                     dataLabels: {
@@ -711,7 +482,7 @@
     <script>
         Highcharts.chart('contract-divisi', {
             chart: {
-                height: 250,
+                // height: 250,
                 type: 'pie',
                 options3d: {
                     enabled: true,
@@ -738,7 +509,7 @@
             },
             plotOptions: {
                 pie: {
-                    innerSize: 80,
+                    innerSize: 150,
                     depth: 5,
                     showInLegend: false,
                     dataLabels: {
@@ -779,7 +550,7 @@
     <script>
         Highcharts.chart('contract-classification', {
             chart: {
-                height: 250,
+                // height: 250,
                 type: 'pie',
                 options3d: {
                     enabled: true,
@@ -806,7 +577,7 @@
             },
             plotOptions: {
                 pie: {
-                    innerSize: 80,
+                    innerSize: 150,
                     depth: 5,
                     showInLegend: false,
                     dataLabels: {
@@ -849,7 +620,7 @@
         Highcharts.chart('contract-jo', {
             chart: {
                 type: 'pie',
-                height: 250,
+                // height: 250,
                 options3d: {
                     enabled: true,
                     alpha: 5
@@ -875,7 +646,7 @@
             },
             plotOptions: {
                 pie: {
-                    innerSize: 110,
+                    innerSize: 150,
                     depth: 5,
                     showInLegend: false,
                     dataLabels: {
@@ -915,7 +686,7 @@
         Highcharts.chart('changes-status', {
             chart: {
                 type: 'pie',
-                height: 330,
+                // height: 330,
                 options3d: {
                     enabled: true,
                     alpha: 5
@@ -989,7 +760,7 @@
                 }
             },
             title: {
-                text: 'Nilai Tender',
+                text: 'TOTAL NILAI KONTRAK : Rp 15.890.000.000',
                 style: {
                     fontWeight: 'bold',
                     fontSize: '20px'
@@ -1046,7 +817,7 @@
         Highcharts.chart('kso', {
             chart: {
                 type: 'pie',
-                height: 330,
+                // height: 330,
                 options3d: {
                     enabled: true,
                     alpha: 5
