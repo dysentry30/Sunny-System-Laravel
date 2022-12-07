@@ -359,38 +359,14 @@
                         <!--end::Card Diagram Column dan Donut-->
 
                         <!--begin::Title-->
-                        <div class="row mx-3">
-                            <!--begin::Card column-->
-                            <div class="col">
-                                <!--begin::Card column-->
-                                <div class="row">
-                                    <!--begin::Card body-->
-                                    <div class="card-body pt-0">
-                                        <!--begin::Card widget 20-->
-                                        <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90 mb-5 mb-xl-1" style="background-color: #063F5C;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: 100%;">
-                                            <!--begin::Header-->
-                                            <div class="card-header pt-5">
-                                                <!--begin::Title-->
-                                                <div class="card-title w-100">
-                                                    <!--begin::Subtitle-->
-                                                    <span class="text-white pt-1 fw-semibold fs-2 mx-auto">Resume CCM</span>
-                                                    <!--end::Subtitle-->
-                                                </div>
-                                                <!--end::Title-->
-                                            </div>
-                                            <!--end::Header-->
-                                            <!--begin::Card body-->
-                                            <div class="card-body d-flex align-items-end pt-0">
-                                            </div>
-                                            <!--end::Card body-->
-                                        </div>
-                                        <!--end::Card widget 20-->
-                                    </div>
-                                    <!--end::Card body-->
+                        <div class="mb-4">
+                            <div class="col-12">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-secondary">
+                                    <h2 class="m-0 text-center">Resume CCM</h2>
                                 </div>
-                                <!--end-begin::Card column-->
+                                <!--end::Title body-->
                             </div>
-                            <!--end::Card column-->
                         </div>
                         <!--end::Title-->
 
@@ -420,246 +396,93 @@
                         <!--end::Card Diagram Column dan Donut-->
 
                         <!--begin::Title-->
-                        <div class="row mx-3">
-                            <!--begin::Card column-->
-                            <div class="col">
-                                <!--begin::Card column-->
-                                <div class="row">
-                                    <!--begin::Card body-->
-                                    <div class="card-body pt-0">
-                                        <!--begin::Card widget 20-->
-                                        <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90 mb-5 mb-xl-1" style="background-color: #063F5C;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: 100%;">
-                                            <!--begin::Header-->
-                                            <div class="card-header pt-5">
-                                                <!--begin::Title-->
-                                                <div class="card-title w-100">
-                                                    <!--begin::Subtitle-->
-                                                    <span class="text-white pt-1 fw-semibold fs-2 mx-auto">Resume CCM</span>
-                                                    <!--end::Subtitle-->
-                                                </div>
-                                                <!--end::Title-->
-                                            </div>
-                                            <!--end::Header-->
-                                            <!--begin::Card body-->
-                                            <div class="card-body d-flex align-items-end pt-0">
-                                            </div>
-                                            <!--end::Card body-->
-                                        </div>
-                                        <!--end::Card widget 20-->
-                                    </div>
-                                    <!--end::Card body-->
+                        <div class="row mb-4">
+                            <div class="col-9">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-warning">
+                                    <h2 class="m-0 text-center">TOTAL NILAI PERUBAHAN : Rp 5.850.000.000.000</h2>
                                 </div>
-                                <!--end-begin::Card column-->
+                                <!--end::Title body-->
                             </div>
-                            <!--end::Card column-->
+                            <div class="col-3">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-warning">
+                                    <h2 class="m-0 text-center">18,4 %</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
                         </div>
                         <!--end::Title-->
-                        {{-- <div class="col-4">
-                            <!--begin::Card Status-->
-                            <div class="col mx-3">
-                                <!--begin::Card column-->
-                                <div class="row">
-                                    <!--begin::Card body-->
-                                    <div class="card-body pt-0">
-                                        <!--begin::Card widget 20-->
-                                        <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90 mb-5 mb-xl-10" style="background-color: #017EB8;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
-                                            <!--begin::Header-->
-                                            <div class="card-header pt-5">
-                                                <!--begin::Title-->
-                                                <div class="card-title d-flex flex-column">
-                                                    <!--begin::Amount-->
-                                                    <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2" id="data-items">Rp. 500.000.000</span>
-                                                    <!--end::Amount-->
-                                                    <!--begin::Subtitle-->
-                                                    <span class="text-white opacity-75 pt-1 fw-semibold fs-6">Total Nilai Perubahan</span>
-                                                    <!--end::Subtitle-->
-                                                </div>
-                                                <!--end::Title-->
-                                            </div>
-                                            <!--end::Header-->
-                                            <!--begin::Card body-->
-                                            <div class="card-body d-flex align-items-end pt-0">
-                                                <!--begin::Progress-->
-                                                <div class="d-flex align-items-center flex-column mt-3 w-100">
-                                                    <div class="d-flex justify-content-between fw-bold fs-6 text-white opacity-75 w-100 mt-auto mb-2">
-                                                        <span id="data-persen">52%</span>
-                                                    </div>
-                                                    <div class="h-8px mx-3 w-100 bg-white bg-opacity-50 rounded">
-                                                        <div class="bg-white rounded h-8px" role="progressbar" style="width: 0%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                                                    </div>
-                                                </div>
-                                                <!--end::Progress-->
-                                            </div>
-                                            <!--end::Card body-->
-                                        </div>
-                                        <!--end::Card widget 20-->
-                                    </div>
-                                    <!--end::Card body-->
-                                </div>
-                                <!--end-begin::Card column-->
-                                <div class="row">
-                                    <!--begin::Card body-->
-                                    <div class="card-body pt-0">
-                                        <!--begin::Card widget 20-->
-                                        <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90 mb-5 mb-xl-10" style="background-color: #28B3AC;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
-                                            <!--begin::Header-->
-                                            <div class="card-header pt-5">
-                                                <!--begin Items::Title-->
-                                                <div class="card-title d-flex flex-column">
-                                                    <!--begin::Amount-->
-                                                    <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2" id="data-items">Rp. 500.000.000</span>
-                                                    <!--end::Amount-->
-                                                    <!--begin::Subtitle-->
-                                                    <span class="text-white opacity-75 pt-1 fw-semibold fs-6">VO</span>
-                                                    <!--end::Subtitle-->
-                                                </div>
-                                                <!--end::Title-->
-                                            </div>
-                                            <!--end::Header-->
-                                            <!--begin::Card body-->
-                                            <div class="card-body d-flex align-items-end pt-0">
-                                                <!--begin::Progress-->
-                                                <div class="d-flex align-items-center flex-column mt-3 w-100">
-                                                    <div class="d-flex justify-content-between fw-bold fs-6 text-white opacity-75 w-100 mt-auto mb-2">
-                                                        <span id="data-persen">8%</span>
-                                                    </div>
-                                                    <div class="h-8px mx-3 w-100 bg-white bg-opacity-50 rounded">
-                                                        <div class="bg-white rounded h-8px" role="progressbar" style="width: 0%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                                                    </div>
-                                                </div>
-                                                <!--end::Progress-->
-                                            </div>
-                                            <!--end::Card body-->
-                                        </div>
-                                        <!--end::Card widget 20-->
-                                    </div>
-                                    <!--end::Card body-->
-                                </div>
-                                <!--end-begin::Card column-->
-                                <div class="row">
-                                    <!--begin::Card body-->
-                                    <div class="card-body pt-0">
-                                        <!--begin::Card widget 20-->
-                                        <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90 mb-5 mb-xl-10" style="background-color: #F7AD1A;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
-                                            <!--begin::Header-->
-                                            <div class="card-header pt-5">
-                                                <!--begin::Title-->
-                                                <div class="card-title d-flex flex-column">
-                                                    <!--begin::Amount-->
-                                                    <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2" id="data-items">Rp. 500.000.000</span>
-                                                    <!--end::Amount-->
-                                                    <!--begin::Subtitle-->
-                                                    <span class="text-white opacity-75 pt-1 fw-semibold fs-6">Klaim</span>
-                                                    <!--end::Subtitle-->
-                                                </div>
-                                                <!--end::Title-->
-                                            </div>
-                                            <!--end::Header-->
-                                            <!--begin::Card body-->
-                                            <div class="card-body d-flex align-items-end pt-0">
-                                                <!--begin::Progress-->
-                                                <div class="d-flex align-items-center flex-column mt-3 w-100">
-                                                    <div class="d-flex justify-content-between fw-bold fs-6 text-white opacity-75 w-100 mt-auto mb-2">
-                                                        <span id="data-persen">11%</span>
-                                                    </div>
-                                                    <div class="h-8px mx-3 w-100 bg-white bg-opacity-50 rounded">
-                                                        <div class="bg-white rounded h-8px" role="progressbar" style="width: 0%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                                                    </div>
-                                                </div>
-                                                <!--end::Progress-->
-                                            </div>
-                                            <!--end::Card body-->
-                                        </div>
-                                        <!--end::Card widget 20-->
-                                    </div>
-                                    <!--end::Card body-->
-                                </div>
-                                <!--end::Card column-->
 
-                                <div class="row">
-                                    <!--begin::Card body-->
-                                    <div class="card-body pt-0">
-                                        <!--begin::Card widget 20-->
-                                        <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90 mb-5 mb-xl-10" style="background-color: #ae1b60;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
-                                            <!--begin::Header-->
-                                            <div class="card-header pt-5">
-                                                <!--begin::Title-->
-                                                <div class="card-title d-flex flex-column">
-                                                    <!--begin::Amount-->
-                                                    <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2" id="data-items">Rp. 500.000.000</span>
-                                                    <!--end::Amount-->
-                                                    <!--begin::Subtitle-->
-                                                    <span class="text-white opacity-75 pt-1 fw-semibold fs-6">Anti Klaim</span>
-                                                    <!--end::Subtitle-->
-                                                </div>
-                                                <!--end::Title-->
-                                            </div>
-                                            <!--end::Header-->
-                                            <!--begin::Card body-->
-                                            <div class="card-body d-flex align-items-end pt-0">
-                                                <!--begin::Progress-->
-                                                <div class="d-flex align-items-center flex-column mt-3 w-100">
-                                                    <div class="d-flex justify-content-between fw-bold fs-6 text-white opacity-75 w-100 mt-auto mb-2">
-                                                        <span id="data-persen">11%</span>
-                                                    </div>
-                                                    <div class="h-8px mx-3 w-100 bg-white bg-opacity-50 rounded">
-                                                        <div class="bg-white rounded h-8px" role="progressbar" style="width: 0%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                                                    </div>
-                                                </div>
-                                                <!--end::Progress-->
-                                            </div>
-                                            <!--end::Card body-->
-                                        </div>
-                                        <!--end::Card widget 20-->
-                                    </div>
-                                    <!--end::Card body-->
+                        <!--begin::Table Body-->
+                        @foreach ($nilai_perubahan_table as $table)
+                        <div class="row mb-4">
+                            <div class="col-3">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-warning">
+                                    <h2 class="m-0 text-center">{{ $table->jenis_claim }}</h2>
                                 </div>
-                                <!--end::Card column-->
-
-                                <!--end-begin::Card column-->
-                                <div class="row">
-                                    <!--begin::Card body-->
-                                    <div class="card-body pt-0">
-                                        <!--begin::Card widget 20-->
-                                        <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90 mb-5 mb-xl-10" style="background-color: #1fb026;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
-                                            <!--begin::Header-->
-                                            <div class="card-header pt-5">
-                                                <!--begin::Title-->
-                                                <div class="card-title d-flex flex-column">
-                                                    <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2" id="data-items">Rp. 500.000.000</span>
-                                                    <!--begin::Amount-->
-                                                    <span class="text-white opacity-75 pt-1 fw-semibold fs-6">Asuransi</span>
-                                                    <!--end::Amount-->
-                                                </div>
-                                                <!--end::Title-->
-                                            </div>
-                                            <!--end::Header-->
-                                            <!--begin::Card body-->
-                                            <div class="card-body d-flex align-items-end pt-0">
-                                                <!--begin::Progress-->
-                                                <div class="d-flex align-items-center flex-column mt-3 w-100">
-                                                    <div class="d-flex justify-content-between fw-bold fs-6 text-white opacity-75 w-100 mt-auto mb-2">
-                                                        <span id="data-persen">11%</span>
-                                                    </div>
-                                                    <div class="h-8px mx-3 w-100 bg-white bg-opacity-50 rounded">
-                                                        <div class="bg-white rounded h-8px" role="progressbar" style="width: 0%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                                                    </div>
-                                                </div>
-                                                <!--end::Progress-->
-                                            </div>
-                                            <!--end::Card body-->
-                                        </div>
-                                        <!--end::Card widget 20-->
-                                    </div>
-                                    <!--end::Card body-->
-                                </div>
-                                <!--end::Card column-->
+                                <!--end::Title body-->
                             </div>
-                            <!--end::Card Status-->
+                            <div class="col-1">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-secondary">
+                                    <h2 class="m-0 text-center">{{ $table->total_proyek }}</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col-5">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-secondary">
+                                    <h2 class="m-0 text-center">{{ $table->total_nilai }}</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col-3">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-secondary">
+                                    <h2 class="m-0 text-center">{{ $table->total_persen }}</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                        </div>
+                        @endforeach
+                        <!--end::Table Body-->
+                        <!--begin::Table Body-->
+                        {{-- <div class="row mb-4">
+                            <div class="col-3">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-warning">
+                                    <h2 class="m-0 text-center">Klaim</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col-1">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-secondary">
+                                    <h2 class="m-0 text-center">10</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col-5">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-secondary">
+                                    <h2 class="m-0 text-center">Rp 1.350.000.000.000</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col-3">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-secondary">
+                                    <h2 class="m-0 text-center">4,5 %</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
                         </div> --}}
+                        <!--end::Table Body-->
 
                         <!--begin::Card Line col-12-->
-                        <div class="card mx-8">
+                        {{-- <div class="card mx-8">
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col table-responsive">
@@ -681,7 +504,7 @@
                                                         <td>{{$perubahan->total_persen}}</td>
                                                     </tr>
                                                 @endforeach
-                                                {{-- <tr>
+                                                <tr>
                                                     <th>Klaim</th>
                                                     <td>10</td>
                                                     <td class="text-end">Rp. 500.000.000</td>
@@ -698,7 +521,7 @@
                                                     <td>10</td>
                                                     <td class="text-end">Rp. 500.000.000</td>
                                                     <td>10%</td>
-                                                </tr> --}}
+                                                </tr>
                                                 <tr class="text-bg-dark">
                                                     <th scope="row">Total Nilai</th>
                                                     <th>40</th>
@@ -710,7 +533,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                         <!--end::Card Line col-12-->
                     </div>
                     <!--end::Body Dashboard-->
