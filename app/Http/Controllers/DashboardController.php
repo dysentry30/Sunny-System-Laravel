@@ -585,10 +585,10 @@ class DashboardController extends Controller
     {
         $dops = Dop::whereNotIn("dop", ["EA"])->get();
         $unit_kerjas = UnitKerja::whereNotIn("divcode", ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "8"])->get();
+        $proyeks = Proyek::whereNotIn("unit_kerja", ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "8"])->get();
         $dop_get = $request->query("dop") ?? "";
         $unit_kerja_get = $request->query("unit-kerja") ?? "";
 
-        $proyeks = Proyek::whereNotIn("unit_kerja", ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "8"])->get();
         if ($dop_get != "") {
             $proyeks = $proyeks->filter(function ($p) use ($dop_get) {
                 return $p->Dop->dop == $dop_get;
@@ -696,15 +696,17 @@ class DashboardController extends Controller
 
     public function dashboard_pelaksanaan_kontrak(Request $request)
     {
-        $dops = Dop::all();
-        $unit_kerjas = UnitKerja::all();
+        $dops = Dop::whereNotIn("dop", ["EA"])->get();
+        $unit_kerjas = UnitKerja::whereNotIn("divcode", ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "8"])->get();
+        $proyeks = Proyek::whereNotIn("unit_kerja", ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "8"])->get();
         $dop_get = $request->query("dop") ?? "";
         $unit_kerja_get = $request->query("unit-kerja") ?? "";
         $proyek_get = $request->query("kode-proyek") ?? "";
-        $claims = ClaimManagements::all();
-        // dd($claims);
+        $claims = ClaimManagements::all()->filter(function($cl) use($proyeks) {
+            return $proyeks->firstWhere("kode_proyek", "=", $cl->kode_proyek)->isNotEmpty();
+        });
+        dd($claims);
 
-        $proyeks = Proyek::all();
         if ($dop_get != "") {
             $proyeks = $proyeks->filter(function ($p) use ($dop_get) {
                 return $p->Dop->dop == $dop_get;

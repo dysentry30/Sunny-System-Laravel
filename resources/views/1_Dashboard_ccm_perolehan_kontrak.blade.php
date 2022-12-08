@@ -1243,7 +1243,7 @@
         //         item.style.width = width + "%";
         //     });
         // }
-        animateProgressBar();
+        // animateProgressBar();
     </script>
     {{-- End :: Animation Progress Bar --}}
 
@@ -1264,8 +1264,8 @@
         // }
 
 
-        // animateCounterNumber("data-persen", "", "%");
-        // animateCounterNumber("data-items", "", "");
+        animateCounterNumber("#data-persen", "", "%");
+        animateCounterNumber("#data-items", "", "");
     </script>
     {{-- End :: Animation Counter Number --}}
 
