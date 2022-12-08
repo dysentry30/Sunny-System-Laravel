@@ -398,7 +398,7 @@
                                             <!--begin::Card column-->
                                             <div class="row">
                                                 <!--begin::Card body-->
-                                                <div class="card-body pt-0">
+                                                <div class="">
                                                     <!--begin::Card widget 20-->
                                                     <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #017EB8;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
                                                         <!--begin::Header-->
@@ -415,11 +415,6 @@
                                                             <!--end::Title-->
                                                         </div>
                                                         <!--end::Header-->
-                                                        <!--begin::Card body-->
-                                                        <div class="card-body d-flex align-items-end pt-0">
-                                                            
-                                                        </div>
-                                                        <!--end::Card body-->
                                                     </div>
                                                     <!--end::Card widget 20-->
                                                 </div>
@@ -428,7 +423,7 @@
                                             <!--end-begin::Card column-->
                                             <div class="row">
                                                 <!--begin::Card body-->
-                                                <div class="card-body pt-0">
+                                                <div class="pt-0">
                                                     <!--begin::Card widget 20-->
                                                     <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #28B3AC;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
                                                         <!--begin::Header-->
@@ -445,11 +440,6 @@
                                                             <!--end::Title-->
                                                         </div>
                                                         <!--end::Header-->
-                                                        <!--begin::Card body-->
-                                                        <div class="card-body d-flex align-items-end pt-0">
-                                                            
-                                                        </div>
-                                                        <!--end::Card body-->
                                                     </div>
                                                     <!--end::Card widget 20-->
                                                 </div>
@@ -458,7 +448,7 @@
                                             <!--end-begin::Card column-->
                                             <div class="row">
                                                 <!--begin::Card body-->
-                                                <div class="card-body pt-0">
+                                                <div class="mb-6 pt-0">
                                                     <!--begin::Card widget 20-->
                                                     <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #F7AD1A;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
                                                         <!--begin::Header-->
@@ -475,11 +465,6 @@
                                                             <!--end::Title-->
                                                         </div>
                                                         <!--end::Header-->
-                                                        <!--begin::Card body-->
-                                                        <div class="card-body d-flex align-items-end pt-0">
-                                                            
-                                                        </div>
-                                                        <!--end::Card body-->
                                                     </div>
                                                     <!--end::Card widget 20-->
                                                 </div>
@@ -488,11 +473,11 @@
                                             <!--end::Card column-->
                                             <div class="row">
                                                 <!--begin::Card body-->
-                                                <div class="card-body pt-0">
+                                                <div class="mb-3 pt-0">
                                                     <!--begin::Card widget 20-->
                                                     <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #c34424;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
                                                         <!--begin::Header-->
-                                                        <div class="card-header pt-5">
+                                                        <div class="card-header pt-6">
                                                             <!--begin::Title-->
                                                             <div class="card-title d-flex flex-column">
                                                                 <!--begin::Amount-->
@@ -518,7 +503,7 @@
                                             <!--end-begin::Card column-->
                                             <div class="row">
                                                 <!--begin::Card body-->
-                                                <div class="card-body pt-0">
+                                                <div class="mb-6 pt-0">
                                                     <!--begin::Card widget 20-->
                                                     <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #ae1b22;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
                                                         <!--begin::Header-->
@@ -555,7 +540,7 @@
                                             <!--begin::Card column-->
                                             <div class="row ">
                                                 <!--begin::Card body-->
-                                                <div class="card-body pt-0">
+                                                <div class="pt-0">
                                                     <!--begin::Card widget 20-->
                                                     <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #017EB8;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
                                                         <!--begin::Header-->
@@ -572,11 +557,6 @@
                                                             <!--end::Title-->
                                                         </div>
                                                         <!--end::Header-->
-                                                        <!--begin::Card body-->
-                                                        <div class="card-body d-flex align-items-end pt-0">
-                                                            
-                                                        </div>
-                                                        <!--end::Card body-->
                                                     </div>
                                                     <!--end::Card widget 20-->
                                                 </div>
@@ -585,11 +565,11 @@
                                             <!--end-begin::Card column-->
                                             <div class="row">
                                                 <!--begin::Card body-->
-                                                <div class="card-body pt-0">
+                                                <div class="pt-0">
                                                     <!--begin::Card widget 20-->
                                                     <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #28B3AC;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
                                                         <!--begin::Header-->
-                                                        <div class="card-header pt-5">
+                                                        <div class="card-header">
                                                             <!--begin Items::Title-->
                                                             <div class="card-title d-flex flex-column">
                                                                 <!--begin::Amount-->
@@ -602,11 +582,6 @@
                                                             <!--end::Title-->
                                                         </div>
                                                         <!--end::Header-->
-                                                        <!--begin::Card body-->
-                                                        <div class="card-body d-flex align-items-end pt-0">
-                                                            
-                                                        </div>
-                                                        <!--end::Card body-->
                                                     </div>
                                                     <!--end::Card widget 20-->
                                                 </div>
@@ -615,11 +590,11 @@
                                             <!--end-begin::Card column-->
                                             <div class="row">
                                                 <!--begin::Card body-->
-                                                <div class="card-body pt-0">
+                                                <div class="pt-0">
                                                     <!--begin::Card widget 20-->
                                                     <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #F7AD1A;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
                                                         <!--begin::Header-->
-                                                        <div class="card-header pt-5">
+                                                        <div class="card-header">
                                                             <!--begin::Title-->
                                                             <div class="card-title d-flex flex-column">
                                                                 <!--begin::Amount-->
@@ -633,10 +608,6 @@
                                                         </div>
                                                         <!--end::Header-->
                                                         <!--begin::Card body-->
-                                                        <div class="card-body d-flex align-items-end pt-0">
-                                                            
-                                                        </div>
-                                                        <!--end::Card body-->
                                                     </div>
                                                     <!--end::Card widget 20-->
                                                 </div>
@@ -645,11 +616,11 @@
                                             <!--end::Card column-->
                                             <div class="row">
                                                 <!--begin::Card body-->
-                                                <div class="card-body pt-0">
+                                                <div class="mb-6 pt-0">
                                                     <!--begin::Card widget 20-->
                                                     <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #c34424;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
                                                         <!--begin::Header-->
-                                                        <div class="card-header pt-5">
+                                                        <div class="card-header">
                                                             <!--begin::Title-->
                                                             <div class="card-title d-flex flex-column">
                                                                 <!--begin::Amount-->
@@ -663,10 +634,6 @@
                                                         </div>
                                                         <!--end::Header-->
                                                         <!--begin::Card body-->
-                                                        <div class="card-body d-flex align-items-end pt-0">
-                                                            
-                                                        </div>
-                                                        <!--end::Card body-->
                                                     </div>
                                                     <!--end::Card widget 20-->
                                                 </div>
@@ -675,11 +642,11 @@
                                             <!--end-begin::Card column-->
                                             <div class="row">
                                                 <!--begin::Card body-->
-                                                <div class="card-body pt-0">
+                                                <div class="pt-0">
                                                     <!--begin::Card widget 20-->
-                                                    <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #ae1b22;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                                    <div class="py-20 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #ae1b22;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
                                                         <!--begin::Header-->
-                                                        <div class="card-header pt-5">
+                                                        <div class="card-header">
                                                             <!--begin::Title-->
                                                             <div class="card-title d-flex flex-column">
                                                                 <!--begin::Amount-->
@@ -692,11 +659,6 @@
                                                             <!--end::Title-->
                                                         </div>
                                                         <!--end::Header-->
-                                                        <!--begin::Card body-->
-                                                        <div class="card-body d-flex align-items-end pt-0">
-                                                            
-                                                        </div>
-                                                        <!--end::Card body-->
                                                     </div>
                                                     <!--end::Card widget 20-->
                                                 </div>
@@ -1094,7 +1056,11 @@
                 type: 'category'
             },
             subtitle: {
-                // text: '3D donut in Highcharts'
+                text: 'Total Jumlah Kontrak : {{ $jumlahKontrak }}',
+                style: {
+                    fontWeight: 'bold',
+                    fontSize: '15px'
+                }
             },
             tooltip: {
                 // headerFormat: '<span style="font-size:15px">{point.key}</span><table>',
