@@ -307,7 +307,7 @@
                                                 <!--begin::Card body-->
                                                 <div class="card-body pt-0">
                                                     <!--begin::Card widget 20-->
-                                                    <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90 mb-5 mb-xl-1" style="background-color: #063F5C;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                                    <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90 mb-5 mb-xl-1" style="background-color: #063F5C;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
                                                         <!--begin::Header-->
                                                         <div class="card-header pt-5">
                                                             <!--begin::Title-->
@@ -338,7 +338,7 @@
                                             <!--begin::Card body-->
                                             <div class="card-body pt-0">
                                                 <!--begin::Card widget 20-->
-                                                <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90 mb-5 mb-xl-1" style="background-color: #063F5C;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: 100%;">
+                                                <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90 mb-5 mb-xl-1" style="background-color: #063F5C;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: 100%;">
                                                     <!--begin::Header-->
                                                     <div class="card-header pt-5">
                                                         <!--begin::Title-->
@@ -400,7 +400,7 @@
                                                 <!--begin::Card body-->
                                                 <div class="">
                                                     <!--begin::Card widget 20-->
-                                                    <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #017EB8;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                                    <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #017EB8;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
                                                         <!--begin::Header-->
                                                         <div class="card-header pt-5">
                                                             <!--begin::Title-->
@@ -425,7 +425,7 @@
                                                 <!--begin::Card body-->
                                                 <div class="pt-0">
                                                     <!--begin::Card widget 20-->
-                                                    <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #28B3AC;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                                    <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #28B3AC;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
                                                         <!--begin::Header-->
                                                         <div class="card-header pt-5">
                                                             <!--begin Items::Title-->
@@ -450,7 +450,7 @@
                                                 <!--begin::Card body-->
                                                 <div class="mb-6 pt-0">
                                                     <!--begin::Card widget 20-->
-                                                    <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #F7AD1A;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                                    <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #F7AD1A;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
                                                         <!--begin::Header-->
                                                         <div class="card-header pt-5">
                                                             <!--begin::Title-->
@@ -475,7 +475,7 @@
                                                 <!--begin::Card body-->
                                                 <div class="mb-3 pt-0">
                                                     <!--begin::Card widget 20-->
-                                                    <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #c34424;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                                    <div class="py-2 rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #c34424;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
                                                         <!--begin::Header-->
                                                         <div class="card-header pt-6">
                                                             <!--begin::Title-->
@@ -505,7 +505,7 @@
                                                 <!--begin::Card body-->
                                                 <div class="mb-6 pt-0">
                                                     <!--begin::Card widget 20-->
-                                                    <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #ae1b22;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                                    <div class="py-2 rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #ae1b22;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
                                                         <!--begin::Header-->
                                                         <div class="card-header pt-5">
                                                             <!--begin::Title-->
@@ -514,7 +514,7 @@
                                                                 <span id="data-items" class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2">{{$proyeks->count()}}</span>
                                                                 <!--end::Amount-->
                                                                 <!--begin::Subtitle-->
-                                                                <span class="text-white opacity-75 pt-1 fw-semibold fs-3">Data Collection</span>
+                                                                <span class="text-white opacity-75 pt-1 fw-semibold fs-4">Data Collection</span>
                                                                 <!--end::Subtitle-->
                                                             </div>
                                                             <!--end::Title-->
@@ -542,7 +542,7 @@
                                                 <!--begin::Card body-->
                                                 <div class="pt-0">
                                                     <!--begin::Card widget 20-->
-                                                    <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #017EB8;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                                    <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #017EB8;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
                                                         <!--begin::Header-->
                                                         <div class="card-header pt-5">
                                                             <!--begin::Title-->
@@ -567,7 +567,7 @@
                                                 <!--begin::Card body-->
                                                 <div class="pt-0">
                                                     <!--begin::Card widget 20-->
-                                                    <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #28B3AC;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                                    <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #28B3AC;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
                                                         <!--begin::Header-->
                                                         <div class="card-header">
                                                             <!--begin Items::Title-->
@@ -592,7 +592,7 @@
                                                 <!--begin::Card body-->
                                                 <div class="pt-0">
                                                     <!--begin::Card widget 20-->
-                                                    <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #F7AD1A;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                                    <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #F7AD1A;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
                                                         <!--begin::Header-->
                                                         <div class="card-header">
                                                             <!--begin::Title-->
@@ -618,7 +618,7 @@
                                                 <!--begin::Card body-->
                                                 <div class="mb-6 pt-0">
                                                     <!--begin::Card widget 20-->
-                                                    <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #c34424;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                                    <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #c34424;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
                                                         <!--begin::Header-->
                                                         <div class="card-header">
                                                             <!--begin::Title-->
@@ -644,9 +644,9 @@
                                                 <!--begin::Card body-->
                                                 <div class="pt-0">
                                                     <!--begin::Card widget 20-->
-                                                    <div class="py-20 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #ae1b22;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                                    <div class="rounded-0 py-20 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #ae1b22;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
                                                         <!--begin::Header-->
-                                                        <div class="card-header">
+                                                        <div class="py-4 card-header">
                                                             <!--begin::Title-->
                                                             <div class="card-title d-flex flex-column">
                                                                 <!--begin::Amount-->
