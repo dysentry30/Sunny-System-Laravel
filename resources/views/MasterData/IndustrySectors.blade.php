@@ -443,12 +443,14 @@
                 }
             }).then(res => res.json());
             if(status) {
-                console.log(status);
                 Toast.fire({
                     text: data.msg,
                     icon: "success",
-                    timer: 5000,
+                    timer: 3000,
                 });
+                setTimeout(() => {
+                    location.reload();
+                }, 3000);
             } else {
                 console.log(status);
                 Toast.fire({
