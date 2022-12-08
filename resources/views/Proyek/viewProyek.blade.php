@@ -1092,7 +1092,7 @@
                                                                     <!--begin::Input-->
                                                                     {{-- @isset($proyek->jenis_proyek) --}}
                                                                     {{-- @dump($proyek->jenis_proyek) --}}
-                                                                    <select id="jenis-proyek" onchange="tampilJOCategory(this)" name="jenis-proyek"
+                                                                    <select id="jenis-proyek" onchange="tampilJOCategory(this)"  name="jenis-proyek"
                                                                         class="form-select form-select-solid"
                                                                         data-control="select2" data-hide-search="true"
                                                                         data-placeholder="Pilih Jenis Proyek"
@@ -1193,64 +1193,69 @@
                                                                 <!--end::Input group-->
                                                             </div>
                                                             <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="required">Kategori JO<i
-                                                                                class="bi bi-key"></i></span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-                                                                    <!--begin::Input-->
-                                                                    {{-- @php
-                                                                        $years = $proyek->tahun_perolehan;
-                                                                    @endphp --}}
-                                                                    {{-- @for ($i = 2021; $i < $years + 20; $i++)
-                                                                        <option value="{{ $i }}" {{ $years == $i ? 'selected' : '' }}>
-                                                                            {{ $i }}</option>
-                                                                    @endfor --}}
-                                                                    @php
-                                                                        $jenis_jo = "";
-                                                                        switch ($proyek->jenis_jo) {
-                                                                            case 30:
-                                                                                $jenis_jo = "JO Integrated Leader";
-                                                                                break;
-                                                                            case 31:
-                                                                                $jenis_jo = "JO Integrated Member";
-                                                                                break;
-                                                                            case 40:
-                                                                                $jenis_jo = "JO Portion Leader";
-                                                                                break;
-                                                                            case 41:
-                                                                                $jenis_jo = "JO Portion Member";
-                                                                                break;
-                                                                            case 50:
-                                                                                $jenis_jo = "JO Mix Integrated - Portion";
-                                                                                break;
-                                                                            default:
-                                                                                $jenis_jo = "Proyek ini bukan JO";
-                                                                                break;
-                                                                        }
-                                                                    @endphp
-                                                                    <input type="text"
-                                                                        class="form-control form-control-solid"
-                                                                        name="preview-kategori-JO"
-                                                                        value="{{ $jenis_jo }}"
-                                                                        disabled
-                                                                        />
-                                                                    <!--begin::Input-->
-                                                                    {{-- <select id="tahun-perolehan" name="tahun-perolehan"
-                                                                        class="form-select form-select-solid select2-hidden-accessible"
-                                                                        data-control="select2" data-hide-search="true" data-placeholder="Tahun"
-                                                                        data-select2-id="select2-data-tahun" tabindex="-1" aria-hidden="true" {{ auth()->user()->check_administrator ? '' : 'disabled'}}>
-                                                                        @for ($i = 2021; $i < $years + 20; $i++)
+                                                                @if ($proyek->jenis_proyek == "J")
+
+                                                                @endif
+                                                                @if ($proyek->jenis_jo == null || $proyek->jenis_jo != 10 || $proyek->jenis_jo != 20 )
+                                                                    <!--begin::Input group-->
+                                                                    <div id="kategori-jenis-jo" class="fv-row mb-7" style="display: none">
+                                                                        <!--begin::Label-->
+                                                                        <label class="fs-6 fw-bold form-label mt-3">
+                                                                            <span class="required">Kategori JO</span>
+                                                                        </label>
+                                                                        <!--end::Label-->
+                                                                        <!--begin::Input-->
+                                                                        {{-- @php
+                                                                            $years = $proyek->tahun_perolehan;
+                                                                        @endphp --}}
+                                                                        {{-- @for ($i = 2021; $i < $years + 20; $i++)
                                                                             <option value="{{ $i }}" {{ $years == $i ? 'selected' : '' }}>
                                                                                 {{ $i }}</option>
-                                                                        @endfor
-                                                                    </select> --}}
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
+                                                                        @endfor --}}
+                                                                        @php
+                                                                            $jenis_jo = "";
+                                                                            switch ($proyek->jenis_jo) {
+                                                                                case 30:
+                                                                                    $jenis_jo = "JO Integrated Leader";
+                                                                                    break;
+                                                                                case 31:
+                                                                                    $jenis_jo = "JO Integrated Member";
+                                                                                    break;
+                                                                                case 40:
+                                                                                    $jenis_jo = "JO Portion Leader";
+                                                                                    break;
+                                                                                case 41:
+                                                                                    $jenis_jo = "JO Portion Member";
+                                                                                    break;
+                                                                                case 50:
+                                                                                    $jenis_jo = "JO Mix Integrated - Portion";
+                                                                                    break;
+                                                                                default:
+                                                                                    $jenis_jo = "Proyek ini bukan JO";
+                                                                                    break;
+                                                                            }
+                                                                        @endphp
+                                                                        {{-- <input type="text"
+                                                                            class="form-control form-control-solid"
+                                                                            name="preview-kategori-JO"
+                                                                            value="{{ $jenis_jo }}"
+                                                                            disabled
+                                                                            /> --}}
+                                                                            <label class="fs-6 fw-bold form-label">
+                                                                                {{-- <span><b>Pilih JO:</b></span> --}}
+                                                                                {{-- <span><b id="max-porsi" value="{{ $proyek->porsi_jo }}">Max Porsi JO : {{ $proyek->porsi_jo }}% </b></span> --}}
+                                                                            </label>
+                                                                            <select id="detail-jo" name="detail-jo" class="form-select form-select-solid select2-hidden-accessible" data-control="select2" data-hide-search="true" data-placeholder="Pilih Jenis JO" readonly="" tabindex="-1" aria-hidden="true">
+                                                                                <option value="" selected></option>
+                                                                                <option value="30">JO Integrated Leader</option>
+                                                                                <option value="31">JO Integrated Member</option>
+                                                                                <option value="40">JO Portion Leader</option>
+                                                                                <option value="41">JO Portion Member</option>
+                                                                                <option value="50">JO Mix Integrated - Portion</option>
+                                                                            </select>
+                                                                    </div>
+                                                                    <!--end::Input group-->
+                                                                @endif
                                                             </div>
                                                             
                                                         </div>
@@ -6914,7 +6919,7 @@
                 <!--end::Modal header-->
 
                 <!--begin::Modal body-->
-                <div class="modal-body py-lg-6 px-lg-6">
+                {{-- <div class="modal-body py-lg-6 px-lg-6">
 
 
                     <!--begin::Row Kanan+Kiri-->
@@ -6926,7 +6931,7 @@
                                 <!--begin::Label-->
                                 <label class="fs-6 fw-bold form-label">
                                     <span><b>Pilih JO:</b></span>
-                                    {{-- <span><b id="max-porsi" value="{{ $proyek->porsi_jo }}">Max Porsi JO : {{ $proyek->porsi_jo }}% </b></span> --}}
+                                    <span><b id="max-porsi" value="{{ $proyek->porsi_jo }}">Max Porsi JO : {{ $proyek->porsi_jo }}% </b></span>
                                 </label>
                                 <select id="detail-jo" name="detail-jo" class="form-select form-select-solid select2-hidden-accessible" data-control="select2" data-hide-search="true" data-placeholder="Pilih Jenis JO" readonly="" tabindex="-1" aria-hidden="true" data-select2-id="select2-data-jenis-jo">
                                     <option value="" selected></option>
@@ -6938,11 +6943,11 @@
                                 </select>
                                 <!--end::Label-->
                                 <!--begin::Label-->
-                                {{-- <label class="fs-6 fw-bold form-label mt-3">
+                                <label class="fs-6 fw-bold form-label mt-3">
                             <span><b>Sisa Porsi JO : {{ $proyek->porsi_jo }} - </b>
                                 <b id="selisih-porsi">0</b>
                                 <b id="sisa-porsi"> = {{ $proyek->porsi_jo }}%</b></span>
-                        </label> --}}
+                        </label>
                                 <!--end::Label-->
                             </div>
                             <!--end::Input group-->
@@ -6956,7 +6961,7 @@
                     <button type="button" onclick="changeValueJODetail(this)" class="btn btn-sm btn-light btn-active-primary text-white"
                         id="jo_detail_save" style="background-color:#008CB4">Save</button>
 
-                </div>
+                </div> --}}
                 <!--end::Modal body-->
             </div>
             <!--end::Modal content-->
@@ -7641,11 +7646,12 @@
 
     {{-- Begin :: JO Detail Modal Pop Up --}}
     <script>
-        const modalJODetail = new bootstrap.Modal("#kt_modal_jo_detail", {});
+        // const modalJODetail = new bootstrap.Modal("#kt_modal_jo_detail", {});
         function tampilJOCategory(e) {
             const valueJO = e.value;
             if(valueJO == "J") {
-                modalJODetail.show();
+                document.getElementById("kategori-jenis-jo").style.display = "";
+                // modalJODetail.show();
             }
         }
     </script>
