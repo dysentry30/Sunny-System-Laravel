@@ -406,7 +406,7 @@
                                                             <!--begin::Title-->
                                                             <div class="card-title d-flex flex-column">
                                                                 <!--begin::Amount-->
-                                                                <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2" id="data-items">78</span>
+                                                                <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2" id="data-items">{{ $sasaran }}</span>
                                                                 <!--end::Amount-->
                                                                 <!--begin::Subtitle-->
                                                                 <span class="text-white opacity-75 pt-1 fw-semibold fs-3">Sasaran</span>
@@ -436,7 +436,7 @@
                                                             <!--begin Items::Title-->
                                                             <div class="card-title d-flex flex-column">
                                                                 <!--begin::Amount-->
-                                                                <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2" id="data-items">35</span>
+                                                                <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2" id="data-items">{{ $cadangan }}</span>
                                                                 <!--end::Amount-->
                                                                 <!--begin::Subtitle-->
                                                                 <span class="text-white opacity-75 pt-1 fw-semibold fs-3">Cadangan</span>
@@ -466,7 +466,7 @@
                                                             <!--begin::Title-->
                                                             <div class="card-title d-flex flex-column">
                                                                 <!--begin::Amount-->
-                                                                <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2" id="data-items">45</span>
+                                                                <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2" id="data-items">{{ $potensial }}</span>
                                                                 <!--end::Amount-->
                                                                 <!--begin::Subtitle-->
                                                                 <span class="text-white opacity-75 pt-1 fw-semibold fs-3">Potensi</span>
@@ -496,7 +496,7 @@
                                                             <!--begin::Title-->
                                                             <div class="card-title d-flex flex-column">
                                                                 <!--begin::Amount-->
-                                                                <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2" id="data-items">45</span>
+                                                                <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2" id="data-items">0</span>
                                                                 <!--end::Amount-->
                                                                 <!--begin::Subtitle-->
                                                                 <span class="text-white opacity-75 pt-1 fw-semibold fs-3">Tender Review</span>
@@ -563,7 +563,7 @@
                                                             <!--begin::Title-->
                                                             <div class="card-title d-flex flex-column">
                                                                 <!--begin::Amount-->
-                                                                <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2" id="data-items">78</span>
+                                                                <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2" id="data-items">{{ $on_going_counter }}</span>
                                                                 <!--end::Amount-->
                                                                 <!--begin::Subtitle-->
                                                                 <span class="text-white opacity-75 pt-1 fw-semibold fs-3">On Going</span>
@@ -593,7 +593,7 @@
                                                             <!--begin Items::Title-->
                                                             <div class="card-title d-flex flex-column">
                                                                 <!--begin::Amount-->
-                                                                <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2" id="data-items">12</span>
+                                                                <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2" id="data-items">{{ $cancel_counter }}</span>
                                                                 <!--end::Amount-->
                                                                 <!--begin::Subtitle-->
                                                                 <span class="text-white opacity-75 pt-1 fw-semibold fs-3">Cancel</span>
@@ -623,7 +623,7 @@
                                                             <!--begin::Title-->
                                                             <div class="card-title d-flex flex-column">
                                                                 <!--begin::Amount-->
-                                                                <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2" id="data-items">55</span>
+                                                                <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2" id="data-items">{{ $win_counter }}</span>
                                                                 <!--end::Amount-->
                                                                 <!--begin::Subtitle-->
                                                                 <span class="text-white opacity-75 pt-1 fw-semibold fs-3">Win</span>
@@ -653,7 +653,7 @@
                                                             <!--begin::Title-->
                                                             <div class="card-title d-flex flex-column">
                                                                 <!--begin::Amount-->
-                                                                <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2" id="data-items">21</span>
+                                                                <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2" id="data-items">{{ $lose_counter }}</span>
                                                                 <!--end::Amount-->
                                                                 <!--begin::Subtitle-->
                                                                 <span class="text-white opacity-75 pt-1 fw-semibold fs-3">Lose</span>
@@ -1107,7 +1107,7 @@
                 pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b><br/>'
             },
             legend: {
-                enabled: false,
+                enabled: true,
             },
             credits: {
                 enabled: false
@@ -1115,6 +1115,13 @@
             exporting: {
                 showTable: false,
                 allowHTML: true
+            },
+            plotOptions: {
+                column: {
+                    dataLabels: {
+                        enabled: true,
+                    }
+                }
             },
             series: [
                 {
@@ -1255,8 +1262,10 @@
         //         }, 15);
         //     });
         // }
-        animateCounterNumber("#data-persen", "", "%");
-        animateCounterNumber("#data-items", "", "");
+
+
+        // animateCounterNumber("data-persen", "", "%");
+        // animateCounterNumber("data-items", "", "");
     </script>
     {{-- End :: Animation Counter Number --}}
 

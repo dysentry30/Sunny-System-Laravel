@@ -583,12 +583,12 @@ class DashboardController extends Controller
 
     public function dashboard_perolehan_kontrak(Request $request)
     {
-        $dops = Dop::all();
-        $unit_kerjas = UnitKerja::all();
+        $dops = Dop::whereNotIn("dop", ["EA"])->get();
+        $unit_kerjas = UnitKerja::whereNotIn("divcode", ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "8"])->get();
         $dop_get = $request->query("dop") ?? "";
         $unit_kerja_get = $request->query("unit-kerja") ?? "";
 
-        $proyeks = Proyek::all();
+        $proyeks = Proyek::whereNotIn("unit_kerja", ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "8"])->get();
         if ($dop_get != "") {
             $proyeks = $proyeks->filter(function ($p) use ($dop_get) {
                 return $p->Dop->dop == $dop_get;
@@ -598,6 +598,7 @@ class DashboardController extends Controller
                 return $p->UnitKerja->divcode == $unit_kerja_get;
             });
         }
+
 
         // Begin :: Kontrak Berdasarkan Stage Chart
         $on_going_counter = $proyeks->where(function ($p) {
@@ -615,7 +616,7 @@ class DashboardController extends Controller
         })->count();
         $cancel_counter = $proyeks->where(function ($p) {
             // return !empty($p->ContractManagements) && $p->ContractManagements->stage < 3;
-            return $p->is_cancel;
+            return $p->is_cancel == true;
             // dd($p->ContractManagements);
         })->count();
         $kontrak_by_stage = collect([
@@ -669,8 +670,28 @@ class DashboardController extends Controller
         $success_rate = (int) Percentage::fromFractionAndTotal($win_counter, $proyeks->count())->asFloat();
         // End :: Success Rate
 
+        // Begin :: Clasification Column
+        $cadangan = 0;
+        $sasaran = 0;
+        $potensial = 0;
+        foreach ($proyeks as $key => $p) {
+            // dd($p->status_pasar);
+            if ($p->status_pasdin == "Cadangan") {
+                $cadangan += 1;
+            }
+            if ($p->status_pasdin == "Sasaran") {
+                $sasaran += 1;
+            }
+            if ($p->status_pasdin == "Potensial") {
+                $potensial += 1;
+            }
+        }
+        // End :: Clasification Column
+        // Begin :: Tender Status Column
+        // End :: Tender Status Column
 
-        return view("1_Dashboard_ccm_perolehan_kontrak", compact(["proyeks", "dops", "unit_kerjas", "dop_get", "unit_kerja_get", "kontrak_by_stage", "divisi", "JO_Non_JO_counter", "nilai_tender_proyeks", "success_rate"]));
+
+        return view("1_Dashboard_ccm_perolehan_kontrak", compact(["cadangan", "sasaran", "potensial", "cancel_counter","lose_counter", "win_counter", "on_going_counter", "proyeks", "dops", "unit_kerjas", "dop_get", "unit_kerja_get", "kontrak_by_stage", "divisi", "JO_Non_JO_counter", "nilai_tender_proyeks", "success_rate"]));
     }
 
     public function dashboard_pelaksanaan_kontrak(Request $request)
