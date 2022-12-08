@@ -221,18 +221,6 @@
                         </div>
                         <!--end::Card Line col-12-->
 
-                        <!--begin::Title-->
-                        <div class="mb-4">
-                            <div class="col-12">
-                                <!--begin::Title body-->
-                                <div style="border-radius: 0px" class="card-body bg-secondary">
-                                    <h2 class="m-0 text-center">Resume <i class="h2 px-1">Outstanding</i> CCM</h2>
-                                </div>
-                                <!--end::Title body-->
-                            </div>
-                        </div>
-                        <!--end::Title-->
-
                         <!--begin::Card Diagram Column dan Donut-->
                         <div class="row mx-3">
                             <!--begin::Card body-->
@@ -285,8 +273,21 @@
                             <!--end::Card body-->
                         </div>
                         <!--end::Card Diagram Column dan Donut-->
-
+                        
                         <br>
+                        
+                        <!--begin::Title-->
+                        <div class="mb-4">
+                            <div class="col-12">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-secondary">
+                                    <h2 class="m-0 text-center">Resume <i class="h2 px-1">Outstanding</i> CCM</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                        </div>
+                        <!--end::Title-->
+
 
                         <!--begin::Card Diagram Column dan Donut-->
                         <div class="row mx-3">
