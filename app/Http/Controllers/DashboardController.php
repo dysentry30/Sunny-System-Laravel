@@ -1046,13 +1046,13 @@ class DashboardController extends Controller
                         }
                     }
                 }
-                $tipe_proyek = "";
-                if ($data[$kode_proyek]->tipe_proyek == "R") {
-                    $tipe_proyek = "Retail";
-                } else {
-                    $tipe_proyek = "Non-Retail";
-                }
                 if (isset($data[$kode_proyek])) {
+                    $tipe_proyek = "";
+                    if ($data[$kode_proyek]->tipe_proyek == "R") {
+                        $tipe_proyek = "Retail";
+                    } else {
+                        $tipe_proyek = "Non-Retail";
+                    }
                     $sheet->setCellValue("A" . $counter, $data[$kode_proyek]->nama_proyek);
                     $sheet->setCellValue("B" . $counter, $data[$kode_proyek]->status_pasdin);
                     $stage = $this->getProyekStage($data[$kode_proyek]->stage);
