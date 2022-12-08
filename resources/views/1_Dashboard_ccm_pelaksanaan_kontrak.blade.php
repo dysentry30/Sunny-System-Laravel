@@ -231,14 +231,6 @@
                                 <!-- data table is inserted here -->
                                 <!--end::COLUMN CHART-->
                             </div>
-                            <!--end-begin::Card column-->
-                            <div class="col-4">
-                                <!--begin::COLUMN CHART-->
-                                <div id="contract-classification"></div>
-                                <!-- data table is inserted here -->
-                                <!--end::COLUMN CHART-->
-                            </div>
-                            <!--end-begin::Card column-->
                             <div class="col-4">
                                 <!--begin::PIE CHART-->
                                 <figure class="highcharts-figure">
@@ -248,6 +240,14 @@
                                 <!--end::PIE CHART-->
                             </div>
                             <!--end::Card column-->
+                            <!--end-begin::Card column-->
+                            <div class="col-4">
+                                <!--begin::COLUMN CHART-->
+                                <div id="contract-classification"></div>
+                                <!-- data table is inserted here -->
+                                <!--end::COLUMN CHART-->
+                            </div>
+                            <!--end-begin::Card column-->
                         </div>
                         <!--end::Card Diagram Column dan Donut-->
 
@@ -293,7 +293,7 @@
                             <div class="col-9">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-warning">
-                                    <h2 class="m-0 text-center">TOTAL NILAI PERUBAHAN : Rp 5.850.000.000.000</h2>
+                                    <h2 class="m-0 text-center">TOTAL NILAI PERUBAHAN : Rp {{ number_format($totalPerubahan, 0, ".", ".") }}</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
@@ -327,7 +327,7 @@
                             <div class="col-5">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-secondary">
-                                    <h2 class="m-0 text-center">{{ $table->total_nilai }}</h2>
+                                    <h2 class="m-0 text-center">Rp {{ number_format($table->total_nilai, 0, ".", ".") }}</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
@@ -776,11 +776,15 @@
                     fontSize: '20px'
                 }
             },
+            subtitle: {
+                text: 'Total Jumlah Kontrak : {{ $jumlahKontrak }}',
+                style: {
+                    fontWeight: 'bold',
+                    fontSize: '15px'
+                }
+            },
             xAxis: {
                 type: 'category'
-            },
-            subtitle: {
-                // text: '3D donut in Highcharts'
             },
             tooltip: {
                 // headerFormat: '<span style="font-size:15px">{point.key}</span><table>',
@@ -797,6 +801,13 @@
             },
             credits: {
                 enabled: false
+            },
+            plotOptions: {
+                column: {
+                    dataLabels: {
+                        enabled: true,
+                    }
+                }
             },
             exporting: {
                 showTable: false,
@@ -912,20 +923,20 @@
     </script> --}}
     <!--end::Highchart Line-->
 
-    {{-- Begin :: Animation Progress Bar --}}
+    <!-- Begin :: Animation Progress Bar -->
     <script>
         animateProgressBar();
     </script>
-    {{-- End :: Animation Progress Bar --}}
+    <!-- End :: Animation Progress Bar -->
 
-    {{-- Begin :: Animation Counter Number --}}
+    <!-- Begin :: Animation Counter Number -->
     <script>
         animateCounterNumber("#data-persen", "", "%");
         animateCounterNumber("#data-items", "Rp. ");
     </script>
-    {{-- End :: Animation Counter Number --}}
+    <!-- End :: Animation Counter Number -->
 
-    {{-- Begin :: Select Filter Dropdown --}}
+    <!-- Begin :: Select Filter Dropdown -->
     <script>
         function selectFilter(e) {
             const value = e.value;
@@ -942,6 +953,6 @@
             return;
         }
     </script>
-    {{-- End :: Select Filter Dropdown --}}
+    <!-- End :: Select Filter Dropdown -->
 
 @endsection
