@@ -1062,7 +1062,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     });
 
     // Master Data Provinsi
-    Route::get('/negara', function (Request $request) {
+    Route::get('/provinsi', function (Request $request) {
         $provinsi = Provinsi::all();
         return view("/MasterData/Provinsi", compact(["provinsi"]));
     });

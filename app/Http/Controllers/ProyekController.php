@@ -1346,351 +1346,353 @@ class ProyekController extends Controller
                 // $customer_online = $customer->
                 // http://nasabah.wika.co.id/index.php/mod_excel/post_json_crm_dev
                 // Begin :: Ngirim data ke nasabah online WIKA
-                $data_nasabah_online = collect([
-                    "devid" => "YMMI002",
-                    "packageid" => $this->GUID(),
-                    "cocode" => "A000",
-                    "prctr" => "",
-                    // "timestamp" => "20221013100000",
-                    "timestamp" => date("y") . date("m") . date("d") . "10000",
-                    "data" => [
-                        "BPARTNER" => "$customer->kode_nasabah",
-
-                        "GROUPING" => "$sap->bp_grouping",
-
-                        "LVORM" => "",
-
-                        "TITLE" => "Z001",
-
-                        "NAME" => "$customer->name",
-
-                        "TITLELETTER" => "$sap->search_term_1",
-
-                        "SEARCHTERM1" => "$sap->search_term_1",
-
-                        "SEARCHTERM2" => "$sap->search_term_2",
-
-                        "STREET" => "$sap->street",
-
-                        "HOUSE_NO" => "NO123",
-
-                        "POSTL_COD1" => "$customer->kode_pos",
-
-                        "CITY" => "$customer->kota_kabupaten",
-
-                        "ADDR_COUNTRY" => "$customer->negara",
-
-                        "REGION" => "$customer->kota_kabupaten",
-
-                        "PO_BOX" => "XXXXX",
-
-                        "POSTL_COD3" => "",
-
-                        "LANGU" => "E",
-
-                        "TELEPHONE" => "$customer->phone_number",
-
-                        "PHONE_EXTENSION" => "",
-
-                        "MOBPHONE" => "$customer->handphone",
-
-                        "FAX" => "",
-
-                        "FAX_EXTENSION" => "",
-
-                        "E_MAIL" => "$customer->email",
-
-                        "VALIDFROMDATE" => "$proyekStage->tanggal_mulai_terkontrak",
-
-                        "VALIDTODATE" => "$proyekStage->tanggal_selesai_fho",
-
-                        "IDENTIFICATION" => [
-
-                            "TAXTYPE" => "$sap->tax_number_category",
-
-                            "TAXNUMBER" => "$customer->npwp_company"
-                        ],
-
-                        "BANK" => [
-                            "BANK_DET_ID" => "",
-
-                            "BANK_CTRY" => "",
-
-                            "BANK_KEY" => "",
-
-                            "BANK_ACCT" => "",
-
-                            "BK_CTRL_KEY" => "",
-
-                            "BANK_REF" => "",
-
-                            "EXTERNALBANKID" => "",
-
-                            "ACCOUNTHOLDER" => "",
-
-                            "BANKACCOUNTNAME" => ""
-                        ],
-
-                        "CUST_BUKRS" => "A000",
-
-                        "KUNNR" => "T100000002",
-
-                        "CUST_AKONT" => "1104111000",
-
-                        "CUST_C_ZTERM" => "ZC02",
-
-                        "CUST_WTAX" => [
-
-                            "WITHT" => "J3",
-
-                            "WT_AGENT" => "X",
-
-                            "WT_AGTDF" => "2022-10-13",
-
-                            "WT_AGTDT" => "9999-12-31"
-                        ],
-
-                        "VKORG" => "A000",
-
-                        "VTWEG" => "00",
-
-                        "SPART" => "00",
-
-                        "KDGRP" => "04",
-
-                        "CUST_WAERS" => "IDR",
-
-                        "KALKS" => "1",
-
-                        "VERSG" => "1",
-
-                        "VSBED" => "01",
-
-                        "INCO1" => "EXW",
-
-                        "INCO2_L" => "-",
-
-                        "CUST_S_ZTERM" => "ZC00",
-
-                        "KTGRD" => "Z1",
-
-                        "TAXKD" => "1",
-
-                        "VEND_BUKRS" => "",
-
-                        "LIFNR" => "T100000002",
-
-                        "VEND_AKONT" => "",
-
-                        "VEND_C_ZTERM" => "",
-
-                        "REPRF" => "X",
-
-                        "VEND_WTAX" => [],
-                        // "VEND_WTAX" => [
-
-                        //     "WITHT" => "J3",
-
-                        //     "WT_SUBJCT" => "X"
-
-                        // ],
-
-                        "EKORG" => "A000",
-
-                        "VEND_P_ZTERM" => "",
-
-                        "WEBRE" => "X",
-
-                        "VEND_WAERS" => "",
-
-                        "LEBRE" => "X"
-                    ]
-                ]);
-                // dd($data_nasabah_online);
                 // $data_nasabah_online = collect([
-                //     "nmnasabah" => "$customer->name",
-                //     "alamat" => "$customer->address_1",
-                //     "kota" => "$customer->kota_kabupaten",
-                //     "email" => "$customer->email",
-                //     "ext" => "-",
-                //     "telepon" => "$customer->phone_number",
-                //     "fax" => ".",
-                //     "npwp" => "$customer->npwp_company",
-                //     "nama_kontak" => "$pic->nama_pic",
-                //     "jenisperusahaan" => "$customer->jenis_instansi",
-                //     "jabatan" => "$pic->jabatan_pic",
-                //     "email1" => "$pic->email_pic",
-                //     "telpon1" => "$pic->phone_pic",
-                //     "handphone" => "$pic->phone_pic",
-                //     "tipe_perusahaan" => "-",
-                //     "tipe_lain_perusahaan" => "-",
-                //     "cotid" => "11",
-                //     "dtsap" => [
-                //         "devid" => "YMMI002",
-                //         "packageid" => $this->GUID(),
-                //         "cocode" => "A000",
-                //         "prctr" => "",
-                //         // "timestamp" => "20221013100000",
-                //         "timestamp" => date("y") . date("m") . date("d") . "10000",
-                //         "data" => [
-                //             "BPARTNER" => "$customer->kode_nasabah",
+                //     "devid" => "YMMI002",
+                //     "packageid" => $this->GUID(),
+                //     "cocode" => "A000",
+                //     "prctr" => "",
+                //     // "timestamp" => "20221013100000",
+                //     "timestamp" => date("y") . date("m") . date("d") . "10000",
+                //     "data" => [
+                //         "BPARTNER" => "$customer->kode_nasabah",
 
-                //             "GROUPING" => "$sap->bp_grouping",
+                //         "GROUPING" => "$sap->bp_grouping",
 
-                //             "LVORM" => "",
+                //         "LVORM" => "",
 
-                //             "TITLE" => "Z001",
+                //         "TITLE" => "Z001",
 
-                //             "NAME" => "$customer->name",
+                //         "NAME" => "$customer->name",
 
-                //             "TITLELETTER" => "$sap->search_term_1",
+                //         "TITLELETTER" => "$sap->search_term_1",
 
-                //             "SEARCHTERM1" => "$sap->search_term_1",
+                //         "SEARCHTERM1" => "$sap->search_term_1",
 
-                //             "SEARCHTERM2" => "$sap->search_term_2",
+                //         "SEARCHTERM2" => "$sap->search_term_2",
 
-                //             "STREET" => "$sap->street",
+                //         "STREET" => "$sap->street",
 
-                //             "HOUSE_NO" => "NO123",
+                //         "HOUSE_NO" => "NO123",
 
-                //             "POSTL_COD1" => "$customer->kode_pos",
+                //         "POSTL_COD1" => "$customer->kode_pos",
 
-                //             "CITY" => "$customer->kota_kabupaten",
+                //         "CITY" => "$customer->kota_kabupaten",
 
-                //             "ADDR_COUNTRY" => "$customer->negara",
+                //         "ADDR_COUNTRY" => "$customer->negara",
 
-                //             "REGION" => "$customer->kota_kabupaten",
+                //         "REGION" => "$customer->kota_kabupaten",
 
-                //             "PO_BOX" => "XXXXX",
+                //         "PO_BOX" => "XXXXX",
 
-                //             "POSTL_COD3" => "",
+                //         "POSTL_COD3" => "",
 
-                //             "LANGU" => "E",
+                //         "LANGU" => "E",
 
-                //             "TELEPHONE" => "$customer->phone_number",
+                //         "TELEPHONE" => "$customer->phone_number",
 
-                //             "PHONE_EXTENSION" => "",
+                //         "PHONE_EXTENSION" => "",
 
-                //             "MOBPHONE" => "$customer->handphone",
+                //         "MOBPHONE" => "$customer->handphone",
 
-                //             "FAX" => "",
+                //         "FAX" => "",
 
-                //             "FAX_EXTENSION" => "",
+                //         "FAX_EXTENSION" => "",
 
-                //             "E_MAIL" => "$customer->email",
+                //         "E_MAIL" => "$customer->email",
 
-                //             "VALIDFROMDATE" => "$proyekStage->tanggal_mulai_terkontrak",
+                //         "VALIDFROMDATE" => "$proyekStage->tanggal_mulai_terkontrak",
 
-                //             "VALIDTODATE" => "$proyekStage->tanggal_selesai_fho",
+                //         "VALIDTODATE" => "$proyekStage->tanggal_selesai_fho",
 
-                //             "IDENTIFICATION" => [
+                //         "IDENTIFICATION" => [
 
-                //                 "TAXTYPE" => "$sap->tax_number_category",
+                //             "TAXTYPE" => "$sap->tax_number_category",
 
-                //                 "TAXNUMBER" => "$sap->tax_number"
-                //             ],
+                //             "TAXNUMBER" => "$customer->npwp_company"
+                //         ],
 
-                //             "BANK" => [
-                //                 "BANK_DET_ID" => "",
+                //         "BANK" => [
+                //             "BANK_DET_ID" => "",
 
-                //                 "BANK_CTRY" => "",
+                //             "BANK_CTRY" => "",
 
-                //                 "BANK_KEY" => "",
+                //             "BANK_KEY" => "",
 
-                //                 "BANK_ACCT" => "",
+                //             "BANK_ACCT" => "",
 
-                //                 "BK_CTRL_KEY" => "",
+                //             "BK_CTRL_KEY" => "",
 
-                //                 "BANK_REF" => "",
+                //             "BANK_REF" => "",
 
-                //                 "EXTERNALBANKID" => "",
+                //             "EXTERNALBANKID" => "",
 
-                //                 "ACCOUNTHOLDER" => "",
+                //             "ACCOUNTHOLDER" => "",
 
-                //                 "BANKACCOUNTNAME" => ""
-                //             ],
+                //             "BANKACCOUNTNAME" => ""
+                //         ],
 
-                //             "CUST_BUKRS" => "A000",
+                //         "CUST_BUKRS" => "A000",
 
-                //             "KUNNR" => "T100000002",
+                //         "KUNNR" => "T100000002",
 
-                //             "CUST_AKONT" => "1104111000",
+                //         "CUST_AKONT" => "1104111000",
 
-                //             "CUST_C_ZTERM" => "ZC02",
+                //         "CUST_C_ZTERM" => "ZC02",
 
-                //             "CUST_WTAX" => [
+                //         "CUST_WTAX" => [
 
-                //                 "WITHT" => "J3",
+                //             "WITHT" => "J3",
 
-                //                 "WT_AGENT" => "X",
+                //             "WT_AGENT" => "X",
 
-                //                 "WT_AGTDF" => "2022-10-13",
+                //             "WT_AGTDF" => "2022-10-13",
 
-                //                 "WT_AGTDT" => "9999-12-31"
-                //             ],
+                //             "WT_AGTDT" => "9999-12-31"
+                //         ],
 
-                //             "VKORG" => "A000",
+                //         "VKORG" => "A000",
 
-                //             "VTWEG" => "00",
+                //         "VTWEG" => "00",
 
-                //             "SPART" => "00",
+                //         "SPART" => "00",
 
-                //             "KDGRP" => "04",
+                //         "KDGRP" => "04",
 
-                //             "CUST_WAERS" => "IDR",
+                //         "CUST_WAERS" => "IDR",
 
-                //             "KALKS" => "1",
+                //         "KALKS" => "1",
 
-                //             "VERSG" => "1",
+                //         "VERSG" => "1",
 
-                //             "VSBED" => "01",
+                //         "VSBED" => "01",
 
-                //             "INCO1" => "EXW",
+                //         "INCO1" => "EXW",
 
-                //             "INCO2_L" => "-",
+                //         "INCO2_L" => "-",
 
-                //             "CUST_S_ZTERM" => "ZC00",
+                //         "CUST_S_ZTERM" => "ZC00",
 
-                //             "KTGRD" => "Z1",
+                //         "KTGRD" => "Z1",
 
-                //             "TAXKD" => "1",
+                //         "TAXKD" => "1",
 
-                //             "VEND_BUKRS" => "",
+                //         "VEND_BUKRS" => "",
 
-                //             "LIFNR" => "T100000002",
+                //         "LIFNR" => "T100000002",
 
-                //             "VEND_AKONT" => "",
+                //         "VEND_AKONT" => "",
 
-                //             "VEND_C_ZTERM" => "",
+                //         "VEND_C_ZTERM" => "",
 
-                //             "REPRF" => "X",
+                //         "REPRF" => "X",
 
-                //             "VEND_WTAX" => [],
-                //             // "VEND_WTAX" => [
+                //         "VEND_WTAX" => [],
+                //         // "VEND_WTAX" => [
 
-                //             //     "WITHT" => "J3",
+                //         //     "WITHT" => "J3",
 
-                //             //     "WT_SUBJCT" => "X"
+                //         //     "WT_SUBJCT" => "X"
 
-                //             // ],
+                //         // ],
 
-                //             "EKORG" => "A000",
+                //         "EKORG" => "A000",
 
-                //             "VEND_P_ZTERM" => "",
+                //         "VEND_P_ZTERM" => "",
 
-                //             "WEBRE" => "X",
+                //         "WEBRE" => "X",
 
-                //             "VEND_WAERS" => "",
+                //         "VEND_WAERS" => "",
 
-                //             "LEBRE" => "X"
-                //         ]
+                //         "LEBRE" => "X"
                 //     ]
                 // ]);
+                // dd($data_nasabah_online);
+                $data_nasabah_online = collect([
+                    "nmnasabah" => "$customer->name",
+                    "alamat" => "$customer->address_1",
+                    "kota" => "$customer->kota_kabupaten",
+                    "email" => "$customer->email",
+                    "ext" => "-",
+                    "telepon" => "$customer->phone_number",
+                    "fax" => ".",
+                    "npwp" => "$customer->npwp_company",
+                    "nama_kontak" => "$pic->nama_pic",
+                    "jenisperusahaan" => "$customer->jenis_instansi",
+                    "jabatan" => "$pic->jabatan_pic",
+                    "email1" => "$pic->email_pic",
+                    "telpon1" => "$pic->phone_pic",
+                    "handphone" => "$pic->phone_pic",
+                    "tipe_perusahaan" => "-",
+                    "tipe_lain_perusahaan" => "-",
+                    "cotid" => "11",
+                    "dtsap" => [
+                        "devid" => "YMMI002",
+                        "packageid" => $this->GUID(),
+                        "cocode" => "A000",
+                        "prctr" => "",
+                        // "timestamp" => "20221013100000",
+                        "timestamp" => date("y") . date("m") . date("d") . "10000",
+                        "data" => [
+                            "BPARTNER" => "$customer->kode_nasabah",
+
+                            "GROUPING" => "$sap->bp_grouping",
+
+                            "LVORM" => "",
+
+                            "TITLE" => "Z001",
+
+                            "NAME" => "$customer->name",
+
+                            "TITLELETTER" => "$sap->search_term_1",
+
+                            "SEARCHTERM1" => "$sap->search_term_1",
+
+                            "SEARCHTERM2" => "$sap->search_term_2",
+
+                            "STREET" => "$sap->street",
+
+                            "HOUSE_NO" => "NO123",
+
+                            "POSTL_COD1" => "$customer->kode_pos",
+
+                            "CITY" => "$customer->kota_kabupaten",
+
+                            // "ADDR_COUNTRY" => "$customer->negara",
+                            "ADDR_COUNTRY" => "ID",
+
+                            "REGION" => "$customer->kota_kabupaten",
+
+                            "PO_BOX" => "XXXXX",
+
+                            "POSTL_COD3" => "",
+
+                            "LANGU" => "E",
+
+                            "TELEPHONE" => "$customer->phone_number",
+
+                            "PHONE_EXTENSION" => "",
+
+                            "MOBPHONE" => "$customer->handphone",
+
+                            "FAX" => "",
+
+                            "FAX_EXTENSION" => "",
+
+                            "E_MAIL" => "$customer->email",
+
+                            "VALIDFROMDATE" => "$proyekStage->tanggal_mulai_terkontrak",
+
+                            "VALIDTODATE" => "$proyekStage->tanggal_selesai_fho",
+
+                            "IDENTIFICATION" => [
+
+                                "TAXTYPE" => "$sap->tax_number_category",
+
+                                "TAXNUMBER" => "$customer->npwp_company"
+                            ],
+
+                            "BANK" => [
+                                "BANK_DET_ID" => "",
+
+                                "BANK_CTRY" => "",
+
+                                "BANK_KEY" => "",
+
+                                "BANK_ACCT" => "",
+
+                                "BK_CTRL_KEY" => "",
+
+                                "BANK_REF" => "",
+
+                                "EXTERNALBANKID" => "",
+
+                                "ACCOUNTHOLDER" => "",
+
+                                "BANKACCOUNTNAME" => ""
+                            ],
+
+                            "CUST_BUKRS" => "A000",
+
+                            "KUNNR" => "T100000002",
+
+                            "CUST_AKONT" => "1104111000",
+
+                            "CUST_C_ZTERM" => "ZC02",
+
+                            "CUST_WTAX" => [
+
+                                "WITHT" => "J3",
+
+                                "WT_AGENT" => "X",
+
+                                "WT_AGTDF" => "2022-10-13",
+
+                                "WT_AGTDT" => "9999-12-31"
+                            ],
+
+                            "VKORG" => "A000",
+
+                            "VTWEG" => "00",
+
+                            "SPART" => "00",
+
+                            "KDGRP" => "04",
+
+                            "CUST_WAERS" => "IDR",
+
+                            "KALKS" => "1",
+
+                            "VERSG" => "1",
+
+                            "VSBED" => "01",
+
+                            "INCO1" => "EXW",
+
+                            "INCO2_L" => "-",
+
+                            "CUST_S_ZTERM" => "ZC00",
+
+                            "KTGRD" => "Z1",
+
+                            "TAXKD" => "1",
+
+                            "VEND_BUKRS" => "",
+
+                            "LIFNR" => "T100000002",
+
+                            "VEND_AKONT" => "",
+
+                            "VEND_C_ZTERM" => "",
+
+                            "REPRF" => "X",
+
+                            "VEND_WTAX" => [],
+                            // "VEND_WTAX" => [
+
+                            //     "WITHT" => "J3",
+
+                            //     "WT_SUBJCT" => "X"
+
+                            // ],
+
+                            "EKORG" => "A000",
+
+                            "VEND_P_ZTERM" => "",
+
+                            "WEBRE" => "X",
+
+                            "VEND_WAERS" => "",
+
+                            "LEBRE" => "X"
+                        ]
+                    ]
+                ]);
+                dd($data_nasabah_online);
                 // return response()->json($data_nasabah_online);
                 $nasabah_online_response = Http::post("http://nasabah.wika.co.id/index.php/mod_excel/post_json_crm_dev", $data_nasabah_online)->json();
-                if (!$nasabah_online_response["status"]) {
-                }
                 dd($nasabah_online_response);
+                // if (!$nasabah_online_response["status"]) {
+                // }
                 // var_dump($data_nasabah_online);
                 // dd();
                 // End :: Ngirim data ke nasabah online WIKA
