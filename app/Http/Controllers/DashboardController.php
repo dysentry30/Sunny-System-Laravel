@@ -842,8 +842,9 @@ class DashboardController extends Controller
         }
 
         $claims = ClaimManagements::all()->filter(function ($cl) use ($proyeks) {
-            return $proyeks->firstWhere("kode_proyek", "=", $cl->kode_proyek);
+            return $proyeks->where("kode_proyek", "=", $cl->kode_proyek)->count() > 0;
         });
+
 
         // Begin :: Pemilik Pekerjaan
         $pemilik_pekerjaan = $proyeks->map(function ($p) {
@@ -863,6 +864,7 @@ class DashboardController extends Controller
         $kategori_kontrak = $claims->groupBy("jenis_claim")->map(function ($c, $key) {
             return [$key, $c->count()];
         })->values();
+        // dd($kategori_kontrak);
         // End :: Changes Overview
         // dd($claims);
 
