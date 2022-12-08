@@ -1073,7 +1073,7 @@
                 pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b><br/>'
             },
             legend: {
-                enabled: true,
+                enabled: false,
             },
             credits: {
                 enabled: false
@@ -1199,7 +1199,7 @@
     </script> --}}
     <!--end::Highchart Line-->
 
-    {{-- Begin :: Animation Progress Bar --}}
+    <!-- Begin :: Animation Progress Bar -->
     <script>
         // function animateProgressBar() {
         //     const progressbarElts = document.querySelectorAll("div[role='progressbar']");
@@ -1211,9 +1211,9 @@
         // }
         // animateProgressBar();
     </script>
-    {{-- End :: Animation Progress Bar --}}
+    <!-- End :: Animation Progress Bar -->
 
-    {{-- Begin :: Animation Counter Number --}}
+    <!-- Begin :: Animation Counter Number -->
     <script>
         // function animateCounterNumber(selector, lastPrefix) {
         //     const animateCounterElts = document.querySelectorAll(`${selector}`);
@@ -1233,9 +1233,9 @@
         animateCounterNumber("#data-persen", "", "%");
         animateCounterNumber("#data-items", "", "");
     </script>
-    {{-- End :: Animation Counter Number --}}
+    <!-- End :: Animation Counter Number -->
 
-    {{-- Begin :: Select Filter Dropdown --}}
+    <!-- Begin :: Select Filter Dropdown -->
     <script>
         function selectFilter(e) {
             const value = e.value;
@@ -1250,6 +1250,6 @@
             return;
         }
     </script>
-    {{-- End :: Select Filter Dropdown --}}
+    <!-- End :: Select Filter Dropdown -->
 
 @endsection
