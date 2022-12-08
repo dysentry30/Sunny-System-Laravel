@@ -109,8 +109,10 @@ class ClaimController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function new(Proyek $proyek, ContractManagements $contract)
+    public function new(Proyek $proyek, $contract)
     {
+        $contract = urldecode(urldecode($contract));
+        $contract = ContractManagements::find($contract);
         $no_urut = new ClaimManagements();
         if (!empty($no_urut->all()->sortBy("id_claim")->last()->id_claim)) {
             $no_urut = (int) explode(".", $no_urut->all()->sortBy("id_claim")->last()->id_claim ?? 0)[2];

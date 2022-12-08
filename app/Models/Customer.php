@@ -53,4 +53,9 @@ class Customer extends Model
         return $this->hasOne(CustomerSAP::class, "id_customer", "id_customer");
     }
 
+    public function IndustrySector()
+    {
+        return $this->hasOne(IndustrySector::class, "id_industry_sector", "industry_sector");
+    }
+
 }

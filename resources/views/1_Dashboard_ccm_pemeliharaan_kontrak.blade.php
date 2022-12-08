@@ -414,6 +414,7 @@
 
     <!--begin::Highchart Donut Pemilik Pekerjaan-->
     <script>
+        const pemilikPekerjaan = JSON.parse('{!! $pemilik_pekerjaan->toJson() !!}');
         Highcharts.chart('contract-stage', {
             chart: {
                 // height: 250,
@@ -469,12 +470,7 @@
             },
             series: [{
                 name: 'Kontrak',
-                data: [
-                    ['Pemerintah', 3],
-                    ['Others', 2],
-                    ['BUMN', 7],
-                    ['Swasta', 3],
-                ]
+                data: pemilikPekerjaan
             }]
         });
     </script>
@@ -482,6 +478,7 @@
 
     <!--begin::Highchart Donut Changes Overview-->
     <script>
+        const kategoriKontrak = JSON.parse('{!! $kategori_kontrak->toJson() !!}');
         Highcharts.chart('contract-divisi', {
             chart: {
                 // height: 250,
@@ -537,12 +534,7 @@
             },
             series: [{
                 name: 'Kontrak',
-                data: [
-                    ['Insurance', 8],
-                    ['VO', 16],
-                    ['Claim', 12],
-                    ['Anti Claim', 4],
-                ]
+                data: kategoriKontrak
             }]
         });
     </script>
@@ -550,6 +542,7 @@
 
     <!--begin::Highchart Donut Jenis Kontrak -->
     <script>
+        const jenisKontrak = JSON.parse('{!! $jenis_kontrak->toJson() !!}');
         Highcharts.chart('contract-classification', {
             chart: {
                 // height: 250,
@@ -605,13 +598,7 @@
             },
             series: [{
                 name: 'Kontrak',
-                data: [
-                    ['Lumpsum', 8],
-                    ['Unit Price', 16],
-                    ['Gabungan', 12],
-                    ['Turn Key', 9],
-                    ['Others', 4],
-                ]
+                data: jenisKontrak
             }]
         });
     </script>
@@ -753,6 +740,7 @@
     
     <!--begin::Highchart Block Nilai Tender -->
     <script>
+        const nilaiTender = JSON.parse('{!! $nilai_tender_proyeks->toJson() !!}');
         Highcharts.chart('chart-line', {
             chart: {
                 type: 'column',
@@ -798,16 +786,7 @@
                 {
                     name: "Nilai Tender",
                     colorByPoint: true,
-                    data: [
-                        {
-                            name: "Divisi Infra 1",
-                            y: 1999123058123,
-                        },
-                        {
-                            name: "Divisi Infra 2",
-                            y: 2999123058123,
-                        },
-                    ]
+                    data: nilaiTender
                 },
             ]
         });
@@ -826,7 +805,7 @@
                 }
             },
             title: {
-                text: 'KSO dan NON-KSO',
+                text: 'KSO/NON-KSO',
                 style: {
                     fontWeight: 'bold',
                     fontSize: '20px'
