@@ -9,7 +9,8 @@
     <title>@yield('title')</title>
 
     {{-- <link rel="shortcut icon" href="{{ asset('/media/logos/Icon-CCM.png') }}" /> --}}
-    <link rel="icon" type="image/x-icon" href="public/media/logos/Icon-Sunny.png">
+    {{-- <link rel="icon" type="image/x-icon" href="public/media/logos/Icon-Sunny.png"> --}}
+    <link rel="icon" type="image/x-icon" href="/assets/media/logos/icon-sunny.png">
     <!--begin::Fonts-->
 
     {{-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" /> --}}
@@ -1425,7 +1426,11 @@
                         item.innerText = `${firstPrefix}${data}${lastPrefix}`;
                         return;
                     };
-                    i+= Math.floor(data/15);
+                    if(data > 15) {
+                        i+= Math.floor(data/15);
+                    } else {
+                        i+= 1;
+                    }
                     if(firstPrefix == "Rp. "){
                         // i+= Math.floor((data / 15) + data);
                         item.innerText = `${firstPrefix}${Intl.NumberFormat(["id"]).format(i)}${lastPrefix}`;

@@ -167,7 +167,13 @@ class ProyekController extends Controller
         // $newProyek->sumber_dana = $dataProyek["sumber-dana"];
         $newProyek->tahun_perolehan = $dataProyek["tahun-perolehan"];
         $newProyek->bulan_pelaksanaan = $dataProyek["bulan-pelaksanaan"];
-        $newProyek->jenis_jo = $dataProyek["kategori-jo"];
+        if($newProyek->jenis_proyek == "J") {
+            $newProyek->jenis_jo = $dataProyek["kategori-jo"];
+        } else if($newProyek->jenis_proyek == "N") {
+            $newProyek->jenis_jo = 10;
+        } else {
+            $newProyek->jenis_jo = 20;
+        }
 
         //auto filled by required 
         $newProyek->bulan_awal = $dataProyek["bulan-pelaksanaan"];
@@ -1402,7 +1408,7 @@ class ProyekController extends Controller
 
                             "TAXTYPE" => "$sap->tax_number_category",
 
-                            "TAXNUMBER" => "$sap->tax_number"
+                            "TAXNUMBER" => "$customer->npwp_company"
                         ],
 
                         "BANK" => [
@@ -1500,7 +1506,7 @@ class ProyekController extends Controller
                         "LEBRE" => "X"
                     ]
                 ]);
-
+                // dd($data_nasabah_online);
                 // $data_nasabah_online = collect([
                 //     "nmnasabah" => "$customer->name",
                 //     "alamat" => "$customer->address_1",
@@ -1683,8 +1689,8 @@ class ProyekController extends Controller
                 // return response()->json($data_nasabah_online);
                 $nasabah_online_response = Http::post("http://nasabah.wika.co.id/index.php/mod_excel/post_json_crm_dev", $data_nasabah_online)->json();
                 if (!$nasabah_online_response["status"]) {
-                    dd($nasabah_online_response);
                 }
+                dd($nasabah_online_response);
                 // var_dump($data_nasabah_online);
                 // dd();
                 // End :: Ngirim data ke nasabah online WIKA
