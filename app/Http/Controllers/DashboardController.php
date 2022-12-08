@@ -583,9 +583,9 @@ class DashboardController extends Controller
 
     public function dashboard_perolehan_kontrak(Request $request)
     {
-        $dops = Dop::whereNotIn("dop", ["EA"])->get();
-        $unit_kerjas = UnitKerja::whereNotIn("divcode", ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "8"])->get();
-        $proyeks = Proyek::whereNotIn("unit_kerja", ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "8"])->get();
+        $dops = Dop::whereNotIn("dop", ["EA", "PUSAT"])->get();
+        $unit_kerjas = UnitKerja::whereNotIn("divcode", ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "N"])->get();
+        $proyeks = Proyek::whereNotIn("unit_kerja", ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "N"])->get();
         $dop_get = $request->query("dop") ?? "";
         $unit_kerja_get = $request->query("unit-kerja") ?? "";
 
@@ -697,9 +697,9 @@ class DashboardController extends Controller
 
     public function dashboard_pelaksanaan_kontrak(Request $request)
     {
-        $dops = Dop::whereNotIn("dop", ["EA"])->get();
-        $unit_kerjas = UnitKerja::whereNotIn("divcode", ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "8"])->get();
-        $proyeks = Proyek::whereNotIn("unit_kerja", ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "8"])->where("stage", "=", 8)->get();
+        $dops = Dop::whereNotIn("dop", ["EA", "PUSAT"])->get();
+        $unit_kerjas = UnitKerja::whereNotIn("divcode", ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "N"])->get();
+        $proyeks = Proyek::whereNotIn("unit_kerja", ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "N"])->where("stage", "=", 8)->get();
         $dop_get = $request->query("dop") ?? "";
         $unit_kerja_get = $request->query("unit-kerja") ?? "";
         $proyek_get = $request->query("kode-proyek") ?? "";
@@ -716,7 +716,7 @@ class DashboardController extends Controller
             });
         } else if (!empty($proyek_get)) {
             $proyeks = $proyeks->where("kode_proyek", "=", $proyek_get);
-            return view("1_Dashboard_ccm_pelaksanaan_kontrak_proyek", compact(["proyeks"]));
+            return view("1_Dashboard_ccm_pelaksanaan_kontrak_proyek", compact(["proyeks", "dops", "unit_kerjas"]));
         }
         
         $claims = ClaimManagements::all()->filter(function($cl) use($proyeks) {
@@ -788,6 +788,13 @@ class DashboardController extends Controller
             return $new_class;
             // return (int) $c->nilai_claim;
         });
+
+        // $proyeksDummy = Proyek::whereNotIn("unit_kerja", ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "8"])->join("claim_managements", "proyeks.kode_proyek", "=", "claim_managements.kode_proyek")->where("stage", "=", 8)->get();
+        // $nilai_perubahan_table = $proyeksDummy->groupBy("jenis_claim")->map(function ($c, $key) {
+        //     $nilai = $c->sum(function($p) {
+        //         return (int) $p->nilai_perolehan;
+        //     });
+            // dd($c);
         $nilai_perubahan_table = $claims->groupBy("jenis_claim")->map(function ($c, $key) {
             $nilai = $c->sum(function($p) {
                 return (int) $p->nilai_claim;
@@ -812,9 +819,9 @@ class DashboardController extends Controller
 
     public function dashboard_pemeliharaan_kontrak(Request $request)
     {
-        $dops = Dop::whereNotIn("dop", ["EA"])->get();
-        $unit_kerjas = UnitKerja::whereNotIn("divcode", ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "8"])->get();
-        $proyeks = Proyek::whereNotIn("unit_kerja", ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "8"])->where("stage", "=", 8)->get();
+        $dops = Dop::whereNotIn("dop", ["EA", "PUSAT"])->get();
+        $unit_kerjas = UnitKerja::whereNotIn("divcode", ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "N"])->get();
+        $proyeks = Proyek::whereNotIn("unit_kerja", ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "N"])->where("stage", "=", 8)->get();
         $dop_get = $request->query("dop") ?? "";
         $unit_kerja_get = $request->query("unit-kerja") ?? "";
         $proyek_get = $request->query("kode-proyek") ?? "";

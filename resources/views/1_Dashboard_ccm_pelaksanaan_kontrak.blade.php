@@ -184,8 +184,8 @@
                                                 {{-- <option value="" {{$dop_get == "" ? "selected" : ""}}></option> --}}
                                                 <option value="" selected></option>
                                                 @foreach ($proyeks as $proyek)
-                                                    <option value="{{ $proyek->divcode }}" {{ $proyek_get == $proyek->divcode ? 'selected' : '' }} >{{ $proyek->unit_kerja }}</option>
-                                                    {{-- <option value="{{ $proyek->kode_proyek }}" >{{ $proyek->nama_proyek }} ({{$proyek->kode_proyek}})</option> --}}
+                                                    {{-- <option value="{{ $proyek->divcode }}" {{ $proyek_get == $proyek->divcode ? 'selected' : '' }} >{{ $proyek->unit_kerja }}</option> --}}
+                                                    <option value="{{ $proyek->kode_proyek }}" >{{ $proyek->nama_proyek }} ({{$proyek->kode_proyek}})</option>
                                                 @endforeach
                                         </select>
                                     </div>
@@ -300,7 +300,7 @@
                             <div class="col-3">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-warning">
-                                    <h2 class="m-0 text-center">18,4 %</h2>
+                                    <h2 class="m-0 text-center">0 %</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
