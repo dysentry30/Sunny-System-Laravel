@@ -1078,8 +1078,12 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::get('/industry-sector/get', function (Request $request) {
         // $provinsi = Provinsi::all();
         try {
+            $uname = "WIKA_INT";
+            $pass = "Initial123";
+            $author = base64_encode($uname.":".$pass);
+            $industrySector = getApi("https://fiori.wika.co.id/ywikasd002/industry-sector?sap-client=300", "", ["Authorization: Basic $author"], false);
+            $industrySector = collect($industrySector->DATA)->mapInto(\Illuminate\Support\Collection::class);
             // $industrySector = collect(json_decode(Http::get("https://fioridev.wika.co.id/ywikasd002/industry-sector?sap-client=200")));
-            $industrySector = collect(json_decode(Http::withOptions(["verify"=>false])->get("https://fioridev.wika.co.id/ywikasd002/industry-sector?sap-client=310")));
             if($industrySector->isEmpty()) {
                 $data = [
                     "status" => false,
@@ -1303,14 +1307,12 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             //         ]
             //     ]
             // ]);
-            $industrySector = collect($industrySector["data"])->mapInto(\Illuminate\Support\Collection::class);
-            // dd($industrySector);
             $industrySector->each(function($i) {
-                $is_industry_sector_exist = IndustrySector::find($i["braco"]);
+                $is_industry_sector_exist = IndustrySector::find($i["BRACO"]);
                 if(empty($is_industry_sector_exist)) {
                     $new_industry_sector = new IndustrySector();
-                    $new_industry_sector->id_industry_sector = $i["braco"];
-                    $new_industry_sector->description = $i["vtext"];
+                    $new_industry_sector->id_industry_sector = $i["BRACO"];
+                    $new_industry_sector->description = $i["VTEXT"];
                     $new_industry_sector->save();
                 }
             });
@@ -2272,6 +2274,22 @@ function arrayToXML($array, &$xml_data)
     }
     return $xml_data->asXML();
 }
+
+function getApi ($url, $payload, $header, $is_post) {
+    $c = curl_init($url);
+    // $c = curl_init("http://101.255.171.12/dashboard-api/data/report");
+    curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($c, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13');
+    if ($is_post == true) {
+        curl_setopt($c, CURLOPT_POSTFIELDS, $payload);
+    }
+    curl_setopt($c, CURLOPT_HTTPHEADER, $header);
+    // dd($c);
+    $output = curl_exec($c);
+    curl_close($c);
+    $output = json_decode($output);
+    return $output;
+};
 
 Route::get('/abort/{code}/{msg}', function ($code, $msg) {
     return abort($code, $msg);
