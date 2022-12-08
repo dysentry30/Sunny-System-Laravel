@@ -716,7 +716,7 @@ class DashboardController extends Controller
             });
         } else if (!empty($proyek_get)) {
             $proyeks = $proyeks->where("kode_proyek", "=", $proyek_get);
-            return view("1_Dashboard_ccm_pelaksanaan_kontrak_proyek", compact(["proyeks", "dops", "unit_kerjas"]));
+            return view("/DashboardCCM/1_Dashboard_ccm_pelaksanaan_kontrak_proyek", compact(["proyek_get", "unit_kerja_get", "dop_get", "proyeks", "dops", "unit_kerjas"]));
         }
         
         $claims = ClaimManagements::all()->filter(function($cl) use($proyeks) {
