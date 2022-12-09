@@ -781,6 +781,15 @@ class DashboardController extends Controller
         ]
         ];
         $kategori_kontrak = collect($kategori_kontrak);
+
+        $jumlahKontrak = 0;
+        $totalKontrak = 0;
+        $totalPersen = 0;
+        foreach ($kategori_kontrak as $key => $k) {
+            $jumlahKontrak += (int) $k[1];
+            $totalKontrak += (int) $k[2];
+            $totalPersen += (int) $k[3];
+        }
         // End :: Changes Overview
         // dd($kategori_kontrak);
 
@@ -854,7 +863,7 @@ class DashboardController extends Controller
 
         $jumlahKontrak = $proyeks->count();
 
-        return view("1_Dashboard_ccm_pelaksanaan_kontrak", compact(["totalPerubahan", "jumlahKontrak", "dops", "unit_kerjas", "proyeks", "pemilik_pekerjaan", "kategori_kontrak", "jenis_kontrak", "dop_get", "unit_kerja_get", "proyek_get", "nilai_tender_proyeks", "total_nilai_perubahan", "nilai_perubahan_table"]));
+        return view("1_Dashboard_ccm_pelaksanaan_kontrak", compact(["jumlahKontrak", "totalKontrak", "totalPersen", "totalPerubahan", "jumlahKontrak", "dops", "unit_kerjas", "proyeks", "pemilik_pekerjaan", "kategori_kontrak", "jenis_kontrak", "dop_get", "unit_kerja_get", "proyek_get", "nilai_tender_proyeks", "total_nilai_perubahan", "nilai_perubahan_table"]));
     }
 
     public function dashboard_pemeliharaan_kontrak(Request $request)
@@ -916,6 +925,15 @@ class DashboardController extends Controller
         ]
         ];
         $kategori_kontrak = collect($kategori_kontrak);
+
+        $jumlahKontrak = 0;
+        $totalKontrak = 0;
+        $totalPersen = 0;
+        foreach ($kategori_kontrak as $key => $k) {
+            $jumlahKontrak += (int) $k[1];
+            $totalKontrak += (int) $k[2];
+            $totalPersen += (int) $k[3];
+        }
         // dd($kategori_kontrak);
         // End :: Changes Overview
         // dd($claims);
@@ -983,7 +1001,7 @@ class DashboardController extends Controller
 
         $jumlahKontrak = $proyeks->count();
 
-        return view("1_Dashboard_ccm_pemeliharaan_kontrak", compact(["totalPerubahan", "jumlahKontrak", "dops", "unit_kerjas", "proyeks", "pemilik_pekerjaan", "kategori_kontrak", "jenis_kontrak", "dop_get", "unit_kerja_get", "proyek_get", "nilai_tender_proyeks", "total_nilai_perubahan", "nilai_perubahan_table"]));
+        return view("1_Dashboard_ccm_pemeliharaan_kontrak", compact(["jumlahKontrak", "totalKontrak", "totalPersen", "totalPerubahan", "jumlahKontrak", "dops", "unit_kerjas", "proyeks", "pemilik_pekerjaan", "kategori_kontrak", "jenis_kontrak", "dop_get", "unit_kerja_get", "proyek_get", "nilai_tender_proyeks", "total_nilai_perubahan", "nilai_perubahan_table"]));
     }
 
     /**

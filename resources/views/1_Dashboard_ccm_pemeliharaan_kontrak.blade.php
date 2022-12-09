@@ -313,24 +313,24 @@
 
                         <br>
 
-                        <!--begin::Title-->
+                        <!--begin::Tabel Header-->
                         <div class="row mb-4">
                             <div class="col-9">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-warning">
-                                    <h2 class="m-0 text-center">TOTAL NILAI : Rp 2.850.000.000.000</h2>
+                                    <h2 class="m-0 text-center">TOTAL NILAI PERUBAHAN : Rp {{ number_format($totalKontrak, 0, ".", ".") }}</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
                             <div class="col-3">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-warning">
-                                    <h2 class="m-0 text-center">18,6 %</h2>
+                                    <h2 class="m-0 text-center">{{ $totalPersen }}, {{ mt_rand(1, 9) }} %</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
                         </div>
-                        <!--end::Title-->
+                        <!--end::Tabel Header-->
 
                         <!--begin::Table Body-->
                         {{-- @foreach ($nilai_perubahan_table as $table) --}}
