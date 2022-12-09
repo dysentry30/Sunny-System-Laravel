@@ -2065,7 +2065,24 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
                 $jenis_proyek = "Non JO";
                 break;
             case "J":
-                $jenis_proyek = "JO Portion Member";
+                // $jenis_proyek = "JO Portion Member";
+                switch ($p->kategori_jo) {
+                    case "30":
+                        $jenis_proyek = "JO Integrated Leader";
+                        break;
+                    case "31":
+                        $jenis_proyek = "JO Integrated Member";
+                        break;
+                    case "40":
+                        $jenis_proyek = "JO Portion Leader";
+                        break;
+                    case "41":
+                        $jenis_proyek = "JO Portion Member";
+                        break;
+                    case "50":
+                        $jenis_proyek = "JO Mix Integrated - Portion";
+                        break;
+                    }
                 break;
         }
         $p->UsrJenis = [
@@ -2073,7 +2090,7 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
                 "entry" => [
                     "content" => [
                         "properties" => [
-                            "Name" => JenisProyek::find($p->jenis_proyek)->jenis_proyek ?? "",
+                            // "Name" => JenisProyek::find($p->jenis_proyek)->jenis_proyek ?? "",
                             "Name" => $jenis_proyek ?? "",
                         ]
                     ]
