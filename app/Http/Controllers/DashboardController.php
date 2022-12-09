@@ -771,13 +771,13 @@ class DashboardController extends Controller
         // })->values();
         $kategori_kontrak = [
             [
-                "VO", mt_rand(0, 9), mt_rand(1000000000, 2000000000), mt_rand(0, 6)
+                "VO", mt_rand(0, 15), mt_rand(1000000000, 20000000000), mt_rand(0, 10)
             ], [
-                "KLAIM", mt_rand(0, 9), mt_rand(1000000000, 2000000000), mt_rand(0, 6)
+                "KLAIM", mt_rand(0, 15), mt_rand(1000000000, 20000000000), mt_rand(0, 10)
             ], [
-                "ANTI-KLAIM", mt_rand(0, 9), mt_rand(1000000000, 2000000000), mt_rand(0, 6)
+                "ANTI-KLAIM", mt_rand(0, 15), mt_rand(1000000000, 20000000000), mt_rand(0, 10)
             ], [
-                "ASURANSI", mt_rand(0, 9), mt_rand(1000000000, 2000000000), mt_rand(0, 6)
+                "ASURANSI", mt_rand(0, 15), mt_rand(1000000000, 20000000000), mt_rand(0, 10)
         ]
         ];
         $kategori_kontrak = collect($kategori_kontrak);
@@ -887,7 +887,35 @@ class DashboardController extends Controller
             });
         } else if (!empty($proyek_get)) {
             $proyeks = $proyeks->where("kode_proyek", "=", $proyek_get);
-            return view("1_Dashboard_ccm_pelaksanaan_kontrak_proyek", compact(["proyeks"]));
+
+            $claims = ClaimManagements::where("kode_proyek", "=", $proyek_get)->get();
+
+            // Begin :: Changes Overview
+            // $kategori_kontrak = $claims->groupBy("jenis_claim")->map(function ($c, $key) {
+            //         return [$key, $c->count()];
+            //     })->values();
+            $kategori_kontrak = [
+                [
+                    "KLAIM", mt_rand(0, 9), mt_rand(1000000000, 2000000000), mt_rand(0, 6)
+                ], [
+                    "ANTI-KLAIM", mt_rand(0, 9), mt_rand(1000000000, 2000000000), mt_rand(0, 6)
+                ], [
+                    "ASURANSI", mt_rand(0, 9), mt_rand(1000000000, 2000000000), mt_rand(0, 6)
+                ]
+            ];
+            // End :: Changes Overview
+            $kategori_kontrak = collect($kategori_kontrak);
+
+            $jumlahKontrak = 0;
+            $totalKontrak = 0;
+            $totalPersen = 0;
+            foreach ($kategori_kontrak as $key => $k) {
+                $jumlahKontrak += (int) $k[1];
+                $totalKontrak += (int) $k[2];
+                $totalPersen += (int) $k[3];
+            }
+
+            return view("/DashboardCCM/Dashboard_pemeliharaan_proyek", compact(["jumlahKontrak", "totalKontrak", "totalPersen", "kategori_kontrak", "proyek_get", "unit_kerja_get", "dop_get", "proyeks", "dops", "unit_kerjas"]));
         }
 
         $claims = ClaimManagements::all()->filter(function ($cl) use ($proyeks) {
@@ -915,13 +943,13 @@ class DashboardController extends Controller
         // })->values();
         $kategori_kontrak = [
             [
-                "VO", mt_rand(0, 9), mt_rand(1000000000, 2000000000), mt_rand(0, 6)
+                "VO", mt_rand(0, 15), mt_rand(1000000000, 20000000000), mt_rand(0, 10)
             ], [
-                "KLAIM", mt_rand(0, 9), mt_rand(1000000000, 2000000000), mt_rand(0, 6)
+                "KLAIM", mt_rand(0, 15), mt_rand(1000000000, 20000000000), mt_rand(0, 10)
             ], [
-                "ANTI-KLAIM", mt_rand(0, 9), mt_rand(1000000000, 2000000000), mt_rand(0, 6)
+                "ANTI-KLAIM", mt_rand(0, 15), mt_rand(1000000000, 20000000000), mt_rand(0, 10)
             ], [
-                "ASURANSI", mt_rand(0, 9), mt_rand(1000000000, 2000000000), mt_rand(0, 6)
+                "ASURANSI", mt_rand(0, 15), mt_rand(1000000000, 20000000000), mt_rand(0, 10)
         ]
         ];
         $kategori_kontrak = collect($kategori_kontrak);
