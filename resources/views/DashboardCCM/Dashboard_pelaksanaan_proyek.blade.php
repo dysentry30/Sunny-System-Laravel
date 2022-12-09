@@ -311,10 +311,148 @@
                         </div>
                         <!--end::Row-->
 
-                        <!--begin::Card Diagram Column dan Donut-->
+                        <!--begin::Card Diagram-->
                         <div class="row mx-3">
                             <!--begin::Card column-->
                             <div class="col-2 ">
+                                <!--begin::Link-->
+                                <div class="col mb-4">
+                                    <!--begin::Card body-->
+                                    <div class="pt-0">
+                                        <!--begin::Card widget 20-->
+                                        <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #027DB8;background-image:url('/assets/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                            <!--begin::Card body-->
+                                            <div class="btn rounded-0 btn-active-primary card-body d-flex align-items-end pt-3">
+                                                <!--begin::Progress-->
+                                                <div class="d-flex align-items-center flex-column  w-100">
+                                                    @if (empty($proyek->ContractManagements))
+                                                    <a target="_blank" class="text-white fs-3" href="#">Lihat Kontrak</a>
+                                                    @else    
+                                                    <a target="_blank" class="text-white fs-3" href="/contract-management/view/{{ urlencode(urlencode($proyek->ContractManagements->id_contract)) }}">Lihat Kontrak</a>
+                                                    @endif
+                                                </div>
+                                                <!--end::Progress-->
+                                            </div>
+                                            <!--end::Card body-->
+                                        </div>
+                                        <!--end::Card widget 20-->
+                                    </div>
+                                    <!--end::Card body-->
+                                </div>
+                                <!--end::Link-->
+                                <!--begin::Link-->
+                                <div class="col mb-4">
+                                    <!--begin::Card body-->
+                                    <div class="pt-0">
+                                        <!--begin::Card widget 20-->
+                                        <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #027DB8;background-image:url('/assets/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                            <!--begin::Card body-->
+                                            <div class="btn rounded-0 btn-active-primary card-body d-flex align-items-end pt-3">
+                                                <!--begin::Progress-->
+                                                <div class="d-flex align-items-center flex-column  w-100">
+                                                    <a target="_blank" class="text-white fs-3" href="/proyek/view/{{ $proyek->kode_proyek }}">Lihat Proyek</a>
+                                                </div>
+                                                <!--end::Progress-->
+                                            </div>
+                                            <!--end::Card body-->
+                                        </div>
+                                        <!--end::Card widget 20-->
+                                    </div>
+                                    <!--end::Card body-->
+                                </div>
+                                <!--end::Link-->
+                                <!--begin::Link-->
+                                <div class="col mb-4">
+                                    <!--begin::Card body-->
+                                    <div class="pt-0">
+                                        <!--begin::Card widget 20-->
+                                        <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #027DB8;background-image:url('/assets/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                            <!--begin::Card body-->
+                                            <div class="btn rounded-0 btn-active-primary card-body d-flex align-items-end pt-3">
+                                                <!--begin::Progress-->
+                                                <div class="d-flex align-items-center flex-column  w-100">
+                                                    @if (empty($proyek->ContractManagements))
+                                                    <a target="_blank" class="text-white fs-3" href="#">Lihat Kontrak</a>
+                                                    @else    
+                                                    <a target="_blank" class="text-white fs-3" href="/contract-management/view/{{ urlencode(urlencode($proyek->ContractManagements->id_contract)) }}">Lihat Kontrak</a>
+                                                    @endif
+                                                </div>
+                                                <!--end::Progress-->
+                                            </div>
+                                            <!--end::Card body-->
+                                        </div>
+                                        <!--end::Card widget 20-->
+                                    </div>
+                                    <!--end::Card body-->
+                                </div>
+                                <!--end::Link-->
+                                <!--begin::Link-->
+                                <div class="col mb-4">
+                                    <!--begin::Card body-->
+                                    <div class="pt-0">
+                                        <!--begin::Card widget 20-->
+                                        <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #027DB8;background-image:url('/assets/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                            <!--begin::Card body-->
+                                            <div class="btn rounded-0 btn-active-primary card-body d-flex align-items-end pt-3">
+                                                <!--begin::Progress-->
+                                                <div class="d-flex align-items-center flex-column  w-100">
+                                                    <a target="_blank" class="text-white fs-3" href="/proyek/view/{{ $proyek->kode_proyek }}">Lihat Proyek</a>
+                                                </div>
+                                                <!--end::Progress-->
+                                            </div>
+                                            <!--end::Card body-->
+                                        </div>
+                                        <!--end::Card widget 20-->
+                                    </div>
+                                    <!--end::Card body-->
+                                </div>
+                                <!--end::Link-->
+                                <!--begin::Link-->
+                                <div class="col mb-4">
+                                    <!--begin::Card body-->
+                                    <div class="pt-0">
+                                        <!--begin::Card widget 20-->
+                                        <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #027DB8;background-image:url('/assets/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                            <!--begin::Card body-->
+                                            <div class="btn rounded-0 btn-active-primary card-body d-flex align-items-end pt-3">
+                                                <!--begin::Progress-->
+                                                <div class="d-flex align-items-center flex-column  w-100">
+                                                    @if (empty($proyek->ContractManagements))
+                                                    <a target="_blank" class="text-white fs-3" href="#">Lihat Kontrak</a>
+                                                    @else    
+                                                    <a target="_blank" class="text-white fs-3" href="/contract-management/view/{{ urlencode(urlencode($proyek->ContractManagements->id_contract)) }}">Lihat Kontrak</a>
+                                                    @endif
+                                                </div>
+                                                <!--end::Progress-->
+                                            </div>
+                                            <!--end::Card body-->
+                                        </div>
+                                        <!--end::Card widget 20-->
+                                    </div>
+                                    <!--end::Card body-->
+                                </div>
+                                <!--end::Link-->
+                                <!--begin::Link-->
+                                <div class="col mb-4">
+                                    <!--begin::Card body-->
+                                    <div class="pt-0">
+                                        <!--begin::Card widget 20-->
+                                        <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #027DB8;background-image:url('/assets/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                            <!--begin::Card body-->
+                                            <div class="btn rounded-0 btn-active-primary card-body d-flex align-items-end pt-3">
+                                                <!--begin::Progress-->
+                                                <div class="d-flex align-items-center flex-column  w-100">
+                                                    <a target="_blank" class="text-white fs-3" href="/proyek/view/{{ $proyek->kode_proyek }}">Lihat Proyek</a>
+                                                </div>
+                                                <!--end::Progress-->
+                                            </div>
+                                            <!--end::Card body-->
+                                        </div>
+                                        <!--end::Card widget 20-->
+                                    </div>
+                                    <!--end::Card body-->
+                                </div>
+                                <!--end::Link-->
                                 <!--begin::Link-->
                                 <div class="col mb-4">
                                     <!--begin::Card body-->
@@ -365,7 +503,41 @@
                             <!--end begin::Card column-->
                             <div class="col-10">
                                 
+                                <!--begin::Title-->
+                                <div class="mb-4">
+                                    <div class="col-12">
+                                        <!--begin::Title body-->
+                                        <div style="border-radius: 0px" class="card-body bg-secondary">
+                                            <h2 class="m-0 text-center">Resume CCM</h2>
+                                        </div>
+                                        <!--end::Title body-->
+                                    </div>
+                                </div>
+                                <!--end::Title-->
+
                                 <!--begin::Row-->
+                                <div class="row">
+                                    <!--begin::Card column-->
+                                    <div class="col-6">
+                                            <!--begin::COLUMN CHART-->
+                                            <div id="contract-divisi"></div>
+                                            <!-- data table is inserted here -->
+                                            <!--end::COLUMN CHART-->
+                                    </div>
+                                    <!--end-begin::Card column-->
+                                    <div class="col-6">
+                                            <!--begin::PIE CHART-->
+                                            <figure class="highcharts-figure">
+                                                <div id="changes-status"></div>
+                                                <!-- data table is inserted here -->
+                                            </figure>
+                                            <!--end::PIE CHART-->
+                                    </div>
+                                    <!--end::Card column-->
+                                </div>
+                                <!--end::Row-->
+
+                                {{-- <!--begin::Row-->
                                 <div class="row">
                                     <!--begin::Card column-->
                                     <div class="col-6">
@@ -414,11 +586,178 @@
                                             <!-- data table is inserted here -->
                                             <!--end::COLUMN CHART-->
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
                             <!--end::Card column-->
                         </div>
-                        <!--end::Card Diagram Column dan Donut-->
+                        <!--end::Card Diagram-->
+
+                        <br>
+
+                        <!--begin::Tabel Header-->
+                        <div class="row mb-4">
+                            <div class="col-2">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-success">
+                                    <h2 class="m-0 text-center">URAIAN</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-success">
+                                    <h2 class="m-0 text-center">POTENTIAL</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-success">
+                                    <h2 class="m-0 text-center">SUBS</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col-3">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="py-2 bg-success">
+                                    <h4 class="m-0 text-center">SUBMISIONS STATUS</h4>
+                                    <div class="row">
+                                        <div class="col">
+                                            <h6 class="m-0 text-center">REVISION</h6>
+                                        </div>
+                                        <div class="col">
+                                            <h6 class="m-0 text-center">REJECTED</h6>
+                                        </div>
+                                        <div class="col">
+                                            <h6 class="m-0 text-center">APPROVED</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-success">
+                                    <h2 class="m-0 text-center">DISPUTE</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                        </div>
+                        <!--end::Tabel Header-->
+
+                        <!--begin::Table Body-->
+                        @foreach ($kategori_kontrak as $table)
+                        {{-- @dd($table) --}}
+                        <div class="row mb-4">
+                            <div class="col-2">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-success">
+                                    <h2 class="m-0 text-center">{{ $table[0] }}</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-secondary">
+                                    <h2 class="m-0 text-center">{{ $table[1] }}</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-secondary">
+                                    <h2 class="m-0 text-center">{{ $table[1] }}</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col-1">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-secondary">
+                                    <h2 class="m-0 text-center">{{ mt_rand(0, 6) }}</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col-1">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-secondary">
+                                    <h2 class="m-0 text-center">{{ mt_rand(0, 6) }}</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col-1">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-secondary">
+                                    <h2 class="m-0 text-center">{{ mt_rand(0, 6) }}</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-secondary">
+                                    <h2 class="m-0 text-center">{{ mt_rand(0, 2) }}</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                        </div>
+                        @endforeach
+                        <!--end::Table Body-->
+
+                        <br>
+                        
+                        <!--begin::Tabel Header-->
+                        <div class="row mb-4">
+                            <div class="col-9">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-warning">
+                                    <h2 class="m-0 text-center">TOTAL NILAI PERUBAHAN : Rp {{ number_format($totalKontrak, 0, ".", ".") }}</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col-3">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-warning">
+                                    <h2 class="m-0 text-center">{{ $totalPersen }}, {{ mt_rand(1, 9) }} %</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                        </div>
+                        <!--end::Tabel Header-->
+
+                        <!--begin::Table Body-->
+                        @foreach ($kategori_kontrak as $table)
+                        {{-- @dd($table) --}}
+                        <div class="row mb-4">
+                            <div class="col-3">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-warning">
+                                    <h2 class="m-0 text-center">{{ $table[0] }}</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col-1">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-secondary">
+                                    <h2 class="m-0 text-center">{{ $table[1] }}</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col-5">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-secondary">
+                                    <h2 class="m-0 text-center">Rp {{ number_format($table[2], 0, ".", ".") }}</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col-3">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-secondary">
+                                    <h2 class="m-0 text-center">{{ $table[3] }}, {{ mt_rand(1, 9) }} %</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                        </div>
+                        @endforeach
+                        <!--end::Table Body-->
                         
                     </div>
                     <!--end::Body Dashboard-->
@@ -459,6 +798,136 @@
 {{-- End::Main --}}
 @section('js-script')
 
+    <!--begin::Highchart Donut Changes Overview-->
+    <script>
+        const changesOverview = JSON.parse('{!! json_encode($kategori_kontrak) !!}');
+        Highcharts.chart('contract-divisi', {
+            chart: {
+                type: 'pie',
+                options3d: {
+                    enabled: true,
+                    alpha: 5
+                }
+            },
+            title: {
+                text: 'Changes Overview',
+                style: {
+                    fontWeight: 'bold',
+                    fontSize: '20px'
+                }
+            },
+            subtitle: {
+                // text: '3D donut in Highcharts'
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:15px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>&nbsp;{point.y}</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                pie: {
+                    innerSize: 0,
+                    depth: 5,
+                    showInLegend: false,
+                    dataLabels: {
+                        enabled: true,
+                    }
+                }
+            },
+            legend: {
+                layout: 'horizontal',
+                align: 'center',
+                verticalAlign: 'bottom',
+                format : '<b>{point.key}</b><br>',
+                itemStyle: {
+                    fontSize:'15px',
+                },
+            },
+            credits: {
+                enabled: false
+            },
+            exporting: {
+                showTable: false,
+                allowHTML: true
+            },
+            series: [{
+                name: 'Kontrak',
+                data: changesOverview
+            }]
+        });
+    </script>
+    <!--end::Highchart Donut Changes Overview-->
+
+    <!--begin::Highchart Donut Changes Status -->
+    <script>
+        Highcharts.chart('changes-status', {
+            chart: {
+                type: 'pie',
+                options3d: {
+                    enabled: true,
+                    alpha: 5
+                }
+            },
+            title: {
+                text: 'Changes Status',
+                style: {
+                    fontWeight: 'bold',
+                    fontSize: '20px'
+                }
+            },
+            subtitle: {
+                // text: '3D donut in Highcharts'
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:15px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>&nbsp;{point.y}</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                pie: {
+                    innerSize: 0,
+                    depth: 5,
+                    showInLegend: false,
+                    dataLabels: {
+                        enabled: true,
+                    }
+                }
+            },
+            legend: {
+                layout: 'horizontal',
+                align: 'center',
+                verticalAlign: 'bottom',
+                format : '<b>{point.key}</b><br>',
+                itemStyle: {
+                    fontSize:'15px',
+                },
+            },
+            credits: {
+                enabled: false
+            },
+            exporting: {
+                showTable: false,
+                allowHTML: true
+            },
+            series: [{
+                name: 'Kontrak',
+                data: [
+                    ['Dispute', 8],
+                    ['Revision', 16],
+                    ['Reject', 2],
+                    ['Approve', 10],
+                ]
+            }]
+        });
+    </script>
+    <!--end::Highchart Donut Changes Status -->
+
     <!--begin::Highchart Donut Pemilik Pekerjaan-->
     <script>
         Highcharts.chart('contract-stage', {
@@ -489,7 +958,7 @@
             },
             plotOptions: {
                 pie: {
-                    innerSize: 150,
+                    innerSize: 0,
                     depth: 5,
                     showInLegend: false,
                     dataLabels: {
@@ -526,73 +995,6 @@
     </script>
     <!--end::Highchart Donut Pemilik Pekerjaan-->
 
-    <!--begin::Highchart Donut Changes Overview-->
-    <script>
-        Highcharts.chart('contract-divisi', {
-            chart: {
-                type: 'pie',
-                options3d: {
-                    enabled: true,
-                    alpha: 5
-                }
-            },
-            title: {
-                text: 'Changes Overview',
-                style: {
-                    fontWeight: 'bold',
-                    fontSize: '20px'
-                }
-            },
-            subtitle: {
-                // text: '3D donut in Highcharts'
-            },
-            tooltip: {
-                headerFormat: '<span style="font-size:15px">{point.key}</span><table>',
-                pointFormat: '<tr><td style="padding:0">{series.name}: </td>' +
-                    '<td style="padding:0"><b>&nbsp;{point.y}</b></td></tr>',
-                footerFormat: '</table>',
-                shared: true,
-                useHTML: true
-            },
-            plotOptions: {
-                pie: {
-                    innerSize: 150,
-                    depth: 5,
-                    showInLegend: false,
-                    dataLabels: {
-                        enabled: true,
-                    }
-                }
-            },
-            legend: {
-                layout: 'horizontal',
-                align: 'center',
-                verticalAlign: 'bottom',
-                format : '<b>{point.key}</b><br>',
-                itemStyle: {
-                    fontSize:'15px',
-                },
-            },
-            credits: {
-                enabled: false
-            },
-            exporting: {
-                showTable: false,
-                allowHTML: true
-            },
-            series: [{
-                name: 'Kontrak',
-                data: [
-                    ['Insurance', 8],
-                    ['VO', 16],
-                    ['Claim', 12],
-                    ['Anti Claim', 4],
-                ]
-            }]
-        });
-    </script>
-    <!--end::Highchart Donut Changes Overview-->
-
     <!--begin::Highchart Donut Jenis Kontrak -->
     <script>
         Highcharts.chart('contract-classification', {
@@ -623,7 +1025,7 @@
             },
             plotOptions: {
                 pie: {
-                    innerSize: 100,
+                    innerSize: 0,
                     depth: 5,
                     showInLegend: false,
                     dataLabels: {
@@ -691,7 +1093,7 @@
             },
             plotOptions: {
                 pie: {
-                    innerSize: 150,
+                    innerSize: 0,
                     depth: 5,
                     showInLegend: false,
                     dataLabels: {
@@ -726,74 +1128,8 @@
     </script>
     <!--end::Highchart Donut Kontrak JO dan Non-JO -->
     
-    <!--begin::Highchart Donut Changes Status -->
-    <script>
-        Highcharts.chart('changes-status', {
-            chart: {
-                type: 'pie',
-                options3d: {
-                    enabled: true,
-                    alpha: 5
-                }
-            },
-            title: {
-                text: 'Changes Status',
-                style: {
-                    fontWeight: 'bold',
-                    fontSize: '20px'
-                }
-            },
-            subtitle: {
-                // text: '3D donut in Highcharts'
-            },
-            tooltip: {
-                headerFormat: '<span style="font-size:15px">{point.key}</span><table>',
-                pointFormat: '<tr><td style="padding:0">{series.name}: </td>' +
-                    '<td style="padding:0"><b>&nbsp;{point.y}</b></td></tr>',
-                footerFormat: '</table>',
-                shared: true,
-                useHTML: true
-            },
-            plotOptions: {
-                pie: {
-                    innerSize: 180,
-                    depth: 5,
-                    showInLegend: false,
-                    dataLabels: {
-                        enabled: true,
-                    }
-                }
-            },
-            legend: {
-                layout: 'horizontal',
-                align: 'center',
-                verticalAlign: 'bottom',
-                format : '<b>{point.key}</b><br>',
-                itemStyle: {
-                    fontSize:'15px',
-                },
-            },
-            credits: {
-                enabled: false
-            },
-            exporting: {
-                showTable: false,
-                allowHTML: true
-            },
-            series: [{
-                name: 'Kontrak',
-                data: [
-                    ['Dispute', 8],
-                    ['Revision', 16],
-                    ['Reject', 2],
-                    ['Approve', 10],
-                ]
-            }]
-        });
-    </script>
-    <!--end::Highchart Donut Changes Status -->
     
-    {{-- Begin :: Animation Progress Bar --}}
+    <!-- Begin :: Animation Progress Bar -->
     <script>
         function animateProgressBar() {
             const progressbarElts = document.querySelectorAll("div[role='progressbar']");
@@ -805,9 +1141,9 @@
         }
         animateProgressBar();
     </script>
-    {{-- End :: Animation Progress Bar --}}
+    <!-- End :: Animation Progress Bar -->
 
-    {{-- Begin :: Animation Counter Number --}}
+    <!-- Begin :: Animation Counter Number -->
     <script>
         function animateCounterNumber(selector, firstPrefix = "", lastPrefix = "") {
             const animateCounterElts = document.querySelectorAll(`${selector}`);
@@ -844,7 +1180,7 @@
         // animateCounterNumber("#data-persen", "", "%");
         // animateCounterNumber("#data-items", "Rp. ");
     </script>
-    {{-- End :: Animation Counter Number --}}
+    <!-- End :: Animation Counter Number -->
 
     <!-- Begin :: Select Filter Dropdown -->
     <script>

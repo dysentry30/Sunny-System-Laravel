@@ -288,7 +288,7 @@
                         </div>
                         <!--end::Card Diagram Column dan Donut-->
 
-                        <!--begin::Title-->
+                        <!--begin::Tabel Header-->
                         <div class="row mb-4">
                             <div class="col-9">
                                 <!--begin::Title body-->
@@ -305,7 +305,7 @@
                                 <!--end::Title body-->
                             </div>
                         </div>
-                        <!--end::Title-->
+                        <!--end::Tabel Header-->
 
                         <!--begin::Table Body-->
                         @foreach ($nilai_perubahan_table as $table)
@@ -467,7 +467,7 @@
             },
             plotOptions: {
                 pie: {
-                    innerSize: 150,
+                    innerSize: 0,
                     depth: 5,
                     showInLegend: false,
                     dataLabels: {
@@ -531,7 +531,7 @@
             },
             plotOptions: {
                 pie: {
-                    innerSize: 150,
+                    innerSize: 0,
                     depth: 5,
                     showInLegend: false,
                     dataLabels: {
@@ -595,7 +595,7 @@
             },
             plotOptions: {
                 pie: {
-                    innerSize: 150,
+                    innerSize: 0,
                     depth: 5,
                     showInLegend: false,
                     dataLabels: {
@@ -658,7 +658,7 @@
             },
             plotOptions: {
                 pie: {
-                    innerSize: 150,
+                    innerSize: 0,
                     depth: 5,
                     showInLegend: false,
                     dataLabels: {
@@ -724,7 +724,7 @@
             },
             plotOptions: {
                 pie: {
-                    innerSize: 150,
+                    innerSize: 0,
                     depth: 5,
                     showInLegend: false,
                     dataLabels: {
