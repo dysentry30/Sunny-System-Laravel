@@ -778,7 +778,7 @@ class DashboardController extends Controller
                 "ANTI-KLAIM", mt_rand(0, 9), mt_rand(1000000000, 2000000000), mt_rand(0, 6)
             ], [
                 "ASURANSI", mt_rand(0, 9), mt_rand(1000000000, 2000000000), mt_rand(0, 6)
-            ]
+        ]
         ];
         $kategori_kontrak = collect($kategori_kontrak);
         // End :: Changes Overview
@@ -901,9 +901,21 @@ class DashboardController extends Controller
         // End :: Pemilik Pekerjaan
 
         // Begin :: Changes Overview
-        $kategori_kontrak = $claims->groupBy("jenis_claim")->map(function ($c, $key) {
-            return [$key, $c->count()];
-        })->values();
+        // $kategori_kontrak = $claims->groupBy("jenis_claim")->map(function ($c, $key) {
+        //     return [$key, $c->count()];
+        // })->values();
+        $kategori_kontrak = [
+            [
+                "VO", mt_rand(0, 9), mt_rand(1000000000, 2000000000), mt_rand(0, 6)
+            ], [
+                "KLAIM", mt_rand(0, 9), mt_rand(1000000000, 2000000000), mt_rand(0, 6)
+            ], [
+                "ANTI-KLAIM", mt_rand(0, 9), mt_rand(1000000000, 2000000000), mt_rand(0, 6)
+            ], [
+                "ASURANSI", mt_rand(0, 9), mt_rand(1000000000, 2000000000), mt_rand(0, 6)
+        ]
+        ];
+        $kategori_kontrak = collect($kategori_kontrak);
         // dd($kategori_kontrak);
         // End :: Changes Overview
         // dd($claims);
