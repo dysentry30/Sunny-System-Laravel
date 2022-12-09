@@ -2131,7 +2131,7 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
                 "d:UsrBASTPHO" => $p->tanggal_selesai_pho,
                 "d:UsrBASTFHO" => $p->tanggal_selesai_fho,
                 "d:UsrPorsi" => $p->porsi_jo,
-                "d:UsrNilaiKontrak" => $p->HistoryForecasts->where("periode_prognosa", "=", $periodeOtor)->whereYear("created_at", "=", $yearOtor)->sum(function ($hf) { return (int) $hf->realisasi_forecast; }),
+                "d:UsrNilaiKontrak" => $p->HistoryForecasts->where("periode_prognosa", "=", $periodeOtor)->sum(function ($hf) { return (int) $hf->realisasi_forecast; }),
                 "d:UsrKlasifikasiProyek" => $p->klasifikasi_terkontrak,
                 "d:UsrNoKontrak" => $p->nomor_terkontrak,
                 "d:UsrNilaiTukar" => $p->kurs_review,
