@@ -808,7 +808,7 @@
             },
             plotOptions: {
                 pie: {
-                    innerSize: 100,
+                    innerSize: 0,
                     depth: 5,
                     showInLegend: false,
                     dataLabels: {
@@ -872,7 +872,7 @@
             },
             plotOptions: {
                 pie: {
-                    innerSize: 100,
+                    innerSize: 0,
                     depth: 5,
                     showInLegend: false,
                     dataLabels: {
@@ -935,7 +935,7 @@
             },
             plotOptions: {
                 pie: {
-                    innerSize: 100,
+                    innerSize: 0,
                     depth: 5,
                     showInLegend: false,
                     dataLabels: {
@@ -1003,7 +1003,7 @@
             },
             plotOptions: {
                 pie: {
-                    innerSize: 100,
+                    innerSize: 0,
                     depth: 5,
                     showInLegend: false,
                     dataLabels: {

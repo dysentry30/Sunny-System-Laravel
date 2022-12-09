@@ -444,7 +444,7 @@
             },
             plotOptions: {
                 pie: {
-                    innerSize: 150,
+                    // innerSize: 150,
                     depth: 5,
                     showInLegend: false,
                     dataLabels: {
@@ -508,7 +508,7 @@
             },
             plotOptions: {
                 pie: {
-                    innerSize: 150,
+                    // innerSize: 150,
                     depth: 5,
                     showInLegend: false,
                     dataLabels: {
@@ -572,7 +572,7 @@
             },
             plotOptions: {
                 pie: {
-                    innerSize: 150,
+                    // innerSize: 120,
                     depth: 5,
                     showInLegend: false,
                     dataLabels: {
@@ -635,7 +635,7 @@
             },
             plotOptions: {
                 pie: {
-                    innerSize: 150,
+                    // innerSize: 150,
                     depth: 5,
                     showInLegend: false,
                     dataLabels: {
@@ -701,7 +701,7 @@
             },
             plotOptions: {
                 pie: {
-                    innerSize: 150,
+                    // innerSize: 120,
                     depth: 5,
                     showInLegend: false,
                     dataLabels: {
@@ -756,11 +756,15 @@
                     fontSize: '20px'
                 }
             },
+            subtitle: {
+                text: 'Total Jumlah Kontrak : {{ $jumlahKontrak }}',
+                style: {
+                    fontWeight: 'bold',
+                    fontSize: '15px'
+                }
+            },
             xAxis: {
                 type: 'category'
-            },
-            subtitle: {
-                // text: '3D donut in Highcharts'
             },
             tooltip: {
                 // headerFormat: '<span style="font-size:15px">{point.key}</span><table>',
@@ -824,7 +828,7 @@
             },
             plotOptions: {
                 pie: {
-                    innerSize: 150,
+                    // innerSize: 150,
                     depth: 5,
                     showInLegend: false,
                     dataLabels: {

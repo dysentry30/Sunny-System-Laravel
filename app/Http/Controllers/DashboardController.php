@@ -716,7 +716,35 @@ class DashboardController extends Controller
             });
         } else if (!empty($proyek_get)) {
             $proyeks = $proyeks->where("kode_proyek", "=", $proyek_get);
-            return view("/DashboardCCM/1_Dashboard_ccm_pelaksanaan_kontrak_proyek", compact(["proyek_get", "unit_kerja_get", "dop_get", "proyeks", "dops", "unit_kerjas"]));
+
+            $claims = ClaimManagements::where("kode_proyek", "=", $proyek_get)->get();
+
+            // Begin :: Changes Overview
+            // $kategori_kontrak = $claims->groupBy("jenis_claim")->map(function ($c, $key) {
+            //         return [$key, $c->count()];
+            //     })->values();
+            $kategori_kontrak = [
+                        [
+                            "KLAIM", mt_rand(0, 9), mt_rand(1000000000, 2000000000), mt_rand(0, 6)
+                        ],[
+                            "ANTI-KLAIM", mt_rand(0, 9), mt_rand(1000000000, 2000000000), mt_rand(0, 6)
+                        ],[
+                            "ASURANSI", mt_rand(0, 9), mt_rand(1000000000, 2000000000), mt_rand(0, 6)
+                        ]
+                    ];
+            // End :: Changes Overview
+            $kategori_kontrak = collect($kategori_kontrak);
+
+            $jumlahKontrak = 0;
+            $totalKontrak = 0;
+            $totalPersen = 0;
+            foreach ($kategori_kontrak as $key => $k) {
+                $jumlahKontrak += (int) $k[1] ;
+                $totalKontrak += (int) $k[2] ;
+                $totalPersen += (int) $k[3] ;
+            }
+
+            return view("/DashboardCCM/Dashboard_pelaksanaan_proyek", compact(["jumlahKontrak", "totalKontrak", "totalPersen", "kategori_kontrak", "proyek_get", "unit_kerja_get", "dop_get", "proyeks", "dops", "unit_kerjas"]));
         }
         
         $claims = ClaimManagements::all()->filter(function($cl) use($proyeks) {
@@ -742,7 +770,7 @@ class DashboardController extends Controller
             return [$key, $c->count()];
         })->values();
         // End :: Changes Overview
-        // dd($claims);
+        // dd($kategori_kontrak);
 
         // Begin :: Jenis Kontrak
         $jenis_kontrak = $proyeks->map(function ($p) {
