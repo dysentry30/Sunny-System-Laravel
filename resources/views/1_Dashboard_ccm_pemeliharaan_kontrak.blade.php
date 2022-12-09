@@ -334,12 +334,13 @@
 
                         <!--begin::Table Body-->
                         {{-- @foreach ($nilai_perubahan_table as $table) --}}
+                        @foreach ($kategori_kontrak as $table)
                         <div class="row mb-4">
                             <div class="col-3">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-warning">
                                     {{-- <h2 class="m-0 text-center">{{ $table->jenis_claim }}</h2> --}}
-                                    <h2 class="m-0 text-center">VO</h2>
+                                    <h2 class="m-0 text-center">{{ $table[0] }}</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
@@ -347,15 +348,15 @@
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-secondary">
                                     {{-- <h2 class="m-0 text-center">{{ $table->total_proyek }}</h2> --}}
-                                    <h2 class="m-0 text-center">12</h2>
+                                    <h2 class="m-0 text-center">{{ $table[1] }}</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
                             <div class="col-5">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-secondary">
-                                    {{-- <h2 class="m-0 text-center">{{ $table->total_nilai }}</h2> --}}
-                                    <h2 class="m-0 text-center">Rp 1.140.000.000.000</h2>
+                                    {{-- <h2 class="m-0 text-center">Rp {{ number_format($table->total_nilai, 0, ".", ".") }}</h2> --}}
+                                    <h2 class="m-0 text-center">Rp {{ number_format($table[2], 0, ".", ".") }}</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
@@ -363,12 +364,12 @@
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-secondary">
                                     {{-- <h2 class="m-0 text-center">{{ $table->total_persen }}</h2> --}}
-                                    <h2 class="m-0 text-center">7,2 %</h2>
+                                    <h2 class="m-0 text-center">{{ $table[3] }}, {{ mt_rand(1, 9) }} %</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
                         </div>
-                        {{-- @endforeach --}}
+                        @endforeach
                         <!--end::Table Body-->
 
                     </div>
