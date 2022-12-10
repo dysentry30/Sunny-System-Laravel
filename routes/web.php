@@ -1354,9 +1354,9 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::get('/history-autorisasi', function () {
         $periodeOtor = (int) date('m');
         if ($periodeOtor == 1) {
-            $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("is_cancel", "=", false)->where("periode_prognosa", "=", $periodeOtor - 1)->whereYear("created_at", "=", (int) date("Y") - 1)->join("dops", "dops.dop", "=", "proyeks.dop")->join("unit_kerjas", "unit_kerjas.divcode", "=", "proyeks.unit_kerja");
+            $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("stage", "!=", 7)->where("periode_prognosa", "=", $periodeOtor - 1)->whereYear("created_at", "=", (int) date("Y") - 1)->join("dops", "dops.dop", "=", "proyeks.dop")->join("unit_kerjas", "unit_kerjas.divcode", "=", "proyeks.unit_kerja");
         } else {
-            $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("is_cancel", "=", false)->where("periode_prognosa", "=", $periodeOtor - 1)->join("dops", "dops.dop", "=", "proyeks.dop")->join("unit_kerjas", "unit_kerjas.divcode", "=", "proyeks.unit_kerja");
+            $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("stage", "!=", 7)->where("periode_prognosa", "=", $periodeOtor - 1)->join("dops", "dops.dop", "=", "proyeks.dop")->join("unit_kerjas", "unit_kerjas.divcode", "=", "proyeks.unit_kerja");
         }
         $history_forecasts = $history_forecasts->get()->groupBy("unit_kerja");
 
