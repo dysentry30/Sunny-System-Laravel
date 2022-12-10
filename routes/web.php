@@ -1352,7 +1352,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     //Begin :: History Autorisasi
     Route::get('/history-autorisasi', function () {
-        $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->join("dops", "dops.dop", "=", "proyeks.dop")->join("unit_kerjas", "unit_kerjas.divcode", "=", "proyeks.unit_kerja")->get()->groupBy("unit_kerja");
+        $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("periode_prognosa", ((int) date('m')))->join("dops", "dops.dop", "=", "proyeks.dop")->join("unit_kerjas", "unit_kerjas.divcode", "=", "proyeks.unit_kerja")->get()->groupBy("unit_kerja");
+        // dd($history_forecasts);
         return view("/12_Autorisasi", compact("history_forecasts"));
     });
     //End :: History Autorisasi
