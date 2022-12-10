@@ -236,14 +236,14 @@
                                             <td class="text-center">
                                                 {{number_format((int) $history->sum(function($f) {
                                                     return (int) $f->nilai_forecast;
-                                                }), 0, ",", ",")}}
+                                                }), 0, ".", ".")}}
                                             </td>
                                             <td class="text-center">
                                                 {{number_format((int) $history->sum(function($f) {
                                                     if($f->stage >= 8) {
                                                         return (int) $f->realisasi_forecast;
                                                     }
-                                                }), 0, ",", ",")}}
+                                                }), 0, ".", ".")}}
                                             </td>
                                             {{-- <td class="text-center">
                                                 {{Carbon\Carbon::parse($history->created_at)->translatedFormat("d F Y")}}
