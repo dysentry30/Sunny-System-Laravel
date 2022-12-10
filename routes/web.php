@@ -1352,7 +1352,24 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     //Begin :: History Autorisasi
     Route::get('/history-autorisasi', function () {
-        $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("periode_prognosa", ((int) date('m')))->join("dops", "dops.dop", "=", "proyeks.dop")->join("unit_kerjas", "unit_kerjas.divcode", "=", "proyeks.unit_kerja")->get()->groupBy("unit_kerja");
+        // $periodeOtor = 0;
+        // $yearOtor = 0;
+        // $proyeks = Proyek::where("stage", "=", 8)->where("unit_kerja", "=", $unitKerjaPis)->get(["id", "tanggal_selesai_pho", "tanggal_selesai_fho", "jenis_proyek", "kode_proyek", "nama_proyek", "tanggal_mulai_terkontrak", "tanggal_akhir_terkontrak", "nospk_external", "porsi_jo", "nilai_kontrak_keseluruhan", "nomor_terkontrak", "nilai_valas_review", "tglspk_internal", "tanggal_terkontrak", "nilai_perolehan", "kurs_review", "klasifikasi_terkontrak", "provinsi", "negara", "sistem_bayar", "sumber_dana", "sbu", "jenis_terkontrak", "lokasi_tender", "mata_uang_review", "mata_uang_awal", "longitude", "latitude"])->filter(function ($p) use (&$periodeOtor, $periode, &$yearOtor) {
+        //     if ($periode[1] == 1) {
+        //         $periodeOtor = 12;
+        //         $yearOtor = (int) date("Y") - 1;
+        //         $is_forecast_exist = $p->HistoryForecasts->where("periode_prognosa", ((int) $periode[1] + 11))->whereYear("created_at", "=", $yearOtor)->count() > 0;
+        //     } else {
+        //         $periodeOtor = $periode[1] - 1;
+        //         $yearOtor = (int) date("Y");
+        //         $is_forecast_exist = $p->HistoryForecasts->where("periode_prognosa", ((int) $periode[1] - 1))->count() > 0;
+        //     }
+        //     unset($p->HistoryForecasts);
+        //     return $is_forecast_exist;
+        // });
+
+        $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("periode_prognosa", ((int) date('m')))->join("dops", "dops.dop", "=", "proyeks.dop")->join("unit_kerjas", "unit_kerjas.divcode", "=", "proyeks.unit_kerja");
+        $history_forecasts = $history_forecasts->get()->groupBy("unit_kerja")->groupBy("periode_prognosa");
         // dd($history_forecasts);
         return view("/12_Autorisasi", compact("history_forecasts"));
     });
