@@ -552,84 +552,90 @@
                                     </figure>
                                     <hr> --}}
 
-                                    <figure class="highcharts-figure py-12">
-                                        <div class="py-12" id="monitoring-proyek">
-                                            <!--begin::MONITORING PROYEK-->
-                                            <!--end::MONITORING PROYEK-->
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <figure class="highcharts-figure py-12">
+                                                <div class="py-12" id="monitoring-proyek">
+                                                    <!--begin::MONITORING PROYEK-->
+                                                    <!--end::MONITORING PROYEK-->
+                                                </div>
+                                                <div class="" id="datatable-monitoring-proyek" style="display: none;">
+                                                    <div class="text-center">
+                                                        <h2 id="title-table"></h2>
+                                                        <h4 id="total"></h4>
+                                                    </div>
+                                                    <div class="d-flex justify-content-end">
+                                                        <button class="btn btn-sm btn-light btn-active-primary fs-6 me-3"
+                                                            onclick="hideTable('#datatable-monitoring-proyek','#monitoring-proyek')"><i class="bi bi-bar-chart-fill fs-6"></i> Show
+                                                            Chart</button>
+                                                        <a href="#" target="_blank" id="export-excel-btn" class="btn btn-sm btn-light btn-active-primary fs-6 me-3"><i class="bi bi-download"></i> Export Excel</a>
+                                                        <button class="btn btn-sm btn-light btn-active-danger fs-6"
+                                                            onclick="toggleFullscreen()" id="exit-fullscreen"><i
+                                                                class="bi bi-fullscreen-exit fs-6"></i> Exit Fullscreen</button>
+                                                        {{-- <button class="btn btn-sm btn-active-primary text-white" style="background-color: #008cb4;"><i class="bi bi-graph-up-arrow text-white"></i></button> --}}
+                                                    </div>
+                                                    <br>
+                                                    <div class="" style="max-height: 500px; overflow-y:scroll">
+                                                        <table class="table align-middle table-row-dashed fs-6 gy-2">
+                                                            <!--begin::Table head-->
+                                                            <thead id="table-line-head" class="bg-white" style="position: sticky; top: 0">
+                                                                {{-- THead Here --}}
+                                                            </thead>
+                                                            <!--end::Table head-->
+                                                            <!--begin::Table body-->
+                                                            <tbody class="fw-bold" id="table-line-body">
+                                                                {{-- Data Here --}}
+                                                            </tbody>
+                                                            <!--end::Table body-->
+                                                        </table>
+                                                    </div>
+                                                    <!--end::Table Proyek-->
+                                                </div>
+                                            </figure>
                                         </div>
-                                        <div class="" id="datatable-monitoring-proyek" style="display: none;">
-                                            <div class="text-center">
-                                                <h2 id="title-table"></h2>
-                                                <h4 id="total"></h4>
-                                            </div>
-                                            <div class="d-flex justify-content-end">
-                                                <button class="btn btn-sm btn-light btn-active-primary fs-6 me-3"
-                                                    onclick="hideTable('#datatable-monitoring-proyek','#monitoring-proyek')"><i class="bi bi-bar-chart-fill fs-6"></i> Show
-                                                    Chart</button>
-                                                <a href="#" target="_blank" id="export-excel-btn" class="btn btn-sm btn-light btn-active-primary fs-6 me-3"><i class="bi bi-download"></i> Export Excel</a>
-                                                <button class="btn btn-sm btn-light btn-active-danger fs-6"
-                                                    onclick="toggleFullscreen()" id="exit-fullscreen"><i
-                                                        class="bi bi-fullscreen-exit fs-6"></i> Exit Fullscreen</button>
-                                                {{-- <button class="btn btn-sm btn-active-primary text-white" style="background-color: #008cb4;"><i class="bi bi-graph-up-arrow text-white"></i></button> --}}
-                                            </div>
-                                            <br>
-                                            <div class="" style="max-height: 500px; overflow-y:scroll">
-                                                <table class="table align-middle table-row-dashed fs-6 gy-2">
-                                                    <!--begin::Table head-->
-                                                    <thead id="table-line-head" class="bg-white" style="position: sticky; top: 0">
-                                                        {{-- THead Here --}}
-                                                    </thead>
-                                                    <!--end::Table head-->
-                                                    <!--begin::Table body-->
-                                                    <tbody class="fw-bold" id="table-line-body">
-                                                        {{-- Data Here --}}
-                                                    </tbody>
-                                                    <!--end::Table body-->
-                                                </table>
-                                            </div>
-                                            <!--end::Table Proyek-->
+                                        <div class="col-6">
+                                            <figure class="highcharts-figure py-12">
+                                                <div class="py-12" id="terendah-terkontrak">
+                                                    <!--begin::TERENDAH - TERKONTRAK-->
+                                                    <!--end::TERENDAH - TERKONTRAK-->
+                                                </div>
+                                                <div class="" id="datatable-terendah-terkontrak" style="display: none;">
+                                                    <div class="text-center">
+                                                        <h2 id="title-table"></h2>
+                                                        <h4 id="total"></h4>
+                                                    </div>
+                                                    <div class="d-flex justify-content-end">
+                                                        <button class="btn btn-sm btn-light btn-active-primary fs-6 me-3"
+                                                            onclick="hideTable('#datatable-terendah-terkontrak','#terendah-terkontrak')"><i class="bi bi-bar-chart-fill fs-6"></i> Show
+                                                            Chart</button>
+                                                        <a href="#" target="_blank" id="export-excel-btn" class="btn btn-sm btn-light btn-active-primary fs-6 me-3"><i class="bi bi-download"></i> Export Excel</a>
+                                                        <button class="btn btn-sm btn-light btn-active-danger fs-6"
+                                                            onclick="toggleFullscreen()" id="exit-fullscreen"><i
+                                                                class="bi bi-fullscreen-exit fs-6"></i> Exit Fullscreen</button>
+                                                        {{-- <button class="btn btn-sm btn-active-primary text-white" style="background-color: #008cb4;"><i class="bi bi-graph-up-arrow text-white"></i></button> --}}
+                                                    </div>
+                                                    <br>
+                                                    <div class="" style="max-height: 500px; overflow-y:scroll">
+                                                        <table class="table align-middle table-row-dashed fs-6 gy-2">
+                                                            <!--begin::Table head-->
+                                                            <thead id="table-line-head" class="bg-white" style="position: sticky; top: 0">
+                                                                {{-- THead Here --}}
+                                                            </thead>
+                                                            <!--end::Table head-->
+                                                            <!--begin::Table body-->
+                                                            <tbody class="fw-bold" id="table-line-body">
+                                                                {{-- Data Here --}}
+                                                            </tbody>
+                                                            <!--end::Table body-->
+                                                        </table>
+                                                    </div>
+                                                    <!--end::Table Proyek-->
+                                                </div>
+                                            </figure>
                                         </div>
-                                    </figure>
+                                    </div>
                                     <hr>
                                     
-                                    <figure class="highcharts-figure py-12">
-                                        <div class="py-12" id="terendah-terkontrak">
-                                            <!--begin::TERENDAH - TERKONTRAK-->
-                                            <!--end::TERENDAH - TERKONTRAK-->
-                                        </div>
-                                        <div class="" id="datatable-terendah-terkontrak" style="display: none;">
-                                            <div class="text-center">
-                                                <h2 id="title-table"></h2>
-                                                <h4 id="total"></h4>
-                                            </div>
-                                            <div class="d-flex justify-content-end">
-                                                <button class="btn btn-sm btn-light btn-active-primary fs-6 me-3"
-                                                    onclick="hideTable('#datatable-terendah-terkontrak','#terendah-terkontrak')"><i class="bi bi-bar-chart-fill fs-6"></i> Show
-                                                    Chart</button>
-                                                <a href="#" target="_blank" id="export-excel-btn" class="btn btn-sm btn-light btn-active-primary fs-6 me-3"><i class="bi bi-download"></i> Export Excel</a>
-                                                <button class="btn btn-sm btn-light btn-active-danger fs-6"
-                                                    onclick="toggleFullscreen()" id="exit-fullscreen"><i
-                                                        class="bi bi-fullscreen-exit fs-6"></i> Exit Fullscreen</button>
-                                                {{-- <button class="btn btn-sm btn-active-primary text-white" style="background-color: #008cb4;"><i class="bi bi-graph-up-arrow text-white"></i></button> --}}
-                                            </div>
-                                            <br>
-                                            <div class="" style="max-height: 500px; overflow-y:scroll">
-                                                <table class="table align-middle table-row-dashed fs-6 gy-2">
-                                                    <!--begin::Table head-->
-                                                    <thead id="table-line-head" class="bg-white" style="position: sticky; top: 0">
-                                                        {{-- THead Here --}}
-                                                    </thead>
-                                                    <!--end::Table head-->
-                                                    <!--begin::Table body-->
-                                                    <tbody class="fw-bold" id="table-line-body">
-                                                        {{-- Data Here --}}
-                                                    </tbody>
-                                                    <!--end::Table body-->
-                                                </table>
-                                            </div>
-                                            <!--end::Table Proyek-->
-                                        </div>
-                                    </figure>
                                     <hr>
 
                                     <div class="row">
