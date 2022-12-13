@@ -1189,9 +1189,9 @@
             const type = e.getAttribute("id");
             let url = "";
             if(type == "dop") {
-                url = `/dashboard-ccm/pelaksanaan-kontrak?dop=${value}`;
+                url = `/dashboard-ccm/pemeliharaan-kontrak?dop=${value}`;
             } else {
-                url = `/dashboard-ccm/pelaksanaan-kontrak?unit-kerja=${value}`;
+                url = `/dashboard-ccm/pemeliharaan-kontrak?unit-kerja=${value}`;
             }
             window.location.href = url;
             return;
