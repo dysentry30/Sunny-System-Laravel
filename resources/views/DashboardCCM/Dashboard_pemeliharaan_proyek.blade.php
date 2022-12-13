@@ -115,13 +115,13 @@
                                             <!--end:::Tab Item Tab Pane-->
                                             <!--begin:::Tab Item Tab Pane-->
                                             <li class="nav-item">
-                                                <a class="nav-link text-active-primary pb-4 active"
+                                                <a class="nav-link text-active-primary pb-4"
                                                     href="/dashboard-ccm/pelaksanaan-kontrak" style="font-size:14px;">Pelaksanaan Kontrak</a>
                                             </li>
                                             <!--end:::Tab Item Tab Pane-->
                                             <!--begin:::Tab Item Tab Pane-->
                                             <li class="nav-item">
-                                                <a class="nav-link text-active-primary pb-4"
+                                                <a class="nav-link text-active-primary pb-4 active"
                                                     href="/dashboard-ccm/pemeliharaan-kontrak" style="font-size:14px;">Pemeliharaan Kontrak</a>
                                             </li>
                                             <!--end:::Tab Item Tab Pane-->
