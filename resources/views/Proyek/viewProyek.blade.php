@@ -1001,7 +1001,7 @@
                                                         <!--begin::Row Kanan+Kiri-->
                                                         <div class="row fv-row">
                                                             <!--begin::Col-->
-                                                            <div class="col-6">
+                                                            <div class="col-4">
                                                                 <!--begin::Input group Website-->
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
@@ -1038,6 +1038,23 @@
                                                                         @endif
                                                                     </select>
                                                                     <!--end::Input-->
+                                                                </div>
+                                                                <!--end::Input group-->
+                                                            </div>
+                                                            <!--End::Col-->
+                                                            <!--begin::Col-->
+                                                            <div class="col-2">
+                                                                <!--begin::Input group Website-->
+                                                                <div class="fv-row mb-7">
+                                                                    <!--begin::Label-->
+                                                                    <label class="mt-12 fs-6 fw-bold form-label mt-3">
+                                                                        <a class="btn btn-sm btn-light btn-active-primary ms-2" target="_blank" href="/customer/view/{{ $proyekberjalans->id_customer }}" id="kt_toolbar_export"><i class="bi bi-search"></i> Cek Pemberi Kerja 
+                                                                        </a>
+                                                                    </label>
+                                                                    {{-- <a target="_blank" href="/customer/view/{{ $proyekberjalans->id_customer }}">
+                                                                    <span> Cek Pelanggan</span>
+                                                                    </a> --}}
+                                                                    <!--end::Label-->
                                                                 </div>
                                                                 <!--end::Input group-->
                                                             </div>
