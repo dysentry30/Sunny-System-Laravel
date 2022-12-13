@@ -97,41 +97,59 @@
                     <!--begin::Card "style edited"-->
                     <div class="card" Id="List-vv" style="position: relative; overflow: hidden;">
 
-
-                        <!--begin::Card header-->
-                        {{-- <div class="card-header border-0 pt-">
-                            <!--begin::Card title-->
-                            <div class="card-title">
-                                <!--begin::Search-->
-                                <div class="d-flex align-items-center position-relative my-1">
-                                    <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
-                                    <span class="svg-icon svg-icon-1 position-absolute ms-6">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            viewBox="0 0 24 24" fill="none">
-                                            <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546"
-                                                height="2" rx="1" transform="rotate(45 17.0365 15.1223)"
-                                                fill="black" />
-                                            <path
-                                                d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z"
-                                                fill="black" />
-                                        </svg>
-                                    </span>
-                                    <!--end::Svg Icon-->
-                                    <input type="text" data-kt-customer-table-filter="search"
-                                        class="form-control form-control-solid w-250px ps-15" placeholder="Search Proyek" />
-                                </div>
-                                <!--end::Search-->
-                            </div>
-                            <!--begin::Card title-->
-
-                        </div> --}}
-                        <!--end::Card header-->
-
-
                         <!--begin::Card body-->
                         <div class="card-body py-10">
                             @if (auth()->user()->check_administrator)
-                                <!--begin::Table-->
+
+                            <!--Begin :: Filter-->
+                            <div class="card">
+                                <div class="card-title">
+                                    <div class="row">
+                                        <div class="col-2">
+                                        <h2 class="mt-3">Pilih Periode Otorisasi : </h2>
+                                        </div>
+                                        <div class="col-3">
+                                                <form action="/history-autorisasi" method="get">
+                                                <!--begin::Select Options-->
+                                                <select onchange="this.form.submit()" id="periode-prognosa" name="periode-prognosa"
+                                                    class="form-select form-select-solid select2-hidden-accessible w-auto ms-2"
+                                                    style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
+                                                    data-placeholder="Bulan" data-select2-id="select2-data-bulan" tabindex="-1"
+                                                    aria-hidden="true">
+                                                    <option {{ $periodeOtor == '' ? 'selected' : '' }}></option>
+                                                    <option value="1" {{ $periodeOtor == 1 ? 'selected' : '' }}>Januari</option>
+                                                    <option value="2" {{ $periodeOtor == 2 ? 'selected' : '' }}>Februari</option>
+                                                    <option value="3" {{ $periodeOtor == 3 ? 'selected' : '' }}>Maret</option>
+                                                    <option value="4" {{ $periodeOtor == 4 ? 'selected' : '' }}>April</option>
+                                                    <option value="5" {{ $periodeOtor == 5 ? 'selected' : '' }}>Mei</option>
+                                                    <option value="6" {{ $periodeOtor == 6 ? 'selected' : '' }}>Juni</option>
+                                                    <option value="7" {{ $periodeOtor == 7 ? 'selected' : '' }}>Juli</option>
+                                                    <option value="8" {{ $periodeOtor == 8 ? 'selected' : '' }}>Agustus</option>
+                                                    <option value="9" {{ $periodeOtor == 9 ? 'selected' : '' }}>September</option>
+                                                    <option value="10" {{ $periodeOtor == 10 ? 'selected' : '' }}>Oktober</option>
+                                                    <option value="11" {{ $periodeOtor == 11 ? 'selected' : '' }}>November</option>
+                                                    <option value="12" {{ $periodeOtor == 12 ? 'selected' : '' }}>Desember</option>
+                                                </select>
+                                                <!--end::Select Options-->
+                                            </form>
+                                        </div>
+                                            
+                                        <div class="col">
+                                            <form action="" method="GET">
+                                                <button type="submit" class="btn btn-secondary">Reset</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--End :: Filter-->
+                        </div>
+                        <!--end::Card body-->
+                        
+                        <!--begin::Card body-->
+                        <div class="card-body py-10">
+
+                            <!--begin::Table-->
                             <table class="table align-middle table-row-dashed fs-6 gy-2" id="kt_customers_table">
                                 <!--begin::Table head-->
                                 <thead>
@@ -305,18 +323,16 @@
                             <!--end::Table-->
                             
                             @endif
-
-
                         </div>
                         <!--end::Card body-->
+                        
                     </div>
                     <!--end::Card-->
                     <!--end::Container-->
                     <!--end::Post-->
 
 
-                </div>
-                <!--end::Content-->
+                
                 <!--begin::Footer-->
 
                 <!--end::Footer-->
