@@ -554,16 +554,15 @@ class DashboardController extends Controller
             }
             // $sumber_dana_model = SumberDana::
             foreach ($proyeks_sumber_dana as $proyek) {
-                dump($proyek);
-                if($proyek->tipe_proyek == "R") {
-                    $total_rkap += (int) $proyek->Forecasts->filter(function($f) use($month, $year) {
-                        return $f->periode_prognosa == $month && Carbon::createFromTimeString($f->created_at)->year == $year;
-                    })->sum(function($f) {
-                        return (int) $f->rkap_forecast;
-                    });
-                } else {
-                    $total_rkap += (int) $proyek->nilai_rkap / $per;
-                }
+                // if($proyek->tipe_proyek == "R") {
+                //     $total_rkap += (int) $proyek->Forecasts->filter(function($f) use($month, $year) {
+                //         return $f->periode_prognosa == $month && Carbon::createFromTimeString($f->created_at)->year == $year;
+                //     })->sum(function($f) {
+                //         return (int) $f->rkap_forecast;
+                //     });
+                // } else {
+                // }
+                $total_rkap += (int) $proyek->nilai_rkap / $per;
                 // $total_RKAP_keseluruhan += (int) $proyek->nilai_rkap / $per;
             }
             $totalRKAPSumberDana->push([
