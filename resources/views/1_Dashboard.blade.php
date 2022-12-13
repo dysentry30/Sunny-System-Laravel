@@ -634,8 +634,7 @@
                                             </figure>
                                         </div>
                                     </div>
-                                    <hr>
-                                    
+
                                     <hr>
 
                                     <div class="row">
