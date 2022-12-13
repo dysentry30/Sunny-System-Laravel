@@ -111,7 +111,8 @@ class ClaimController extends Controller
      */
     public function new(Proyek $proyek, $contract)
     {
-        $contract = urldecode(urldecode($contract));
+        // $contract = urldecode(urldecode($contract));
+        $contract = url_encode($contract);
         $contract = ContractManagements::find($contract);
         $no_urut = new ClaimManagements();
         if (!empty($no_urut->all()->sortBy("id_claim")->last()->id_claim)) {

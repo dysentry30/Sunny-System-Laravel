@@ -231,7 +231,8 @@
                                                             {{-- <a class="text-hover-primary 
                                                                 href="/claim-management/view/{{ $claim->id_claim }}">{{ $claim->id_claim }}
                                                             </a> --}}
-                                                            <a href="/contract-management/view/{{ urlencode(urlencode($proyek->nomor_terkontrak)) }}"
+                                                            {{-- <a href="/contract-management/view/{{ urlencode(urlencode($proyek->nomor_terkontrak)) }}" --}}
+                                                            <a href="/contract-management/view/{{ url_encode($proyek->nomor_terkontrak) }}"
                                                                 id="click-name"
                                                                 class="text-hover-primary mb-1">{{ $proyek->kode_proyek }}</a>
                                                         </td>
