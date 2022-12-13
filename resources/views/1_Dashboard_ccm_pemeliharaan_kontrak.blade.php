@@ -175,7 +175,7 @@
                                         </select>
                                     </div>
 
-                                    {{-- <div class="col-3">
+                                    <div class="col-3">
                                         <select onchange="selectFilter(this)" id="proyek" name="proyek"
                                                 class="form-select form-select-solid w-auto"
                                                 style="margin-right: 2rem;" data-control="select2" data-hide-search="false"
@@ -187,7 +187,8 @@
                                                     <option value="{{ $proyek->kode_proyek }}" >{{ $proyek->nama_proyek }} ({{$proyek->kode_proyek}})</option>
                                                 @endforeach
                                         </select>
-                                    </div> --}}
+                                    </div>
+                                    
                                     <div class="col-3">
                                         <form action="" method="GET">
                                             <button type="submit" class="btn btn-secondary">Reset</button>
