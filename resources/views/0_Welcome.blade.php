@@ -13,7 +13,7 @@
     <!--begin::Global Stylesheets Bundle(used by all pages)-->
     <link href="/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
     <link href="/css/style.bundle.css" rel="stylesheet" type="text/css" />
-    <title>Sunny Sidasi KPPU</title>
+    <title>Sunny System</title>
     <link href="/css/login.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
