@@ -106,7 +106,7 @@
                                 <div class="card-title">
                                     <div class="row">
                                         <div class="col-2">
-                                        <h2 class="mt-3">Pilih Periode Otorisasi : </h2>
+                                        <h2 class="mt-3 text-end">Periode Otorisasi : </h2>
                                         </div>
                                         <div class="col-3">
                                                 <form action="/history-autorisasi" method="get">
