@@ -545,7 +545,7 @@ class DashboardController extends Controller
         //         return (int) $f->rkap_forecast;
         //     });
         // });
-        $proyeksGroupBySumberDana = $proyeksGroupBySumberDana->mergeRecursive($proyeksGroupBySumberDanaRetail);
+        // $proyeksGroupBySumberDana = $proyeksGroupBySumberDana->mergeRecursive($proyeksGroupBySumberDanaRetail);
         // $proyeksGroupBySumberDana = $proyeks->first();
         foreach ($proyeksGroupBySumberDana as $sumber_dana => $proyeks_sumber_dana) {
             $total_rkap = 0;
