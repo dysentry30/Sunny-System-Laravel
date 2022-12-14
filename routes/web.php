@@ -563,6 +563,9 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     // DELETE Dokumen Prakualifikasi
     Route::delete('proyek/dokumen-prakualifikasi/{id}/delete', [ProyekController::class, 'deleteDokumenPrakualifikasi']);
 
+    // DELETE Dokumen Prakualifikasi
+    Route::delete('proyek/dokumen-nda/{id}/delete', [ProyekController::class, 'deleteDokumenNda']);
+
     // DELETE Dokumen Tender
     Route::delete('proyek/dokumen-tender/{id}/delete', [ProyekController::class, 'deleteDokumenTender']);
 
@@ -1355,9 +1358,9 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $periodeOtor = $request->query("periode-prognosa") ?? (int) date('m') - 1;
         // $periodeOtor = (int) date('m');
         if ($periodeOtor == 1) {
-            $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("stage", "!=", 7)->where("periode_prognosa", "=", $periodeOtor)->whereYear("created_at", "=", (int) date("Y") - 1)->join("dops", "dops.dop", "=", "proyeks.dop")->join("unit_kerjas", "unit_kerjas.divcode", "=", "proyeks.unit_kerja");
+            $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("stage", "!=", 7)->where("is_cancel", "!=", true)->where("periode_prognosa", "=", $periodeOtor)->whereYear("created_at", "=", (int) date("Y") - 1)->join("dops", "dops.dop", "=", "proyeks.dop")->join("unit_kerjas", "unit_kerjas.divcode", "=", "proyeks.unit_kerja");
         } else {
-            $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("stage", "!=", 7)->where("periode_prognosa", "=", $periodeOtor)->join("dops", "dops.dop", "=", "proyeks.dop")->join("unit_kerjas", "unit_kerjas.divcode", "=", "proyeks.unit_kerja");
+            $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("stage", "!=", 7)->where("is_cancel", "!=", true)->where("periode_prognosa", "=", $periodeOtor)->join("dops", "dops.dop", "=", "proyeks.dop")->join("unit_kerjas", "unit_kerjas.divcode", "=", "proyeks.unit_kerja");
         }
         
         $history_forecasts = $history_forecasts->get()->groupBy("unit_kerja");
