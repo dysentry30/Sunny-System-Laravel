@@ -15,6 +15,9 @@
     .table>:not(caption)>*>* {
         padding: 0.25rem 0.25rem !important;
     }
+     /* .table tbody * {
+            font-family: Poppins !important;
+        } */
 </style>
 
 <!--begin::Main-->
@@ -116,7 +119,7 @@
                     <!--begin::Post-->
                     <!--begin::Container-->
                     <!--begin::Card "style edited"-->
-                    <div class="card" Id="List-vv" style="position: relative; overflow: hidden;">
+                    <div class="card mx-6" Id="List-vv" style="position: relative; overflow: hidden;">
 
 
                         <!--begin::Card header-->
@@ -308,7 +311,7 @@
 
 
                         <!--begin::Card body-->
-                        <div class="card-body pt-0 px-0">
+                        <div class="card-body pt-0 px-3">
 
 
                             <!--begin::Table Proyek-->
@@ -318,9 +321,9 @@
                                     <!--begin::Table row-->
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase text-sm gs-0">
                                         <th class="min-w-auto ps-3"><small>@sortablelink('kode_proyek', 'Kode Proyek')</small></th>
-                                        <th class="w-25"><small>@sortablelink('nama_proyek', 'Nama Proyek')</small></th>
+                                        <th class="w-20"><small>@sortablelink('nama_proyek', 'Nama Proyek')</small></th>
                                         <th class="min-w-auto"><small>@sortablelink('unit_kerja', 'Unit Kerja')</small></th>
-                                        <th class="min-w-auto"><small>@sortablelink('stage', 'Stage')</small></th>
+                                        <th class="min-w-auto text-center"><small>@sortablelink('stage', 'Stage')</small></th>
                                         <th class="min-w-auto"><small>@sortablelink('tahun_perolehan', 'Tahun RA Perolehan')</small></th>
                                         <th class="min-w-auto"><small>@sortablelink('bulan_pelaksanaan', 'Bulan RA Perolehan')</small></th>
                                         <th class="min-w-auto"><small>@sortablelink('nilai_rkap', 'Nilai RKAP')</small></th>
@@ -328,6 +331,7 @@
                                         <th class="min-w-auto"><small>@sortablelink('nilai_perolehan', 'Nilai Realisasi')</small></th>
                                         <th class="min-w-auto"><small>Pelanggan</small></th>
                                         <th class="min-w-auto text-center"><small>@sortablelink('jenis_proyek', 'Jenis Proyek')</small></th>
+                                        <th class="min-w-auto text-center"><small>@sortablelink('tipe_proyek', 'Tipe Proyek')</small></th>
                                         @if (auth()->user()->check_administrator)
                                             <th class="min-w-auto text-center"><small>Action</small></th>
                                         @endif
@@ -353,7 +357,7 @@
                                             <!--begin::Email-->
                                             <td>
                                                 <small>
-                                                    <a href="/proyek/view/{{ $proyek->kode_proyek }}" id="click-name"
+                                                    <a target="_blank" href="/proyek/view/{{ $proyek->kode_proyek }}" id="click-name"
                                                         class="text-gray-800 text-hover-primary">{{ $proyek->nama_proyek }}</a>
                                                 </small>
                                             </td>
@@ -376,7 +380,7 @@
                                                     $stageColor = "badge-light-primary";
                                                 }                                                    
                                             @endphp
-                                            <td class="" style="max-width: 80px">
+                                            <td class="text-center" style="max-width: 80px">
                                                 @if ($proyek->is_cancel)
                                                 <small class="badge fs-8 {{ $stageColor }}">
                                                     Canceled
@@ -552,29 +556,21 @@
                                             </td>
                                             <!--end::customer-->
 
-
                                             <!--begin::Jenis Proyek-->
                                             <td class="text-center">
                                                 <small>
-                                                    @switch($proyek->jenis_proyek)
-                                                        @case('I')
-                                                            Internal
-                                                        @break
-
-                                                        @case('N')
-                                                            External
-                                                        @break
-
-                                                        @case('J')
-                                                            JO
-                                                        @break
-
-                                                        @default
-                                                            -
-                                                    @endswitch
+                                                    {{ $proyek->jenis_proyek == "I" ? "Internal" : ($proyek->jenis_proyek == "N" ? "External" : "JO") }}
                                                 </small>
                                             </td>
                                             <!--end::Jenis Proyek-->
+
+                                            <!--begin::Tipe Proyek-->
+                                            <td class="text-center">
+                                                <small>
+                                                    {{ $proyek->tipe_proyek == "R" ? "Retail" : "Non-Retail" }}
+                                                </small>
+                                            </td>
+                                            <!--end::Tipe Proyek-->
 
                                             @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)"))
                                                 <!--begin::Action-->

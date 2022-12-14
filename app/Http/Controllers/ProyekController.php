@@ -191,6 +191,7 @@ class ProyekController extends Controller
         $newProyek->mata_uang_awal = "IDR";
         $newProyek->nilaiok_awal = (int) str_replace('.', '', $dataProyek["nilai-rkap"]);
         $newProyek->porsi_jo = 100;
+        $newProyek->is_cancel = false;
 
         //begin::Generate Kode Proyek
         $generateProyek = Proyek::all()->sortBy("id");

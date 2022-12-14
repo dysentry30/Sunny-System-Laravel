@@ -19,7 +19,7 @@ class Proyek extends Model
     ];
 
     public $sortable = [
-        'nama_proyek', 'kode_proyek', 'jenis_proyek', 'unit_kerja', 'tahun_perolehan', 'stage', 'bulan_pelaksanaan', 'nilai_rkap', 'nilai_kontrak_keseluruhan', 'forecast'
+        'nama_proyek', 'kode_proyek', 'jenis_proyek', 'tipe_proyek', 'unit_kerja', 'tahun_perolehan', 'stage', 'bulan_pelaksanaan', 'nilai_rkap', 'nilai_kontrak_keseluruhan', 'forecast'
     ];
 
     public function Company()
