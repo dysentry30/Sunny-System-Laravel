@@ -49,68 +49,69 @@
                 <!--begin::Content-->
                 <!--begin::Form-->
                 @if ($proyek->is_cancel == false)
-                    <form action={{ url('/proyek/update/') }} onsubmit="disabledSubmitButton(this)" method="post" enctype="multipart/form-data">
-                    @csrf
+                    <form action={{ url('/proyek/update/') }} onsubmit="disabledSubmitButton(this)" method="post"
+                        enctype="multipart/form-data">
+                        @csrf
                 @endif
 
 
-                    <!--begin:: id_customer selected-->
-                    <input type="hidden" name="kode-proyek" value="{{ $proyek->kode_proyek }}" id="kode-proyek">
-                    <!--end:: id_customerid-->
+                <!--begin:: id_customer selected-->
+                <input type="hidden" name="kode-proyek" value="{{ $proyek->kode_proyek }}" id="kode-proyek">
+                <!--end:: id_customerid-->
 
 
-                    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+                <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
 
-                        <!--begin::Toolbar-->
-                        <div class="toolbar" id="kt_toolbar">
-                            <!--begin::Container-->
-                            <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
-                                <!--begin::Page title-->
-                                <div data-kt-swapper="true" data-kt-swapper-mode="prepend"
-                                    data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
-                                    class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
-                                    <!--begin::Title-->
-                                    <h1
-                                        class="d-flex align-items-center fs-1 my-1 fw-bolder {{ $proyek->is_cancel == true ? 'text-danger' : '' }}">
-                                        @if ($proyek->is_cancel == true)
-                                            Proyek Canceled - &nbsp;
-                                        @else
-                                            Proyek - &nbsp;
-                                        @endif
-                                        <div class="text-truncate" style="max-width: 500px" data-bs-toggle="tooltip"
-                                            data-bs-title="{{ $proyek->nama_proyek }}" data-bs-custom-class="text-start">
-                                            {{ $proyek->nama_proyek }}
-                                        </div>
-                                    </h1>
-                                    <!--end::Title-->
-                                </div>
-                                <!--end::Page title-->
-                                <!--begin::Actions-->
-                                <div class="d-flex align-items-center py-1">
-
-                                    <!--begin::Button-->
-                                    <button type="button" class="btn btn-sm btn-light btn-active-danger ms-2"
-                                        onclick="document.location.reload()" style="display: none;" id="cancel-button">
-                                        Cancel <i class="bi bi-x"></i></button>
-                                    <!--end::Button-->
-
-                                    <!--begin::Button-->
-                                    @if ($proyek->is_cancel == false)
-                                    <button type="submit" class="btn btn-sm btn-primary ms-2" id="proyek-save"
-                                    style="background-color:#008CB4">
-                                        Save</button>
+                    <!--begin::Toolbar-->
+                    <div class="toolbar" id="kt_toolbar">
+                        <!--begin::Container-->
+                        <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
+                            <!--begin::Page title-->
+                            <div data-kt-swapper="true" data-kt-swapper-mode="prepend"
+                                data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
+                                class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
+                                <!--begin::Title-->
+                                <h1
+                                    class="d-flex align-items-center fs-1 my-1 fw-bolder {{ $proyek->is_cancel == true ? 'text-danger' : '' }}">
+                                    @if ($proyek->is_cancel == true)
+                                        Proyek Canceled - &nbsp;
+                                    @else
+                                        Proyek - &nbsp;
                                     @endif
-                                    <!--end::Button-->
+                                    <div class="text-truncate" style="max-width: 500px" data-bs-toggle="tooltip"
+                                        data-bs-title="{{ $proyek->nama_proyek }}" data-bs-custom-class="text-start">
+                                        {{ $proyek->nama_proyek }}
+                                    </div>
+                                </h1>
+                                <!--end::Title-->
+                            </div>
+                            <!--end::Page title-->
+                            <!--begin::Actions-->
+                            <div class="d-flex align-items-center py-1">
 
-                                    <!--begin::Button-->
-                                    <a class="btn btn-sm btn-light btn-active-danger ms-2" data-bs-toggle="modal"
-                                        data-bs-target="#kt_modal_cancel_proyek" id="kt_toolbar_export">Cancel Proyek
-                                    </a>
-                                    <!--end::Button-->
+                                <!--begin::Button-->
+                                <button type="button" class="btn btn-sm btn-light btn-active-danger ms-2"
+                                    onclick="document.location.reload()" style="display: none;" id="cancel-button">
+                                    Cancel <i class="bi bi-x"></i></button>
+                                <!--end::Button-->
 
-                                    <!--begin::Action-->
-                                    <!--begin::Wrapper-->
-                                    {{-- <div class="me-2" style="margin-left:10px;">
+                                <!--begin::Button-->
+                                @if ($proyek->is_cancel == false)
+                                    <button type="submit" class="btn btn-sm btn-primary ms-2" id="proyek-save"
+                                        style="background-color:#008CB4">
+                                        Save</button>
+                                @endif
+                                <!--end::Button-->
+
+                                <!--begin::Button-->
+                                <a class="btn btn-sm btn-light btn-active-danger ms-2" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_cancel_proyek" id="kt_toolbar_export">Cancel Proyek
+                                </a>
+                                <!--end::Button-->
+
+                                <!--begin::Action-->
+                                <!--begin::Wrapper-->
+                                {{-- <div class="me-2" style="margin-left:10px;">
                                         <!--begin::Menu-->
                                         <a href="#" class="btn btn-sm btn-flex btn-light btn-active-primary"
                                             data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
@@ -141,239 +142,239 @@
                                         <!--end::Menu 1-->
                                         <!--end::Menu-->
                                     </div> --}}
-                                    <!--end::Wrapper-->
-                                    <!--end::Action-->
+                                <!--end::Wrapper-->
+                                <!--end::Action-->
 
-                                    <!--begin::Button-->
-                                    {{-- <a class="btn btn-sm btn-light btn-active-primary fs-7 px-4 mx-3" data-bs-toggle="modal"
+                                <!--begin::Button-->
+                                {{-- <a class="btn btn-sm btn-light btn-active-primary fs-7 px-4 mx-3" data-bs-toggle="modal"
                                         data-bs-target="#kt_modal_create_approval" id="kt_toolbar_primary_button"
                                         style="padding: 8px">
                                         Req Approval
                                     </a> --}}
-                                    <!--end::Button-->
+                                <!--end::Button-->
 
-                                    <!--begin::Button-->
-                                    <a href="{{ URL::previous() }}" class="btn btn-sm btn-light btn-active-primary ms-2"
-                                        id="proyek-back">
-                                        Back</a>
-                                    <!--end::Button-->
+                                <!--begin::Button-->
+                                <a href="{{ URL::previous() }}" class="btn btn-sm btn-light btn-active-primary ms-2"
+                                    id="proyek-back">
+                                    Back</a>
+                                <!--end::Button-->
 
-                                    <!--begin::Button-->
-                                    {{-- <a href="/proyek" class="btn btn-sm btn-light btn-active-primary ms-2"
+                                <!--begin::Button-->
+                                {{-- <a href="/proyek" class="btn btn-sm btn-light btn-active-primary ms-2"
                                         id="proyek-close">
                                         Close</a> --}}
-                                    <!--end::Button-->
+                                <!--end::Button-->
 
 
-                                </div>
-                                <!--end::Actions-->
                             </div>
-                            <!--end::Container-->
+                            <!--end::Actions-->
                         </div>
-                        <!--end::Toolbar-->
+                        <!--end::Container-->
+                    </div>
+                    <!--end::Toolbar-->
 
 
 
 
-                        <!--begin::Post-->
-                        <div class="post d-flex flex-column-fluid" id="kt_post">
-                            <!--begin::Container-->
-                            <div id="kt_content_container" class="container-fluid">
-                                <!--begin::Contacts App- Edit Contact-->
-                                <div class="row">
+                    <!--begin::Post-->
+                    <div class="post d-flex flex-column-fluid" id="kt_post">
+                        <!--begin::Container-->
+                        <div id="kt_content_container" class="container-fluid">
+                            <!--begin::Contacts App- Edit Contact-->
+                            <div class="row">
 
-<!--begin::Header Orange-->
-                                    <div class="col-xl-15 mb-8">
-                                        <div class="card card-flush h-lg-100" id="kt_contacts_main">
+                                <!--begin::Header Orange-->
+                                <div class="col-xl-15 mb-8">
+                                    <div class="card card-flush h-lg-100" id="kt_contacts_main">
 
-                                            <div class="card-body pt-auto"
-                                                style="background-color:#f1f1f1; border:1px solid #e6e6e6;">
+                                        <div class="card-body pt-auto"
+                                            style="background-color:#f1f1f1; border:1px solid #e6e6e6;">
 
-                                                <div class="form-group">
-                                                    <div id="stage-button" class="stage-list">
-                                                        @if ($proyek->stage >= 1)
-                                                            <a href="#"
-                                                                class="stage-button stage-action color-is-default stage-is-done"
-                                                                style="outline: 0px; cursor: pointer; {{ auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)") ? '' : 'pointer-events: none;' }}" stage="1">
-                                                                Pasar Dini
-                                                            </a>
-                                                        @else
-                                                            <a href="#"
-                                                                class="stage-button stage-action color-is-default stage-is-not-active"
-                                                                style="outline: 0px; pointer-events: none" stage="1">
-                                                                Pasar Dini
-                                                            </a>
-                                                        @endif
-
-                                                        @if ($proyek->stage > 1)
-                                                            <a href="#"
-                                                                class="stage-button stage-action color-is-default stage-is-done"
-                                                                style="outline: 0px; cursor: pointer; {{ auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)") ? '' : 'pointer-events: none;' }}" stage="2">
-                                                                Pasar Potensial
-                                                            </a>
-                                                        @else
-                                                            <a href="#"
-                                                                class="stage-button stage-action color-is-default stage-is-not-active"
-                                                                style="outline: 0px; cursor: pointer;" stage="2">
-                                                                Pasar Potensial
-                                                            </a>
-                                                        @endif
-
-                                                        @if ($proyek->is_tidak_lulus_pq)
+                                            <div class="form-group">
+                                                <div id="stage-button" class="stage-list">
+                                                    @if ($proyek->stage >= 1)
                                                         <a href="#"
-                                                            class="stage-button stage-is-done color-is-danger"
-                                                            data-bs-toggle="dropdown" role="button"
-                                                            id="menang" aria-expanded="false"
-                                                            style="outline: 0px; cursor: pointer;" stage="1">
+                                                            class="stage-button stage-action color-is-default stage-is-done"
+                                                            style="outline: 0px; cursor: pointer; {{ auth()->user()->check_administrator || str_contains(auth()->user()->name, '(PIC)') ? '' : 'pointer-events: none;' }}"
+                                                            stage="1">
+                                                            Pasar Dini
+                                                        </a>
+                                                    @else
+                                                        <a href="#"
+                                                            class="stage-button stage-action color-is-default stage-is-not-active"
+                                                            style="outline: 0px; pointer-events: none" stage="1">
+                                                            Pasar Dini
+                                                        </a>
+                                                    @endif
+
+                                                    @if ($proyek->stage > 1)
+                                                        <a href="#"
+                                                            class="stage-button stage-action color-is-default stage-is-done"
+                                                            style="outline: 0px; cursor: pointer; {{ auth()->user()->check_administrator || str_contains(auth()->user()->name, '(PIC)') ? '' : 'pointer-events: none;' }}"
+                                                            stage="2">
+                                                            Pasar Potensial
+                                                        </a>
+                                                    @else
+                                                        <a href="#"
+                                                            class="stage-button stage-action color-is-default stage-is-not-active"
+                                                            style="outline: 0px; cursor: pointer;" stage="2">
+                                                            Pasar Potensial
+                                                        </a>
+                                                    @endif
+
+                                                    @if ($proyek->is_tidak_lulus_pq)
+                                                        <a href="#" class="stage-button stage-is-done color-is-danger"
+                                                            data-bs-toggle="dropdown" role="button" id="menang"
+                                                            aria-expanded="false" style="outline: 0px; cursor: pointer;"
+                                                            stage="1">
                                                             <div class="d-flex flex-row">
                                                                 <span class="text-white">Tidak Lulus PQ</span>&nbsp;&nbsp;
-                                                                <span class=""
-                                                                    style="position: relative;top: 15%;"
+                                                                <span class="" style="position: relative;top: 15%;"
                                                                     stage="1"><i
                                                                         class="bi bi-caret-down-fill text-white"></i></span>
                                                             </div>
                                                         </a>
+                                                    @else
+                                                        @if ($proyek->stage > 2)
+                                                            <a href="#" data-bs-toggle="dropdown" role="button"
+                                                                id="tidak-lulus-pq" aria-expanded="false"
+                                                                aria-controls="#tidak-lulus-pq"
+                                                                class="stage-button d-flex align-items-center stage-is-done color-is-default"
+                                                                style="outline: 0px; cursor: pointer; {{ auth()->user()->check_administrator || str_contains(auth()->user()->name, '(PIC)') ? '' : 'pointer-events: none;' }}"
+                                                                stage="3">
+                                                                <span>Prakualifikasi</span>
+                                                                <i class="bi bi-caret-down-fill text-white ms-3"></i>
+                                                            </a>
                                                         @else
-                                                            @if ($proyek->stage > 2)
-                                                                <a href="#"
-                                                                    data-bs-toggle="dropdown"
-                                                                    role="button" id="tidak-lulus-pq" aria-expanded="false"
+                                                            @if (abs($proyek->stage - 3) != 1)
+                                                                <a href="#" data-bs-toggle="dropdown" role="button"
+                                                                    id="tidak-lulus-pq" aria-expanded="false"
                                                                     aria-controls="#tidak-lulus-pq"
-                                                                    class="stage-button d-flex align-items-center stage-is-done color-is-default"
-                                                                    style="outline: 0px; cursor: pointer; {{ auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)") ? '' : 'pointer-events: none;' }}" stage="3">
-                                                                        <span>Prakualifikasi</span>
-                                                                        <i class="bi bi-caret-down-fill text-white ms-3"></i>
+                                                                    class="stage-button d-flex align-items-center stage-is-not-active color-is-default"
+                                                                    style="outline: 0px; cursor: pointer; pointer-events: none;"
+                                                                    stage="3">
+                                                                    <span>Prakualifikasi</span>
+                                                                    <i class="bi bi-caret-down-fill text-white ms-3"></i>
                                                                 </a>
                                                             @else
-                                                                @if (abs($proyek->stage - 3) != 1)
-                                                                    <a href="#"
-                                                                        data-bs-toggle="dropdown"
-                                                                        role="button" id="tidak-lulus-pq" aria-expanded="false"
-                                                                        aria-controls="#tidak-lulus-pq"
-                                                                        class="stage-button d-flex align-items-center stage-is-not-active color-is-default"
-                                                                        style="outline: 0px; cursor: pointer; pointer-events: none;"
-                                                                        stage="3">
-                                                                            <span>Prakualifikasi</span>
-                                                                            <i class="bi bi-caret-down-fill text-white ms-3"></i>
-                                                                    </a>
-                                                                @else
-                                                                    <a href="#"
-                                                                        data-bs-toggle="dropdown"
-                                                                        role="button" id="tidak-lulus-pq" aria-expanded="false"
-                                                                        aria-controls="#tidak-lulus-pq"
-                                                                        class="stage-button d-flex align-items-center stage-is-not-active color-is-default"
-                                                                        style="outline: 0px; cursor: pointer;" stage="3">
-                                                                            <span>Prakualifikasi</span>
-                                                                            <i class="bi bi-caret-down-fill text-white ms-3"></i>
-                                                                    </a>
-                                                                @endif
+                                                                <a href="#" data-bs-toggle="dropdown"
+                                                                    role="button" id="tidak-lulus-pq"
+                                                                    aria-expanded="false" aria-controls="#tidak-lulus-pq"
+                                                                    class="stage-button d-flex align-items-center stage-is-not-active color-is-default"
+                                                                    style="outline: 0px; cursor: pointer;" stage="3">
+                                                                    <span>Prakualifikasi</span>
+                                                                    <i class="bi bi-caret-down-fill text-white ms-3"></i>
+                                                                </a>
                                                             @endif
                                                         @endif
+                                                    @endif
 
-                                                        @if ($proyek->is_cancel == false)
-                                                            <ul class="dropdown-menu"
-                                                                id="tidak-lulus-pq"
-                                                                aria-labelledby="tidak-lulus-pq">
-                                                                <form action="/proyek/stage-save" method="POST">
-                                                                </form>
-                                                                <form action="/proyek/stage-save" method="POST"
-                                                                    onsubmit="confirmAction(this); return false;"
-                                                                    stage="8">
-                                                                    @csrf
-                                                                    <input type="hidden" name="kode_proyek"
-                                                                        value="{{ $proyek->kode_proyek }}">
-                                                                    <li><input type="submit"
-                                                                            onclick="this.form.submitted=this.value"
-                                                                            class="dropdown-item" name="stage-prakualifikasi"
-                                                                            value="Prakualifikasi" />
-                                                                    </li>
-                                                                    <li><input type="submit"
-                                                                            onclick="this.form.submitted=this.value"
-                                                                            class="dropdown-item" name="stage-tidak-lulus-pq"
-                                                                            value="Tidak Lulus PQ" />
-                                                                    </li>
-                                                                </form>
-                                                            </ul>
-                                                        @endif
-                                                        @if ($proyek->stage > 3)
+                                                    @if ($proyek->is_cancel == false)
+                                                        <ul class="dropdown-menu" id="tidak-lulus-pq"
+                                                            aria-labelledby="tidak-lulus-pq">
+                                                            <form action="/proyek/stage-save" method="POST">
+                                                            </form>
+                                                            <form action="/proyek/stage-save" method="POST"
+                                                                onsubmit="confirmAction(this); return false;"
+                                                                stage="8">
+                                                                @csrf
+                                                                <input type="hidden" name="kode_proyek"
+                                                                    value="{{ $proyek->kode_proyek }}">
+                                                                <li><input type="submit"
+                                                                        onclick="this.form.submitted=this.value"
+                                                                        class="dropdown-item" name="stage-prakualifikasi"
+                                                                        value="Prakualifikasi" />
+                                                                </li>
+                                                                <li><input type="submit"
+                                                                        onclick="this.form.submitted=this.value"
+                                                                        class="dropdown-item" name="stage-tidak-lulus-pq"
+                                                                        value="Tidak Lulus PQ" />
+                                                                </li>
+                                                            </form>
+                                                        </ul>
+                                                    @endif
+                                                    @if ($proyek->stage > 3)
+                                                        <a href="#"
+                                                            class="stage-button stage-action stage-is-done color-is-default"
+                                                            style="outline: 0px; cursor: pointer; {{ auth()->user()->check_administrator || str_contains(auth()->user()->name, '(PIC)') ? '' : 'pointer-events: none;' }}"
+                                                            stage="4">
+                                                            Tender Diikuti
+                                                        </a>
+                                                    @else
+                                                        @if (abs($proyek->stage - 4) != 1)
                                                             <a href="#"
-                                                                class="stage-button stage-action stage-is-done color-is-default"
-                                                                style="outline: 0px; cursor: pointer; {{ auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)") ? '' : 'pointer-events: none;' }}" stage="4">
+                                                                class="stage-button stage-action stage-is-not-active color-is-default"
+                                                                style="outline: 0px; cursor: pointer; pointer-events: none;"
+                                                                stage="4">
                                                                 Tender Diikuti
                                                             </a>
                                                         @else
-                                                            @if (abs($proyek->stage - 4) != 1)
-                                                                <a href="#"
-                                                                    class="stage-button stage-action stage-is-not-active color-is-default"
-                                                                    style="outline: 0px; cursor: pointer; pointer-events: none;"
-                                                                    stage="4">
-                                                                    Tender Diikuti
-                                                                </a>
-                                                            @else
-                                                                <a href="#"
-                                                                    class="stage-button stage-action stage-is-not-active color-is-default"
-                                                                    style="outline: 0px; cursor: pointer; {{ $proyek->is_tidak_lulus_pq == false ? '' : 'pointer-events: none;' }}" stage="4">
-                                                                    Tender Diikuti
-                                                                </a>
-                                                            @endif
-                                                        @endif
-
-                                                        @if ($proyek->stage > 4)
                                                             <a href="#"
-                                                                class="stage-button stage-action stage-is-done color-is-default"
-                                                                style="outline: 0px; cursor: pointer; {{ auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)") ? '' : 'pointer-events: none;' }}" stage="5">
+                                                                class="stage-button stage-action stage-is-not-active color-is-default"
+                                                                style="outline: 0px; cursor: pointer; {{ $proyek->is_tidak_lulus_pq == false ? '' : 'pointer-events: none;' }}"
+                                                                stage="4">
+                                                                Tender Diikuti
+                                                            </a>
+                                                        @endif
+                                                    @endif
+
+                                                    @if ($proyek->stage > 4)
+                                                        <a href="#"
+                                                            class="stage-button stage-action stage-is-done color-is-default"
+                                                            style="outline: 0px; cursor: pointer; {{ auth()->user()->check_administrator || str_contains(auth()->user()->name, '(PIC)') ? '' : 'pointer-events: none;' }}"
+                                                            stage="5">
+                                                            Perolehan
+                                                        </a>
+                                                    @else
+                                                        @if (abs($proyek->stage - 5) != 1)
+                                                            <a href="#"
+                                                                class="stage-button stage-action stage-is-not-active color-is-default"
+                                                                style="outline: 0px; cursor: pointer; pointer-events: none;"
+                                                                stage="5">
                                                                 Perolehan
                                                             </a>
                                                         @else
-                                                            @if (abs($proyek->stage - 5) != 1)
-                                                                <a href="#"
-                                                                    class="stage-button stage-action stage-is-not-active color-is-default"
-                                                                    style="outline: 0px; cursor: pointer; pointer-events: none;"
-                                                                    stage="5">
-                                                                    Perolehan
-                                                                </a>
-                                                            @else
-                                                                <a href="#"
-                                                                    class="stage-button stage-action stage-is-not-active color-is-default"
-                                                                    style="outline: 0px; cursor: pointer;" stage="5">
-                                                                    Perolehan
-                                                                </a>
-                                                            @endif
+                                                            <a href="#"
+                                                                class="stage-button stage-action stage-is-not-active color-is-default"
+                                                                style="outline: 0px; cursor: pointer;" stage="5">
+                                                                Perolehan
+                                                            </a>
                                                         @endif
+                                                    @endif
 
-                                                        @if ($proyek->stage > 5)
-                                                            @if ($proyek->stage == 6 || $proyek->stage > 7)
-                                                                <a href="#"
-                                                                    class="stage-button stage-is-done color-is-default"
-                                                                    data-bs-toggle="dropdown" role="button"
-                                                                    id="menang" aria-expanded="false"
-                                                                    style="outline: 0px; cursor: pointer; {{ auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)") ? '' : 'pointer-events: none;' }}" stage="1">
-                                                                    <div class="d-flex flex-row">
-                                                                        <span class="text-white">Menang</span>&nbsp;&nbsp;
-                                                                        <span class=""
-                                                                            style="position: relative;top: 15%;"
-                                                                            stage="1"><i
-                                                                                class="bi bi-caret-down-fill text-white"></i></span>
-                                                                    </div>
-                                                                </a>
-                                                            @elseif($proyek->stage == 7)
-                                                                <a href="#"
-                                                                    class="stage-button stage-is-done color-is-danger"
-                                                                    data-bs-toggle="dropdown" role="button"
-                                                                    id="menang" aria-expanded="false"
-                                                                    style="outline: 0px; cursor: pointer;" stage="1">
-                                                                    <div class="d-flex flex-row">
-                                                                        <span class="text-white">Kalah</span>&nbsp;&nbsp;
-                                                                        <span class=""
-                                                                            style="position: relative;top: 15%;"
-                                                                            stage="1"><i
-                                                                                class="bi bi-caret-down-fill text-white"></i></span>
-                                                                    </div>
-                                                                </a>
-                                                            @endif
-                                                            @if ($proyek->is_cancel == false || $proyek->is_tidak_lulus_pq == false)
-                                                            <ul class="dropdown-menu"
-                                                                aria-labelledby="menang">
+                                                    @if ($proyek->stage > 5)
+                                                        @if ($proyek->stage == 6 || $proyek->stage > 7)
+                                                            <a href="#"
+                                                                class="stage-button stage-is-done color-is-default"
+                                                                data-bs-toggle="dropdown" role="button" id="menang"
+                                                                aria-expanded="false"
+                                                                style="outline: 0px; cursor: pointer; {{ auth()->user()->check_administrator || str_contains(auth()->user()->name, '(PIC)') ? '' : 'pointer-events: none;' }}"
+                                                                stage="1">
+                                                                <div class="d-flex flex-row">
+                                                                    <span class="text-white">Menang</span>&nbsp;&nbsp;
+                                                                    <span class=""
+                                                                        style="position: relative;top: 15%;"
+                                                                        stage="1"><i
+                                                                            class="bi bi-caret-down-fill text-white"></i></span>
+                                                                </div>
+                                                            </a>
+                                                        @elseif($proyek->stage == 7)
+                                                            <a href="#"
+                                                                class="stage-button stage-is-done color-is-danger"
+                                                                data-bs-toggle="dropdown" role="button" id="menang"
+                                                                aria-expanded="false"
+                                                                style="outline: 0px; cursor: pointer;" stage="1">
+                                                                <div class="d-flex flex-row">
+                                                                    <span class="text-white">Kalah</span>&nbsp;&nbsp;
+                                                                    <span class=""
+                                                                        style="position: relative;top: 15%;"
+                                                                        stage="1"><i
+                                                                            class="bi bi-caret-down-fill text-white"></i></span>
+                                                                </div>
+                                                            </a>
+                                                        @endif
+                                                        @if ($proyek->is_cancel == false || $proyek->is_tidak_lulus_pq == false)
+                                                            <ul class="dropdown-menu" aria-labelledby="menang">
                                                                 <form action="/proyek/stage-save" method="POST">
                                                                 </form>
                                                                 <form action="/proyek/stage-save" method="POST"
@@ -392,37 +393,33 @@
                                                                             value="Kalah" /></li>
                                                                 </form>
                                                             </ul>
-                                                            @endif
+                                                        @endif
+                                                    @else
+                                                        @if (abs($proyek->stage - 6) != 1 || abs($proyek->stage - 7) != 2)
+                                                            <a href="#"
+                                                                class="stage-button stage-is-not-active color-is-default"
+                                                                style="outline: 0px; cursor: pointer; pointer-events: none;"
+                                                                stage="8">
+                                                                Menang
+                                                                &nbsp;&nbsp;
+                                                                <span class="" style="position: relative;top: 15%;"
+                                                                    stage="8"><i
+                                                                        class="bi bi-caret-down-fill text-white"></i></span>
+                                                            </a>
                                                         @else
-                                                            @if (abs($proyek->stage - 6) != 1 || abs($proyek->stage - 7) != 2)
-                                                                <a href="#"
-                                                                    class="stage-button stage-is-not-active color-is-default"
-                                                                    style="outline: 0px; cursor: pointer; pointer-events: none;"
-                                                                    stage="8">
-                                                                    Menang
-                                                                    &nbsp;&nbsp;
-                                                                    <span class=""
-                                                                        style="position: relative;top: 15%;"
-                                                                        stage="8"><i
-                                                                            class="bi bi-caret-down-fill text-white"></i></span>
-                                                                </a>
-                                                            @else
-                                                                {{-- <div class=""> --}}
-                                                                <a href="#" data-bs-toggle="dropdown"
-                                                                    role="button" id="menang"
-                                                                    aria-expanded="false"
-                                                                    class="stage-button stage-is-not-active color-is-default"
-                                                                    style="outline: 0px; cursor: pointer;" stage="8">
-                                                                    Menang
-                                                                    &nbsp;&nbsp;
-                                                                    <span class=""
-                                                                        style="position: relative;top: 15%;"
-                                                                        stage="8"><i
-                                                                            class="bi bi-caret-down-fill text-white"></i></span>
-                                                                </a>
-                                                                @if ($proyek->is_cancel == false || $proyek->is_tidak_lulus_pq == false)
-                                                                <ul class="dropdown-menu"
-                                                                    aria-labelledby="menang">
+                                                            {{-- <div class=""> --}}
+                                                            <a href="#" data-bs-toggle="dropdown" role="button"
+                                                                id="menang" aria-expanded="false"
+                                                                class="stage-button stage-is-not-active color-is-default"
+                                                                style="outline: 0px; cursor: pointer;" stage="8">
+                                                                Menang
+                                                                &nbsp;&nbsp;
+                                                                <span class="" style="position: relative;top: 15%;"
+                                                                    stage="8"><i
+                                                                        class="bi bi-caret-down-fill text-white"></i></span>
+                                                            </a>
+                                                            @if ($proyek->is_cancel == false || $proyek->is_tidak_lulus_pq == false)
+                                                                <ul class="dropdown-menu" aria-labelledby="menang">
                                                                     <form action="/proyek/stage-save" method="POST">
                                                                     </form>
                                                                     <form action="/proyek/stage-save" method="POST"
@@ -443,12 +440,11 @@
                                                                         </li>
                                                                     </form>
                                                                 </ul>
-                                                                @endif
-                                                                {{-- </div> --}}
                                                             @endif
-                                                            @if ($proyek->is_cancel == false || $proyek->is_tidak_lulus_pq == false)
-                                                            <ul class="dropdown-menu"
-                                                                aria-labelledby="menang">
+                                                            {{-- </div> --}}
+                                                        @endif
+                                                        @if ($proyek->is_cancel == false || $proyek->is_tidak_lulus_pq == false)
+                                                            <ul class="dropdown-menu" aria-labelledby="menang">
                                                                 <form action="/proyek/stage-save" method="POST">
                                                                 </form>
                                                                 <form action="/proyek/stage-save" method="POST"
@@ -467,38 +463,36 @@
                                                                             value="Kalah" /></li>
                                                                 </form>
                                                             </ul>
-                                                            @endif
                                                         @endif
+                                                    @endif
 
-                                                        @if ($proyek->stage > 7)
-                                                            @if ($proyek->stage == 8 || $proyek->stage > 9)
-                                                                <a href="#" data-bs-toggle="dropdown"
-                                                                    role="button" id="terkontrak" aria-expanded="false"
-                                                                    aria-controls="#terkontrak"
-                                                                    class="stage-button stage-is-done color-is-default"
-                                                                    style="outline: 0px; cursor: pointer;" stage="8">
-                                                                    Terkontrak
-                                                                    &nbsp;&nbsp;
-                                                                    <span class=""
-                                                                        style="position: relative;top: 15%;"
-                                                                        stage="8"><i
-                                                                            class="bi bi-caret-down-fill text-white"></i></span>
-                                                                </a>
-                                                            @elseif($proyek->stage == 9)
-                                                                <a href="#" data-bs-toggle="dropdown"
-                                                                    role="button" id="terkontrak" aria-expanded="false"
-                                                                    aria-controls="#terkontrak"
-                                                                    class="stage-button stage-is-done color-is-danger"
-                                                                    style="outline: 0px; cursor: pointer;" stage="8">
-                                                                    Terendah
-                                                                    &nbsp;&nbsp;
-                                                                    <span class=""
-                                                                        style="position: relative;top: 15%;"
-                                                                        stage="8"><i
-                                                                            class="bi bi-caret-down-fill text-white"></i></span>
-                                                                </a>
-                                                            @endif
-                                                            @if ($proyek->is_cancel == false || $proyek->is_tidak_lulus_pq == false)
+                                                    @if ($proyek->stage > 7)
+                                                        @if ($proyek->stage == 8 || $proyek->stage > 9)
+                                                            <a href="#" data-bs-toggle="dropdown" role="button"
+                                                                id="terkontrak" aria-expanded="false"
+                                                                aria-controls="#terkontrak"
+                                                                class="stage-button stage-is-done color-is-default"
+                                                                style="outline: 0px; cursor: pointer;" stage="8">
+                                                                Terkontrak
+                                                                &nbsp;&nbsp;
+                                                                <span class="" style="position: relative;top: 15%;"
+                                                                    stage="8"><i
+                                                                        class="bi bi-caret-down-fill text-white"></i></span>
+                                                            </a>
+                                                        @elseif($proyek->stage == 9)
+                                                            <a href="#" data-bs-toggle="dropdown" role="button"
+                                                                id="terkontrak" aria-expanded="false"
+                                                                aria-controls="#terkontrak"
+                                                                class="stage-button stage-is-done color-is-danger"
+                                                                style="outline: 0px; cursor: pointer;" stage="8">
+                                                                Terendah
+                                                                &nbsp;&nbsp;
+                                                                <span class="" style="position: relative;top: 15%;"
+                                                                    stage="8"><i
+                                                                        class="bi bi-caret-down-fill text-white"></i></span>
+                                                            </a>
+                                                        @endif
+                                                        @if ($proyek->is_cancel == false || $proyek->is_tidak_lulus_pq == false)
                                                             <ul class="dropdown-menu" id="terkontrak"
                                                                 aria-labelledby="terkontrak">
                                                                 <form action="/proyek/stage-save" method="POST">
@@ -519,33 +513,32 @@
                                                                             value="Terendah" /></li>
                                                                 </form>
                                                             </ul>
-                                                            @endif
+                                                        @endif
+                                                    @else
+                                                        @php
+                                                            $selisih = abs($proyek->stage - 8);
+                                                        @endphp
+                                                        @if ($selisih == 2)
+                                                            <a href="#" data-bs-toggle="dropdown" role="button"
+                                                                id="terkontrak" aria-expanded="false"
+                                                                aria-controls="#terkontrak"
+                                                                class="stage-button stage-is-not-active color-is-default"
+                                                                style="outline: 0px; cursor: pointer;" stage="8">
+                                                                Terkontrak
+                                                                &nbsp;&nbsp;
+                                                                <span class="" style="position: relative;top: 15%;"
+                                                                    stage="8"><i
+                                                                        class="bi bi-caret-down-fill text-white"></i></span>
+                                                            </a>
                                                         @else
-                                                            @php
-                                                                $selisih = abs($proyek->stage - 8);
-                                                            @endphp
-                                                            @if ($selisih == 2)
-                                                                <a href="#" data-bs-toggle="dropdown"
-                                                                    role="button" id="terkontrak" aria-expanded="false"
-                                                                    aria-controls="#terkontrak"
-                                                                    class="stage-button stage-is-not-active color-is-default"
-                                                                    style="outline: 0px; cursor: pointer;" stage="8">
-                                                                    Terkontrak
-                                                                    &nbsp;&nbsp;
-                                                                    <span class=""
-                                                                        style="position: relative;top: 15%;"
-                                                                        stage="8"><i
-                                                                            class="bi bi-caret-down-fill text-white"></i></span>
-                                                                </a>
-                                                            @else
-                                                                <a href="#"
-                                                                    class="stage-button stage-is-not-active color-is-default"
-                                                                    style="outline: 0px; cursor: pointer;pointer-events: none;"
-                                                                    stage="8">
-                                                                    Terkontrak
-                                                                </a>
-                                                            @endif
-                                                            @if ($proyek->is_cancel == false || $proyek->is_tidak_lulus_pq == false)
+                                                            <a href="#"
+                                                                class="stage-button stage-is-not-active color-is-default"
+                                                                style="outline: 0px; cursor: pointer;pointer-events: none;"
+                                                                stage="8">
+                                                                Terkontrak
+                                                            </a>
+                                                        @endif
+                                                        @if ($proyek->is_cancel == false || $proyek->is_tidak_lulus_pq == false)
                                                             <ul class="dropdown-menu" id="terkontrak"
                                                                 aria-labelledby="terkontrak">
                                                                 <form action="/proyek/stage-save" method="POST">
@@ -566,11 +559,11 @@
                                                                             value="Terendah" /></li>
                                                                 </form>
                                                             </ul>
-                                                            @endif
                                                         @endif
+                                                    @endif
 
 
-                                                        {{-- @if ($proyek->stage > 9)
+                                                    {{-- @if ($proyek->stage > 9)
                                                             <a href="#"
                                                                 class="stage-button stage-action stage-is-done color-is-default"
                                                                 style="outline: 0px; cursor: pointer;" stage="10">
@@ -592,12 +585,12 @@
                                                                 </a>
                                                             @endif
                                                         @endif --}}
-                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    @if ($proyek->is_cancel == false || $proyek->is_tidak_lulus_pq == false)
+                                </div>
+                                @if ($proyek->is_cancel == false || $proyek->is_tidak_lulus_pq == false)
                                     <script>
                                         // const stages = document.querySelectorAll(".stage-button");
                                         // stages.forEach((stage, i) => {
@@ -614,10 +607,10 @@
                                         //         }
                                         //     }
                                         // });
-                                        const proyekIsCancel = Boolean(Number("{{$proyek->is_cancel}}"));
+                                        const proyekIsCancel = Boolean(Number("{{ $proyek->is_cancel }}"));
 
                                         function confirmAction(form) {
-                                            if(proyekIsCancel) {
+                                            if (proyekIsCancel) {
                                                 Swal.fire({
                                                     title: '',
                                                     text: "Cancel Proyek tidak bisa pindah stage",
@@ -682,7 +675,7 @@
                                         const stageActions = document.querySelectorAll(".stage-action");
                                         stageActions.forEach(stageAction => {
                                             stageAction.addEventListener("click", async e => {
-                                                if(proyekIsCancel) {
+                                                if (proyekIsCancel) {
                                                     Swal.fire({
                                                         title: '',
                                                         text: "Cancel Proyek tidak bisa pindah stage",
@@ -725,201 +718,200 @@
                                             });
                                         });
                                     </script>
-                                    @endif
-<!--end::-->
+                                @endif
+                                <!--end::-->
 
 
-                                    <!--begin::All Content-->
-                                    <div class="col-xl-15">
-                                        <!--begin::Contacts-->
-                                        <div class="card card-flush h-lg-100" id="kt_contacts_main">
+                                <!--begin::All Content-->
+                                <div class="col-xl-15">
+                                    <!--begin::Contacts-->
+                                    <div class="card card-flush h-lg-100" id="kt_contacts_main">
 
-                                            <!--begin::Card body-->
-                                            <div class="card-body pt-5">
+                                        <!--begin::Card body-->
+                                        <div class="card-body pt-5">
 
-<!--begin:::Tabs Navigasi-->
-                                                <ul
-                                                    class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-8">
+                                            <!--begin:::Tabs Navigasi-->
+                                            <ul
+                                                class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-8">
 
-                                                    @if ($proyek->stage == 0)
-                                                        <!--begin:::Tab item Pasar Dini-->
-                                                        <li class="nav-item">
-                                                            <a class="nav-link" data-bs-toggle="tab"
-                                                                href="#kt_user_view_overview_pasardini"
-                                                                style="font-size:14px;">Proyek Canceled</a>
-                                                        </li>
-                                                        <!--end:::Tab item Pasar Dini-->
-                                                    @endif
+                                                @if ($proyek->stage == 0)
+                                                    <!--begin:::Tab item Pasar Dini-->
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" data-bs-toggle="tab"
+                                                            href="#kt_user_view_overview_pasardini"
+                                                            style="font-size:14px;">Proyek Canceled</a>
+                                                    </li>
+                                                    <!--end:::Tab item Pasar Dini-->
+                                                @endif
 
-                                                    @if ($proyek->stage > 0)
-                                                        <!--begin:::Tab item Pasar Dini-->
-                                                        <li class="nav-item">
-                                                            <a class="nav-link text-active-primary pb-4 active"
-                                                                data-bs-toggle="tab"
-                                                                href="#kt_user_view_overview_pasardini"
-                                                                style="font-size:14px;">Pasar Dini</a>
-                                                        </li>
-                                                        <!--end:::Tab item Pasar Dini-->
-                                                    @endif
+                                                @if ($proyek->stage > 0)
+                                                    <!--begin:::Tab item Pasar Dini-->
+                                                    <li class="nav-item">
+                                                        <a class="nav-link text-active-primary pb-4 active"
+                                                            data-bs-toggle="tab" href="#kt_user_view_overview_pasardini"
+                                                            style="font-size:14px;">Pasar Dini</a>
+                                                    </li>
+                                                    <!--end:::Tab item Pasar Dini-->
+                                                @endif
 
-                                                    @if ($proyek->stage > 1)
-                                                        <!--begin:::Tab item Pasar Potensial-->
-                                                        <li class="nav-item">
-                                                            <a class="nav-link text-active-primary pb-4"
-                                                                data-kt-countup-tabs="true" data-bs-toggle="tab"
-                                                                href="#kt_user_view_overview_potensial"
-                                                                style="font-size:14px;">Pasar Potensial</a>
-                                                        </li>
-                                                        <!--end:::Tab item Pasar Potensial-->
-                                                    @endif
+                                                @if ($proyek->stage > 1)
+                                                    <!--begin:::Tab item Pasar Potensial-->
+                                                    <li class="nav-item">
+                                                        <a class="nav-link text-active-primary pb-4"
+                                                            data-kt-countup-tabs="true" data-bs-toggle="tab"
+                                                            href="#kt_user_view_overview_potensial"
+                                                            style="font-size:14px;">Pasar Potensial</a>
+                                                    </li>
+                                                    <!--end:::Tab item Pasar Potensial-->
+                                                @endif
 
-                                                    @if ($proyek->stage > 2 && $proyek->is_tidak_lulus_pq == false)
-                                                        <!--begin:::Tab item Prakualifikasi-->
-                                                        <li class="nav-item">
-                                                            <a class="nav-link text-active-primary pb-4"
-                                                                data-kt-countup-tabs="true" data-bs-toggle="tab"
-                                                                href="#kt_user_view_overview_prakualifikasi"
-                                                                style="font-size:14px;">Prakualifikasi</a>
-                                                        </li>
-                                                        <!--end:::Tab item Prakualifikasi-->
-                                                    @elseif($proyek->is_tidak_lulus_pq)
-                                                        <!--begin:::Tab item Prakualifikasi-->
-                                                        <li class="nav-item">
-                                                            <a class="nav-link text-active-primary pb-4"
-                                                                data-kt-countup-tabs="true" data-bs-toggle="tab"
-                                                                href="#kt_user_view_overview_prakualifikasi"
-                                                                style="font-size:14px;">Tidak Lulus PQ</a>
-                                                        </li>
-                                                        <!--end:::Tab item Prakualifikasi-->
-                                                    @endif
+                                                @if ($proyek->stage > 2 && $proyek->is_tidak_lulus_pq == false)
+                                                    <!--begin:::Tab item Prakualifikasi-->
+                                                    <li class="nav-item">
+                                                        <a class="nav-link text-active-primary pb-4"
+                                                            data-kt-countup-tabs="true" data-bs-toggle="tab"
+                                                            href="#kt_user_view_overview_prakualifikasi"
+                                                            style="font-size:14px;">Prakualifikasi</a>
+                                                    </li>
+                                                    <!--end:::Tab item Prakualifikasi-->
+                                                @elseif($proyek->is_tidak_lulus_pq)
+                                                    <!--begin:::Tab item Prakualifikasi-->
+                                                    <li class="nav-item">
+                                                        <a class="nav-link text-active-primary pb-4"
+                                                            data-kt-countup-tabs="true" data-bs-toggle="tab"
+                                                            href="#kt_user_view_overview_prakualifikasi"
+                                                            style="font-size:14px;">Tidak Lulus PQ</a>
+                                                    </li>
+                                                    <!--end:::Tab item Prakualifikasi-->
+                                                @endif
 
-                                                    @if ($proyek->stage > 3)
-                                                        <!--begin:::Tab item Tender Diikuti-->
-                                                        <li class="nav-item">
-                                                            <a class="nav-link text-active-primary pb-4"
-                                                                data-kt-countup-tabs="true" data-bs-toggle="tab"
-                                                                href="#kt_user_view_overview_tender"
-                                                                style="font-size:14px;">Tender Diikuti</a>
-                                                        </li>
-                                                        <!--end:::Tab item Tender Diikuti-->
-                                                    @endif
+                                                @if ($proyek->stage > 3)
+                                                    <!--begin:::Tab item Tender Diikuti-->
+                                                    <li class="nav-item">
+                                                        <a class="nav-link text-active-primary pb-4"
+                                                            data-kt-countup-tabs="true" data-bs-toggle="tab"
+                                                            href="#kt_user_view_overview_tender"
+                                                            style="font-size:14px;">Tender Diikuti</a>
+                                                    </li>
+                                                    <!--end:::Tab item Tender Diikuti-->
+                                                @endif
 
-                                                    @if ($proyek->stage > 4)
-                                                        <!--begin:::Tab item Perolehan-->
-                                                        <li class="nav-item">
-                                                            <a class="nav-link text-active-primary pb-4"
-                                                                data-kt-countup-tabs="true" data-bs-toggle="tab"
-                                                                href="#kt_user_view_overview_perolehan"
-                                                                style="font-size:14px;">Perolehan</a>
-                                                        </li>
-                                                        <!--end:::Tab item Perolehan-->
-                                                    @endif
+                                                @if ($proyek->stage > 4)
+                                                    <!--begin:::Tab item Perolehan-->
+                                                    <li class="nav-item">
+                                                        <a class="nav-link text-active-primary pb-4"
+                                                            data-kt-countup-tabs="true" data-bs-toggle="tab"
+                                                            href="#kt_user_view_overview_perolehan"
+                                                            style="font-size:14px;">Perolehan</a>
+                                                    </li>
+                                                    <!--end:::Tab item Perolehan-->
+                                                @endif
 
-                                                    @if ($proyek->stage > 5)
-                                                        <!--begin:::Tab item Menang-->
-                                                        <li class="nav-item">
-                                                            <a class="nav-link text-active-primary pb-4"
-                                                                data-kt-countup-tabs="true" data-bs-toggle="tab"
-                                                                href="#kt_user_view_overview_menang"
-                                                                style="font-size:14px;">{{ $proyek->stage == 7 ? 'Kalah' : 'Menang' }}</a>
-                                                        </li>
-                                                        <!--end:::Tab item Menang-->
-                                                    @endif
-                                                    @if ($proyek->stage > 7)
-                                                        <!--begin:::Tab item Terkontrak-->
-                                                        <li class="nav-item">
-                                                            <a class="nav-link text-active-primary pb-4"
-                                                                data-kt-countup-tabs="true" data-bs-toggle="tab"
-                                                                href="#kt_user_view_overview_terkontrak"
-                                                                style="font-size:14px;">{{ $proyek->stage == 9 ? 'Terendah' : 'Terkontrak' }}</a>
-                                                        </li>
-                                                        <!--end:::Tab item Terkontrak-->
-                                                    @endif
+                                                @if ($proyek->stage > 5)
+                                                    <!--begin:::Tab item Menang-->
+                                                    <li class="nav-item">
+                                                        <a class="nav-link text-active-primary pb-4"
+                                                            data-kt-countup-tabs="true" data-bs-toggle="tab"
+                                                            href="#kt_user_view_overview_menang"
+                                                            style="font-size:14px;">{{ $proyek->stage == 7 ? 'Kalah' : 'Menang' }}</a>
+                                                    </li>
+                                                    <!--end:::Tab item Menang-->
+                                                @endif
+                                                @if ($proyek->stage > 7)
+                                                    <!--begin:::Tab item Terkontrak-->
+                                                    <li class="nav-item">
+                                                        <a class="nav-link text-active-primary pb-4"
+                                                            data-kt-countup-tabs="true" data-bs-toggle="tab"
+                                                            href="#kt_user_view_overview_terkontrak"
+                                                            style="font-size:14px;">{{ $proyek->stage == 9 ? 'Terendah' : 'Terkontrak' }}</a>
+                                                    </li>
+                                                    <!--end:::Tab item Terkontrak-->
+                                                @endif
 
 
-                                                    <!--begin:::Tab item Approval-->
-                                                    {{-- <li class="nav-item">
+                                                <!--begin:::Tab item Approval-->
+                                                {{-- <li class="nav-item">
                                                         <a class="nav-link text-active-primary pb-4"
                                                         data-kt-countup-tabs="true" data-bs-toggle="tab"
                                                             href="#kt_user_view_overview_approval"
                                                             style="font-size:14px;">Approval</a>
                                                         </li> --}}
-                                                    <!--end:::Tab item Approval-->
+                                                <!--end:::Tab item Approval-->
 
-                                                    @if ($proyek->stage > 9)
-                                                        <!--begin:::Tab item Feedback-->
-                                                        {{-- <li class="nav-item">
+                                                @if ($proyek->stage > 9)
+                                                    <!--begin:::Tab item Feedback-->
+                                                    {{-- <li class="nav-item">
                                                             <a class="nav-link text-active-primary pb-4"
                                                                 data-kt-countup-tabs="true" data-bs-toggle="tab"
                                                                 href="#kt_user_view_overview_Feedback"
                                                                 style="font-size:14px;">Feedback</a>
                                                             </li> --}}
-                                                        <!--end:::Tab item Feedback-->
-                                                    @endif
+                                                    <!--end:::Tab item Feedback-->
+                                                @endif
 
-                                                    @if ($proyek->stage > 9)
-                                                        <!--begin:::Tab item Feedback-->
-                                                        <li class="nav-item">
-                                                            <a class="nav-link text-active-primary pb-4"
-                                                                data-kt-countup-tabs="true" data-bs-toggle="tab"
-                                                                {{-- href="#kt_user_view_overview_Feedback" --}}
-                                                                style="font-size:14px; color:#D9214E">*Gugur
-                                                                Prakualifikasi</a>
-                                                        </li>
-                                                        <!--end:::Tab item Feedback-->
-                                                    @endif
-                                                        <li class="nav-item">
-                                                            <a class="nav-link text-active-primary pb-4"
-                                                                data-kt-countup-tabs="true" data-bs-toggle="tab"
-                                                                href="#kt_user_view_overview_forecast"
-                                                                style="font-size:14px;">Forecast</a>
-                                                        </li>
-                                                </ul>
-<!--end:::Tabs Navigas  i-->
+                                                @if ($proyek->stage > 9)
+                                                    <!--begin:::Tab item Feedback-->
+                                                    <li class="nav-item">
+                                                        <a class="nav-link text-active-primary pb-4"
+                                                            data-kt-countup-tabs="true" data-bs-toggle="tab"
+                                                            {{-- href="#kt_user_view_overview_Feedback" --}}
+                                                            style="font-size:14px; color:#D9214E">*Gugur
+                                                            Prakualifikasi</a>
+                                                    </li>
+                                                    <!--end:::Tab item Feedback-->
+                                                @endif
+                                                <li class="nav-item">
+                                                    <a class="nav-link text-active-primary pb-4"
+                                                        data-kt-countup-tabs="true" data-bs-toggle="tab"
+                                                        href="#kt_user_view_overview_forecast"
+                                                        style="font-size:14px;">Forecast</a>
+                                                </li>
+                                            </ul>
+                                            <!--end:::Tabs Navigasi-->
 
-                                                <!--begin:::Tab isi content  -->
-                                                <div class="tab-content" id="myTabContent">
+                                            <!--begin:::Tab isi content  -->
+                                            <div class="tab-content" id="myTabContent">
 
-                                                    <!--begin:::Tab Pasar Dini-->
-                                                    <div class="tab-pane fade show active"
-                                                        id="kt_user_view_overview_pasardini" role="tabpanel">
+                                                <!--begin:::Tab Pasar Dini-->
+                                                <div class="tab-pane fade show active"
+                                                    id="kt_user_view_overview_pasardini" role="tabpanel">
 
-                                                        <!--begin::Row Kanan+Kiri-->
-                                                        <div class="row fv-row">
-                                                            <!--begin::Col-->
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="required">Nama Proyek</span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-                                                                    <!--begin::Input-->
-                                                                    <input type="text"
-                                                                        class="form-control form-control-solid char-counter"
-                                                                        data-max-char="40"
-                                                                        id="nama-proyek" name="nama-proyek"
-                                                                        value="{{ $proyek->nama_proyek }}" />
-                                                                    <!--end::Input-->
-                                                                    <div class="d-flex flex-row justify-content-end">
-                                                                        <small class="">0/40</small>
-                                                                    </div>
+                                                    <!--begin::Row Kanan+Kiri-->
+                                                    <div class="row fv-row">
+                                                        <!--begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span class="required">Nama Proyek</span>
+                                                                </label>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                <input type="text"
+                                                                    class="form-control form-control-solid char-counter"
+                                                                    data-max-char="40" id="nama-proyek"
+                                                                    name="nama-proyek"
+                                                                    value="{{ $proyek->nama_proyek }}" />
+                                                                <!--end::Input-->
+                                                                <div class="d-flex flex-row justify-content-end">
+                                                                    <small class="">0/40</small>
                                                                 </div>
-                                                                <!--end::Input group-->
                                                             </div>
-                                                            <!--End begin::Col-->
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="required">Unit Kerja <i
-                                                                                class="bi bi-lock"></i></span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-                                                                    <!--begin::Input-->
-                                                                    {{-- <select name="unit-kerja"
+                                                            <!--end::Input group-->
+                                                        </div>
+                                                        <!--End begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span class="required">Unit Kerja <i
+                                                                            class="bi bi-lock"></i></span>
+                                                                </label>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                {{-- <select name="unit-kerja"
                                                                         class="form-select form-select-solid"
                                                                         data-control="select2" data-hide-search="true"
                                                                         data-placeholder="Pilih Unit Kerja">
@@ -933,25 +925,25 @@
                                                                     @endif
                                                                     @endforeach
                                                                     </select> --}}
-                                                                    @foreach ($unitkerjas as $unitkerja)
-                                                                        @if ($unitkerja->divcode == $proyek->unit_kerja)
-                                                                            <input type="text"
-                                                                                class="form-control form-control-solid"
-                                                                                value="{{ $unitkerja->unit_kerja }}"
-                                                                                readonly />
-                                                                        @endif
-                                                                    @endforeach
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
+                                                                @foreach ($unitkerjas as $unitkerja)
+                                                                    @if ($unitkerja->divcode == $proyek->unit_kerja)
+                                                                        <input type="text"
+                                                                            class="form-control form-control-solid"
+                                                                            value="{{ $unitkerja->unit_kerja }}"
+                                                                            readonly />
+                                                                    @endif
+                                                                @endforeach
+                                                                <!--end::Input-->
                                                             </div>
-                                                            <!--End::Col-->
+                                                            <!--end::Input group-->
                                                         </div>
-                                                        <!--End::Row Kanan+Kiri-->
+                                                        <!--End::Col-->
+                                                    </div>
+                                                    <!--End::Row Kanan+Kiri-->
 
-                                                        <!--begin::Row Kanan+Kiri-->
-                                                        <div class="row fv-row">
-                                                            {{-- <!--begin::Col-->
+                                                    <!--begin::Row Kanan+Kiri-->
+                                                    <div class="row fv-row">
+                                                        {{-- <!--begin::Col-->
                                                             <div class="col-6">
                                                                 <!--begin::Input group Website-->
                                                                 <div class="fv-row mb-7">
@@ -974,82 +966,85 @@
                                                                 <!--end::Input group-->
                                                             </div> --}}
 
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="required">Kode Proyek <i
-                                                                                class="bi bi-lock"></i></span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-                                                                    <!--begin::Input-->
-                                                                    @isset($proyek->kode_proyek)
-                                                                        <input type="text"
-                                                                            class="form-control form-control-solid"
-                                                                            id="edit-kode-proyek" name="edit-kode-proyek"
-                                                                            value="{{ $proyek->kode_proyek }}" readonly />
-                                                                    @endisset
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span class="required">Kode Proyek <i
+                                                                            class="bi bi-lock"></i></span>
+                                                                </label>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                @isset($proyek->kode_proyek)
+                                                                    <input type="text"
+                                                                        class="form-control form-control-solid"
+                                                                        id="edit-kode-proyek" name="edit-kode-proyek"
+                                                                        value="{{ $proyek->kode_proyek }}" readonly />
+                                                                @endisset
+                                                                <!--end::Input-->
                                                             </div>
-                                                            <!--End::Col-->
+                                                            <!--end::Input group-->
                                                         </div>
-                                                        <!--End::Row Kanan+Kiri-->
+                                                        <!--End::Col-->
+                                                    </div>
+                                                    <!--End::Row Kanan+Kiri-->
 
-                                                        <!--begin::Row Kanan+Kiri-->
-                                                        <div class="row fv-row">
-                                                            <!--begin::Col-->
-                                                            <div class="col-4">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Pelanggan</span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-                                                                    <!--begin::Input-->
-                                                                    {{-- <option value="{{ $proyekberjalans->kode_proyek }}" selected>{{$proyekberjalans->kode_proyek }}</option> --}}
-                                                                    <select id="customer" name="customer"
-                                                                        class="form-select form-select-solid"
-                                                                        data-control="select2" data-hide-search="false"
-                                                                        data-placeholder="Pilih Customer">
-                                                                        <option></option>
-                                                                        @if (isset($proyekberjalans))
-                                                                            @foreach ($customers as $customer)
-                                                                                @if ($customer->id_customer == $proyekberjalans->id_customer)
-                                                                                    <option
-                                                                                        value="{{ $customer->id_customer }}"
-                                                                                        selected>{{ $customer->name }}
-                                                                                    </option>
-                                                                                @else
-                                                                                    <option
-                                                                                        value="{{ $customer->id_customer }}">
-                                                                                        {{ $customer->name }}</option>
-                                                                                @endif
-                                                                            @endforeach
-                                                                        @else
-                                                                            @foreach ($customers as $customer)
+                                                    <!--begin::Row Kanan+Kiri-->
+                                                    <div class="row fv-row">
+                                                        <!--begin::Col-->
+                                                        <div class="col-4">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>Pelanggan</span>
+                                                                </label>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                {{-- <option value="{{ $proyekberjalans->kode_proyek }}" selected>{{$proyekberjalans->kode_proyek }}</option> --}}
+                                                                <select id="customer" name="customer"
+                                                                    class="form-select form-select-solid"
+                                                                    data-control="select2" data-hide-search="false"
+                                                                    data-placeholder="Pilih Customer">
+                                                                    <option></option>
+                                                                    @if (isset($proyekberjalans))
+                                                                        @foreach ($customers as $customer)
+                                                                            @if ($customer->id_customer == $proyekberjalans->id_customer)
+                                                                                <option
+                                                                                    value="{{ $customer->id_customer }}"
+                                                                                    selected>{{ $customer->name }}
+                                                                                </option>
+                                                                            @else
                                                                                 <option
                                                                                     value="{{ $customer->id_customer }}">
                                                                                     {{ $customer->name }}</option>
-                                                                            @endforeach
-                                                                        @endif
-                                                                    </select>
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
+                                                                            @endif
+                                                                        @endforeach
+                                                                    @else
+                                                                        @foreach ($customers as $customer)
+                                                                            <option value="{{ $customer->id_customer }}">
+                                                                                {{ $customer->name }}</option>
+                                                                        @endforeach
+                                                                    @endif
+                                                                </select>
+                                                                <!--end::Input-->
                                                             </div>
-                                                            <!--End::Col-->
-                                                            <!--begin::Col-->
-                                                            @if (!empty($proyekberjalans))
+                                                            <!--end::Input group-->
+                                                        </div>
+                                                        <!--End::Col-->
+                                                        <!--begin::Col-->
+                                                        @if (!empty($proyekberjalans))
                                                             <div class="col-2">
                                                                 <!--begin::Input group Website-->
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="mt-12 fs-6 fw-bold form-label mt-3">
-                                                                        <a class="btn btn-sm btn-light btn-active-primary ms-2" target="_blank" href="/customer/view/{{ $proyekberjalans->id_customer }}" id="kt_toolbar_export"><i class="bi bi-search"></i> Cek Pemberi Kerja 
+                                                                        <a class="btn btn-sm btn-light btn-active-primary ms-2"
+                                                                            target="_blank"
+                                                                            href="/customer/view/{{ $proyekberjalans->id_customer }}"
+                                                                            id="kt_toolbar_export"><i
+                                                                                class="bi bi-search"></i> Cek Pemberi Kerja
                                                                         </a>
                                                                     </label>
                                                                     {{-- <a target="_blank" href="/customer/view/{{ $proyekberjalans->id_customer }}">
@@ -1059,75 +1054,77 @@
                                                                 </div>
                                                                 <!--end::Input group-->
                                                             </div>
-                                                            @endif
-                                                            <!--End::Col-->
-                                                        </div>
-                                                        <!--End::Row Kanan+Kiri-->
+                                                        @endif
+                                                        <!--End::Col-->
+                                                    </div>
+                                                    <!--End::Row Kanan+Kiri-->
 
-                                                        <!--begin::Row Kanan+Kiri-->
-                                                        <div class="row fv-row">
-                                                            <!--begin::Col-->
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="required">Tipe Proyek <i
-                                                                                class="bi bi-lock"></i></span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-                                                                    <!--begin::Input-->
-                                                                    <select id="tipe-proyek" name="tipe-proyek"
-                                                                        class="form-select form-select-solid"
-                                                                        data-control="select2" data-hide-search="true"
-                                                                        data-placeholder="Pilih Tipe Proyek"
-                                                                        {{ auth()->user()->check_administrator ? '' : 'readonly' }}>
-                                                                        <option value="R"
-                                                                            {{ $proyek->tipe_proyek == 'R' ? 'selected' : '' }}>
-                                                                            Retail</option>
-                                                                        <option value="P"
-                                                                            {{ $proyek->tipe_proyek == 'P' ? 'selected' : '' }}>
-                                                                            Non-Retail</option>
-                                                                    </select>
-                                                                    {{-- <input type="text"
+                                                    <!--begin::Row Kanan+Kiri-->
+                                                    <div class="row fv-row">
+                                                        <!--begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span class="required">Tipe Proyek <i
+                                                                            class="bi bi-lock"></i></span>
+                                                                </label>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                <select id="tipe-proyek" name="tipe-proyek"
+                                                                    class="form-select form-select-solid"
+                                                                    data-control="select2" data-hide-search="true"
+                                                                    data-placeholder="Pilih Tipe Proyek"
+                                                                    {{ auth()->user()->check_administrator ? '' : 'readonly' }}>
+                                                                    <option value="R"
+                                                                        {{ $proyek->tipe_proyek == 'R' ? 'selected' : '' }}>
+                                                                        Retail</option>
+                                                                    <option value="P"
+                                                                        {{ $proyek->tipe_proyek == 'P' ? 'selected' : '' }}>
+                                                                        Non-Retail</option>
+                                                                </select>
+                                                                {{-- <input type="text"
                                                                         class="form-control form-control-solid"
                                                                         id="tipe-proyek" name="tipe-proyek"
                                                                         value="{{ $proyek->tipe_proyek == 'R' ? 'Retail' : 'Non-Retail' }}"
                                                                         readonly /> --}}
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
+                                                                <!--end::Input-->
                                                             </div>
-                                                            <!--End begin::Col-->
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="required">Jenis Proyek <i
-                                                                                class="bi bi-key"></i></span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-                                                                    <!--begin::Input-->
-                                                                    {{-- @isset($proyek->jenis_proyek) --}}
-                                                                    {{-- @dump($proyek->jenis_proyek) --}}
-                                                                    <select id="jenis-proyek" onchange="tampilJOCategory(this)"  name="jenis-proyek"
-                                                                        class="form-select form-select-solid"
-                                                                        data-control="select2" data-hide-search="true"
-                                                                        data-placeholder="Pilih Jenis Proyek"
-                                                                        {{ auth()->user()->check_administrator ? '' : 'readonly' }}>
-                                                                        <option value="I"
-                                                                            {{ $proyek->jenis_proyek == 'I' ? 'selected' : '' }}>
-                                                                            Internal</option>
-                                                                        <option value="N"
-                                                                            {{ $proyek->jenis_proyek == 'N' ? 'selected' : '' }}>
-                                                                            External</option>
-                                                                        <option value="J"
-                                                                            {{ $proyek->jenis_proyek == 'J' ? 'selected' : '' }}>
-                                                                            JO</option>
-                                                                    </select>
-                                                                    <input type="hidden" name="jo-category" id="jo-category" value="">
-                                                                    {{-- @php
+                                                            <!--end::Input group-->
+                                                        </div>
+                                                        <!--End begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span class="required">Jenis Proyek <i
+                                                                            class="bi bi-key"></i></span>
+                                                                </label>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                {{-- @isset($proyek->jenis_proyek) --}}
+                                                                {{-- @dump($proyek->jenis_proyek) --}}
+                                                                <select id="jenis-proyek"
+                                                                    onchange="tampilJOCategory(this)" name="jenis-proyek"
+                                                                    class="form-select form-select-solid"
+                                                                    data-control="select2" data-hide-search="true"
+                                                                    data-placeholder="Pilih Jenis Proyek"
+                                                                    {{ auth()->user()->check_administrator ? '' : 'readonly' }}>
+                                                                    <option value="I"
+                                                                        {{ $proyek->jenis_proyek == 'I' ? 'selected' : '' }}>
+                                                                        Internal</option>
+                                                                    <option value="N"
+                                                                        {{ $proyek->jenis_proyek == 'N' ? 'selected' : '' }}>
+                                                                        External</option>
+                                                                    <option value="J"
+                                                                        {{ $proyek->jenis_proyek == 'J' ? 'selected' : '' }}>
+                                                                        JO</option>
+                                                                </select>
+                                                                <input type="hidden" name="jo-category" id="jo-category"
+                                                                    value="">
+                                                                {{-- @php
                                                                         $jenis_jo = "";
                                                                         switch ($proyek->jenis_jo) {
                                                                             case 30:
@@ -1150,55 +1147,54 @@
                                                                                 break;
                                                                         }
                                                                     @endphp
-                                                                    @if(!empty($proyek->jenis_jo))
+                                                                    @if (!empty($proyek->jenis_jo))
                                                                         <small>JO Category: <b>{{ $jenis_jo }}</b></small>
                                                                     @else 
                                                                         <small>JO Category: <b class="text-danger">{{ $jenis_jo }}</b></small>
                                                                     @endif --}}
-                                                                    {{-- @endisset --}}
-                                                                    {{-- <input type="text"
+                                                                {{-- @endisset --}}
+                                                                {{-- <input type="text"
                                                                         class="form-control form-control-solid"
                                                                         id="jenis-proyek" name="jenis-proyek"
                                                                         value="{{ $proyek->jenis_proyek == 'I' ? 'Internal' : 'External' }}"
                                                                         readonly /> --}}
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
+                                                                <!--end::Input-->
                                                             </div>
-                                                            <!--End::Col-->
+                                                            <!--end::Input group-->
                                                         </div>
-                                                        <!--End::Row Kanan+Kiri-->
+                                                        <!--End::Col-->
+                                                    </div>
+                                                    <!--End::Row Kanan+Kiri-->
 
 
-                                                        <!--begin::Row Kanan+Kiri-->
-                                                        <div class="row fv-row">
-                                                            <!--begin::Col-->
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="required">RA Tahun Perolehan <i
-                                                                                class="bi bi-key"></i></span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-                                                                    <!--begin::Input-->
-                                                                    {{-- @php
+                                                    <!--begin::Row Kanan+Kiri-->
+                                                    <div class="row fv-row">
+                                                        <!--begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span class="required">RA Tahun Perolehan <i
+                                                                            class="bi bi-key"></i></span>
+                                                                </label>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                {{-- @php
                                                                         $years = $proyek->tahun_perolehan;
                                                                     @endphp --}}
-                                                                    {{-- @for ($i = 2021; $i < $years + 20; $i++)
+                                                                {{-- @for ($i = 2021; $i < $years + 20; $i++)
                                                                         <option value="{{ $i }}" {{ $years == $i ? 'selected' : '' }}>
                                                                             {{ $i }}</option>
                                                                     @endfor --}}
-                                                                    <input type="number"
-                                                                        class="form-control form-control-solid"
-                                                                        name="tahun-perolehan" min="2021"
-                                                                        max="{{ $proyek->tahun_perolehan + 10 }}"
-                                                                        step="1"
-                                                                        value="{{ $proyek->tahun_perolehan }}"
-                                                                        {{ auth()->user()->check_administrator ? '' : 'readonly' }} />
-                                                                    <!--begin::Input-->
-                                                                    {{-- <select id="tahun-perolehan" name="tahun-perolehan"
+                                                                <input type="number"
+                                                                    class="form-control form-control-solid"
+                                                                    name="tahun-perolehan" min="2021"
+                                                                    max="{{ $proyek->tahun_perolehan + 10 }}"
+                                                                    step="1" value="{{ $proyek->tahun_perolehan }}"
+                                                                    {{ auth()->user()->check_administrator ? '' : 'readonly' }} />
+                                                                <!--begin::Input-->
+                                                                {{-- <select id="tahun-perolehan" name="tahun-perolehan"
                                                                         class="form-select form-select-solid select2-hidden-accessible"
                                                                         data-control="select2" data-hide-search="true" data-placeholder="Tahun"
                                                                         data-select2-id="select2-data-tahun" tabindex="-1" aria-hidden="true" {{ auth()->user()->check_administrator ? '' : 'disabled'}}>
@@ -1207,169 +1203,336 @@
                                                                                 {{ $i }}</option>
                                                                         @endfor
                                                                     </select> --}}
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
+                                                                <!--end::Input-->
                                                             </div>
-                                                            <div class="col-6">
-                                                                @if ($proyek->jenis_proyek == "J")
-
-                                                                @endif
-                                                                @if ($proyek->jenis_jo == null || $proyek->jenis_jo != 10 || $proyek->jenis_jo != 20 )
-                                                                    <!--begin::Input group-->
-                                                                    <div id="kategori-jenis-jo" class="fv-row mb-7" style="display: none">
-                                                                        <!--begin::Label-->
-                                                                        <label class="fs-6 fw-bold form-label mt-3">
-                                                                            <span class="required">Kategori JO</span>
-                                                                        </label>
-                                                                        <!--end::Label-->
-                                                                        <!--begin::Input-->
-                                                                        {{-- @php
+                                                            <!--end::Input group-->
+                                                        </div>
+                                                        <div class="col-6">
+                                                            @if ($proyek->jenis_proyek == 'J')
+                                                            @endif
+                                                            @if ($proyek->jenis_jo == null || $proyek->jenis_jo != 10 || $proyek->jenis_jo != 20)
+                                                                <!--begin::Input group-->
+                                                                <div id="kategori-jenis-jo" class="fv-row mb-7"
+                                                                    style="display: none">
+                                                                    <!--begin::Label-->
+                                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                                        <span class="required">Kategori JO</span>
+                                                                    </label>
+                                                                    <!--end::Label-->
+                                                                    <!--begin::Input-->
+                                                                    {{-- @php
                                                                             $years = $proyek->tahun_perolehan;
                                                                         @endphp --}}
-                                                                        {{-- @for ($i = 2021; $i < $years + 20; $i++)
+                                                                    {{-- @for ($i = 2021; $i < $years + 20; $i++)
                                                                             <option value="{{ $i }}" {{ $years == $i ? 'selected' : '' }}>
                                                                                 {{ $i }}</option>
                                                                         @endfor --}}
-                                                                        @php
-                                                                            $jenis_jo = "";
-                                                                            switch ($proyek->jenis_jo) {
-                                                                                case 30:
-                                                                                    $jenis_jo = "JO Integrated Leader";
-                                                                                    break;
-                                                                                case 31:
-                                                                                    $jenis_jo = "JO Integrated Member";
-                                                                                    break;
-                                                                                case 40:
-                                                                                    $jenis_jo = "JO Portion Leader";
-                                                                                    break;
-                                                                                case 41:
-                                                                                    $jenis_jo = "JO Portion Member";
-                                                                                    break;
-                                                                                case 50:
-                                                                                    $jenis_jo = "JO Mix Integrated - Portion";
-                                                                                    break;
-                                                                                default:
-                                                                                    $jenis_jo = "Proyek ini bukan JO";
-                                                                                    break;
-                                                                            }
-                                                                        @endphp
-                                                                        {{-- <input type="text"
+                                                                    @php
+                                                                        $jenis_jo = '';
+                                                                        switch ($proyek->jenis_jo) {
+                                                                            case 30:
+                                                                                $jenis_jo = 'JO Integrated Leader';
+                                                                                break;
+                                                                            case 31:
+                                                                                $jenis_jo = 'JO Integrated Member';
+                                                                                break;
+                                                                            case 40:
+                                                                                $jenis_jo = 'JO Portion Leader';
+                                                                                break;
+                                                                            case 41:
+                                                                                $jenis_jo = 'JO Portion Member';
+                                                                                break;
+                                                                            case 50:
+                                                                                $jenis_jo = 'JO Mix Integrated - Portion';
+                                                                                break;
+                                                                            default:
+                                                                                $jenis_jo = 'Proyek ini bukan JO';
+                                                                                break;
+                                                                        }
+                                                                    @endphp
+                                                                    {{-- <input type="text"
                                                                             class="form-control form-control-solid"
                                                                             name="preview-kategori-JO"
                                                                             value="{{ $jenis_jo }}"
                                                                             disabled
                                                                             /> --}}
-                                                                            <label class="fs-6 fw-bold form-label">
-                                                                                {{-- <span><b>Pilih JO:</b></span> --}}
-                                                                                {{-- <span><b id="max-porsi" value="{{ $proyek->porsi_jo }}">Max Porsi JO : {{ $proyek->porsi_jo }}% </b></span> --}}
-                                                                            </label>
-                                                                            <select id="detail-jo" name="detail-jo" class="form-select form-select-solid select2-hidden-accessible" data-control="select2" data-hide-search="true" data-placeholder="Pilih Jenis JO" readonly="" tabindex="-1" aria-hidden="true">
-                                                                                <option value="" selected></option>
-                                                                                <option value="30">JO Integrated Leader</option>
-                                                                                <option value="31">JO Integrated Member</option>
-                                                                                <option value="40">JO Portion Leader</option>
-                                                                                <option value="41">JO Portion Member</option>
-                                                                                <option value="50">JO Mix Integrated - Portion</option>
-                                                                            </select>
-                                                                    </div>
-                                                                    <!--end::Input group-->
-                                                                @endif
-                                                            </div>
-                                                            
+                                                                    <label class="fs-6 fw-bold form-label">
+                                                                        {{-- <span><b>Pilih JO:</b></span> --}}
+                                                                        {{-- <span><b id="max-porsi" value="{{ $proyek->porsi_jo }}">Max Porsi JO : {{ $proyek->porsi_jo }}% </b></span> --}}
+                                                                    </label>
+                                                                    <select id="detail-jo" name="detail-jo"
+                                                                        class="form-select form-select-solid select2-hidden-accessible"
+                                                                        data-control="select2" data-hide-search="true"
+                                                                        data-placeholder="Pilih Jenis JO" readonly=""
+                                                                        tabindex="-1" aria-hidden="true">
+                                                                        <option value="" selected></option>
+                                                                        <option value="30">JO Integrated Leader
+                                                                        </option>
+                                                                        <option value="31">JO Integrated Member
+                                                                        </option>
+                                                                        <option value="40">JO Portion Leader</option>
+                                                                        <option value="41">JO Portion Member</option>
+                                                                        <option value="50">JO Mix Integrated - Portion
+                                                                        </option>
+                                                                    </select>
+                                                                </div>
+                                                                <!--end::Input group-->
+                                                            @endif
                                                         </div>
-                                                        <!--End::Row Kanan+Kiri-->
 
+                                                    </div>
+                                                    <!--End::Row Kanan+Kiri-->
+
+
+                                                    <!--begin::Row Kanan+Kiri-->
+                                                    <div class="row fv-row">
+                                                        <!--End begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>RA Bulan Perolehan</span>
+                                                                </label>
+                                                                <!--end::Label-->
+                                                                <!--Begin::Input-->
+                                                                <select id="bulan-pelaksanaan" name="bulan-pelaksanaan"
+                                                                    class="form-select form-select-solid"
+                                                                    data-control="select2" data-hide-search="true"
+                                                                    data-placeholder="Pilih Bulan Perolehan">
+                                                                    <option></option>
+                                                                    <option value="1"
+                                                                        {{ $proyek->bulan_pelaksanaan == '1' ? 'selected' : '' }}>
+                                                                        Januari</option>
+                                                                    <option value="2"
+                                                                        {{ $proyek->bulan_pelaksanaan == '2' ? 'selected' : '' }}>
+                                                                        Februari</option>
+                                                                    <option value="3"
+                                                                        {{ $proyek->bulan_pelaksanaan == '3' ? 'selected' : '' }}>
+                                                                        Maret</option>
+                                                                    <option value="4"
+                                                                        {{ $proyek->bulan_pelaksanaan == '4' ? 'selected' : '' }}>
+                                                                        April</option>
+                                                                    <option value="5"
+                                                                        {{ $proyek->bulan_pelaksanaan == '5' ? 'selected' : '' }}>
+                                                                        Mei</option>
+                                                                    <option value="6"
+                                                                        {{ $proyek->bulan_pelaksanaan == '6' ? 'selected' : '' }}>
+                                                                        Juni</option>
+                                                                    <option value="7"
+                                                                        {{ $proyek->bulan_pelaksanaan == '7' ? 'selected' : '' }}>
+                                                                        Juli</option>
+                                                                    <option value="8"
+                                                                        {{ $proyek->bulan_pelaksanaan == '8' ? 'selected' : '' }}>
+                                                                        Agustus</option>
+                                                                    <option value="9"
+                                                                        {{ $proyek->bulan_pelaksanaan == '9' ? 'selected' : '' }}>
+                                                                        September</option>
+                                                                    <option value="10"
+                                                                        {{ $proyek->bulan_pelaksanaan == '10' ? 'selected' : '' }}>
+                                                                        Oktober</option>
+                                                                    <option value="11"
+                                                                        {{ $proyek->bulan_pelaksanaan == '11' ? 'selected' : '' }}>
+                                                                        November</option>
+                                                                    <option value="12"
+                                                                        {{ $proyek->bulan_pelaksanaan == '12' ? 'selected' : '' }}>
+                                                                        Desember</option>
+                                                                </select>
+                                                                <!--end::Input-->
+                                                            </div>
+                                                            <!--end::Input group-->
+                                                        </div>
+                                                        <!--End::Col-->
+                                                        <!--begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>Sumber Dana</span>
+                                                                </label>
+                                                                @php
+                                                                    $sumberdanas = $sumberdanas->sortBy('created_at');
+                                                                @endphp
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                <select id="sumber-dana" name="sumber-dana"
+                                                                    class="form-select form-select-solid"
+                                                                    data-control="select2" data-hide-search="true"
+                                                                    data-placeholder="Pilih Sumber Dana">
+                                                                    <option></option>
+                                                                    @foreach ($sumberdanas as $sumberdana)
+                                                                        @if ($sumberdana->kode_sumber == $proyek->sumber_dana)
+                                                                            <option value="{{ $sumberdana->kode_sumber }}"
+                                                                                selected>
+                                                                                {{ $sumberdana->nama_sumber }}
+                                                                            </option>
+                                                                        @else
+                                                                            <option
+                                                                                value="{{ $sumberdana->kode_sumber }}">
+                                                                                {{ $sumberdana->nama_sumber }}
+                                                                            </option>
+                                                                        @endif
+                                                                    @endforeach
+                                                                </select>
+                                                                <!--end::Input-->
+                                                            </div>
+                                                            <!--end::Input group-->
+                                                        </div>
+                                                        <!--End begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>Nilai OK (Excludde Ppn) <i
+                                                                            class="bi bi-lock"></i></span>
+                                                                </label>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                <input type="text"
+                                                                    class="form-control reformat form-control-solid"
+                                                                    id="nilai-rkap" name="nilai-rkap"
+                                                                    value="{{ number_format((int) str_replace('.', '', $proyek->nilai_rkap), 0, '.', '.') }}"
+                                                                    placeholder="Nilai OK (Excludde Ppn)" readonly />
+                                                                <!--end::Input-->
+                                                            </div>
+                                                            <!--end::Input group-->
+                                                        </div>
+                                                        <!--End::Col-->
+                                                    </div>
+                                                    <!--End::Row Kanan+Kiri-->
+
+                                                    <!--begin::Row Kanan+Kiri-->
+                                                    <div class="row fv-row">
+                                                        <!--begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>Status Pasar Dini</span>
+                                                                </label>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                {{-- <input type="text"
+                                                                        class="form-control form-control-solid"
+                                                                        id="status-pasardini" name="status-pasardini" placeholder="Status Pasar Dini"
+                                                                        value="{{ $proyek->status_pasdin }}" /> --}}
+                                                                <select id="status-pasardini" name="status-pasardini"
+                                                                    class="form-select form-select-solid"
+                                                                    data-control="select2" data-hide-search="true"
+                                                                    data-placeholder="Status Pasar Dini">
+                                                                    <option value=""></option>
+                                                                    <option value="Cadangan"
+                                                                        {{ $proyek->status_pasdin == 'Cadangan' ? 'selected' : '' }}>
+                                                                        Cadangan</option>
+                                                                    <option value="Potensial"
+                                                                        {{ $proyek->status_pasdin == 'Potensial' ? 'selected' : '' }}>
+                                                                        Potensial</option>
+                                                                    <option value="Sasaran"
+                                                                        {{ $proyek->status_pasdin == 'Sasaran' ? 'selected' : '' }}>
+                                                                        Sasaran</option>
+                                                                </select>
+                                                                <!--end::Input-->
+                                                            </div>
+                                                            <!--end::Input group-->
+                                                        </div>
+                                                        <!--End begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>Asal Info Proyek</span>
+                                                                </label>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                <input type="text"
+                                                                    class="form-control form-control-solid"
+                                                                    id="info-proyek" name="info-proyek"
+                                                                    placeholder="Asal Info Proyek"
+                                                                    value="{{ $proyek->info_asal_proyek }}" />
+                                                                <!--end::Input-->
+                                                            </div>
+                                                            <!--end::Input group-->
+                                                        </div>
+                                                        <!--End::Col-->
+                                                    </div>
+                                                    <!--End::Row Kanan+Kiri-->
+
+
+                                                    <!--Begin::Title Biru Form: Nilai RKAP Review-->
+                                                    &nbsp;<br>
+                                                    <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                                        Nilai RKAP Review &nbsp;
+                                                        <i onclick="hideReview()" id="hide-review"
+                                                            class="bi bi-arrows-collapse"></i><i onclick="showReview()"
+                                                            id="show-review" style="display: none"
+                                                            class="bi bi-arrows-expand"></i>
+                                                    </h3>
+                                                    <script>
+                                                        function hideReview() {
+                                                            document.getElementById("divRkapReview").style.display = "none";
+                                                            document.getElementById("hide-review").style.display = "none";
+                                                            document.getElementById("show-review").style.display = "";
+                                                        }
+
+                                                        function showReview() {
+                                                            document.getElementById("divRkapReview").style.display = "";
+                                                            document.getElementById("hide-review").style.display = "";
+                                                            document.getElementById("show-review").style.display = "none";
+                                                        }
+                                                    </script>
+                                                    <br>
+                                                    <div id="divRkapReview">
+                                                        <!--End::Title Biru Form: Nilai RKAP Review-->
 
                                                         <!--begin::Row Kanan+Kiri-->
                                                         <div class="row fv-row">
-                                                            <!--End begin::Col-->
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>RA Bulan Perolehan</span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-                                                                    <!--Begin::Input-->
-                                                                    <select id="bulan-pelaksanaan"
-                                                                        name="bulan-pelaksanaan"
-                                                                        class="form-select form-select-solid"
-                                                                        data-control="select2" data-hide-search="true"
-                                                                        data-placeholder="Pilih Bulan Perolehan">
-                                                                        <option></option>
-                                                                        <option value="1"
-                                                                            {{ $proyek->bulan_pelaksanaan == '1' ? 'selected' : '' }}>
-                                                                            Januari</option>
-                                                                        <option value="2"
-                                                                            {{ $proyek->bulan_pelaksanaan == '2' ? 'selected' : '' }}>
-                                                                            Februari</option>
-                                                                        <option value="3"
-                                                                            {{ $proyek->bulan_pelaksanaan == '3' ? 'selected' : '' }}>
-                                                                            Maret</option>
-                                                                        <option value="4"
-                                                                            {{ $proyek->bulan_pelaksanaan == '4' ? 'selected' : '' }}>
-                                                                            April</option>
-                                                                        <option value="5"
-                                                                            {{ $proyek->bulan_pelaksanaan == '5' ? 'selected' : '' }}>
-                                                                            Mei</option>
-                                                                        <option value="6"
-                                                                            {{ $proyek->bulan_pelaksanaan == '6' ? 'selected' : '' }}>
-                                                                            Juni</option>
-                                                                        <option value="7"
-                                                                            {{ $proyek->bulan_pelaksanaan == '7' ? 'selected' : '' }}>
-                                                                            Juli</option>
-                                                                        <option value="8"
-                                                                            {{ $proyek->bulan_pelaksanaan == '8' ? 'selected' : '' }}>
-                                                                            Agustus</option>
-                                                                        <option value="9"
-                                                                            {{ $proyek->bulan_pelaksanaan == '9' ? 'selected' : '' }}>
-                                                                            September</option>
-                                                                        <option value="10"
-                                                                            {{ $proyek->bulan_pelaksanaan == '10' ? 'selected' : '' }}>
-                                                                            Oktober</option>
-                                                                        <option value="11"
-                                                                            {{ $proyek->bulan_pelaksanaan == '11' ? 'selected' : '' }}>
-                                                                            November</option>
-                                                                        <option value="12"
-                                                                            {{ $proyek->bulan_pelaksanaan == '12' ? 'selected' : '' }}>
-                                                                            Desember</option>
-                                                                    </select>
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
-                                                            </div>
-                                                            <!--End::Col-->
                                                             <!--begin::Col-->
                                                             <div class="col-6">
                                                                 <!--begin::Input group Website-->
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Sumber Dana</span>
+                                                                        <span>Nilai OK Review (Valas) (Exclude Tax)</span>
                                                                     </label>
-                                                                    @php
-                                                                        $sumberdanas = $sumberdanas->sortBy("created_at");
-                                                                    @endphp
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
-                                                                    <select id="sumber-dana" name="sumber-dana"
+                                                                    <input type="text" onkeyup="hitungReview()"
+                                                                        class="form-control form-control-solid reformat"
+                                                                        id="nilai-valas-review" name="nilai-valas-review"
+                                                                        value="{{ number_format((int) str_replace('.', '', $proyek->nilai_valas_review), 0, '.', '.') }}"
+                                                                        placeholder="Nilai OK Review (Valas) (Exclude Tax)" />
+                                                                    <!--end::Input-->
+                                                                </div>
+                                                                <!--end::Input group-->
+                                                            </div>
+                                                            <!--End begin::Col-->
+                                                            <div class="col-6">
+                                                                <!--begin::Input group Website-->
+                                                                <div class="fv-row mb-7">
+                                                                    <!--begin::Label-->
+                                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                                        <span>Mata Uang Review</span>
+                                                                    </label>
+                                                                    <!--end::Label-->
+                                                                    <!--Begin::Input-->
+                                                                    <select id="mata-uang-review" name="mata-uang-review"
                                                                         class="form-select form-select-solid"
                                                                         data-control="select2" data-hide-search="true"
-                                                                        data-placeholder="Pilih Sumber Dana">
+                                                                        data-placeholder="Pilih Mata Uang">
                                                                         <option></option>
-                                                                        @foreach ($sumberdanas as $sumberdana)
-                                                                            @if ($sumberdana->kode_sumber == $proyek->sumber_dana)
-                                                                                <option
-                                                                                    value="{{ $sumberdana->kode_sumber }}"
+                                                                        @foreach ($mataUang as $uang)
+                                                                            @if ($uang->mata_uang == $proyek->mata_uang_review)
+                                                                                <option value="{{ $uang->mata_uang }}"
                                                                                     selected>
-                                                                                    {{ $sumberdana->nama_sumber }}
+                                                                                    {{ $uang->mata_uang }}
                                                                                 </option>
                                                                             @else
-                                                                                <option
-                                                                                    value="{{ $sumberdana->kode_sumber }}">
-                                                                                    {{ $sumberdana->nama_sumber }}
+                                                                                <option value="{{ $uang->mata_uang }}">
+                                                                                    {{ $uang->mata_uang }}
                                                                                 </option>
                                                                             @endif
                                                                         @endforeach
@@ -1378,21 +1541,87 @@
                                                                 </div>
                                                                 <!--end::Input group-->
                                                             </div>
+                                                            <!--End::Col-->
+                                                        </div>
+                                                        <!--End::Row Kanan+Kiri-->
+
+                                                        <!--begin::Row Kanan+Kiri-->
+                                                        <div class="row fv-row">
+                                                            <!--begin::Col-->
+                                                            <div class="col-6">
+                                                                <!--begin::Input group Website-->
+                                                                <div class="fv-row mb-7">
+                                                                    <!--begin::Label-->
+                                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                                        <span>Kurs Review <i class="bi bi-key"></i></span>
+                                                                    </label>
+                                                                    <!--end::Label-->
+                                                                    <!--begin::Input-->
+                                                                    <input onkeyup="hitungReview()" type="text"
+                                                                        class="form-control form-control-solid reformat"
+                                                                        id="kurs-review" name="kurs-review"
+                                                                        value="{{ $proyek->kurs_review }}"
+                                                                        placeholder="Kurs Review"
+                                                                        {{ auth()->user()->check_administrator ? '' : 'readonly' }} />
+                                                                    <!--end::Input-->
+                                                                </div>
+                                                                <!--end::Input group-->
+                                                            </div>
                                                             <!--End begin::Col-->
                                                             <div class="col-6">
                                                                 <!--begin::Input group Website-->
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Nilai OK (Excludde Ppn) <i class="bi bi-lock"></i></span>
+                                                                        <span>Bulan Pelaksanaan Review <i
+                                                                                class="bi bi-key"></i></span>
                                                                     </label>
                                                                     <!--end::Label-->
-                                                                    <!--begin::Input-->
-                                                                    <input type="text"
-                                                                        class="form-control reformat form-control-solid"
-                                                                        id="nilai-rkap" name="nilai-rkap"
-                                                                        value="{{ number_format((int) str_replace('.', '', $proyek->nilai_rkap), 0, '.', '.') }}"
-                                                                        placeholder="Nilai OK (Excludde Ppn)" readonly />
+                                                                    <!--Begin::Input-->
+                                                                    <select id="bulan-pelaksanaan-review"
+                                                                        name="bulan-pelaksanaan-review"
+                                                                        class="form-select form-select-solid"
+                                                                        data-control="select2" data-hide-search="true"
+                                                                        data-placeholder="Pilih Bulan Pelaksanaan"
+                                                                        {{ auth()->user()->check_administrator ? '' : 'readonly' }}>
+                                                                        <option></option>
+                                                                        <option value="1"
+                                                                            {{ $proyek->bulan_review == '1' ? 'selected' : '' }}>
+                                                                            Januari</option>
+                                                                        <option value="2"
+                                                                            {{ $proyek->bulan_review == '2' ? 'selected' : '' }}>
+                                                                            Februari</option>
+                                                                        <option value="3"
+                                                                            {{ $proyek->bulan_review == '3' ? 'selected' : '' }}>
+                                                                            Maret</option>
+                                                                        <option value="4"
+                                                                            {{ $proyek->bulan_review == '4' ? 'selected' : '' }}>
+                                                                            April</option>
+                                                                        <option value="5"
+                                                                            {{ $proyek->bulan_review == '5' ? 'selected' : '' }}>
+                                                                            Mei</option>
+                                                                        <option value="6"
+                                                                            {{ $proyek->bulan_review == '6' ? 'selected' : '' }}>
+                                                                            Juni</option>
+                                                                        <option value="7"
+                                                                            {{ $proyek->bulan_review == '7' ? 'selected' : '' }}>
+                                                                            Juli</option>
+                                                                        <option value="8"
+                                                                            {{ $proyek->bulan_review == '8' ? 'selected' : '' }}>
+                                                                            Agustus</option>
+                                                                        <option value="9"
+                                                                            {{ $proyek->bulan_review == '9' ? 'selected' : '' }}>
+                                                                            September</option>
+                                                                        <option value="10"
+                                                                            {{ $proyek->bulan_review == '10' ? 'selected' : '' }}>
+                                                                            Oktober</option>
+                                                                        <option value="11"
+                                                                            {{ $proyek->bulan_review == '11' ? 'selected' : '' }}>
+                                                                            November</option>
+                                                                        <option value="12"
+                                                                            {{ $proyek->bulan_review == '12' ? 'selected' : '' }}>
+                                                                            Desember</option>
+                                                                    </select>
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
@@ -1409,29 +1638,84 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Status Pasar Dini</span>
+                                                                        <span>Nilai OK (Exclude PPN) <i
+                                                                                class="bi bi-key"></i></span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
-                                                                    {{-- <input type="text"
-                                                                        class="form-control form-control-solid"
-                                                                        id="status-pasardini" name="status-pasardini" placeholder="Status Pasar Dini"
-                                                                        value="{{ $proyek->status_pasdin }}" /> --}}
-                                                                    <select id="status-pasardini" name="status-pasardini"
-                                                                        class="form-select form-select-solid"
-                                                                        data-control="select2" data-hide-search="true"
-                                                                        data-placeholder="Status Pasar Dini">
-                                                                        <option value=""></option>
-                                                                        <option value="Cadangan"
-                                                                            {{ $proyek->status_pasdin == 'Cadangan' ? 'selected' : '' }}>
-                                                                            Cadangan</option>
-                                                                        <option value="Potensial"
-                                                                            {{ $proyek->status_pasdin == 'Potensial' ? 'selected' : '' }}>
-                                                                            Potensial</option>
-                                                                        <option value="Sasaran"
-                                                                            {{ $proyek->status_pasdin == 'Sasaran' ? 'selected' : '' }}>
-                                                                            Sasaran</option>
-                                                                    </select>
+                                                                    <input type="text"
+                                                                        class="form-control form-control-solid reformat"
+                                                                        id="nilaiok-review" name="nilaiok-review"
+                                                                        value="{{ number_format((int) str_replace('.', '', $proyek->nilaiok_review), 0, '.', '.') }}"
+                                                                        placeholder="Nilai OK (Exclude PPN)"
+                                                                        {{ auth()->user()->check_administrator ? '' : 'readonly' }} />
+                                                                    <!--end::Input-->
+                                                                </div>
+                                                                <!--end::Input group-->
+                                                            </div>
+                                                            <!--End::Col-->
+                                                        </div>
+                                                        <!--End::Row Kanan+Kiri-->
+
+                                                        <script>
+                                                            function hitungReview() {
+                                                                let nilaiOkReview = document.getElementById("nilai-valas-review").value.replaceAll(".", "");
+                                                                // console.log(nilaiOkReview); 
+                                                                let kursReview = document.getElementById("kurs-review").value.replaceAll(".", "");
+                                                                let hasilOkReview = nilaiOkReview * kursReview;
+                                                                document.getElementById("nilaiok-review").value = Intl.NumberFormat(["id"]).format(hasilOkReview);
+                                                                // console.log(hasilOkReview);
+                                                            }
+                                                        </script>
+                                                    </div>
+                                                    <!--divRkapReview-->
+
+
+                                                    <!--Begin::Title Biru Form: Nilai RKAP Awal-->
+                                                    <br>
+                                                    <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                                        Nilai RKAP Awal &nbsp;
+                                                        <i onclick="hideColumn()" id="hide-button"
+                                                            class="bi bi-arrows-collapse"></i><i onclick="showColumn()"
+                                                            id="show-button" style="display: none"
+                                                            class="bi bi-arrows-expand"></i>
+                                                    </h3>
+                                                    <script>
+                                                        function hideColumn() {
+                                                            document.getElementById("divRkapAwal").style.display = "none";
+                                                            document.getElementById("hide-button").style.display = "none";
+                                                            document.getElementById("show-button").style.display = "";
+                                                        }
+
+                                                        function showColumn() {
+                                                            document.getElementById("divRkapAwal").style.display = "";
+                                                            document.getElementById("hide-button").style.display = "";
+                                                            document.getElementById("show-button").style.display = "none";
+                                                        }
+                                                    </script>
+                                                    <br>
+                                                    <div id="divRkapAwal">
+                                                        <!--End::Title Biru Form: Nilai RKAP Awal-->
+
+                                                        <!--begin::Row Kanan+Kiri-->
+                                                        <div class="row fv-row">
+                                                            <!--begin::Col-->
+                                                            <div class="col-6">
+                                                                <!--begin::Input group Website-->
+                                                                <div class="fv-row mb-7">
+                                                                    <!--begin::Label-->
+                                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                                        <span>Nilai OK Awal (Valas) (Exclude Tax) <i
+                                                                                class="bi bi-lock"></i></span>
+                                                                    </label>
+                                                                    <!--end::Label-->
+                                                                    <!--begin::Input-->
+                                                                    <input type="text" onkeyup="hitungAwal()"
+                                                                        class="form-control form-control-solid reformat"
+                                                                        id="nilai-valas-awal" name="nilai-valas-awal"
+                                                                        value="{{ number_format((int) str_replace('.', '', $proyek->nilai_rkap), 0, '.', '.') }}"
+                                                                        placeholder="Nilai OK Awal (Valas) (Exclude Tax)"
+                                                                        readonly />
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
@@ -1442,317 +1726,28 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Asal Info Proyek</span>
+                                                                        <span class="required">Mata Uang Awal</span>
                                                                     </label>
                                                                     <!--end::Label-->
-                                                                    <!--begin::Input-->
-                                                                    <input type="text"
-                                                                        class="form-control form-control-solid"
-                                                                        id="info-proyek" name="info-proyek"
-                                                                        placeholder="Asal Info Proyek"
-                                                                        value="{{ $proyek->info_asal_proyek }}" />
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
-                                                            </div>
-                                                            <!--End::Col-->
-                                                        </div>
-                                                        <!--End::Row Kanan+Kiri-->
-
-
-                                                        <!--Begin::Title Biru Form: Nilai RKAP Review-->
-                                                        &nbsp;<br>
-                                                        <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                            style="font-size:14px;">Nilai RKAP Review &nbsp;
-                                                            <i onclick="hideReview()" id="hide-review"
-                                                                class="bi bi-arrows-collapse"></i><i
-                                                                onclick="showReview()" id="show-review"
-                                                                style="display: none" class="bi bi-arrows-expand"></i>
-                                                        </h3>
-                                                        <script>
-                                                            function hideReview() {
-                                                                document.getElementById("divRkapReview").style.display = "none";
-                                                                document.getElementById("hide-review").style.display = "none";
-                                                                document.getElementById("show-review").style.display = "";
-                                                            }
-
-                                                            function showReview() {
-                                                                document.getElementById("divRkapReview").style.display = "";
-                                                                document.getElementById("hide-review").style.display = "";
-                                                                document.getElementById("show-review").style.display = "none";
-                                                            }
-                                                        </script>
-                                                        <br>
-                                                        <div id="divRkapReview">
-                                                            <!--End::Title Biru Form: Nilai RKAP Review-->
-
-                                                            <!--begin::Row Kanan+Kiri-->
-                                                            <div class="row fv-row">
-                                                                <!--begin::Col-->
-                                                                <div class="col-6">
-                                                                    <!--begin::Input group Website-->
-                                                                    <div class="fv-row mb-7">
-                                                                        <!--begin::Label-->
-                                                                        <label class="fs-6 fw-bold form-label mt-3">
-                                                                            <span>Nilai OK Review (Valas) (Exclude Tax)</span>
-                                                                        </label>
-                                                                        <!--end::Label-->
-                                                                        <!--begin::Input-->
-                                                                        <input type="text" onkeyup="hitungReview()"
-                                                                            class="form-control form-control-solid reformat"
-                                                                            id="nilai-valas-review"
-                                                                            name="nilai-valas-review"
-                                                                            value="{{ number_format((int) str_replace('.', '', $proyek->nilai_valas_review), 0, '.', '.') }}"
-                                                                            placeholder="Nilai OK Review (Valas) (Exclude Tax)" />
-                                                                        <!--end::Input-->
-                                                                    </div>
-                                                                    <!--end::Input group-->
-                                                                </div>
-                                                                <!--End begin::Col-->
-                                                                <div class="col-6">
-                                                                    <!--begin::Input group Website-->
-                                                                    <div class="fv-row mb-7">
-                                                                        <!--begin::Label-->
-                                                                        <label class="fs-6 fw-bold form-label mt-3">
-                                                                            <span>Mata Uang Review</span>
-                                                                        </label>
-                                                                        <!--end::Label-->
-                                                                        <!--Begin::Input-->
-                                                                        <select id="mata-uang-review"
-                                                                            name="mata-uang-review"
-                                                                            class="form-select form-select-solid"
-                                                                            data-control="select2" data-hide-search="true"
-                                                                            data-placeholder="Pilih Mata Uang">
-                                                                            <option></option>
-                                                                            @foreach ($mataUang as $uang)
-                                                                                @if ($uang->mata_uang == $proyek->mata_uang_review)
-                                                                                    <option
-                                                                                        value="{{ $uang->mata_uang }}"
-                                                                                        selected>
-                                                                                        {{ $uang->mata_uang }}
-                                                                                    </option>
-                                                                                @else
-                                                                                    <option
-                                                                                        value="{{ $uang->mata_uang }}">
-                                                                                        {{ $uang->mata_uang }}
-                                                                                    </option>
-                                                                                @endif
-                                                                            @endforeach
-                                                                        </select>
-                                                                        <!--end::Input-->
-                                                                    </div>
-                                                                    <!--end::Input group-->
-                                                                </div>
-                                                                <!--End::Col-->
-                                                            </div>
-                                                            <!--End::Row Kanan+Kiri-->
-
-                                                            <!--begin::Row Kanan+Kiri-->
-                                                            <div class="row fv-row">
-                                                                <!--begin::Col-->
-                                                                <div class="col-6">
-                                                                    <!--begin::Input group Website-->
-                                                                    <div class="fv-row mb-7">
-                                                                        <!--begin::Label-->
-                                                                        <label class="fs-6 fw-bold form-label mt-3">
-                                                                            <span>Kurs Review <i
-                                                                                    class="bi bi-key"></i></span>
-                                                                        </label>
-                                                                        <!--end::Label-->
-                                                                        <!--begin::Input-->
-                                                                        <input onkeyup="hitungReview()" type="text"
-                                                                            class="form-control form-control-solid reformat"
-                                                                            id="kurs-review" name="kurs-review"
-                                                                            value="{{ $proyek->kurs_review }}"
-                                                                            placeholder="Kurs Review"
-                                                                            {{ auth()->user()->check_administrator ? '' : 'readonly' }} />
-                                                                        <!--end::Input-->
-                                                                    </div>
-                                                                    <!--end::Input group-->
-                                                                </div>
-                                                                <!--End begin::Col-->
-                                                                <div class="col-6">
-                                                                    <!--begin::Input group Website-->
-                                                                    <div class="fv-row mb-7">
-                                                                        <!--begin::Label-->
-                                                                        <label class="fs-6 fw-bold form-label mt-3">
-                                                                            <span>Bulan Pelaksanaan Review <i
-                                                                                    class="bi bi-key"></i></span>
-                                                                        </label>
-                                                                        <!--end::Label-->
-                                                                        <!--Begin::Input-->
-                                                                        <select id="bulan-pelaksanaan-review"
-                                                                            name="bulan-pelaksanaan-review"
-                                                                            class="form-select form-select-solid"
-                                                                            data-control="select2" data-hide-search="true"
-                                                                            data-placeholder="Pilih Bulan Pelaksanaan"
-                                                                            {{ auth()->user()->check_administrator ? '' : 'readonly' }}>
-                                                                            <option></option>
-                                                                            <option value="1"
-                                                                                {{ $proyek->bulan_review == '1' ? 'selected' : '' }}>
-                                                                                Januari</option>
-                                                                            <option value="2"
-                                                                                {{ $proyek->bulan_review == '2' ? 'selected' : '' }}>
-                                                                                Februari</option>
-                                                                            <option value="3"
-                                                                                {{ $proyek->bulan_review == '3' ? 'selected' : '' }}>
-                                                                                Maret</option>
-                                                                            <option value="4"
-                                                                                {{ $proyek->bulan_review == '4' ? 'selected' : '' }}>
-                                                                                April</option>
-                                                                            <option value="5"
-                                                                                {{ $proyek->bulan_review == '5' ? 'selected' : '' }}>
-                                                                                Mei</option>
-                                                                            <option value="6"
-                                                                                {{ $proyek->bulan_review == '6' ? 'selected' : '' }}>
-                                                                                Juni</option>
-                                                                            <option value="7"
-                                                                                {{ $proyek->bulan_review == '7' ? 'selected' : '' }}>
-                                                                                Juli</option>
-                                                                            <option value="8"
-                                                                                {{ $proyek->bulan_review == '8' ? 'selected' : '' }}>
-                                                                                Agustus</option>
-                                                                            <option value="9"
-                                                                                {{ $proyek->bulan_review == '9' ? 'selected' : '' }}>
-                                                                                September</option>
-                                                                            <option value="10"
-                                                                                {{ $proyek->bulan_review == '10' ? 'selected' : '' }}>
-                                                                                Oktober</option>
-                                                                            <option value="11"
-                                                                                {{ $proyek->bulan_review == '11' ? 'selected' : '' }}>
-                                                                                November</option>
-                                                                            <option value="12"
-                                                                                {{ $proyek->bulan_review == '12' ? 'selected' : '' }}>
-                                                                                Desember</option>
-                                                                        </select>
-                                                                        <!--end::Input-->
-                                                                    </div>
-                                                                    <!--end::Input group-->
-                                                                </div>
-                                                                <!--End::Col-->
-                                                            </div>
-                                                            <!--End::Row Kanan+Kiri-->
-
-                                                            <!--begin::Row Kanan+Kiri-->
-                                                            <div class="row fv-row">
-                                                                <!--begin::Col-->
-                                                                <div class="col-6">
-                                                                    <!--begin::Input group Website-->
-                                                                    <div class="fv-row mb-7">
-                                                                        <!--begin::Label-->
-                                                                        <label class="fs-6 fw-bold form-label mt-3">
-                                                                            <span>Nilai OK (Exclude PPN) <i
-                                                                                    class="bi bi-key"></i></span>
-                                                                        </label>
-                                                                        <!--end::Label-->
-                                                                        <!--begin::Input-->
-                                                                        <input type="text"
-                                                                            class="form-control form-control-solid reformat"
-                                                                            id="nilaiok-review" name="nilaiok-review"
-                                                                            value="{{ number_format((int) str_replace('.', '', $proyek->nilaiok_review), 0, '.', '.') }}"
-                                                                            placeholder="Nilai OK (Exclude PPN)"
-                                                                            {{ auth()->user()->check_administrator ? '' : 'readonly' }} />
-                                                                        <!--end::Input-->
-                                                                    </div>
-                                                                    <!--end::Input group-->
-                                                                </div>
-                                                                <!--End::Col-->
-                                                            </div>
-                                                            <!--End::Row Kanan+Kiri-->
-
-                                                            <script>
-                                                                function hitungReview() {
-                                                                    let nilaiOkReview = document.getElementById("nilai-valas-review").value.replaceAll(".", "");
-                                                                    // console.log(nilaiOkReview); 
-                                                                    let kursReview = document.getElementById("kurs-review").value.replaceAll(".", "");
-                                                                    let hasilOkReview = nilaiOkReview * kursReview;
-                                                                    document.getElementById("nilaiok-review").value = Intl.NumberFormat(["id"]).format(hasilOkReview);
-                                                                    // console.log(hasilOkReview);
-                                                                }
-                                                            </script>
-                                                        </div>
-                                                        <!--divRkapReview-->
-
-
-                                                        <!--Begin::Title Biru Form: Nilai RKAP Awal-->
-                                                        <br>
-                                                        <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                            style="font-size:14px;">Nilai RKAP Awal &nbsp;
-                                                            <i onclick="hideColumn()" id="hide-button"
-                                                                class="bi bi-arrows-collapse"></i><i
-                                                                onclick="showColumn()" id="show-button"
-                                                                style="display: none" class="bi bi-arrows-expand"></i>
-                                                        </h3>
-                                                        <script>
-                                                            function hideColumn() {
-                                                                document.getElementById("divRkapAwal").style.display = "none";
-                                                                document.getElementById("hide-button").style.display = "none";
-                                                                document.getElementById("show-button").style.display = "";
-                                                            }
-
-                                                            function showColumn() {
-                                                                document.getElementById("divRkapAwal").style.display = "";
-                                                                document.getElementById("hide-button").style.display = "";
-                                                                document.getElementById("show-button").style.display = "none";
-                                                            }
-                                                        </script>
-                                                        <br>
-                                                        <div id="divRkapAwal">
-                                                            <!--End::Title Biru Form: Nilai RKAP Awal-->
-
-                                                            <!--begin::Row Kanan+Kiri-->
-                                                            <div class="row fv-row">
-                                                                <!--begin::Col-->
-                                                                <div class="col-6">
-                                                                    <!--begin::Input group Website-->
-                                                                    <div class="fv-row mb-7">
-                                                                        <!--begin::Label-->
-                                                                        <label class="fs-6 fw-bold form-label mt-3">
-                                                                            <span>Nilai OK Awal (Valas) (Exclude Tax) <i
-                                                                                    class="bi bi-lock"></i></span>
-                                                                        </label>
-                                                                        <!--end::Label-->
-                                                                        <!--begin::Input-->
-                                                                        <input type="text" onkeyup="hitungAwal()"
-                                                                            class="form-control form-control-solid reformat"
-                                                                            id="nilai-valas-awal" name="nilai-valas-awal"
-                                                                            value="{{ number_format((int) str_replace('.', '', $proyek->nilai_rkap), 0, '.', '.') }}"
-                                                                            placeholder="Nilai OK Awal (Valas) (Exclude Tax)"
-                                                                            readonly />
-                                                                        <!--end::Input-->
-                                                                    </div>
-                                                                    <!--end::Input group-->
-                                                                </div>
-                                                                <!--End begin::Col-->
-                                                                <div class="col-6">
-                                                                    <!--begin::Input group Website-->
-                                                                    <div class="fv-row mb-7">
-                                                                        <!--begin::Label-->
-                                                                        <label class="fs-6 fw-bold form-label mt-3">
-                                                                            <span class="required">Mata Uang Awal</span>
-                                                                        </label>
-                                                                        <!--end::Label-->
-                                                                        <!--Begin::Input-->
-                                                                        <select id="mata-uang-awal" name="mata-uang-awal"
-                                                                            class="form-select form-select-solid"
-                                                                            data-control="select2" data-hide-search="true"
-                                                                            data-placeholder="Pilih Mata Uang">
-                                                                            <option></option>
-                                                                            @foreach ($mataUang as $uang)
-                                                                                @if ($uang->mata_uang == $proyek->mata_uang_awal)
-                                                                                    <option
-                                                                                        value="{{ $uang->mata_uang }}"
-                                                                                        selected>
-                                                                                        {{ $uang->mata_uang }}
-                                                                                    </option>
-                                                                                @else
-                                                                                    <option
-                                                                                        value="{{ $uang->mata_uang }}">
-                                                                                        {{ $uang->mata_uang }}
-                                                                                    </option>
-                                                                                @endif
-                                                                            @endforeach
-                                                                            {{-- <option value="Rupiah"
+                                                                    <!--Begin::Input-->
+                                                                    <select id="mata-uang-awal" name="mata-uang-awal"
+                                                                        class="form-select form-select-solid"
+                                                                        data-control="select2" data-hide-search="true"
+                                                                        data-placeholder="Pilih Mata Uang">
+                                                                        <option></option>
+                                                                        @foreach ($mataUang as $uang)
+                                                                            @if ($uang->mata_uang == $proyek->mata_uang_awal)
+                                                                                <option value="{{ $uang->mata_uang }}"
+                                                                                    selected>
+                                                                                    {{ $uang->mata_uang }}
+                                                                                </option>
+                                                                            @else
+                                                                                <option value="{{ $uang->mata_uang }}">
+                                                                                    {{ $uang->mata_uang }}
+                                                                                </option>
+                                                                            @endif
+                                                                        @endforeach
+                                                                        {{-- <option value="Rupiah"
                                                                                 {{ $proyek->mata_uang_awal == 'Rupiah' ? 'selected' : '' }}>
                                                                                 Rupiah</option>
                                                                             <option value="US Dollar"
@@ -1761,178 +1756,16 @@
                                                                             <option value="Chinese Yuan"
                                                                                 {{ $proyek->mata_uang_awal == 'Chinese Yuan' ? 'selected' : '' }}>
                                                                                 Chinese Yuan</option> --}}
-                                                                        </select>
-                                                                        <!--end::Input-->
-                                                                    </div>
-                                                                    <!--end::Input group-->
+                                                                    </select>
+                                                                    <!--end::Input-->
                                                                 </div>
-                                                                <!--End::Col-->
+                                                                <!--end::Input group-->
                                                             </div>
-                                                            <!--End::Row Kanan+Kiri-->
-
-                                                            <!--begin::Row Kanan+Kiri-->
-                                                            <div class="row fv-row">
-                                                                <!--begin::Col-->
-                                                                <div class="col-6">
-                                                                    <!--begin::Input group Website-->
-                                                                    <div class="fv-row mb-7">
-                                                                        <!--begin::Label-->
-                                                                        <label class="fs-6 fw-bold form-label mt-3">
-                                                                            <span>Kurs Awal</span>
-                                                                        </label>
-                                                                        <!--end::Label-->
-
-                                                                        <!--begin::Input-->
-                                                                        <input onkeyup="hitungAwal()" type="text"
-                                                                            class="form-control form-control-solid reformat"
-                                                                            id="kurs-awal" name="kurs-awal"
-                                                                            value="{{ $proyek->kurs_awal }}"
-                                                                            placeholder="Kurs Awal" />
-                                                                        <!--end::Input-->
-                                                                    </div>
-                                                                    <!--end::Input group-->
-                                                                </div>
-                                                                <!--End begin::Col-->
-                                                                <div class="col-6">
-                                                                    <!--begin::Input group Website-->
-                                                                    <div class="fv-row mb-7">
-                                                                        <!--begin::Label-->
-                                                                        <label class="fs-6 fw-bold form-label mt-3">
-                                                                            <span>Bulan Pelaksanaan Awal <i
-                                                                                    class="bi bi-lock"></i></span>
-                                                                        </label>
-                                                                        <!--end::Label-->
-                                                                        <!--Begin::Input-->
-                                                                        <select id="bulan-pelaksanaan-awal"
-                                                                            name="bulan-pelaksanaan-awal"
-                                                                            class="form-select form-select-solid"
-                                                                            data-control="select2" data-hide-search="true"
-                                                                            data-placeholder="Bulan Pelaksanaan" readonly>
-                                                                            <option></option>
-                                                                            <option selected>
-                                                                                @switch($proyek->bulan_pelaksanaan)
-                                                                                    @case('1')
-                                                                                        Januari
-                                                                                    @break
-
-                                                                                    @case('2')
-                                                                                        Februari
-                                                                                    @break
-
-                                                                                    @case('3')
-                                                                                        Maret
-                                                                                    @break
-
-                                                                                    @case('4')
-                                                                                        April
-                                                                                    @break
-
-                                                                                    @case('5')
-                                                                                        Mei
-                                                                                    @break
-
-                                                                                    @case('6')
-                                                                                        Juni
-                                                                                    @break
-
-                                                                                    @case('7')
-                                                                                        Juli
-                                                                                    @break
-
-                                                                                    @case('8')
-                                                                                        Agustus
-                                                                                    @break
-
-                                                                                    @case('9')
-                                                                                        September
-                                                                                    @break
-
-                                                                                    @case('10')
-                                                                                        Oktober
-                                                                                    @break
-
-                                                                                    @case('11')
-                                                                                        November
-                                                                                    @break
-
-                                                                                    @case('12')
-                                                                                        Desember
-                                                                                    @break
-
-                                                                                    @default
-                                                                                        *Bulan Belum Ditentukan
-                                                                                @endswitch
-                                                                            </option>
-                                                                        </select>
-                                                                        <!--end::Input-->
-                                                                    </div>
-                                                                    <!--end::Input group-->
-                                                                </div>
-                                                                <!--End::Col-->
-                                                            </div>
-                                                            <!--End::Row Kanan+Kiri-->
-
-                                                            <!--begin::Row Kanan+Kiri-->
-                                                            <div class="row fv-row">
-                                                                <!--begin::Col-->
-                                                                <div class="col-6">
-                                                                    <!--begin::Input group Website-->
-                                                                    <div class="fv-row mb-7">
-                                                                        <!--begin::Label-->
-                                                                        <label class="fs-6 fw-bold form-label mt-3">
-                                                                            <span>Nilai OK (Exclude PPN) <i
-                                                                                    class="bi bi-lock"></i></span>
-                                                                        </label>
-                                                                        <!--end::Label-->
-
-                                                                        <!--begin::Input-->
-                                                                        <input type="text"
-                                                                            class="form-control form-control-solid reformat"
-                                                                            id="nilaiok-awal" name="nilaiok-awal"
-                                                                            value="{{ $proyek->nilaiok_awal == null ? number_format((int) str_replace('.', '', $proyek->nilai_rkap), 0, '.', '.') : number_format((int) str_replace('.', '', $proyek->nilaiok_awal), 0, '.', '.') }}"
-                                                                            placeholder="Nilai OK (Exclude PPN)"
-                                                                            readonly />
-                                                                        <!--end::Input-->
-                                                                    </div>
-                                                                    <!--end::Input group-->
-                                                                </div>
-                                                                <!--End::Col-->
-                                                            </div>
-                                                            <script>
-                                                                function hitungAwal() {
-                                                                    let nilaiOkAwal = document.getElementById("nilai-valas-awal").value.replaceAll(".", "");
-                                                                    let kursAwal = document.getElementById("kurs-awal").value.replaceAll(".", "");
-                                                                    let hasilOkAwal = nilaiOkAwal * kursAwal;
-                                                                    document.getElementById("nilaiok-awal").value = Intl.NumberFormat(["id"]).format(hasilOkAwal);
-                                                                }
-                                                            </script>
-                                                            <!--End::Row Kanan+Kiri-->
+                                                            <!--End::Col-->
                                                         </div>
-                                                        <!--divRkapAwal-->
+                                                        <!--End::Row Kanan+Kiri-->
 
-
-                                                        <!--Begin::Title Biru Form: Laporan Kualitatif-->
-                                                        <br>
-                                                        <h3 class="fw-bolder m-0 required" id="HeadDetail"
-                                                            style="font-size:14px;">Laporan Kualitatif
-                                                        </h3>
-                                                        <br>
-                                                        <div class="form-group">
-                                                            <textarea id="laporan-kualitatif-pasdin" name="laporan-kualitatif-pasdin" class="form-control" rows="7">{!! $proyek->laporan_kualitatif_pasdin !!}</textarea>
-                                                        </div>
-                                                        <!--End::Title Biru Form: Laporan Kualitatif-->
-
-                                                        <h6 class="text-danger fw-normal">(*) Kolom Ini Harus Diisi !</h6>
-
-                                                    </div>
-                                                    <!--end:::Tab Pasar Dini-->
-
-
-                                                    <!--begin:::Tab Pasar Potensial-->
-                                                    <div class="tab-pane fade" id="kt_user_view_overview_potensial"
-                                                        role="tabpanel">
-
-                                                        <!--begin::Row-->
+                                                        <!--begin::Row Kanan+Kiri-->
                                                         <div class="row fv-row">
                                                             <!--begin::Col-->
                                                             <div class="col-6">
@@ -1940,253 +1773,417 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Negara</span>
+                                                                        <span>Kurs Awal</span>
                                                                     </label>
                                                                     <!--end::Label-->
 
                                                                     <!--begin::Input-->
-                                                                    {{-- <input type="text"
+                                                                    <input onkeyup="hitungAwal()" type="text"
+                                                                        class="form-control form-control-solid reformat"
+                                                                        id="kurs-awal" name="kurs-awal"
+                                                                        value="{{ $proyek->kurs_awal }}"
+                                                                        placeholder="Kurs Awal" />
+                                                                    <!--end::Input-->
+                                                                </div>
+                                                                <!--end::Input group-->
+                                                            </div>
+                                                            <!--End begin::Col-->
+                                                            <div class="col-6">
+                                                                <!--begin::Input group Website-->
+                                                                <div class="fv-row mb-7">
+                                                                    <!--begin::Label-->
+                                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                                        <span>Bulan Pelaksanaan Awal <i
+                                                                                class="bi bi-lock"></i></span>
+                                                                    </label>
+                                                                    <!--end::Label-->
+                                                                    <!--Begin::Input-->
+                                                                    <select id="bulan-pelaksanaan-awal"
+                                                                        name="bulan-pelaksanaan-awal"
+                                                                        class="form-select form-select-solid"
+                                                                        data-control="select2" data-hide-search="true"
+                                                                        data-placeholder="Bulan Pelaksanaan" readonly>
+                                                                        <option></option>
+                                                                        <option selected>
+                                                                            @switch($proyek->bulan_pelaksanaan)
+                                                                                @case('1')
+                                                                                    Januari
+                                                                                @break
+
+                                                                                @case('2')
+                                                                                    Februari
+                                                                                @break
+
+                                                                                @case('3')
+                                                                                    Maret
+                                                                                @break
+
+                                                                                @case('4')
+                                                                                    April
+                                                                                @break
+
+                                                                                @case('5')
+                                                                                    Mei
+                                                                                @break
+
+                                                                                @case('6')
+                                                                                    Juni
+                                                                                @break
+
+                                                                                @case('7')
+                                                                                    Juli
+                                                                                @break
+
+                                                                                @case('8')
+                                                                                    Agustus
+                                                                                @break
+
+                                                                                @case('9')
+                                                                                    September
+                                                                                @break
+
+                                                                                @case('10')
+                                                                                    Oktober
+                                                                                @break
+
+                                                                                @case('11')
+                                                                                    November
+                                                                                @break
+
+                                                                                @case('12')
+                                                                                    Desember
+                                                                                @break
+
+                                                                                @default
+                                                                                    *Bulan Belum Ditentukan
+                                                                            @endswitch
+                                                                        </option>
+                                                                    </select>
+                                                                    <!--end::Input-->
+                                                                </div>
+                                                                <!--end::Input group-->
+                                                            </div>
+                                                            <!--End::Col-->
+                                                        </div>
+                                                        <!--End::Row Kanan+Kiri-->
+
+                                                        <!--begin::Row Kanan+Kiri-->
+                                                        <div class="row fv-row">
+                                                            <!--begin::Col-->
+                                                            <div class="col-6">
+                                                                <!--begin::Input group Website-->
+                                                                <div class="fv-row mb-7">
+                                                                    <!--begin::Label-->
+                                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                                        <span>Nilai OK (Exclude PPN) <i
+                                                                                class="bi bi-lock"></i></span>
+                                                                    </label>
+                                                                    <!--end::Label-->
+
+                                                                    <!--begin::Input-->
+                                                                    <input type="text"
+                                                                        class="form-control form-control-solid reformat"
+                                                                        id="nilaiok-awal" name="nilaiok-awal"
+                                                                        value="{{ $proyek->nilaiok_awal == null ? number_format((int) str_replace('.', '', $proyek->nilai_rkap), 0, '.', '.') : number_format((int) str_replace('.', '', $proyek->nilaiok_awal), 0, '.', '.') }}"
+                                                                        placeholder="Nilai OK (Exclude PPN)" readonly />
+                                                                    <!--end::Input-->
+                                                                </div>
+                                                                <!--end::Input group-->
+                                                            </div>
+                                                            <!--End::Col-->
+                                                        </div>
+                                                        <script>
+                                                            function hitungAwal() {
+                                                                let nilaiOkAwal = document.getElementById("nilai-valas-awal").value.replaceAll(".", "");
+                                                                let kursAwal = document.getElementById("kurs-awal").value.replaceAll(".", "");
+                                                                let hasilOkAwal = nilaiOkAwal * kursAwal;
+                                                                document.getElementById("nilaiok-awal").value = Intl.NumberFormat(["id"]).format(hasilOkAwal);
+                                                            }
+                                                        </script>
+                                                        <!--End::Row Kanan+Kiri-->
+                                                    </div>
+                                                    <!--divRkapAwal-->
+
+
+                                                    <!--Begin::Title Biru Form: Laporan Kualitatif-->
+                                                    <br>
+                                                    <h3 class="fw-bolder m-0 required" id="HeadDetail"
+                                                        style="font-size:14px;">Laporan Kualitatif
+                                                    </h3>
+                                                    <br>
+                                                    <div class="form-group">
+                                                        <textarea id="laporan-kualitatif-pasdin" name="laporan-kualitatif-pasdin" class="form-control" rows="7">{!! $proyek->laporan_kualitatif_pasdin !!}</textarea>
+                                                    </div>
+                                                    <!--End::Title Biru Form: Laporan Kualitatif-->
+
+                                                    <h6 class="text-danger fw-normal">(*) Kolom Ini Harus Diisi !</h6>
+
+                                                </div>
+                                                <!--end:::Tab Pasar Dini-->
+
+
+                                                <!--begin:::Tab Pasar Potensial-->
+                                                <div class="tab-pane fade" id="kt_user_view_overview_potensial"
+                                                    role="tabpanel">
+
+                                                    <!--begin::Row-->
+                                                    <div class="row fv-row">
+                                                        <!--begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>Negara</span>
+                                                                </label>
+                                                                <!--end::Label-->
+
+                                                                <!--begin::Input-->
+                                                                {{-- <input type="text"
                                                                         class="form-control form-control-solid"
                                                                         id="negara" name="negara"
                                                                         value="{{ $proyek->negara }}"
                                                                         placeholder="Negara" /> --}}
-                                                                    <select name="negara" id="negara"
-                                                                        class="form-select form-select-solid"
-                                                                        data-control="select2" data-hide-search="false"
-                                                                        data-placeholder="Pilih Negara">
-                                                                        <option value=""></option>
-                                                                        @foreach ($data_negara as $negara)
-                                                                            @if ($negara->country == $proyek->negara)
-                                                                                <option value="{{ $negara->abbreviation }}"
-                                                                                    selected>{{ $negara->country }}
-                                                                                </option>
-                                                                            @else
-                                                                                <option value="{{ $negara->country }}">
-                                                                                    {{ $negara->country }}</option>
-                                                                            @endif
-                                                                        @endforeach
-                                                                    </select>
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
+                                                                <select name="negara" id="negara"
+                                                                    class="form-select form-select-solid"
+                                                                    data-control="select2" data-hide-search="false"
+                                                                    data-placeholder="Pilih Negara">
+                                                                    <option value=""></option>
+                                                                    @foreach ($data_negara as $negara)
+                                                                        @if ($negara->country == $proyek->negara)
+                                                                            <option value="{{ $negara->abbreviation }}"
+                                                                                selected>{{ $negara->country }}
+                                                                            </option>
+                                                                        @else
+                                                                            <option value="{{ $negara->country }}">
+                                                                                {{ $negara->country }}</option>
+                                                                        @endif
+                                                                    @endforeach
+                                                                </select>
+                                                                <!--end::Input-->
                                                             </div>
-                                                            <!--End begin::Col-->
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>SBU</span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-                                                                    <!--begin::Input-->
-                                                                    <select onchange="getSBU(this)" id="sbu"
-                                                                        name="sbu"
-                                                                        class="form-select form-select-solid"
-                                                                        data-control="select2" data-hide-search="false"
-                                                                        data-placeholder="Pilih SBU">
-                                                                        <option></option>
-                                                                        @foreach ($sbus as $sbu)
-                                                                            @if ($sbu->lingkup_kerja == $proyek->sbu)
-                                                                                <option value="{{ $sbu->lingkup_kerja }}"
-                                                                                    data-klasifikasi="{{ $sbu->klasifikasi }}"
-                                                                                    data-sub="{{ $sbu->sub_klasifikasi }}"
-                                                                                    selected>{{ $sbu->lingkup_kerja }}
-                                                                                </option>
-                                                                            @else
-                                                                                <option value="{{ $sbu->lingkup_kerja }}"
-                                                                                    data-klasifikasi="{{ $sbu->klasifikasi }}"
-                                                                                    data-sub="{{ $sbu->sub_klasifikasi }}">
-                                                                                    {{ $sbu->lingkup_kerja }}</option>
-                                                                            @endif
-                                                                        @endforeach
-                                                                    </select>
-                                                                    <!--end::Input-->
-                                                                    <script>
-                                                                        function getSBU(e) {
-                                                                            // console.log(e);
-                                                                            let klasifikasi = "";
-                                                                            let subKlasifikasi = "";
-                                                                            e.options.forEach(option => {
-                                                                                if (option.selected) {
-                                                                                    // console.log(option);
-                                                                                    klasifikasi = option.getAttribute("data-klasifikasi");
-                                                                                    subKlasifikasi = option.getAttribute("data-sub");
-                                                                                }
-                                                                                document.querySelector("#klasifikasi").value = klasifikasi;
-                                                                                document.querySelector("#sub-klasifikasi").value = subKlasifikasi;
-                                                                            })
-                                                                        }
-                                                                    </script>
-                                                                </div>
-                                                                <!--end::Input group-->
-                                                            </div>
-                                                            <!--End begin::Col-->
+                                                            <!--end::Input group-->
                                                         </div>
-                                                        <!--End begin::Row-->
+                                                        <!--End begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>SBU</span>
+                                                                </label>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                <select onchange="getSBU(this)" id="sbu"
+                                                                    name="sbu" class="form-select form-select-solid"
+                                                                    data-control="select2" data-hide-search="false"
+                                                                    data-placeholder="Pilih SBU">
+                                                                    <option></option>
+                                                                    @foreach ($sbus as $sbu)
+                                                                        @if ($sbu->lingkup_kerja == $proyek->sbu)
+                                                                            <option value="{{ $sbu->lingkup_kerja }}"
+                                                                                data-klasifikasi="{{ $sbu->klasifikasi }}"
+                                                                                data-sub="{{ $sbu->sub_klasifikasi }}"
+                                                                                selected>{{ $sbu->lingkup_kerja }}
+                                                                            </option>
+                                                                        @else
+                                                                            <option value="{{ $sbu->lingkup_kerja }}"
+                                                                                data-klasifikasi="{{ $sbu->klasifikasi }}"
+                                                                                data-sub="{{ $sbu->sub_klasifikasi }}">
+                                                                                {{ $sbu->lingkup_kerja }}</option>
+                                                                        @endif
+                                                                    @endforeach
+                                                                </select>
+                                                                <!--end::Input-->
+                                                                <script>
+                                                                    function getSBU(e) {
+                                                                        // console.log(e);
+                                                                        let klasifikasi = "";
+                                                                        let subKlasifikasi = "";
+                                                                        e.options.forEach(option => {
+                                                                            if (option.selected) {
+                                                                                // console.log(option);
+                                                                                klasifikasi = option.getAttribute("data-klasifikasi");
+                                                                                subKlasifikasi = option.getAttribute("data-sub");
+                                                                            }
+                                                                            document.querySelector("#klasifikasi").value = klasifikasi;
+                                                                            document.querySelector("#sub-klasifikasi").value = subKlasifikasi;
+                                                                        })
+                                                                    }
+                                                                </script>
+                                                            </div>
+                                                            <!--end::Input group-->
+                                                        </div>
+                                                        <!--End begin::Col-->
+                                                    </div>
+                                                    <!--End begin::Row-->
 
-                                                        <!--begin::Row-->
-                                                        <div class="row fv-row">
-                                                            <!--begin::Col-->
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3 required">
-                                                                        <span>Status Pasar <i
-                                                                                class="bi bi-lock"></i></span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-                                                                    <!--begin::Input-->
-                                                                    @php
-                                                                        $jumlahBobot = 0;
-                                                                        $statusPasar = '';
-                                                                        foreach ($kriteriapasarproyek as $kriteria) {
-                                                                            $jumlahBobot += $kriteria->bobot;
-                                                                            $jumlahKriteria = count($kriteriapasarproyek);
-                                                                            $statusPasar = round($jumlahBobot / $jumlahKriteria, 2);
-                                                                        }
-                                                                        if ($statusPasar == '') {
-                                                                            $statusPasar = '*Kriteria Pasar Belum Diisi';
-                                                                        } elseif ($statusPasar >= 0.75) {
-                                                                            $statusPasar = 'Potensial';
-                                                                        } else {
-                                                                            $statusPasar = 'Non-Potensial';
-                                                                        }
-                                                                    @endphp
-                                                                    <input type="text"
-                                                                        class="form-control form-control-solid {{ $statusPasar == '*Kriteria Pasar Belum Diisi' ? 'text-danger' : '' }}"
-                                                                        id="status-pasar" name="status-pasar"
-                                                                        value="{{ $statusPasar }}" readonly />
-                                                                    <!--end::Input-->
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Provinsi</span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-                                                                    <!--begin::Input-->
-                                                                    {{-- <input type="text"
+                                                    <!--begin::Row-->
+                                                    <div class="row fv-row">
+                                                        <!--begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3 required">
+                                                                    <span>Status Pasar <i class="bi bi-lock"></i></span>
+                                                                </label>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                @php
+                                                                    $jumlahBobot = 0;
+                                                                    $statusPasar = '';
+                                                                    foreach ($kriteriapasarproyek as $kriteria) {
+                                                                        $jumlahBobot += $kriteria->bobot;
+                                                                        $jumlahKriteria = count($kriteriapasarproyek);
+                                                                        $statusPasar = round($jumlahBobot / $jumlahKriteria, 2);
+                                                                    }
+                                                                    if ($statusPasar == '') {
+                                                                        $statusPasar = '*Kriteria Pasar Belum Diisi';
+                                                                    } elseif ($statusPasar >= 0.75) {
+                                                                        $statusPasar = 'Potensial';
+                                                                    } else {
+                                                                        $statusPasar = 'Non-Potensial';
+                                                                    }
+                                                                @endphp
+                                                                <input type="text"
+                                                                    class="form-control form-control-solid {{ $statusPasar == '*Kriteria Pasar Belum Diisi' ? 'text-danger' : '' }}"
+                                                                    id="status-pasar" name="status-pasar"
+                                                                    value="{{ $statusPasar }}" readonly />
+                                                                <!--end::Input-->
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>Provinsi</span>
+                                                                </label>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                {{-- <input type="text"
                                                                         class="form-control form-control-solid"
                                                                         id="provinsi" name="provinsi"
                                                                         value="{{ $proyek->provinsi }}"
                                                                         placeholder="Provinsi" /> --}}
-                                                                    <select name="provinsi" id="provinsi" class="form-select form-select-solid"
-                                                                        data-control="select2" data-hide-search="false" 
-                                                                        data-placeholder="Pilih Provinsi">
-                                                                        <option value=""></option>
-                                                                        @foreach ($provinsi as $prov)
-                                                                            @if ($prov->province_id  == $proyek->provinsi)
-                                                                                <option value="{{$prov->province_id }}" selected>{{ucwords(strtolower($prov->province_name))}}</option>
-                                                                            @else
-                                                                                <option value="{{$prov->province_id }}">{{ucwords(strtolower($prov->province_name))}}</option>
-                                                                            @endif
-                                                                        @endforeach
-                                                                    </select>
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
+                                                                <select name="provinsi" id="provinsi"
+                                                                    class="form-select form-select-solid"
+                                                                    data-control="select2" data-hide-search="false"
+                                                                    data-placeholder="Pilih Provinsi">
+                                                                    <option value=""></option>
+                                                                    @foreach ($provinsi as $prov)
+                                                                        @if ($prov->province_id == $proyek->provinsi)
+                                                                            <option value="{{ $prov->province_id }}"
+                                                                                selected>
+                                                                                {{ ucwords(strtolower($prov->province_name)) }}
+                                                                            </option>
+                                                                        @else
+                                                                            <option value="{{ $prov->province_id }}">
+                                                                                {{ ucwords(strtolower($prov->province_name)) }}
+                                                                            </option>
+                                                                        @endif
+                                                                    @endforeach
+                                                                </select>
+                                                                <!--end::Input-->
                                                             </div>
-                                                            <!--End begin::Col-->
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Klasifikasi <i class="bi bi-lock"></i></span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-                                                                    <!--begin::Input-->
-                                                                    <input type="text"
-                                                                        class="form-control form-control-solid"
-                                                                        id="klasifikasi" name="klasifikasi"
-                                                                        value="{{ $proyek->klasifikasi }}"
-                                                                        placeholder="Klasifikasi" readonly />
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
-                                                            </div>
-                                                            <!--End begin::Col-->
+                                                            <!--end::Input group-->
                                                         </div>
-                                                        <!--End begin::Row-->
-
-                                                        <!--begin::Row-->
-                                                        <div class="row fv-row">
-                                                            <!--begin::Col-->
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>DOP <i class="bi bi-lock"></i></span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-                                                                    <!--begin::Input-->
-                                                                    <select id="dop" name="dop"
-                                                                        class="form-select form-select-solid"
-                                                                        data-control="select2" data-hide-search="true"
-                                                                        data-placeholder="Pilih DOP">
-                                                                        <option selected>{{ $proyek->dop }}</option>
-                                                                    </select>
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
+                                                        <!--End begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>Klasifikasi <i class="bi bi-lock"></i></span>
+                                                                </label>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                <input type="text"
+                                                                    class="form-control form-control-solid"
+                                                                    id="klasifikasi" name="klasifikasi"
+                                                                    value="{{ $proyek->klasifikasi }}"
+                                                                    placeholder="Klasifikasi" readonly />
+                                                                <!--end::Input-->
                                                             </div>
-                                                            <!--End begin::Col-->
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Sub-Klasifikasi <i
-                                                                                class="bi bi-lock"></i></span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-                                                                    <!--begin::Input-->
-                                                                    <input type="text"
-                                                                        class="form-control form-control-solid"
-                                                                        id="sub-klasifikasi" name="sub-klasifikasi"
-                                                                        value="{{ $proyek->sub_klasifikasi }}"
-                                                                        placeholder="Sub-Klasifikasi" readonly />
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
-                                                            </div>
-                                                            <!--End begin::Col-->
+                                                            <!--end::Input group-->
                                                         </div>
-                                                        <!--End begin::Row-->
+                                                        <!--End begin::Col-->
+                                                    </div>
+                                                    <!--End begin::Row-->
 
-                                                        <!--begin::Row-->
-                                                        <div class="row fv-row">
-                                                            <!--begin::Col-->
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Company <i class="bi bi-lock"></i>
-                                                                        </span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-                                                                    <!--begin::Input-->
-                                                                    <select id="company" name="company"
-                                                                        class="form-select form-select-solid"
-                                                                        data-control="select2" data-hide-search="true"
-                                                                        data-placeholder="Pilih Company">
-                                                                        <option selected>{{ $proyek->company }}</option>
-                                                                        {{-- @foreach ($companies as $company)
+                                                    <!--begin::Row-->
+                                                    <div class="row fv-row">
+                                                        <!--begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>DOP <i class="bi bi-lock"></i></span>
+                                                                </label>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                <select id="dop" name="dop"
+                                                                    class="form-select form-select-solid"
+                                                                    data-control="select2" data-hide-search="true"
+                                                                    data-placeholder="Pilih DOP">
+                                                                    <option selected>{{ $proyek->dop }}</option>
+                                                                </select>
+                                                                <!--end::Input-->
+                                                            </div>
+                                                            <!--end::Input group-->
+                                                        </div>
+                                                        <!--End begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>Sub-Klasifikasi <i class="bi bi-lock"></i></span>
+                                                                </label>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                <input type="text"
+                                                                    class="form-control form-control-solid"
+                                                                    id="sub-klasifikasi" name="sub-klasifikasi"
+                                                                    value="{{ $proyek->sub_klasifikasi }}"
+                                                                    placeholder="Sub-Klasifikasi" readonly />
+                                                                <!--end::Input-->
+                                                            </div>
+                                                            <!--end::Input group-->
+                                                        </div>
+                                                        <!--End begin::Col-->
+                                                    </div>
+                                                    <!--End begin::Row-->
+
+                                                    <!--begin::Row-->
+                                                    <div class="row fv-row">
+                                                        <!--begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>Company <i class="bi bi-lock"></i>
+                                                                    </span>
+                                                                </label>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                <select id="company" name="company"
+                                                                    class="form-select form-select-solid"
+                                                                    data-control="select2" data-hide-search="true"
+                                                                    data-placeholder="Pilih Company">
+                                                                    <option selected>{{ $proyek->company }}</option>
+                                                                    {{-- @foreach ($companies as $company)
                                                                     @if ($company->nama_company == $proyek->company)
                                                                         <option value="{{ $company->nama_company }}" selected>{{$company->nama_company }}</option>
                                                                     @else
                                                                         <option value="{{ $company->nama_company }}">{{$company->nama_company }}</option>
                                                                     @endif
                                                                     @endforeach --}}
-                                                                    </select>
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
+                                                                </select>
+                                                                <!--end::Input-->
                                                             </div>
-                                                            <!--End begin::Col-->
-                                                            {{-- <div class="col-6">
+                                                            <!--end::Input group-->
+                                                        </div>
+                                                        <!--End begin::Col-->
+                                                        {{-- <div class="col-6">
                                                                 <!--begin::Input group Website-->
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
@@ -2206,240 +2203,234 @@
                                                                 </div>
                                                                 <!--end::Input group-->
                                                             </div> --}}
-                                                            <!--End begin::Col-->
-                                                        </div>
-                                                        <!--End begin::Row-->
+                                                        <!--End begin::Col-->
+                                                    </div>
+                                                    <!--End begin::Row-->
 
-                                                        <div class="row">
-                                                            <div class="col">
-                                                                <label class="fs-6 fw-bold form-label mt-3">
-                                                                    <span>Longitude</span>
-                                                                </label>
-                                                                <!--begin::Input-->
-                                                                <input type="text"
-                                                                class="form-control form-control-solid"
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            <label class="fs-6 fw-bold form-label mt-3">
+                                                                <span>Longitude</span>
+                                                            </label>
+                                                            <!--begin::Input-->
+                                                            <input type="text" class="form-control form-control-solid"
                                                                 id="longitude" name="longitude"
                                                                 value="{{ $proyek->longitude }}"
                                                                 placeholder="Longitude" />
-                                                                <!--end::Input-->
-                                                            </div>
+                                                            <!--end::Input-->
+                                                        </div>
 
-                                                            <div class="col">
-                                                                <label class="fs-6 fw-bold form-label mt-3">
-                                                                    <span>Latitude</span>
-                                                                </label>
-                                                                <!--begin::Input-->
-                                                                <input type="text"
-                                                                class="form-control form-control-solid"
+                                                        <div class="col">
+                                                            <label class="fs-6 fw-bold form-label mt-3">
+                                                                <span>Latitude</span>
+                                                            </label>
+                                                            <!--begin::Input-->
+                                                            <input type="text" class="form-control form-control-solid"
                                                                 id="latitude" name="latitude"
                                                                 value="{{ $proyek->latitude }}"
                                                                 placeholder="Latitude" />
-                                                                <!--end::Input-->
-                                                            </div>
+                                                            <!--end::Input-->
                                                         </div>
+                                                    </div>
 
 
-                                                        <!--Begin::Title Biru Form: Kriteria pasar-->
-                                                        <br>
-                                                        <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                            style="font-size:14px;">
-                                                            <!--begin::Options-->
-                                                            <label
-                                                                class="form-check form-check-custom form-check-solid me-6 m-0 align-middle">
-                                                                <span class="me-4">Proyek Strategis : </span>
-                                                                <input class="form-check-input" type="checkbox"
-                                                                    style="border: 1px solid #b5b5c3" value=""
-                                                                    id="proyek-strategis" name="proyek-strategis"
-                                                                    {{ $proyek->proyek_strategis ? 'checked' : '' }} />&nbsp;
-                                                                {{ $proyek->proyek_strategis ? ' Ya' : '' }}
-                                                            </label>
-                                                            <!--end::Options-->
-                                                        </h3>
-                                                        <br>
+                                                    <!--Begin::Title Biru Form: Kriteria pasar-->
+                                                    <br>
+                                                    <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                                        <!--begin::Options-->
+                                                        <label
+                                                            class="form-check form-check-custom form-check-solid me-6 m-0 align-middle">
+                                                            <span class="me-4">Proyek Strategis : </span>
+                                                            <input class="form-check-input" type="checkbox"
+                                                                style="border: 1px solid #b5b5c3" value=""
+                                                                id="proyek-strategis" name="proyek-strategis"
+                                                                {{ $proyek->proyek_strategis ? 'checked' : '' }} />&nbsp;
+                                                            {{ $proyek->proyek_strategis ? ' Ya' : '' }}
+                                                        </label>
+                                                        <!--end::Options-->
+                                                    </h3>
+                                                    <br>
 
-                                                        <!--Begin::Title Biru Form: Kriteria pasar-->
-                                                        <br>
-                                                        <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                            style="font-size:14px;">Kriteria Pasar
-                                                            @php
-                                                                $style = '';
-                                                                foreach ($kriteriapasarproyek as $kriteria) {
-                                                                    if ($kriteria->count() > 0) {
-                                                                        $style = 'none';
-                                                                    }
+                                                    <!--Begin::Title Biru Form: Kriteria pasar-->
+                                                    <br>
+                                                    <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                                        Kriteria Pasar
+                                                        @php
+                                                            $style = '';
+                                                            foreach ($kriteriapasarproyek as $kriteria) {
+                                                                if ($kriteria->count() > 0) {
+                                                                    $style = 'none';
                                                                 }
-                                                            @endphp
-                                                            <a onclick="kategoriSelect()" href="#" Id="Plus"
-                                                                style="display: {{ $style }}"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#kt_modal_kriteria_pasardini">+</a>
-                                                        </h3>
-                                                        <br>
-                                                        <!--begin::Table Kriteria Pasar-->
-                                                        <table class="table align-middle table-row-dashed fs-6 gy-2"
-                                                            id="kt_customers_table">
-                                                            <!--begin::Table head-->
-                                                            <thead>
-                                                                <!--begin::Table row-->
-                                                                <tr
-                                                                    class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                    <th class="w-50px text-center">No.</th>
-                                                                    <th class="w-auto">Kategori</th>
-                                                                    <th class="w-auto">Kriteria</th>
-                                                                    <th class="w-auto">Bobot</th>
-                                                                    <th class="w-100px"></th>
-                                                                </tr>
-                                                                <!--end::Table row-->
-                                                            </thead>
-                                                            <!--end::Table head-->
-                                                            <!--begin::Table body-->
-                                                            @php
-                                                                $no = 1;
-                                                            @endphp
-                                                            <tbody class="fw-bold text-gray-600">
-                                                                @foreach ($kriteriapasarproyek as $kriteria)
-                                                                    <tr>
-                                                                        <!--begin::Name-->
-                                                                        <td class="text-center">
-                                                                            {{ $no++ }}
-                                                                        </td>
-                                                                        <!--end::Name-->
-                                                                        <!--begin::Kategori-->
-                                                                        <td>
-                                                                            <a onclick="kategoriKlick(this)"
-                                                                                data-value="{{ $kriteria->kategori }}"
-                                                                                data-kriteria="edit-kriteria-pasar-{{ $kriteria->id }}"
-                                                                                href="#"
-                                                                                class="text-gray-800 text-hover-primary"
-                                                                                data-bs-toggle="modal"
-                                                                                data-bs-target="#kt_modal_edit_kriteria_{{ $kriteria->id }}">{{ $kriteria->kategori }}</a>
-                                                                        </td>
-                                                                        <!--end::Kategori-->
-                                                                        <!--begin::Kategori-->
-                                                                        <td>
-                                                                            {{ $kriteria->kriteria }}
-                                                                        </td>
-                                                                        <!--end::Kategori-->
-                                                                        <!--begin::Kategori-->
-                                                                        <td>
-                                                                            {{ $kriteria->bobot }}
-                                                                        </td>
-                                                                        <!--end::Kategori-->
-                                                                        <!--begin::Action-->
-                                                                        <td class="text-center">
-                                                                            <small>
-                                                                                <p data-bs-toggle="modal"
-                                                                                    data-bs-target="#kt_kriteria_delete_{{ $kriteria->id }}"
-                                                                                    id="modal-delete"
-                                                                                    class="btn btn-sm btn-light btn-active-primary">
-                                                                                    Delete
-                                                                                </p>
-                                                                            </small>
-                                                                        </td>
-                                                                        <!--end::Action-->
-                                                                    </tr>
-                                                                @endforeach
+                                                            }
+                                                        @endphp
+                                                        <a onclick="kategoriSelect()" href="#" Id="Plus"
+                                                            style="display: {{ $style }}" data-bs-toggle="modal"
+                                                            data-bs-target="#kt_modal_kriteria_pasardini">+</a>
+                                                    </h3>
+                                                    <br>
+                                                    <!--begin::Table Kriteria Pasar-->
+                                                    <table class="table align-middle table-row-dashed fs-6 gy-2"
+                                                        id="kt_customers_table">
+                                                        <!--begin::Table head-->
+                                                        <thead>
+                                                            <!--begin::Table row-->
+                                                            <tr
+                                                                class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                <th class="w-50px text-center">No.</th>
+                                                                <th class="w-auto">Kategori</th>
+                                                                <th class="w-auto">Kriteria</th>
+                                                                <th class="w-auto">Bobot</th>
+                                                                <th class="w-100px"></th>
+                                                            </tr>
+                                                            <!--end::Table row-->
+                                                        </thead>
+                                                        <!--end::Table head-->
+                                                        <!--begin::Table body-->
+                                                        @php
+                                                            $no = 1;
+                                                        @endphp
+                                                        <tbody class="fw-bold text-gray-600">
+                                                            @foreach ($kriteriapasarproyek as $kriteria)
                                                                 <tr>
+                                                                    <!--begin::Name-->
+                                                                    <td class="text-center">
+                                                                        {{ $no++ }}
+                                                                    </td>
+                                                                    <!--end::Name-->
                                                                     <!--begin::Kategori-->
-                                                                    {{-- <td></td>
-                                                                    <td></td> --}}
-                                                                    <td colspan="3" class="text-end text-gray-400">
-                                                                        Average Skor Pasar :</td>
-                                                                    @php
-                                                                        $jumlahBobot = 0;
-                                                                        $statusPasar = '';
-                                                                        foreach ($kriteriapasarproyek as $kriteria) {
-                                                                            $jumlahBobot += $kriteria->bobot;
-                                                                            $jumlahKriteria = count($kriteriapasarproyek);
-                                                                            $statusPasar = round($jumlahBobot / $jumlahKriteria, 2);
-                                                                        }
-                                                                    @endphp
                                                                     <td>
-                                                                        {{ $statusPasar }}
+                                                                        <a onclick="kategoriKlick(this)"
+                                                                            data-value="{{ $kriteria->kategori }}"
+                                                                            data-kriteria="edit-kriteria-pasar-{{ $kriteria->id }}"
+                                                                            href="#"
+                                                                            class="text-gray-800 text-hover-primary"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#kt_modal_edit_kriteria_{{ $kriteria->id }}">{{ $kriteria->kategori }}</a>
                                                                     </td>
                                                                     <!--end::Kategori-->
+                                                                    <!--begin::Kategori-->
+                                                                    <td>
+                                                                        {{ $kriteria->kriteria }}
+                                                                    </td>
+                                                                    <!--end::Kategori-->
+                                                                    <!--begin::Kategori-->
+                                                                    <td>
+                                                                        {{ $kriteria->bobot }}
+                                                                    </td>
+                                                                    <!--end::Kategori-->
+                                                                    <!--begin::Action-->
+                                                                    <td class="text-center">
+                                                                        <small>
+                                                                            <p data-bs-toggle="modal"
+                                                                                data-bs-target="#kt_kriteria_delete_{{ $kriteria->id }}"
+                                                                                id="modal-delete"
+                                                                                class="btn btn-sm btn-light btn-active-primary">
+                                                                                Delete
+                                                                            </p>
+                                                                        </small>
+                                                                    </td>
+                                                                    <!--end::Action-->
                                                                 </tr>
-                                                            </tbody>
-                                                            <!--end::Table body-->
-                                                        </table>
-                                                        <!--end::Table Kriteria Pasar-->
-                                                        <!--End::Title Biru Form: Kriteria pasar-->
+                                                            @endforeach
+                                                            <tr>
+                                                                <!--begin::Kategori-->
+                                                                {{-- <td></td>
+                                                                    <td></td> --}}
+                                                                <td colspan="3" class="text-end text-gray-400">
+                                                                    Average Skor Pasar :</td>
+                                                                @php
+                                                                    $jumlahBobot = 0;
+                                                                    $statusPasar = '';
+                                                                    foreach ($kriteriapasarproyek as $kriteria) {
+                                                                        $jumlahBobot += $kriteria->bobot;
+                                                                        $jumlahKriteria = count($kriteriapasarproyek);
+                                                                        $statusPasar = round($jumlahBobot / $jumlahKriteria, 2);
+                                                                    }
+                                                                @endphp
+                                                                <td>
+                                                                    {{ $statusPasar }}
+                                                                </td>
+                                                                <!--end::Kategori-->
+                                                            </tr>
+                                                        </tbody>
+                                                        <!--end::Table body-->
+                                                    </table>
+                                                    <!--end::Table Kriteria Pasar-->
+                                                    <!--End::Title Biru Form: Kriteria pasar-->
 
-                                                        &nbsp;<br>
-                                                        <h3 class="fw-bolder m-0 required" id="HeadDetail"
-                                                            style="font-size:14px;">Laporan Kualitatif
-                                                        </h3>
-                                                        &nbsp;<br>
-                                                        <div class="form-group">
-                                                            <textarea class="form-control" id="laporan-kualitatif-paspot" name="laporan-kualitatif-paspot" rows="7">{!! $proyek->laporan_kualitatif_paspot !!}</textarea>
-                                                        </div>
-                                                        <!--End::Title Biru Form: Laporan Kualitatif-->
-
-                                                        <h6 class="text-danger fw-normal">(*) Kolom Ini Harus Diisi !</h6>
-
+                                                    &nbsp;<br>
+                                                    <h3 class="fw-bolder m-0 required" id="HeadDetail"
+                                                        style="font-size:14px;">Laporan Kualitatif
+                                                    </h3>
+                                                    &nbsp;<br>
+                                                    <div class="form-group">
+                                                        <textarea class="form-control" id="laporan-kualitatif-paspot" name="laporan-kualitatif-paspot" rows="7">{!! $proyek->laporan_kualitatif_paspot !!}</textarea>
                                                     </div>
-                                                    <!--end:::Tab Pasar Potensial-->
+                                                    <!--End::Title Biru Form: Laporan Kualitatif-->
+
+                                                    <h6 class="text-danger fw-normal">(*) Kolom Ini Harus Diisi !</h6>
+
+                                                </div>
+                                                <!--end:::Tab Pasar Potensial-->
 
 
-                                                    <!--begin:::Tab Prakualifikasi-->
-                                                    <div class="tab-pane fade" id="kt_user_view_overview_prakualifikasi"
-                                                        role="tabpanel">
+                                                <!--begin:::Tab Prakualifikasi-->
+                                                <div class="tab-pane fade" id="kt_user_view_overview_prakualifikasi"
+                                                    role="tabpanel">
 
-                                                        <!--begin::Row-->
-                                                        <div class="row fv-row">
-                                                            <!--begin::Col-->
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Jadwal PQ</span>
-                                                                    </label>
-                                                                    <a href="#" class="btn"
-                                                                        style="background: transparent;"
-                                                                        id="start-date-modal"
-                                                                        onclick="showCalendarModal(this)">
-                                                                        <i class="bi bi-calendar2-plus-fill"
-                                                                            style="color: #008CB4"></i>
-                                                                    </a>
-                                                                    <!--end::Label-->
-                                                                    <!--begin::Input-->
-                                                                    <input type="Date"
-                                                                        class="form-control form-control-solid"
-                                                                        name="jadwal-pq"
-                                                                        value="{{ $proyek->jadwal_pq }}"
-                                                                        placeholder="Date" />
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
+                                                    <!--begin::Row-->
+                                                    <div class="row fv-row">
+                                                        <!--begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>Jadwal PQ</span>
+                                                                </label>
+                                                                <a href="#" class="btn"
+                                                                    style="background: transparent;" id="start-date-modal"
+                                                                    onclick="showCalendarModal(this)">
+                                                                    <i class="bi bi-calendar2-plus-fill"
+                                                                        style="color: #008CB4"></i>
+                                                                </a>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                <input type="Date"
+                                                                    class="form-control form-control-solid"
+                                                                    name="jadwal-pq" value="{{ $proyek->jadwal_pq }}"
+                                                                    placeholder="Date" />
+                                                                <!--end::Input-->
                                                             </div>
-                                                            <!--End begin::Col-->
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="required">HPS / Pagu (Rupiah)</span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-                                                                    <!--begin::Input-->
-                                                                    <input type="text"
-                                                                        class="form-control form-control-solid reformat"
-                                                                        id="hps-pagu" name="hps-pagu"
-                                                                        value="{{ number_format((int) str_replace('.', '', $proyek->hps_pagu), 0, '.', '.') }}"
-                                                                        placeholder="HPS / Pagu (Rupiah)" />
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
-                                                            </div>
-                                                            <!--End begin::Col-->
+                                                            <!--end::Input group-->
                                                         </div>
-                                                        <!--End begin::Row-->
+                                                        <!--End begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span class="required">HPS / Pagu (Rupiah)</span>
+                                                                </label>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                <input type="text"
+                                                                    class="form-control form-control-solid reformat"
+                                                                    id="hps-pagu" name="hps-pagu"
+                                                                    value="{{ number_format((int) str_replace('.', '', $proyek->hps_pagu), 0, '.', '.') }}"
+                                                                    placeholder="HPS / Pagu (Rupiah)" />
+                                                                <!--end::Input-->
+                                                            </div>
+                                                            <!--end::Input group-->
+                                                        </div>
+                                                        <!--End begin::Col-->
+                                                    </div>
+                                                    <!--End begin::Row-->
 
-                                                        <!--begin::Row-->
-                                                        <div class="row fv-row">
-                                                            <!--begin::Col-->
-                                                            {{-- <div class="col-6">
+                                                    <!--begin::Row-->
+                                                    <div class="row fv-row">
+                                                        <!--begin::Col-->
+                                                        {{-- <div class="col-6">
                                                                 <!--begin::Input group Website-->
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
@@ -2464,301 +2455,89 @@
                                                                 </div>
                                                                 <!--end::Input group-->
                                                             </div> --}}
-                                                            <!--End begin::Col-->
-                                                            <div class="col-3">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Porsi JO (<i
-                                                                                class="bi bi-percent text-dark"></i>) <i
-                                                                                class="bi bi-lock"></i></span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-                                                                    <!--begin::Input-->
-                                                                    <input type="number" min="1" max="100"
-                                                                        class="form-control form-control-solid"
-                                                                        id="porsi-jo" name="porsi-jo"
-                                                                        value="{{ $proyek->porsi_jo }}"
-                                                                        placeholder="Porsi JO" readonly /> 
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
-                                                            </div>
-                                                            <div class="col-1">
+                                                        <!--End begin::Col-->
+                                                        <div class="col-3">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
                                                                 <!--begin::Label-->
                                                                 <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>Porsi JO (<i
+                                                                            class="bi bi-percent text-dark"></i>) <i
+                                                                            class="bi bi-lock"></i></span>
                                                                 </label>
-                                                                <p class="mt-12"><i class="bi bi-percent text-dark"></i>
-                                                                </p>
                                                                 <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                <input type="number" min="1" max="100"
+                                                                    class="form-control form-control-solid" id="porsi-jo"
+                                                                    name="porsi-jo" value="{{ $proyek->porsi_jo }}"
+                                                                    placeholder="Porsi JO" readonly />
+                                                                <!--end::Input-->
                                                             </div>
-                                                            {{-- @if ($proyek->porsi_jo < 100 && $proyek->jenis_proyek != "J" ) --}}
-                                                            @if ($proyek->porsi_jo < 100)
+                                                            <!--end::Input group-->
+                                                        </div>
+                                                        <div class="col-1">
+                                                            <!--begin::Label-->
+                                                            <label class="fs-6 fw-bold form-label mt-3">
+                                                            </label>
+                                                            <p class="mt-12"><i class="bi bi-percent text-dark"></i>
+                                                            </p>
+                                                            <!--end::Label-->
+                                                        </div>
+                                                        {{-- @if ($proyek->porsi_jo < 100 && $proyek->jenis_proyek != 'J') --}}
+                                                        @if ($proyek->porsi_jo < 100)
                                                             <div class="col-2">
                                                                 {{-- <form action="/proyek/reset-jo/{{ $proyek->kode_proyek }}" method="post" enctype="multipart/form-data">
                                                                 @csrf --}}
-                                                                    <button onclick="resetJO()" type="button" class="btn btn-sm btn-light btn-active-danger mt-12" id="kt_toolbar_primary_button">Reset JO</button>
-                                                                    <script>
-                                                                        function resetJO() {
-                                                                            Swal.fire({
-                                                                                title: 'Yakin Reset Porsi-JO?',
-                                                                                text: "Pilihan tidak bisa dibatalkan !",
-                                                                                icon: "warning",
-                                                                                showCancelButton: true,
-                                                                                confirmButtonColor: '#008CB4',
-                                                                                cancelButtonColor: '#BABABA',
-                                                                                confirmButtonText: 'Ya'
-                                                                                }).then( async (result) => {
-                                                                                    if (result.isConfirmed) {
-                                                                                        const deleteAttachRes = await fetch(`/proyek/reset-jo/{{ $proyek->kode_proyek }}`);
-                                                                                        Swal.fire({
-                                                                                            title: 'JO berhasil Direset',
-                                                                                            icon: 'success',
-                                                                                            showCancelButton: false,
-                                                                                            confirmButtonColor: '#3085d6',
-                                                                                            confirmButtonText: 'OK',
-                                                                                            timer: 1500,
-                                                                                            timerProgressBar: true,
-                                                                                        });
-                                                                                        window.setTimeout( function() {
-                                                                                        window.location.reload();
-                                                                                        }, 1500);
-                                                                                    // } else {
-                                                                                    }
-                                                                            })
-                                                                        }
-                                                                    </script>
+                                                                <button onclick="resetJO()" type="button"
+                                                                    class="btn btn-sm btn-light btn-active-danger mt-12"
+                                                                    id="kt_toolbar_primary_button">Reset JO</button>
+                                                                <script>
+                                                                    function resetJO() {
+                                                                        Swal.fire({
+                                                                            title: 'Yakin Reset Porsi-JO?',
+                                                                            text: "Pilihan tidak bisa dibatalkan !",
+                                                                            icon: "warning",
+                                                                            showCancelButton: true,
+                                                                            confirmButtonColor: '#008CB4',
+                                                                            cancelButtonColor: '#BABABA',
+                                                                            confirmButtonText: 'Ya'
+                                                                        }).then(async (result) => {
+                                                                            if (result.isConfirmed) {
+                                                                                const deleteAttachRes = await fetch(`/proyek/reset-jo/{{ $proyek->kode_proyek }}`);
+                                                                                Swal.fire({
+                                                                                    title: 'JO berhasil Direset',
+                                                                                    icon: 'success',
+                                                                                    showCancelButton: false,
+                                                                                    confirmButtonColor: '#3085d6',
+                                                                                    confirmButtonText: 'OK',
+                                                                                    timer: 1500,
+                                                                                    timerProgressBar: true,
+                                                                                });
+                                                                                window.setTimeout(function() {
+                                                                                    window.location.reload();
+                                                                                }, 1500);
+                                                                                // } else {
+                                                                            }
+                                                                        })
+                                                                    }
+                                                                </script>
                                                                 {{-- </form> --}}
                                                             </div>
-                                                            @endif
-                                                            <!--End begin::Col-->
-                                                        </div>
-                                                        <!--End begin::Row-->
-                                                        <br>
-
-                                                        @if ($proyek->jenis_proyek == 'J')
-                                                            <!--Begin::Title Biru Form: Partner JO-->
-                                                            <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                                style="font-size:14px;">Partner JO
-                                                                <a href="#" Id="Plus" data-bs-toggle="modal"
-                                                                    data-bs-target="#kt_modal_porsijo">+</a>
-                                                            </h3>
-                                                            <br>
-                                                            <!--End::Title Biru Form: Partner JO-->
-
-                                                            <!--begin::Row-->
-                                                            <div class="row fv-row">
-                                                                <!--begin::Col-->
-                                                                <div class="col-6">
-                                                                    <!--begin::Input group Website-->
-                                                                    <div class="fv-row mb-7">
-                                                                        <!--begin::Label-->
-                                                                        <!--begin::Table-->
-                                                                        <table
-                                                                            class="table align-middle table-row-dashed fs-6 gy-2"
-                                                                            id="kt_customers_table">
-                                                                            <!--begin::Table head-->
-                                                                            <thead>
-                                                                                <!--begin::Table row-->
-                                                                                <tr
-                                                                                    class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                                    <th class="w-50px text-center">No.</th>
-                                                                                    <th class="w-auto">Company</th>
-                                                                                    <th class="w-auto">Porsi JO</th>
-                                                                                    <th class="w-100px"></th>
-                                                                                </tr>
-                                                                                <!--end::Table row-->
-                                                                            </thead>
-                                                                            <!--end::Table head-->
-                                                                            <!--begin::Table body-->
-                                                                            @php
-                                                                                $no = 1;
-                                                                            @endphp
-                                                                            @foreach ($porsiJO as $porsi)
-                                                                                <tbody class="fw-bold text-gray-600">
-
-                                                                                    <tr>
-                                                                                        <!--begin::Name-->
-                                                                                        <td class="text-center">
-                                                                                            {{ $no++ }}
-                                                                                        </td>
-                                                                                        <!--end::Name-->
-                                                                                        <!--begin::Column-->
-                                                                                        <td>
-                                                                                            <a href=#
-                                                                                                data-bs-toggle="modal"
-                                                                                                data-bs-target="#kt_porsi_edit_{{ $porsi->id }}"
-                                                                                                class="text-hover-primary">
-                                                                                                {{ $porsi->company_jo }}
-                                                                                            </a>
-                                                                                        </td>
-                                                                                        <!--end::Column-->
-                                                                                        <!--begin::Column-->
-                                                                                        <td>
-                                                                                            {{ $porsi->porsi_jo }}<i
-                                                                                                class="bi bi-percent text-dark"></i>
-                                                                                        </td>
-                                                                                        <!--end::Column-->
-                                                                                        <!--begin::Action-->
-                                                                                        <td class="text-center">
-                                                                                            <small>
-                                                                                                <p data-bs-toggle="modal"
-                                                                                                    data-bs-target="#kt_porsi_delete_{{ $porsi->id }}"
-                                                                                                    class="btn btn-sm btn-light btn-active-primary">
-                                                                                                    Delete
-                                                                                                </p>
-                                                                                            </small>
-                                                                                        </td>
-                                                                                        <!--end::Action-->
-                                                                                </tbody>
-                                                                            @endforeach
-                                                                            <!--end::Table body-->
-                                                                        </table>
-                                                                        <!--end::Table-->
-                                                                    </div>
-                                                                    <!--end::Input group-->
-                                                                </div>
-                                                            </div>
-                                                            <!--End begin::Row-->
-                                                            <br>
                                                         @endif
+                                                        <!--End begin::Col-->
+                                                    </div>
+                                                    <!--End begin::Row-->
+                                                    <br>
 
-
-                                                        <!--Begin::Title Biru Form: Document Prakualifikasi-->
+                                                    @if ($proyek->jenis_proyek == 'J')
+                                                        <!--Begin::Title Biru Form: Partner JO-->
                                                         <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                            style="font-size:14px;">Document Prakualifikasi
-                                                        </h3>
-                                                        <br>
-                                                        <div class="w-50">
-                                                            <input type="file"
-                                                                class="form-control form-control-sm form-input-solid"
-                                                                name="dokumen-prakualifikasi" accept=".pdf">
-                                                        </div>
-                                                        <h6 id="error-dokumen-prakualifikasi"
-                                                            class="text-danger fw-normal" style="display: none">*File
-                                                            terlalu besar ! Max Size 50Mb</h6>
-                                                        <br>
-                                                        <!--begin::Table-->
-                                                        <table class="table align-middle table-row-dashed w-50 fs-6 gy-2"
-                                                            id="kt_customers_table">
-                                                            <!--begin::Table head-->
-                                                            <thead>
-                                                                <!--begin::Table row-->
-                                                                <tr
-                                                                    class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                    <th class="w-50px text-center">No.</th>
-                                                                    <th class="w-auto">Nama Document</th>
-                                                                    <th class="w-auto">Modified On</th>
-                                                                    <th class="w-auto text-center"></th>
-                                                                </tr>
-                                                                <!--end::Table row-->
-                                                            </thead>
-                                                            <!--end::Table head-->
-                                                            @php
-                                                                $no = 1;
-                                                            @endphp
-                                                            <!--begin::Table body-->
-                                                            <tbody class="fw-bold text-gray-600">
-                                                                @foreach ($proyek->DokumenPrakualifikasi as $dokumen_prakualifikasi)
-                                                                    <tr>
-                                                                        <!--begin::Nomor-->
-                                                                        <td class="text-center">
-                                                                            {{ $no++ }}
-                                                                        </td>
-                                                                        <!--end::Nomor-->
-                                                                        <!--begin::Name-->
-                                                                        <td>
-                                                                            @if (str_contains("$dokumen_prakualifikasi->nama_dokumen", '.doc'))
-                                                                                <a href="/document/view/{{ $dokumen_prakualifikasi->id_dokumen_prakualifikasi }}/{{ $dokumen_prakualifikasi->id_document }}"
-                                                                                    class="text-hover-primary">{{ $dokumen_prakualifikasi->nama_dokumen }}</a>
-                                                                            @else
-                                                                                <a target="_blank"
-                                                                                    href="{{ asset('words/' . $dokumen_prakualifikasi->id_document . '.pdf') }}"
-                                                                                    class="text-hover-primary">{{ $dokumen_prakualifikasi->nama_dokumen }}</a>
-                                                                            @endif
-                                                                        </td>
-                                                                        <!--end::Name-->
-                                                                        <!--begin::Column-->
-                                                                        <td>
-                                                                            {{ Carbon\Carbon::parse($dokumen_prakualifikasi->created_at)->translatedFormat('d F Y') }}
-                                                                        </td>
-                                                                        <!--end::Column-->
-                                                                        <!--begin::Action-->
-                                                                        <td class="text-center">
-                                                                            <small>
-                                                                                <p data-bs-toggle="modal"
-                                                                                    data-bs-target="#kt_dokumen_prakualifikasi_delete_{{ $dokumen_prakualifikasi->id_dokumen_prakualifikasi }}"
-                                                                                    id="modal-delete"
-                                                                                    class="btn btn-sm btn-light btn-active-primary">
-                                                                                    Delete
-                                                                                </p>
-                                                                            </small>
-                                                                        </td>
-                                                                        <!--end::Action-->
-                                                                    </tr>
-                                                                @endforeach
-                                                            </tbody>
-                                                            <!--end::Table body-->
-                                                        </table>
-
-                                                        <!--end::Table-->
-                                                        <!--End::Title Biru Form: Document Prakualifikasi-->
-
-                                                        <br>
-
-                                                        <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                            style="font-size:14px;">Ketua Team Tender
-                                                            {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
-                                                                data-bs-target="#kt_modal_porsijo">+</a> --}}
-                                                        </h3>
-                                                        <br>
-                                                        <!--begin::Row-->
-                                                        <div class="row fv-row">
-                                                            <!--begin::Col-->
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    {{-- <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Ketua Team Tender</span>
-                                                                    </label> --}}
-                                                                    <!--end::Label-->
-                                                                    <!--begin::Input-->
-                                                                    <select onchange="this.form.submit()"
-                                                                        id="ketua-tender" name="ketua-tender"
-                                                                        class="form-select form-select-solid"
-                                                                        data-control="select2" data-hide-search="false"
-                                                                        data-placeholder="Ketua Team Tender">
-                                                                        <option></option>
-                                                                        @foreach ($users as $user)
-                                                                            @if ($user->id == $proyek->ketua_tender)
-                                                                                <option value="{{ $user->id }}"
-                                                                                    selected>{{ $user->name }}</option>
-                                                                            @endif
-                                                                            <option value="{{ $user->id }}">
-                                                                                {{ $user->name }}</option>
-                                                                        @endforeach
-                                                                    </select>
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
-                                                            </div>
-                                                        </div>
-                                                        <!--End begin::Row-->
-
-
-                                                        <!--Begin::Title Biru Form: SKT Personil-->
-                                                        <br>
-                                                        <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                            style="font-size:14px;">SKT Personil
+                                                            style="font-size:14px;">Partner JO
                                                             <a href="#" Id="Plus" data-bs-toggle="modal"
-                                                                data-bs-target="#kt_modal_add_user">+</a>
+                                                                data-bs-target="#kt_modal_porsijo">+</a>
                                                         </h3>
-
                                                         <br>
-
-                                                        <!--End::Title Biru Form: SKT Personil-->
+                                                        <!--End::Title Biru Form: Partner JO-->
 
                                                         <!--begin::Row-->
                                                         <div class="row fv-row">
@@ -2777,8 +2556,8 @@
                                                                             <tr
                                                                                 class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                                                                 <th class="w-50px text-center">No.</th>
-                                                                                <th class="w-auto">Nama</th>
-                                                                                <th class="w-auto">Bidang Sertifikasi</th>
+                                                                                <th class="w-auto">Company</th>
+                                                                                <th class="w-auto">Porsi JO</th>
                                                                                 <th class="w-100px"></th>
                                                                             </tr>
                                                                             <!--end::Table row-->
@@ -2788,31 +2567,35 @@
                                                                         @php
                                                                             $no = 1;
                                                                         @endphp
-                                                                        @foreach ($teams as $team)
+                                                                        @foreach ($porsiJO as $porsi)
                                                                             <tbody class="fw-bold text-gray-600">
 
                                                                                 <tr>
-                                                                                    <!--begin::Nomor-->
+                                                                                    <!--begin::Name-->
                                                                                     <td class="text-center">
                                                                                         {{ $no++ }}
                                                                                     </td>
-                                                                                    <!--end::Nomor-->
+                                                                                    <!--end::Name-->
                                                                                     <!--begin::Column-->
                                                                                     <td>
-                                                                                        {{ $team->User->name }}
+                                                                                        <a href=# data-bs-toggle="modal"
+                                                                                            data-bs-target="#kt_porsi_edit_{{ $porsi->id }}"
+                                                                                            class="text-hover-primary">
+                                                                                            {{ $porsi->company_jo }}
+                                                                                        </a>
                                                                                     </td>
                                                                                     <!--end::Column-->
                                                                                     <!--begin::Column-->
                                                                                     <td>
-                                                                                        {{ $team->role }}
+                                                                                        {{ $porsi->porsi_jo }}<i
+                                                                                            class="bi bi-percent text-dark"></i>
                                                                                     </td>
                                                                                     <!--end::Column-->
                                                                                     <!--begin::Action-->
                                                                                     <td class="text-center">
                                                                                         <small>
                                                                                             <p data-bs-toggle="modal"
-                                                                                                data-bs-target="#kt_team_delete_{{ $team->id }}"
-                                                                                                id="modal-delete"
+                                                                                                data-bs-target="#kt_porsi_delete_{{ $porsi->id }}"
                                                                                                 class="btn btn-sm btn-light btn-active-primary">
                                                                                                 Delete
                                                                                             </p>
@@ -2829,599 +2612,512 @@
                                                             </div>
                                                         </div>
                                                         <!--End begin::Row-->
-
                                                         <br>
+                                                    @endif
 
-                                                        <!--Begin::Title Biru Form: Laporan Kualitatif-->
-                                                        <br>
-                                                        <h3 class="fw-bolder m-0 required" id="HeadDetail"
-                                                            style="font-size:14px;">Laporan Kualitatif
-                                                        </h3>
-                                                        <br>
-                                                        <div class="form-group">
-                                                            <textarea class="form-control" id="laporan-prakualifikasi" name="laporan-prakualifikasi" rows="7">{!! $proyek->laporan_prakualifikasi !!}</textarea>
-                                                        </div>
-                                                        <!--End::Title Biru Form: Laporan Kualitatif-->
 
-                                                        <h6 class="text-danger fw-normal">(*) Kolom Ini Harus Diisi !</h6>
-
+                                                    <!--Begin::Title Biru Form: Document Prakualifikasi-->
+                                                    <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                                        Document Prakualifikasi
+                                                    </h3>
+                                                    <br>
+                                                    <div class="w-50">
+                                                        <input type="file"
+                                                            class="form-control form-control-sm form-input-solid"
+                                                            name="dokumen-prakualifikasi" accept=".pdf">
                                                     </div>
-                                                    <!--end:::Tab Prakualifikasi-->
-
-
-
-                                                    <!--begin:::Tab Tender Diikuti-->
-                                                    <div class="tab-pane fade" id="kt_user_view_overview_tender"
-                                                        role="tabpanel">
-
-                                                        <!--begin::Row-->
-                                                        <div class="row fv-row">
-                                                            <!--begin::Col-->
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Jadwal Pemasukan Tender</span>
-                                                                    </label>
-                                                                    <a href="#" class="btn"
-                                                                        style="background: transparent;"
-                                                                        id="start-date-modal"
-                                                                        onclick="showCalendarModal(this)">
-                                                                        <i class="bi bi-calendar2-plus-fill"
-                                                                            style="color: #008CB4"></i>
-                                                                    </a>
-                                                                    <!--end::Label-->
-                                                                    <!--begin::Input-->
-                                                                    <input type="Date"
-                                                                        class="form-control form-control-solid"
-                                                                        id="jadwal-tender" name="jadwal-tender"
-                                                                        value="{{ $proyek->jadwal_tender }}"
-                                                                        placeholder="Date" />
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
-                                                            </div>
-                                                            <!--End begin::Col-->
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Lokasi Tender</span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-                                                                    <!--begin::Input-->
-                                                                    <input type="text"
-                                                                        class="form-control form-control-solid"
-                                                                        id="lokasi-tender" name="lokasi-tender"
-                                                                        value="{{ $proyek->lokasi_tender }}"
-                                                                        placeholder="Lokasi Tender" />
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
-                                                            </div>
-                                                            <!--End begin::Col-->
-                                                        </div>
-                                                        <!--End begin::Row-->
-
-                                                        <!--begin::Row-->
-                                                        <div class="row fv-row">
-                                                            <!--begin::Col-->
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="required">Nilai Penawaran
-                                                                            Keseluruhan</span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-
-                                                                    <!--begin::Input-->
-                                                                    <input type="text"
-                                                                        class="form-control form-control-solid reformat"
-                                                                        id="nilai-kontrak-penawaran"
-                                                                        name="nilai-kontrak-penawaran"
-                                                                        value="{{ number_format((int) str_replace('.', '', $proyek->penawaran_tender), 0, '.', '.') }}"
-                                                                        placeholder="Nilai Penawaran Keseluruhan" />
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
-                                                            </div>
-                                                            <!--End begin::Col-->
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>HPS / Pagu (Rupiah) <i class="bi bi-lock"></i></span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-                                                                    <!--begin::Input-->
-                                                                    <input type="text"
-                                                                        class="form-control form-control-solid reformat {{ $proyek->hps_pagu == null ? 'text-danger' : '' }}"
-                                                                        value="{{ number_format((int) str_replace('.', '', $proyek->hps_pagu), 0, '.', '.') ?? '*HPS/Pagu Belum Ditentukan' }}"
-                                                                        placeholder="HPS / Pagu (Rupiah)" readonly />
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
-                                                            </div>
-                                                            <!--End begin::Col-->
-                                                        </div>
-                                                        <!--End begin::Row-->
-
-                                                        
-                                                        <!--Begin::Title Biru Form: Document Tender-->
-                                                        <br>
-                                                        <h3 class="fw-bolder m-0 required" id="HeadDetail"
-                                                            style="font-size:14px;">Document Tender
-                                                        </h3>
-                                                        <br>
-                                                        <div class="w-50">
-                                                            <input type="file"
-                                                                class="form-control form-control-sm form-input-solid"
-                                                                name="dokumen-tender" accept=".pdf">
-                                                        </div>
-                                                        <h6 id="error-dokumen-tender"
-                                                            class="text-danger fw-normal" style="display: none">*File
-                                                            terlalu besar ! Max Size 50Mb</h6>
-                                                        <br>
-                                                        <!--begin::Table-->
-                                                        <table class="table align-middle table-row-dashed w-50 fs-6 gy-2"
-                                                            id="kt_customers_table">
-                                                            <!--begin::Table head-->
-                                                            <thead>
-                                                                <!--begin::Table row-->
-                                                                <tr
-                                                                    class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                    <th class="w-50px text-center">No.</th>
-                                                                    <th class="w-auto">Nama Document</th>
-                                                                    <th class="w-auto">Modified On</th>
-                                                                    <th class="w-auto text-center"></th>
-                                                                </tr>
-                                                                <!--end::Table row-->
-                                                            </thead>
-                                                            <!--end::Table head-->
-                                                            @php
-                                                                $no = 1;
-                                                            @endphp
-                                                            <!--begin::Table body-->
-                                                            <tbody class="fw-bold text-gray-600">
-                                                                @foreach ($proyek->DokumenTender as $dokumen)
-                                                                    <tr>
-                                                                        <!--begin::Nomor-->
-                                                                        <td class="text-center">
-                                                                            {{ $no++ }}
-                                                                        </td>
-                                                                        <!--end::Nomor-->
-                                                                        <!--begin::Name-->
-                                                                        <td>
-                                                                            @if (str_contains("$dokumen->nama_dokumen", '.doc'))
-                                                                                <a href="/document/view/{{ $dokumen->id_dokumen_tender }}/{{ $dokumen->id_document }}"
-                                                                                    class="text-hover-primary">{{ $dokumen->nama_dokumen }}</a>
-                                                                            @else
-                                                                                <a target="_blank"
-                                                                                    href="{{ asset('words/' . $dokumen->id_document . '.pdf') }}"
-                                                                                    class="text-hover-primary">{{ $dokumen->nama_dokumen }}</a>
-                                                                            @endif
-                                                                        </td>
-                                                                        <!--end::Name-->
-                                                                        <!--begin::Column-->
-                                                                        <td>
-                                                                            {{ Carbon\Carbon::parse($dokumen->created_at)->translatedFormat('d F Y') }}
-                                                                        </td>
-                                                                        <!--end::Column-->
-                                                                        <!--begin::Action-->
-                                                                        @if ($proyek->stage < 5)
-                                                                        <td class="text-center">
-                                                                            <small>
-                                                                                <p data-bs-toggle="modal"
-                                                                                data-bs-target="#kt_dokumen_tender_delete_{{ $dokumen->id_dokumen_tender }}"
+                                                    <h6 id="error-dokumen-prakualifikasi" class="text-danger fw-normal"
+                                                        style="display: none">*File
+                                                        terlalu besar ! Max Size 50Mb</h6>
+                                                    <br>
+                                                    <!--begin::Table-->
+                                                    <table class="table align-middle table-row-dashed w-50 fs-6 gy-2"
+                                                        id="kt_customers_table">
+                                                        <!--begin::Table head-->
+                                                        <thead>
+                                                            <!--begin::Table row-->
+                                                            <tr
+                                                                class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                <th class="w-50px text-center">No.</th>
+                                                                <th class="w-auto">Nama Document</th>
+                                                                <th class="w-auto">Modified On</th>
+                                                                <th class="w-auto text-center"></th>
+                                                            </tr>
+                                                            <!--end::Table row-->
+                                                        </thead>
+                                                        <!--end::Table head-->
+                                                        @php
+                                                            $no = 1;
+                                                        @endphp
+                                                        <!--begin::Table body-->
+                                                        <tbody class="fw-bold text-gray-600">
+                                                            @foreach ($proyek->DokumenPrakualifikasi as $dokumen_prakualifikasi)
+                                                                <tr>
+                                                                    <!--begin::Nomor-->
+                                                                    <td class="text-center">
+                                                                        {{ $no++ }}
+                                                                    </td>
+                                                                    <!--end::Nomor-->
+                                                                    <!--begin::Name-->
+                                                                    <td>
+                                                                        @if (str_contains("$dokumen_prakualifikasi->nama_dokumen", '.doc'))
+                                                                            <a href="/document/view/{{ $dokumen_prakualifikasi->id_dokumen_prakualifikasi }}/{{ $dokumen_prakualifikasi->id_document }}"
+                                                                                class="text-hover-primary">{{ $dokumen_prakualifikasi->nama_dokumen }}</a>
+                                                                        @else
+                                                                            <a target="_blank"
+                                                                                href="{{ asset('words/' . $dokumen_prakualifikasi->id_document . '.pdf') }}"
+                                                                                class="text-hover-primary">{{ $dokumen_prakualifikasi->nama_dokumen }}</a>
+                                                                        @endif
+                                                                    </td>
+                                                                    <!--end::Name-->
+                                                                    <!--begin::Column-->
+                                                                    <td>
+                                                                        {{ Carbon\Carbon::parse($dokumen_prakualifikasi->created_at)->translatedFormat('d F Y') }}
+                                                                    </td>
+                                                                    <!--end::Column-->
+                                                                    <!--begin::Action-->
+                                                                    <td class="text-center">
+                                                                        <small>
+                                                                            <p data-bs-toggle="modal"
+                                                                                data-bs-target="#kt_dokumen_prakualifikasi_delete_{{ $dokumen_prakualifikasi->id_dokumen_prakualifikasi }}"
                                                                                 id="modal-delete"
                                                                                 class="btn btn-sm btn-light btn-active-primary">
-                                                                                Delete</p>
-                                                                            </small>
-                                                                        </td>
+                                                                                Delete
+                                                                            </p>
+                                                                        </small>
+                                                                    </td>
+                                                                    <!--end::Action-->
+                                                                </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                        <!--end::Table body-->
+                                                    </table>
+                                                    <!--end::Table-->
+                                                    <!--End::Title Biru Form: Document Prakualifikasi-->
+
+                                                    <br>
+
+                                                    {{-- <!--Begin::Title Biru Form: Document NDA-->
+                                                    <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                                        Document NDA
+                                                    </h3>
+                                                    <br>
+                                                    <div class="w-50">
+                                                        <input type="file"
+                                                            class="form-control form-control-sm form-input-solid"
+                                                            name="dokumen-prakualifikasi" accept=".pdf">
+                                                    </div>
+                                                    <h6 id="error-dokumen-prakualifikasi" class="text-danger fw-normal"
+                                                        style="display: none">*File
+                                                        terlalu besar ! Max Size 50Mb</h6>
+                                                    <br>
+                                                    <!--begin::Table-->
+                                                    <table class="table align-middle table-row-dashed w-50 fs-6 gy-2"
+                                                        id="kt_customers_table">
+                                                        <!--begin::Table head-->
+                                                        <thead>
+                                                            <!--begin::Table row-->
+                                                            <tr
+                                                                class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                <th class="w-50px text-center">No.</th>
+                                                                <th class="w-auto">Nama Document</th>
+                                                                <th class="w-auto">Modified On</th>
+                                                                <th class="w-auto text-center"></th>
+                                                            </tr>
+                                                            <!--end::Table row-->
+                                                        </thead>
+                                                        <!--end::Table head-->
+                                                        @php
+                                                            $no = 1;
+                                                        @endphp
+                                                        <!--begin::Table body-->
+                                                        <tbody class="fw-bold text-gray-600">
+                                                            @foreach ($proyek->DokumenPrakualifikasi as $dokumen_prakualifikasi)
+                                                                <tr>
+                                                                    <!--begin::Nomor-->
+                                                                    <td class="text-center">
+                                                                        {{ $no++ }}
+                                                                    </td>
+                                                                    <!--end::Nomor-->
+                                                                    <!--begin::Name-->
+                                                                    <td>
+                                                                        @if (str_contains("$dokumen_prakualifikasi->nama_dokumen", '.doc'))
+                                                                            <a href="/document/view/{{ $dokumen_prakualifikasi->id_dokumen_prakualifikasi }}/{{ $dokumen_prakualifikasi->id_document }}"
+                                                                                class="text-hover-primary">{{ $dokumen_prakualifikasi->nama_dokumen }}</a>
+                                                                        @else
+                                                                            <a target="_blank"
+                                                                                href="{{ asset('words/' . $dokumen_prakualifikasi->id_document . '.pdf') }}"
+                                                                                class="text-hover-primary">{{ $dokumen_prakualifikasi->nama_dokumen }}</a>
                                                                         @endif
-                                                                        <!--end::Action-->
-                                                                    </tr>
-                                                                @endforeach
-                                                            </tbody>
-                                                            <!--end::Table body-->
-                                                        </table>
+                                                                    </td>
+                                                                    <!--end::Name-->
+                                                                    <!--begin::Column-->
+                                                                    <td>
+                                                                        {{ Carbon\Carbon::parse($dokumen_prakualifikasi->created_at)->translatedFormat('d F Y') }}
+                                                                    </td>
+                                                                    <!--end::Column-->
+                                                                    <!--begin::Action-->
+                                                                    <td class="text-center">
+                                                                        <small>
+                                                                            <p data-bs-toggle="modal"
+                                                                                data-bs-target="#kt_dokumen_prakualifikasi_delete_{{ $dokumen_prakualifikasi->id_dokumen_prakualifikasi }}"
+                                                                                id="modal-delete"
+                                                                                class="btn btn-sm btn-light btn-active-primary">
+                                                                                Delete
+                                                                            </p>
+                                                                        </small>
+                                                                    </td>
+                                                                    <!--end::Action-->
+                                                                </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                        <!--end::Table body-->
+                                                    </table>
+                                                    <!--end::Table-->
+                                                    <!--End::Title Biru Form: Document NDA--> --}}
 
-                                                        <!--end::Table-->
-                                                        <!--End::Title Biru Form: Document Tender-->
+                                                    <br>
 
-                                                        <!--Begin::Title Biru Form: List Peserta Tender-->
-                                                        <br>
-                                                        <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                            style="font-size:14px;">Kompetitor
-                                                            <a href="#" Id="Plus" data-bs-toggle="modal"
-                                                                data-bs-target="#kt_modal_peserta_tender">+</a>
-                                                        </h3>
-                                                        <!--End::Title Biru Form: List Peserta Tender-->
-                                                        <br>
+                                                    <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                                        Ketua Team Tender
+                                                        {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
+                                                                data-bs-target="#kt_modal_porsijo">+</a> --}}
+                                                    </h3>
+                                                    <br>
+                                                    <!--begin::Row-->
+                                                    <div class="row fv-row">
                                                         <!--begin::Col-->
                                                         <div class="col-6">
-                                                            <!--begin::Table Kompetitor-->
-                                                            <table class="table align-middle table-row-dashed fs-6 gy-2"
-                                                                id="kt_customers_table">
-                                                                <!--begin::Table head-->
-                                                                <thead>
-                                                                    <!--begin::Table row-->
-                                                                    <tr
-                                                                        class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                        <th class="w-50px text-center">No.</th>
-                                                                        <th class="w-auto">Nama Peserta Tender</th>
-                                                                        {{-- <th class="w-auto">Nilai Penawaran</th> --}}
-                                                                        {{-- <th class="w-auto"><i class="bi bi-percent"></i>OE</th> --}}
-                                                                        {{-- <th class="w-auto">Status</th> --}}
-                                                                        <th class="w-100px"></th>
-                                                                    </tr>
-                                                                    <!--end::Table row-->
-                                                                </thead>
-                                                                <!--end::Table head-->
-                                                                <!--begin::Table body-->
-                                                                @php
-                                                                    $no = 1;
-                                                                @endphp
-                                                                <tbody class="fw-bold text-gray-600">
-                                                                    @foreach ($pesertatender as $peserta)
-                                                                        <tr>
-                                                                            <!--begin::Name-->
-                                                                            <td class="text-center">
-                                                                                {{ $no++ }}
-                                                                            </td>
-                                                                            <!--end::Name-->
-                                                                            <!--begin::Column-->
-                                                                            <td>
-                                                                                <a href="#"
-                                                                                    class="text-gray-800 text-hover-primary"
-                                                                                    data-bs-toggle="modal"
-                                                                                    data-bs-target="#kt_modal_edit_tender_{{ $peserta->id }}">{{ $peserta->peserta_tender }}</a>
-                                                                            </td>
-                                                                            <!--end::Column-->
-                                                                            <!--begin::Column-->
-                                                                            {{-- <td>
-                                                                                {{ $peserta->nilai_tender_peserta ?? "-" }}
-                                                                            </td> --}}
-                                                                            <!--end::Column-->
-                                                                            <!--begin::Column-->
-                                                                            {{-- <td>
-                                                                                {{ $peserta->oe_tender ?? "-" }}
-                                                                            </td> --}}
-                                                                            <!--end::Column-->
-                                                                            <!--begin::Column-->
-                                                                            {{-- <td>
-                                                                                {{ $peserta->status ?? "-" }}
-                                                                            </td> --}}
-                                                                            <!--end::Column-->
-                                                                            <!--begin::Action-->
-                                                                            <td class="text-center">
-                                                                                <small>
-                                                                                    <p data-bs-toggle="modal"
-                                                                                        data-bs-target="#kt_tender_delete_{{ $peserta->id }}"
-                                                                                        id="modal-delete"
-                                                                                        class="btn btn-sm btn-light btn-active-primary">
-                                                                                        Delete
-                                                                                    </p>
-                                                                                </small>
-                                                                            </td>
-                                                                            <!--end::Action-->
-                                                                        </tr>
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                {{-- <label class="fs-6 fw-bold form-label mt-3">
+                                                                        <span>Ketua Team Tender</span>
+                                                                    </label> --}}
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                <select onchange="this.form.submit()" id="ketua-tender"
+                                                                    name="ketua-tender"
+                                                                    class="form-select form-select-solid"
+                                                                    data-control="select2" data-hide-search="false"
+                                                                    data-placeholder="Ketua Team Tender">
+                                                                    <option></option>
+                                                                    @foreach ($users as $user)
+                                                                        @if ($user->id == $proyek->ketua_tender)
+                                                                            <option value="{{ $user->id }}"
+                                                                                selected>{{ $user->name }}</option>
+                                                                        @endif
+                                                                        <option value="{{ $user->id }}">
+                                                                            {{ $user->name }}</option>
                                                                     @endforeach
-                                                                </tbody>
-                                                                <!--end::Table body-->
-                                                            </table>
-                                                            <!--begin::Table Kompetitor-->
+                                                                </select>
+                                                                <!--end::Input-->
+                                                            </div>
+                                                            <!--end::Input group-->
                                                         </div>
-                                                        <!--End::Col-->
+                                                    </div>
+                                                    <!--End begin::Row-->
 
-                                                        <br>
 
-                                                        <!--Begin::Title Biru Form: Risk Peserta Tender-->
-                                                        {{-- <h6 class="fw-bolder m-0" id="HeadDetail"
-                                                            style="font-size:14px;">
-                                                        </h6> --}}
-                                                        <br>
-                                                        <h3 class="fw-bolder m-0 required" id="HeadDetail"
-                                                            style="font-size:14px;">Risk Tender
-                                                        </h3>
-                                                        <small><a class="text-active-primary text-gray" href="https://crm.wika.co.id/faqs/104625_RiskTender_Input-Kosong.rev.xlsx">Download Template Risk Tender</a></small>
-                                                        <br><br>
-                                                        <div class="w-50">
-                                                            <input onchange="this.form.submit()" type="file"
-                                                                class="form-control form-control-sm form-input-solid"
-                                                                name="risk-tender" accept=".pdf">
+                                                    <!--Begin::Title Biru Form: SKT Personil-->
+                                                    <br>
+                                                    <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                                        SKT Personil
+                                                        <a href="#" Id="Plus" data-bs-toggle="modal"
+                                                            data-bs-target="#kt_modal_add_user">+</a>
+                                                    </h3>
+
+                                                    <br>
+
+                                                    <!--End::Title Biru Form: SKT Personil-->
+
+                                                    <!--begin::Row-->
+                                                    <div class="row fv-row">
+                                                        <!--begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <!--begin::Table-->
+                                                                <table
+                                                                    class="table align-middle table-row-dashed fs-6 gy-2"
+                                                                    id="kt_customers_table">
+                                                                    <!--begin::Table head-->
+                                                                    <thead>
+                                                                        <!--begin::Table row-->
+                                                                        <tr
+                                                                            class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                            <th class="w-50px text-center">No.</th>
+                                                                            <th class="w-auto">Nama</th>
+                                                                            <th class="w-auto">Bidang Sertifikasi</th>
+                                                                            <th class="w-100px"></th>
+                                                                        </tr>
+                                                                        <!--end::Table row-->
+                                                                    </thead>
+                                                                    <!--end::Table head-->
+                                                                    <!--begin::Table body-->
+                                                                    @php
+                                                                        $no = 1;
+                                                                    @endphp
+                                                                    @foreach ($teams as $team)
+                                                                        <tbody class="fw-bold text-gray-600">
+
+                                                                            <tr>
+                                                                                <!--begin::Nomor-->
+                                                                                <td class="text-center">
+                                                                                    {{ $no++ }}
+                                                                                </td>
+                                                                                <!--end::Nomor-->
+                                                                                <!--begin::Column-->
+                                                                                <td>
+                                                                                    {{ $team->User->name }}
+                                                                                </td>
+                                                                                <!--end::Column-->
+                                                                                <!--begin::Column-->
+                                                                                <td>
+                                                                                    {{ $team->role }}
+                                                                                </td>
+                                                                                <!--end::Column-->
+                                                                                <!--begin::Action-->
+                                                                                <td class="text-center">
+                                                                                    <small>
+                                                                                        <p data-bs-toggle="modal"
+                                                                                            data-bs-target="#kt_team_delete_{{ $team->id }}"
+                                                                                            id="modal-delete"
+                                                                                            class="btn btn-sm btn-light btn-active-primary">
+                                                                                            Delete
+                                                                                        </p>
+                                                                                    </small>
+                                                                                </td>
+                                                                                <!--end::Action-->
+                                                                        </tbody>
+                                                                    @endforeach
+                                                                    <!--end::Table body-->
+                                                                </table>
+                                                                <!--end::Table-->
+                                                            </div>
+                                                            <!--end::Input group-->
                                                         </div>
-                                                        <h6 id="error-risk-tender" class="text-danger fw-normal"
-                                                            style="display: none">*File terlalu besar ! Max Size 50Mb</h6>
-                                                        <br>
-                                                        <!--begin::Table Kriteria Pasar-->
-                                                        <table class="table align-middle table-row-dashed fs-6 gy-2"
-                                                            id="kt_customers_table">
-                                                            <!--begin::Table head-->
-                                                            <thead>
-                                                                <!--begin::Table row-->
-                                                                <tr
-                                                                    class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                    <th class="w-50px text-center">No.</th>
-                                                                    <th class="w-auto">Nama Documnet</th>
-                                                                    <th class="w-auto">Modified On</th>
-                                                                    <th class="w-auto">Upload By</th>
-                                                                    <th class="w-100px"></th>
-                                                                </tr>
-                                                                <!--end::Table row-->
-                                                            </thead>
-                                                            <!--end::Table head-->
-                                                            <!--begin::Table body-->
-                                                            @php
-                                                                $no = 1;
-                                                            @endphp
-                                                            <tbody class="fw-bold text-gray-600">
-                                                                @foreach ($proyek->RiskTenderProyek as $riskTender)
-                                                                    <tr>
-                                                                        <!--begin::Nomor-->
-                                                                        <td class="text-center">
-                                                                            {{ $no++ }}
-                                                                        </td>
-                                                                        <!--end::Nomor-->
-                                                                        <!--begin::Name-->
-                                                                        <td>
-                                                                            @if (str_contains("$riskTender->nama_risk_tender", '.doc'))
-                                                                                <a href="/document/view/{{ $riskTender->id }}/{{ $riskTender->id_document }}"
-                                                                                    class="text-hover-primary">{{ $riskTender->nama_risk_tender }}</a>
-                                                                            @else
-                                                                                <a target="_blank"
-                                                                                    href="{{ asset('words/' . $riskTender->id_document . '.pdf') }}"
-                                                                                    class="text-hover-primary">{{ $riskTender->nama_risk_tender }}</a>
-                                                                            @endif
-                                                                        </td>
-                                                                        <!--end::Name-->
-                                                                        <!--begin::Modified On-->
-                                                                        <td>
-                                                                            {{ $riskTender->created_at ?? '-' }}
-                                                                        </td>
-                                                                        <!--end::Modified On-->
-                                                                        <!--begin::Modified By-->
-                                                                        <td>
-                                                                            {{ $riskTender->created_by ?? '-' }}
-                                                                        </td>
-                                                                        <!--end::Modified By-->
-                                                                        <!--begin::Action-->
+                                                    </div>
+                                                    <!--End begin::Row-->
+
+                                                    <br>
+
+                                                    <!--Begin::Title Biru Form: Laporan Kualitatif-->
+                                                    <br>
+                                                    <h3 class="fw-bolder m-0 required" id="HeadDetail"
+                                                        style="font-size:14px;">Laporan Kualitatif
+                                                    </h3>
+                                                    <br>
+                                                    <div class="form-group">
+                                                        <textarea class="form-control" id="laporan-prakualifikasi" name="laporan-prakualifikasi" rows="7">{!! $proyek->laporan_prakualifikasi !!}</textarea>
+                                                    </div>
+                                                    <!--End::Title Biru Form: Laporan Kualitatif-->
+
+                                                    <h6 class="text-danger fw-normal">(*) Kolom Ini Harus Diisi !</h6>
+
+                                                </div>
+                                                <!--end:::Tab Prakualifikasi-->
+
+
+
+                                                <!--begin:::Tab Tender Diikuti-->
+                                                <div class="tab-pane fade" id="kt_user_view_overview_tender"
+                                                    role="tabpanel">
+
+                                                    <!--begin::Row-->
+                                                    <div class="row fv-row">
+                                                        <!--begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>Jadwal Pemasukan Tender</span>
+                                                                </label>
+                                                                <a href="#" class="btn"
+                                                                    style="background: transparent;"
+                                                                    id="start-date-modal"
+                                                                    onclick="showCalendarModal(this)">
+                                                                    <i class="bi bi-calendar2-plus-fill"
+                                                                        style="color: #008CB4"></i>
+                                                                </a>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                <input type="Date"
+                                                                    class="form-control form-control-solid"
+                                                                    id="jadwal-tender" name="jadwal-tender"
+                                                                    value="{{ $proyek->jadwal_tender }}"
+                                                                    placeholder="Date" />
+                                                                <!--end::Input-->
+                                                            </div>
+                                                            <!--end::Input group-->
+                                                        </div>
+                                                        <!--End begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>Lokasi Tender</span>
+                                                                </label>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                <input type="text"
+                                                                    class="form-control form-control-solid"
+                                                                    id="lokasi-tender" name="lokasi-tender"
+                                                                    value="{{ $proyek->lokasi_tender }}"
+                                                                    placeholder="Lokasi Tender" />
+                                                                <!--end::Input-->
+                                                            </div>
+                                                            <!--end::Input group-->
+                                                        </div>
+                                                        <!--End begin::Col-->
+                                                    </div>
+                                                    <!--End begin::Row-->
+
+                                                    <!--begin::Row-->
+                                                    <div class="row fv-row">
+                                                        <!--begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span class="required">Nilai Penawaran
+                                                                        Keseluruhan</span>
+                                                                </label>
+                                                                <!--end::Label-->
+
+                                                                <!--begin::Input-->
+                                                                <input type="text"
+                                                                    class="form-control form-control-solid reformat"
+                                                                    id="nilai-kontrak-penawaran"
+                                                                    name="nilai-kontrak-penawaran"
+                                                                    value="{{ number_format((int) str_replace('.', '', $proyek->penawaran_tender), 0, '.', '.') }}"
+                                                                    placeholder="Nilai Penawaran Keseluruhan" />
+                                                                <!--end::Input-->
+                                                            </div>
+                                                            <!--end::Input group-->
+                                                        </div>
+                                                        <!--End begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>HPS / Pagu (Rupiah) <i
+                                                                            class="bi bi-lock"></i></span>
+                                                                </label>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                <input type="text"
+                                                                    class="form-control form-control-solid reformat {{ $proyek->hps_pagu == null ? 'text-danger' : '' }}"
+                                                                    value="{{ number_format((int) str_replace('.', '', $proyek->hps_pagu), 0, '.', '.') ?? '*HPS/Pagu Belum Ditentukan' }}"
+                                                                    placeholder="HPS / Pagu (Rupiah)" readonly />
+                                                                <!--end::Input-->
+                                                            </div>
+                                                            <!--end::Input group-->
+                                                        </div>
+                                                        <!--End begin::Col-->
+                                                    </div>
+                                                    <!--End begin::Row-->
+
+
+                                                    <!--Begin::Title Biru Form: Document Tender-->
+                                                    <br>
+                                                    <h3 class="fw-bolder m-0 required" id="HeadDetail"
+                                                        style="font-size:14px;">Document Tender
+                                                    </h3>
+                                                    <br>
+                                                    <div class="w-50">
+                                                        <input type="file"
+                                                            class="form-control form-control-sm form-input-solid"
+                                                            name="dokumen-tender" accept=".pdf">
+                                                    </div>
+                                                    <h6 id="error-dokumen-tender" class="text-danger fw-normal"
+                                                        style="display: none">*File
+                                                        terlalu besar ! Max Size 50Mb</h6>
+                                                    <br>
+                                                    <!--begin::Table-->
+                                                    <table class="table align-middle table-row-dashed w-50 fs-6 gy-2"
+                                                        id="kt_customers_table">
+                                                        <!--begin::Table head-->
+                                                        <thead>
+                                                            <!--begin::Table row-->
+                                                            <tr
+                                                                class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                <th class="w-50px text-center">No.</th>
+                                                                <th class="w-auto">Nama Document</th>
+                                                                <th class="w-auto">Modified On</th>
+                                                                <th class="w-auto text-center"></th>
+                                                            </tr>
+                                                            <!--end::Table row-->
+                                                        </thead>
+                                                        <!--end::Table head-->
+                                                        @php
+                                                            $no = 1;
+                                                        @endphp
+                                                        <!--begin::Table body-->
+                                                        <tbody class="fw-bold text-gray-600">
+                                                            @foreach ($proyek->DokumenTender as $dokumen)
+                                                                <tr>
+                                                                    <!--begin::Nomor-->
+                                                                    <td class="text-center">
+                                                                        {{ $no++ }}
+                                                                    </td>
+                                                                    <!--end::Nomor-->
+                                                                    <!--begin::Name-->
+                                                                    <td>
+                                                                        @if (str_contains("$dokumen->nama_dokumen", '.doc'))
+                                                                            <a href="/document/view/{{ $dokumen->id_dokumen_tender }}/{{ $dokumen->id_document }}"
+                                                                                class="text-hover-primary">{{ $dokumen->nama_dokumen }}</a>
+                                                                        @else
+                                                                            <a target="_blank"
+                                                                                href="{{ asset('words/' . $dokumen->id_document . '.pdf') }}"
+                                                                                class="text-hover-primary">{{ $dokumen->nama_dokumen }}</a>
+                                                                        @endif
+                                                                    </td>
+                                                                    <!--end::Name-->
+                                                                    <!--begin::Column-->
+                                                                    <td>
+                                                                        {{ Carbon\Carbon::parse($dokumen->created_at)->translatedFormat('d F Y') }}
+                                                                    </td>
+                                                                    <!--end::Column-->
+                                                                    <!--begin::Action-->
+                                                                    @if ($proyek->stage < 5)
                                                                         <td class="text-center">
                                                                             <small>
                                                                                 <p data-bs-toggle="modal"
-                                                                                    data-bs-target="#kt_risk_tender_delete_{{ $riskTender->id }}"
+                                                                                    data-bs-target="#kt_dokumen_tender_delete_{{ $dokumen->id_dokumen_tender }}"
                                                                                     id="modal-delete"
                                                                                     class="btn btn-sm btn-light btn-active-primary">
-                                                                                    Delete
-                                                                                </p>
+                                                                                    Delete</p>
                                                                             </small>
                                                                         </td>
-                                                                        <!--end::Action-->
-                                                                    </tr>
-                                                                @endforeach
-                                                            </tbody>
-                                                            <!--end::Table body-->
-                                                        </table>
-                                                        <!--End::Title Biru Form: Risk Peserta Tender-->
+                                                                    @endif
+                                                                    <!--end::Action-->
+                                                                </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                        <!--end::Table body-->
+                                                    </table>
 
-                                                        <br>
-                                                        <br>
+                                                    <!--end::Table-->
+                                                    <!--End::Title Biru Form: Document Tender-->
 
-                                                        <!--Begin::Title Biru Form: Laporan Kualitatif-->
-                                                        <h3 class="fw-bolder m-0 required" id="HeadDetail"
-                                                            style="font-size:14px;">Laporan Kualitatif
-                                                        </h3>
-                                                        &nbsp;<br>
-                                                        <div class="form-group">
-                                                            <textarea class="form-control" id="laporan-tender" name="laporan-tender" rows="7">{!! $proyek->laporan_tender !!}</textarea>
-                                                        </div>
-                                                        <!--End::Title Biru Form: Laporan Kualitatif-->
-
-                                                        <h6 class="text-danger fw-normal">(*) Kolom Ini Harus Diisi !</h6>
-
-                                                    </div>
-                                                    <!--end:::Tab Tender Diikuti-->
-
-
-                                                    <!--begin:::Tab Perolehan-->
-                                                    <div class="tab-pane fade" id="kt_user_view_overview_perolehan"
-                                                        role="tabpanel">
-
-                                                        <!--begin::Row-->
-                                                        <div class="row fv-row">
-                                                            <!--begin::Col-->
-                                                            {{-- <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Total Biaya Pra-Proyek</span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-                                                                    <!--begin::Input-->
-                                                                    <input type="text"
-                                                                        class="form-control form-control-solid reformat"
-                                                                        id="biaya-praproyek" name="biaya-praproyek"
-                                                                        value="{{ $proyek->biaya_praproyek }}"
-                                                                        placeholder="Total Biaya Pra-Proyek" />
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
-                                                            </div> --}}
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>HPS / Pagu (Rupiah) <i
-                                                                                class="bi bi-lock"></i></span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-
-                                                                    <!--begin::Input-->
-                                                                    <input type="text"
-                                                                        class="form-control form-control-solid reformat {{ $proyek->hps_pagu == null ? 'text-danger' : '' }}"
-                                                                        value="{{ number_format((int) str_replace('.', '', $proyek->hps_pagu), 0, '.', '.') ?? '*HPS/Pagu Belum Ditentukan' }}"
-                                                                        placeholder="HPS / Pagu (Rupiah)" readonly />
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
-                                                            </div>
-                                                            <!--End begin::Col-->
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Nilai Penawaran Keseluruhan <i
-                                                                                class="bi bi-lock"></i></span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-                                                                    <!--begin::Input-->
-                                                                    <input type="text"
-                                                                        class="form-control form-control-solid {{ $proyek->penawaran_tender == null ? 'text-danger' : '' }}"
-                                                                        id="penawaran-perolehan"
-                                                                        name="penawaran-perolehan"
-                                                                        value="{{ number_format((int) str_replace('.', '', $proyek->penawaran_tender), 0, '.', '.') ?? '*Nilai Penawaran Keseluruhan Belum Ditentukan' }}"
-                                                                        placeholder="Nilai Penawaran Keseluruhan"
-                                                                        readonly />
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
-                                                            </div>
-                                                            <!--End begin::Col-->
-                                                        </div>
-                                                        <!--End begin::Row-->
-
-                                                        <!--begin::Row-->
-                                                        <div class="row fv-row">
-                                                            <!--begin::Col-->
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="required">Nilai Perolehan</span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-                                                                    <!--begin::Input-->
-                                                                    <input type="text"
-                                                                        class="form-control form-control-solid reformat"
-                                                                        id="nilai-perolehan" name="nilai-perolehan"
-                                                                        value="{{ number_format((int) str_replace('.', '', $proyek->nilai_perolehan), 0, '.', '.') }}"
-                                                                        placeholder="Nilai Perolehan" />
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
-                                                            </div>
-                                                            <!--End begin::Col-->
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Peringkat Wika</span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-                                                                    <!--begin::Input-->
-                                                                    <select id="peringkat-wika" name="peringkat-wika"
-                                                                        class="form-select form-select-solid"
-                                                                        data-control="select2" data-hide-search="true"
-                                                                        data-placeholder="Pilih Peringkat">
-                                                                        <option></option>
-                                                                        <option value="Peringkat 1"
-                                                                            {{ $proyek->peringkat_wika == 'Peringkat 1' ? 'selected' : '' }}>
-                                                                            Peringkat 1</option>
-                                                                        <option value="Peringkat 2"
-                                                                            {{ $proyek->peringkat_wika == 'Peringkat 2' ? 'selected' : '' }}>
-                                                                            Peringkat 2</option>
-                                                                        <option value="Peringkat 3"
-                                                                            {{ $proyek->peringkat_wika == 'Peringkat 3' ? 'selected' : '' }}>
-                                                                            Peringkat 3</option>
-                                                                        <option value="Peringkat 4"
-                                                                            {{ $proyek->peringkat_wika == 'Peringkat 4' ? 'selected' : '' }}>
-                                                                            Peringkat 4</option>
-                                                                        <option value="Peringkat 5"
-                                                                            {{ $proyek->peringkat_wika == 'Peringkat 5' ? 'selected' : '' }}>
-                                                                            Peringkat 5</option>
-                                                                        <option value="Peringkat 6"
-                                                                            {{ $proyek->peringkat_wika == 'Peringkat 6' ? 'selected' : '' }}>
-                                                                            Peringkat 6</option>
-                                                                        <option value="Peringkat 7"
-                                                                            {{ $proyek->peringkat_wika == 'Peringkat 7' ? 'selected' : '' }}>
-                                                                            Peringkat 7</option>
-                                                                        <option value="Peringkat 8"
-                                                                            {{ $proyek->peringkat_wika == 'Peringkat 8' ? 'selected' : '' }}>
-                                                                            Peringkat 8</option>
-                                                                        <option value="Peringkat 9"
-                                                                            {{ $proyek->peringkat_wika == 'Peringkat 9' ? 'selected' : '' }}>
-                                                                            Peringkat 9</option>
-                                                                        <option value="Peringkat 10"
-                                                                            {{ $proyek->peringkat_wika == 'Peringkat 10' ? 'selected' : '' }}>
-                                                                            Peringkat 10</option>
-                                                                        <option value="Gugur"
-                                                                            {{ $proyek->peringkat_wika == 'Gugur' ? 'selected' : '' }}>
-                                                                            Gugur</option>
-                                                                    </select>
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
-                                                            </div>
-                                                            <!--End begin::Col-->
-                                                        </div>
-                                                        <!--End begin::Row-->
-
-                                                        <!--begin::Row-->
-                                                        <div class="row fv-row">
-                                                            <!--begin::Col-->
-                                                            <div class="col-3">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span><i class="bi bi-percent text-dark"></i> OE
-                                                                            Wika <i class="bi bi-lock"></i></span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-
-                                                                    <!--begin::Input-->
-                                                                    <input type="text"
-                                                                        class="form-control form-control-solid"
-                                                                        id="oe-wika" name="oe-wika"
-                                                                        value="{{ $proyek->oe_wika }}"
-                                                                        placeholder="OE Wika" />
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
-                                                            </div>
-                                                            <div class="col-3">
-                                                                <!--begin::Label-->
-                                                                <label class="fs-6 fw-bold form-label mt-3">
-                                                                </label>
-                                                                <p class="mt-12"><i
-                                                                        class="bi bi-percent text-dark"></i>
-                                                                </p>
-                                                                <!--end::Label-->
-                                                            </div>
-                                                            <!--End begin::Col-->
-                                                        </div>
-                                                        <!--End begin::Row-->
-
-                                                        <br>
-
-                                                        <!--Begin::Title Biru Form: List Peserta Tender-->
-                                                        <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                            style="font-size:14px;">List Peserta Tender
-                                                            <a href="#" Id="Plus" data-bs-toggle="modal"
-                                                                data-bs-target="#kt_modal_peserta_tender">+</a>
-                                                        </h3>
-                                                        <br>
-                                                        <!--begin::Table Kriteria Pasar-->
+                                                    <!--Begin::Title Biru Form: List Peserta Tender-->
+                                                    <br>
+                                                    <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                                        Kompetitor
+                                                        <a href="#" Id="Plus" data-bs-toggle="modal"
+                                                            data-bs-target="#kt_modal_peserta_tender">+</a>
+                                                    </h3>
+                                                    <!--End::Title Biru Form: List Peserta Tender-->
+                                                    <br>
+                                                    <!--begin::Col-->
+                                                    <div class="col-6">
+                                                        <!--begin::Table Kompetitor-->
                                                         <table class="table align-middle table-row-dashed fs-6 gy-2"
                                                             id="kt_customers_table">
                                                             <!--begin::Table head-->
@@ -3431,10 +3127,9 @@
                                                                     class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                                                     <th class="w-50px text-center">No.</th>
                                                                     <th class="w-auto">Nama Peserta Tender</th>
-                                                                    <th class="w-auto">Nilai Penawaran</th>
-                                                                    <th class="w-auto"><i class="bi bi-percent"></i>OE
-                                                                    </th>
-                                                                    <th class="w-auto">Status</th>
+                                                                    {{-- <th class="w-auto">Nilai Penawaran</th> --}}
+                                                                    {{-- <th class="w-auto"><i class="bi bi-percent"></i>OE</th> --}}
+                                                                    {{-- <th class="w-auto">Status</th> --}}
                                                                     <th class="w-100px"></th>
                                                                 </tr>
                                                                 <!--end::Table row-->
@@ -3461,19 +3156,19 @@
                                                                         </td>
                                                                         <!--end::Column-->
                                                                         <!--begin::Column-->
-                                                                        <td>
-                                                                            {{ $peserta->nilai_tender_peserta ?? '-' }}
-                                                                        </td>
+                                                                        {{-- <td>
+                                                                                {{ $peserta->nilai_tender_peserta ?? "-" }}
+                                                                            </td> --}}
                                                                         <!--end::Column-->
                                                                         <!--begin::Column-->
-                                                                        <td>
-                                                                            {{ $peserta->oe_tender ?? '-' }}
-                                                                        </td>
+                                                                        {{-- <td>
+                                                                                {{ $peserta->oe_tender ?? "-" }}
+                                                                            </td> --}}
                                                                         <!--end::Column-->
                                                                         <!--begin::Column-->
-                                                                        <td>
-                                                                            {{ $peserta->status ?? '-' }}
-                                                                        </td>
+                                                                        {{-- <td>
+                                                                                {{ $peserta->status ?? "-" }}
+                                                                            </td> --}}
                                                                         <!--end::Column-->
                                                                         <!--begin::Action-->
                                                                         <td class="text-center">
@@ -3492,277 +3187,500 @@
                                                             </tbody>
                                                             <!--end::Table body-->
                                                         </table>
-                                                        <!--End::Title Biru Form: List Peserta Tender-->
-
-                                                        <br>
-
-                                                        <!--Begin::Title Biru Form: Laporan Kualitatif-->
-                                                        <br>
-                                                        <h3 class="fw-bolder m-0 required" id="HeadDetail"
-                                                            style="font-size:14px;">Laporan Kualitatif
-                                                        </h3>
-                                                        <br>
-                                                        <div class="form-group">
-                                                            <textarea class="form-control" id="laporan-perolehan" name="laporan-perolehan" rows="7">{!! $proyek->laporan_perolehan !!}</textarea>
-                                                        </div>
-                                                        <!--End::Title Biru Form: Laporan Kualitatif-->
-
-                                                        <h6 class="text-danger fw-normal">(*) Kolom Ini Harus Diisi !</h6>
-
+                                                        <!--begin::Table Kompetitor-->
                                                     </div>
-                                                    <!--end:::Tab Perolehan-->
+                                                    <!--End::Col-->
+
+                                                    <br>
+
+                                                    <!--Begin::Title Biru Form: Risk Peserta Tender-->
+                                                    {{-- <h6 class="fw-bolder m-0" id="HeadDetail"
+                                                            style="font-size:14px;">
+                                                        </h6> --}}
+                                                    <br>
+                                                    <h3 class="fw-bolder m-0 required" id="HeadDetail"
+                                                        style="font-size:14px;">Risk Tender
+                                                    </h3>
+                                                    <small><a class="text-active-primary text-gray"
+                                                            href="https://crm.wika.co.id/faqs/104625_RiskTender_Input-Kosong.rev.xlsx">Download
+                                                            Template Risk Tender</a></small>
+                                                    <br><br>
+                                                    <div class="w-50">
+                                                        <input onchange="this.form.submit()" type="file"
+                                                            class="form-control form-control-sm form-input-solid"
+                                                            name="risk-tender" accept=".pdf">
+                                                    </div>
+                                                    <h6 id="error-risk-tender" class="text-danger fw-normal"
+                                                        style="display: none">*File terlalu besar ! Max Size 50Mb</h6>
+                                                    <br>
+                                                    <!--begin::Table Kriteria Pasar-->
+                                                    <table class="table align-middle table-row-dashed fs-6 gy-2"
+                                                        id="kt_customers_table">
+                                                        <!--begin::Table head-->
+                                                        <thead>
+                                                            <!--begin::Table row-->
+                                                            <tr
+                                                                class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                <th class="w-50px text-center">No.</th>
+                                                                <th class="w-auto">Nama Documnet</th>
+                                                                <th class="w-auto">Modified On</th>
+                                                                <th class="w-auto">Upload By</th>
+                                                                <th class="w-100px"></th>
+                                                            </tr>
+                                                            <!--end::Table row-->
+                                                        </thead>
+                                                        <!--end::Table head-->
+                                                        <!--begin::Table body-->
+                                                        @php
+                                                            $no = 1;
+                                                        @endphp
+                                                        <tbody class="fw-bold text-gray-600">
+                                                            @foreach ($proyek->RiskTenderProyek as $riskTender)
+                                                                <tr>
+                                                                    <!--begin::Nomor-->
+                                                                    <td class="text-center">
+                                                                        {{ $no++ }}
+                                                                    </td>
+                                                                    <!--end::Nomor-->
+                                                                    <!--begin::Name-->
+                                                                    <td>
+                                                                        @if (str_contains("$riskTender->nama_risk_tender", '.doc'))
+                                                                            <a href="/document/view/{{ $riskTender->id }}/{{ $riskTender->id_document }}"
+                                                                                class="text-hover-primary">{{ $riskTender->nama_risk_tender }}</a>
+                                                                        @else
+                                                                            <a target="_blank"
+                                                                                href="{{ asset('words/' . $riskTender->id_document . '.pdf') }}"
+                                                                                class="text-hover-primary">{{ $riskTender->nama_risk_tender }}</a>
+                                                                        @endif
+                                                                    </td>
+                                                                    <!--end::Name-->
+                                                                    <!--begin::Modified On-->
+                                                                    <td>
+                                                                        {{ $riskTender->created_at ?? '-' }}
+                                                                    </td>
+                                                                    <!--end::Modified On-->
+                                                                    <!--begin::Modified By-->
+                                                                    <td>
+                                                                        {{ $riskTender->created_by ?? '-' }}
+                                                                    </td>
+                                                                    <!--end::Modified By-->
+                                                                    <!--begin::Action-->
+                                                                    <td class="text-center">
+                                                                        <small>
+                                                                            <p data-bs-toggle="modal"
+                                                                                data-bs-target="#kt_risk_tender_delete_{{ $riskTender->id }}"
+                                                                                id="modal-delete"
+                                                                                class="btn btn-sm btn-light btn-active-primary">
+                                                                                Delete
+                                                                            </p>
+                                                                        </small>
+                                                                    </td>
+                                                                    <!--end::Action-->
+                                                                </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                        <!--end::Table body-->
+                                                    </table>
+                                                    <!--End::Title Biru Form: Risk Peserta Tender-->
+
+                                                    <br>
+                                                    <br>
+
+                                                    <!--Begin::Title Biru Form: Laporan Kualitatif-->
+                                                    <h3 class="fw-bolder m-0 required" id="HeadDetail"
+                                                        style="font-size:14px;">Laporan Kualitatif
+                                                    </h3>
+                                                    &nbsp;<br>
+                                                    <div class="form-group">
+                                                        <textarea class="form-control" id="laporan-tender" name="laporan-tender" rows="7">{!! $proyek->laporan_tender !!}</textarea>
+                                                    </div>
+                                                    <!--End::Title Biru Form: Laporan Kualitatif-->
+
+                                                    <h6 class="text-danger fw-normal">(*) Kolom Ini Harus Diisi !</h6>
+
+                                                </div>
+                                                <!--end:::Tab Tender Diikuti-->
 
 
-                                                    <!--begin:::Tab Menang-->
-                                                    <div class="tab-pane fade" id="kt_user_view_overview_menang"
-                                                        role="tabpanel">
+                                                <!--begin:::Tab Perolehan-->
+                                                <div class="tab-pane fade" id="kt_user_view_overview_perolehan"
+                                                    role="tabpanel">
 
-                                                        <!--Begin::Title Biru Form: Analisa Sebab Kemenangan-->
-                                                        <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                            style="font-size:14px;">Analisa Sebab
-                                                            {{ $proyek->stage == 7 ? 'Kekalahan' : 'Kemenangan' }} &nbsp;
-                                                            <i onclick="hideMenang()" id="hide-menang"
-                                                                class="bi bi-arrows-collapse"></i><i
-                                                                onclick="showMenang()" id="show-menang"
-                                                                style="display: none" class="bi bi-arrows-expand"></i>
-                                                        </h3>
-                                                        <script>
-                                                            function hideMenang() {
-                                                                document.getElementById("divMenang").style.display = "none";
-                                                                document.getElementById("hide-menang").style.display = "none";
-                                                                document.getElementById("show-menang").style.display = "";
-                                                            }
+                                                    <!--begin::Row-->
+                                                    <div class="row fv-row">
+                                                        <!--begin::Col-->
+                                                        {{-- <div class="col-6">
+                                                                <!--begin::Input group Website-->
+                                                                <div class="fv-row mb-7">
+                                                                    <!--begin::Label-->
+                                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                                        <span>Total Biaya Pra-Proyek</span>
+                                                                    </label>
+                                                                    <!--end::Label-->
+                                                                    <!--begin::Input-->
+                                                                    <input type="text"
+                                                                        class="form-control form-control-solid reformat"
+                                                                        id="biaya-praproyek" name="biaya-praproyek"
+                                                                        value="{{ $proyek->biaya_praproyek }}"
+                                                                        placeholder="Total Biaya Pra-Proyek" />
+                                                                    <!--end::Input-->
+                                                                </div>
+                                                                <!--end::Input group-->
+                                                            </div> --}}
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>HPS / Pagu (Rupiah) <i
+                                                                            class="bi bi-lock"></i></span>
+                                                                </label>
+                                                                <!--end::Label-->
 
-                                                            function showMenang() {
-                                                                document.getElementById("divMenang").style.display = "";
-                                                                document.getElementById("hide-menang").style.display = "";
-                                                                document.getElementById("show-menang").style.display = "none";
-                                                            }
-                                                        </script>
-                                                        <!--End::Title Biru Form: Analisa Sebab Kemenangan-->
+                                                                <!--begin::Input-->
+                                                                <input type="text"
+                                                                    class="form-control form-control-solid reformat {{ $proyek->hps_pagu == null ? 'text-danger' : '' }}"
+                                                                    value="{{ number_format((int) str_replace('.', '', $proyek->hps_pagu), 0, '.', '.') ?? '*HPS/Pagu Belum Ditentukan' }}"
+                                                                    placeholder="HPS / Pagu (Rupiah)" readonly />
+                                                                <!--end::Input-->
+                                                            </div>
+                                                            <!--end::Input group-->
+                                                        </div>
+                                                        <!--End begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>Nilai Penawaran Keseluruhan <i
+                                                                            class="bi bi-lock"></i></span>
+                                                                </label>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                <input type="text"
+                                                                    class="form-control form-control-solid {{ $proyek->penawaran_tender == null ? 'text-danger' : '' }}"
+                                                                    id="penawaran-perolehan" name="penawaran-perolehan"
+                                                                    value="{{ number_format((int) str_replace('.', '', $proyek->penawaran_tender), 0, '.', '.') ?? '*Nilai Penawaran Keseluruhan Belum Ditentukan' }}"
+                                                                    placeholder="Nilai Penawaran Keseluruhan" readonly />
+                                                                <!--end::Input-->
+                                                            </div>
+                                                            <!--end::Input group-->
+                                                        </div>
+                                                        <!--End begin::Col-->
+                                                    </div>
+                                                    <!--End begin::Row-->
 
-                                                        <br>
+                                                    <!--begin::Row-->
+                                                    <div class="row fv-row">
+                                                        <!--begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span class="required">Nilai Perolehan</span>
+                                                                </label>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                <input type="text"
+                                                                    class="form-control form-control-solid reformat"
+                                                                    id="nilai-perolehan" name="nilai-perolehan"
+                                                                    value="{{ number_format((int) str_replace('.', '', $proyek->nilai_perolehan), 0, '.', '.') }}"
+                                                                    placeholder="Nilai Perolehan" />
+                                                                <!--end::Input-->
+                                                            </div>
+                                                            <!--end::Input group-->
+                                                        </div>
+                                                        <!--End begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>Peringkat Wika</span>
+                                                                </label>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                <select id="peringkat-wika" name="peringkat-wika"
+                                                                    class="form-select form-select-solid"
+                                                                    data-control="select2" data-hide-search="true"
+                                                                    data-placeholder="Pilih Peringkat">
+                                                                    <option></option>
+                                                                    <option value="Peringkat 1"
+                                                                        {{ $proyek->peringkat_wika == 'Peringkat 1' ? 'selected' : '' }}>
+                                                                        Peringkat 1</option>
+                                                                    <option value="Peringkat 2"
+                                                                        {{ $proyek->peringkat_wika == 'Peringkat 2' ? 'selected' : '' }}>
+                                                                        Peringkat 2</option>
+                                                                    <option value="Peringkat 3"
+                                                                        {{ $proyek->peringkat_wika == 'Peringkat 3' ? 'selected' : '' }}>
+                                                                        Peringkat 3</option>
+                                                                    <option value="Peringkat 4"
+                                                                        {{ $proyek->peringkat_wika == 'Peringkat 4' ? 'selected' : '' }}>
+                                                                        Peringkat 4</option>
+                                                                    <option value="Peringkat 5"
+                                                                        {{ $proyek->peringkat_wika == 'Peringkat 5' ? 'selected' : '' }}>
+                                                                        Peringkat 5</option>
+                                                                    <option value="Peringkat 6"
+                                                                        {{ $proyek->peringkat_wika == 'Peringkat 6' ? 'selected' : '' }}>
+                                                                        Peringkat 6</option>
+                                                                    <option value="Peringkat 7"
+                                                                        {{ $proyek->peringkat_wika == 'Peringkat 7' ? 'selected' : '' }}>
+                                                                        Peringkat 7</option>
+                                                                    <option value="Peringkat 8"
+                                                                        {{ $proyek->peringkat_wika == 'Peringkat 8' ? 'selected' : '' }}>
+                                                                        Peringkat 8</option>
+                                                                    <option value="Peringkat 9"
+                                                                        {{ $proyek->peringkat_wika == 'Peringkat 9' ? 'selected' : '' }}>
+                                                                        Peringkat 9</option>
+                                                                    <option value="Peringkat 10"
+                                                                        {{ $proyek->peringkat_wika == 'Peringkat 10' ? 'selected' : '' }}>
+                                                                        Peringkat 10</option>
+                                                                    <option value="Gugur"
+                                                                        {{ $proyek->peringkat_wika == 'Gugur' ? 'selected' : '' }}>
+                                                                        Gugur</option>
+                                                                </select>
+                                                                <!--end::Input-->
+                                                            </div>
+                                                            <!--end::Input group-->
+                                                        </div>
+                                                        <!--End begin::Col-->
+                                                    </div>
+                                                    <!--End begin::Row-->
 
-                                                        <div id="divMenang">
-                                                            <!--begin::Row-->
-                                                            <div class="row fv-row">
-                                                                <!--begin::Col-->
-                                                                <div class="col-6">
-                                                                    <!--begin::Input group Website-->
-                                                                    <div class="fv-row mb-7">
-                                                                        <!--begin::Label-->
-                                                                        <label class="fs-6 fw-bold form-label mt-3">
-                                                                            <span>Aspek Pesaing</span>
-                                                                        </label>
-                                                                        <!--end::Label-->
+                                                    <!--begin::Row-->
+                                                    <div class="row fv-row">
+                                                        <!--begin::Col-->
+                                                        <div class="col-3">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span><i class="bi bi-percent text-dark"></i> OE
+                                                                        Wika <i class="bi bi-lock"></i></span>
+                                                                </label>
+                                                                <!--end::Label-->
 
-                                                                        <!--begin::Input-->
-                                                                        <textarea class="form-control" id="aspek-pesaing" name="aspek-pesaing" rows="3">{{ $proyek->aspek_pesaing }}</textarea>
-                                                                        {{-- <input type="text"
+                                                                <!--begin::Input-->
+                                                                <input type="text"
+                                                                    class="form-control form-control-solid"
+                                                                    id="oe-wika" name="oe-wika"
+                                                                    value="{{ $proyek->oe_wika }}"
+                                                                    placeholder="OE Wika" />
+                                                                <!--end::Input-->
+                                                            </div>
+                                                            <!--end::Input group-->
+                                                        </div>
+                                                        <div class="col-3">
+                                                            <!--begin::Label-->
+                                                            <label class="fs-6 fw-bold form-label mt-3">
+                                                            </label>
+                                                            <p class="mt-12"><i class="bi bi-percent text-dark"></i>
+                                                            </p>
+                                                            <!--end::Label-->
+                                                        </div>
+                                                        <!--End begin::Col-->
+                                                    </div>
+                                                    <!--End begin::Row-->
+
+                                                    <br>
+
+                                                    <!--Begin::Title Biru Form: List Peserta Tender-->
+                                                    <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                                        List Peserta Tender
+                                                        <a href="#" Id="Plus" data-bs-toggle="modal"
+                                                            data-bs-target="#kt_modal_peserta_tender">+</a>
+                                                    </h3>
+                                                    <br>
+                                                    <!--begin::Table Kriteria Pasar-->
+                                                    <table class="table align-middle table-row-dashed fs-6 gy-2"
+                                                        id="kt_customers_table">
+                                                        <!--begin::Table head-->
+                                                        <thead>
+                                                            <!--begin::Table row-->
+                                                            <tr
+                                                                class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                <th class="w-50px text-center">No.</th>
+                                                                <th class="w-auto">Nama Peserta Tender</th>
+                                                                <th class="w-auto">Nilai Penawaran</th>
+                                                                <th class="w-auto"><i class="bi bi-percent"></i>OE
+                                                                </th>
+                                                                <th class="w-auto">Status</th>
+                                                                <th class="w-100px"></th>
+                                                            </tr>
+                                                            <!--end::Table row-->
+                                                        </thead>
+                                                        <!--end::Table head-->
+                                                        <!--begin::Table body-->
+                                                        @php
+                                                            $no = 1;
+                                                        @endphp
+                                                        <tbody class="fw-bold text-gray-600">
+                                                            @foreach ($pesertatender as $peserta)
+                                                                <tr>
+                                                                    <!--begin::Name-->
+                                                                    <td class="text-center">
+                                                                        {{ $no++ }}
+                                                                    </td>
+                                                                    <!--end::Name-->
+                                                                    <!--begin::Column-->
+                                                                    <td>
+                                                                        <a href="#"
+                                                                            class="text-gray-800 text-hover-primary"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#kt_modal_edit_tender_{{ $peserta->id }}">{{ $peserta->peserta_tender }}</a>
+                                                                    </td>
+                                                                    <!--end::Column-->
+                                                                    <!--begin::Column-->
+                                                                    <td>
+                                                                        {{ $peserta->nilai_tender_peserta ?? '-' }}
+                                                                    </td>
+                                                                    <!--end::Column-->
+                                                                    <!--begin::Column-->
+                                                                    <td>
+                                                                        {{ $peserta->oe_tender ?? '-' }}
+                                                                    </td>
+                                                                    <!--end::Column-->
+                                                                    <!--begin::Column-->
+                                                                    <td>
+                                                                        {{ $peserta->status ?? '-' }}
+                                                                    </td>
+                                                                    <!--end::Column-->
+                                                                    <!--begin::Action-->
+                                                                    <td class="text-center">
+                                                                        <small>
+                                                                            <p data-bs-toggle="modal"
+                                                                                data-bs-target="#kt_tender_delete_{{ $peserta->id }}"
+                                                                                id="modal-delete"
+                                                                                class="btn btn-sm btn-light btn-active-primary">
+                                                                                Delete
+                                                                            </p>
+                                                                        </small>
+                                                                    </td>
+                                                                    <!--end::Action-->
+                                                                </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                        <!--end::Table body-->
+                                                    </table>
+                                                    <!--End::Title Biru Form: List Peserta Tender-->
+
+                                                    <br>
+
+                                                    <!--Begin::Title Biru Form: Laporan Kualitatif-->
+                                                    <br>
+                                                    <h3 class="fw-bolder m-0 required" id="HeadDetail"
+                                                        style="font-size:14px;">Laporan Kualitatif
+                                                    </h3>
+                                                    <br>
+                                                    <div class="form-group">
+                                                        <textarea class="form-control" id="laporan-perolehan" name="laporan-perolehan" rows="7">{!! $proyek->laporan_perolehan !!}</textarea>
+                                                    </div>
+                                                    <!--End::Title Biru Form: Laporan Kualitatif-->
+
+                                                    <h6 class="text-danger fw-normal">(*) Kolom Ini Harus Diisi !</h6>
+
+                                                </div>
+                                                <!--end:::Tab Perolehan-->
+
+
+                                                <!--begin:::Tab Menang-->
+                                                <div class="tab-pane fade" id="kt_user_view_overview_menang"
+                                                    role="tabpanel">
+
+                                                    <!--Begin::Title Biru Form: Analisa Sebab Kemenangan-->
+                                                    <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                                        Analisa Sebab
+                                                        {{ $proyek->stage == 7 ? 'Kekalahan' : 'Kemenangan' }} &nbsp;
+                                                        <i onclick="hideMenang()" id="hide-menang"
+                                                            class="bi bi-arrows-collapse"></i><i onclick="showMenang()"
+                                                            id="show-menang" style="display: none"
+                                                            class="bi bi-arrows-expand"></i>
+                                                    </h3>
+                                                    <script>
+                                                        function hideMenang() {
+                                                            document.getElementById("divMenang").style.display = "none";
+                                                            document.getElementById("hide-menang").style.display = "none";
+                                                            document.getElementById("show-menang").style.display = "";
+                                                        }
+
+                                                        function showMenang() {
+                                                            document.getElementById("divMenang").style.display = "";
+                                                            document.getElementById("hide-menang").style.display = "";
+                                                            document.getElementById("show-menang").style.display = "none";
+                                                        }
+                                                    </script>
+                                                    <!--End::Title Biru Form: Analisa Sebab Kemenangan-->
+
+                                                    <br>
+
+                                                    <div id="divMenang">
+                                                        <!--begin::Row-->
+                                                        <div class="row fv-row">
+                                                            <!--begin::Col-->
+                                                            <div class="col-6">
+                                                                <!--begin::Input group Website-->
+                                                                <div class="fv-row mb-7">
+                                                                    <!--begin::Label-->
+                                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                                        <span>Aspek Pesaing</span>
+                                                                    </label>
+                                                                    <!--end::Label-->
+
+                                                                    <!--begin::Input-->
+                                                                    <textarea class="form-control" id="aspek-pesaing" name="aspek-pesaing" rows="3">{{ $proyek->aspek_pesaing }}</textarea>
+                                                                    {{-- <input type="text"
                                                                             class="form-control form-control-solid"
                                                                             id="aspek-pesaing" name="aspek-pesaing"
                                                                             value="{{ $proyek->aspek_pesaing }}"
                                                                             placeholder="Aspek Pesaing" /> --}}
-                                                                        <!--end::Input-->
-                                                                    </div>
-                                                                    <!--end::Input group-->
+                                                                    <!--end::Input-->
                                                                 </div>
-                                                                <!--End begin::Col-->
-                                                                <div class="col-6">
-                                                                    <!--begin::Input group Website-->
-                                                                    <div class="fv-row mb-7">
-                                                                        <!--begin::Label-->
-                                                                        <label class="fs-6 fw-bold form-label mt-3">
-                                                                            <span>Aspek Non Pesaing</span>
-                                                                        </label>
-                                                                        <!--end::Label-->
-                                                                        <!--begin::Input-->
-                                                                        <textarea class="form-control" id="aspek-non-pesaing" name="aspek-non-pesaing" rows="3">{{ $proyek->aspek_non_pesaing }}</textarea>
-                                                                        {{-- <input type="text"
+                                                                <!--end::Input group-->
+                                                            </div>
+                                                            <!--End begin::Col-->
+                                                            <div class="col-6">
+                                                                <!--begin::Input group Website-->
+                                                                <div class="fv-row mb-7">
+                                                                    <!--begin::Label-->
+                                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                                        <span>Aspek Non Pesaing</span>
+                                                                    </label>
+                                                                    <!--end::Label-->
+                                                                    <!--begin::Input-->
+                                                                    <textarea class="form-control" id="aspek-non-pesaing" name="aspek-non-pesaing" rows="3">{{ $proyek->aspek_non_pesaing }}</textarea>
+                                                                    {{-- <input type="text"
                                                                             class="form-control form-control-solid"
                                                                             id="aspek-non-pesaing" name="aspek-non-pesaing"
                                                                             value="{{ $proyek->aspek_non_pesaing }}"
                                                                             placeholder="Aspek Non Pesaing" /> --}}
-                                                                        <!--end::Input-->
-                                                                    </div>
-                                                                    <!--end::Input group-->
+                                                                    <!--end::Input-->
                                                                 </div>
-                                                                <!--End begin::Col-->
+                                                                <!--end::Input group-->
                                                             </div>
-                                                            <!--End begin::Row-->
+                                                            <!--End begin::Col-->
+                                                        </div>
+                                                        <!--End begin::Row-->
 
-                                                            <!--begin::Row-->
-                                                            <div class="row fv-row">
-                                                                <!--begin::Col-->
-                                                                <div class="col-6">
-                                                                    <!--begin::Input group Website-->
-                                                                    <div class="fv-row mb-7">
-                                                                        <!--begin::Label-->
-                                                                        <label class="fs-6 fw-bold form-label mt-3">
-                                                                            <span>Usulan Saran Perbaikan</span>
-                                                                        </label>
-                                                                        <!--end::Label-->
+                                                        <!--begin::Row-->
+                                                        <div class="row fv-row">
+                                                            <!--begin::Col-->
+                                                            <div class="col-6">
+                                                                <!--begin::Input group Website-->
+                                                                <div class="fv-row mb-7">
+                                                                    <!--begin::Label-->
+                                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                                        <span>Usulan Saran Perbaikan</span>
+                                                                    </label>
+                                                                    <!--end::Label-->
 
-                                                                        <!--begin::Input-->
-                                                                        <textarea class="form-control" id="saran-perbaikan" name="saran-perbaikan" rows="3">{{ $proyek->saran_perbaikan }}</textarea>
-                                                                        {{-- <input type="text"
+                                                                    <!--begin::Input-->
+                                                                    <textarea class="form-control" id="saran-perbaikan" name="saran-perbaikan" rows="3">{{ $proyek->saran_perbaikan }}</textarea>
+                                                                    {{-- <input type="text"
                                                                             class="form-control form-control-solid"
                                                                             id="saran-perbaikan" name="saran-perbaikan"
                                                                             value="{{ $proyek->saran_perbaikan }}"
                                                                             placeholder="Saran Perbaikan" /> --}}
-                                                                        <!--end::Input-->
-                                                                    </div>
-                                                                    <!--end::Input group-->
-                                                                </div>
-                                                                <!--End begin::Col-->
-                                                            </div>
-                                                            <!--End begin::Row-->
-                                                        </div>
-                                                        <!--divMenang-->
-
-                                                        <!--Begin::Title Biru Form: Attachment Menang-->
-                                                        <br>
-                                                        <h3 class="fw-bolder m-0 required" id="HeadDetail"
-                                                            style="font-size:14px;">Dokumen SPPBJ / LOI / Penunjukan
-                                                            Pemenangan
-                                                        </h3>
-                                                        <br>
-                                                        <div class="w-50">
-                                                            <input onchange="this.form.submit()" type="file"
-                                                                class="form-control form-control-sm form-input-solid"
-                                                                name="attachment-menang" accept=".pdf">
-                                                        </div>
-                                                        <h6 id="error-attachment-menang" class="text-danger fw-normal"
-                                                            style="display: none">*File terlalu besar ! Max Size 50Mb</h6>
-                                                        <br>
-                                                        <!--begin::Table-->
-                                                        <table class="table align-middle table-row-dashed w-50 fs-6 gy-2"
-                                                            id="kt_customers_table">
-                                                            <!--begin::Table head-->
-                                                            <thead>
-                                                                <!--begin::Table row-->
-                                                                <tr
-                                                                    class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                    <th class="w-50px text-center">No.</th>
-                                                                    <th class="w-auto">Nama Document</th>
-                                                                    <th class="w-auto">Modified On</th>
-                                                                    <th class="w-auto text-center"></th>
-                                                                </tr>
-                                                                <!--end::Table row-->
-                                                            </thead>
-                                                            <!--end::Table head-->
-                                                            @php
-                                                                $no = 1;
-                                                            @endphp
-                                                            <!--begin::Table body-->
-                                                            <tbody class="fw-bold text-gray-600">
-                                                                @foreach ($proyek->AttachmentMenang as $attachment)
-                                                                    <tr>
-                                                                        <!--begin::Nomor-->
-                                                                        <td class="text-center">
-                                                                            {{ $no++ }}
-                                                                        </td>
-                                                                        <!--end::Nomor-->
-                                                                        <!--begin::Name-->
-                                                                        <td>
-                                                                            @if (str_contains("$attachment->nama_attachment", '.doc'))
-                                                                                <a href="/document/view/{{ $attachment->id }}/{{ $attachment->id_document }}"
-                                                                                    class="text-hover-primary">{{ $attachment->nama_attachment }}</a>
-                                                                            @else
-                                                                                <a target="_blank"
-                                                                                    href="{{ asset('words/' . $attachment->id_document . '.pdf') }}"
-                                                                                    class="text-hover-primary">{{ $attachment->nama_attachment }}</a>
-                                                                            @endif
-                                                                        </td>
-                                                                        <!--end::Name-->
-                                                                        <!--begin::Column-->
-                                                                        <td>
-                                                                            {{ Carbon\Carbon::parse($attachment->created_at)->translatedFormat('d F Y') }}
-                                                                        </td>
-                                                                        <!--end::Column-->
-                                                                        <!--begin::Action-->
-                                                                        @if ($proyek->stage < 8)
-                                                                            <td class="text-center">
-                                                                                <small>
-                                                                                    <p data-bs-toggle="modal"
-                                                                                        data-bs-target="#kt_attachment_delete_{{ $attachment->id }}"
-                                                                                        id="modal-delete"
-                                                                                        class="btn btn-sm btn-light btn-active-primary">
-                                                                                        Delete
-                                                                                    </p>
-                                                                                </small>
-                                                                            </td>
-                                                                        @endif
-                                                                        <!--end::Action-->
-                                                                    </tr>
-                                                                @endforeach
-                                                            </tbody>
-                                                            <!--end::Table body-->
-                                                        </table>
-
-                                                        <!--end::Table-->
-                                                        <br>
-                                                        <!--End::Title Biru Form: Attachment Menang-->
-
-                                                        <!--Begin::Title Biru Form: Laporan Kualitatif-->
-                                                        <br>
-                                                        <h3 class="fw-bolder m-0 required" id="HeadDetail"
-                                                            style="font-size:14px;">Laporan Kualitatif
-                                                        </h3>
-                                                        <br>
-                                                        <div class="form-group">
-                                                            <textarea class="form-control" id="laporan-menang" name="laporan-menang" rows="7">{!! $proyek->laporan_menang !!}</textarea>
-                                                        </div>
-                                                        <!--End::Title Biru Form: Laporan Kualitatif-->
-
-                                                        <h6 class="text-danger fw-normal">(*) Kolom Ini Harus Diisi !</h6>
-
-                                                    </div>
-                                                    <!--end:::Tab Menang-->
-
-
-                                                    <!--begin:::Tab Pasar Terkontrak New-->
-                                                    <div class="tab-pane fade" id="kt_user_view_overview_terkontrak"
-                                                        role="tabpanel">
-
-                                                        <!--begin::Row-->
-                                                        <div class="row fv-row">
-                                                            <!--begin::Col-->
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>No SPK External <i
-                                                                                class="bi bi-journal-text"></i></span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-
-                                                                    <!--begin::Input-->
-                                                                    <input type="text"
-                                                                        class="form-control form-control-solid"
-                                                                        id="nospk-external" name="nospk-external"
-                                                                        value="{{ $proyek->nospk_external }}"
-                                                                        placeholder="No SPK External" />
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
-                                                            </div>
-                                                            <!--End begin::Col-->
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Jenis Proyek <i
-                                                                                class="bi bi-lock"></i></span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-                                                                    <!--begin::Input-->
-                                                                    <input type="text"
-                                                                        class="form-control form-control-solid"
-                                                                        value="{{ $proyek->jenis_proyek == 'I' ? 'Internal' : ($proyek->jenis_proyek == 'N' ? 'External' : 'JO') }}"
-                                                                        readonly />
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
@@ -3770,623 +3688,768 @@
                                                             <!--End begin::Col-->
                                                         </div>
                                                         <!--End begin::Row-->
+                                                    </div>
+                                                    <!--divMenang-->
 
-                                                        <!--begin::Row-->
-                                                        <div class="row fv-row">
-                                                            <!--begin::Col-->
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Tanggal SPK Internal</i></span>
-                                                                    </label>
-                                                                    <a href="#" class="btn"
-                                                                        style="background: transparent;"
-                                                                        id="start-date-modal"
-                                                                        onclick="showCalendarModal(this)">
-                                                                        <i class="bi bi-calendar2-plus-fill"
-                                                                            style="color: #008CB4"></i>
-                                                                    </a>
-                                                                    <!--end::Label-->
-                                                                    <!--begin::Input-->
-                                                                    <input type="Date"
-                                                                        class="form-control form-control-solid"
-                                                                        id="tglspk-internal" name="tglspk-internal"
-                                                                        value="{{ $proyek->tglspk_internal }}"
-                                                                        placeholder="Date" />
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
-                                                            </div>
-                                                            <!--End begin::Col-->
-                                                            <div class="col-3">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Porsi JO (<i
-                                                                                class="bi bi-percent text-dark"></i>) <i
-                                                                                class="bi bi-lock"></i></span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-                                                                    <!--begin::Input-->
-                                                                    <input type="text"
-                                                                        class="form-control form-control-solid {{ $proyek->porsi_jo == null ? 'text-danger' : '' }}"
-                                                                        value="{{ (int) $proyek->porsi_jo ?? '*Porsi JO Belum Ditentukan' }}"
-                                                                        placeholder="Porsi JO" readonly />
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
-                                                            </div>
-                                                            <div class="col-3">
+                                                    <!--Begin::Title Biru Form: Attachment Menang-->
+                                                    <br>
+                                                    <h3 class="fw-bolder m-0 required" id="HeadDetail"
+                                                        style="font-size:14px;">Dokumen SPPBJ / LOI / Penunjukan
+                                                        Pemenangan
+                                                    </h3>
+                                                    <br>
+                                                    <div class="w-50">
+                                                        <input onchange="this.form.submit()" type="file"
+                                                            class="form-control form-control-sm form-input-solid"
+                                                            name="attachment-menang" accept=".pdf">
+                                                    </div>
+                                                    <h6 id="error-attachment-menang" class="text-danger fw-normal"
+                                                        style="display: none">*File terlalu besar ! Max Size 50Mb</h6>
+                                                    <br>
+                                                    <!--begin::Table-->
+                                                    <table class="table align-middle table-row-dashed w-50 fs-6 gy-2"
+                                                        id="kt_customers_table">
+                                                        <!--begin::Table head-->
+                                                        <thead>
+                                                            <!--begin::Table row-->
+                                                            <tr
+                                                                class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                <th class="w-50px text-center">No.</th>
+                                                                <th class="w-auto">Nama Document</th>
+                                                                <th class="w-auto">Modified On</th>
+                                                                <th class="w-auto text-center"></th>
+                                                            </tr>
+                                                            <!--end::Table row-->
+                                                        </thead>
+                                                        <!--end::Table head-->
+                                                        @php
+                                                            $no = 1;
+                                                        @endphp
+                                                        <!--begin::Table body-->
+                                                        <tbody class="fw-bold text-gray-600">
+                                                            @foreach ($proyek->AttachmentMenang as $attachment)
+                                                                <tr>
+                                                                    <!--begin::Nomor-->
+                                                                    <td class="text-center">
+                                                                        {{ $no++ }}
+                                                                    </td>
+                                                                    <!--end::Nomor-->
+                                                                    <!--begin::Name-->
+                                                                    <td>
+                                                                        @if (str_contains("$attachment->nama_attachment", '.doc'))
+                                                                            <a href="/document/view/{{ $attachment->id }}/{{ $attachment->id_document }}"
+                                                                                class="text-hover-primary">{{ $attachment->nama_attachment }}</a>
+                                                                        @else
+                                                                            <a target="_blank"
+                                                                                href="{{ asset('words/' . $attachment->id_document . '.pdf') }}"
+                                                                                class="text-hover-primary">{{ $attachment->nama_attachment }}</a>
+                                                                        @endif
+                                                                    </td>
+                                                                    <!--end::Name-->
+                                                                    <!--begin::Column-->
+                                                                    <td>
+                                                                        {{ Carbon\Carbon::parse($attachment->created_at)->translatedFormat('d F Y') }}
+                                                                    </td>
+                                                                    <!--end::Column-->
+                                                                    <!--begin::Action-->
+                                                                    @if ($proyek->stage < 8)
+                                                                        <td class="text-center">
+                                                                            <small>
+                                                                                <p data-bs-toggle="modal"
+                                                                                    data-bs-target="#kt_attachment_delete_{{ $attachment->id }}"
+                                                                                    id="modal-delete"
+                                                                                    class="btn btn-sm btn-light btn-active-primary">
+                                                                                    Delete
+                                                                                </p>
+                                                                            </small>
+                                                                        </td>
+                                                                    @endif
+                                                                    <!--end::Action-->
+                                                                </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                        <!--end::Table body-->
+                                                    </table>
+
+                                                    <!--end::Table-->
+                                                    <br>
+                                                    <!--End::Title Biru Form: Attachment Menang-->
+
+                                                    <!--Begin::Title Biru Form: Laporan Kualitatif-->
+                                                    <br>
+                                                    <h3 class="fw-bolder m-0 required" id="HeadDetail"
+                                                        style="font-size:14px;">Laporan Kualitatif
+                                                    </h3>
+                                                    <br>
+                                                    <div class="form-group">
+                                                        <textarea class="form-control" id="laporan-menang" name="laporan-menang" rows="7">{!! $proyek->laporan_menang !!}</textarea>
+                                                    </div>
+                                                    <!--End::Title Biru Form: Laporan Kualitatif-->
+
+                                                    <h6 class="text-danger fw-normal">(*) Kolom Ini Harus Diisi !</h6>
+
+                                                </div>
+                                                <!--end:::Tab Menang-->
+
+
+                                                <!--begin:::Tab Pasar Terkontrak New-->
+                                                <div class="tab-pane fade" id="kt_user_view_overview_terkontrak"
+                                                    role="tabpanel">
+
+                                                    <!--begin::Row-->
+                                                    <div class="row fv-row">
+                                                        <!--begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
                                                                 <!--begin::Label-->
                                                                 <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>No SPK External <i
+                                                                            class="bi bi-journal-text"></i></span>
                                                                 </label>
-                                                                <p class="mt-12"><i
-                                                                        class="bi bi-percent text-dark"></i></p>
                                                                 <!--end::Label-->
-                                                            </div>
-                                                            <!--End begin::Col-->
-                                                        </div>
-                                                        <!--End begin::Row-->
 
-                                                        <!--begin::Row-->
-                                                        <div class="row fv-row">
-                                                            <!--begin::Col-->
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Tahun RI Perolehan</span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-                                                                    <!--begin::Input-->
-                                                                    <input type="number"
-                                                                        class="form-control form-control-solid"
-                                                                        id="" name="tahun-ri-perolehan"
-                                                                        min="2020" max="2099" step="1"
-                                                                        value="{{ $proyek->tahun_ri_perolehan == (int) '0' ? '' : $proyek->tahun_ri_perolehan }}"
-                                                                        placeholder="Tahun Ri Perolehan" />
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
+                                                                <!--begin::Input-->
+                                                                <input type="text"
+                                                                    class="form-control form-control-solid"
+                                                                    id="nospk-external" name="nospk-external"
+                                                                    value="{{ $proyek->nospk_external }}"
+                                                                    placeholder="No SPK External" />
+                                                                <!--end::Input-->
                                                             </div>
-                                                            <!--End begin::Col-->
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Nilai OK Review (Valas) (Exclude Tax) <i
-                                                                                class="bi bi-lock"></i></span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-                                                                    <!--begin::Input-->
-                                                                    <input type="text"
-                                                                        class="form-control form-control-solid reformat {{ $proyek->nilai_valas_review == null ? 'text-danger' : '' }}"
-                                                                        value="{{ number_format((int) str_replace('.', '', $proyek->nilai_valas_review), 0, '.', '.') ?? '*Nilai OK Review Belum Ditentukan' }}"
-                                                                        placeholder="Nilai OK Review (Valas) (Exclude Tax)"
-                                                                        readonly />
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
-                                                            </div>
-                                                            <!--End begin::Col-->
+                                                            <!--end::Input group-->
                                                         </div>
-                                                        <!--End begin::Row-->
-
-                                                        <!--begin::Row-->
-                                                        <div class="row fv-row">
-                                                            <!--begin::Col-->
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Bulan RI Perolehan</span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-                                                                    <!--Begin::Input-->
-                                                                    <select id="bulan-ri-perolehan"
-                                                                        name="bulan-ri-perolehan"
-                                                                        class="form-select form-select-solid"
-                                                                        data-control="select2" data-hide-search="true"
-                                                                        data-placeholder="Pilih Bulan RI Perolehan">
-                                                                        <option></option>
-                                                                        <option value="1"
-                                                                            {{ $proyek->bulan_ri_perolehan == '1' ? 'selected' : '' }}>
-                                                                            Januari</option>
-                                                                        <option value="2"
-                                                                            {{ $proyek->bulan_ri_perolehan == '2' ? 'selected' : '' }}>
-                                                                            Februari</option>
-                                                                        <option value="3"
-                                                                            {{ $proyek->bulan_ri_perolehan == '3' ? 'selected' : '' }}>
-                                                                            Maret</option>
-                                                                        <option value="4"
-                                                                            {{ $proyek->bulan_ri_perolehan == '4' ? 'selected' : '' }}>
-                                                                            April</option>
-                                                                        <option value="5"
-                                                                            {{ $proyek->bulan_ri_perolehan == '5' ? 'selected' : '' }}>
-                                                                            Mei</option>
-                                                                        <option value="6"
-                                                                            {{ $proyek->bulan_ri_perolehan == '6' ? 'selected' : '' }}>
-                                                                            Juni</option>
-                                                                        <option value="7"
-                                                                            {{ $proyek->bulan_ri_perolehan == '7' ? 'selected' : '' }}>
-                                                                            Juli</option>
-                                                                        <option value="8"
-                                                                            {{ $proyek->bulan_ri_perolehan == '8' ? 'selected' : '' }}>
-                                                                            Agustus</option>
-                                                                        <option value="9"
-                                                                            {{ $proyek->bulan_ri_perolehan == '9' ? 'selected' : '' }}>
-                                                                            September</option>
-                                                                        <option value="10"
-                                                                            {{ $proyek->bulan_ri_perolehan == '10' ? 'selected' : '' }}>
-                                                                            Oktober</option>
-                                                                        <option value="11"
-                                                                            {{ $proyek->bulan_ri_perolehan == '11' ? 'selected' : '' }}>
-                                                                            November</option>
-                                                                        <option value="12"
-                                                                            {{ $proyek->bulan_ri_perolehan == '12' ? 'selected' : '' }}>
-                                                                            Desember</option>
-                                                                    </select>
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
+                                                        <!--End begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>Jenis Proyek <i class="bi bi-lock"></i></span>
+                                                                </label>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                <input type="text"
+                                                                    class="form-control form-control-solid"
+                                                                    value="{{ $proyek->jenis_proyek == 'I' ? 'Internal' : ($proyek->jenis_proyek == 'N' ? 'External' : 'JO') }}"
+                                                                    readonly />
+                                                                <!--end::Input-->
                                                             </div>
-                                                            <!--End begin::Col-->
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Mata Uang <i class="bi bi-lock"></i></span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-                                                                    <!--Begin::Input-->
-                                                                    <input type="text"
-                                                                        class="form-control form-control-solid {{ ($proyek->mata_uang_review == null && $proyek->mata_uang_awal == null) ? 'text-danger' : '' }}"
-                                                                        value="{{ $proyek->mata_uang_review ?? $proyek->mata_uang_awal ?? '*Mata Uang Belum Ditentukan' }}"
-                                                                        readonly />
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
-                                                            </div>
-                                                            <!--End begin::Col-->
+                                                            <!--end::Input group-->
                                                         </div>
-                                                        <!--End begin::Row-->
+                                                        <!--End begin::Col-->
+                                                    </div>
+                                                    <!--End begin::Row-->
 
-                                                        <!--begin::Row Kanan+Kiri-->
-                                                        <div class="row fv-row">
-                                                            <!--begin::Col-->
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>No Kontrak <i
-                                                                                class="bi bi-journal-text"></i></span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-                                                                    <!--begin::Input-->
-                                                                    <div
-                                                                        class="d-flex align-items-center position-relative">
-                                                                        <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
-                                                                        {{-- <span id="view-kontrak" class="svg-icon svg-icon-1 position-absolute ms-4">
+                                                    <!--begin::Row-->
+                                                    <div class="row fv-row">
+                                                        <!--begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>Tanggal SPK Internal</i></span>
+                                                                </label>
+                                                                <a href="#" class="btn"
+                                                                    style="background: transparent;"
+                                                                    id="start-date-modal"
+                                                                    onclick="showCalendarModal(this)">
+                                                                    <i class="bi bi-calendar2-plus-fill"
+                                                                        style="color: #008CB4"></i>
+                                                                </a>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                <input type="Date"
+                                                                    class="form-control form-control-solid"
+                                                                    id="tglspk-internal" name="tglspk-internal"
+                                                                    value="{{ $proyek->tglspk_internal }}"
+                                                                    placeholder="Date" />
+                                                                <!--end::Input-->
+                                                            </div>
+                                                            <!--end::Input group-->
+                                                        </div>
+                                                        <!--End begin::Col-->
+                                                        <div class="col-3">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>Porsi JO (<i
+                                                                            class="bi bi-percent text-dark"></i>) <i
+                                                                            class="bi bi-lock"></i></span>
+                                                                </label>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                <input type="text"
+                                                                    class="form-control form-control-solid {{ $proyek->porsi_jo == null ? 'text-danger' : '' }}"
+                                                                    value="{{ (int) $proyek->porsi_jo ?? '*Porsi JO Belum Ditentukan' }}"
+                                                                    placeholder="Porsi JO" readonly />
+                                                                <!--end::Input-->
+                                                            </div>
+                                                            <!--end::Input group-->
+                                                        </div>
+                                                        <div class="col-3">
+                                                            <!--begin::Label-->
+                                                            <label class="fs-6 fw-bold form-label mt-3">
+                                                            </label>
+                                                            <p class="mt-12"><i class="bi bi-percent text-dark"></i>
+                                                            </p>
+                                                            <!--end::Label-->
+                                                        </div>
+                                                        <!--End begin::Col-->
+                                                    </div>
+                                                    <!--End begin::Row-->
+
+                                                    <!--begin::Row-->
+                                                    <div class="row fv-row">
+                                                        <!--begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>Tahun RI Perolehan</span>
+                                                                </label>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                <input type="number"
+                                                                    class="form-control form-control-solid"
+                                                                    id="" name="tahun-ri-perolehan"
+                                                                    min="2020" max="2099" step="1"
+                                                                    value="{{ $proyek->tahun_ri_perolehan == (int) '0' ? '' : $proyek->tahun_ri_perolehan }}"
+                                                                    placeholder="Tahun Ri Perolehan" />
+                                                                <!--end::Input-->
+                                                            </div>
+                                                            <!--end::Input group-->
+                                                        </div>
+                                                        <!--End begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>Nilai OK Review (Valas) (Exclude Tax) <i
+                                                                            class="bi bi-lock"></i></span>
+                                                                </label>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                <input type="text"
+                                                                    class="form-control form-control-solid reformat {{ $proyek->nilai_valas_review == null ? 'text-danger' : '' }}"
+                                                                    value="{{ number_format((int) str_replace('.', '', $proyek->nilai_valas_review), 0, '.', '.') ?? '*Nilai OK Review Belum Ditentukan' }}"
+                                                                    placeholder="Nilai OK Review (Valas) (Exclude Tax)"
+                                                                    readonly />
+                                                                <!--end::Input-->
+                                                            </div>
+                                                            <!--end::Input group-->
+                                                        </div>
+                                                        <!--End begin::Col-->
+                                                    </div>
+                                                    <!--End begin::Row-->
+
+                                                    <!--begin::Row-->
+                                                    <div class="row fv-row">
+                                                        <!--begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>Bulan RI Perolehan</span>
+                                                                </label>
+                                                                <!--end::Label-->
+                                                                <!--Begin::Input-->
+                                                                <select id="bulan-ri-perolehan"
+                                                                    name="bulan-ri-perolehan"
+                                                                    class="form-select form-select-solid"
+                                                                    data-control="select2" data-hide-search="true"
+                                                                    data-placeholder="Pilih Bulan RI Perolehan">
+                                                                    <option></option>
+                                                                    <option value="1"
+                                                                        {{ $proyek->bulan_ri_perolehan == '1' ? 'selected' : '' }}>
+                                                                        Januari</option>
+                                                                    <option value="2"
+                                                                        {{ $proyek->bulan_ri_perolehan == '2' ? 'selected' : '' }}>
+                                                                        Februari</option>
+                                                                    <option value="3"
+                                                                        {{ $proyek->bulan_ri_perolehan == '3' ? 'selected' : '' }}>
+                                                                        Maret</option>
+                                                                    <option value="4"
+                                                                        {{ $proyek->bulan_ri_perolehan == '4' ? 'selected' : '' }}>
+                                                                        April</option>
+                                                                    <option value="5"
+                                                                        {{ $proyek->bulan_ri_perolehan == '5' ? 'selected' : '' }}>
+                                                                        Mei</option>
+                                                                    <option value="6"
+                                                                        {{ $proyek->bulan_ri_perolehan == '6' ? 'selected' : '' }}>
+                                                                        Juni</option>
+                                                                    <option value="7"
+                                                                        {{ $proyek->bulan_ri_perolehan == '7' ? 'selected' : '' }}>
+                                                                        Juli</option>
+                                                                    <option value="8"
+                                                                        {{ $proyek->bulan_ri_perolehan == '8' ? 'selected' : '' }}>
+                                                                        Agustus</option>
+                                                                    <option value="9"
+                                                                        {{ $proyek->bulan_ri_perolehan == '9' ? 'selected' : '' }}>
+                                                                        September</option>
+                                                                    <option value="10"
+                                                                        {{ $proyek->bulan_ri_perolehan == '10' ? 'selected' : '' }}>
+                                                                        Oktober</option>
+                                                                    <option value="11"
+                                                                        {{ $proyek->bulan_ri_perolehan == '11' ? 'selected' : '' }}>
+                                                                        November</option>
+                                                                    <option value="12"
+                                                                        {{ $proyek->bulan_ri_perolehan == '12' ? 'selected' : '' }}>
+                                                                        Desember</option>
+                                                                </select>
+                                                                <!--end::Input-->
+                                                            </div>
+                                                            <!--end::Input group-->
+                                                        </div>
+                                                        <!--End begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>Mata Uang <i class="bi bi-lock"></i></span>
+                                                                </label>
+                                                                <!--end::Label-->
+                                                                <!--Begin::Input-->
+                                                                <input type="text"
+                                                                    class="form-control form-control-solid {{ $proyek->mata_uang_review == null && $proyek->mata_uang_awal == null ? 'text-danger' : '' }}"
+                                                                    value="{{ $proyek->mata_uang_review ?? ($proyek->mata_uang_awal ?? '*Mata Uang Belum Ditentukan') }}"
+                                                                    readonly />
+                                                                <!--end::Input-->
+                                                            </div>
+                                                            <!--end::Input group-->
+                                                        </div>
+                                                        <!--End begin::Col-->
+                                                    </div>
+                                                    <!--End begin::Row-->
+
+                                                    <!--begin::Row Kanan+Kiri-->
+                                                    <div class="row fv-row">
+                                                        <!--begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>No Kontrak <i
+                                                                            class="bi bi-journal-text"></i></span>
+                                                                </label>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                <div class="d-flex align-items-center position-relative">
+                                                                    <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
+                                                                    {{-- <span id="view-kontrak" class="svg-icon svg-icon-1 position-absolute ms-4">
                                                                             <a href="/contract-management/view/{{ $proyek->nomor_terkontrak }}" class="text-gray-800 text-hover-primary mb-1">{{ $proyek->nomor_terkontrak }}</a>
                                                                         </span>
                                                                         <input onclick="viewKontrak(this)" type="text" id="fake-terkontrak"
                                                                             class="form-control form-control-solid"
                                                                             value="" readonly/> --}}
-                                                                        <!--end::Svg Icon-->
-                                                                        <input onfocusout="displayKontrak(this)"
-                                                                            type="text"
-                                                                            class="form-control form-control-solid"
-                                                                            id="nomor-terkontrak"
-                                                                            name="nomor-terkontrak"
-                                                                            value="{{ $proyek->nomor_terkontrak }}"
-                                                                            placeholder="" onpaste="return false" />
-                                                                    </div>
-                                                                    <p style="display: none" id="char-error"
-                                                                        class="text-danger fw-normal">*Not Allowed : / \ ?
-                                                                        #;</p>
-                                                                    <script>
-                                                                        // document.getElementById("nomor-terkontrak").onkeypress = function(e) {
-                                                                        //     var chr = String.fromCharCode(e.which);
-                                                                        //     if (`/ \ ? #`.indexOf(chr) >= 0){
-                                                                        //     // if (`!?"'#%&()*/@[\]^_{|}><~;`.indexOf(chr) >= 0){
-                                                                        //         document.getElementById('char-error').style.display = "";
-                                                                        //     // showError(chr)
-                                                                        //     return false;
-                                                                        //     }
-                                                                        //     return true
-                                                                        // };
-                                                                        // function viewKontrak(e) {
-                                                                        //     document.getElementById('fake-terkontrak').style.display = "none";
-                                                                        //     document.getElementById('view-kontrak').style.display = "none";
-                                                                        //     document.getElementById('nomor-terkontrak').style.display = "";
-                                                                        //     // e.value = "{{ $proyek->nomor_terkontrak }}";
-                                                                        // }
-                                                                        // function displayKontrak(e) {
-                                                                        //     document.getElementById('view-kontrak').style.display = "";
-                                                                        //     document.getElementById('view-kontrak').innerHTML = e.value;
-                                                                        //     document.getElementById('fake-terkontrak').style.display = "";
-                                                                        //     document.getElementById('nomor-terkontrak').style.display = "none";
-                                                                        //     // console.log(e);
-                                                                        // }
-                                                                    </script>
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
-                                                            </div>
-                                                            <!--End begin::Col-->
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Kurs Review <i
-                                                                                class="bi bi-lock"></i></span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-                                                                    <!--begin::Input-->
-                                                                    <input onkeyup="hitungReview()" type="text"
-                                                                        class="form-control form-control-solid {{ $proyek->kurs_review == null ? 'text-danger' : '' }}"
-                                                                        value="{{ $proyek->kurs_review ?? '*Kurs Review Belum Ditentukan' }}"
-                                                                        placeholder="Kurs Review" readonly />
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
-                                                            </div>
-                                                            <!--End::Col-->
-                                                        </div>
-                                                        <!--End::Row Kanan+Kiri-->
-
-
-                                                        <!--begin::Row Kanan+Kiri-->
-                                                        <div class="row fv-row">
-                                                            <!--begin::Col-->
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Tanggal Kontrak</span>
-                                                                    </label>
-                                                                    <a href="#" class="btn"
-                                                                        style="background: transparent;"
-                                                                        id="start-date-modal"
-                                                                        onclick="showCalendarModal(this)">
-                                                                        <i class="bi bi-calendar2-plus-fill"
-                                                                            style="color: #008CB4"></i>
-                                                                    </a>
-                                                                    <!--end::Label-->
-                                                                    <!--begin::Input-->
-                                                                    <input type="Date"
+                                                                    <!--end::Svg Icon-->
+                                                                    <input onfocusout="displayKontrak(this)"
+                                                                        type="text"
                                                                         class="form-control form-control-solid"
-                                                                        id="tanggal-terkontrak"
-                                                                        name="tanggal-terkontrak"
-                                                                        value="{{ $proyek->tanggal_terkontrak }}"
-                                                                        placeholder="Date" />
-                                                                    <!--end::Input-->
+                                                                        id="nomor-terkontrak" name="nomor-terkontrak"
+                                                                        value="{{ $proyek->nomor_terkontrak }}"
+                                                                        placeholder="" onpaste="return false" />
                                                                 </div>
-                                                                <!--end::Input group-->
+                                                                <p style="display: none" id="char-error"
+                                                                    class="text-danger fw-normal">*Not Allowed : / \ ?
+                                                                    #;</p>
+                                                                <script>
+                                                                    // document.getElementById("nomor-terkontrak").onkeypress = function(e) {
+                                                                    //     var chr = String.fromCharCode(e.which);
+                                                                    //     if (`/ \ ? #`.indexOf(chr) >= 0){
+                                                                    //     // if (`!?"'#%&()*/@[\]^_{|}><~;`.indexOf(chr) >= 0){
+                                                                    //         document.getElementById('char-error').style.display = "";
+                                                                    //     // showError(chr)
+                                                                    //     return false;
+                                                                    //     }
+                                                                    //     return true
+                                                                    // };
+                                                                    // function viewKontrak(e) {
+                                                                    //     document.getElementById('fake-terkontrak').style.display = "none";
+                                                                    //     document.getElementById('view-kontrak').style.display = "none";
+                                                                    //     document.getElementById('nomor-terkontrak').style.display = "";
+                                                                    //     // e.value = "{{ $proyek->nomor_terkontrak }}";
+                                                                    // }
+                                                                    // function displayKontrak(e) {
+                                                                    //     document.getElementById('view-kontrak').style.display = "";
+                                                                    //     document.getElementById('view-kontrak').innerHTML = e.value;
+                                                                    //     document.getElementById('fake-terkontrak').style.display = "";
+                                                                    //     document.getElementById('nomor-terkontrak').style.display = "none";
+                                                                    //     // console.log(e);
+                                                                    // }
+                                                                </script>
+                                                                <!--end::Input-->
                                                             </div>
-                                                            <!--End begin::Col-->
-                                                            @php
-                                                                if ($proyek->stage == 8 || $proyek->stage == 9){
-                                                                    if ($proyek->nilai_perolehan != null && $proyek->porsi_jo != null) {
-                                                                        $nilaiPerolehan = (int) str_replace('.', '', $proyek->nilai_perolehan);
-                                                                        $kontrakKeseluruhan = ($nilaiPerolehan * 100) / (int) $proyek->porsi_jo;
-                                                                        $nilaiKontrakKeseluruhan = number_format((int) str_replace('.', '', round($kontrakKeseluruhan)), 0, '.', '.');
-                                                                    }
+                                                            <!--end::Input group-->
+                                                        </div>
+                                                        <!--End begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>Kurs Review <i class="bi bi-lock"></i></span>
+                                                                </label>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                <input onkeyup="hitungReview()" type="text"
+                                                                    class="form-control form-control-solid {{ $proyek->kurs_review == null ? 'text-danger' : '' }}"
+                                                                    value="{{ $proyek->kurs_review ?? '*Kurs Review Belum Ditentukan' }}"
+                                                                    placeholder="Kurs Review" readonly />
+                                                                <!--end::Input-->
+                                                            </div>
+                                                            <!--end::Input group-->
+                                                        </div>
+                                                        <!--End::Col-->
+                                                    </div>
+                                                    <!--End::Row Kanan+Kiri-->
 
-                                                                } else {
-                                                                    $nilaiKontrakKeseluruhan = 0;
+
+                                                    <!--begin::Row Kanan+Kiri-->
+                                                    <div class="row fv-row">
+                                                        <!--begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>Tanggal Kontrak</span>
+                                                                </label>
+                                                                <a href="#" class="btn"
+                                                                    style="background: transparent;"
+                                                                    id="start-date-modal"
+                                                                    onclick="showCalendarModal(this)">
+                                                                    <i class="bi bi-calendar2-plus-fill"
+                                                                        style="color: #008CB4"></i>
+                                                                </a>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                <input type="Date"
+                                                                    class="form-control form-control-solid"
+                                                                    id="tanggal-terkontrak" name="tanggal-terkontrak"
+                                                                    value="{{ $proyek->tanggal_terkontrak }}"
+                                                                    placeholder="Date" />
+                                                                <!--end::Input-->
+                                                            </div>
+                                                            <!--end::Input group-->
+                                                        </div>
+                                                        <!--End begin::Col-->
+                                                        @php
+                                                            if ($proyek->stage == 8 || $proyek->stage == 9) {
+                                                                if ($proyek->nilai_perolehan != null && $proyek->porsi_jo != null) {
+                                                                    $nilaiPerolehan = (int) str_replace('.', '', $proyek->nilai_perolehan);
+                                                                    $kontrakKeseluruhan = ($nilaiPerolehan * 100) / (int) $proyek->porsi_jo;
+                                                                    $nilaiKontrakKeseluruhan = number_format((int) str_replace('.', '', round($kontrakKeseluruhan)), 0, '.', '.');
                                                                 }
-                                                                // dump( $nilaiKontrakKeseluruhan)
-                                                            @endphp
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Nilai Kontrak Keseluruhan<i
-                                                                                class="bi bi-lock"></i></span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-                                                                    <!--begin::Input-->
-                                                                    {{-- <input type="text"
+                                                            } else {
+                                                                $nilaiKontrakKeseluruhan = 0;
+                                                            }
+                                                            // dump( $nilaiKontrakKeseluruhan)
+                                                        @endphp
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>Nilai Kontrak Keseluruhan<i
+                                                                            class="bi bi-lock"></i></span>
+                                                                </label>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                {{-- <input type="text"
                                                                         class="form-control form-control-solid reformat {{ $proyek->nilai_kontrak_keseluruhan == null ? 'text-danger' : '' }}"
                                                                         value="{{ number_format((int) str_replace('.', '', $proyek->nilai_kontrak_keseluruhan), 0, '.', '.') ?? '*Nilai Perolehan Belum Ditentukan' }}"
                                                                         id="nilai-kontrak-keseluruhan"
                                                                         name="nilai-kontrak-keseluruhan"
                                                                         placeholder="*Nilai Perolehan Belum Ditentukan"
                                                                         readonly /> --}}
-                                                                    <input type="text"
-                                                                        class="form-control form-control-solid reformat {{ $nilaiKontrakKeseluruhan == 0 ? 'text-danger' : '' }}"
-                                                                        value="{{ $nilaiKontrakKeseluruhan == 0 ? '' : $nilaiKontrakKeseluruhan }}"
-                                                                        id="nilai-kontrak-keseluruhan"
-                                                                        name="nilai-kontrak-keseluruhan"
-                                                                        placeholder="*Nilai Perolehan Belum Ditentukan"
-                                                                        readonly />
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
+                                                                <input type="text"
+                                                                    class="form-control form-control-solid reformat {{ $nilaiKontrakKeseluruhan == 0 ? 'text-danger' : '' }}"
+                                                                    value="{{ $nilaiKontrakKeseluruhan == 0 ? '' : $nilaiKontrakKeseluruhan }}"
+                                                                    id="nilai-kontrak-keseluruhan"
+                                                                    name="nilai-kontrak-keseluruhan"
+                                                                    placeholder="*Nilai Perolehan Belum Ditentukan"
+                                                                    readonly />
+                                                                <!--end::Input-->
                                                             </div>
-                                                            <!--End::Col-->
+                                                            <!--end::Input group-->
                                                         </div>
-                                                        <!--End::Row Kanan+Kiri-->
+                                                        <!--End::Col-->
+                                                    </div>
+                                                    <!--End::Row Kanan+Kiri-->
 
 
-                                                        <!--begin::Row Kanan+Kiri-->
-                                                        <div class="row fv-row">
-                                                            <!--begin::Col-->
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Tanggal Mulai Kontrak <i
-                                                                                class="bi bi-journal-text"></i></span>
-                                                                    </label>
-                                                                    <a href="#" class="btn"
-                                                                        style="background: transparent;"
-                                                                        id="start-date-modal"
-                                                                        onclick="showCalendarModal(this)">
-                                                                        <i class="bi bi-calendar2-plus-fill"
-                                                                            style="color: #008CB4"></i>
-                                                                    </a>
-                                                                    <!--end::Label-->
-                                                                    <!--begin::Input-->
-                                                                    <input type="Date"
-                                                                        class="form-control form-control-solid"
-                                                                        id="tanggal-mulai-kontrak"
-                                                                        name="tanggal-mulai-kontrak"
-                                                                        value="{{ $proyek->tanggal_mulai_terkontrak }}"
-                                                                        placeholder="Date" />
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
+                                                    <!--begin::Row Kanan+Kiri-->
+                                                    <div class="row fv-row">
+                                                        <!--begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>Tanggal Mulai Kontrak <i
+                                                                            class="bi bi-journal-text"></i></span>
+                                                                </label>
+                                                                <a href="#" class="btn"
+                                                                    style="background: transparent;"
+                                                                    id="start-date-modal"
+                                                                    onclick="showCalendarModal(this)">
+                                                                    <i class="bi bi-calendar2-plus-fill"
+                                                                        style="color: #008CB4"></i>
+                                                                </a>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                <input type="Date"
+                                                                    class="form-control form-control-solid"
+                                                                    id="tanggal-mulai-kontrak"
+                                                                    name="tanggal-mulai-kontrak"
+                                                                    value="{{ $proyek->tanggal_mulai_terkontrak }}"
+                                                                    placeholder="Date" />
+                                                                <!--end::Input-->
                                                             </div>
-                                                            <!--End begin::Col-->
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Nilai Kontrak (Porsi WIKA) <i
-                                                                                class="bi bi-journal-text"></i> <i
-                                                                                class="bi bi-lock"></i></span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-                                                                    <!--begin::Input-->
-                                                                    <input type="text"
-                                                                        class="form-control form-control-solid reformat {{ $proyek->nilai_perolehan == null ? 'text-danger' : '' }}"
-                                                                        value="{{ number_format((int) str_replace('.', '', $proyek->nilai_perolehan), 0, '.', '.') ?? '*Nilai Perolehan Belum Ditentukan' }}"
-                                                                        placeholder="Nilai Kontrak (Porsi WIKA)"
-                                                                        readonly />
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
-                                                            </div>
-                                                            <!--End::Col-->
+                                                            <!--end::Input group-->
                                                         </div>
-                                                        <!--End::Row Kanan+Kiri-->
-
-
-                                                        <!--begin::Row Kanan+Kiri-->
-                                                        <div class="row fv-row">
-                                                            <!--begin::Col-->
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Tanggal Akhir Kontrak <i
-                                                                                class="bi bi-journal-text"></i></span>
-                                                                    </label>
-                                                                    <a href="#" class="btn"
-                                                                        style="background: transparent;"
-                                                                        id="start-date-modal"
-                                                                        onclick="showCalendarModal(this)">
-                                                                        <i class="bi bi-calendar2-plus-fill"
-                                                                            style="color: #008CB4"></i>
-                                                                    </a>
-                                                                    <!--end::Label-->
-                                                                    <!--begin::Input-->
-                                                                    <input type="Date"
-                                                                        class="form-control form-control-solid"
-                                                                        id="tanggal-akhir-kontrak"
-                                                                        name="tanggal-akhir-kontrak"
-                                                                        value="{{ $proyek->tanggal_akhir_terkontrak }}"
-                                                                        placeholder="Date" />
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
+                                                        <!--End begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>Nilai Kontrak (Porsi WIKA) <i
+                                                                            class="bi bi-journal-text"></i> <i
+                                                                            class="bi bi-lock"></i></span>
+                                                                </label>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                <input type="text"
+                                                                    class="form-control form-control-solid reformat {{ $proyek->nilai_perolehan == null ? 'text-danger' : '' }}"
+                                                                    value="{{ number_format((int) str_replace('.', '', $proyek->nilai_perolehan), 0, '.', '.') ?? '*Nilai Perolehan Belum Ditentukan' }}"
+                                                                    placeholder="Nilai Kontrak (Porsi WIKA)" readonly />
+                                                                <!--end::Input-->
                                                             </div>
-                                                            <!--End begin::Col-->
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Klasifikasi Proyek</span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-                                                                    <!--begin::Input-->
-                                                                    <select id="klasifikasi-terkontrak"
-                                                                        name="klasifikasi-terkontrak"
-                                                                        class="form-select form-select-solid"
-                                                                        data-control="select2" data-hide-search="true"
-                                                                        data-placeholder="Pilih Klasifikasi Proyek">
-                                                                        <option></option>
-                                                                        <option value="Proyek Besar"
-                                                                            {{ $proyek->klasifikasi_terkontrak == 'Proyek Besar' ? 'selected' : '' }}>
-                                                                            Proyek Besar</option>
-                                                                        <option value="Proyek Menengah"
-                                                                            {{ $proyek->klasifikasi_terkontrak == 'Proyek Menengah' ? 'selected' : '' }}>
-                                                                            Proyek Menengah</option>
-                                                                        <option value="Proyek Kecil"
-                                                                            {{ $proyek->klasifikasi_terkontrak == 'Proyek Kecil' ? 'selected' : '' }}>
-                                                                            Proyek Kecil</option>
-                                                                        <option value="Mega Proyek"
-                                                                            {{ $proyek->klasifikasi_terkontrak == 'Mega Proyek' ? 'selected' : '' }}>
-                                                                            Mega Proyek</option>
-                                                                    </select>
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
-                                                            </div>
-                                                            <!--End::Col-->
+                                                            <!--end::Input group-->
                                                         </div>
-                                                        <!--End::Row Kanan+Kiri-->
+                                                        <!--End::Col-->
+                                                    </div>
+                                                    <!--End::Row Kanan+Kiri-->
 
 
-                                                        <!--begin::Row Kanan+Kiri-->
-                                                        <div class="row fv-row">
-                                                            <!--begin::Col-->
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Tanggal Selesai Bash PHO</span>
-                                                                    </label>
-                                                                    <a href="#" class="btn"
-                                                                        style="background: transparent;"
-                                                                        id="start-date-modal"
-                                                                        onclick="showCalendarModal(this)">
-                                                                        <i class="bi bi-calendar2-plus-fill"
-                                                                            style="color: #008CB4"></i>
-                                                                    </a>
-                                                                    <!--end::Label-->
-                                                                    <!--begin::Input-->
-                                                                    <input type="Date"
-                                                                        class="form-control form-control-solid"
-                                                                        id="tanggal-selesai-kontrak-pho"
-                                                                        name="tanggal-selesai-kontrak-pho"
-                                                                        value="{{ $proyek->tanggal_selesai_pho }}"
-                                                                        placeholder="Date" />
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
+                                                    <!--begin::Row Kanan+Kiri-->
+                                                    <div class="row fv-row">
+                                                        <!--begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>Tanggal Akhir Kontrak <i
+                                                                            class="bi bi-journal-text"></i></span>
+                                                                </label>
+                                                                <a href="#" class="btn"
+                                                                    style="background: transparent;"
+                                                                    id="start-date-modal"
+                                                                    onclick="showCalendarModal(this)">
+                                                                    <i class="bi bi-calendar2-plus-fill"
+                                                                        style="color: #008CB4"></i>
+                                                                </a>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                <input type="Date"
+                                                                    class="form-control form-control-solid"
+                                                                    id="tanggal-akhir-kontrak"
+                                                                    name="tanggal-akhir-kontrak"
+                                                                    value="{{ $proyek->tanggal_akhir_terkontrak }}"
+                                                                    placeholder="Date" />
+                                                                <!--end::Input-->
                                                             </div>
-                                                            <!--End begin::Col-->
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Jenis Kontrak</span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-                                                                    <!--begin::Input-->
-                                                                    <select id="jenis-terkontrak"
-                                                                        name="jenis-terkontrak"
-                                                                        class="form-select form-select-solid"
-                                                                        data-control="select2" data-hide-search="true"
-                                                                        data-placeholder="Jenis Kontrak">
-                                                                        <option></option>
-                                                                        <option value="Cost-Plus/Provisional Sum"
-                                                                            {{ $proyek->jenis_terkontrak == 'Cost-Plus/Provisional Sum' ? 'selected' : '' }}>
-                                                                            Cost-Plus/Provisional Sum</option>
-                                                                        {{-- <option value="Design & Build"
+                                                            <!--end::Input group-->
+                                                        </div>
+                                                        <!--End begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>Klasifikasi Proyek</span>
+                                                                </label>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                <select id="klasifikasi-terkontrak"
+                                                                    name="klasifikasi-terkontrak"
+                                                                    class="form-select form-select-solid"
+                                                                    data-control="select2" data-hide-search="true"
+                                                                    data-placeholder="Pilih Klasifikasi Proyek">
+                                                                    <option></option>
+                                                                    <option value="Proyek Besar"
+                                                                        {{ $proyek->klasifikasi_terkontrak == 'Proyek Besar' ? 'selected' : '' }}>
+                                                                        Proyek Besar</option>
+                                                                    <option value="Proyek Menengah"
+                                                                        {{ $proyek->klasifikasi_terkontrak == 'Proyek Menengah' ? 'selected' : '' }}>
+                                                                        Proyek Menengah</option>
+                                                                    <option value="Proyek Kecil"
+                                                                        {{ $proyek->klasifikasi_terkontrak == 'Proyek Kecil' ? 'selected' : '' }}>
+                                                                        Proyek Kecil</option>
+                                                                    <option value="Mega Proyek"
+                                                                        {{ $proyek->klasifikasi_terkontrak == 'Mega Proyek' ? 'selected' : '' }}>
+                                                                        Mega Proyek</option>
+                                                                </select>
+                                                                <!--end::Input-->
+                                                            </div>
+                                                            <!--end::Input group-->
+                                                        </div>
+                                                        <!--End::Col-->
+                                                    </div>
+                                                    <!--End::Row Kanan+Kiri-->
+
+
+                                                    <!--begin::Row Kanan+Kiri-->
+                                                    <div class="row fv-row">
+                                                        <!--begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>Tanggal Selesai Bash PHO</span>
+                                                                </label>
+                                                                <a href="#" class="btn"
+                                                                    style="background: transparent;"
+                                                                    id="start-date-modal"
+                                                                    onclick="showCalendarModal(this)">
+                                                                    <i class="bi bi-calendar2-plus-fill"
+                                                                        style="color: #008CB4"></i>
+                                                                </a>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                <input type="Date"
+                                                                    class="form-control form-control-solid"
+                                                                    id="tanggal-selesai-kontrak-pho"
+                                                                    name="tanggal-selesai-kontrak-pho"
+                                                                    value="{{ $proyek->tanggal_selesai_pho }}"
+                                                                    placeholder="Date" />
+                                                                <!--end::Input-->
+                                                            </div>
+                                                            <!--end::Input group-->
+                                                        </div>
+                                                        <!--End begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>Jenis Kontrak</span>
+                                                                </label>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                <select id="jenis-terkontrak" name="jenis-terkontrak"
+                                                                    class="form-select form-select-solid"
+                                                                    data-control="select2" data-hide-search="true"
+                                                                    data-placeholder="Jenis Kontrak">
+                                                                    <option></option>
+                                                                    <option value="Cost-Plus/Provisional Sum"
+                                                                        {{ $proyek->jenis_terkontrak == 'Cost-Plus/Provisional Sum' ? 'selected' : '' }}>
+                                                                        Cost-Plus/Provisional Sum</option>
+                                                                    {{-- <option value="Design & Build"
                                                                             {{ $proyek->jenis_terkontrak == 'Design & Build' ? 'selected' : '' }}>
                                                                             Design & Build</option> --}}
-                                                                        <option value="Lumpsum"
-                                                                            {{ ($proyek->jenis_terkontrak == 'Lumpsum' || $proyek->jenis_terkontrak == 'Design & Build') ? 'selected' : '' }}>
-                                                                            Lumpsum</option>
-                                                                        {{-- <option value="OM"
+                                                                    <option value="Lumpsum"
+                                                                        {{ $proyek->jenis_terkontrak == 'Lumpsum' || $proyek->jenis_terkontrak == 'Design & Build' ? 'selected' : '' }}>
+                                                                        Lumpsum</option>
+                                                                    {{-- <option value="OM"
                                                                             {{ $proyek->jenis_terkontrak == 'OM' ? 'selected' : '' }}>
                                                                             OM</option> --}}
-                                                                        <option value="Turnkey"
-                                                                            {{ $proyek->jenis_terkontrak == 'Turnkey' ? 'selected' : '' }}>
-                                                                            Turnkey</option>
-                                                                        <option value="Unit Price"
-                                                                            {{ ($proyek->jenis_terkontrak == 'Unit Price' || $proyek->jenis_terkontrak == 'OM') ? 'selected' : '' }}>
-                                                                            Unit Price</option>
-                                                                        <option value="Fixed Price"
-                                                                            {{ $proyek->jenis_terkontrak == 'Fixed Price' ? 'selected' : '' }}>
-                                                                            Fixed Price</option>
-                                                                        <option value="Lumsump+Unit Price"
-                                                                            {{ $proyek->jenis_terkontrak == 'Lumsump+Unit Price' ? 'selected' : '' }}>
-                                                                            Lumsump+Unit Price</option>
-                                                                    </select>
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
+                                                                    <option value="Turnkey"
+                                                                        {{ $proyek->jenis_terkontrak == 'Turnkey' ? 'selected' : '' }}>
+                                                                        Turnkey</option>
+                                                                    <option value="Unit Price"
+                                                                        {{ $proyek->jenis_terkontrak == 'Unit Price' || $proyek->jenis_terkontrak == 'OM' ? 'selected' : '' }}>
+                                                                        Unit Price</option>
+                                                                    <option value="Fixed Price"
+                                                                        {{ $proyek->jenis_terkontrak == 'Fixed Price' ? 'selected' : '' }}>
+                                                                        Fixed Price</option>
+                                                                    <option value="Lumsump+Unit Price"
+                                                                        {{ $proyek->jenis_terkontrak == 'Lumsump+Unit Price' ? 'selected' : '' }}>
+                                                                        Lumsump+Unit Price</option>
+                                                                </select>
+                                                                <!--end::Input-->
                                                             </div>
-                                                            <!--End::Col-->
+                                                            <!--end::Input group-->
                                                         </div>
-                                                        <!--End::Row Kanan+Kiri-->
+                                                        <!--End::Col-->
+                                                    </div>
+                                                    <!--End::Row Kanan+Kiri-->
 
-                                                        <!--begin::Row Kanan+Kiri-->
-                                                        <div class="row fv-row">
-                                                            <!--begin::Col-->
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Tanggal Selesai Bash FHO</span>
-                                                                    </label>
-                                                                    <a href="#" class="btn"
-                                                                        style="background: transparent;"
-                                                                        id="start-date-modal"
-                                                                        onclick="showCalendarModal(this)">
-                                                                        <i class="bi bi-calendar2-plus-fill"
-                                                                            style="color: #008CB4"></i>
-                                                                    </a>
-                                                                    <!--end::Label-->
-                                                                    <!--begin::Input-->
-                                                                    <input type="Date"
-                                                                        class="form-control form-control-solid"
-                                                                        id="tanggal-selesai-kontrak-fho"
-                                                                        name="tanggal-selesai-kontrak-fho"
-                                                                        value="{{ $proyek->tanggal_selesai_fho }}"
-                                                                        placeholder="Date" />
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
+                                                    <!--begin::Row Kanan+Kiri-->
+                                                    <div class="row fv-row">
+                                                        <!--begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>Tanggal Selesai Bash FHO</span>
+                                                                </label>
+                                                                <a href="#" class="btn"
+                                                                    style="background: transparent;"
+                                                                    id="start-date-modal"
+                                                                    onclick="showCalendarModal(this)">
+                                                                    <i class="bi bi-calendar2-plus-fill"
+                                                                        style="color: #008CB4"></i>
+                                                                </a>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                <input type="Date"
+                                                                    class="form-control form-control-solid"
+                                                                    id="tanggal-selesai-kontrak-fho"
+                                                                    name="tanggal-selesai-kontrak-fho"
+                                                                    value="{{ $proyek->tanggal_selesai_fho }}"
+                                                                    placeholder="Date" />
+                                                                <!--end::Input-->
                                                             </div>
-                                                            <!--End begin::Col-->
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Sistem Pembayaran</span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-                                                                    <!--begin::Input-->
-                                                                    <select id="sistem-bayar" name="sistem-bayar"
-                                                                        class="form-select form-select-solid"
-                                                                        data-control="select2" data-hide-search="true"
-                                                                        data-placeholder="Sistem Pembayaran">
-                                                                        <option></option>
-                                                                        <option value="CPF (Turn Key)"
-                                                                            {{ $proyek->sistem_bayar == 'CPF (Turn Key)' ? 'selected' : '' }}>
-                                                                            CPF (Turn Key)</option>
-                                                                        <option value="Milestone"
-                                                                            {{ $proyek->sistem_bayar == 'Milestone' ? 'selected' : '' }}>
-                                                                            Milestone</option>
-                                                                        <option value="Monthly"
-                                                                            {{ $proyek->sistem_bayar == 'Monthly' ? 'selected' : '' }}>
-                                                                            Monthly</option>
-                                                                    </select>
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
-                                                            </div>
-                                                            <!--End::Col-->
+                                                            <!--end::Input group-->
                                                         </div>
-                                                        <!--End::Row Kanan+Kiri-->
+                                                        <!--End begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>Sistem Pembayaran</span>
+                                                                </label>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                <select id="sistem-bayar" name="sistem-bayar"
+                                                                    class="form-select form-select-solid"
+                                                                    data-control="select2" data-hide-search="true"
+                                                                    data-placeholder="Sistem Pembayaran">
+                                                                    <option></option>
+                                                                    <option value="CPF (Turn Key)"
+                                                                        {{ $proyek->sistem_bayar == 'CPF (Turn Key)' ? 'selected' : '' }}>
+                                                                        CPF (Turn Key)</option>
+                                                                    <option value="Milestone"
+                                                                        {{ $proyek->sistem_bayar == 'Milestone' ? 'selected' : '' }}>
+                                                                        Milestone</option>
+                                                                    <option value="Monthly"
+                                                                        {{ $proyek->sistem_bayar == 'Monthly' ? 'selected' : '' }}>
+                                                                        Monthly</option>
+                                                                </select>
+                                                                <!--end::Input-->
+                                                            </div>
+                                                            <!--end::Input group-->
+                                                        </div>
+                                                        <!--End::Col-->
+                                                    </div>
+                                                    <!--End::Row Kanan+Kiri-->
 
-                                                        <!--Begin::Title Biru Form: History Adendum-->
-                                                        {{-- <br>
+                                                    <!--Begin::Title Biru Form: History Adendum-->
+                                                    {{-- <br>
                                                         <h3 class="fw-bolder m-0" id="HeadDetail"
                                                             style="font-size:14px;">History Adendum
                                                             <a href="#" Id="Plus" data-bs-toggle="modal"
@@ -4469,662 +4532,676 @@
                                                             </tbody>
                                                             <!--end::Table body-->
                                                         </table> --}}
-                                                        <!--End::Title Biru Form: History Adendum-->
+                                                    <!--End::Title Biru Form: History Adendum-->
 
-                                                        <br>
+                                                    <br>
 
-                                                        <!--begin::Data Performance-->
-                                                        <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                            style="font-size:14px;">
-                                                            Proyek Performance 
-                                                            <i onclick="hideperformance()" id="hide-performance" class="bi bi-arrows-collapse"></i>
-                                                            <i onclick="showperformance()" id="show-performance" style="display: none" class="bi bi-arrows-expand"></i>
-                                                        </h3>
+                                                    <!--begin::Data Performance-->
+                                                    <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                                        Proyek Performance
+                                                        <i onclick="hideperformance()" id="hide-performance"
+                                                            class="bi bi-arrows-collapse"></i>
+                                                        <i onclick="showperformance()" id="show-performance"
+                                                            style="display: none" class="bi bi-arrows-expand"></i>
+                                                    </h3>
 
-                                                        <script>
-                                                            function hideperformance() {
-                                                                document.getElementById("divProyekPerformance").style.display = "none";
-                                                                document.getElementById("hide-performance").style.display = "none";
-                                                                document.getElementById("show-performance").style.display = "";
-                                                            }
+                                                    <script>
+                                                        function hideperformance() {
+                                                            document.getElementById("divProyekPerformance").style.display = "none";
+                                                            document.getElementById("hide-performance").style.display = "none";
+                                                            document.getElementById("show-performance").style.display = "";
+                                                        }
 
-                                                            function showperformance() {
-                                                                document.getElementById("divProyekPerformance").style.display = "";
-                                                                document.getElementById("hide-performance").style.display = "";
-                                                                document.getElementById("show-performance").style.display = "none";
-                                                            }
-                                                        </script>
-                                                        <br>
-                                                        <div id="divProyekPerformance">
+                                                        function showperformance() {
+                                                            document.getElementById("divProyekPerformance").style.display = "";
+                                                            document.getElementById("hide-performance").style.display = "";
+                                                            document.getElementById("show-performance").style.display = "none";
+                                                        }
+                                                    </script>
+                                                    <br>
+                                                    <div id="divProyekPerformance">
                                                         <!--end::Data Performance-->
-                                                            <!--begin::Row-->
-                                                            <div class="row fv-row">
-                                                                <!--begin::Col-->
-                                                                <div class="col-6">
-                                                                    <!--begin::Input group Website-->
-                                                                    <div class="fv-row mb-7">
-                                                                        <!--begin::Label-->
-                                                                        <label class="fs-6 fw-bold form-label mt-3">
-                                                                            <span>Nilai OK (Excludde Ppn)&nbsp;<i class="bi bi-lock"></i></span>
-                                                                        </label>
-                                                                        <!--end::Label-->
-                                                                        <!--begin::Input-->
-                                                                        <input type="text"
-                                                                            class="form-control form-control-solid reformat"
-                                                                            value="{{ number_format((int) str_replace('.', '', $proyek->nilai_rkap), 0, '.', '.') }}"
-                                                                            placeholder="Nilai OK" readonly/>
-                                                                        <!--end::Input-->
-                                                                    </div>
-                                                                    <!--end::Input group-->
+                                                        <!--begin::Row-->
+                                                        <div class="row fv-row">
+                                                            <!--begin::Col-->
+                                                            <div class="col-6">
+                                                                <!--begin::Input group Website-->
+                                                                <div class="fv-row mb-7">
+                                                                    <!--begin::Label-->
+                                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                                        <span>Nilai OK (Excludde Ppn)&nbsp;<i
+                                                                                class="bi bi-lock"></i></span>
+                                                                    </label>
+                                                                    <!--end::Label-->
+                                                                    <!--begin::Input-->
+                                                                    <input type="text"
+                                                                        class="form-control form-control-solid reformat"
+                                                                        value="{{ number_format((int) str_replace('.', '', $proyek->nilai_rkap), 0, '.', '.') }}"
+                                                                        placeholder="Nilai OK" readonly />
+                                                                    <!--end::Input-->
                                                                 </div>
-                                                                <!--End begin::Col-->
-                                                                <div class="col-6">
-                                                                    <!--begin::Input group Website-->
-                                                                    <div class="fv-row mb-7">
-                                                                        <!--begin::Label-->
-                                                                        <label class="fs-6 fw-bold form-label mt-3">
-                                                                            <span>Piutang</span>
-                                                                        </label>
-                                                                        <!--end::Label-->
-                                                                        <!--begin::Input-->
-                                                                        <input type="text"
-                                                                            class="form-control form-control-solid reformat"
-                                                                            name="piutang-performance"
-                                                                            value="{{ number_format((int) str_replace('.', '', $proyek->piutang), 0, '.', '.') }}"
-                                                                            placeholder="Piutang" />
-                                                                        <!--end::Input-->
-                                                                    </div>
-                                                                    <!--end::Input group-->
-                                                                </div>
-                                                                <!--End begin::Col-->
+                                                                <!--end::Input group-->
                                                             </div>
-                                                            <!--End begin::Row-->
-                                                            <!--begin::Row-->
-                                                            <div class="row fv-row">
-                                                                <!--begin::Col-->
-                                                                <div class="col-6">
-                                                                    <!--begin::Input group Website-->
-                                                                    <div class="fv-row mb-7">
-                                                                        <!--begin::Label-->
-                                                                        <label class="fs-6 fw-bold form-label mt-3">
-                                                                            <span>Laba</span>
-                                                                        </label>
-                                                                        <!--end::Label-->
-                                                                        <!--begin::Input-->
-                                                                        <input type="text"
-                                                                            class="form-control form-control-solid reformat"
-                                                                            name="laba-performance"
-                                                                            value="{{ number_format((int) str_replace('.', '', $proyek->laba), 0, '.', '.') }}"
-                                                                            placeholder="Laba" />
-                                                                        <!--end::Input-->
-                                                                    </div>
-                                                                    <!--end::Input group-->
+                                                            <!--End begin::Col-->
+                                                            <div class="col-6">
+                                                                <!--begin::Input group Website-->
+                                                                <div class="fv-row mb-7">
+                                                                    <!--begin::Label-->
+                                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                                        <span>Piutang</span>
+                                                                    </label>
+                                                                    <!--end::Label-->
+                                                                    <!--begin::Input-->
+                                                                    <input type="text"
+                                                                        class="form-control form-control-solid reformat"
+                                                                        name="piutang-performance"
+                                                                        value="{{ number_format((int) str_replace('.', '', $proyek->piutang), 0, '.', '.') }}"
+                                                                        placeholder="Piutang" />
+                                                                    <!--end::Input-->
                                                                 </div>
-                                                                <!--End begin::Col-->
-                                                                <div class="col-6">
-                                                                    <!--begin::Input group Website-->
-                                                                    <div class="fv-row mb-7">
-                                                                        <!--begin::Label-->
-                                                                        <label class="fs-6 fw-bold form-label mt-3">
-                                                                            <span>Rugi</span>
-                                                                        </label>
-                                                                        <!--end::Label-->
-                                                                        <!--begin::Input-->
-                                                                        <input type="text"
-                                                                            class="form-control form-control-solid reformat"
-                                                                            name="rugi-performance"
-                                                                            value="{{ number_format((int) str_replace('.', '', $proyek->rugi), 0, '.', '.') }}"
-                                                                            placeholder="Rugi" />
-                                                                        <!--end::Input-->
-                                                                    </div>
-                                                                    <!--end::Input group-->
-                                                                </div>
-                                                                <!--End begin::Col-->
+                                                                <!--end::Input group-->
                                                             </div>
+                                                            <!--End begin::Col-->
+                                                        </div>
                                                         <!--End begin::Row-->
+                                                        <!--begin::Row-->
+                                                        <div class="row fv-row">
+                                                            <!--begin::Col-->
+                                                            <div class="col-6">
+                                                                <!--begin::Input group Website-->
+                                                                <div class="fv-row mb-7">
+                                                                    <!--begin::Label-->
+                                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                                        <span>Laba</span>
+                                                                    </label>
+                                                                    <!--end::Label-->
+                                                                    <!--begin::Input-->
+                                                                    <input type="text"
+                                                                        class="form-control form-control-solid reformat"
+                                                                        name="laba-performance"
+                                                                        value="{{ number_format((int) str_replace('.', '', $proyek->laba), 0, '.', '.') }}"
+                                                                        placeholder="Laba" />
+                                                                    <!--end::Input-->
+                                                                </div>
+                                                                <!--end::Input group-->
+                                                            </div>
+                                                            <!--End begin::Col-->
+                                                            <div class="col-6">
+                                                                <!--begin::Input group Website-->
+                                                                <div class="fv-row mb-7">
+                                                                    <!--begin::Label-->
+                                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                                        <span>Rugi</span>
+                                                                    </label>
+                                                                    <!--end::Label-->
+                                                                    <!--begin::Input-->
+                                                                    <input type="text"
+                                                                        class="form-control form-control-solid reformat"
+                                                                        name="rugi-performance"
+                                                                        value="{{ number_format((int) str_replace('.', '', $proyek->rugi), 0, '.', '.') }}"
+                                                                        placeholder="Rugi" />
+                                                                    <!--end::Input-->
+                                                                </div>
+                                                                <!--end::Input group-->
+                                                            </div>
+                                                            <!--End begin::Col-->
                                                         </div>
-
-                                                        <!--Begin::Title Biru Form: Laporan Kualitatif-->
-                                                        <br>
-                                                        <h3 class="fw-bolder m-0 required" id="HeadDetail"
-                                                            style="font-size:14px;">Laporan Kualitatif
-                                                        </h3>
-                                                        <br>
-                                                        <div class="form-group">
-                                                            <textarea class="form-control" id="laporan-terkontrak" name="laporan-terkontrak" rows="7">{!! $proyek->laporan_terkontrak !!}</textarea>
-                                                        </div>
-                                                        <!--End::Title Biru Form: Laporan Kualitatif-->
-
-                                                        <h6 class="text-danger fw-normal">(*) Kolom Ini Harus Diisi !</h6>
-
+                                                        <!--End begin::Row-->
                                                     </div>
-                                                    <!--end:::Tab Pasar Terkontrak New-->
 
-<!--begin:::Tab Forecast Non Retail-->
-                <div class="tab-pane fade" id="kt_user_view_overview_forecast" role="tabpanel">
+                                                    <!--Begin::Title Biru Form: Laporan Kualitatif-->
+                                                    <br>
+                                                    <h3 class="fw-bolder m-0 required" id="HeadDetail"
+                                                        style="font-size:14px;">Laporan Kualitatif
+                                                    </h3>
+                                                    <br>
+                                                    <div class="form-group">
+                                                        <textarea class="form-control" id="laporan-terkontrak" name="laporan-terkontrak" rows="7">{!! $proyek->laporan_terkontrak !!}</textarea>
+                                                    </div>
+                                                    <!--End::Title Biru Form: Laporan Kualitatif-->
 
-                    <!--Begin::Title Biru Form: History-->
-                    <br>
-                    <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">History Forecast</h3>
-                    <!--End::Title Biru Form: List History-->
+                                                    <h6 class="text-danger fw-normal">(*) Kolom Ini Harus Diisi !</h6>
 
-                    {{-- begin::Detail History Forecast --}}
-                    <div class="d-flex flex-row-reverse mb-5">
-                        <div>
-                            Periode Prognosa :
-                            @php
-                                setlocale(LC_TIME, 'id.UTF-8');
-                                $periode_prognosa = strftime('%B');
-                            @endphp
-                            <b class="mx-4">{{ $periode_prognosa }}</b>
-                        </div>
-                    </div>
-                    <hr>
-                    <br>
-                    {{-- end::Detail History Forecast --}}
+                                                </div>
+                                                <!--end:::Tab Pasar Terkontrak New-->
 
-                    <!--begin::Table-->
-                    <table class="table align-middle table-row-dashed fs-6 gy-2" id="kt_customers_table">
-                        <!--begin::Table head-->
-                        <thead>
-                            <!--begin::Table row-->
-                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                <th class="w-auto min-w-100px text-end"></th>
-                                <th class="w-auto text-center">Bulan</th>
-                                <th class="w-auto text-center">Nilai</th>
-                                <th class="w-auto min-w-100px text-center"></th>
-                            </tr>
-                            <!--end::Table row-->
-                        </thead>
-                        <!--end::Table head-->
-                        <!--begin::Table body-->
-                        <tbody class="fw-bold text-gray-600">
-                            <!--begin::NILAI OK-->
-                            <tr>
-                                <!--begin::Name-->
-                                <td class="text-end">
-                                    <b>OK :</b>
-                                </td>
-                                <!--end::Name-->
-                                <!--begin::input-->
-                                <td class="text-start ps-8">
-                                @switch($proyek->bulan_pelaksanaan)
-                                    @case('1')
-                                        Januari
-                                    @break
+                                                <!--begin:::Tab Forecast Non Retail-->
+                                                <div class="tab-pane fade" id="kt_user_view_overview_forecast"
+                                                    role="tabpanel">
 
-                                    @case('2')
-                                        Februari
-                                    @break
+                                                    <!--Begin::Title Biru Form: History-->
+                                                    <br>
+                                                    <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                                        History Forecast</h3>
+                                                    <!--End::Title Biru Form: List History-->
 
-                                    @case('3')
-                                        Maret
-                                    @break
+                                                    {{-- begin::Detail History Forecast --}}
+                                                    <div class="d-flex flex-row-reverse mb-5">
+                                                        <div>
+                                                            Periode Prognosa :
+                                                            @php
+                                                                setlocale(LC_TIME, 'id.UTF-8');
+                                                                $periode_prognosa = strftime('%B');
+                                                            @endphp
+                                                            <b class="mx-4">{{ $periode_prognosa }}</b>
+                                                        </div>
+                                                    </div>
+                                                    <hr>
+                                                    <br>
+                                                    {{-- end::Detail History Forecast --}}
 
-                                    @case('4')
-                                        April
-                                    @break
+                                                    <!--begin::Table-->
+                                                    <table class="table align-middle table-row-dashed fs-6 gy-2"
+                                                        id="kt_customers_table">
+                                                        <!--begin::Table head-->
+                                                        <thead>
+                                                            <!--begin::Table row-->
+                                                            <tr
+                                                                class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                <th class="w-auto min-w-100px text-end"></th>
+                                                                <th class="w-auto text-center">Bulan</th>
+                                                                <th class="w-auto text-center">Nilai</th>
+                                                                <th class="w-auto min-w-100px text-center"></th>
+                                                            </tr>
+                                                            <!--end::Table row-->
+                                                        </thead>
+                                                        <!--end::Table head-->
+                                                        <!--begin::Table body-->
+                                                        <tbody class="fw-bold text-gray-600">
+                                                            <!--begin::NILAI OK-->
+                                                            <tr>
+                                                                <!--begin::Name-->
+                                                                <td class="text-end">
+                                                                    <b>OK :</b>
+                                                                </td>
+                                                                <!--end::Name-->
+                                                                <!--begin::input-->
+                                                                <td class="text-start ps-8">
+                                                                    @switch($proyek->bulan_pelaksanaan)
+                                                                        @case('1')
+                                                                            Januari
+                                                                        @break
 
-                                    @case('5')
-                                        Mei
-                                    @break
+                                                                        @case('2')
+                                                                            Februari
+                                                                        @break
 
-                                    @case('6')
-                                        Juni
-                                    @break
+                                                                        @case('3')
+                                                                            Maret
+                                                                        @break
 
-                                    @case('7')
-                                        Juli
-                                    @break
+                                                                        @case('4')
+                                                                            April
+                                                                        @break
 
-                                    @case('8')
-                                        Agustus
-                                    @break
+                                                                        @case('5')
+                                                                            Mei
+                                                                        @break
 
-                                    @case('9')
-                                        September
-                                    @break
+                                                                        @case('6')
+                                                                            Juni
+                                                                        @break
 
-                                    @case('10')
-                                        Oktober
-                                    @break
+                                                                        @case('7')
+                                                                            Juli
+                                                                        @break
 
-                                    @case('11')
-                                        November
-                                    @break
+                                                                        @case('8')
+                                                                            Agustus
+                                                                        @break
 
-                                    @case('12')
-                                        Desember
-                                    @break
+                                                                        @case('9')
+                                                                            September
+                                                                        @break
 
-                                    @default
-                                        *Belum Ditentukan
-                                @endswitch
-                                </td>
-                                <!--end::input-->
-                                <!--begin::input-->
-                                <td>
-                                    <!--begin::Input-->
-                                    <input type="text"
-                                        class="form-control reformat form-control-solid"
-                                        id="rkap-forecast" name="rkap-forecast"
-                                        value="{{ number_format((int) str_replace('.', '', $proyek->nilai_rkap), 0, '.', '.') }}"
-                                        placeholder="Nilai OK (Excludde Ppn)" readonly/>
-                                    <!--end::Input-->
-                                </td>
-                                <td></td>
-                            </tr>
-                            <!--end::NILAI OK-->
-                            <!--begin::FORECAST-->
-                            <tr>    
-                                <!--begin::Name-->
-                                <td class="text-end">
-                                    <b>Forecast :</b>
-                                </td>
-                                <!--end::Name-->
-                                <!--begin::input-->
-                                <td class="text-start ps-8">
-                                    @php
-                                        $bulans = (int) date('m');
-                                        $forecast = $proyek->Forecasts->where("periode_prognosa", "=", $bulans)->last();
-                                    @endphp
-                                    {{-- @foreach ($proyek->Forecasts as $forecast)
-                                    @endforeach --}}
-                                    @switch($forecast->month_forecast ?? 0)
-                                        @case('1')
-                                            Januari
-                                        @break
+                                                                        @case('10')
+                                                                            Oktober
+                                                                        @break
 
-                                        @case('2')
-                                            Februari
-                                        @break
+                                                                        @case('11')
+                                                                            November
+                                                                        @break
 
-                                        @case('3')
-                                            Maret
-                                        @break
+                                                                        @case('12')
+                                                                            Desember
+                                                                        @break
 
-                                        @case('4')
-                                            April
-                                        @break
+                                                                        @default
+                                                                            *Belum Ditentukan
+                                                                    @endswitch
+                                                                </td>
+                                                                <!--end::input-->
+                                                                <!--begin::input-->
+                                                                <td>
+                                                                    <!--begin::Input-->
+                                                                    <input type="text"
+                                                                        class="form-control reformat form-control-solid"
+                                                                        id="rkap-forecast" name="rkap-forecast"
+                                                                        value="{{ number_format((int) str_replace('.', '', $proyek->nilai_rkap), 0, '.', '.') }}"
+                                                                        placeholder="Nilai OK (Excludde Ppn)" readonly />
+                                                                    <!--end::Input-->
+                                                                </td>
+                                                                <td></td>
+                                                            </tr>
+                                                            <!--end::NILAI OK-->
+                                                            <!--begin::FORECAST-->
+                                                            <tr>
+                                                                <!--begin::Name-->
+                                                                <td class="text-end">
+                                                                    <b>Forecast :</b>
+                                                                </td>
+                                                                <!--end::Name-->
+                                                                <!--begin::input-->
+                                                                <td class="text-start ps-8">
+                                                                    @php
+                                                                        $bulans = (int) date('m');
+                                                                        $forecast = $proyek->Forecasts->where('periode_prognosa', '=', $bulans)->last();
+                                                                    @endphp
+                                                                    {{-- @foreach ($proyek->Forecasts as $forecast)
+                                                                    @endforeach --}}
+                                                                    @switch($forecast->month_forecast ?? 0)
+                                                                        @case('1')
+                                                                            Januari
+                                                                        @break
 
-                                        @case('5')
-                                            Mei
-                                        @break
+                                                                        @case('2')
+                                                                            Februari
+                                                                        @break
 
-                                        @case('6')
-                                            Juni
-                                        @break
+                                                                        @case('3')
+                                                                            Maret
+                                                                        @break
 
-                                        @case('7')
-                                            Juli
-                                        @break
+                                                                        @case('4')
+                                                                            April
+                                                                        @break
 
-                                        @case('8')
-                                            Agustus
-                                        @break
+                                                                        @case('5')
+                                                                            Mei
+                                                                        @break
 
-                                        @case('9')
-                                            September
-                                        @break
+                                                                        @case('6')
+                                                                            Juni
+                                                                        @break
 
-                                        @case('10')
-                                            Oktober
-                                        @break
+                                                                        @case('7')
+                                                                            Juli
+                                                                        @break
 
-                                        @case('11')
-                                            November
-                                        @break
+                                                                        @case('8')
+                                                                            Agustus
+                                                                        @break
 
-                                        @case('12')
-                                            Desember
-                                        @break
+                                                                        @case('9')
+                                                                            September
+                                                                        @break
 
-                                        @default
-                                            *Belum Ditentukan
-                                    @endswitch
-                                </td>
-                                <!--end::input-->
-                                <!--begin::input-->
-                                <td>
-                                    <!--begin::Input-->
-                                    <input type="text"
-                                        class="form-control reformat form-control-solid"
-                                        id="nilai-forecast" name="nilai-forecast"
-                                        value="{{ number_format((int) str_replace('.', '', $forecast->nilai_forecast ?? 0), 0, '.', '.') }}"
-                                        placeholder="Nilai OK (Excludde Ppn)" readonly/>
-                                    <!--end::Input-->
-                                </td>
-                                {{-- @dump(count($proyek->Forecasts)) --}}
-                                @php
-                                    $countForecast = $proyek->Forecasts->where("periode_prognosa", "=", $bulans);
-                                @endphp
-                                @if (isset($countForecast))
-                                    @if (count($countForecast) > 1 )
-                                        <td class="text-danger fw-bolder">*Proyek Non-Retail {{ $proyek->kode_proyek }},<br>&nbsp;Tidak Dapat Multi Bulan. Hub Admin !</td>
-                                    @endif
-                                @endif
-                                <!--end::input-->
-                            </tr>
-                            <!--end::FORECAST-->
-                            <!--begin::Realisasi-->
-                            <tr>
-                                <!--begin::Name-->
-                                <td class="text-end">
-                                    <b>Realisasi :</b>
-                                </td>
-                                <!--end::Name-->
-                                <!--begin::input-->
-                                <td class="text-start ps-8">
-                                @switch($proyek->bulan_ri_perolehan)
-                                    @case('1')
-                                        Januari
-                                    @break
+                                                                        @case('10')
+                                                                            Oktober
+                                                                        @break
 
-                                    @case('2')
-                                        Februari
-                                    @break
+                                                                        @case('11')
+                                                                            November
+                                                                        @break
 
-                                    @case('3')
-                                        Maret
-                                    @break
+                                                                        @case('12')
+                                                                            Desember
+                                                                        @break
 
-                                    @case('4')
-                                        April
-                                    @break
+                                                                        @default
+                                                                            *Belum Ditentukan
+                                                                    @endswitch
+                                                                </td>
+                                                                <!--end::input-->
+                                                                <!--begin::input-->
+                                                                <td>
+                                                                    <!--begin::Input-->
+                                                                    <input type="text"
+                                                                        class="form-control reformat form-control-solid"
+                                                                        id="nilai-forecast" name="nilai-forecast"
+                                                                        value="{{ number_format((int) str_replace('.', '', $forecast->nilai_forecast ?? 0), 0, '.', '.') }}"
+                                                                        placeholder="Nilai OK (Excludde Ppn)" readonly />
+                                                                    <!--end::Input-->
+                                                                </td>
+                                                                {{-- @dump(count($proyek->Forecasts)) --}}
+                                                                @php
+                                                                    $countForecast = $proyek->Forecasts->where('periode_prognosa', '=', $bulans);
+                                                                @endphp
+                                                                @if (isset($countForecast))
+                                                                    @if (count($countForecast) > 1)
+                                                                        <td class="text-danger fw-bolder">*Proyek
+                                                                            Non-Retail
+                                                                            {{ $proyek->kode_proyek }},<br>&nbsp;Tidak
+                                                                            Dapat Multi Bulan. Hub Admin !</td>
+                                                                    @endif
+                                                                @endif
+                                                                <!--end::input-->
+                                                            </tr>
+                                                            <!--end::FORECAST-->
+                                                            <!--begin::Realisasi-->
+                                                            <tr>
+                                                                <!--begin::Name-->
+                                                                <td class="text-end">
+                                                                    <b>Realisasi :</b>
+                                                                </td>
+                                                                <!--end::Name-->
+                                                                <!--begin::input-->
+                                                                <td class="text-start ps-8">
+                                                                    @switch($proyek->bulan_ri_perolehan)
+                                                                        @case('1')
+                                                                            Januari
+                                                                        @break
 
-                                    @case('5')
-                                        Mei
-                                    @break
+                                                                        @case('2')
+                                                                            Februari
+                                                                        @break
 
-                                    @case('6')
-                                        Juni
-                                    @break
+                                                                        @case('3')
+                                                                            Maret
+                                                                        @break
 
-                                    @case('7')
-                                        Juli
-                                    @break
+                                                                        @case('4')
+                                                                            April
+                                                                        @break
 
-                                    @case('8')
-                                        Agustus
-                                    @break
+                                                                        @case('5')
+                                                                            Mei
+                                                                        @break
 
-                                    @case('9')
-                                        September
-                                    @break
+                                                                        @case('6')
+                                                                            Juni
+                                                                        @break
 
-                                    @case('10')
-                                        Oktober
-                                    @break
+                                                                        @case('7')
+                                                                            Juli
+                                                                        @break
 
-                                    @case('11')
-                                        November
-                                    @break
+                                                                        @case('8')
+                                                                            Agustus
+                                                                        @break
 
-                                    @case('12')
-                                        Desember
-                                    @break
+                                                                        @case('9')
+                                                                            September
+                                                                        @break
 
-                                    @default
-                                        *Belum Ditentukan
-                                @endswitch
-                                </td>
-                                <!--end::input-->
-                                <!--begin::input-->
-                                <td>
-                                    <!--begin::Input-->
-                                    <input type="text"
-                                        class="form-control reformat form-control-solid"
-                                        id="realisasi-forecast" name="realisasi-forecast"
-                                        value="{{ number_format((int) str_replace('.', '', $proyek->nilai_perolehan), 0, '.', '.') }}"
-                                        placeholder="Nilai OK (Excludde Ppn)" readonly/>
-                                    <!--end::Input-->
-                                </td>
-                                <td></td>
-                                <!--end::input-->
-                            </tr>
-                            <!--end::Realisasi-->
-                        </tbody>
-                        <!--end::Table body-->
-                    </table>
-                    <!--end::Table-->
+                                                                        @case('10')
+                                                                            Oktober
+                                                                        @break
 
-                    {{-- <br><hr><br> --}}
-                    
-                    <!--begin::Table-->
-                    <table style="visibility: hidden" class="table align-middle table-row-dashed fs-6 gy-2" id="kt_customers_table">
-                        <!--begin::Table head-->
-                        <thead>
-                            <!--begin::Table row-->
-                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                <th class="w-auto min-w-100px text-end"></th>
-                                <th class="w-auto text-center">Bulan</th>
-                                <th class="w-auto text-center">Nilai</th>
-                                <th class="w-auto min-w-100px text-center"></th>
-                            </tr>
-                            <!--end::Table row-->
-                        </thead>
-                        <!--end::Table head-->
-                        <!--begin::Table body-->
-                        <tbody class="fw-bold text-gray-600">
-                        {{-- <form action="/proyek/forecast/non-retail" method="post"> --}}
-                            <!--begin::NILAI OK-->
-                            <tr>
-                                <!--begin::Name-->
-                                <td class="text-end">
-                                    <b>OK :</b>
-                                </td>
-                                <!--end::Name-->
-                                <!--begin::input-->
-                                <td class="text-start ps-8">
-                                    <select id="month-rkap"
-                                    name="month-rkap"
-                                    class="form-select form-select-solid"
-                                    data-control="select2" data-hide-search="true"
-                                    data-placeholder="Pilih Bulan OK">
-                                    <option></option>
-                                    <option value="1"
-                                        {{ $proyek->bulan_pelaksanaan == '1' ? 'selected' : '' }}>
-                                        Januari</option>
-                                    <option value="2"
-                                        {{ $proyek->bulan_pelaksanaan == '2' ? 'selected' : '' }}>
-                                        Februari</option>
-                                    <option value="3"
-                                        {{ $proyek->bulan_pelaksanaan == '3' ? 'selected' : '' }}>
-                                        Maret</option>
-                                    <option value="4"
-                                        {{ $proyek->bulan_pelaksanaan == '4' ? 'selected' : '' }}>
-                                        April</option>
-                                    <option value="5"
-                                        {{ $proyek->bulan_pelaksanaan == '5' ? 'selected' : '' }}>
-                                        Mei</option>
-                                    <option value="6"
-                                        {{ $proyek->bulan_pelaksanaan == '6' ? 'selected' : '' }}>
-                                        Juni</option>
-                                    <option value="7"
-                                        {{ $proyek->bulan_pelaksanaan == '7' ? 'selected' : '' }}>
-                                        Juli</option>
-                                    <option value="8"
-                                        {{ $proyek->bulan_pelaksanaan == '8' ? 'selected' : '' }}>
-                                        Agustus</option>
-                                    <option value="9"
-                                        {{ $proyek->bulan_pelaksanaan == '9' ? 'selected' : '' }}>
-                                        September</option>
-                                    <option value="10"
-                                        {{ $proyek->bulan_pelaksanaan == '10' ? 'selected' : '' }}>
-                                        Oktober</option>
-                                    <option value="11"
-                                        {{ $proyek->bulan_pelaksanaan == '11' ? 'selected' : '' }}>
-                                        November</option>
-                                    <option value="12"
-                                        {{ $proyek->bulan_pelaksanaan == '12' ? 'selected' : '' }}>
-                                        Desember</option>
-                                </select>
-                                </td>
-                                <!--end::input-->
-                                <!--begin::input-->
-                                <td>
-                                    <!--begin::Input-->
-                                    <input type="text"
-                                        class="form-control reformat form-control-solid"
-                                        id="rkap-forecast" name="rkap-forecast"
-                                        value="{{ number_format((int) str_replace('.', '', $proyek->nilai_rkap), 0, '.', '.') }}"
-                                        placeholder="Nilai OK (Excludde Ppn)"/>
-                                    <!--end::Input-->
-                                </td>
-                                <td></td>
-                            </tr>
-                            <!--end::NILAI OK-->
-                            <!--begin::FORECAST-->
-                            <tr>    
-                                <!--begin::Name-->
-                                <td class="text-end">
-                                    <b>Forecast :</b>
-                                </td>
-                                <!--end::Name-->
-                                <!--begin::input-->
-                                <td class="text-start ps-8">
-                                    <select id="month-forecast"
-                                        name="month-forecast"
-                                        class="form-select form-select-solid"
-                                        data-control="select2" data-hide-search="true"
-                                        data-placeholder="Pilih Bulan Forecast">
-                                        <option></option>
-                                        <option value="1"
-                                            {{ ($forecast->month_forecast ?? 0) == '1' ? 'selected' : '' }}>
-                                            Januari</option>
-                                        <option value="2"
-                                            {{ ($forecast->month_forecast ?? 0) == '2' ? 'selected' : '' }}>
-                                            Februari</option>
-                                        <option value="3"
-                                            {{ ($forecast->month_forecast ?? 0) == '3' ? 'selected' : '' }}>
-                                            Maret</option>
-                                        <option value="4"
-                                            {{ ($forecast->month_forecast ?? 0) == '4' ? 'selected' : '' }}>
-                                            April</option>
-                                        <option value="5"
-                                            {{ ($forecast->month_forecast ?? 0) == '5' ? 'selected' : '' }}>
-                                            Mei</option>
-                                        <option value="6"
-                                            {{ ($forecast->month_forecast ?? 0) == '6' ? 'selected' : '' }}>
-                                            Juni</option>
-                                        <option value="7"
-                                            {{ ($forecast->month_forecast ?? 0) == '7' ? 'selected' : '' }}>
-                                            Juli</option>
-                                        <option value="8"
-                                            {{ ($forecast->month_forecast ?? 0) == '8' ? 'selected' : '' }}>
-                                            Agustus</option>
-                                        <option value="9"
-                                            {{ ($forecast->month_forecast ?? 0) == '9' ? 'selected' : '' }}>
-                                            September</option>
-                                        <option value="10"
-                                            {{ ($forecast->month_forecast ?? 0) == '10' ? 'selected' : '' }}>
-                                            Oktober</option>
-                                        <option value="11"
-                                            {{ ($forecast->month_forecast ?? 0) == '11' ? 'selected' : '' }}>
-                                            November</option>
-                                        <option value="12"
-                                            {{ ($forecast->month_forecast ?? 0) == '12' ? 'selected' : '' }}>
-                                            Desember</option>
-                                    </select>
-                                </td>
-                                <!--end::input-->
-                                <!--begin::input-->
-                                <td>
-                                    <!--begin::Input-->
-                                    <input type="text"
-                                        class="form-control reformat form-control-solid"
-                                        id="nilai-forecast" name="nilai-forecast"
-                                        value="{{ number_format((int) str_replace('.', '', $forecast->nilai_forecast ?? 0), 0, '.', '.') }}"
-                                        placeholder="Nilai OK (Excludde Ppn)" />
-                                    <!--end::Input-->
-                                </td>
-                                {{-- @dump(count($proyek->Forecasts)) --}}
-                                @if (isset($proyek->Forecasts))
-                                    @if (count($proyek->Forecasts) > 1)
-                                    <td class="text-danger fw-bolder">*Proyek Non-Retail {{ $proyek->kode_proyek }},<br>&nbsp;Tidak Dapat Multi Bulan. Hub Admin !</td>
-                                    @endif
-                                @endif
-                                <!--end::input-->
-                            </tr>
-                            <!--end::FORECAST-->
-                            <!--begin::Realisasi-->
-                            <tr>
-                                <!--begin::Name-->
-                                <td class="text-end">
-                                    <b>Realisasi :</b>
-                                </td>
-                                <!--end::Name-->
-                                <!--begin::input-->
-                                <td class="text-start ps-8">
-                                    <select id="month-realisasi"
-                                        name="month-realisasi"
-                                        class="form-select form-select-solid"
-                                        data-control="select2" data-hide-search="true"
-                                        data-placeholder="Pilih Bulan Realisasi">
-                                        <option></option>
-                                        <option value="1"
-                                            {{ $proyek->bulan_ri_perolehan == '1' ? 'selected' : '' }}>
-                                            Januari</option>
-                                        <option value="2"
-                                            {{ $proyek->bulan_ri_perolehan == '2' ? 'selected' : '' }}>
-                                            Februari</option>
-                                        <option value="3"
-                                            {{ $proyek->bulan_ri_perolehan == '3' ? 'selected' : '' }}>
-                                            Maret</option>
-                                        <option value="4"
-                                            {{ $proyek->bulan_ri_perolehan == '4' ? 'selected' : '' }}>
-                                            April</option>
-                                        <option value="5"
-                                            {{ $proyek->bulan_ri_perolehan == '5' ? 'selected' : '' }}>
-                                            Mei</option>
-                                        <option value="6"
-                                            {{ $proyek->bulan_ri_perolehan == '6' ? 'selected' : '' }}>
-                                            Juni</option>
-                                        <option value="7"
-                                            {{ $proyek->bulan_ri_perolehan == '7' ? 'selected' : '' }}>
-                                            Juli</option>
-                                        <option value="8"
-                                            {{ $proyek->bulan_ri_perolehan == '8' ? 'selected' : '' }}>
-                                            Agustus</option>
-                                        <option value="9"
-                                            {{ $proyek->bulan_ri_perolehan == '9' ? 'selected' : '' }}>
-                                            September</option>
-                                        <option value="10"
-                                            {{ $proyek->bulan_ri_perolehan == '10' ? 'selected' : '' }}>
-                                            Oktober</option>
-                                        <option value="11"
-                                            {{ $proyek->bulan_ri_perolehan == '11' ? 'selected' : '' }}>
-                                            November</option>
-                                        <option value="12"
-                                            {{ $proyek->bulan_ri_perolehan == '12' ? 'selected' : '' }}>
-                                            Desember</option>
-                                    </select>
-                                </td>
-                                <!--end::input-->
-                                <!--begin::input-->
-                                <td>
-                                    <!--begin::Input-->
-                                    <input type="text"
-                                        class="form-control reformat form-control-solid"
-                                        id="realisasi-forecast" name="realisasi-forecast"
-                                        value="{{ number_format((int) str_replace('.', '', $proyek->nilai_perolehan), 0, '.', '.') }}"
-                                        placeholder="Nilai OK (Excludde Ppn)"/>
-                                    <!--end::Input-->
-                                </td>
-                                <td></td>
-                                <!--end::input-->
-                            </tr>
-                            <!--end::Realisasi-->
-                        {{-- </form> --}}
-                        </tbody>
-                        <!--end::Table body-->
-                    </table>
-                    <!--end::Table-->
+                                                                        @case('11')
+                                                                            November
+                                                                        @break
 
-<!--end:::Tab Forecast Non Retail-->
+                                                                        @case('12')
+                                                                            Desember
+                                                                        @break
+
+                                                                        @default
+                                                                            *Belum Ditentukan
+                                                                    @endswitch
+                                                                </td>
+                                                                <!--end::input-->
+                                                                <!--begin::input-->
+                                                                <td>
+                                                                    <!--begin::Input-->
+                                                                    <input type="text"
+                                                                        class="form-control reformat form-control-solid"
+                                                                        id="realisasi-forecast"
+                                                                        name="realisasi-forecast"
+                                                                        value="{{ number_format((int) str_replace('.', '', $proyek->nilai_perolehan), 0, '.', '.') }}"
+                                                                        placeholder="Nilai OK (Excludde Ppn)" readonly />
+                                                                    <!--end::Input-->
+                                                                </td>
+                                                                <td></td>
+                                                                <!--end::input-->
+                                                            </tr>
+                                                            <!--end::Realisasi-->
+                                                        </tbody>
+                                                        <!--end::Table body-->
+                                                    </table>
+                                                    <!--end::Table-->
+
+                                                    {{-- <br><hr><br> --}}
+
+                                                    <!--begin::Table-->
+                                                    <table style="visibility: hidden"
+                                                        class="table align-middle table-row-dashed fs-6 gy-2"
+                                                        id="kt_customers_table">
+                                                        <!--begin::Table head-->
+                                                        <thead>
+                                                            <!--begin::Table row-->
+                                                            <tr
+                                                                class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                <th class="w-auto min-w-100px text-end"></th>
+                                                                <th class="w-auto text-center">Bulan</th>
+                                                                <th class="w-auto text-center">Nilai</th>
+                                                                <th class="w-auto min-w-100px text-center"></th>
+                                                            </tr>
+                                                            <!--end::Table row-->
+                                                        </thead>
+                                                        <!--end::Table head-->
+                                                        <!--begin::Table body-->
+                                                        <tbody class="fw-bold text-gray-600">
+                                                            {{-- <form action="/proyek/forecast/non-retail" method="post"> --}}
+                                                            <!--begin::NILAI OK-->
+                                                            <tr>
+                                                                <!--begin::Name-->
+                                                                <td class="text-end">
+                                                                    <b>OK :</b>
+                                                                </td>
+                                                                <!--end::Name-->
+                                                                <!--begin::input-->
+                                                                <td class="text-start ps-8">
+                                                                    <select id="month-rkap" name="month-rkap"
+                                                                        class="form-select form-select-solid"
+                                                                        data-control="select2" data-hide-search="true"
+                                                                        data-placeholder="Pilih Bulan OK">
+                                                                        <option></option>
+                                                                        <option value="1"
+                                                                            {{ $proyek->bulan_pelaksanaan == '1' ? 'selected' : '' }}>
+                                                                            Januari</option>
+                                                                        <option value="2"
+                                                                            {{ $proyek->bulan_pelaksanaan == '2' ? 'selected' : '' }}>
+                                                                            Februari</option>
+                                                                        <option value="3"
+                                                                            {{ $proyek->bulan_pelaksanaan == '3' ? 'selected' : '' }}>
+                                                                            Maret</option>
+                                                                        <option value="4"
+                                                                            {{ $proyek->bulan_pelaksanaan == '4' ? 'selected' : '' }}>
+                                                                            April</option>
+                                                                        <option value="5"
+                                                                            {{ $proyek->bulan_pelaksanaan == '5' ? 'selected' : '' }}>
+                                                                            Mei</option>
+                                                                        <option value="6"
+                                                                            {{ $proyek->bulan_pelaksanaan == '6' ? 'selected' : '' }}>
+                                                                            Juni</option>
+                                                                        <option value="7"
+                                                                            {{ $proyek->bulan_pelaksanaan == '7' ? 'selected' : '' }}>
+                                                                            Juli</option>
+                                                                        <option value="8"
+                                                                            {{ $proyek->bulan_pelaksanaan == '8' ? 'selected' : '' }}>
+                                                                            Agustus</option>
+                                                                        <option value="9"
+                                                                            {{ $proyek->bulan_pelaksanaan == '9' ? 'selected' : '' }}>
+                                                                            September</option>
+                                                                        <option value="10"
+                                                                            {{ $proyek->bulan_pelaksanaan == '10' ? 'selected' : '' }}>
+                                                                            Oktober</option>
+                                                                        <option value="11"
+                                                                            {{ $proyek->bulan_pelaksanaan == '11' ? 'selected' : '' }}>
+                                                                            November</option>
+                                                                        <option value="12"
+                                                                            {{ $proyek->bulan_pelaksanaan == '12' ? 'selected' : '' }}>
+                                                                            Desember</option>
+                                                                    </select>
+                                                                </td>
+                                                                <!--end::input-->
+                                                                <!--begin::input-->
+                                                                <td>
+                                                                    <!--begin::Input-->
+                                                                    <input type="text"
+                                                                        class="form-control reformat form-control-solid"
+                                                                        id="rkap-forecast" name="rkap-forecast"
+                                                                        value="{{ number_format((int) str_replace('.', '', $proyek->nilai_rkap), 0, '.', '.') }}"
+                                                                        placeholder="Nilai OK (Excludde Ppn)" />
+                                                                    <!--end::Input-->
+                                                                </td>
+                                                                <td></td>
+                                                            </tr>
+                                                            <!--end::NILAI OK-->
+                                                            <!--begin::FORECAST-->
+                                                            <tr>
+                                                                <!--begin::Name-->
+                                                                <td class="text-end">
+                                                                    <b>Forecast :</b>
+                                                                </td>
+                                                                <!--end::Name-->
+                                                                <!--begin::input-->
+                                                                <td class="text-start ps-8">
+                                                                    <select id="month-forecast" name="month-forecast"
+                                                                        class="form-select form-select-solid"
+                                                                        data-control="select2" data-hide-search="true"
+                                                                        data-placeholder="Pilih Bulan Forecast">
+                                                                        <option></option>
+                                                                        <option value="1"
+                                                                            {{ ($forecast->month_forecast ?? 0) == '1' ? 'selected' : '' }}>
+                                                                            Januari</option>
+                                                                        <option value="2"
+                                                                            {{ ($forecast->month_forecast ?? 0) == '2' ? 'selected' : '' }}>
+                                                                            Februari</option>
+                                                                        <option value="3"
+                                                                            {{ ($forecast->month_forecast ?? 0) == '3' ? 'selected' : '' }}>
+                                                                            Maret</option>
+                                                                        <option value="4"
+                                                                            {{ ($forecast->month_forecast ?? 0) == '4' ? 'selected' : '' }}>
+                                                                            April</option>
+                                                                        <option value="5"
+                                                                            {{ ($forecast->month_forecast ?? 0) == '5' ? 'selected' : '' }}>
+                                                                            Mei</option>
+                                                                        <option value="6"
+                                                                            {{ ($forecast->month_forecast ?? 0) == '6' ? 'selected' : '' }}>
+                                                                            Juni</option>
+                                                                        <option value="7"
+                                                                            {{ ($forecast->month_forecast ?? 0) == '7' ? 'selected' : '' }}>
+                                                                            Juli</option>
+                                                                        <option value="8"
+                                                                            {{ ($forecast->month_forecast ?? 0) == '8' ? 'selected' : '' }}>
+                                                                            Agustus</option>
+                                                                        <option value="9"
+                                                                            {{ ($forecast->month_forecast ?? 0) == '9' ? 'selected' : '' }}>
+                                                                            September</option>
+                                                                        <option value="10"
+                                                                            {{ ($forecast->month_forecast ?? 0) == '10' ? 'selected' : '' }}>
+                                                                            Oktober</option>
+                                                                        <option value="11"
+                                                                            {{ ($forecast->month_forecast ?? 0) == '11' ? 'selected' : '' }}>
+                                                                            November</option>
+                                                                        <option value="12"
+                                                                            {{ ($forecast->month_forecast ?? 0) == '12' ? 'selected' : '' }}>
+                                                                            Desember</option>
+                                                                    </select>
+                                                                </td>
+                                                                <!--end::input-->
+                                                                <!--begin::input-->
+                                                                <td>
+                                                                    <!--begin::Input-->
+                                                                    <input type="text"
+                                                                        class="form-control reformat form-control-solid"
+                                                                        id="nilai-forecast" name="nilai-forecast"
+                                                                        value="{{ number_format((int) str_replace('.', '', $forecast->nilai_forecast ?? 0), 0, '.', '.') }}"
+                                                                        placeholder="Nilai OK (Excludde Ppn)" />
+                                                                    <!--end::Input-->
+                                                                </td>
+                                                                {{-- @dump(count($proyek->Forecasts)) --}}
+                                                                @if (isset($proyek->Forecasts))
+                                                                    @if (count($proyek->Forecasts) > 1)
+                                                                        <td class="text-danger fw-bolder">*Proyek
+                                                                            Non-Retail
+                                                                            {{ $proyek->kode_proyek }},<br>&nbsp;Tidak
+                                                                            Dapat Multi Bulan. Hub Admin !</td>
+                                                                    @endif
+                                                                @endif
+                                                                <!--end::input-->
+                                                            </tr>
+                                                            <!--end::FORECAST-->
+                                                            <!--begin::Realisasi-->
+                                                            <tr>
+                                                                <!--begin::Name-->
+                                                                <td class="text-end">
+                                                                    <b>Realisasi :</b>
+                                                                </td>
+                                                                <!--end::Name-->
+                                                                <!--begin::input-->
+                                                                <td class="text-start ps-8">
+                                                                    <select id="month-realisasi" name="month-realisasi"
+                                                                        class="form-select form-select-solid"
+                                                                        data-control="select2" data-hide-search="true"
+                                                                        data-placeholder="Pilih Bulan Realisasi">
+                                                                        <option></option>
+                                                                        <option value="1"
+                                                                            {{ $proyek->bulan_ri_perolehan == '1' ? 'selected' : '' }}>
+                                                                            Januari</option>
+                                                                        <option value="2"
+                                                                            {{ $proyek->bulan_ri_perolehan == '2' ? 'selected' : '' }}>
+                                                                            Februari</option>
+                                                                        <option value="3"
+                                                                            {{ $proyek->bulan_ri_perolehan == '3' ? 'selected' : '' }}>
+                                                                            Maret</option>
+                                                                        <option value="4"
+                                                                            {{ $proyek->bulan_ri_perolehan == '4' ? 'selected' : '' }}>
+                                                                            April</option>
+                                                                        <option value="5"
+                                                                            {{ $proyek->bulan_ri_perolehan == '5' ? 'selected' : '' }}>
+                                                                            Mei</option>
+                                                                        <option value="6"
+                                                                            {{ $proyek->bulan_ri_perolehan == '6' ? 'selected' : '' }}>
+                                                                            Juni</option>
+                                                                        <option value="7"
+                                                                            {{ $proyek->bulan_ri_perolehan == '7' ? 'selected' : '' }}>
+                                                                            Juli</option>
+                                                                        <option value="8"
+                                                                            {{ $proyek->bulan_ri_perolehan == '8' ? 'selected' : '' }}>
+                                                                            Agustus</option>
+                                                                        <option value="9"
+                                                                            {{ $proyek->bulan_ri_perolehan == '9' ? 'selected' : '' }}>
+                                                                            September</option>
+                                                                        <option value="10"
+                                                                            {{ $proyek->bulan_ri_perolehan == '10' ? 'selected' : '' }}>
+                                                                            Oktober</option>
+                                                                        <option value="11"
+                                                                            {{ $proyek->bulan_ri_perolehan == '11' ? 'selected' : '' }}>
+                                                                            November</option>
+                                                                        <option value="12"
+                                                                            {{ $proyek->bulan_ri_perolehan == '12' ? 'selected' : '' }}>
+                                                                            Desember</option>
+                                                                    </select>
+                                                                </td>
+                                                                <!--end::input-->
+                                                                <!--begin::input-->
+                                                                <td>
+                                                                    <!--begin::Input-->
+                                                                    <input type="text"
+                                                                        class="form-control reformat form-control-solid"
+                                                                        id="realisasi-forecast"
+                                                                        name="realisasi-forecast"
+                                                                        value="{{ number_format((int) str_replace('.', '', $proyek->nilai_perolehan), 0, '.', '.') }}"
+                                                                        placeholder="Nilai OK (Excludde Ppn)" />
+                                                                    <!--end::Input-->
+                                                                </td>
+                                                                <td></td>
+                                                                <!--end::input-->
+                                                            </tr>
+                                                            <!--end::Realisasi-->
+                                                            {{-- </form> --}}
+                                                        </tbody>
+                                                        <!--end::Table body-->
+                                                    </table>
+                                                    <!--end::Table-->
+
+                                                    <!--end:::Tab Forecast Non Retail-->
 
 
-<!--begin:::Tab Approval    -->
+                                                    <!--begin:::Tab Approval    -->
                                                     <div class="tab-pane fade" id="kt_user_view_overview_approval"
                                                         role="tabpanel">
 
@@ -5283,9 +5360,9 @@
                                                         <!--end::Table-->
 
                                                     </div>
-<!--end:::Tab Approval-->
+                                                    <!--end:::Tab Approval-->
 
-<!--begin:::Tab Feedback    -->
+                                                    <!--begin:::Tab Feedback    -->
                                                     <div class="tab-pane fade" id="kt_user_view_overview_feedback"
                                                         role="tabpanel">
 
@@ -5343,7 +5420,7 @@
                                                         <!--end::Table-->
 
                                                     </div>
-<!--end:::Tab Feed  back-->
+                                                    <!--end:::Tab Feed  back-->
 
 
 
@@ -5355,35 +5432,35 @@
 
                                         </div>
                                         <!--end::Content-->
-                </form>
-                <!--end::Form-->
+                                        </form>
+                                        <!--end::Form-->
 
+                                    </div>
+                                    <!--end::Contacts App- Edit Contact-->
+
+                                </div>
+                                <!--end::Container-->
+                            </div>
+                            <!--end::Post-->
+
+                        </div>
+                        <!--end::Content-->
+
+                        <!--begin::Footer-->
+
+                        <!--end::Footer-->
+                    </div>
+                    <!--end::Wrapper-->
+                </div>
+                <!--end::Page-->
             </div>
-            <!--end::Contacts App- Edit Contact-->
-
-        </div>
-        <!--end::Container-->
-    </div>
-    <!--end::Post-->
-
-    </div>
-    <!--end::Content-->
-
-    <!--begin::Footer-->
-
-    <!--end::Footer-->
-    </div>
-    <!--end::Wrapper-->
-    </div>
-    <!--end::Page-->
-    </div>
-    <!--end::Root-->
+            <!--end::Root-->
 
 
-    <!--begin::Modal-->
+            <!--begin::Modal-->
 
-    <!--begin::modal HISTORY ADENDUM-->
-    {{-- <form action="/proyek/adendum/add" method="post" enctype="multipart/form-data">
+            <!--begin::modal HISTORY ADENDUM-->
+            {{-- <form action="/proyek/adendum/add" method="post" enctype="multipart/form-data">
     @csrf
     <input type="hidden" name="adendum-kode-proyek" value="{{ $proyek->kode_proyek }}">
     <div class="modal fade" id="kt_modal_history_adendum" tabindex="-1" aria-hidden="true">
@@ -5561,10 +5638,10 @@
         <!--end::Modal dialog-->
     </div>
 </form> --}}
-    <!--end::modal HISTORY ADENDUM-->
+            <!--end::modal HISTORY ADENDUM-->
 
-    <!--begin::edit HISTORY ADENDUM-->
-    {{-- @foreach ($proyek->AdendumProyek as $adendum)
+            <!--begin::edit HISTORY ADENDUM-->
+            {{-- @foreach ($proyek->AdendumProyek as $adendum)
 <form action="/proyek/adendum/{{ $adendum->id }}/edit" method="post" enctype="multipart/form-data">
     @csrf
     <input type="hidden" name="adendum-kode-proyek" value="{{ $proyek->kode_proyek }}">
@@ -5744,10 +5821,10 @@
     </div>
 </form>
 @endforeach --}}
-    <!--end::edit HISTORY ADENDUM-->
+            <!--end::edit HISTORY ADENDUM-->
 
-    <!--begin::DELETE HISTORY ADENDUM-->
-    {{-- @foreach ($proyek->AdendumProyek as $adendum)
+            <!--begin::DELETE HISTORY ADENDUM-->
+            {{-- @foreach ($proyek->AdendumProyek as $adendum)
 <form action="/proyek/adendum/{{ $adendum->id }}/delete" method="post" enctype="multipart/form-data">
     @method('delete')
     @csrf
@@ -5791,90 +5868,93 @@
     </div>
 </form>
 @endforeach --}}
-    <!--end::DELETE HISTORY ADENDUM-->
+            <!--end::DELETE HISTORY ADENDUM-->
 
-    <!--begin::modal ADD PESERTA TENDER-->
-    <form onsubmit="disabledSubmitButton(this)" action="/proyek/peserta-tender/add" method="post" enctype="multipart/form-data">
-        @csrf
-        <input type="hidden" name="tender-pagu" value="{{ $proyek->hps_pagu }}">
-        <input type="hidden" name="tender-kode-proyek" value="{{ $proyek->kode_proyek }}">
-        <input type="hidden" name="stage-proyek" value="{{ $proyek->stage }}">
-        <div class="modal fade" id="kt_modal_peserta_tender" tabindex="-1" aria-hidden="true">
-            <!--begin::Modal dialog-->
-            <div class="modal-dialog modal-dialog-centered mw-800px">
-                <!--begin::Modal content-->
-                <div class="modal-content">
-                    <!--begin::Modal header-->
-                    <div class="modal-header">
-                        <!--begin::Modal title-->
-                        <h2>Tambah Peserta Tender :</h2>
-                        <!--end::Modal title-->
-                        <!--begin::Close-->
-                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                            <span class="svg-icon svg-icon-1">
-                                <i class="bi bi-x-lg"></i>
-                            </span>
-                            <!--end::Svg Icon-->
-                        </div>
-                        <!--end::Close-->
-                    </div>
-                    <!--end::Modal header-->
-
-                    <!--begin::Modal body-->
-                    <div class="modal-body py-lg-6 px-lg-6">
-
-                        <!--begin::Row-->
-                        <div class="row fv-row">
-                            <!--begin::Col-->
-                            <div class="col-6">
-                                <!--begin::Input group Website-->
-                                <div class="fv-row mb-7">
-                                    <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Nama Peserta Tender</span>
-                                    </label>
-                                    <!--end::Label-->
-                                    <!--begin::Input-->
-                                    <select id="peserta-tender" name="peserta-tender"
-                                        class="form-select form-select-solid" data-control="select2"
-                                        data-hide-search="false" data-placeholder="Pilih Peserta Tender">
-                                        <option></option>
-                                        @foreach ($customers as $customer)
-                                            <option value="{{ $customer->name }}"> {{ $customer->name }}</option>
-                                        @endforeach
-                                    </select>
-                                    <!--end::Input-->
+            <!--begin::modal ADD PESERTA TENDER-->
+            <form onsubmit="disabledSubmitButton(this)" action="/proyek/peserta-tender/add" method="post"
+                enctype="multipart/form-data">
+                @csrf
+                <input type="hidden" name="tender-pagu" value="{{ $proyek->hps_pagu }}">
+                <input type="hidden" name="tender-kode-proyek" value="{{ $proyek->kode_proyek }}">
+                <input type="hidden" name="stage-proyek" value="{{ $proyek->stage }}">
+                <div class="modal fade" id="kt_modal_peserta_tender" tabindex="-1" aria-hidden="true">
+                    <!--begin::Modal dialog-->
+                    <div class="modal-dialog modal-dialog-centered mw-800px">
+                        <!--begin::Modal content-->
+                        <div class="modal-content">
+                            <!--begin::Modal header-->
+                            <div class="modal-header">
+                                <!--begin::Modal title-->
+                                <h2>Tambah Peserta Tender :</h2>
+                                <!--end::Modal title-->
+                                <!--begin::Close-->
+                                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                                    <span class="svg-icon svg-icon-1">
+                                        <i class="bi bi-x-lg"></i>
+                                    </span>
+                                    <!--end::Svg Icon-->
                                 </div>
-                                <!--end::Input group-->
+                                <!--end::Close-->
                             </div>
-                            @if ($proyek->stage >= 5)
-                                <!--End begin::Col-->
-                                <div class="col-6">
-                                    <!--begin::Input group Website-->
-                                    <div class="fv-row mb-7">
-                                        <!--begin::Label-->
-                                        <label class="fs-6 fw-bold form-label mt-3">
-                                            <span>Nilai Penawaran</span>
-                                        </label>
-                                        <!--end::Label-->
-                                        <!--begin::Input-->
-                                        <input type="text" class="form-control form-control-solid reformat"
-                                            id="nilai-tender" name="nilai-tender" placeholder="Nilai Penawaran" />
-                                        <!--end::Input-->
-                                    </div>
-                                    <!--end::Input group-->
-                                </div>
-                                <!--End begin::Col-->
-                            @endif
-                        </div>
-                        <!--End begin::Row-->
+                            <!--end::Modal header-->
 
-                        @if ($proyek->stage >= 5)
-                            <!--begin::Row-->
-                            <div class="row fv-row">
-                                <!--begin::Col-->
-                                {{-- <div class="col-6">
+                            <!--begin::Modal body-->
+                            <div class="modal-body py-lg-6 px-lg-6">
+
+                                <!--begin::Row-->
+                                <div class="row fv-row">
+                                    <!--begin::Col-->
+                                    <div class="col-6">
+                                        <!--begin::Input group Website-->
+                                        <div class="fv-row mb-7">
+                                            <!--begin::Label-->
+                                            <label class="fs-6 fw-bold form-label mt-3">
+                                                <span class="required">Nama Peserta Tender</span>
+                                            </label>
+                                            <!--end::Label-->
+                                            <!--begin::Input-->
+                                            <select id="peserta-tender" name="peserta-tender"
+                                                class="form-select form-select-solid" data-control="select2"
+                                                data-hide-search="false" data-placeholder="Pilih Peserta Tender">
+                                                <option></option>
+                                                @foreach ($customers as $customer)
+                                                    <option value="{{ $customer->name }}"> {{ $customer->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            <!--end::Input-->
+                                        </div>
+                                        <!--end::Input group-->
+                                    </div>
+                                    @if ($proyek->stage >= 5)
+                                        <!--End begin::Col-->
+                                        <div class="col-6">
+                                            <!--begin::Input group Website-->
+                                            <div class="fv-row mb-7">
+                                                <!--begin::Label-->
+                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                    <span>Nilai Penawaran</span>
+                                                </label>
+                                                <!--end::Label-->
+                                                <!--begin::Input-->
+                                                <input type="text" class="form-control form-control-solid reformat"
+                                                    id="nilai-tender" name="nilai-tender"
+                                                    placeholder="Nilai Penawaran" />
+                                                <!--end::Input-->
+                                            </div>
+                                            <!--end::Input group-->
+                                        </div>
+                                        <!--End begin::Col-->
+                                    @endif
+                                </div>
+                                <!--End begin::Row-->
+
+                                @if ($proyek->stage >= 5)
+                                    <!--begin::Row-->
+                                    <div class="row fv-row">
+                                        <!--begin::Col-->
+                                        {{-- <div class="col-6">
                         <!--begin::Input group Website-->
                         <div class="fv-row mb-7">
                             <!--begin::Label-->
@@ -5889,52 +5969,248 @@
                         </div>
                         <!--end::Input group-->
                     </div> --}}
-                                <!--End begin::Col-->
-                                <div class="col-6">
-                                    <!--begin::Input group Website-->
-                                    <div class="fv-row mb-7">
-                                        <!--begin::Label-->
-                                        <label class="fs-6 fw-bold form-label mt-3">
-                                            <span>Status</span>
-                                        </label>
-                                        <!--end::Label-->
-                                        <!--begin::Input-->
-                                        <input type="text" class="form-control form-control-solid"
-                                            id="status-tender" name="status-tender" placeholder="Status" />
-                                        <!--end::Input-->
+                                        <!--End begin::Col-->
+                                        <div class="col-6">
+                                            <!--begin::Input group Website-->
+                                            <div class="fv-row mb-7">
+                                                <!--begin::Label-->
+                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                    <span>Status</span>
+                                                </label>
+                                                <!--end::Label-->
+                                                <!--begin::Input-->
+                                                <input type="text" class="form-control form-control-solid"
+                                                    id="status-tender" name="status-tender" placeholder="Status" />
+                                                <!--end::Input-->
+                                            </div>
+                                            <!--end::Input group-->
+                                        </div>
+                                        <!--End begin::Col-->
                                     </div>
-                                    <!--end::Input group-->
-                                </div>
-                                <!--End begin::Col-->
+                                    <!--End begin::Row-->
+                                @endif
+
                             </div>
-                            <!--End begin::Row-->
-                        @endif
+                            <div class="modal-footer">
 
+                                <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white"
+                                    id="new_save" style="background-color:#008CB4">Save</button>
+
+                            </div>
+                            <!--end::Modal body-->
+                        </div>
+                        <!--end::Modal content-->
                     </div>
-                    <div class="modal-footer">
-
-                        <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white"
-                            id="new_save" style="background-color:#008CB4">Save</button>
-
-                    </div>
-                    <!--end::Modal body-->
+                    <!--end::Modal dialog-->
                 </div>
-                <!--end::Modal content-->
-            </div>
-            <!--end::Modal dialog-->
-        </div>
-    </form>
-    <!--end::modal ADD PESERTA TENDER-->
+            </form>
+            <!--end::modal ADD PESERTA TENDER-->
 
-    <!--begin::modal EDIT PESERTA TENDER-->
-    @foreach ($pesertatender as $peserta)
-        <form action="/proyek/peserta-tender/{{ $peserta->id }}/edit" method="post" enctype="multipart/form-data">
+            <!--begin::modal EDIT PESERTA TENDER-->
+            @foreach ($pesertatender as $peserta)
+                <form action="/proyek/peserta-tender/{{ $peserta->id }}/edit" method="post"
+                    enctype="multipart/form-data">
+                    @csrf
+                    <input type="hidden" name="tender-kode-proyek" value="{{ $proyek->kode_proyek }}">
+                    <input type="hidden" name="tender-pagu" value="{{ $proyek->hps_pagu }}">
+                    <input type="hidden" name="stage-proyek" value="{{ $proyek->stage }}">
+                    <div class="modal fade" id="kt_modal_edit_tender_{{ $peserta->id }}" tabindex="-1"
+                        aria-hidden="true">
+                        <!--begin::Modal dialog-->
+                        <div class="modal-dialog modal-dialog-centered mw-800px">
+                            <!--begin::Modal content-->
+                            <div class="modal-content">
+                                <!--begin::Modal header-->
+                                <div class="modal-header">
+                                    <!--begin::Modal title-->
+                                    <h2>Edit Peserta Tender :</h2>
+                                    <!--end::Modal title-->
+                                    <!--begin::Close-->
+                                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                                        <span class="svg-icon svg-icon-1">
+                                            <i class="bi bi-x-lg"></i>
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </div>
+                                    <!--end::Close-->
+                                </div>
+                                <!--end::Modal header-->
+
+                                <!--begin::Modal body-->
+                                <div class="modal-body py-lg-6 px-lg-6">
+
+                                    <!--begin::Row-->
+                                    <div class="row fv-row">
+                                        <!--begin::Col-->
+                                        <div class="col-6">
+                                            <!--begin::Input group Website-->
+                                            <div class="fv-row mb-7">
+                                                <!--begin::Label-->
+                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                    <span class="required">Nama Peserta Tender</span>
+                                                </label>
+                                                <!--end::Label-->
+                                                <!--begin::Input-->
+                                                <select id="edit-peserta-tender" name="edit-peserta-tender"
+                                                    class="form-select form-select-solid" data-control="select2"
+                                                    data-hide-search="false" data-placeholder="Pilih Peserta Tender">
+                                                    <option></option>
+                                                    @foreach ($customers as $customer)
+                                                        @if ($customer->name == $peserta->peserta_tender)
+                                                            <option value="{{ $customer->name }}" selected>
+                                                                {{ $customer->name }}</option>
+                                                        @else
+                                                            <option value="{{ $customer->name }}">
+                                                                {{ $customer->name }}
+                                                            </option>
+                                                        @endif
+                                                    @endforeach
+                                                </select>
+                                                <!--end::Input-->
+                                            </div>
+                                            <!--end::Input group-->
+                                        </div>
+                                        @if ($proyek->stage >= 5)
+                                            <!--End begin::Col-->
+                                            <div class="col-6">
+                                                <!--begin::Input group Website-->
+                                                <div class="fv-row mb-7">
+                                                    <!--begin::Label-->
+                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                        <span>Nilai Penawaran</span>
+                                                    </label>
+                                                    <!--end::Label-->
+                                                    <!--begin::Input-->
+                                                    <input type="text"
+                                                        class="form-control form-control-solid reformat"
+                                                        id="nilai-tender" name="nilai-tender"
+                                                        value="{{ $peserta->nilai_tender_peserta }}"
+                                                        placeholder="Nilai Penawaran" />
+                                                    <!--end::Input-->
+                                                </div>
+                                                <!--end::Input group-->
+                                            </div>
+                                            <!--End begin::Col-->
+                                        @endif
+                                    </div>
+                                    <!--End begin::Row-->
+
+                                    @if ($proyek->stage >= 5)
+                                        <!--begin::Row-->
+                                        <div class="row fv-row">
+                                            <!--begin::Col-->
+                                            {{-- <div class="col-6">
+                        <!--begin::Input group Website-->
+                        <div class="fv-row mb-7">
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span><i class="bi bi-percent text-dark"></i> OE</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" class="form-control form-control-solid reformat" id="oe-tender"
+                                name="oe-tender" value="{{ $peserta->oe_tender }}" placeholder="% OE" />
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+                    </div> --}}
+                                            <!--End begin::Col-->
+                                            <div class="col-6">
+                                                <!--begin::Input group Website-->
+                                                <div class="fv-row mb-7">
+                                                    <!--begin::Label-->
+                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                        <span>Status</span>
+                                                    </label>
+                                                    <!--end::Label-->
+                                                    <!--begin::Input-->
+                                                    <input type="text" class="form-control form-control-solid"
+                                                        id="status-tender" name="status-tender"
+                                                        value="{{ $peserta->status }}" placeholder="Status" />
+                                                    <!--end::Input-->
+                                                </div>
+                                                <!--end::Input group-->
+                                            </div>
+                                            <!--End begin::Col-->
+                                        </div>
+                                        <!--End begin::Row-->
+                                    @endif
+
+                                </div>
+                                <div class="modal-footer">
+
+                                    <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white"
+                                        id="new_save" style="background-color:#008CB4">Save</button>
+
+                                </div>
+                                <!--end::Modal body-->
+                            </div>
+                            <!--end::Modal content-->
+                        </div>
+                        <!--end::Modal dialog-->
+                    </div>
+                </form>
+            @endforeach
+            <!--end::modal EDIT PESERTA TENDER-->
+
+            <!--begin::DELETE PESERTA TENDER-->
+            @foreach ($pesertatender as $peserta)
+                <form action="/proyek/peserta-tender/{{ $peserta->id }}/delete" method="post"
+                    enctype="multipart/form-data">
+                    @method('delete')
+                    @csrf
+                    <div class="modal fade" id="kt_tender_delete_{{ $peserta->id }}" tabindex="-1"
+                        aria-hidden="true">
+                        <!--begin::Modal dialog-->
+                        <div class="modal-dialog modal-dialog-centered mw-800px">
+                            <!--begin::Modal content-->
+                            <div class="modal-content">
+                                <!--begin::Modal header-->
+                                <div class="modal-header">
+                                    <!--begin::Modal title-->
+                                    <h2>Hapus Peserta Tender : {{ $peserta->peserta_tender }}
+                                    </h2>
+                                    <!--end::Modal title-->
+                                    <!--begin::Close-->
+                                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                                        <span class="svg-icon svg-icon-1">
+                                            <i class="bi bi-x-lg"></i>
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </div>
+                                    <!--end::Close-->
+                                </div>
+                                <!--end::Modal header-->
+                                <!--begin::Modal body-->
+                                <div class="modal-body py-lg-6 px-lg-6">
+                                    Data yang dihapus tidak dapat dipulihkan, anda yakin ?
+                                    <br>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-sm btn-light btn-active-primary">Delete</button>
+                                </div>
+                                <!--end::Input group-->
+
+                            </div>
+                            <!--end::Modal body-->
+                        </div>
+                        <!--end::Modal content-->
+                    </div>
+                    <!--end::Modal dialog-->
+        </div>
+        </form>
+        @endforeach
+        <!--end::DELETE PESERTA TENDER-->
+
+        <!--begin::modal ADD USER SKAT-->
+        <form onsubmit="disabledSubmitButton(this)" action="/proyek/user/add" method="post"
+            enctype="multipart/form-data">
             @csrf
-            <input type="hidden" name="tender-kode-proyek" value="{{ $proyek->kode_proyek }}">
-            <input type="hidden" name="tender-pagu" value="{{ $proyek->hps_pagu }}">
-            <input type="hidden" name="stage-proyek" value="{{ $proyek->stage }}">
-            <div class="modal fade" id="kt_modal_edit_tender_{{ $peserta->id }}" tabindex="-1"
-                aria-hidden="true">
+            <input type="hidden" name="assign-kode-proyek" value="{{ $proyek->kode_proyek }}">
+            <input type="hidden" name="assign-stage" value="{{ $proyek->stage }}">
+            <div class="modal fade" id="kt_modal_add_user" tabindex="-1" aria-hidden="true">
                 <!--begin::Modal dialog-->
                 <div class="modal-dialog modal-dialog-centered mw-800px">
                     <!--begin::Modal content-->
@@ -5942,7 +6218,7 @@
                         <!--begin::Modal header-->
                         <div class="modal-header">
                             <!--begin::Modal title-->
-                            <h2>Edit Peserta Tender :</h2>
+                            <h2>Assign Personil Proyek : {{ $proyek->nama_proyek }}</h2>
                             <!--end::Modal title-->
                             <!--begin::Close-->
                             <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
@@ -5967,92 +6243,41 @@
                                     <div class="fv-row mb-7">
                                         <!--begin::Label-->
                                         <label class="fs-6 fw-bold form-label mt-3">
-                                            <span class="required">Nama Peserta Tender</span>
+                                            <span class="required">Nama Personil</span>
                                         </label>
                                         <!--end::Label-->
                                         <!--begin::Input-->
-                                        <select id="edit-peserta-tender" name="edit-peserta-tender"
-                                            class="form-select form-select-solid" data-control="select2"
-                                            data-hide-search="false" data-placeholder="Pilih Peserta Tender">
+                                        <select name="nama-team" class="form-select form-select-solid"
+                                            data-control="select2" data-hide-search="false"
+                                            data-placeholder="Pilih Team">
                                             <option></option>
-                                            @foreach ($customers as $customer)
-                                                @if ($customer->name == $peserta->peserta_tender)
-                                                    <option value="{{ $customer->name }}" selected>
-                                                        {{ $customer->name }}</option>
-                                                @else
-                                                    <option value="{{ $customer->name }}"> {{ $customer->name }}
-                                                    </option>
-                                                @endif
+                                            @foreach ($users as $user)
+                                                <option value="{{ $user->id }}">{{ $user->name }}</option>
                                             @endforeach
                                         </select>
                                         <!--end::Input-->
                                     </div>
                                     <!--end::Input group-->
                                 </div>
-                                @if ($proyek->stage >= 5)
-                                    <!--End begin::Col-->
-                                    <div class="col-6">
-                                        <!--begin::Input group Website-->
-                                        <div class="fv-row mb-7">
-                                            <!--begin::Label-->
-                                            <label class="fs-6 fw-bold form-label mt-3">
-                                                <span>Nilai Penawaran</span>
-                                            </label>
-                                            <!--end::Label-->
-                                            <!--begin::Input-->
-                                            <input type="text" class="form-control form-control-solid reformat"
-                                                id="nilai-tender" name="nilai-tender"
-                                                value="{{ $peserta->nilai_tender_peserta }}"
-                                                placeholder="Nilai Penawaran" />
-                                            <!--end::Input-->
-                                        </div>
-                                        <!--end::Input group-->
+                                <!--End begin::Col-->
+                                <div class="col-6">
+                                    <!--begin::Input group Website-->
+                                    <div class="fv-row mb-7">
+                                        <!--begin::Label-->
+                                        <label class="fs-6 fw-bold form-label mt-3">
+                                            <span class="required">Bidang Sertifikasi</span>
+                                        </label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <input type="text" class="form-control form-control-solid" id="role-team"
+                                            name="role-team" placeholder="Bidang Sertifikasi" />
+                                        <!--end::Input-->
                                     </div>
-                                    <!--End begin::Col-->
-                                @endif
+                                    <!--end::Input group-->
+                                </div>
+                                <!--End begin::Col-->
                             </div>
                             <!--End begin::Row-->
-
-                            @if ($proyek->stage >= 5)
-                                <!--begin::Row-->
-                                <div class="row fv-row">
-                                    <!--begin::Col-->
-                                    {{-- <div class="col-6">
-                        <!--begin::Input group Website-->
-                        <div class="fv-row mb-7">
-                            <!--begin::Label-->
-                            <label class="fs-6 fw-bold form-label mt-3">
-                                <span><i class="bi bi-percent text-dark"></i> OE</span>
-                            </label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <input type="text" class="form-control form-control-solid reformat" id="oe-tender"
-                                name="oe-tender" value="{{ $peserta->oe_tender }}" placeholder="% OE" />
-                            <!--end::Input-->
-                        </div>
-                        <!--end::Input group-->
-                    </div> --}}
-                                    <!--End begin::Col-->
-                                    <div class="col-6">
-                                        <!--begin::Input group Website-->
-                                        <div class="fv-row mb-7">
-                                            <!--begin::Label-->
-                                            <label class="fs-6 fw-bold form-label mt-3">
-                                                <span>Status</span>
-                                            </label>
-                                            <!--end::Label-->
-                                            <!--begin::Input-->
-                                            <input type="text" class="form-control form-control-solid"
-                                                id="status-tender" name="status-tender"
-                                                value="{{ $peserta->status }}" placeholder="Status" />
-                                            <!--end::Input-->
-                                        </div>
-                                        <!--end::Input group-->
-                                    </div>
-                                    <!--End begin::Col-->
-                                </div>
-                                <!--End begin::Row-->
-                            @endif
 
                         </div>
                         <div class="modal-footer">
@@ -6068,192 +6293,53 @@
                 <!--end::Modal dialog-->
             </div>
         </form>
-    @endforeach
-    <!--end::modal EDIT PESERTA TENDER-->
+        <!--end::modal ADD USER SKAT-->
 
-    <!--begin::DELETE PESERTA TENDER-->
-    @foreach ($pesertatender as $peserta)
-        <form action="/proyek/peserta-tender/{{ $peserta->id }}/delete" method="post"
-            enctype="multipart/form-data">
-            @method('delete')
-            @csrf
-            <div class="modal fade" id="kt_tender_delete_{{ $peserta->id }}" tabindex="-1" aria-hidden="true">
-                <!--begin::Modal dialog-->
-                <div class="modal-dialog modal-dialog-centered mw-800px">
-                    <!--begin::Modal content-->
-                    <div class="modal-content">
-                        <!--begin::Modal header-->
-                        <div class="modal-header">
-                            <!--begin::Modal title-->
-                            <h2>Hapus Peserta Tender : {{ $peserta->peserta_tender }}
-                            </h2>
-                            <!--end::Modal title-->
-                            <!--begin::Close-->
-                            <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                                <span class="svg-icon svg-icon-1">
-                                    <i class="bi bi-x-lg"></i>
-                                </span>
-                                <!--end::Svg Icon-->
-                            </div>
-                            <!--end::Close-->
-                        </div>
-                        <!--end::Modal header-->
-                        <!--begin::Modal body-->
-                        <div class="modal-body py-lg-6 px-lg-6">
-                            Data yang dihapus tidak dapat dipulihkan, anda yakin ?
-                            <br>
-                        </div>
-                        <div class="modal-footer">
-                            <button class="btn btn-sm btn-light btn-active-primary">Delete</button>
-                        </div>
-                        <!--end::Input group-->
-
-                    </div>
-                    <!--end::Modal body-->
-                </div>
-                <!--end::Modal content-->
-            </div>
-            <!--end::Modal dialog-->
-            </div>
-        </form>
-    @endforeach
-    <!--end::DELETE PESERTA TENDER-->
-
-    <!--begin::modal ADD USER SKAT-->
-    <form onsubmit="disabledSubmitButton(this)" action="/proyek/user/add" method="post" enctype="multipart/form-data">
-        @csrf
-        <input type="hidden" name="assign-kode-proyek" value="{{ $proyek->kode_proyek }}">
-        <input type="hidden" name="assign-stage" value="{{ $proyek->stage }}">
-        <div class="modal fade" id="kt_modal_add_user" tabindex="-1" aria-hidden="true">
-            <!--begin::Modal dialog-->
-            <div class="modal-dialog modal-dialog-centered mw-800px">
-                <!--begin::Modal content-->
-                <div class="modal-content">
-                    <!--begin::Modal header-->
-                    <div class="modal-header">
-                        <!--begin::Modal title-->
-                        <h2>Assign Personil Proyek : {{ $proyek->nama_proyek }}</h2>
-                        <!--end::Modal title-->
-                        <!--begin::Close-->
-                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                            <span class="svg-icon svg-icon-1">
-                                <i class="bi bi-x-lg"></i>
-                            </span>
-                            <!--end::Svg Icon-->
-                        </div>
-                        <!--end::Close-->
-                    </div>
-                    <!--end::Modal header-->
-
-                    <!--begin::Modal body-->
-                    <div class="modal-body py-lg-6 px-lg-6">
-
-                        <!--begin::Row-->
-                        <div class="row fv-row">
-                            <!--begin::Col-->
-                            <div class="col-6">
-                                <!--begin::Input group Website-->
-                                <div class="fv-row mb-7">
-                                    <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Nama Personil</span>
-                                    </label>
-                                    <!--end::Label-->
-                                    <!--begin::Input-->
-                                    <select name="nama-team" class="form-select form-select-solid"
-                                        data-control="select2" data-hide-search="false" data-placeholder="Pilih Team">
-                                        <option></option>
-                                        @foreach ($users as $user)
-                                            <option value="{{ $user->id }}">{{ $user->name }}</option>
-                                        @endforeach
-                                    </select>
-                                    <!--end::Input-->
+        <!--begin::DELETE USER SKAT-->
+        @foreach ($teams as $team)
+            <form action="/proyek/user-delete/{{ $team->id }}" method="post" enctype="multipart/form-data">
+                @method('delete')
+                @csrf
+                <div class="modal fade" id="kt_team_delete_{{ $team->id }}" tabindex="-1" aria-hidden="true">
+                    <!--begin::Modal dialog-->
+                    <div class="modal-dialog modal-dialog-centered mw-800px">
+                        <!--begin::Modal content-->
+                        <div class="modal-content">
+                            <!--begin::Modal header-->
+                            <div class="modal-header">
+                                <!--begin::Modal title-->
+                                <h2>Hapus : {{ $team->User->name }} - {{ $team->role }}
+                                </h2>
+                                <!--end::Modal title-->
+                                <!--begin::Close-->
+                                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                                    <span class="svg-icon svg-icon-1">
+                                        <i class="bi bi-x-lg"></i>
+                                    </span>
+                                    <!--end::Svg Icon-->
                                 </div>
-                                <!--end::Input group-->
+                                <!--end::Close-->
                             </div>
-                            <!--End begin::Col-->
-                            <div class="col-6">
-                                <!--begin::Input group Website-->
-                                <div class="fv-row mb-7">
-                                    <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Bidang Sertifikasi</span>
-                                    </label>
-                                    <!--end::Label-->
-                                    <!--begin::Input-->
-                                    <input type="text" class="form-control form-control-solid" id="role-team"
-                                        name="role-team" placeholder="Bidang Sertifikasi" />
-                                    <!--end::Input-->
-                                </div>
-                                <!--end::Input group-->
+                            <!--end::Modal header-->
+                            <!--begin::Modal body-->
+                            <div class="modal-body py-lg-6 px-lg-6">
+                                Data yang dihapus tidak dapat dipulihkan, anda yakin ?
+                                <br>
                             </div>
-                            <!--End begin::Col-->
+                            <div class="modal-footer">
+                                <button class="btn btn-sm btn-light btn-active-primary">Delete</button>
+                            </div>
+                            <!--end::Input group-->
+
                         </div>
-                        <!--End begin::Row-->
-
+                        <!--end::Modal body-->
                     </div>
-                    <div class="modal-footer">
-
-                        <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white"
-                            id="new_save" style="background-color:#008CB4">Save</button>
-
-                    </div>
-                    <!--end::Modal body-->
+                    <!--end::Modal content-->
                 </div>
-                <!--end::Modal content-->
-            </div>
-            <!--end::Modal dialog-->
-        </div>
+                <!--end::Modal dialog-->
+    </div>
     </form>
-    <!--end::modal ADD USER SKAT-->
-
-    <!--begin::DELETE USER SKAT-->
-    @foreach ($teams as $team)
-        <form action="/proyek/user-delete/{{ $team->id }}" method="post" enctype="multipart/form-data">
-            @method('delete')
-            @csrf
-            <div class="modal fade" id="kt_team_delete_{{ $team->id }}" tabindex="-1" aria-hidden="true">
-                <!--begin::Modal dialog-->
-                <div class="modal-dialog modal-dialog-centered mw-800px">
-                    <!--begin::Modal content-->
-                    <div class="modal-content">
-                        <!--begin::Modal header-->
-                        <div class="modal-header">
-                            <!--begin::Modal title-->
-                            <h2>Hapus : {{ $team->User->name }} - {{ $team->role }}
-                            </h2>
-                            <!--end::Modal title-->
-                            <!--begin::Close-->
-                            <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                                <span class="svg-icon svg-icon-1">
-                                    <i class="bi bi-x-lg"></i>
-                                </span>
-                                <!--end::Svg Icon-->
-                            </div>
-                            <!--end::Close-->
-                        </div>
-                        <!--end::Modal header-->
-                        <!--begin::Modal body-->
-                        <div class="modal-body py-lg-6 px-lg-6">
-                            Data yang dihapus tidak dapat dipulihkan, anda yakin ?
-                            <br>
-                        </div>
-                        <div class="modal-footer">
-                            <button class="btn btn-sm btn-light btn-active-primary">Delete</button>
-                        </div>
-                        <!--end::Input group-->
-
-                    </div>
-                    <!--end::Modal body-->
-                </div>
-                <!--end::Modal content-->
-            </div>
-            <!--end::Modal dialog-->
-            </div>
-        </form>
     @endforeach
     <!--end::DELETE USER SKAT-->
 
@@ -6774,7 +6860,8 @@
 
 
     <!--begin::modal PORSI JO-->
-    <form action="/proyek/porsi-jo" onsubmit="disabledSubmitButton(this)" method="post" enctype="multipart/form-data">
+    <form action="/proyek/porsi-jo" onsubmit="disabledSubmitButton(this)" method="post"
+        enctype="multipart/form-data">
         @csrf
         <input type="hidden" name="porsi-kode-proyek" value="{{ $proyek->kode_proyek }}">
 
@@ -7226,13 +7313,12 @@
 
     <!--begin::DELETE DOKUMEN TENDER-->
     @foreach ($proyek->DokumenTender as $dokumen)
-        <form action="/proyek/dokumen-tender/{{ $dokumen->id_dokumen_tender }}/delete"
-            method="post" enctype="multipart/form-data">
+        <form action="/proyek/dokumen-tender/{{ $dokumen->id_dokumen_tender }}/delete" method="post"
+            enctype="multipart/form-data">
             @method('delete')
             @csrf
-            <div class="modal fade"
-                id="kt_dokumen_tender_delete_{{ $dokumen->id_dokumen_tender }}"
-                tabindex="-1" aria-hidden="true">
+            <div class="modal fade" id="kt_dokumen_tender_delete_{{ $dokumen->id_dokumen_tender }}" tabindex="-1"
+                aria-hidden="true">
                 <!--begin::Modal dialog-->
                 <div class="modal-dialog modal-dialog-centered mw-800px">
                     <!--begin::Modal content-->
@@ -7668,7 +7754,7 @@
         // const modalJODetail = new bootstrap.Modal("#kt_modal_jo_detail", {});
         function tampilJOCategory(e) {
             const valueJO = e.value;
-            if(valueJO == "J") {
+            if (valueJO == "J") {
                 document.getElementById("kategori-jenis-jo").style.display = "";
                 // modalJODetail.show();
             }
@@ -7680,7 +7766,10 @@
     <script>
         function changeValueJODetail(e) {
             const selectJOElt = e.parentElement.parentElement.querySelector("select");
-            const valueJODetail = {value: selectJOElt.value, text: selectJOElt.options[selectJOElt.selectedIndex].text};
+            const valueJODetail = {
+                value: selectJOElt.value,
+                text: selectJOElt.options[selectJOElt.selectedIndex].text
+            };
             const inputJODetail = document.querySelector("#jo-category");
             const textJODetail = inputJODetail.parentElement.querySelector("small");
             inputJODetail.value = valueJODetail.value;
