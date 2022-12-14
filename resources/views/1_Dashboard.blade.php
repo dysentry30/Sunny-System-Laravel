@@ -4211,13 +4211,12 @@
                             nilai = filter.hps_pagu ?? 0;
                             break;
                         case "Menang":
-                            const forecasts = filter.forecasts.sort((a, b) => {
+                            const forecasts = filter.forecasts?.sort((a, b) => {
                                 return a.month_realisasi - b.month_realisasi;
                             });
-                            
                             let forecastLength = forecasts.length ?? 0;
                             // forecasts.reduce((prev, next) => console.log({prev, next}));
-                            getBulanColumn = forecasts[forecastLength - 1].month_realisasi ?? 0;
+                            getBulanColumn = forecasts[forecastLength - 1]?.month_realisasi ?? 0;
                             if(filter.tipe_proyek == "R") {
                                 // menghitung total nilai realisasi
                                 forecasts.forEach((item) => {
