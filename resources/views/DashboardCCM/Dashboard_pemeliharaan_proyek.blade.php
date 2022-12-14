@@ -595,7 +595,7 @@
                         <br>
 
                         <!--begin::Tabel Header-->
-                        <div class="row mb-4">
+                        <div class="row mb-4 mx-3">
                             <div class="col-2">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-success">
@@ -648,7 +648,7 @@
                         <!--begin::Table Body-->
                         @foreach ($kategori_kontrak as $table)
                         {{-- @dd($table) --}}
-                        <div class="row mb-4">
+                        <div class="row mb-4 mx-3">
                             <div class="col-2">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-success">
@@ -705,7 +705,7 @@
                         <br>
                         
                         <!--begin::Tabel Header-->
-                        <div class="row mb-4">
+                        <div class="row mb-4 mx-3">
                             <div class="col-9">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-warning">
@@ -726,7 +726,7 @@
                         <!--begin::Table Body-->
                         @foreach ($kategori_kontrak as $table)
                         {{-- @dd($table) --}}
-                        <div class="row mb-4">
+                        <div class="row mb-4 mx-3">
                             <div class="col-3">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-warning">
@@ -758,6 +758,253 @@
                         </div>
                         @endforeach
                         <!--end::Table Body-->
+
+                        <br>
+
+                        <!--begin::Title-->
+                        <div class="mb-4">
+                            <div class="col-12">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-secondary">
+                                    <h2 class="m-0 text-center">KPI - Key Performance Index</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                        </div>
+                        <!--end::Title-->
+
+                        <!--begin::Row-->
+                        <div class="row">
+                            <!--begin::Card-->
+                            <div class="ms-6 col mb-6 pt-0">
+                                <!--begin::Card widget 20-->
+                                <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #027DB8;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                    <!--begin::Header-->
+                                    <div class="card-header">
+                                        <!--begin::Title-->
+                                        <div class="card-body d-flex flex-row">
+                                            <!--begin::Amount-->
+                                            <span class="text-white fs-3 ms-6">Proses Pre-Claim : </span>
+                                            <!--end::Amount-->
+                                            <!--begin::Subtitle-->
+                                            <span class="text-white fs-3 ms-12 fw-bolder">{{ mt_rand(85, 95) }} %</span>
+                                            <!--end::Subtitle-->
+                                        </div>
+                                        <!--end::Title-->
+                                    </div>
+                                    <!--end::Header-->
+                                </div>
+                                <!--end::Card widget 20-->
+                            </div>
+                            <!--end::Card-->
+                            <!--begin::Card-->
+                            <div class="col mb-6 pt-0">
+                                <!--begin::Card widget 20-->
+                                <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #28B3AC;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                    <!--begin::Header-->
+                                    <div class="card-header">
+                                        <!--begin::Title-->
+                                        <div class="card-body d-flex flex-row">
+                                            <!--begin::Amount-->
+                                            <span class="text-white fs-3 ms-6">Proses During-Claim : </span>
+                                            <!--end::Amount-->
+                                            <!--begin::Subtitle-->
+                                            <span class="text-white fs-3 ms-12 fw-bolder">{{ mt_rand(85, 95) }} %</span>
+                                            <!--end::Subtitle-->
+                                        </div>
+                                        <!--end::Title-->
+                                    </div>
+                                    <!--end::Header-->
+                                </div>
+                                <!--end::Card widget 20-->
+                            </div>
+                            <!--end::Card-->
+                            <!--begin::Card-->
+                            <div class="me-6 col mb-6 pt-0">
+                                <!--begin::Card widget 20-->
+                                <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #F7AD1A;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                    <!--begin::Header-->
+                                    <div class="card-header">
+                                        <!--begin::Title-->
+                                        <div class="card-body d-flex flex-row">
+                                            <!--begin::Amount-->
+                                            <span class="text-white fs-3 ms-6">Proses Post-Claim : </span>
+                                            <!--end::Amount-->
+                                            <!--begin::Subtitle-->
+                                            <span class="text-white fs-3 ms-12 fw-bolder">{{ mt_rand(85, 95) }} %</span>
+                                            <!--end::Subtitle-->
+                                        </div>
+                                        <!--end::Title-->
+                                    </div>
+                                    <!--end::Header-->
+                                </div>
+                                <!--end::Card widget 20-->
+                            </div>
+                            <!--begin::Card-->
+                        </div>
+                        <!--end::Row-->
+
+                        <br>
+
+                        <!--begin::Title-->
+                        <div class="row mb-4">
+                            <div class="col-6">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-secondary">
+                                    <h2 class="m-0 text-center">INSURANCE STATUS</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col-6">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-secondary">
+                                    <h2 class="m-0 text-center">BOND STATUS</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                        </div>
+                        <!--end::Title-->
+
+                        <!--begin::Title-->
+                        <div class="row mb-4">
+                            <div class="col-6">
+                                <!--begin::Title body-->
+                                <div class="row mb-4 ms-3">
+                                    <div class="col-3">
+                                        <!--begin::Title body-->
+                                        <div style="border-radius: 0px" class="card-body bg-success">
+                                            <p class="fw-bolder m-0 text-center">Asuransi</p>
+                                        </div>
+                                        <!--end::Title body-->
+                                    </div>
+                                    <div class="col-3">
+                                        <!--begin::Title body-->
+                                        <div style="border-radius: 0px" class="card-body bg-success">
+                                            <p class="fw-bolder m-0 text-center">Tgl Penerbitan</p>
+                                        </div>
+                                        <!--end::Title body-->
+                                    </div>
+                                    <div class="col-3">
+                                        <!--begin::Title body-->
+                                        <div style="border-radius: 0px" class="card-body bg-success">
+                                            <p class="fw-bolder m-0 text-center">Tgl Berakhir</p>
+                                        </div>
+                                        <!--end::Title body-->
+                                    </div>
+                                    <div class="col-3">
+                                        <!--begin::Title body-->
+                                        <div style="border-radius: 0px" class="card-body bg-success">
+                                            <p class="fw-bolder m-0 text-center">Status</p>
+                                        </div>
+                                        <!--end::Title body-->
+                                    </div>
+                                </div>
+                                <!--end::Title body-->
+                                <!--begin::Title body-->
+                                @foreach ($insurance as $status)
+                                <div class="row mb-4 ms-3">
+                                    <div class="col-3">
+                                        <!--begin::Title body-->
+                                        <div style="border-radius: 0px" class="card-body bg-secondary">
+                                            <p class="fw-bolder m-0 text-center">{{ $status[0] }}</p>
+                                        </div>
+                                        <!--end::Title body-->
+                                    </div>
+                                    <div class="col-3">
+                                        <!--begin::Title body-->
+                                        <div style="border-radius: 0px" class="card-body bg-secondary">
+                                            <p class="fw-bolder m-0 text-center">{{ date("d/m/Y") }}</p>
+                                        </div>
+                                        <!--end::Title body-->
+                                    </div>
+                                    <div class="col-3">
+                                        <!--begin::Title body-->
+                                        <div style="border-radius: 0px" class="card-body bg-secondary">
+                                            <p class="fw-bolder m-0 text-center">{{ date("d/m/Y") }}</p>
+                                        </div>
+                                        <!--end::Title body-->
+                                    </div>
+                                    <div class="col-3">
+                                        <!--begin::Title body-->
+                                        <div style="border-radius: 0px" class="card-body bg-secondary">
+                                            <p class="fw-bolder m-0 text-center">{{ $status[1] == 1 ? "VALID" : "EXPIRED" }}</p>
+                                        </div>
+                                        <!--end::Title body-->
+                                    </div>
+                                </div>
+                                @endforeach
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col-6">
+                                <!--begin::Title body-->
+                                <div class="row mb-4 me-3">
+                                    <div class="col-3">
+                                        <!--begin::Title body-->
+                                        <div style="border-radius: 0px" class="card-body bg-warning">
+                                            <p class="fw-bolder m-0 text-center">Jaminan</p>
+                                        </div>
+                                        <!--end::Title body-->
+                                    </div>
+                                    <div class="col-3">
+                                        <!--begin::Title body-->
+                                        <div style="border-radius: 0px" class="card-body bg-warning">
+                                            <p class="fw-bolder m-0 text-center">Tgl Penerbitan</p>
+                                        </div>
+                                        <!--end::Title body-->
+                                    </div>
+                                    <div class="col-3">
+                                        <!--begin::Title body-->
+                                        <div style="border-radius: 0px" class="card-body bg-warning">
+                                            <p class="fw-bolder m-0 text-center">Tgl Berakhir</p>
+                                        </div>
+                                        <!--end::Title body-->
+                                    </div>
+                                    <div class="col-3">
+                                        <!--begin::Title body-->
+                                        <div style="border-radius: 0px" class="card-body bg-warning">
+                                            <p class="fw-bolder m-0 text-center">Status</p>
+                                        </div>
+                                        <!--end::Title body-->
+                                    </div>
+                                </div>
+                                <!--end::Title body-->
+                                <!--begin::Title body-->
+                                @foreach ($bond as $status)
+                                <div class="row mb-4 me-3">
+                                    <div class="col-3">
+                                        <!--begin::Title body-->
+                                        <div style="border-radius: 0px" class="card-body bg-secondary">
+                                            <p class="fw-bolder m-0 text-center">{{ $status[0] }}</p>
+                                        </div>
+                                        <!--end::Title body-->
+                                    </div>
+                                    <div class="col-3">
+                                        <!--begin::Title body-->
+                                        <div style="border-radius: 0px" class="card-body bg-secondary">
+                                            <p class="fw-bolder m-0 text-center">{{ date("d/m/Y") }}</p>
+                                        </div>
+                                        <!--end::Title body-->
+                                    </div>
+                                    <div class="col-3">
+                                        <!--begin::Title body-->
+                                        <div style="border-radius: 0px" class="card-body bg-secondary">
+                                            <p class="fw-bolder m-0 text-center">{{ date("d/m/Y") }}</p>
+                                        </div>
+                                        <!--end::Title body-->
+                                    </div>
+                                    <div class="col-3">
+                                        <!--begin::Title body-->
+                                        <div style="border-radius: 0px" class="card-body bg-secondary">
+                                            <p class="fw-bolder m-0 text-center">{{ $status[1] == 1 ? "VALID" : "EXPIRED" }}</p>
+                                        </div>
+                                        <!--end::Title body-->
+                                    </div>
+                                </div>
+                                @endforeach
+                                <!--end::Title body-->
+                            </div>
+                        </div>
+                        <!--end::Title-->
                         
                     </div>
                     <!--end::Body Dashboard-->
