@@ -1043,7 +1043,7 @@
                                                             </div>
                                                             <!--End::Col-->
                                                             <!--begin::Col-->
-                                                            @if (!emppty($proyekberjalans))
+                                                            @if (!empty($proyekberjalans))
                                                             <div class="col-2">
                                                                 <!--begin::Input group Website-->
                                                                 <div class="fv-row mb-7">
