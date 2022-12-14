@@ -534,10 +534,9 @@ class DashboardController extends Controller
         });
         $proyeksGroupBySumberDanaRetail = $proyeks->filter(function ($p) {
             return $p->tipe_proyek == "R";
+        })->groupBy(function ($p) {
+            return $p->tipe_proyek;
         });
-        // ->groupBy(function ($p) {
-        //     return $p->tipe_proyek;
-        // });
         // $testing_total_rkap_retail = (int) $proyeksGroupBySumberDanaRetail->sum(function($p) use($month, $year) {
         //     return $p->Forecasts->filter(function($f) use($month, $year) {
         //         return $f->periode_prognosa == $month && Carbon::createFromTimeString($f->created_at)->year == $year;
@@ -545,7 +544,7 @@ class DashboardController extends Controller
         //         return (int) $f->rkap_forecast;
         //     });
         // });
-        // $proyeksGroupBySumberDana = $proyeksGroupBySumberDana->mergeRecursive($proyeksGroupBySumberDanaRetail);
+        $proyeksGroupBySumberDana = $proyeksGroupBySumberDana->mergeRecursive($proyeksGroupBySumberDanaRetail);
         // $proyeksGroupBySumberDana = $proyeks->first();
         foreach ($proyeksGroupBySumberDana as $sumber_dana => $proyeks_sumber_dana) {
             $total_rkap = 0;
@@ -554,15 +553,15 @@ class DashboardController extends Controller
             }
             // $sumber_dana_model = SumberDana::
             foreach ($proyeks_sumber_dana as $proyek) {
-                // if($proyek->tipe_proyek == "R") {
-                //     $total_rkap += (int) $proyek->Forecasts->filter(function($f) use($month, $year) {
-                //         return $f->periode_prognosa == $month && Carbon::createFromTimeString($f->created_at)->year == $year;
-                //     })->sum(function($f) {
-                //         return (int) $f->rkap_forecast;
-                //     });
-                // } else {
-                // }
-                $total_rkap += (int) $proyek->nilai_rkap / $per;
+                if($proyek->tipe_proyek == "R") {
+                    $total_rkap += (int) $proyek->Forecasts->filter(function($f) use($month, $year) {
+                        return $f->periode_prognosa == $month && Carbon::createFromTimeString($f->created_at)->year == $year;
+                    })->sum(function($f) {
+                        return (int) $f->rkap_forecast;
+                    });
+                } else {
+                    $total_rkap += (int) $proyek->nilai_rkap / $per;
+                }
                 // $total_RKAP_keseluruhan += (int) $proyek->nilai_rkap / $per;
             }
             $totalRKAPSumberDana->push([
@@ -584,6 +583,9 @@ class DashboardController extends Controller
         $total_realisasi_keseluruhan = 0;
         foreach ($proyeksGroupBySumberDana as $sumber_dana => $proyeks_sumber_dana) {
             $total_realisasi = 0;
+            if($sumber_dana == "R") {
+                $sumber_dana = "Retail";
+            }
             foreach ($proyeks_sumber_dana as $proyek) {
                 $total_realisasi += (int) $proyek->nilai_perolehan / $per;
                 $total_realisasi_keseluruhan += (int) $proyek->nilai_perolehan / $per;
@@ -607,7 +609,6 @@ class DashboardController extends Controller
         });
         // dd($totalRealisasiSumberDana, $total_realisasi_keseluruhan);
         // End :: SUMBER DANA REALISASI
-
         return view('1_Dashboard', compact(["totalNilaiSisaPareto", "totalNilaiRealisasiPareto", "realisasiForecast", "sisaForecast", "pasarDini", "pasarPotensial", "stagePrakualifikasi", "stageTender", "stagePerolehan", "stageMenang", "stageKalah", "stageTerkontrak", "top_proyeks_close_this_month", "proyek_kalah_cancel_tidak_lulus_pq", "totalRealisasiSumberDana", "totalRKAPSumberDana", "claim_status_array", "anti_claim_status_array", "claim_asuransi_status_array", "nilaiForecastArray", "nilaiRkapArray", "nilaiRealisasiArray", "nilaiForecastTriwunalArray", "year", "month", "proses", "menang", "kalah", "prakualifikasi", "prosesTender", "terkontrak", "pelaksanaan", "serahTerima", "closing", "proyeks", "paretoClaim", "paretoAntiClaim", "paretoAsuransi", "kategoriunitKerja", "nilaiOkKumulatif", "nilaiRealisasiKumulatif", "nilaiTerkontrak", "nilaiTerendah", "jumlahMenang", "jumlahKalah", "nilaiMenang", "nilaiKalah", "unitKerja", "unit_kerja_get", "dop_get", "dops"]));
     }
 
@@ -774,7 +775,33 @@ class DashboardController extends Controller
                 $totalPersen += (int) $k[3] ;
             }
 
-            return view("/DashboardCCM/Dashboard_pelaksanaan_proyek", compact(["jumlahKontrak", "totalKontrak", "totalPersen", "kategori_kontrak", "proyek_get", "unit_kerja_get", "dop_get", "proyeks", "dops", "unit_kerjas"]));
+            $insurance = [
+                [
+                    "CAR/EAR", mt_rand(0, 1)
+                ], [
+                    "3rd PARTY", mt_rand(0, 1)
+                ], [
+                    "PROF. INDEMNITY", mt_rand(0, 1)
+                ], [
+                    "HEAVY EQUIP", mt_rand(0, 1)
+                ]
+            ];
+            $insurance = collect($insurance);
+            
+            $bond = [
+                [
+                    "ADV PAYMENT", mt_rand(0, 1)
+                ], [
+                    "PERFORMANCE", mt_rand(0, 1)
+                ], [
+                    "WARRANTY", mt_rand(0, 1)
+                ], [
+                    "PARTNER", mt_rand(0, 1)
+                ]
+            ];
+            $bond = collect($bond);
+
+            return view("/DashboardCCM/Dashboard_pelaksanaan_proyek", compact(["bond", "insurance", "jumlahKontrak", "totalKontrak", "totalPersen", "kategori_kontrak", "proyek_get", "unit_kerja_get", "dop_get", "proyeks", "dops", "unit_kerjas"]));
         }
         
         $claims = ClaimManagements::all()->filter(function($cl) use($proyeks) {
@@ -945,7 +972,33 @@ class DashboardController extends Controller
                 $totalPersen += (int) $k[3];
             }
 
-            return view("/DashboardCCM/Dashboard_pemeliharaan_proyek", compact(["jumlahKontrak", "totalKontrak", "totalPersen", "kategori_kontrak", "proyek_get", "unit_kerja_get", "dop_get", "proyeks", "dops", "unit_kerjas"]));
+            $insurance = [
+                [
+                    "CAR/EAR", mt_rand(0, 1)
+                ], [
+                    "3rd PARTY", mt_rand(0, 1)
+                ], [
+                    "PROF. INDEMNITY", mt_rand(0, 1)
+                ], [
+                    "HEAVY EQUIP", mt_rand(0, 1)
+                ]
+            ];
+            $insurance = collect($insurance);
+            
+            $bond = [
+                [
+                    "ADV PAYMENT", mt_rand(0, 1)
+                ], [
+                    "PERFORMANCE", mt_rand(0, 1)
+                ], [
+                    "WARRANTY", mt_rand(0, 1)
+                ], [
+                    "PARTNER", mt_rand(0, 1)
+                ]
+            ];
+            $bond = collect($bond);
+
+            return view("/DashboardCCM/Dashboard_pemeliharaan_proyek", compact(["bond", "insurance", "jumlahKontrak", "totalKontrak", "totalPersen", "kategori_kontrak", "proyek_get", "unit_kerja_get", "dop_get", "proyeks", "dops", "unit_kerjas"]));
         }
 
         $claims = ClaimManagements::all()->filter(function ($cl) use ($proyeks) {
@@ -1438,7 +1491,7 @@ class DashboardController extends Controller
         if (is_array($stage) && $stage != null) {
             $proyeks = $proyeks->whereIn("stage", $stage)->sortBy($column_to_sort, SORT_NUMERIC)->values();
         } elseif ($stage != null) {
-            $proyeks = $proyeks->where("stage", $stage)->sortBy($column_to_sort, SORT_NUMERIC)->values();
+            $proyeks = $proyeks->where("stage", "=", $stage)->sortBy($column_to_sort, SORT_NUMERIC)->values();
         }
 
         $row = 2;

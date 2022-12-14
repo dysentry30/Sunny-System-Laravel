@@ -110,14 +110,6 @@
                                         </li>
                                         <!--end:::Tab item Claim-->
 
-                                        <!--begin:::Tab item Anti Claim-->
-                                        <li class="nav-item">
-                                            <a class="nav-link text-active-primary pb-4"
-                                                data-bs-toggle="tab" href="#kt_user_view_overview_tender_menang"
-                                                style="font-size:14px;">Terkontrak</a>
-                                        </li>
-                                        <!--end:::Tab item Anti Claim-->
-
                                         <!--begin:::Tab item -->
                                         <li class="nav-item">
                                             <a class="nav-link text-active-primary pb-4"
@@ -129,16 +121,8 @@
                                         <!--begin:::Tab item -->
                                         <li class="nav-item">
                                             <a class="nav-link text-active-primary pb-4"
-                                                data-bs-toggle="tab" href="#kt_user_view_overview_serah_terima"
-                                                style="font-size:14px;">Serah Terima Pekerjaan</a>
-                                        </li>
-                                        <!--end:::Tab item -->
-
-                                        <!--begin:::Tab item -->
-                                        <li class="nav-item">
-                                            <a class="nav-link text-active-primary pb-4"
                                                 data-bs-toggle="tab" href="#kt_user_view_overview_closing_proyek"
-                                                style="font-size:14px;">Closing Proyek</a>
+                                                style="font-size:14px;">Pemeliharaan</a>
                                         </li>
                                         <!--end:::Tab item -->
                                     </ul>
@@ -171,14 +155,22 @@
                                         <!--end::Table head-->
                                         <!--begin::Table body-->
                                         <tbody class="fw-bold text-gray-600 fs-6">
-                                            @forelse ($proyeks_tender_awal as $proyek)
+                                            @forelse ($proyeks_perolehan as $proyek)
                                                 <tr>
                                                     <!--begin::Name=-->
-                                                    <td>
-                                                            <a href="/proyek/view/{{ $proyek->kode_proyek }}"
+                                                    @if (!empty($proyek->ContractManagements))
+                                                        <td>
+                                                            <a href="/contract-management/view/{{ url_encode($proyek->ContractManagements->id_contract) }}"
                                                                 id="click-name"
-                                                                class="text-hover-primary mb-1">{{ $proyek->kode_proyek }}</a>
-                                                    </td>
+                                                                class="text-hover-primary mb-1">{{ $proyek->ContractManagements->id_contract }}</a>
+                                                        </td>
+                                                    @else 
+                                                        <td>
+                                                            <a href="#"
+                                                                id="click-name"
+                                                                class="text-hover-primary mb-1">Belum tersedia</a>
+                                                        </td>
+                                                    @endif
                                                     <!--end::Name=-->
                                                     <!--begin::Name=-->
                                                     <td>
@@ -206,68 +198,6 @@
                                 </div>
                                 {{-- End :: Tab Content Tender Awal --}}
                                 
-                                {{-- Begin :: Tab Content Tender Menang --}}
-                                <div class="tab-pane fade" id="kt_user_view_overview_tender_menang" role="tabpanel">
-                                    <!--begin::Table Claim-->
-                                    <table class="table align-middle table-row-dashed" id="kt_proyek_table">
-                                        <!--begin::Table head-->
-                                        <thead>
-                                            <!--begin::Table row-->
-                                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                <th class="min-w-auto">Kode Proyek</th>
-                                                <th class="min-w-auto">Nama Proyek</th>
-                                                <th class="min-w-auto">Unit Kerja</th>
-                                                {{-- <th class="min-w-auto">ID Contract</th> --}}
-                                            </tr>
-                                            <!--end::Table row-->
-                                        </thead>
-                                        <!--end::Table head-->
-                                        <!--begin::Table body-->
-                                        <tbody class="fw-bold text-gray-600 fs-6">
-                                            @forelse ($proyeks_terkontrak as $proyek)
-                                                    <tr>
-                                                        <!--begin::Name=-->
-                                                        <td>
-                                                            {{-- <a class="text-hover-primary 
-                                                                href="/claim-management/view/{{ $claim->id_claim }}">{{ $claim->id_claim }}
-                                                            </a> --}}
-                                                            {{-- <a href="/contract-management/view/{{ urlencode(urlencode($proyek->nomor_terkontrak)) }}" --}}
-                                                            <a href="/contract-management/view/{{ url_encode($proyek->nomor_terkontrak) }}"
-                                                                id="click-name"
-                                                                class="text-hover-primary mb-1">{{ $proyek->kode_proyek }}</a>
-                                                        </td>
-                                                        <!--end::Name=-->
-                                                        <!--begin::Name=-->
-                                                        <td>
-                                                            <a href="/proyek/view/{{ $proyek->kode_proyek }}"
-                                                                id="click-name"
-                                                                class="text-hover-primary mb-1">{{ $proyek->nama_proyek }}</a>
-                                                        </td>
-                                                        <!--end::Name=-->
-                                                        <!--begin::Email=-->
-                                                        <td>
-                                                            {{ $proyek->UnitKerja->unit_kerja }}
-                                                        </td>
-                                                        <!--end::Email=-->
-                                                        <!--begin::Action=-->
-                                                        <td>
-                                                            {{-- <a href="/contract-management/view/{{ $proyek}}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekClaims->ContractManagements->id_contract }}</a> --}}
-                                                        </td>
-                                                        <!--end::Action=-->
-                                                    </tr>
-                                                @empty 
-                                                    <tr>
-                                                        <td colspan="3">
-                                                            <p class="text-center bg-gray-200">Data proyek tidak ditemukan</p>
-                                                        </td>
-                                                    </tr>
-                                                @endforelse
-                                        </tbody>
-                                    </table>
-                                    <!--end::Table -->
-                                </div>
-                                {{-- End :: Tab Content Tender Menang --}}
-                                
                                 {{-- Begin :: Tab Content Pelaksanaan --}}
                                 <div class="tab-pane fade" id="kt_user_view_overview_pelaksanaan" role="tabpanel">
                                     <!--begin::Table Claim-->
@@ -286,120 +216,36 @@
                                         <!--end::Table head-->
                                         <!--begin::Table body-->
                                         <tbody class="fw-bold text-gray-600 fs-6">
-                                            @php
-                                                $is_data_found = false;
-                                            @endphp
-                                            @forelse ($proyeks_pelaksanaan_serah_terima as $proyek)
-                                                @if ($proyek->stages == 3)
-                                                    @php
-                                                        $is_data_found = true;
-                                                    @endphp
-                                                    <tr>
-                                                        <!--begin::Name=-->
+                                            @forelse ($proyeks_pelaksanaan as $proyek)
+                                                <tr>
+                                                    <!--begin::Name=-->
+                                                    @if (!empty($proyek->ContractManagements))
                                                         <td>
-                                                            {{-- <a class="text-hover-primary 
-                                                    href="/claim-management/view/{{ $claim->id_claim }}">{{ $claim->id_claim }}
-                                                </a> --}}
-                                                            <a href="/contract-management/view/{{ $proyek->ContractManagements->id_contract }}"
+                                                            <a href="/contract-management/view/{{ url_encode($proyek->ContractManagements->id_contract) }}"
                                                                 id="click-name"
-                                                                class="text-hover-primary mb-1">{{ $proyek->kode_proyek }}</a>
+                                                                class="text-hover-primary mb-1">{{ $proyek->ContractManagements->id_contract }}</a>
                                                         </td>
-                                                        <!--end::Name=-->
-                                                        <!--begin::Name=-->
+                                                    @else 
                                                         <td>
-                                                            <a href="/proyek/view/{{ $proyek->kode_proyek }}"
+                                                            <a href="#"
                                                                 id="click-name"
-                                                                class="text-hover-primary mb-1">{{ $proyek->nama_proyek }}</a>
+                                                                class="text-hover-primary mb-1">Belum tersedia</a>
                                                         </td>
-                                                        <!--end::Name=-->
-                                                        <!--begin::Email=-->
-                                                        <td>
-                                                            {{ $proyek->UnitKerja->unit_kerja }}
-                                                        </td>
-                                                        <!--end::Email=-->
-                                                        <!--begin::Action=-->
-                                                        <td>
-                                                            {{-- <a href="/contract-management/view/{{ $proyek}}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekClaims->ContractManagements->id_contract }}</a> --}}
-                                                        </td>
-                                                        <!--end::Action=-->
-                                                    </tr>
                                                     @endif
-                                                @empty 
-                                                    <tr>
-                                                        <td colspan="3">
-                                                            <p class="text-center bg-gray-200">Data proyek tidak ditemukan</p>
-                                                        </td>
-                                                    </tr>
-                                                @endforelse
-                                                @if (!$is_data_found && $proyeks_pelaksanaan_serah_terima->count() > 0)
-                                                    <tr>
-                                                        <td colspan="3">
-                                                            <p class="text-center bg-gray-200">Data proyek tidak ditemukan</p>
-                                                        </td>
-                                                    </tr>
-                                                @endif
-                                        </tbody>
-                                    </table>
-                                    <!--end::Table -->
-                                </div>
-                                {{-- End :: Tab Content Pelaksanaan --}}
-                                
-                                {{-- Begin :: Tab Content Serah Terima Pekerjaan --}}
-                                <div class="tab-pane fade" id="kt_user_view_overview_serah_terima" role="tabpanel">
-                                    <!--begin::Table Claim-->
-                                    <table class="table align-middle table-row-dashed" id="kt_proyek_table">
-                                        <!--begin::Table head-->
-                                        <thead>
-                                            <!--begin::Table row-->
-                                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                <th class="min-w-auto">Kode Proyek</th>
-                                                <th class="min-w-auto">Nama Proyek</th>
-                                                <th class="min-w-auto">Unit Kerja</th>
-                                                {{-- <th class="min-w-auto">ID Contract</th> --}}
-                                            </tr>
-                                            <!--end::Table row-->
-                                        </thead>
-                                        <!--end::Table head-->
-                                        <!--begin::Table body-->
-                                        <tbody class="fw-bold text-gray-600 fs-6">
-                                            @php
-                                                $is_data_found = false
-                                            @endphp
-                                            @forelse ($proyeks_pelaksanaan_serah_terima as $proyek)
-                                                @if ($proyek->stages == 4)
-                                                    @php
-                                                        $is_data_found = true;
-                                                    @endphp
-                                                    <tr>
-                                                        <!--begin::Name=-->
-                                                        <td>
-                                                            {{-- <a class="text-hover-primary 
-                                                    href="/claim-management/view/{{ $claim->id_claim }}">{{ $claim->id_claim }}
-                                                </a> --}}
-                                                            <a href="/contract-management/view/{{ $proyek->ContractManagements->id_contract }}"
-                                                                id="click-name"
-                                                                class="text-hover-primary mb-1">{{ $proyek->kode_proyek }}</a>
-                                                        </td>
-                                                        <!--end::Name=-->
-                                                        <!--begin::Name=-->
-                                                        <td>
-                                                            <a href="/proyek/view/{{ $proyek->kode_proyek }}"
-                                                                id="click-name"
-                                                                class="text-hover-primary mb-1">{{ $proyek->nama_proyek }}</a>
-                                                        </td>
-                                                        <!--end::Name=-->
-                                                        <!--begin::Email=-->
-                                                        <td>
-                                                            {{ $proyek->UnitKerja->unit_kerja }}
-                                                        </td>
-                                                        <!--end::Email=-->
-                                                        <!--begin::Action=-->
-                                                        <td>
-                                                            {{-- <a href="/contract-management/view/{{ $proyek}}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekClaims->ContractManagements->id_contract }}</a> --}}
-                                                        </td>
-                                                        <!--end::Action=-->
-                                                    </tr>
-                                                    @endif
+                                                    <!--end::Name=-->
+                                                    <!--begin::Name=-->
+                                                    <td>
+                                                        <a href="/proyek/view/{{ $proyek->kode_proyek }}"
+                                                            id="click-name"
+                                                            class="text-hover-primary mb-1">{{ $proyek->nama_proyek }}</a>
+                                                    </td>
+                                                    <!--end::Name=-->
+                                                    <!--begin::Email=-->
+                                                    <td>
+                                                        {{ $proyek->UnitKerja->unit_kerja }}
+                                                    </td>
+                                                    <!--end::Email=-->
+                                                </tr>
                                             @empty
                                                 <tr>
                                                     <td colspan="3">
@@ -407,19 +253,12 @@
                                                     </td>
                                                 </tr>
                                             @endforelse
-                                            @if (!$is_data_found && $proyeks_pelaksanaan_serah_terima->count() > 0)
-                                                <tr>
-                                                    <td colspan="3">
-                                                        <p class="text-center bg-gray-200">Data proyek tidak ditemukan</p>
-                                                    </td>
-                                                </tr>
-                                            @endif
                                         </tbody>
                                     </table>
                                     <!--end::Table -->
                                 </div>
-                                {{-- End :: Tab Content Serah Terima Pekerjaan --}}
-
+                                {{-- End :: Tab Content Pelaksanaan --}}
+                                
                                 {{-- Begin :: Tab Content Closing Proyek --}}
                                 <div class="tab-pane fade" id="kt_user_view_overview_closing_proyek" role="tabpanel">
                                     <!--begin::Table Claim-->
@@ -441,47 +280,6 @@
                                             @php
                                                 $is_data_found = false
                                             @endphp
-                                            @forelse ($proyeks_pelaksanaan_closing_proyek as $proyek)
-                                            <tr>
-                                                <!--begin::Name=-->
-                                                <td>
-                                                    <a href="/contract-management/view/{{ $proyek->ContractManagements->id_contract }}"
-                                                        id="click-name"
-                                                        class="text-hover-primary mb-1">{{ $proyek->kode_proyek }}</a>
-                                                </td>
-                                                <!--end::Name=-->
-                                                <!--begin::Name=-->
-                                                <td>
-                                                    <a href="/proyek/view/{{ $proyek->kode_proyek }}"
-                                                        id="click-name"
-                                                        class="text-hover-primary mb-1">{{ $proyek->nama_proyek }}</a>
-                                                </td>
-                                                <!--end::Name=-->
-                                                <!--begin::Email=-->
-                                                <td>
-                                                    {{ $proyek->UnitKerja->unit_kerja }}
-                                                </td>
-                                                <!--end::Email=-->
-                                                <!--begin::Action=-->
-                                                <td>
-                                                    {{-- <a href="/contract-management/view/{{ $proyek}}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekClaims->ContractManagements->id_contract }}</a> --}}
-                                                </td>
-                                                <!--end::Action=-->
-                                            </tr>
-                                            @empty
-                                                <tr>
-                                                    <td colspan="3">
-                                                        <p class="text-center bg-gray-200">Data proyek tidak ditemukan</p>
-                                                    </td>
-                                                </tr>
-                                            @endforelse
-                                            {{-- @if ($proyeks_pelaksanaan_closing_proyek->count() < 1)
-                                                <tr>
-                                                    <td colspan="3">
-                                                        <p class="text-center bg-gray-200">Data proyek tidak ditemukan</p>
-                                                    </td>
-                                                </tr>
-                                            @endif --}}
                                         </tbody>
                                     </table>
                                     <!--end::Table -->
