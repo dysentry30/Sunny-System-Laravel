@@ -2697,17 +2697,17 @@
 
                                                     <br>
 
-                                                    {{-- <!--Begin::Title Biru Form: Document NDA-->
+                                                    <!--Begin::Title Biru Form: Document NDA-->
                                                     <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                                                        Document NDA
+                                                        Document NDA <i class="bi bi-journal-text"></i>
                                                     </h3>
                                                     <br>
                                                     <div class="w-50">
                                                         <input type="file"
                                                             class="form-control form-control-sm form-input-solid"
-                                                            name="dokumen-prakualifikasi" accept=".pdf">
+                                                            name="dokumen-nda" accept=".pdf">
                                                     </div>
-                                                    <h6 id="error-dokumen-prakualifikasi" class="text-danger fw-normal"
+                                                    <h6 id="error-dokumen-nda" class="text-danger fw-normal"
                                                         style="display: none">*File
                                                         terlalu besar ! Max Size 50Mb</h6>
                                                     <br>
@@ -2732,7 +2732,7 @@
                                                         @endphp
                                                         <!--begin::Table body-->
                                                         <tbody class="fw-bold text-gray-600">
-                                                            @foreach ($proyek->DokumenPrakualifikasi as $dokumen_prakualifikasi)
+                                                            @foreach ($proyek->DokumenNda as $dokumen)
                                                                 <tr>
                                                                     <!--begin::Nomor-->
                                                                     <td class="text-center">
@@ -2741,26 +2741,26 @@
                                                                     <!--end::Nomor-->
                                                                     <!--begin::Name-->
                                                                     <td>
-                                                                        @if (str_contains("$dokumen_prakualifikasi->nama_dokumen", '.doc'))
-                                                                            <a href="/document/view/{{ $dokumen_prakualifikasi->id_dokumen_prakualifikasi }}/{{ $dokumen_prakualifikasi->id_document }}"
-                                                                                class="text-hover-primary">{{ $dokumen_prakualifikasi->nama_dokumen }}</a>
+                                                                        @if (str_contains("$dokumen->nama_dokumen", '.doc'))
+                                                                            <a href="/document/view/{{ $dokumen->id_dokumen_nda }}/{{ $dokumen->id_document }}"
+                                                                                class="text-hover-primary">{{ $dokumen->nama_dokumen }}</a>
                                                                         @else
                                                                             <a target="_blank"
-                                                                                href="{{ asset('words/' . $dokumen_prakualifikasi->id_document . '.pdf') }}"
-                                                                                class="text-hover-primary">{{ $dokumen_prakualifikasi->nama_dokumen }}</a>
+                                                                                href="{{ asset('words/' . $dokumen->id_document . '.pdf') }}"
+                                                                                class="text-hover-primary">{{ $dokumen->nama_dokumen }}</a>
                                                                         @endif
                                                                     </td>
                                                                     <!--end::Name-->
                                                                     <!--begin::Column-->
                                                                     <td>
-                                                                        {{ Carbon\Carbon::parse($dokumen_prakualifikasi->created_at)->translatedFormat('d F Y') }}
+                                                                        {{ Carbon\Carbon::parse($dokumen->created_at)->translatedFormat('d F Y') }}
                                                                     </td>
                                                                     <!--end::Column-->
                                                                     <!--begin::Action-->
                                                                     <td class="text-center">
                                                                         <small>
                                                                             <p data-bs-toggle="modal"
-                                                                                data-bs-target="#kt_dokumen_prakualifikasi_delete_{{ $dokumen_prakualifikasi->id_dokumen_prakualifikasi }}"
+                                                                                data-bs-target="#kt_dokumen_nda_delete_{{ $dokumen->id_dokumen_nda }}"
                                                                                 id="modal-delete"
                                                                                 class="btn btn-sm btn-light btn-active-primary">
                                                                                 Delete
@@ -2774,7 +2774,7 @@
                                                         <!--end::Table body-->
                                                     </table>
                                                     <!--end::Table-->
-                                                    <!--End::Title Biru Form: Document NDA--> --}}
+                                                    <!--End::Title Biru Form: Document NDA-->
 
                                                     <br>
 
@@ -7310,6 +7310,56 @@
         </form>
     @endforeach
     <!--end::DELETE DOKUMEN PRAKUALIFIKASI-->
+
+    <!--begin::DELETE DOKUMEN NDA-->
+    @foreach ($proyek->DokumenNda as $dokumen_nda)
+        <form action="/proyek/dokumen-nda/{{ $dokumen_nda->id_dokumen_nda }}/delete"
+            method="post" enctype="multipart/form-data">
+            @method('delete')
+            @csrf
+            <div class="modal fade"
+                id="kt_dokumen_nda_delete_{{ $dokumen_nda->id_dokumen_nda }}"
+                tabindex="-1" aria-hidden="true">
+                <!--begin::Modal dialog-->
+                <div class="modal-dialog modal-dialog-centered mw-800px">
+                    <!--begin::Modal content-->
+                    <div class="modal-content">
+                        <!--begin::Modal header-->
+                        <div class="modal-header">
+                            <!--begin::Modal title-->
+                            <h2>Hapus : {{ $dokumen_nda->nama_dokumen }}</h2>
+                            <!--end::Modal title-->
+                            <!--begin::Close-->
+                            <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                                <span class="svg-icon svg-icon-1">
+                                    <i class="bi bi-x-lg"></i>
+                                </span>
+                                <!--end::Svg Icon-->
+                            </div>
+                            <!--end::Close-->
+                        </div>
+                        <!--end::Modal header-->
+                        <!--begin::Modal body-->
+                        <div class="modal-body py-lg-6 px-lg-6">
+                            Data yang dihapus tidak dapat dipulihkan, anda yakin ?
+                            <br>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-sm btn-light btn-active-primary">Delete</button>
+                        </div>
+                        <!--end::Input group-->
+
+                    </div>
+                    <!--end::Modal body-->
+                </div>
+                <!--end::Modal content-->
+            </div>
+            <!--end::Modal dialog-->
+            </div>
+        </form>
+    @endforeach
+    <!--end::DELETE DOKUMEN NDA-->
 
     <!--begin::DELETE DOKUMEN TENDER-->
     @foreach ($proyek->DokumenTender as $dokumen)
