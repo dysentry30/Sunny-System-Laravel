@@ -1043,6 +1043,7 @@
                                                             </div>
                                                             <!--End::Col-->
                                                             <!--begin::Col-->
+                                                            @if (!emppty($proyekberjalans))
                                                             <div class="col-2">
                                                                 <!--begin::Input group Website-->
                                                                 <div class="fv-row mb-7">
@@ -1052,12 +1053,13 @@
                                                                         </a>
                                                                     </label>
                                                                     {{-- <a target="_blank" href="/customer/view/{{ $proyekberjalans->id_customer }}">
-                                                                    <span> Cek Pelanggan</span>
+                                                                        <span> Cek Pelanggan</span>
                                                                     </a> --}}
                                                                     <!--end::Label-->
                                                                 </div>
                                                                 <!--end::Input group-->
                                                             </div>
+                                                            @endif
                                                             <!--End::Col-->
                                                         </div>
                                                         <!--End::Row Kanan+Kiri-->
