@@ -51,34 +51,50 @@ class ContractManagementsController extends Controller
         if (Auth::user()->check_administrator) {
             // $proyeks = Proyek::all()->where("stage", ">", 7)->where("nomor_terkontrak", "!=", "");
             // $proyeks = DB::table("proyeks as p")->select("p.*")->join("contract_managements as c", "c.project_id", "=", "p.kode_proyek")->where("p.stage", ">", 7)->where("p.nomor_terkontrak", "!=", "")->where("c.stages", "<", 3)->get()->sortBy("p.kode_proyek");
-            $proyeks_terkontrak = DB::table("proyeks as p")->select(["p.*", "c.stages"])->join("contract_managements as c", "c.project_id", "=", "p.kode_proyek")->where("c.stages", "<", 3)->get()->sortBy("p.kode_proyek")->map(function ($data) {
-                return self::stdClassToModel($data, Proyek::class);
-            })->whereNotNull("nomor_terkontrak");
-            $proyeks_tender_awal = Proyek::all()->where("stage", "<", 5)->where("stage", "!=", 0);
-            $proyeks_pelaksanaan_serah_terima = DB::table("proyeks as p")->select(["p.*", "c.stages"])->join("contract_managements as c", "c.project_id", "=", "p.kode_proyek")->whereBetween("c.stages", [3, 4], "or")->get()->map(function ($data) {
-                return self::stdClassToModel($data, Proyek::class);
+            // $proyeks_terkontrak = DB::table("proyeks as p")->select(["p.*", "c.stages"])->join("contract_managements as c", "c.project_id", "=", "p.kode_proyek")->where("c.stages", "<", 3)->get()->sortBy("p.kode_proyek")->map(function ($data) {
+            //     return self::stdClassToModel($data, Proyek::class);
+            // })->whereNotNull("nomor_terkontrak");
+            // $proyeks_tender_awal = Proyek::all()->where("stage", "<", 5)->where("stage", "!=", 0);
+            // $proyeks_pelaksanaan_serah_terima = DB::table("proyeks as p")->select(["p.*", "c.stages"])->join("contract_managements as c", "c.project_id", "=", "p.kode_proyek")->whereBetween("c.stages", [3, 4], "or")->get()->map(function ($data) {
+            //     return self::stdClassToModel($data, Proyek::class);
+            // });
+
+            // $proyeks_pelaksanaan_closing_proyek = DB::table("proyeks as p")->select(["p.*", "c.stages"])->join("contract_managements as c", "c.project_id", "=", "p.kode_proyek")->where("c.stages", 5)->get()->map(function ($data) {
+            //     return self::stdClassToModel($data, Proyek::class);
+            // });
+            $proyeks_all = Proyek::all();
+            $proyeks_perolehan = $proyeks_all->whereIn("stage", [])->where("is_cancel", "=", false);
+            $proyeks_pelaksanaan = $proyeks_all->where("is_cancel", "=", false)->filter(function($p) {
+                return !empty($p->ContractManagements) && $p->ContractManagements->stages == 2;
             });
 
-            $proyeks_pelaksanaan_closing_proyek = DB::table("proyeks as p")->select(["p.*", "c.stages"])->join("contract_managements as c", "c.project_id", "=", "p.kode_proyek")->where("c.stages", 5)->get()->map(function ($data) {
-                return self::stdClassToModel($data, Proyek::class);
+            $proyeks_pemeliharaan = $proyeks_all->where("is_cancel", "=", false)->filter(function($p) {
+                return !empty($p->ContractManagements) && $p->ContractManagements->stages == 4;
             });
         } else {
             // $proyeks = Proyek::join()where("unit_kerja", "=", Auth::user()->unit_kerja)->where("stage", ">", 7)->where("nomor_terkontrak", "!=", "")->get()->sortBy("kode_proyek");
-            $proyeks = DB::table("proyeks as p")->join("contract_managements as c", "c.project_id", "=", "p.kode_proyek")->where("p.unit_kerja", "=", Auth::user()->unit_kerja)->where("stage", ">", 7)->where("p.nomor_terkontrak", "!=", "")->where("c.stages", "<", 3)->get()->sortBy("kode_proyek");
-            $proyeks_terkontrak = DB::table("proyeks as p")->select(["p.*", "c.stages"])->join("contract_managements as c", "c.project_id", "=", "p.kode_proyek")->where("c.stages", "<", 3)->get()->sortBy("p.kode_proyek")->map(function ($data) {
-                return self::stdClassToModel($data, Proyek::class);
-            })->whereNotNull("nomor_terkontrak");
-            $proyeks_tender_awal = Proyek::all()->where("stage", "<", 5)->where("stage", "!=", 0);
-            $proyeks_pelaksanaan_serah_terima = DB::table("proyeks as p")->select(["p.*", "c.stages"])->join("contract_managements as c", "c.project_id", "=", "p.kode_proyek")->whereBetween("c.stages", [3, 4], "or")->get()->map(function ($data) {
-                return self::stdClassToModel($data, Proyek::class);
-            });
+            // $proyeks = DB::table("proyeks as p")->join("contract_managements as c", "c.project_id", "=", "p.kode_proyek")->where("p.unit_kerja", "=", Auth::user()->unit_kerja)->where("stage", ">", 7)->where("p.nomor_terkontrak", "!=", "")->where("c.stages", "<", 3)->get()->sortBy("kode_proyek");
+            // $proyeks_terkontrak = DB::table("proyeks as p")->select(["p.*", "c.stages"])->join("contract_managements as c", "c.project_id", "=", "p.kode_proyek")->where("c.stages", "<", 3)->get()->sortBy("p.kode_proyek")->map(function ($data) {
+            //     return self::stdClassToModel($data, Proyek::class);
+            // })->whereNotNull("nomor_terkontrak");
+            // $proyeks_tender_awal = Proyek::all()->where("stage", "<", 5)->where("stage", "!=", 0);
+            // $proyeks_pelaksanaan_serah_terima = DB::table("proyeks as p")->select(["p.*", "c.stages"])->join("contract_managements as c", "c.project_id", "=", "p.kode_proyek")->whereBetween("c.stages", [3, 4], "or")->get()->map(function ($data) {
+            //     return self::stdClassToModel($data, Proyek::class);
+            // });
 
-            $proyeks_pelaksanaan_closing_proyek = DB::table("proyeks as p")->select(["p.*", "c.stages"])->join("contract_managements as c", "c.project_id", "=", "p.kode_proyek")->where("c.stages", 5)->get()->map(function ($data) {
-                return self::stdClassToModel($data, Proyek::class);
+            // $proyeks_pelaksanaan_closing_proyek = DB::table("proyeks as p")->select(["p.*", "c.stages"])->join("contract_managements as c", "c.project_id", "=", "p.kode_proyek")->where("c.stages", 5)->get()->map(function ($data) {
+            //     return self::stdClassToModel($data, Proyek::class);
+            // });
+            $proyeks_all = Proyek::all();
+            $proyeks_perolehan = $proyeks_all->where("stage", "==", 8)->where("is_cancel", "=", false)->filter(function($p) {
+                return !empty($p->ContractManagements) && $p->ContractManagements->stages == 2;
             });
+            // $proyeks_pelaksanaan = $proyeks_all->filter(function($p) {
+            //     return !empty($p->ContractManagements) && $p->ContractManagements->where("stages", "=", )
+            // });
         }
         // return view("4_Contract", compact(["proyeks"]));
-        return view("4_Contract", compact(["proyeks_terkontrak", "proyeks_tender_awal", "proyeks_pelaksanaan_serah_terima", "proyeks_pelaksanaan_closing_proyek"]));
+        return view("4_Contract", compact(["proyeks_perolehan", "proyeks_pelaksanaan", "proyeks_pemeliharaan"]));
     }
 
     private function stdClassToModel($data, $instance)
