@@ -107,6 +107,36 @@ class Proyek extends Model
         return $this->hasMany(DokumenNda::class, "kode_proyek");
     }
 
+    public function DokumenMou()
+    {
+        return $this->hasMany(DokumenMou::class, "kode_proyek");
+    }
+
+    public function DokumenEca()
+    {
+        return $this->hasMany(DokumenEca::class, "kode_proyek");
+    }
+
+    public function DokumenIca()
+    {
+        return $this->hasMany(DokumenIca::class, "kode_proyek");
+    }
+
+    public function DokumenRks()
+    {
+        return $this->hasMany(DokumenRks::class, "kode_proyek");
+    }
+
+    public function DokumenDraft()
+    {
+        return $this->hasMany(DokumenDraft::class, "kode_proyek");
+    }
+
+    public function DokumenItbTor()
+    {
+        return $this->hasMany(DokumenItbTor::class, "kode_proyek");
+    }
+
     public function DokumenTender()
     {
         return $this->hasMany(DokumenTender::class, "kode_proyek");
