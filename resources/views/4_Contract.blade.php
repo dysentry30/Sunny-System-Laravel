@@ -21,8 +21,7 @@
                         <!--begin::Container-->
                         <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
                             <!--begin::Page title-->
-                            <div data-kt-swapper="true" data-kt-swapper-mode="prepend"
-                                data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
+                            <div data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                                 class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
                                 <!--begin::Title-->
                                 <h1 class="d-flex align-items-center fs-3 my-1">Contract
@@ -34,20 +33,17 @@
                             <div class="d-flex align-items-center py-1">
 
                                 <!--begin::Button-->
-                                <a href="contract-management/view" class="btn btn-sm btn-primary w-80px"
-                                    id="kt_toolbar_primary_button" style="background-color:#008CB4; padding: 6px">
+                                <a href="contract-management/view" class="btn btn-sm btn-primary w-80px" id="kt_toolbar_primary_button" style="background-color:#008CB4; padding: 6px">
                                     New</a>
                                 <!--end::Button-->
 
                                 <!--begin::Wrapper-->
                                 <div class="me-4" style="margin-left:10px;">
                                     <!--begin::Menu-->
-                                    <a href="#" class="btn btn-sm btn-flex btn-light btn-active-primary"
-                                        data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                                    <a href="#" class="btn btn-sm btn-flex btn-light btn-active-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
                                         <i class="bi bi-folder2-open"></i>Action</a>
                                     <!--begin::Menu 1-->
-                                    <div class="menu menu-sub menu-sub-dropdown w-250px w-md-300px" data-kt-menu="true"
-                                        id="kt_menu_6155ac804a1c2">
+                                    <div class="menu menu-sub menu-sub-dropdown w-250px w-md-300px" data-kt-menu="true" id="kt_menu_6155ac804a1c2">
                                         <!--begin::Header-->
                                         <div class="px-7 py-5">
                                             <div class="fs-5 text-dark fw-bolder">Choose actions:</div>
@@ -59,14 +55,10 @@
                                         <!--begin::Form-->
                                         <div class="">
                                             <!--begin::Item-->
-                                            <button type="submit" class="btn btn-active-primary dropdown-item rounded-0"
-                                                data-bs-toggle="modal" data-bs-target="#kt_modal_import"
-                                                id="kt_toolbar_import">
+                                            <button type="submit" class="btn btn-active-primary dropdown-item rounded-0" data-bs-toggle="modal" data-bs-target="#kt_modal_import" id="kt_toolbar_import">
                                                 <i class="bi bi-file-earmark-spreadsheet"></i>Import Excel
                                             </button>
-                                            <button type="submit" class="btn btn-active-primary dropdown-item rounded-0"
-                                                data-bs-toggle="modal" data-bs-target="#kt_modal_export"
-                                                id="kt_toolbar_export">
+                                            <button type="submit" class="btn btn-active-primary dropdown-item rounded-0" data-bs-toggle="modal" data-bs-target="#kt_modal_export" id="kt_toolbar_export">
                                                 <i class="bi bi-file-earmark-spreadsheet"></i>Export Excel
                                             </button>
                                             <!--end::Item-->
@@ -100,29 +92,23 @@
                                 <!--begin::Search-->
                                 <div class="d-flex align-items-center my-1" style="width: 100%;">
 
-                                    <ul
-                                        class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-8">
+                                    <ul class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-8">
                                         <!--begin:::Tab item Claim-->
                                         <li class="nav-item">
-                                            <a class="nav-link text-active-primary pb-4 active" data-bs-toggle="tab"
-                                                aria-selected="true"
-                                                href="#kt_user_view_tender_awal" style="font-size:14px;">Perolehan</a>
+                                            <a class="nav-link text-active-primary pb-4 active" data-bs-toggle="tab" aria-selected="true" href="#kt_user_view_tender_awal"
+                                                style="font-size:14px;">Perolehan</a>
                                         </li>
                                         <!--end:::Tab item Claim-->
 
                                         <!--begin:::Tab item -->
                                         <li class="nav-item">
-                                            <a class="nav-link text-active-primary pb-4"
-                                                data-bs-toggle="tab" href="#kt_user_view_overview_pelaksanaan"
-                                                style="font-size:14px;">Pelaksanaan</a>
+                                            <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab" href="#kt_user_view_overview_pelaksanaan" style="font-size:14px;">Pelaksanaan</a>
                                         </li>
                                         <!--end:::Tab item -->
 
                                         <!--begin:::Tab item -->
                                         <li class="nav-item">
-                                            <a class="nav-link text-active-primary pb-4"
-                                                data-bs-toggle="tab" href="#kt_user_view_overview_closing_proyek"
-                                                style="font-size:14px;">Pemeliharaan</a>
+                                            <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab" href="#kt_user_view_overview_closing_proyek" style="font-size:14px;">Pemeliharaan</a>
                                         </li>
                                         <!--end:::Tab item -->
                                     </ul>
@@ -145,7 +131,7 @@
                                         <thead>
                                             <!--begin::Table row-->
                                             <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                <th class="min-w-auto">Kode Proyek</th>
+                                                <th class="min-w-auto">Nomor Kontrak</th>
                                                 <th class="min-w-auto">Nama Proyek</th>
                                                 <th class="min-w-auto">Unit Kerja</th>
                                                 {{-- <th class="min-w-auto">ID Contract</th> --}}
@@ -160,23 +146,21 @@
                                                     <!--begin::Name=-->
                                                     @if (!empty($proyek->ContractManagements))
                                                         <td>
-                                                            <a href="/contract-management/view/{{ url_encode($proyek->ContractManagements->id_contract) }}"
-                                                                id="click-name"
+                                                            <a href="/contract-management/view/{{ url_encode($proyek->ContractManagements->id_contract) }}" id="click-name"
                                                                 class="text-hover-primary mb-1">{{ $proyek->ContractManagements->id_contract }}</a>
                                                         </td>
-                                                    @else 
+                                                    @else
                                                         <td>
-                                                            <a href="#"
-                                                                id="click-name"
-                                                                class="text-hover-primary mb-1">Belum tersedia</a>
+                                                            <a href="#" id="click-name" class="text-hover-primary mb-1"><small class="badge badge-light-danger">
+
+                                                                    Belum Ditentukan
+                                                                </small></a>
                                                         </td>
                                                     @endif
                                                     <!--end::Name=-->
                                                     <!--begin::Name=-->
                                                     <td>
-                                                        <a href="/proyek/view/{{ $proyek->kode_proyek }}"
-                                                            id="click-name"
-                                                            class="text-hover-primary mb-1">{{ $proyek->nama_proyek }}</a>
+                                                        <a href="/proyek/view/{{ $proyek->kode_proyek }}" id="click-name" class="text-hover-primary mb-1">{{ $proyek->nama_proyek }}</a>
                                                     </td>
                                                     <!--end::Name=-->
                                                     <!--begin::Email=-->
@@ -197,7 +181,7 @@
                                     <!--end::Table -->
                                 </div>
                                 {{-- End :: Tab Content Tender Awal --}}
-                                
+
                                 {{-- Begin :: Tab Content Pelaksanaan --}}
                                 <div class="tab-pane fade" id="kt_user_view_overview_pelaksanaan" role="tabpanel">
                                     <!--begin::Table Claim-->
@@ -206,7 +190,7 @@
                                         <thead>
                                             <!--begin::Table row-->
                                             <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                <th class="min-w-auto">Kode Proyek</th>
+                                                <th class="min-w-auto">Nomor Kontrak</th>
                                                 <th class="min-w-auto">Nama Proyek</th>
                                                 <th class="min-w-auto">Unit Kerja</th>
                                                 {{-- <th class="min-w-auto">ID Contract</th> --}}
@@ -221,23 +205,21 @@
                                                     <!--begin::Name=-->
                                                     @if (!empty($proyek->ContractManagements))
                                                         <td>
-                                                            <a href="/contract-management/view/{{ url_encode($proyek->ContractManagements->id_contract) }}"
-                                                                id="click-name"
+                                                            <a href="/contract-management/view/{{ url_encode($proyek->ContractManagements->id_contract) }}" id="click-name"
                                                                 class="text-hover-primary mb-1">{{ $proyek->ContractManagements->id_contract }}</a>
                                                         </td>
-                                                    @else 
+                                                    @else
                                                         <td>
-                                                            <a href="#"
-                                                                id="click-name"
-                                                                class="text-hover-primary mb-1">Belum tersedia</a>
+                                                            <a href="#" id="click-name" class="text-hover-primary mb-1"><small class="badge badge-light-danger">
+
+                                                                    Belum Ditentukan
+                                                                </small></a>
                                                         </td>
                                                     @endif
                                                     <!--end::Name=-->
                                                     <!--begin::Name=-->
                                                     <td>
-                                                        <a href="/proyek/view/{{ $proyek->kode_proyek }}"
-                                                            id="click-name"
-                                                            class="text-hover-primary mb-1">{{ $proyek->nama_proyek }}</a>
+                                                        <a href="/proyek/view/{{ $proyek->kode_proyek }}" id="click-name" class="text-hover-primary mb-1">{{ $proyek->nama_proyek }}</a>
                                                     </td>
                                                     <!--end::Name=-->
                                                     <!--begin::Email=-->
@@ -258,7 +240,7 @@
                                     <!--end::Table -->
                                 </div>
                                 {{-- End :: Tab Content Pelaksanaan --}}
-                                
+
                                 {{-- Begin :: Tab Content Closing Proyek --}}
                                 <div class="tab-pane fade" id="kt_user_view_overview_closing_proyek" role="tabpanel">
                                     <!--begin::Table Claim-->
@@ -267,7 +249,7 @@
                                         <thead>
                                             <!--begin::Table row-->
                                             <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                <th class="min-w-auto">Kode Proyek</th>
+                                                <th class="min-w-auto">Nomor Kontrak</th>
                                                 <th class="min-w-auto">Nama Proyek</th>
                                                 <th class="min-w-auto">Unit Kerja</th>
                                                 {{-- <th class="min-w-auto">ID Contract</th> --}}
@@ -277,9 +259,41 @@
                                         <!--end::Table head-->
                                         <!--begin::Table body-->
                                         <tbody class="fw-bold text-gray-600 fs-6">
-                                            @php
-                                                $is_data_found = false
-                                            @endphp
+                                            @forelse ($proyeks_pemeliharaan as $proyek)
+                                                <tr>
+                                                    <!--begin::Name=-->
+                                                    @if (!empty($proyek->ContractManagements))
+                                                        <td>
+                                                            <a href="/contract-management/view/{{ url_encode($proyek->ContractManagements->id_contract) }}" id="click-name"
+                                                                class="text-hover-primary mb-1">{{ $proyek->ContractManagements->id_contract }}</a>
+                                                        </td>
+                                                    @else
+                                                        <td>
+                                                            <a href="#" id="click-name" class="text-hover-primary mb-1"><small class="badge badge-light-danger">
+
+                                                                    Belum Ditentukan
+                                                                </small></a>
+                                                        </td>
+                                                    @endif
+                                                    <!--end::Name=-->
+                                                    <!--begin::Name=-->
+                                                    <td>
+                                                        <a href="/proyek/view/{{ $proyek->kode_proyek }}" id="click-name" class="text-hover-primary mb-1">{{ $proyek->nama_proyek }}</a>
+                                                    </td>
+                                                    <!--end::Name=-->
+                                                    <!--begin::Email=-->
+                                                    <td>
+                                                        {{ $proyek->UnitKerja->unit_kerja }}
+                                                    </td>
+                                                    <!--end::Email=-->
+                                                </tr>
+                                            @empty
+                                                <tr>
+                                                    <td colspan="3">
+                                                        <p class="text-center bg-gray-200">Data proyek tidak ditemukan</p>
+                                                    </td>
+                                                </tr>
+                                            @endforelse
                                         </tbody>
                                     </table>
                                     <!--end::Table -->
