@@ -332,10 +332,11 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     // Begin :: get Kabupaten
     Route::get('/get-kabupaten/{id}', function ($id) {
-        // $data_kabupaten = Http::get("https://emsifa.github.io/api-wilayah-indonesia/api/regencies/$id.json")->json();
-        $data_kabupaten = json_decode(Storage::get("/public/data/$id.json"));
-        return $data_kabupaten;
-    });
+            // $data_kabupaten = Http::get("https://emsifa.github.io/api-wilayah-indonesia/api/regencies/$id.json")->json();
+            $data_kabupaten = Provinsi::where("country_id", "=", $id)->get()->toJson();
+            return $data_kabupaten;
+        }
+    );
     // End :: get Kabupaten
 
     // Begin :: get coordinate kabupaten
@@ -563,8 +564,26 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     // DELETE Dokumen Prakualifikasi
     Route::delete('proyek/dokumen-prakualifikasi/{id}/delete', [ProyekController::class, 'deleteDokumenPrakualifikasi']);
 
-    // DELETE Dokumen Prakualifikasi
+    // DELETE Dokumen NDA
     Route::delete('proyek/dokumen-nda/{id}/delete', [ProyekController::class, 'deleteDokumenNda']);
+
+    // DELETE Dokumen MOU
+    Route::delete('proyek/dokumen-mou/{id}/delete', [ProyekController::class, 'deleteDokumenMou']);
+
+    // DELETE Dokumen ECA
+    Route::delete('proyek/dokumen-eca/{id}/delete', [ProyekController::class, 'deleteDokumenEca']);
+
+    // DELETE Dokumen ICA
+    Route::delete('proyek/dokumen-ica/{id}/delete', [ProyekController::class, 'deleteDokumenIca']);
+
+    // DELETE Dokumen RKS
+    Route::delete('proyek/dokumen-rks/{id}/delete', [ProyekController::class, 'deleteDokumenRks']);
+
+    // DELETE Dokumen DRAFT
+    Route::delete('proyek/dokumen-draft/{id}/delete', [ProyekController::class, 'deleteDokumenDraft']);
+
+    // DELETE Dokumen ITB TOR
+    Route::delete('proyek/dokumen-itb-tor/{id}/delete', [ProyekController::class, 'deleteDokumenItbTor']);
 
     // DELETE Dokumen Tender
     Route::delete('proyek/dokumen-tender/{id}/delete', [ProyekController::class, 'deleteDokumenTender']);

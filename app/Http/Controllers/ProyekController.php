@@ -28,11 +28,17 @@ use App\Models\RiskTenderProyek;
 use Illuminate\Http\UploadedFile;
 use Illuminate\support\Facades\DB;
 use App\Models\ContractManagements;
+use App\Models\DokumenDraft;
+use App\Models\DokumenEca;
+use App\Models\DokumenIca;
+use App\Models\DokumenItbTor;
+use App\Models\DokumenMou;
 use App\Models\DokumenNda;
 use App\Models\KriteriaPasarProyek;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 use App\Models\DokumenPrakualifikasi;
+use App\Models\DokumenRks;
 use App\Models\JenisProyek;
 use App\Models\Provinsi;
 use App\Models\TipeProyek;
@@ -44,6 +50,7 @@ use Illuminate\Support\Facades\Validator;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Google\Service\FactCheckTools\Resource\Claims;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
 
 class ProyekController extends Controller
@@ -656,6 +663,24 @@ class ProyekController extends Controller
                 if (isset($dataProyek["dokumen-nda"])) {
                     self::uploadDokumenNda($dataProyek["dokumen-nda"], $kode_proyek);
                 }
+                if (isset($dataProyek["dokumen-eca"])) {
+                    self::uploadDokumenEca($dataProyek["dokumen-eca"], $kode_proyek);
+                }
+                if (isset($dataProyek["dokumen-ica"])) {
+                    self::uploadDokumenIca($dataProyek["dokumen-ica"], $kode_proyek);
+                }
+                if (isset($dataProyek["dokumen-rks"])) {
+                    self::uploadDokumenRks($dataProyek["dokumen-rks"], $kode_proyek);
+                }
+                if (isset($dataProyek["dokumen-itb-tor"])) {
+                    self::uploadDokumenItbTor($dataProyek["dokumen-itb-tor"], $kode_proyek);
+                }
+                if (isset($dataProyek["dokumen-mou"])) {
+                    self::uploadDokumenMou($dataProyek["dokumen-mou"], $kode_proyek);
+                }
+                if (isset($dataProyek["dokumen-draft"])) {
+                    self::uploadDokumenDraft($dataProyek["dokumen-draft"], $kode_proyek);
+                }
                 if (isset($dataProyek["risk-tender"])) {
                     self::riskTender($dataProyek["risk-tender"], $kode_proyek);
                 }
@@ -672,6 +697,24 @@ class ProyekController extends Controller
                 }
                 if (isset($dataProyek["dokumen-nda"])) {
                     self::uploadDokumenNda($dataProyek["dokumen-nda"], $kode_proyek);
+                }
+                if (isset($dataProyek["dokumen-eca"])) {
+                    self::uploadDokumenEca($dataProyek["dokumen-eca"], $kode_proyek);
+                }
+                if (isset($dataProyek["dokumen-ica"])) {
+                    self::uploadDokumenIca($dataProyek["dokumen-ica"], $kode_proyek);
+                }
+                if (isset($dataProyek["dokumen-rks"])) {
+                    self::uploadDokumenRks($dataProyek["dokumen-rks"], $kode_proyek);
+                }
+                if (isset($dataProyek["dokumen-itb-tor"])) {
+                    self::uploadDokumenItbTor($dataProyek["dokumen-itb-tor"], $kode_proyek);
+                }
+                if (isset($dataProyek["dokumen-mou"])) {
+                    self::uploadDokumenMou($dataProyek["dokumen-mou"], $kode_proyek);
+                }
+                if (isset($dataProyek["dokumen-draft"])) {
+                    self::uploadDokumenDraft($dataProyek["dokumen-draft"], $kode_proyek);
                 }
                 if (isset($dataProyek["dokumen-tender"])) {
                     self::uploadDokumenTender($dataProyek["dokumen-tender"], $kode_proyek);
@@ -823,30 +866,11 @@ class ProyekController extends Controller
             }
 
             if ($newProyek->save()) {
-                if (isset($dataProyek["dokumen-prakualifikasi"])) {
-                    self::uploadDokumenPrakualifikasi($dataProyek["dokumen-prakualifikasi"], $kode_proyek);
-                }
-                if (isset($dataProyek["risk-tender"])) {
-                    self::riskTender($dataProyek["risk-tender"], $kode_proyek);
-                }
-                if (isset($dataProyek["attachment-menang"])) {
-                    self::attachmentMenang($dataProyek["attachment-menang"], $kode_proyek);
-                }
+                $customerHistory->save();
             }
-            $customerHistory->save();
             return redirect("/proyek/view/" . $kode_proyek);
         } else {
-            if ($newProyek->save()) {
-                if (isset($dataProyek["dokumen-prakualifikasi"])) {
-                    self::uploadDokumenPrakualifikasi($dataProyek["dokumen-prakualifikasi"], $kode_proyek);
-                }
-                if (isset($dataProyek["risk-tender"])) {
-                    self::riskTender($dataProyek["risk-tender"], $kode_proyek);
-                }
-                if (isset($dataProyek["attachment-menang"])) {
-                    self::attachmentMenang($dataProyek["attachment-menang"], $kode_proyek);
-                }
-            }
+            $newProyek->save();
             return redirect("/proyek/view/" . $kode_proyek);
         }
     }
@@ -893,6 +917,10 @@ class ProyekController extends Controller
     {
         $delete = AttachmentMenang::find($id);
         // dd($delete);
+        $files = collect(File::allFiles(public_path("words")))->filter(function ($f) use ($delete) {
+            return str_contains($f->getFilename(), $delete->id_document);
+        })->first();
+        File::delete($files);
         $delete->delete();
         Alert::success("Success", "Attachment Menang Berhasil Dihapus");
         return redirect()->back();
@@ -918,6 +946,10 @@ class ProyekController extends Controller
     {
         $delete = RiskTenderProyek::find($id);
         // dd($delete);
+        $files = collect(File::allFiles(public_path("words")))->filter(function ($f) use ($delete) {
+            return str_contains($f->getFilename(), $delete->id_document);
+        })->first();
+        File::delete($files);
         $delete->delete();
         Alert::success("Success", "Risk Tender Berhasil Dihapus");
         return redirect()->back();
@@ -941,9 +973,13 @@ class ProyekController extends Controller
 
     public function deleteDokumenPrakualifikasi($id)
     {
-        $deleteDokumenPrakualifikasi = DokumenPrakualifikasi::find($id);
-        // dd($deleteDokumenPrakualifikasi);
-        $deleteDokumenPrakualifikasi->delete();
+        $delete = DokumenPrakualifikasi::find($id);
+        // dd($$delete);
+        $files = collect(File::allFiles(public_path("words")))->filter(function ($f) use ($delete) {
+            return str_contains($f->getFilename(), $delete->id_document);
+        })->first();
+        File::delete($files);
+        $delete->delete();
         Alert::success("Success", "Dokumen Prakualifikasi Berhasil Dihapus");
         return redirect()->back();
     }
@@ -967,7 +1003,185 @@ class ProyekController extends Controller
     public function deleteDokumenNda($id)
     {
         $deleteDokumen = DokumenNda::find($id);
-        // dd($deleteDokumen);
+        $files = collect(File::allFiles(public_path("words")))->filter(function ($f) use ($deleteDokumen) {
+            return str_contains($f->getFilename(), $deleteDokumen->id_document);
+        })->first();
+        File::delete($files);
+        // dd($files);
+        $deleteDokumen->delete();
+        Alert::success("Success", "Dokumen Berhasil Dihapus");
+        return redirect()->back();
+    }
+    
+    private function uploadDokumenMou(UploadedFile $uploadedFile, $kode_proyek)
+    {
+        $faker = new Uuid();
+        $dokumen = new DokumenMou();
+        $id_document = $faker->uuid3();
+        $file_name = $uploadedFile->getClientOriginalName();
+        $nama_document = date("His_") . $file_name;
+        // $nama_document = date("His_") . substr($uploadedFile->getClientOriginalName(), 0, strlen($uploadedFile->getClientOriginalName()) - 5);
+        moveFileTemp($uploadedFile, $id_document);
+        $dokumen->nama_dokumen = $nama_document;
+        $dokumen->id_document = $id_document;
+        $dokumen->kode_proyek = $kode_proyek;
+        // dd($dokumen);
+        $dokumen->save();
+    }
+
+    public function deleteDokumenMou($id)
+    {
+        $deleteDokumen = DokumenMou::find($id);
+        $files = collect(File::allFiles(public_path("words")))->filter(function ($f) use ($deleteDokumen) {
+            return str_contains($f->getFilename(), $deleteDokumen->id_document);
+        })->first();
+        File::delete($files);
+        // dd($files);
+        $deleteDokumen->delete();
+        Alert::success("Success", "Dokumen Berhasil Dihapus");
+        return redirect()->back();
+    }
+
+    private function uploadDokumenEca(UploadedFile $uploadedFile, $kode_proyek)
+    {
+        $faker = new Uuid();
+        $dokumen = new DokumenEca();
+        $id_document = $faker->uuid3();
+        $file_name = $uploadedFile->getClientOriginalName();
+        $nama_document = date("His_") . $file_name;
+        // $nama_document = date("His_") . substr($uploadedFile->getClientOriginalName(), 0, strlen($uploadedFile->getClientOriginalName()) - 5);
+        moveFileTemp($uploadedFile, $id_document);
+        $dokumen->nama_dokumen = $nama_document;
+        $dokumen->id_document = $id_document;
+        $dokumen->kode_proyek = $kode_proyek;
+        // dd($dokumen);
+        $dokumen->save();
+    }
+
+    public function deleteDokumenEca($id)
+    {
+        $deleteDokumen = DokumenEca::find($id);
+        $files = collect(File::allFiles(public_path("words")))->filter(function ($f) use ($deleteDokumen) {
+            return str_contains($f->getFilename(), $deleteDokumen->id_document);
+        })->first();
+        File::delete($files);
+        // dd($files);
+        $deleteDokumen->delete();
+        Alert::success("Success", "Dokumen Berhasil Dihapus");
+        return redirect()->back();
+    }
+
+    private function uploadDokumenIca(UploadedFile $uploadedFile, $kode_proyek)
+    {
+        $faker = new Uuid();
+        $dokumen = new DokumenIca();
+        $id_document = $faker->uuid3();
+        $file_name = $uploadedFile->getClientOriginalName();
+        $nama_document = date("His_") . $file_name;
+        // $nama_document = date("His_") . substr($uploadedFile->getClientOriginalName(), 0, strlen($uploadedFile->getClientOriginalName()) - 5);
+        moveFileTemp($uploadedFile, $id_document);
+        $dokumen->nama_dokumen = $nama_document;
+        $dokumen->id_document = $id_document;
+        $dokumen->kode_proyek = $kode_proyek;
+        // dd($dokumen);
+        $dokumen->save();
+    }
+
+    public function deleteDokumenIca($id)
+    {
+        $deleteDokumen = DokumenIca::find($id);
+        $files = collect(File::allFiles(public_path("words")))->filter(function ($f) use ($deleteDokumen) {
+            return str_contains($f->getFilename(), $deleteDokumen->id_document);
+        })->first();
+        File::delete($files);
+        // dd($files);
+        $deleteDokumen->delete();
+        Alert::success("Success", "Dokumen Berhasil Dihapus");
+        return redirect()->back();
+    }
+
+    private function uploadDokumenRks(UploadedFile $uploadedFile, $kode_proyek)
+    {
+        $faker = new Uuid();
+        $dokumen = new DokumenRks();
+        $id_document = $faker->uuid3();
+        $file_name = $uploadedFile->getClientOriginalName();
+        $nama_document = date("His_") . $file_name;
+        // $nama_document = date("His_") . substr($uploadedFile->getClientOriginalName(), 0, strlen($uploadedFile->getClientOriginalName()) - 5);
+        moveFileTemp($uploadedFile, $id_document);
+        $dokumen->nama_dokumen = $nama_document;
+        $dokumen->id_document = $id_document;
+        $dokumen->kode_proyek = $kode_proyek;
+        // dd($dokumen);
+        $dokumen->save();
+    }
+
+    public function deleteDokumenRks($id)
+    {
+        $deleteDokumen = DokumenRks::find($id);
+        $files = collect(File::allFiles(public_path("words")))->filter(function ($f) use ($deleteDokumen) {
+            return str_contains($f->getFilename(), $deleteDokumen->id_document);
+        })->first();
+        File::delete($files);
+        // dd($files);
+        $deleteDokumen->delete();
+        Alert::success("Success", "Dokumen Berhasil Dihapus");
+        return redirect()->back();
+    }
+
+    private function uploadDokumenDraft(UploadedFile $uploadedFile, $kode_proyek)
+    {
+        $faker = new Uuid();
+        $dokumen = new DokumenDraft();
+        $id_document = $faker->uuid3();
+        $file_name = $uploadedFile->getClientOriginalName();
+        $nama_document = date("His_") . $file_name;
+        // $nama_document = date("His_") . substr($uploadedFile->getClientOriginalName(), 0, strlen($uploadedFile->getClientOriginalName()) - 5);
+        moveFileTemp($uploadedFile, $id_document);
+        $dokumen->nama_dokumen = $nama_document;
+        $dokumen->id_document = $id_document;
+        $dokumen->kode_proyek = $kode_proyek;
+        // dd($dokumen);
+        $dokumen->save();
+    }
+
+    public function deleteDokumenDraft($id)
+    {
+        $deleteDokumen = DokumenDraft::find($id);
+        $files = collect(File::allFiles(public_path("words")))->filter(function ($f) use ($deleteDokumen) {
+            return str_contains($f->getFilename(), $deleteDokumen->id_document);
+        })->first();
+        File::delete($files);
+        // dd($files);
+        $deleteDokumen->delete();
+        Alert::success("Success", "Dokumen Berhasil Dihapus");
+        return redirect()->back();
+    }
+
+    private function uploadDokumenItbTor(UploadedFile $uploadedFile, $kode_proyek)
+    {
+        $faker = new Uuid();
+        $dokumen = new DokumenItbTor();
+        $id_document = $faker->uuid3();
+        $file_name = $uploadedFile->getClientOriginalName();
+        $nama_document = date("His_") . $file_name;
+        // $nama_document = date("His_") . substr($uploadedFile->getClientOriginalName(), 0, strlen($uploadedFile->getClientOriginalName()) - 5);
+        moveFileTemp($uploadedFile, $id_document);
+        $dokumen->nama_dokumen = $nama_document;
+        $dokumen->id_document = $id_document;
+        $dokumen->kode_proyek = $kode_proyek;
+        // dd($dokumen);
+        $dokumen->save();
+    }
+
+    public function deleteDokumenItbTor($id)
+    {
+        $deleteDokumen = DokumenItbTor::find($id);
+        $files = collect(File::allFiles(public_path("words")))->filter(function ($f) use ($deleteDokumen) {
+            return str_contains($f->getFilename(), $deleteDokumen->id_document);
+        })->first();
+        File::delete($files);
+        // dd($files);
         $deleteDokumen->delete();
         Alert::success("Success", "Dokumen Berhasil Dihapus");
         return redirect()->back();
@@ -975,7 +1189,7 @@ class ProyekController extends Controller
 
     private function uploadDokumenTender(UploadedFile $uploadedFile, $kode_proyek)
     {
-        $faker = new Uuid();
+        $faker = new Uuid();    
         $dokumen_tender = new DokumenTender();
         $id_document = $faker->uuid3();
         $file_name = $uploadedFile->getClientOriginalName();
@@ -992,9 +1206,13 @@ class ProyekController extends Controller
 
     public function deleteDokumenTender($id)
     {
-        $deleteDokumenPrakualifikasi = DokumenTender::find($id);
-        // dd($deleteDokumenPrakualifikasi);
-        $deleteDokumenPrakualifikasi->delete();
+        $deleteDokumen = DokumenTender::find($id);
+        $files = collect(File::allFiles(public_path("words")))->filter(function ($f) use ($deleteDokumen) {
+            return str_contains($f->getFilename(), $deleteDokumen->id_document);
+        })->first();
+        File::delete($files);
+        // dd($files);
+        $deleteDokumen->delete();
         Alert::success("Success", "Dokumen Tender Berhasil Dihapus");
         return redirect()->back();
     }
@@ -1347,7 +1565,7 @@ class ProyekController extends Controller
                                         [
         
                                             // "TAXTYPE" => "$sap->tax_number_category",
-                                            "TAXTYPE" => Provinsi::where("province_name", "=", $customer->provinsi)->first()->country_id == "ID" ? "ID1" : "ID2",
+                                            "TAXTYPE" => $provinsi->country_id == "ID" ? "ID1" : "ID2",
             
                                             "TAXNUMBER" => "$customer->npwp_company"
                                         ]
