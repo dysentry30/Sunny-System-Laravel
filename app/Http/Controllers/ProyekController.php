@@ -1472,7 +1472,7 @@ class ProyekController extends Controller
                     return redirect()->back();
                 } else {
                     $nasabah_online_response = Http::post("http://nasabah.wika.co.id/index.php/mod_excel/post_json_crm_dev", $data_nasabah_online)->json();
-                    if (!$nasabah_online_response["status"]) {
+                    if (!$nasabah_online_response["status"] && !str_contains($nasabah_online_response["msg"], "sudah ada dalam nasabah online")) {
                         Alert::error("Error", $nasabah_online_response["msg"]);
                         return redirect()->back();
                     }
