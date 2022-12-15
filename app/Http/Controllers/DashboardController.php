@@ -349,11 +349,15 @@ class DashboardController extends Controller
         foreach ($proyeks as $proyek) {
             $stg = $proyek->stage;
             if ($stg == 6 || $stg == 8) {
-                $jumlahMenang++;
-                $nilaiMenang += (int) str_replace(".", "", $proyek->nilai_perolehan);
+                if ($proyek->tipe_proyek == "P"){
+                    $jumlahMenang++;
+                    $nilaiMenang += (int) str_replace(".", "", $proyek->nilai_perolehan);
+                }
             } else if ($stg == 7) {
-                $jumlahKalah++;
-                $nilaiKalah += (int) str_replace(".", "", $proyek->nilai_perolehan);
+                if ($proyek->tipe_proyek == "P") {
+                    $jumlahKalah++;
+                    $nilaiKalah += (int) str_replace(".", "", $proyek->nilai_perolehan);
+                }
             };
             // dump($nilaiTerendah, $nilaiTerkontrak);
         };

@@ -2448,12 +2448,12 @@
                 name: "",
                 colorByPoint: true,
                 data: [{
-                        name: "Nilai Menang Tender: " + "{{ number_format($nilaiMenang, 0, ',' , ',' ) }}",
+                        name: "Nilai Menang Tender : " + "{{ number_format( ((int) $nilaiMenang / 1000000 ), 0, '.' , '.' ) }}",
                         y: {{ $nilaiMenang }},
                         x: "Menang : " + {{ $presentaseNilaiMenang }},
                     },
                     {
-                        name: "Nilai Kalah Tender: " + "{{ number_format($nilaiKalah, 0, ',' , ',' ) }}",
+                        name: "Nilai Kalah Tender : " + "{{ number_format( ((int) $nilaiKalah / 1000000 ), 0, '.' , '.' ) }}",
                         y: {{ $nilaiKalah }},
                         x: "Kalah : " + {{ $presentaseNilaiKalah }},
                     }
