@@ -63,12 +63,11 @@ class ContractManagementsController extends Controller
             //     return self::stdClassToModel($data, Proyek::class);
             // });
             $proyeks_all = Proyek::all();
-            $proyeks_perolehan = $proyeks_all->whereIn("stage", [])->where("is_cancel", "=", false);
-            $proyeks_pelaksanaan = $proyeks_all->where("is_cancel", "=", false)->filter(function($p) {
-                return !empty($p->ContractManagements) && $p->ContractManagements->stages == 2;
+            $proyeks_perolehan = $proyeks_all->whereIn("stage", [2, 3, 4, 5, 6])->where("is_cancel", "=", false);
+            $proyeks_pelaksanaan = $proyeks_all->where("stage", "=", 8)->where("is_cancel", "=", false)->sortByDesc(function($p) {
+                return !empty($p->ContractManagements) && $p->ContractManagements->id_contract;
             });
-
-            $proyeks_pemeliharaan = $proyeks_all->where("is_cancel", "=", false)->filter(function($p) {
+            $proyeks_pemeliharaan = $proyeks_all->where("is_cancel", "=", false)->filter(function ($p) {
                 return !empty($p->ContractManagements) && $p->ContractManagements->stages == 4;
             });
         } else {
@@ -86,7 +85,7 @@ class ContractManagementsController extends Controller
             //     return self::stdClassToModel($data, Proyek::class);
             // });
             $proyeks_all = Proyek::all();
-            $proyeks_perolehan = $proyeks_all->where("stage", "==", 8)->where("is_cancel", "=", false)->filter(function($p) {
+            $proyeks_perolehan = $proyeks_all->where("stage", "==", 8)->where("is_cancel", "=", false)->filter(function ($p) {
                 return !empty($p->ContractManagements) && $p->ContractManagements->stages == 2;
             });
             // $proyeks_pelaksanaan = $proyeks_all->filter(function($p) {
