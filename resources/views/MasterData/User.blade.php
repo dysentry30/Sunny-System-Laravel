@@ -431,7 +431,7 @@ a{{-- Begin::Extend Header --}}
                             <!--end::Options-->
                             <!--begin::Options-->
                             <label class="form-check form-check-sm form-check-custom form-check-solid me-6">
-                                <input class="form-check-input" type="checkbox" value="" id="admin-kontrak" name="admin-kontrak" />
+                                <input class="form-check-input" type="checkbox" value="" id="user-sales" name="user-sales" />
                                 <span class="form-check-label me-8 required"><b>User Sales</b></span>
                             </label>
                             <!--end::Options-->
