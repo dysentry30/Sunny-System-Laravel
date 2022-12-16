@@ -51,8 +51,8 @@
                                     <!--end::Button-->
 
                                     <!--begin::Button-->
-                                    <button type="button" class="btn btn-sm btn-light btn-active-danger ms-3" onclick="document.location.reload()" style="display: none;" id="cancel-button">
-                                        Cancel</button>
+                                    <button onclick="document.location.reload()" type="reset" class="btn btn-sm btn-light btn-active-danger pe-3 mx-2" id="cancel-button">
+                                    Discard <i class="bi bi-x"></i></button>
                                     <!--end::Button-->
 
                                     <!--begin::Button-->
