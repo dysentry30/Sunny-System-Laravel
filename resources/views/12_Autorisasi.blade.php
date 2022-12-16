@@ -6,6 +6,29 @@
 @section('title', 'History Autorisasi')
 {{-- End::Title --}}
 
+<!-- begin::DataTables -->
+<link rel="stylesheet" href="datatables/jquery.dataTables.min.css">
+<link rel="stylesheet" href="datatables/fixedColumns.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css">
+{{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css"> --}}
+<link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
+<!-- end::DataTables -->
+
+<style>
+    .buttons-html5 {
+        border-radius: 5px !important;
+        border: none !important;
+    }
+    .buttons-colvis {
+        border: none !important;
+        border-radius: 5px !important;
+    }
+    div.dataTables_wrapper div.dataTables_filter input{
+        border-radius: 5px !important;
+    }
+</style>
+
 <!--begin::Main-->
 @section('content')
 
@@ -112,7 +135,7 @@
                                                 <form action="/history-autorisasi" method="get">
                                                 <!--begin::Select Options-->
                                                 <select onchange="this.form.submit()" id="periode-prognosa" name="periode-prognosa"
-                                                    class="form-select form-select-solid select2-hidden-accessible w-auto ms-2"
+                                                    class="form-select form-select-solid w-100 ms-2 "
                                                     style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
                                                     data-placeholder="Bulan" data-select2-id="select2-data-bulan" tabindex="-1"
                                                     aria-hidden="true">
@@ -150,7 +173,7 @@
                         <div class="card-body py-10">
 
                             <!--begin::Table-->
-                            <table class="table align-middle table-row-dashed fs-6 gy-2" id="kt_customers_table">
+                            <table class="table align-middle table-row-dashed fs-6 gy-2" id="example">
                                 <!--begin::Table head-->
                                 <thead>
                                     <!--begin::Table row-->
@@ -159,11 +182,12 @@
                                         {{-- <th class="min-w-auto text-center">DOP</th> --}}
                                         <th class="min-w-auto text-center">Bulan Pelaporan</th>
                                         <th class="min-w-auto text-center">Tahun Pelaporan</th>
-                                        <th class="min-w-auto text-center">Total OK Review</th>
+                                        {{-- <th class="min-w-auto text-center">Total OK Review</th> --}}
                                         <th class="min-w-auto text-center">Total OK Awal</th>
                                         <th class="min-w-auto text-center">Total Forecast</th>
                                         <th class="min-w-auto text-center">Total Realisasi</th>
-                                        {{-- <th class="min-w-auto text-center">Tanggal Locked</th> --}}
+                                        <th class="min-w-auto text-center">Tanggal Locked</th>
+                                        <th class="min-w-auto text-center">Is Approve</th>
                                         {{-- <th class="min-w-auto text-center">@sortablelink('is_active','Is Locked')</th> --}}
                                         {{-- <th class="text-center">Action</th>
                                         <th class="text-center">Settings</th> --}}
@@ -237,19 +261,20 @@
                                                 @endswitch
                                             </td>
                                             <td class="text-center">
-                                                {{date("Y")}}
-                                                {{-- @dd(date($history->last()->created_at))
-                                                {{date($history->first()->created_at)}} --}}
+                                                {{($history->first()->created_at)->translatedFormat("Y")}}
                                             </td>
-                                            <td class="text-center">
+                                            {{-- <td class="text-center">
                                                 {{ number_format((int) $history->sum(function($f) {
                                                     return (int) $f->nilaiok_review;
                                                 }), 0, ".", ".") }}
-                                            </td>
+                                            </td> --}}
                                             <td class="text-center">
                                                 {{number_format((int) $history->sum(function($f) {
-                                                    return (int) $f->nilaiok_awal;
+                                                    return (int) $f->rkap_forecast;
                                                 }), 0, ".", ".")}}
+                                                {{-- {{number_format((int) $history->sum(function($f) {
+                                                    return (int) $f->nilaiok_awal;
+                                                }), 0, ".", ".")}} --}}
                                             </td>
                                             <td class="text-center">
                                                 {{number_format((int) $history->sum(function($f) {
@@ -263,9 +288,13 @@
                                                     }
                                                 }), 0, ".", ".")}}
                                             </td>
-                                            {{-- <td class="text-center">
-                                                {{Carbon\Carbon::parse($history->created_at)->translatedFormat("d F Y")}}
-                                            </td> --}}
+                                            <td class="text-center">
+                                                {{-- @dd($history->first()) --}}
+                                                {{Carbon\Carbon::parse($history->first()->created_at)->translatedFormat("d F Y")}}
+                                            </td>
+                                            <td class="text-center">
+                                                {{$history->first()->is_approved_1 == null ? "Pending" : ($history->first()->is_approved_1 == true ? "Approve" : "Not Approve")}}
+                                            </td>
                                             {{-- <td class="text-center">
                                                 {{$history->dop}}
                                                 Yes
@@ -342,5 +371,30 @@
         <!--end::Page-->
     </div>
     <!--end::Root-->
-@endsection
 
+@endsection
+@section('js-script')
+
+    <!--begin::Javascript-->
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script> 
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script> 
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.colVis.min.js"></script> 
+    
+    <script>
+        $(document).ready(function() {
+            $('#example').DataTable( {
+                dom: 'Bfrtip',
+                buttons: [
+                    'copy', 'csv', 'excel', 'pdf', 'print'
+                ]
+            } );
+        } );
+    </script>
+    <!--end::Javascript-->
+
+@endsection
