@@ -389,6 +389,7 @@
         $(document).ready(function() {
             $('#example').DataTable( {
                 dom: 'Bfrtip',
+                pageLength : 20,
                 buttons: [
                     'copy', 'csv', 'excel', 'pdf', 'print'
                 ]
