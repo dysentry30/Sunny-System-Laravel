@@ -101,7 +101,7 @@ class Proyek extends Model
     {
         return $this->hasMany(DokumenPrakualifikasi::class, "kode_proyek");
     }
-
+    
     public function DokumenNda()
     {
         return $this->hasMany(DokumenNda::class, "kode_proyek");

@@ -1394,16 +1394,19 @@ class ContractManagementsController extends Controller
     public function usulanPerubahanDraftContractUpload(Request $request, UsulanPerubahanDraft $usulanPerubahanDraft)
     {
         $data = $request->all();
+        // dd($data);
         $messages = [
             "required" => "Field di atas wajib diisi",
-            "file" => "This field must be file only",
+            // "file" => "This field must be file only",
         ];
         $rules = [
             "kategori" => "required",
             "id-contract" => "required",
-            "id-review-contract" => "required",
+            "deskripsi-klausul-awal" => "required",
+            "usulan-perubahan-klausul" => "required",
+            "isu" => "required",
             "keterangan" => "required",
-            "pasals" => "required",
+            // "pasals" => "required",
         ];
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
@@ -1419,14 +1422,16 @@ class ContractManagementsController extends Controller
             return Redirect::back()->with("modal", $data["modal-name"]);
         }
 
-        $pasals = collect($data["pasals"]);
-        $pasals = $pasals->join("|");
+        // $pasals = collect($data["pasals"]);
+        // $pasals = $pasals->join("|");
 
         $usulanPerubahanDraft->id_contract = $contract->id_contract;
-        $usulanPerubahanDraft->id_review_draft = $data["id-review-contract"];
+        $usulanPerubahanDraft->deskripsi_klausul_awal = $data["deskripsi-klausul-awal"];
+        $usulanPerubahanDraft->isu = $data["isu"];
+        $usulanPerubahanDraft->usulan_perubahan_klausul = $data["usulan-perubahan-klausul"];
         $usulanPerubahanDraft->kategori = $data["kategori"];
         $usulanPerubahanDraft->keterangan = $data["keterangan"];
-        $usulanPerubahanDraft->pasal_perbaikan = $pasals;
+        // $usulanPerubahanDraft->pasal_perbaikan = $pasals;
         if ($usulanPerubahanDraft->save()) {
             Alert::success("Success", "Usulan Perubahan Draft berhasil ditambahkan");
             return redirect()->back();

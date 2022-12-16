@@ -437,14 +437,15 @@
                                                                         <!--end::Label-->
                                                                         <!--begin::Input-->
                                                                         <select name="negara" id="negara" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
-                                                                            onchange="selectNegara(this)" data-placeholder="Pilih Negara">
+                                                                            onchange="selectNegara(this)"
+                                                                            data-placeholder="Pilih Negara">
                                                                             <option value=""></option>
                                                                             @foreach ($data_negara as $negara)
-                                                                                @if ($negara->country == $customer->negara)
-                                                                                    <option value="{{ $negara->country }}" selected>{{ $negara->country }}
+                                                                                @if ($negara->abbreviation == $customer->negara || $negara->country == $customer->negara)
+                                                                                    <option value="{{ $negara->abbreviation }}" selected>{{ $negara->country }}
                                                                                     </option>
                                                                                 @else
-                                                                                    <option value="{{ $negara->country }}">
+                                                                                    <option value="{{ $negara->abbreviation }}">
                                                                                         {{ $negara->country }}</option>
                                                                                 @endif
                                                                             @endforeach
@@ -471,17 +472,18 @@
                                                                         value="{{ $customer->provinsi }}" placeholder="Provinsi" style="display: none" />
                                                                     <div id="div-provinsi">
                                                                         <select name="provinsi" id="provinsi" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
-                                                                            onchange="selectProvinsi(this)" data-placeholder="Pilih Customer Provinsi">
+                                                                            {{-- onchange="selectProvinsi(this)"  --}}
+                                                                            data-placeholder="Pilih Customer Provinsi">
                                                                             <option value="{{ $customer->provinsi }}">
                                                                                 {{ $customer->provinsi }}</option>
                                                                             @foreach ($data_provinsi as $provinsi)
-                                                                                @if ($provinsi->id == $customer->provinsi)
-                                                                                    <option value="{{ $provinsi->id }}" selected>
-                                                                                        {{ ucwords(strtolower($provinsi->name)) }}
+                                                                                @if ($provinsi->province_id == $customer->provinsi)
+                                                                                    <option value="{{ $provinsi->province_id }}" selected>
+                                                                                        {{ ucwords(strtolower($provinsi->province_name)) }}
                                                                                     </option>
                                                                                 @else
-                                                                                    <option value="{{ $provinsi->id }}">
-                                                                                        {{ ucwords(strtolower($provinsi->name)) }}
+                                                                                    <option value="{{ $provinsi->province_id }}">
+                                                                                        {{ ucwords(strtolower($provinsi->province_name)) }}
                                                                                     </option>
                                                                                 @endif
                                                                             @endforeach
@@ -495,7 +497,7 @@
                                                             <!--end::Row-->
 
                                                             <!--begin::Row-->
-                                                            <div class="col-6">
+                                                            {{-- <div class="col-6">
                                                                 <!--begin::Input group Website-->
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
@@ -508,7 +510,7 @@
                                                                         value="{{ $customer->kota_kabupaten }}" placeholder="Kabupaten" style="display: none" />
                                                                     <div id="div-kabupaten">
                                                                         <select name="kabupaten" id="kabupaten" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
-                                                                            {{-- onchange="selectKabupaten(this)" --}} data-placeholder="Pilih Customer Kabupaten">
+                                                                            onchange="selectKabupaten(this)" data-placeholder="Pilih Customer Kabupaten">
                                                                             <option value="{{ $customer->kota_kabupaten }}">
                                                                                 {{ $customer->kota_kabupaten }}</option>
                                                                             @if (isset($data_kabupaten))
@@ -529,7 +531,7 @@
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
-                                                            </div>
+                                                            </div> --}}
                                                             <!--End begin::Col-->
 
                                                             <div class="row">
@@ -559,38 +561,46 @@
 
                                                             <!--begin::Fungsi Select Provinsi-->
                                                             <script>
-                                                                function selectNegara(e) {
+                                                                async function selectNegara(e) {
                                                                     // console.log(e.value);
-
-                                                                    if (e.value != "Indonesia") {
-                                                                        document.querySelector("#input-provinsi").style.display = "";
-                                                                        document.querySelector("#input-provinsi").value = "";
-                                                                        document.querySelector("#provinsi").disabled = true;
-                                                                        document.querySelector("#div-provinsi").style.display = "none";
-
-                                                                        document.querySelector("#input-kabupaten").style.display = "";
-                                                                        document.querySelector("#input-kabupaten").value = "";
-                                                                        document.querySelector("#kabupaten").disabled = true;
-                                                                        document.querySelector("#div-kabupaten").style.display = "none";
-                                                                    } else {
-                                                                        document.querySelector("#input-provinsi").style.display = "none";
-                                                                        document.querySelector("#div-provinsi").style.display = "";
-                                                                        document.querySelector("#provinsi").disabled = false;
-                                                                        document.querySelector("#input-kabupaten").style.display = "none";
-                                                                        document.querySelector("#div-kabupaten").style.display = "";
-                                                                        document.querySelector("#kabupaten").disabled = false;
-
-                                                                    }
-                                                                }
-                                                                async function selectProvinsi(elt) {
-                                                                    const idProvinsi = elt.value;
+                                                                    const idProvinsi = e.value;
                                                                     // console.log(elt.value);
                                                                     let html = ``;
+                                                                    // Get Provinsi
                                                                     const getKabupaten = await fetch(`/get-kabupaten/${idProvinsi}`).then(res => res.json());
                                                                     getKabupaten.forEach(kabupaten => {
-                                                                        html += `<option value="${kabupaten.id}">${kabupaten.name}</option>`;
+                                                                        html += `<option value="${kabupaten.province_id}">${kabupaten.province_name}</option>`;
                                                                     });
-                                                                    document.querySelector("#kabupaten").innerHTML = html;
+                                                                    document.querySelector("#provinsi").innerHTML = html;
+                                                                    // if (e.value != "Indonesia") {
+                                                                    //     document.querySelector("#input-provinsi").style.display = "";
+                                                                    //     document.querySelector("#input-provinsi").value = "";
+                                                                    //     document.querySelector("#provinsi").disabled = true;
+                                                                    //     document.querySelector("#div-provinsi").style.display = "none";
+
+                                                                    //     document.querySelector("#input-kabupaten").style.display = "";
+                                                                    //     document.querySelector("#input-kabupaten").value = "";
+                                                                    //     document.querySelector("#kabupaten").disabled = true;
+                                                                    //     document.querySelector("#div-kabupaten").style.display = "none";
+                                                                    // } else {
+                                                                    //     document.querySelector("#input-provinsi").style.display = "none";
+                                                                    //     document.querySelector("#div-provinsi").style.display = "";
+                                                                    //     document.querySelector("#provinsi").disabled = false;
+                                                                    //     document.querySelector("#input-kabupaten").style.display = "none";
+                                                                    //     document.querySelector("#div-kabupaten").style.display = "";
+                                                                    //     document.querySelector("#kabupaten").disabled = false;
+
+                                                                    // }
+                                                                }
+                                                                async function selectProvinsi(elt) {
+                                                                    // const idProvinsi = elt.value;
+                                                                    // // console.log(elt.value);
+                                                                    // let html = ``;
+                                                                    // const getKabupaten = await fetch(`/get-kabupaten/${idProvinsi}`).then(res => res.json());
+                                                                    // getKabupaten.forEach(kabupaten => {
+                                                                    //     html += `<option value="${kabupaten.id}">${kabupaten.name}</option>`;
+                                                                    // });
+                                                                    // document.querySelector("#kabupaten").innerHTML = html;
                                                                 }
                                                             </script>
                                                             <!--end::Fungsi Select Provinsi-->
