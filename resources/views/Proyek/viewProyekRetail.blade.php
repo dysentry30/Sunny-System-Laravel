@@ -89,9 +89,8 @@
                                 <div class="d-flex align-items-center py-1">
 
                                     <!--begin::Button-->
-                                    <button type="button" class="btn btn-sm btn-light btn-active-danger ms-2"
-                                        onclick="document.location.reload()" style="display: none;" id="cancel-button">
-                                        Cancel <i class="bi bi-x"></i></button>
+                                    <button onclick="document.location.reload()" type="reset" class="btn btn-sm btn-light btn-active-danger pe-3 mx-2" id="cancel-button">
+                                    Discard <i class="bi bi-x"></i></button>
                                     <!--end::Button-->
 
                                     <!--begin::Button-->
@@ -685,10 +684,8 @@
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
-                                                                    {{-- @isset($proyek->jenis_proyek) --}}
                                                                     {{-- @dump($proyek->jenis_proyek) --}}
                                                                     <select id="jenis-proyek" name="jenis-proyek"
-                                                                        onchange="tampilJOCategory(this)"
                                                                         class="form-select form-select-solid"
                                                                         data-control="select2" data-hide-search="true"
                                                                         data-placeholder="Pilih Jenis Proyek"
@@ -699,11 +696,11 @@
                                                                         <option value="N"
                                                                             {{ $proyek->jenis_proyek == 'N' ? 'selected' : '' }}>
                                                                             External</option>
-                                                                        <option value="J"
+                                                                        {{-- <option value="J"
                                                                             {{ $proyek->jenis_proyek == 'J' ? 'selected' : '' }}>
-                                                                            JO</option>
+                                                                            JO</option> --}}
                                                                     </select>
-                                                                    <input type="hidden" name="jo-category" id="jo-category" value="">
+                                                                    {{-- <input type="hidden" name="jo-category" id="jo-category" value="">
                                                                     @php
                                                                         $jenis_jo = "";
                                                                         switch ($proyek->jenis_jo) {
@@ -731,8 +728,7 @@
                                                                         <small>JO Category: <b>{{ $jenis_jo }}</b></small>
                                                                     @else 
                                                                         <small>JO Category: <b class="text-danger">{{ $jenis_jo }}</b></small>
-                                                                    @endif
-                                                                    {{-- @endisset --}}
+                                                                    @endif --}}
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->

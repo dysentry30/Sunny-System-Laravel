@@ -6,12 +6,6 @@
 @section('title', 'History Autorisasi')
 {{-- End::Title --}}
 
-<!-- begin::DataTables -->
-<link rel="stylesheet" href="datatables/jquery.dataTables.min.css">
-<link rel="stylesheet" href="datatables/fixedColumns.dataTables.min.css">
-<link rel="stylesheet" href="datatables/buttons.dataTables.min.css">
-<!-- end::DataTables -->
-
 <style>
         .buttons-html5 {
             border-radius: 5px !important;
@@ -116,7 +110,7 @@
                     <div class="card" Id="List-vv" style="position: relative; overflow: hidden;">
 
                         <!--begin::Card body-->
-                        <div class="card-body pt-10 mb-0">
+                        <div class="card-body pt-6 pb-3 mb-0">
                             @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)"))
 
                             <!--Begin :: Filter-->
@@ -124,7 +118,7 @@
                                 <div class="card-title">
                                     <div class="row">
                                         <div class="col-2">
-                                        <h2 class="mt-3 text-end">Periode Otorisasi : </h2>
+                                        <p class="mt-3 text-end">Periode Otorisasi : </p>
                                         </div>
                                         <div class="col-3">
                                                 <form action="/history-autorisasi" method="get">
@@ -154,7 +148,7 @@
                                             
                                         <div class="col">
                                             <form action="" method="GET">
-                                                <button type="submit" class="btn btn-secondary">Reset</button>
+                                                <button type="submit" class="btn btn-light">Reset</button>
                                             </form>
                                         </div>
                                     </div>
@@ -370,8 +364,7 @@
 @endsection
 @section('js-script')
 
-    <!--begin::Javascript-->
-    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <!--begin::Data Tables-->
     <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script> 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script> 
@@ -391,6 +384,6 @@
             } );
         } );
     </script>
-    <!--end::Javascript-->
+    <!--end::Data Tables-->
 
 @endsection

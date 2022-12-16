@@ -7,6 +7,15 @@
 {{-- End::Title --}}
 
 <style>
+    .buttons-html5 {
+        border-radius: 5px !important;
+        border: none !important;
+        font-weight: normal !important;
+    }
+    .buttons-colvis {
+        border: none !important;
+        border-radius: 5px !important;
+    }
     .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
         /* background-color: red !important; */
         --bs-table-accent-bg: #8ecae650 !important;
@@ -15,9 +24,12 @@
     .table>:not(caption)>*>* {
         padding: 0.25rem 0.25rem !important;
     }
-     /* .table tbody * {
-            font-family: Poppins !important;
-        } */
+
+    .dataTables_filter{
+        padding: 0 !important;
+        margin-left: 5px !important;
+        color: #B5B5C3;
+    }
 </style>
 
 <!--begin::Main-->
@@ -123,10 +135,9 @@
 
 
                         <!--begin::Card header-->
-                        <div class="card-header border-0 py-1">
+                        <div class="card-header border-0 py-1 mb-0">
                             <!--begin::Card title-->
                             <div class="card-title">
-
                                 <!--Begin:: BUTTON FILTER-->
                                 <form action="" class="d-flex flex-row w-auto" method="get">
                                     <!--Begin:: Select Options-->
@@ -136,14 +147,11 @@
                                         data-placeholder="Column" data-select2-id="select2-data-bulan" tabindex="-1"
                                         aria-hidden="true">
                                         {{-- <option {{ $column == '' ? 'selected' : '' }}></option> --}}
-                                        <option value="nama_proyek" {{ $column == 'nama_proyek' ? 'selected' : '' }}>Nama
-                                            Proyek</option>
-                                        <option value="kode_proyek" {{ $column == 'kode_proyek' ? 'selected' : '' }}>Kode
-                                            Proyek</option>
-                                        <option value="tahun_perolehan"
-                                            {{ $column == 'tahun_perolehan' ? 'selected' : '' }}>Tahun Perolehan</option>
-                                        <option value="unit_kerja" {{$column == "unit_kerja" ? "selected" : ""}}>Unit Kerja</option>
+                                        {{-- <option value="nama_proyek" {{ $column == 'nama_proyek' ? 'selected' : '' }}>Nama Proyek</option> --}}
+                                        {{-- <option value="kode_proyek" {{ $column == 'kode_proyek' ? 'selected' : '' }}>Kode Proyek</option> --}}
+                                        {{-- <option value="tahun_perolehan" {{ $column == 'tahun_perolehan' ? 'selected' : '' }}>Tahun Perolehan</option> --}}
                                         <option value="stage" {{$column == "stage" ? "selected" : ""}}>Stage</option>
+                                        <option value="unit_kerja" {{$column == "unit_kerja" ? "selected" : ""}}>Unit Kerja</option>
                                         <option value="jenis_proyek" {{$column == "jenis_proyek" ? "selected" : ""}}>Jenis Proyek</option>
                                         <option value="tipe_proyek" {{$column == "tipe_proyek" ? "selected" : ""}}>Tipe Proyek</option>
 
@@ -151,8 +159,7 @@
                                     <!--End:: Select Options-->
 
                                     <!--begin:: Input Filter-->
-                                    {{-- @if ($column == 'stage') --}}
-                                        <div style="display: none !important" id="filterStage" class="d-flex align-items-center position-relative">
+                                        <div style="" id="filterStage" class="d-flex align-items-center position-relative">
                                             <select name="filter-stage"
                                                 class="form-select form-select-solid select2-hidden-accessible w-auto ms-2"
                                                 data-control="select2" data-hide-search="true" data-placeholder="Pilih Stage"
@@ -175,7 +182,7 @@
                                                 <option value="10" {{ $filter == '10' ? 'selected' : '' }}>Selesai</option>
                                             </select>
                                         </div>
-                                    {{-- @elseif ($column == 'jenis_proyek') --}}
+
                                         <div style="display: none !important" id="filterJenis" class="d-flex align-items-center position-relative">
                                             <select name="filter-jenis"
                                                 class="form-select form-select-solid select2-hidden-accessible w-auto ms-2"
@@ -187,6 +194,7 @@
                                                 <option value="J" {{ $filter == 'J' ? 'selected' : '' }}>JO</option>
                                             </select>
                                         </div>
+
                                         <div style="display: none !important" id="filterTipe" class="d-flex align-items-center position-relative">
                                             <select name="filter-tipe"
                                                 class="form-select form-select-solid select2-hidden-accessible w-auto ms-2"
@@ -197,7 +205,7 @@
                                                 <option value="P" {{ $filter == 'P' ? 'selected' : '' }}>Non-Retail</option>
                                             </select>
                                         </div>
-                                    {{-- @elseif ($column == 'unit_kerja') --}}
+
                                         <div style="display: none !important" id="filterUnit" class="d-flex align-items-center position-relative">
                                             <select name="filter-unit" class="form-select form-select-solid w-200px ms-2"
                                                 data-control="select2" data-hide-search="true" data-placeholder="Unit Kerja">
@@ -209,8 +217,8 @@
                                                 @endforeach
                                             </select>
                                         </div>
-                                    {{-- @else --}}
-                                        <div id="filter" class="d-flex align-items-center position-relative">
+
+                                        {{-- <div id="filter" class="d-flex align-items-center position-relative">
                                             <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
                                             <span class="svg-icon svg-icon-1 position-absolute ms-6">
                                                 <i class="bi bi-search"></i>
@@ -220,8 +228,7 @@
                                                 name="filter" value="{{ $filter }}"
                                                 class="form-control form-control-solid ms-2 ps-12 w-auto"
                                                 placeholder="Input Filter" />
-                                        </div>
-                                    {{-- @endif --}}
+                                        </div> --}}
 
                                     <script>
                                         function changes(e) {
@@ -284,38 +291,16 @@
                                     <!--end:: RESET-->
                                 </form>
                                 <!--end:: BUTTON FILTER-->
-
-
                             </div>
                             <!--begin::Card title-->
-
-                            <!--begin::Paginate-->
-                            {{-- <div class="align-items-center d-flex flex-row-reverse">
-												<div>
-													{{ $proyeks->links() }}
-												</div>
-
-												<div class="p-2" style="color:gray">
-													Showing
-													{{ $proyeks->firstItem() }}
-													to
-													{{ $proyeks->lastItem() }}
-													of
-													{{ $proyeks->total()}}
-													entries
-												</div>
-											</div> --}}
-                            <!--end::Paginate-->
                         </div>
                         <!--end::Card header-->
 
 
                         <!--begin::Card body-->
-                        <div class="card-body pt-0 px-3">
-
-
+                        <div class="card-body px-3 pt-0">
                             <!--begin::Table Proyek-->
-                            <table class="table table-striped table-hover align-middle table-row-dashed fs-6 gy-2" id="kt_customers_table">
+                            <table class="table table-striped table-hover align-middle table-row-dashed fs-6 gy-2" id="example">
                                 <!--begin::Table head-->
                                 <thead>
                                     <!--begin::Table row-->
@@ -1012,7 +997,24 @@
 
 @endsection
 @section('js-script')
-<script>
+    <!--begin::Data Tables-->
+    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+    
+    <script>
+        $(document).ready(function() {
+            $('#example').DataTable( {
+                dom: '<"float-start"f><"#example"t>rtip',
+                // dom: 'frtip',
+                pageLength : 50,
+                // buttons: [
+                //     'copy', 'csv', 'excel', 'pdf', 'print'
+                // ]
+            } );
+        } );
+    </script>
+    <!--end::Data Tables-->
+    
+    <script>
     $('#kt_modal_create_proyek').on('show.bs.modal', function() {
         $("#customer").select2({
             dropdownParent: $("#kt_modal_create_proyek")

@@ -33,6 +33,12 @@
     <link href='{{ asset('/froala/froala_editor.pkgd.min.css') }}' rel='stylesheet'
         type='text/css' />
     <!-- end::Froala CSS -->
+
+    <!-- begin::DataTables -->
+    <link rel="stylesheet" href="datatables/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="datatables/fixedColumns.dataTables.min.css">
+    <link rel="stylesheet" href="datatables/buttons.dataTables.min.css">    
+    <!-- end::DataTables -->
     
     <!-- Begin:: Leaflet Map -->
     {{-- <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
@@ -1022,7 +1028,7 @@
     <!--end:: show calendar-->
     
     <!--begin:: Cancel Button-->
-    <script>
+    {{-- <script>
         let isEditing = false;
         const cancelAllInput = document.querySelectorAll("input");
         
@@ -1144,7 +1150,7 @@
                 // };
             }
         });
-        </script>
+    </script> --}}
     <!--end:: Cancel Button-->
     
     <!-- Begin :: Get Modal ID -->
