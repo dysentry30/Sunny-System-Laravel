@@ -9,24 +9,19 @@
 <!-- begin::DataTables -->
 <link rel="stylesheet" href="datatables/jquery.dataTables.min.css">
 <link rel="stylesheet" href="datatables/fixedColumns.dataTables.min.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css">
-{{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css"> --}}
-<link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" href="datatables/buttons.dataTables.min.css">
 <!-- end::DataTables -->
 
 <style>
-    .buttons-html5 {
-        border-radius: 5px !important;
-        border: none !important;
-    }
-    .buttons-colvis {
-        border: none !important;
-        border-radius: 5px !important;
-    }
-    div.dataTables_wrapper div.dataTables_filter input{
-        border-radius: 5px !important;
-    }
+        .buttons-html5 {
+            border-radius: 5px !important;
+            border: none !important;
+            font-weight: normal !important;
+        }
+        .buttons-colvis {
+            border: none !important;
+            border-radius: 5px !important;
+        }
 </style>
 
 <!--begin::Main-->
@@ -121,7 +116,7 @@
                     <div class="card" Id="List-vv" style="position: relative; overflow: hidden;">
 
                         <!--begin::Card body-->
-                        <div class="card-body py-10">
+                        <div class="card-body pt-10 mb-0">
                             @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)"))
 
                             <!--Begin :: Filter-->
@@ -170,7 +165,7 @@
                         <!--end::Card body-->
                         
                         <!--begin::Card body-->
-                        <div class="card-body py-10">
+                        <div class="card-body pt-0">
 
                             <!--begin::Table-->
                             <table class="table align-middle table-row-dashed fs-6 gy-2" id="example">
