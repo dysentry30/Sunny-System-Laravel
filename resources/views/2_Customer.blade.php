@@ -105,11 +105,11 @@
 
 
                         <!--begin::Card header-->
-                        <div class="card-header border-0 py-1">
+                        {{-- <div class="card-header border-0 py-1">
                             <!--begin::Card title-->
                             <div class="card-title">
                                 <!--begin::Search-->
-                                {{-- <form action="" method="get">
+                                <form action="" method="get">
                                     <div class="d-flex align-items-center position-relative my-1 me-8">
                                         <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
                                         <span class="svg-icon svg-icon-1 position-absolute ms-6">
@@ -119,14 +119,14 @@
                                         <input type="text" data-kt-customer-table-filter="search" id="cari" name="cari" value="{{ $cari }}"
                                             class="form-control form-control-solid ps-15" placeholder="Name/Email Pelanggan"/>
                                     </div>
-                                </form> --}}
+                                </form>
                                 <!--end::Search-->
 
                                 <!--Begin:: BUTTON FILTER-->
                                 <form action="" class="d-flex flex-row w-auto" method="get">
                                     <!--Begin:: Select Options-->
                                     <select id="column" name="column" class="form-select form-select-solid select2-hidden-accessible" style="margin-right: 2rem" data-control="select2" data-hide-search="true" data-placeholder="Column" data-select2-id="select2-data-bulan" tabindex="-1" aria-hidden="true">
-                                        {{-- <option {{$column == "" ? "selected": ""}}></option> --}}
+                                        <option {{$column == "" ? "selected": ""}}></option>
                                         <option value="name" {{$column == "name" ? "selected" : ""}}>Nama Pelanggan</option>
                                         <option value="email" {{$column == "email" ? "selected" : ""}}>Email Pelanggan</option>
                                         <option value="kode_pelanggan" {{$column == "kode_pelanggan" ? "selected" : ""}}>Kode Pelanggan</option>
@@ -134,9 +134,9 @@
                                         <option value="email" {{$column == "email" ? "selected" : ""}}>Email</option>
                                     </select>
                                     <!--End:: Select Options-->
-                                    {{-- @php
+                                    @php
                                         $iconSearch = '<i class="bi bi-search"></i>';
-                                    @endphp --}}
+                                    @endphp
                                     
                                     <!--begin:: Input Filter-->
                                     <div class="d-flex align-items-center position-relative">
@@ -170,12 +170,12 @@
                                 
                             </div>
                             <!--end::Card header-->
-                        </div>
+                        </div> --}}
                         <!--begin::Card title-->
 
                         <!--begin::Card body-->
-                        <div class="card-body pt-0">
-                            <table class="table align-middle table-row-dashed fs-6 gy-2" id="kt_customers_table">
+                        <div class="card-body pt-2">
+                            <table class="table align-middle table-row-dashed fs-6 gy-2" id="example">
                                 <!--begin::Table head-->
                                 <thead>
                                     <!--begin::Table row-->
@@ -200,16 +200,16 @@
                                 
                                
                                     <!-- Begin :: Results -->
-                                    <tbody class="fw-bold text-gray-600" id="data-wrapper">
+                                    {{-- <tbody class="fw-bold text-gray-600" id="data-wrapper">
 
                                         <!-- Results :: Data Tabel Infinite Scroll -->
 
-                                    </tbody>
+                                    </tbody> --}}
                                     <tbody class="fw-bold text-gray-600">
 
                                         <!-- Results :: Data Tabel Infinite Scroll -->
 
-                                        @if ($column != null || $sort != null )
+                                        {{-- @if ($column != null || $sort != null ) --}}
                                         
 
                                             @foreach ($results as $customers)
@@ -217,12 +217,12 @@
                                             <tr>
                                                 <!--begin::Kode Pelanggan-->
                                                 <td>
-                                                <a href="/customer/view/{{ $customers->id_customer }}" class="text-gray-800 text-hover-primary">{{ $customers->kode_pelanggan }}</a>
+                                                <a target="_blank" href="/customer/view/{{ $customers->id_customer }}" class="text-gray-800 text-hover-primary">{{ $customers->kode_pelanggan ?? "-" }}</a>
                                                 </td>
                                                 <!--end::Kode Pelanggan-->
                                                 <!--begin::Name-->
                                                 <td>
-                                                <a href="/customer/view/{{ $customers->id_customer }}" class="text-gray-800 text-hover-primary">{{ $customers->name }}</a>
+                                                <a target="_blank" href="/customer/view/{{ $customers->id_customer }}" class="text-gray-800 text-hover-primary">{{ $customers->name }}</a>
                                                 </td>
                                                 <!--end::Name-->
                                                 <!--begin::Email-->
@@ -273,7 +273,7 @@
                                                 const tbody = document.querySelector("#data-wrapper");
                                                 tbody.style.display = "none";
                                             </script>
-                                        @endif
+                                        {{-- @endif --}}
 
                                     </tbody>
                                     <!-- End :: Results -->
@@ -282,13 +282,13 @@
                             <!--end::Table-->
 
                         <!-- Data Loader -->
-                        <div class="auto-load text-center">
+                        {{-- <div class="auto-load text-center">
                             <div class="d-flex justify-content-center">
                                 <div class="spinner-border text-primary" role="status">
                                     <span class="sr-only">Loading...</span>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                             
                         </div>
                         <!--end::Card body-->
@@ -627,6 +627,23 @@
 {{-- End::Main --}}
 
 @section("js-script")
+<!--begin::Data Tables-->
+<script src="datatables/jquery.dataTables.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#example').DataTable( {
+            dom: '<"float-start"f><"#example"t>rtip',
+            // dom: 'frtip',
+            pageLength : 50,
+            // buttons: [
+            //     'copy', 'csv', 'excel', 'pdf', 'print'
+            // ]
+        } );
+    } );
+</script>
+<!--end::Data Tables-->
+
 <script>
     var ENDPOINT = "{{ url('/') }}";
     var page = 1;
