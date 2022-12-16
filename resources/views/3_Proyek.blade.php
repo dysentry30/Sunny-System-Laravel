@@ -998,7 +998,7 @@
 @endsection
 @section('js-script')
     <!--begin::Data Tables-->
-    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+    <script src="datatables/jquery.dataTables.min.js"></script>
     
     <script>
         $(document).ready(function() {
