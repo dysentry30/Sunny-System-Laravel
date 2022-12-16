@@ -17,6 +17,7 @@ use App\Models\CustomerAttachments;
 use App\Models\CustomerSAP;
 use App\Models\IndustryOwner;
 use App\Models\IndustrySector;
+use App\Models\Provinsi;
 use App\Models\StrukturAttachment;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -211,10 +212,12 @@ class CustomerController extends Controller
         // $data_provinsi = Http::get("https://emsifa.github.io/api-wilayah-indonesia/api/provinces.json")->json();
         // $data = Http::get("http://maps.googleapis.com/maps/api/geocode/xml?address=". "Boston, USA" . "&sensor=false");
 
-        $data_provinsi = json_decode(Storage::get("/public/data/provinsi.json"));
+        // $data_provinsi = json_decode(Storage::get("/public/data/provinsi.json"));
         $id_kabupaten = $customer->provinsi;
         $data_kabupaten = json_decode(Storage::get("/public/data/$id_kabupaten.json"));
-        $data_negara = json_decode(Storage::get("/public/data/country.json"));
+        $data_negara = collect(json_decode(Storage::get("/public/data/country.json")));
+        $kode_negara = $data_negara->where("country", "=", $customer->negara)->first()->abbreviation;
+        $data_provinsi = Provinsi::where("country_id", "=", $kode_negara)->get();
         $pic = CustomerPic::where("id_customer", "=", $id_customer)->get();
         $struktur = StrukturCustomer::where("id_customer", "=", $id_customer)->get();
         $proyeks = ProyekBerjalans::where("id_customer", "=", $id_customer)->get();

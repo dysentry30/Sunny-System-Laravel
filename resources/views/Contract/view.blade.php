@@ -7,6 +7,23 @@
     input[type="date"]::-webkit-calendar-picker-indicator {
         display: none;
     }
+    #detailProyek .form-control.form-control-solid {
+        border-left: 0px !important;
+        border-top: 0px !important;
+        border-right: 0px !important;
+        border-bottom: 0px dashed #b5b5c3 !important;
+        border-radius: 0 !important;
+        background-color: #eff2f5 !important;
+    }
+
+    #detailProyek .form-select.form-select-solid {
+        border-left: 0px !important;
+        border-top: 0px !important;
+        border-right: 0px !important;
+        border-bottom: 0px dashed #b5b5c3 !important;
+        border-radius: 0 !important;
+        background-color: #eff2f5 !important;
+    }
 </style>
 @empty($contract)
     @section('title', 'New Contract')
@@ -487,7 +504,8 @@
                                                 <span class="">Proyek: </span>
                                             </div>
                                             <div class="text-dark text-start">
-                                                <a href="/proyek/view/{{ $contract->project->kode_proyek }}"
+                                                <a href="#"
+                                                    data-bs-toggle="modal" data-bs-target="#detailProyek"
                                                     id="click-name"
                                                     class="text-gray-900 text-hover-primary"><b>{{ $contract->project->nama_proyek ?? '' }}</b></a>
                                             </div>
@@ -605,7 +623,7 @@
                                 </div>
                                 <br>
                                 <!--End begin::Col-->
-                                <div class="row">
+                                {{-- <div class="row">
                                     <div class="col-6">
                                         <div class="d-flex align-items-center">
                                             <div class="col-5 text-end me-6">
@@ -626,7 +644,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
                             <h6 id="status-msg" style="display: none"></h6>
 
@@ -753,11 +771,10 @@
                             <thead>
                                 <!--begin::Table row-->
                                 <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-125px">Nama</th>
-                                    <th class="min-w-125px">No. Dokumen</th>
-                                    <th class="min-w-125px">Kategori</th>
+                                    <th class="min-w-125px">Item</th>
+                                    <th class="min-w-125px">Sub Pasal</th>
+                                    <th class="min-w-125px">Daftar Pertanyaan</th>
                                     <th class="min-w-125px">Tanggal</th>
-                                    <th class="min-w-125px">Catatan</th>
                                 </tr>
                                 <!--end::Table row-->
                             </thead>
@@ -770,29 +787,17 @@
                                             <tr>
                                                 <!--begin::Name=-->
                                                 <td>
-                                                    <a target="_blank"
-                                                        href="/document/view/{{ $questionProject->id_question }}/{{ $questionProject->id_document }}"
-                                                        class="text-gray-600 text-hover-primary mb-1">
-                                                        {{ $questionProject->document_name_question }}
-                                                    </a>
+                                                    {{ $questionProject->item }}
                                                 </td>
                                                 <!--end::Name=-->
                                                 <!--begin::Name=-->
                                                 <td>
-                                                    <a target="_blank"
-                                                        href="/document/view/{{ $questionProject->id_question }}/{{ $questionProject->id_document }}"
-                                                        class="text-gray-600 text-hover-primary mb-1">
-                                                        {{ $questionProject->id_document }}
-                                                    </a>
+                                                    {{ $questionProject->sub_pasal }}
                                                 </td>
                                                 <!--end::Name=-->
                                                 <!--begin::Name=-->
                                                 <td>
-                                                    <a target="_blank"
-                                                        href="/document/view/{{ $questionProject->id_question }}/{{ $questionProject->id_document }}"
-                                                        class="text-gray-600 text-hover-primary mb-1">
-                                                        {{ $questionProject->kategori_question }}
-                                                    </a>
+                                                    {{ $questionProject->daftar_pertanyaan }}
                                                 </td>
                                                 <!--end::Name=-->
                                                 <!--begin::Kode=-->
@@ -801,10 +806,6 @@
                                                         {{ date_format(new DateTime($questionProject->created_at), 'd M, Y') }}</a>
                                                 </td>
                                                 <!--end::Kode=-->
-                                                <!--begin::Unit=-->
-                                                <td>{{ $questionProject->note_question }}
-                                                </td>
-                                                <!--end::Unit=-->
                                             </tr>
                                         @endif
                                     @empty
@@ -1048,15 +1049,424 @@
 
                         </table>
                         <!--End:Table: Review-->
+                        
+                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                            Dokumen NDA
+                            <i class="bi-info-circle-fill" class="btn btn-secondary mx-4"
+                            data-bs-toggle="tooltip" data-bs-placement="top"
+                            data-bs-custom-class="custom-tooltip"
+                            data-bs-title="Upload dokumen ini ada di <b>CRM Detail Proyek</b>"
+                            data-bs-html="true"></i>
+                            {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
+                                data-bs-target="#kt_modal_risk_proyek">+</a> --}}
+                        </h3>
 
+                        <!--begin:Table: Review-->
+                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                            <!--begin::Table head-->
+                            <thead>
+                                <!--begin::Table row-->
+                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                    <th class="min-w-125px">Nama</th>
+                                    <th class="min-w-125px">Tanggal</th>
+                                </tr>
+                                <!--end::Table row-->
+                            </thead>
+                            <!--end::Table head-->
+                            <!--begin::Table body-->
+                            <tbody class="fw-bold text-gray-400">
+                                {{-- @if ($contract->inputRisks->contains('stage', 0))
+                                    @forelse ($contract->inputRisks as $inputRisk)
+                                        @if ($inputRisk->stage == 0)
+                                            <tr>
+                                                <!--begin::Name=-->
+                                                <td>
+                                                    <p class="text-gray-600 mb-1">{{ $inputRisk->resiko }}</p>
+                                                </td>
+                                                <!--end::Name=-->
+                                                <!--begin::Name=-->
+                                                <td>
+                                                    <p class="text-gray-600 mb-1">{{ $inputRisk->penyebab }}</p>
+                                                </td>
+                                                <!--end::Name=-->
+                                                <!--begin::Kode=-->
+                                                <td>
+                                                    <p class="text-gray-600 mb-1">{{ $inputRisk->dampak }}</p>
+                                                </td>
+                                                <!--end::Kode=-->
+                                                <!--begin::Unit=-->
+                                                <td>
+                                                    <p class="text-gray-600 mb-1">{{ $inputRisk->mitigasi }}</p>
+                                                </td>
+                                                <!--end::Unit=-->
+                                            </tr>
+                                        @endif
+                                    @empty
+                                        <tr>
+                                            <td colspan="4" class="text-center">
+                                                <h6><b>There is no data</b></h6>
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                @else
+                                    <tr>
+                                        <td colspan="4" class="text-center">
+                                            <h6><b>There is no data</b></h6>
+                                        </td>
+                                    </tr>
+                                @endif --}}
+                                @forelse ($contract->project->DokumenNda as $nda)
+                                    <tr>
+                                        <td>
+                                            <a target="_blank" href="{{asset("/words/$nda->id_document.pdf")}}" class="text-hover-primary">{{$nda->nama_dokumen}}</a>
+                                        </td>
+                                        <td>
+                                            {{Carbon\Carbon::createFromTimeString($nda->created_at)->translatedFormat("d F Y")}}
+                                        </td>
+                                    </tr>
+                                @empty
+                                    
+                                @endforelse
+                            </tbody>
+                            <!--end::Table body-->
 
-                        &nbsp;<br>
-                        &nbsp;<br>
-
+                        </table>
+                        <!--End:Table: Review-->
                         <br>
                         <br>
 
-                        {{-- <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                            Dokumen MoU
+                            <i class="bi-info-circle-fill" class="btn btn-secondary mx-4"
+                            data-bs-toggle="tooltip" data-bs-placement="top"
+                            data-bs-custom-class="custom-tooltip"
+                            data-bs-title="Upload dokumen ini ada di <b>CRM Detail Proyek</b>"
+                            data-bs-html="true"></i>
+                            {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
+                                data-bs-target="#kt_modal_risk_proyek">+</a> --}}
+                        </h3>
+
+                        <!--begin:Table: Review-->
+                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                            <!--begin::Table head-->
+                            <thead>
+                                <!--begin::Table row-->
+                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                    <th class="min-w-125px">Nama</th>
+                                    <th class="min-w-125px">Tanggal</th>
+                                </tr>
+                                <!--end::Table row-->
+                            </thead>
+                            <!--end::Table head-->
+                            <!--begin::Table body-->
+                            <tbody class="fw-bold text-gray-400">
+                                @forelse ($contract->project->DokumenMou as $nda)
+                                    <tr>
+                                        <td>
+                                            <a target="_blank" href="{{asset("/words/$nda->id_document.pdf")}}" class="text-hover-primary">{{$nda->nama_dokumen}}</a>
+                                        </td>
+                                        <td>
+                                            {{Carbon\Carbon::createFromTimeString($nda->created_at)->translatedFormat("d F Y")}}
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="2" class="text-center">
+                                            <b>There is no data</b>
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                            <!--end::Table body-->
+
+                        </table>
+                        <!--End:Table: Review-->
+
+                        <br><br>
+
+                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                            Dokumen ECA
+                            <i class="bi-info-circle-fill" class="btn btn-secondary mx-4"
+                            data-bs-toggle="tooltip" data-bs-placement="top"
+                            data-bs-custom-class="custom-tooltip"
+                            data-bs-title="Upload dokumen ini ada di <b>CRM Detail Proyek</b>"
+                            data-bs-html="true"></i>
+                            {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
+                                data-bs-target="#kt_modal_risk_proyek">+</a> --}}
+                        </h3>
+
+                        <!--begin:Table: Review-->
+                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                            <!--begin::Table head-->
+                            <thead>
+                                <!--begin::Table row-->
+                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                    <th class="min-w-125px">Nama</th>
+                                    <th class="min-w-125px">Tanggal</th>
+                                </tr>
+                                <!--end::Table row-->
+                            </thead>
+                            <!--end::Table head-->
+                            <!--begin::Table body-->
+                            <tbody class="fw-bold text-gray-400">
+                                @forelse ($contract->project->DokumenEca as $nda)
+                                    <tr>
+                                        <td>
+                                            <a target="_blank" href="{{asset("/words/$nda->id_document.pdf")}}" class="text-hover-primary">{{$nda->nama_dokumen}}</a>
+                                        </td>
+                                        <td>
+                                            {{Carbon\Carbon::createFromTimeString($nda->created_at)->translatedFormat("d F Y")}}
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="2" class="text-center">
+                                            <b>There is no data</b>
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                            <!--end::Table body-->
+
+                        </table>
+                        <!--End:Table: Review-->
+
+                        <br><br>
+
+
+                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                            Dokumen ICA
+                            <i class="bi-info-circle-fill" class="btn btn-secondary mx-4"
+                            data-bs-toggle="tooltip" data-bs-placement="top"
+                            data-bs-custom-class="custom-tooltip"
+                            data-bs-title="Upload dokumen ini ada di <b>CRM Detail Proyek</b>"
+                            data-bs-html="true"></i>
+                            {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
+                                data-bs-target="#kt_modal_risk_proyek">+</a> --}}
+                        </h3>
+
+                        <!--begin:Table: Review-->
+                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                            <!--begin::Table head-->
+                            <thead>
+                                <!--begin::Table row-->
+                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                    <th class="min-w-125px">Nama</th>
+                                    <th class="min-w-125px">Tanggal</th>
+                                </tr>
+                                <!--end::Table row-->
+                            </thead>
+                            <!--end::Table head-->
+                            <!--begin::Table body-->
+                            <tbody class="fw-bold text-gray-400">
+                                @forelse ($contract->project->DokumenIca as $nda)
+                                    <tr>
+                                        <td>
+                                            <a target="_blank" href="{{asset("/words/$nda->id_document.pdf")}}" class="text-hover-primary">{{$nda->nama_dokumen}}</a>
+                                        </td>
+                                        <td>
+                                            {{Carbon\Carbon::createFromTimeString($nda->created_at)->translatedFormat("d F Y")}}
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="2" class="text-center">
+                                            <b>There is no data</b>
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                            <!--end::Table body-->
+
+                        </table>
+                        <!--End:Table: Review-->
+                        <br><br>
+                        
+                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                            Dokumen ITB / TOR
+                            <i class="bi-info-circle-fill" class="btn btn-secondary mx-4"
+                            data-bs-toggle="tooltip" data-bs-placement="top"
+                            data-bs-custom-class="custom-tooltip"
+                            data-bs-title="Upload dokumen ini ada di <b>CRM Detail Proyek</b>"
+                            data-bs-html="true"></i>
+                            {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
+                                data-bs-target="#kt_modal_risk_proyek">+</a> --}}
+                        </h3>
+
+                        <!--begin:Table: Review-->
+                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                            <!--begin::Table head-->
+                            <thead>
+                                <!--begin::Table row-->
+                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                    <th class="min-w-125px">Nama</th>
+                                    <th class="min-w-125px">Tanggal</th>
+                                </tr>
+                                <!--end::Table row-->
+                            </thead>
+                            <!--end::Table head-->
+                            <!--begin::Table body-->
+                            <tbody class="fw-bold text-gray-400">
+                                @forelse ($contract->project->DokumenItbTor as $nda)
+                                    <tr>
+                                        <td>
+                                            <a target="_blank" href="{{asset("/words/$nda->id_document.pdf")}}" class="text-hover-primary">{{$nda->nama_dokumen}}</a>
+                                        </td>
+                                        <td>
+                                            {{Carbon\Carbon::createFromTimeString($nda->created_at)->translatedFormat("d F Y")}}
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="2" class="text-center">
+                                            <b>There is no data</b>
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                            <!--end::Table body-->
+
+                        </table>
+                        <br><br>
+                        <!--End:Table: Review-->
+                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                            Dokumen RKS / Project Spesification
+                            <i class="bi-info-circle-fill" class="btn btn-secondary mx-4"
+                            data-bs-toggle="tooltip" data-bs-placement="top"
+                            data-bs-custom-class="custom-tooltip"
+                            data-bs-title="Upload dokumen ini ada di <b>CRM Detail Proyek</b>"
+                            data-bs-html="true"></i>
+                            {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
+                                data-bs-target="#kt_modal_risk_proyek">+</a> --}}
+                        </h3>
+
+                        <!--begin:Table: Review-->
+                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                            <!--begin::Table head-->
+                            <thead>
+                                <!--begin::Table row-->
+                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                    <th class="min-w-125px">Nama</th>
+                                    <th class="min-w-125px">Tanggal</th>
+                                </tr>
+                                <!--end::Table row-->
+                            </thead>
+                            <!--end::Table head-->
+                            <!--begin::Table body-->
+                            <tbody class="fw-bold text-gray-400">
+                                @forelse ($contract->project->DokumenRks as $nda)
+                                    <tr>
+                                        <td>
+                                            <a target="_blank" href="{{asset("/words/$nda->id_document.pdf")}}" class="text-hover-primary">{{$nda->nama_dokumen}}</a>
+                                        </td>
+                                        <td>
+                                            {{Carbon\Carbon::createFromTimeString($nda->created_at)->translatedFormat("d F Y")}}
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="2" class="text-center">
+                                            <b>There is no data</b>
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                            <!--end::Table body-->
+
+                        </table>
+                        <br><br>
+                        <!--End:Table: Review-->
+                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                            Dokumen Draft Kontrak
+                            {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
+                                data-bs-target="#kt_modal_risk_proyek">+</a> --}}
+                        </h3>
+
+                        <!--begin:Table: Review-->
+                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                            <!--begin::Table head-->
+                            <thead>
+                                <!--begin::Table row-->
+                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                    <th class="min-w-125px">Nama</th>
+                                    <th class="min-w-125px">Tanggal</th>
+                                </tr>
+                                <!--end::Table row-->
+                            </thead>
+                            <!--end::Table head-->
+                            <!--begin::Table body-->
+                            <tbody class="fw-bold text-gray-400">
+                                @forelse ($contract->project->DokumenDraft as $nda)
+                                    <tr>
+                                        <td>
+                                            <a target="_blank" href="{{asset("/words/$nda->id_document.pdf")}}" class="text-hover-primary">{{$nda->nama_dokumen}}</a>
+                                        </td>
+                                        <td>
+                                            {{Carbon\Carbon::createFromTimeString($nda->created_at)->translatedFormat("d F Y")}}
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="2" class="text-center">
+                                            <b>There is no data</b>
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                            <!--end::Table body-->
+
+                        </table>
+                        <!--End:Table: Review-->
+                        <br><br>
+                        <!--End:Table: Review-->
+                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                            Dokumen LOI
+                            <i class="bi-info-circle-fill" class="btn btn-secondary mx-4"
+                            data-bs-toggle="tooltip" data-bs-placement="top"
+                            data-bs-custom-class="custom-tooltip"
+                            data-bs-title="Upload dokumen ini ada di <b>CRM Detail Proyek</b>"
+                            data-bs-html="true"></i>
+                            {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
+                                data-bs-target="#kt_modal_risk_proyek">+</a> --}}
+                        </h3>
+
+                        <!--begin:Table: Review-->
+                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                            <!--begin::Table head-->
+                            <thead>
+                                <!--begin::Table row-->
+                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                    <th class="min-w-125px">Nama</th>
+                                    <th class="min-w-125px">Tanggal</th>
+                                </tr>
+                                <!--end::Table row-->
+                            </thead>
+                            <!--end::Table head-->
+                            <!--begin::Table body-->
+                            <tbody class="fw-bold text-gray-400">
+                                @forelse ($contract->project->AttachmentMenang as $nda)
+                                    <tr>
+                                        <td>
+                                            <a target="_blank" href="{{asset("/words/$nda->id_document.pdf")}}" class="text-hover-primary">{{$nda->nama_attachment}}</a>
+                                        </td>
+                                        <td>
+                                            {{Carbon\Carbon::createFromTimeString($nda->created_at)->translatedFormat("d F Y")}}
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="2" class="text-center">
+                                            <b>There is no data</b>
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                            <!--end::Table body-->
+
+                        </table>
+                        <!--End:Table: Review-->
+
+                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Usulan Perubahan Draft Kontrak
                                 <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_usulan_perubahan_draft_kontrak">+</a>
@@ -1068,9 +1478,10 @@
                                 <thead>
                                     <!--begin::Table row-->
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                        <th class="min-w-125px">Review Usulan</th>
+                                        <th class="min-w-125px">Isu</th>
+                                        <th class="min-w-125px">Deskripsi Klausul Awal</th>
+                                        <th class="min-w-125px">Usulan Perubahan</th>
                                         <th class="min-w-125px">Keterangan</th>
-                                        <th class="min-w-125px">Pasal Perbaikan</th>
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>
@@ -1079,7 +1490,7 @@
                                 <tbody class="fw-bold text-gray-600">
                                     @if ($contract->UsulanPerubahanDraft->contains('kategori', 1))
                                         <tr>
-                                            <td colspan="5" class= px-4">
+                                            <td colspan="5" class= "px-4 text-bg-dark">
                                                 <b>Surat Perjanjian Kontrak</b>
                                             </td>
                                         </tr>
@@ -1089,13 +1500,10 @@
                                                     $pasals = collect(explode("|", $perubahan_draft->pasal_perbaikan));
                                                 @endphp
                                                 @if ($perubahan_draft->kategori == 1)
-                                                    <td>{{$perubahan_draft->ReviewContract->DraftContract->title_draft}}</td>
+                                                    <td>{{$perubahan_draft->isu}}</td>
+                                                    <td>{{$perubahan_draft->deskripsi_klausul_awal}}</td>
+                                                    <td>{{$perubahan_draft->usulan_perubahan_klausul}}</td>
                                                     <td>{{$perubahan_draft->keterangan}}</td>
-                                                    <td>
-                                                        @foreach ($pasals as $pasal)
-                                                        - {{$pasal}} <br> 
-                                                        @endforeach
-                                                    </td>
                                                 @endif
                                             @endforeach
                                         </tr>
@@ -1103,7 +1511,7 @@
 
                                     @if ($contract->UsulanPerubahanDraft->contains('kategori', 2))
                                         <tr>
-                                            <td colspan="5" class= px-4">
+                                            <td colspan="5" class= "px-4 text-bg-dark">
                                                 <b>Syarat-syarat Umum Kontrak (SSUK)</b>
                                             </td>
                                         </tr>
@@ -1113,13 +1521,10 @@
                                                     $pasals = collect(explode("|", $perubahan_draft->pasal_perbaikan));
                                                 @endphp
                                                 @if ($perubahan_draft->kategori == 2)
-                                                    <td>{{$perubahan_draft->ReviewContract->DraftContract->title_draft}}</td>
+                                                    <td>{{$perubahan_draft->isu}}</td>
+                                                    <td>{{$perubahan_draft->deskripsi_klausul_awal}}</td>
+                                                    <td>{{$perubahan_draft->usulan_perubahan_klausul}}</td>
                                                     <td>{{$perubahan_draft->keterangan}}</td>
-                                                    <td>
-                                                        @foreach ($pasals as $pasal)
-                                                        - {{$pasal}} <br>
-                                                        @endforeach
-                                                    </td>
                                                 @endif
                                             @endforeach
                                         </tr>
@@ -1127,7 +1532,7 @@
 
                                     @if ($contract->UsulanPerubahanDraft->contains('kategori', 3))
                                         <tr>
-                                            <td colspan="5" class= px-4">
+                                            <td colspan="5" class= "px-4 text-bg-dark">
                                                 <b>Syarat-syarat Khusus Kontrak (SSKK)</b>
                                             </td>
                                         </tr>
@@ -1137,13 +1542,10 @@
                                                     $pasals = collect(explode("|", $perubahan_draft->pasal_perbaikan));
                                                 @endphp
                                                 @if ($perubahan_draft->kategori == 3)
-                                                    <td>{{$perubahan_draft->ReviewContract->DraftContract->title_draft}}</td>
+                                                    <td>{{$perubahan_draft->isu}}</td>
+                                                    <td>{{$perubahan_draft->deskripsi_klausul_awal}}</td>
+                                                    <td>{{$perubahan_draft->usulan_perubahan_klausul}}</td>
                                                     <td>{{$perubahan_draft->keterangan}}</td>
-                                                    <td>
-                                                        @foreach ($pasals as $pasal)
-                                                        - {{$pasal}} <br>
-                                                        @endforeach
-                                                    </td>
                                                 @endif
                                             @endforeach
                                         </tr>
@@ -1152,7 +1554,7 @@
                                 <!--end::Table body-->
 
                             </table>
-                            End:Table: Review--> --}}
+                            <!--End:Table: Review-->
                     </div>
                 </div>
                 <!--end:::Tab pane Informasi Perusahaan-->
@@ -2848,7 +3250,7 @@
 <!--end::Modal - Draft Contract-->
 @isset($contract)
 
-@if ($contract->stages > 1)
+@if ($contract->stages >= 1)
 
     <!--begin::Modal - Draft Contract Tender Menang-->
     <div class="modal fade" id="kt_modal_draft_menang" tabindex="-1" aria-hidden="true">
@@ -4655,6 +5057,811 @@
 @endif
 @endisset
 
+<!--Begin::Modal - Detail Proyek-->
+<div class="modal fade" id="detailProyek" tabindex="-1" aria-labelledby="detailProyekLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="detailProyekLabel">Detail Proyek (Read Only)</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+             <!--begin::Row-->
+             <div class="row fv-row">
+                <!--begin::Col-->
+                <div class="col-6">
+                    <!--begin::Input group Website-->
+                    <div class="fv-row mb-7">
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span>No SPK External</span>
+                        </label>
+                        <!--end::Label-->
+
+                        <!--begin::Input-->
+                        <input type="text" disabled readonly
+                            class="form-control form-control-solid"
+                            id="nospk-external" name="nospk-external"
+                            value="{{ $contract->project->nospk_external ?? "Kosong" }}"
+                            placeholder="No SPK External" />
+                        <!--end::Input-->
+                    </div>
+                    <!--end::Input group-->
+                </div>
+                <!--End begin::Col-->
+                <div class="col-6">
+                    <!--begin::Input group Website-->
+                    <div class="fv-row mb-7">
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span>Jenis Proyek</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input type="text" disabled readonly
+                            class="form-control form-control-solid"
+                            value="{{ $contract->project->jenis_proyek ?? "Kosong" == 'I' ? 'Internal' : ($contract->project->jenis_proyek ?? "Kosong" == 'N' ? 'External' : 'JO') }}"
+                            readonly />
+                        <!--end::Input-->
+                    </div>
+                    <!--end::Input group-->
+                </div>
+                <!--End begin::Col-->
+            </div>
+            <!--End begin::Row-->
+
+            <!--begin::Row-->
+            <div class="row fv-row">
+                <!--begin::Col-->
+                <div class="col-6">
+                    <!--begin::Input group Website-->
+                    <div class="fv-row mb-7">
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span>Tanggal SPK Internal</i></span>
+                        </label>
+                        
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input disabled type="text" disabled readonly
+                            class="form-control form-control-solid"
+                            id="tglspk-internal" name="tglspk-internal"
+                            value="{{ $contract->project->tglspk_internal ?? "Kosong" }}"
+                            placeholder="Date" />
+                        <!--end::Input-->
+                    </div>
+                    <!--end::Input group-->
+                </div>
+                <!--End begin::Col-->
+                <div class="col-1">
+                    <!--begin::Input group Website-->
+                    <div class="fv-row mb-7">
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span>Porsi JO (<i
+                                    class="bi bi-percent text-dark"></i>)</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input disabled type="text" disabled readonly
+                            class="form-control form-control-solid {{ $contract->project->porsi_jo == null ? 'text-danger' : '' }}"
+                            value="{{ (int) $contract->project->porsi_jo ?? "Kosong" ?? '*Porsi JO Belum Ditentukan' }}"
+                            placeholder="Porsi JO" readonly />
+                        <!--end::Input-->
+                    </div>
+                    <!--end::Input group-->
+                </div>
+                <div class="col-1">
+                    <!--begin::Label-->
+                    <label class="fs-6 fw-bold form-label mt-3">
+                    </label>
+                    <p class="mt-16"><i class="bi bi-percent text-dark"></i>
+                    </p>
+                    <!--end::Label-->
+                </div>
+                <!--End begin::Col-->
+            </div>
+            <!--End begin::Row-->
+
+            <!--begin::Row-->
+            <div class="row fv-row">
+                <!--begin::Col-->
+                <div class="col-6">
+                    <!--begin::Input group Website-->
+                    <div class="fv-row mb-7">
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span>Tahun RI Perolehan</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input disabled type="text" disabled readonly
+                            class="form-control form-control-solid"
+                            id="" name="tahun-ri-perolehan"
+                            value="{{ $contract->project->tahun_ri_perolehan ?? "Kosong" }}"
+                            placeholder="Tahun Ri Perolehan" />
+                        <!--end::Input-->
+                    </div>
+                    <!--end::Input group-->
+                </div>
+                <!--End begin::Col-->
+                <div class="col-6">
+                    <!--begin::Input group Website-->
+                    <div class="fv-row mb-7">
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span>Nilai OK Review (Valas) (Exclude Tax)</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input disabled type="text" disabled readonly
+                            class="form-control form-control-solid reformat {{ $contract->project->nilai_valas_review ?? "Kosong" == null ? 'text-danger' : '' }}"
+                            value="{{ number_format((int) str_replace('.', '', $contract->project->nilai_valas_review ?? "Kosong"), 0, '.', '.') ?? '*Nilai OK Review Belum Ditentukan' }}"
+                            placeholder="Nilai OK Review (Valas) (Exclude Tax)"
+                            readonly />
+                        <!--end::Input-->
+                    </div>
+                    <!--end::Input group-->
+                </div>
+                <!--End begin::Col-->
+            </div>
+            <!--End begin::Row-->
+
+            <!--begin::Row-->
+            <div class="row fv-row">
+                <!--begin::Col-->
+                <div class="col-6">
+                    <!--begin::Input group Website-->
+                    <div class="fv-row mb-7">
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span>Bulan RI Perolehan</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--Begin::Input-->
+                        <select disabled id="bulan-ri-perolehan"
+                            name="bulan-ri-perolehan"
+                            class="form-select form-select-solid"
+                            data-control="select2" data-hide-search="true"
+                            data-placeholder="Pilih Bulan RI Perolehan">
+                            <option></option>
+                            <option value="1"
+                                {{ $contract->project->bulan_ri_perolehan ?? "Kosong" == '1' ? 'selected' : '' }}>
+                                Januari</option>
+                            <option value="2"
+                                {{ $contract->project->bulan_ri_perolehan ?? "Kosong" == '2' ? 'selected' : '' }}>
+                                Februari</option>
+                            <option value="3"
+                                {{ $contract->project->bulan_ri_perolehan ?? "Kosong" == '3' ? 'selected' : '' }}>
+                                Maret</option>
+                            <option value="4"
+                                {{ $contract->project->bulan_ri_perolehan ?? "Kosong" == '4' ? 'selected' : '' }}>
+                                April</option>
+                            <option value="5"
+                                {{ $contract->project->bulan_ri_perolehan ?? "Kosong" == '5' ? 'selected' : '' }}>
+                                Mei</option>
+                            <option value="6"
+                                {{ $contract->project->bulan_ri_perolehan ?? "Kosong" == '6' ? 'selected' : '' }}>
+                                Juni</option>
+                            <option value="7"
+                                {{ $contract->project->bulan_ri_perolehan ?? "Kosong" == '7' ? 'selected' : '' }}>
+                                Juli</option>
+                            <option value="8"
+                                {{ $contract->project->bulan_ri_perolehan ?? "Kosong" == '8' ? 'selected' : '' }}>
+                                Agustus</option>
+                            <option value="9"
+                                {{ $contract->project->bulan_ri_perolehan ?? "Kosong" == '9' ? 'selected' : '' }}>
+                                September</option>
+                            <option value="10"
+                                {{ $contract->project->bulan_ri_perolehan ?? "Kosong" == '10' ? 'selected' : '' }}>
+                                Oktober</option>
+                            <option value="11"
+                                {{ $contract->project->bulan_ri_perolehan ?? "Kosong" == '11' ? 'selected' : '' }}>
+                                November</option>
+                            <option value="12"
+                                {{ $contract->project->bulan_ri_perolehan ?? "Kosong" == '12' ? 'selected' : '' }}>
+                                Desember</option>
+                        </select>
+                        <!--end::Input-->
+                    </div>
+                    <!--end::Input group-->
+                </div>
+                <!--End begin::Col-->
+                <div class="col-6">
+                    <!--begin::Input group Website-->
+                    <div class="fv-row mb-7">
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span>Mata Uang</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--Begin::Input-->
+                        <input disabled type="text" disabled readonly
+                            class="form-control form-control-solid {{ $contract->project->mata_uang_review ?? "Kosong" == null && $contract->project->mata_uang_awal ?? "Kosong" == null ? 'text-danger' : '' }}"
+                            value="{{ $contract->project->mata_uang_review ?? "Kosong" ?? ($contract->project->mata_uang_awal ?? "Kosong" ?? '*Mata Uang Belum Ditentukan') }}"
+                            readonly />
+                        <!--end::Input-->
+                    </div>
+                    <!--end::Input group-->
+                </div>
+                <!--End begin::Col-->
+            </div>
+            <!--End begin::Row-->
+
+            <!--begin::Row Kanan+Kiri-->
+            <div class="row fv-row">
+                <!--begin::Col-->
+                <div class="col-6">
+                    <!--begin::Input group Website-->
+                    <div class="fv-row mb-7">
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span>No Kontrak</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <div class="d-flex align-items-center position-relative">
+                            <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
+                            {{-- <span id="view-kontrak" class="svg-icon svg-icon-1 position-absolute ms-4">
+                                    <a href="/contract-management/view/{{ $contract->project->nomor_terkontrak ?? "Kosong" }}" class="text-gray-800 text-hover-primary mb-1">{{ $contract->project->nomor_terkontrak ?? "Kosong" }}</a>
+                                </span>
+                                <input disabled onclick="viewKontrak(this)" type="text" disabled readonly id="fake-terkontrak"
+                                    class="form-control form-control-solid"
+                                    value="" readonly/> --}}
+                            <!--end::Svg Icon-->
+                            <input disabled onfocusout="displayKontrak(this)"
+                                type="text" disabled readonly
+                                class="form-control form-control-solid"
+                                id="nomor-terkontrak" name="nomor-terkontrak"
+                                value="{{ $contract->project->nomor_terkontrak ?? "Kosong" }}"
+                                placeholder="" onpaste="return false" />
+                        </div>
+                        <p style="display: none" id="char-error"
+                            class="text-danger fw-normal">*Not Allowed : / \ ?
+                            #;</p>
+                        <script>
+                            // document.getElementById("nomor-terkontrak").onkeypress = function(e) {
+                            //     var chr = String.fromCharCode(e.which);
+                            //     if (`/ \ ? #`.indexOf(chr) >= 0){
+                            //     // if (`!?"'#%&()*/@[\]^_{|}><~;`.indexOf(chr) >= 0){
+                            //         document.getElementById('char-error').style.display = "";
+                            //     // showError(chr)
+                            //     return false;
+                            //     }
+                            //     return true
+                            // };
+                            // function viewKontrak(e) {
+                            //     document.getElementById('fake-terkontrak').style.display = "none";
+                            //     document.getElementById('view-kontrak').style.display = "none";
+                            //     document.getElementById('nomor-terkontrak').style.display = "";
+                            //     // e.value = "{{ $contract->project->nomor_terkontrak ?? "Kosong" }}";
+                            // }
+                            // function displayKontrak(e) {
+                            //     document.getElementById('view-kontrak').style.display = "";
+                            //     document.getElementById('view-kontrak').innerHTML = e.value;
+                            //     document.getElementById('fake-terkontrak').style.display = "";
+                            //     document.getElementById('nomor-terkontrak').style.display = "none";
+                            //     // console.log(e);
+                            // }
+                        </script>
+                        <!--end::Input-->
+                    </div>
+                    <!--end::Input group-->
+                </div>
+                <!--End begin::Col-->
+                <div class="col-6">
+                    <!--begin::Input group Website-->
+                    <div class="fv-row mb-7">
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span>Kurs Review</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input disabled onkeyup="hitungReview()" type="text" disabled readonly
+                            class="form-control form-control-solid {{ $contract->project->kurs_review ?? "Kosong" == null ? 'text-danger' : '' }}"
+                            value="{{ $contract->project->kurs_review ?? "Kosong" ?? '*Kurs Review Belum Ditentukan' }}"
+                            placeholder="Kurs Review" readonly />
+                        <!--end::Input-->
+                    </div>
+                    <!--end::Input group-->
+                </div>
+                <!--End::Col-->
+            </div>
+            <!--End::Row Kanan+Kiri-->
+
+
+            <!--begin::Row Kanan+Kiri-->
+            <div class="row fv-row">
+                <!--begin::Col-->
+                <div class="col-6">
+                    <!--begin::Input group Website-->
+                    <div class="fv-row mb-7">
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span>Tanggal Kontrak</span>
+                        </label>
+                        
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input disabled type="text" disabled readonly
+                            class="form-control form-control-solid"
+                            id="tanggal-terkontrak" name="tanggal-terkontrak"
+                            value="{{ $contract->project->tanggal_terkontrak ?? "Kosong" }}"
+                            placeholder="Date" />
+                        <!--end::Input-->
+                    </div>
+                    <!--end::Input group-->
+                </div>
+                <!--End begin::Col-->
+                @php
+                    if ($contract->project->stage == 8 || $contract->project->stage == 9) {
+                        if ($contract->project->nilai_perolehan != null && $contract->project->porsi_jo != null) {
+                            $nilaiPerolehan = (int) str_replace('.', '', $contract->project->nilai_perolehan);
+                            $kontrakKeseluruhan = ($nilaiPerolehan * 100) / (int) $contract->project->porsi_jo;
+                            $nilaiKontrakKeseluruhan = number_format((int) str_replace('.', '', round($kontrakKeseluruhan)), 0, '.', '.');
+                        }
+                    } else {
+                        $nilaiKontrakKeseluruhan = 0;
+                    }
+                    // dump( $nilaiKontrakKeseluruhan)
+                @endphp
+                <div class="col-6">
+                    <!--begin::Input group Website-->
+                    <div class="fv-row mb-7">
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span>Nilai Kontrak Keseluruhan</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        {{-- <input disabled type="text" disabled readonly
+                                class="form-control form-control-solid reformat {{ $contract->project->nilai_kontrak_keseluruhan == null ? 'text-danger' : '' }}"
+                                value="{{ number_format((int) str_replace('.', '', $contract->project->nilai_kontrak_keseluruhan), 0, '.', '.') ?? '*Nilai Perolehan Belum Ditentukan' }}"
+                                id="nilai-kontrak-keseluruhan"
+                                name="nilai-kontrak-keseluruhan"
+                                placeholder="*Nilai Perolehan Belum Ditentukan"
+                                readonly /> --}}
+                        <input disabled type="text" disabled readonly
+                            class="form-control form-control-solid reformat {{ $nilaiKontrakKeseluruhan == 0 ? 'text-danger' : '' }}"
+                            value="{{ $nilaiKontrakKeseluruhan == 0 ? '' : $nilaiKontrakKeseluruhan }}"
+                            id="nilai-kontrak-keseluruhan"
+                            name="nilai-kontrak-keseluruhan"
+                            placeholder="*Nilai Perolehan Belum Ditentukan"
+                            readonly />
+                        <!--end::Input-->
+                    </div>
+                    <!--end::Input group-->
+                </div>
+                <!--End::Col-->
+            </div>
+            <!--End::Row Kanan+Kiri-->
+
+
+            <!--begin::Row Kanan+Kiri-->
+            <div class="row fv-row">
+                <!--begin::Col-->
+                <div class="col-6">
+                    <!--begin::Input group Website-->
+                    <div class="fv-row mb-7">
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span>Tanggal Mulai Kontrak</span>
+                        </label>
+                        
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input disabled type="text" disabled readonly
+                            class="form-control form-control-solid"
+                            id="tanggal-mulai-kontrak"
+                            name="tanggal-mulai-kontrak"
+                            value="{{ $contract->project->tanggal_mulai_terkontrak ?? "Kosong" }}"
+                            placeholder="Date" />
+                        <!--end::Input-->
+                    </div>
+                    <!--end::Input group-->
+                </div>
+                <!--End begin::Col-->
+                <div class="col-6">
+                    <!--begin::Input group Website-->
+                    <div class="fv-row mb-7">
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span>Nilai Kontrak (Porsi WIKA)</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input disabled type="text" disabled readonly
+                            class="form-control form-control-solid reformat {{ $contract->project->nilai_perolehan == null ? 'text-danger' : '' }}"
+                            value="{{ number_format((int) str_replace('.', '', $contract->project->nilai_perolehan), 0, '.', '.') ?? '*Nilai Perolehan Belum Ditentukan' }}"
+                            placeholder="Nilai Kontrak (Porsi WIKA)" readonly />
+                        <!--end::Input-->
+                    </div>
+                    <!--end::Input group-->
+                </div>
+                <!--End::Col-->
+            </div>
+            <!--End::Row Kanan+Kiri-->
+
+
+            <!--begin::Row Kanan+Kiri-->
+            <div class="row fv-row">
+                <!--begin::Col-->
+                <div class="col-6">
+                    <!--begin::Input group Website-->
+                    <div class="fv-row mb-7">
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span>Tanggal Akhir Kontrak</span>
+                        </label>
+                        
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input disabled type="text" disabled readonly
+                            class="form-control form-control-solid"
+                            id="tanggal-akhir-kontrak"
+                            name="tanggal-akhir-kontrak"
+                            value="{{ $contract->project->tanggal_akhir_terkontrak ?? "Kosong" }}"
+                            placeholder="Date" />
+                        <!--end::Input-->
+                    </div>
+                    <!--end::Input group-->
+                </div>
+                <!--End begin::Col-->
+                <div class="col-6">
+                    <!--begin::Input group Website-->
+                    <div class="fv-row mb-7">
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span>Klasifikasi Proyek</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input disabled type="text" disabled readonly
+                            class="form-control form-control-solid"
+                            id="tanggal-selesai-kontrak-fho"
+                            name="tanggal-selesai-kontrak-fho"
+                            value="{{ $contract->project->klasifikasi_terkontrak ?? "Kosong" ?? "" }}"
+                            placeholder="" />
+                        <!--end::Input-->
+                    </div>
+                    <!--end::Input group-->
+                </div>
+                <!--End::Col-->
+            </div>
+            <!--End::Row Kanan+Kiri-->
+
+
+            <!--begin::Row Kanan+Kiri-->
+            <div class="row fv-row">
+                <!--begin::Col-->
+                <div class="col-6">
+                    <!--begin::Input group Website-->
+                    <div class="fv-row mb-7">
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span>Tanggal Selesai Bash PHO</span>
+                        </label>
+                        
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input disabled type="text" disabled readonly
+                            class="form-control form-control-solid"
+                            id="tanggal-selesai-kontrak-pho"
+                            name="tanggal-selesai-kontrak-pho"
+                            value="{{ $contract->project->tanggal_selesai_pho ?? "Kosong" }}"
+                            placeholder="Date" />
+                        <!--end::Input-->
+                    </div>
+                    <!--end::Input group-->
+                </div>
+                <!--End begin::Col-->
+                <div class="col-6">
+                    <!--begin::Input group Website-->
+                    <div class="fv-row mb-7">
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span>Jenis Kontrak</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input disabled type="text" disabled readonly
+                            class="form-control form-control-solid"
+                            id="tanggal-selesai-kontrak-pho"
+                            name="tanggal-selesai-kontrak-pho"
+                            value="{{ $contract->project->jenis_terkontrak ?? "Kosong" }}"
+                            placeholder="Date" />
+                        <!--end::Input-->
+                    </div>
+                    <!--end::Input group-->
+                </div>
+                <!--End::Col-->
+            </div>
+            <!--End::Row Kanan+Kiri-->
+
+            <!--begin::Row Kanan+Kiri-->
+            <div class="row fv-row">
+                <!--begin::Col-->
+                <div class="col-6">
+                    <!--begin::Input group Website-->
+                    <div class="fv-row mb-7">
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span>Tanggal Selesai Bash FHO</span>
+                        </label>
+                        
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input disabled type="text" disabled readonly
+                            class="form-control form-control-solid"
+                            id="tanggal-selesai-kontrak-fho"
+                            name="tanggal-selesai-kontrak-fho"
+                            value="{{ $contract->project->tanggal_selesai_fho ?? "Kosong" }}"
+                            placeholder="Date" />
+                        <!--end::Input-->
+                    </div>
+                    <!--end::Input group-->
+                </div>
+                <!--End begin::Col-->
+                <div class="col-6">
+                    <!--begin::Input group Website-->
+                    <div class="fv-row mb-7">
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span>Sistem Pembayaran</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input disabled type="text" disabled readonly
+                            class="form-control form-control-solid"
+                            id="tanggal-selesai-kontrak-fho"
+                            name="tanggal-selesai-kontrak-fho"
+                            value="{{ $contract->project->sistem_bayar ?? "Kosong" }}"
+                            placeholder="Date" />
+                        {{-- <select disabled id="sistem-bayar" name="sistem-bayar"
+                            class="form-select form-select-solid"
+                            data-control="select2" data-hide-search="true"
+                            data-placeholder="Sistem Pembayaran">
+                            <option></option>
+                            <option value="CPF (Turn Key)"
+                                {{ $contract->project->sistem_bayar ?? "Kosong" == 'CPF (Turn Key)' ? 'selected' : '' }}>
+                                CPF (Turn Key)</option>
+                            <option value="Milestone"
+                                {{ $contract->project->sistem_bayar ?? "Kosong" == 'Milestone' ? 'selected' : '' }}>
+                                Milestone</option>
+                            <option value="Monthly"
+                                {{ $contract->project->sistem_bayar ?? "Kosong" == 'Monthly' ? 'selected' : '' }}>
+                                Monthly</option>
+                        </select> --}}
+                        <!--end::Input-->
+                    </div>
+                    <!--end::Input group-->
+                </div>
+                <!--End::Col-->
+            </div>
+            <!--End::Row Kanan+Kiri-->
+
+            <!--Begin::Title Biru Form: History Adendum-->
+            {{-- <br>
+                <h3 class="fw-bolder m-0" id="HeadDetail"
+                    style="font-size:14px;">History Adendum
+                    <a href="#" Id="Plus" data-bs-toggle="modal"
+                        data-bs-target="#kt_modal_history_adendum">+</a>
+                </h3>
+                <br>
+                <!--begin::Table Kriteria Pasar-->
+                <table class="table align-middle table-row-dashed fs-6 gy-2"
+                    id="kt_customers_table">
+                    <!--begin::Table head-->
+                    <thead>
+                        <!--begin::Table row-->
+                        <tr
+                            class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                            <th class="w-50px text-center">No.</th>
+                            <th class="w-auto">Nama Pelanggan</th>
+                            <th class="w-auto">Nomor Adendum</th>
+                            <th class="w-auto">Nilai Adendum</th>
+                            <th class="w-auto">Tanggal Adendum</th>
+                            <th class="w-auto">Tgl Selesai Proyek</th>
+                            <th class="w-100px"></th>
+                        </tr>
+                        <!--end::Table row-->
+                    </thead>
+                    <!--end::Table head-->
+                    <!--begin::Table body-->
+                    @php
+                        $no = 1;
+                    @endphp
+                    <tbody class="fw-bold text-gray-600">
+                        @foreach ($contract->project->AdendumProyek ?? "Kosong" as $adendum)
+                            <tr>
+                                <!--begin::Name-->
+                                <td class="text-center">
+                                    {{ $no++ }}
+                                </td>
+                                <!--end::Name-->
+                                <!--begin::Column-->
+                                <td>
+                                    <a href="#"
+                                        class="text-gray-800 text-hover-primary"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#kt_modal_edit_adendum_{{ $adendum->id }}">{{ $adendum->pelanggan_adendum }}</a>
+                                </td>
+                                <!--end::Column-->
+                                <!--begin::Column-->
+                                <td>
+                                    {{ $adendum->nomor_adendum ?? "-" }}
+                                </td>
+                                <!--end::Column-->
+                                <!--begin::Column-->
+                                <td>
+                                    {{ $adendum->nilai_adendum ?? "-" }}
+                                </td>
+                                <!--end::Column-->
+                                <!--begin::Column-->
+                                <td>
+                                    {{ $adendum->tanggal_adendum ?? "-" }}
+                                </td>
+                                <!--end::Column-->
+                                <!--begin::Column-->
+                                <td>
+                                    {{ $adendum->tanggal_selesai_proyek ?? "-" }}
+                                </td>
+                                <!--end::Column-->
+                                <!--begin::Action-->
+                                <td class="text-center">
+                                    <small>
+                                        <p data-bs-toggle="modal"
+                                            data-bs-target="#kt_adendum_delete_{{ $adendum->id }}"
+                                            id="modal-delete"
+                                            class="btn btn-sm btn-light btn-active-primary">
+                                            Delete
+                                        </p>
+                                    </small>
+                                </td>
+                                <!--end::Action-->
+                            </tr>
+                        @endforeach
+                    </tbody>
+                    <!--end::Table body-->
+                </table> --}}
+            <!--End::Title Biru Form: History Adendum-->
+
+            <br>
+
+            <!--begin::Data Performance-->
+            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                Proyek Performance
+                <i onclick="hideperformance()" id="hide-performance"
+                    class="bi bi-arrows-collapse"></i>
+                <i onclick="showperformance()" id="show-performance"
+                    style="display: none" class="bi bi-arrows-expand"></i>
+            </h3>
+
+            <script>
+                function hideperformance() {
+                    document.getElementById("divProyekPerformance").style.display = "none";
+                    document.getElementById("hide-performance").style.display = "none";
+                    document.getElementById("show-performance").style.display = "";
+                }
+
+                function showperformance() {
+                    document.getElementById("divProyekPerformance").style.display = "";
+                    document.getElementById("hide-performance").style.display = "";
+                    document.getElementById("show-performance").style.display = "none";
+                }
+            </script>
+            <br>
+            <div id="divProyekPerformance">
+                <!--end::Data Performance-->
+                <!--begin::Row-->
+                <div class="row fv-row">
+                    <!--begin::Col-->
+                    <div class="col-6">
+                        <!--begin::Input group Website-->
+                        <div class="fv-row mb-7">
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span>Nilai OK (Excludde Ppn)&nbsp;<i
+                                        class="bi bi-lock"></i></span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input disabled type="text"
+                                class="form-control form-control-solid reformat"
+                                value="{{ number_format((int) str_replace('.', '', $contract->project->nilai_rkap ?? "Kosong"), 0, '.', '.') }}"
+                                placeholder="Nilai OK" readonly />
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+                    </div>
+                    <!--End begin::Col-->
+                    <div class="col-6">
+                        <!--begin::Input group Website-->
+                        <div class="fv-row mb-7">
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span>Piutang</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input disabled type="text"
+                                class="form-control form-control-solid reformat"
+                                name="piutang-performance"
+                                value="{{ number_format((int) str_replace('.', '', $contract->project->piutang ?? "Kosong"), 0, '.', '.') }}"
+                                placeholder="Piutang" />
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+                    </div>
+                    <!--End begin::Col-->
+                </div>
+                <!--End begin::Row-->
+                <!--begin::Row-->
+                <div class="row fv-row">
+                    <!--begin::Col-->
+                    <div class="col-6">
+                        <!--begin::Input group Website-->
+                        <div class="fv-row mb-7">
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span>Laba</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input disabled type="text"
+                                class="form-control form-control-solid reformat"
+                                name="laba-performance"
+                                value="{{ number_format((int) str_replace('.', '', $contract->project->laba ?? "Kosong"), 0, '.', '.') }}"
+                                placeholder="Laba" />
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+                    </div>
+                    <!--End begin::Col-->
+                    <div class="col-6">
+                        <!--begin::Input group Website-->
+                        <div class="fv-row mb-7">
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span>Rugi</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input disabled type="text"
+                                class="form-control form-control-solid reformat"
+                                name="rugi-performance"
+                                value="{{ number_format((int) str_replace('.', '', $contract->project->rugi ?? "Kosong"), 0, '.', '.') }}"
+                                placeholder="Rugi" />
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+                    </div>
+                    <!--End begin::Col-->
+                </div>
+                <!--End begin::Row-->
+            </div>
+
+            <!--Begin::Title Biru Form: Laporan Kualitatif-->
+            <br>
+            <h3 class="fw-bolder m-0 required" id="HeadDetail"
+                style="font-size:14px;">Laporan Kualitatif
+            </h3>
+            <br>
+            <div class="form-group">
+                <textarea class="form-control" disabled id="laporan-terkontrak" name="laporan-terkontrak" rows="7">{!! $contract->project->laporan_terkontrak ?? "Kosong" !!}</textarea>
+            </div>
+            {{-- <!--End::Title Biru Form: Laporan Kualitatif--> --}}
+            
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+<!--End::Modal - Detail Proyek-->
+
 <!--begin::Modal - Question Tender Menang-->
 <div class="modal fade" id="kt_modal_usulan_perubahan_draft_kontrak" tabindex="-1" aria-hidden="true">
 <!--begin::Modal dialog-->
@@ -4664,7 +5871,7 @@
         <!--begin::Modal header-->
         <div class="modal-header">
             <!--begin::Modal title-->
-            <h2>Add Usulan Perubahan Draft Kontrak</h2>
+            <h2>Add Usulan Perubahan</h2>
             <!--end::Modal title-->
             <!--begin::Close-->
             <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
@@ -4699,8 +5906,8 @@
                         </label>
                         <!--end::Label-->
                         <!--begin::Input-->
-                        {{-- <input type="hidden" value="1" name="is-tender-menang">
-                    <input type="hidden" class="modal-name" name="modal-name">
+                        {{-- <input disabled type="hidden" value="1" name="is-tender-menang">
+                    <input disabled type="hidden" class="modal-name" name="modal-name">
                             --}}
                         <select name="kategori" id="kategori" class="form-select form-select-solid"
                             data-control="select2" data-hide-search="true" data-placeholder="Pilih Kategori"
@@ -4718,7 +5925,7 @@
                             name="id-contract">
                         <input type="hidden" class="modal-name" name="modal-name">
 
-                        <!--begin::Label-->
+                        {{-- <!--begin::Label-->
                         <label class="fs-6 fw-bold form-label">
                             <span style="font-weight: normal">Pilih Review Kontrak</span>
                         </label>
@@ -4735,8 +5942,41 @@
                                     {{ $review->DraftContract->title_draft }}</option>
                             @endforeach
                         </select>
-                        <!--end::Input-->
-                        <br><br>
+                        <!--end::Input--> --}}
+
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label">
+                            <span style="font-weight: normal">Isu</span>
+                        </label>
+                        <!--end::Label-->
+                        
+                        <!--Begin::Input-->
+                        <input type="text" class="form-control form-control-solid" name="isu" placeholder="Isu">
+                        <!--End::Input-->
+                        
+                        <br>
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label">
+                            <span style="font-weight: normal">Deskripsi Klausul Awal</span>
+                        </label>
+                        <!--end::Label-->
+                        
+                        <!--Begin::Input-->
+                        <input type="text" class="form-control form-control-solid" name="deskripsi-klausul-awal" placeholder="Deskripsi Klausul Awal">
+                        <!--End::Input-->
+                        
+                        <br>
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label">
+                            <span style="font-weight: normal">Usulan Perubahan Klausul</span>
+                        </label>
+                        <!--end::Label-->
+                        
+                        <!--Begin::Input-->
+                        <input type="text" class="form-control form-control-solid" name="usulan-perubahan-klausul" placeholder="Usulan Perubahan Klausul">
+                        <!--End::Input-->
+                        
+                        <br>
                         <!--begin::Label-->
                         <label class="fs-6 fw-bold form-label">
                             <span style="font-weight: normal">Keterangan</span>
@@ -5185,80 +6425,59 @@
             <div class="fv-row mb-5">
                 <form action="/question/upload" enctype="multipart/form-data" method="POST">
                     @csrf
-                    <!--begin::Label-->
-                    <label class="fs-6 fw-bold form-label mt-3">
-                        <span style="font-weight: normal">Attachment</span>
-                    </label>
-                    <!--end::Label-->
                     <!--begin::Input-->
                     <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
                         name="id-contract">
                     <input type="hidden" class="modal-name" name="modal-name">
-                    <input type="file" class="form-control form-control-solid" name="attach-file-question"
-                        id="attach-file-question" value="" style="font-weight: normal" accept=".docx"
-                        placeholder="Name Proyek" />
-                    <!--end::Input-->
 
                     <!--begin::Label-->
                     <label class="fs-6 fw-bold form-label mt-3">
-                        <span style="font-weight: normal">Kategori Pertanyaan</span>
-                    </label>
-                    <!--end::Label-->
-
-                    {{-- Begin :: Select Kategori Dokumen --}}
-                    <select name="kategori-Aanwitjzing" id="kategori-Aanwitjzing"
-                        class="form-select form-select-solid" data-control="select2" data-hide-search="true"
-                        data-placeholder="Pilih Kategori Pertanyaan"
-                        data-select2-id="select2-data-kategori-Aanwitjzing" tabindex="-1" aria-hidden="true">
-                        <option value=""></option>
-                        <option value="Pertanyaan Aanwitjzing">
-                            Pertanyaan Aanwitjzing
-                        </option>
-                        <option value="Jawaban Aanwitjzing">
-                            Jawaban Aanwitjzing
-                        </option>
-                        <option value="Berita Acara Aanwitjzing">
-                            Berita Acara Aanwitjzing
-                        </option>
-                    </select>
-                    {{-- End :: Select Kategori Dokumen --}}
-
-                    <!--begin::Label-->
-                    <label class="fs-6 fw-bold form-label mt-3">
-                        <span style="font-weight: normal">Nama Dokumen</span>
+                        <span style="font-weight: normal">Item</span>
                     </label>
                     <!--end::Label-->
                     <!--begin::Input-->
                     <input type="text" class="form-control form-control-solid"
                         name="document-name-question" id="document-name-question" style="font-weight: normal"
-                        value="" placeholder="Nama Document" />
+                        value="" placeholder="Item" />
                     <!--end::Input-->
 
                     <!--begin::Label-->
                     <label class="fs-6 fw-bold form-label mt-3">
-                        <span style="font-weight: normal">Catatan</span>
+                        <span style="font-weight: normal">Sub Pasal</span>
                     </label>
                     <!--end::Label-->
                     <!--begin::Input-->
                     <input type="text" class="form-control form-control-solid" name="note-question"
                         id="note-question" style="font-weight: normal" value=""
-                        placeholder="Catatan" />
+                        placeholder="Sub" />
+                    <!--end::Input-->
+                    <small id="file-error-msg-question" style="color: rgb(199, 42, 42); display:none"></small>
+                    
+                    <!--begin::Label-->
+                    <label class="fs-6 fw-bold form-label mt-3">
+                        <span style="font-weight: normal">Daftar Pertanyaan</span>
+                    </label>
+                    <!--end::Label-->
+                    <!--begin::Input-->
+                    <input type="text" class="form-control form-control-solid" name="note-question"
+                        id="note-question" style="font-weight: normal" value=""
+                        placeholder="Daftar Pertanyaan" />
                     <!--end::Input-->
                     <small id="file-error-msg-question" style="color: rgb(199, 42, 42); display:none"></small>
 
-
                     {{-- begin::Froala Editor --}}
-                    <div id="froala-editor-question">
+                    {{-- <div id="froala-editor-question">
                         <h1>Attach file with <b>.DOCX</b> format only</h1>
-                    </div>
+                    </div> --}}
                     {{-- end::Froala Editor --}}
                     {{-- begin::Read File --}}
-                    <script>
+                    {{-- <script>
                         document.getElementById("attach-file-question").addEventListener("change", async function() {
                             await readFile(this.files[0], "#froala-editor-question");
                         });
-                    </script>
+                    </script> --}}
                     {{-- end::Read File --}}
+                    <br><br>
                     <button type="submit" id="save-question" class="btn btn-lg btn-primary"
                         data-bs-dismiss="modal">Save</button>
                 </form>

@@ -177,7 +177,7 @@ class DashboardController extends Controller
             array_push($nilaiRkapArray, round($nilaiRkapForecast));
 
             foreach ($historyRealisasi as $realisasi) {
-                if ($realisasi->month_realisasi == $i && !$forecast->is_cancel) {
+                if ($realisasi->month_realisasi == $i && !$realisasi->is_cancel) {
                     // dump($realisasi->realisasi_forecast);
                     $nilaiRealisasiForecast += (int) $realisasi->realisasi_forecast / $per;
                 } else {
@@ -187,7 +187,7 @@ class DashboardController extends Controller
             array_push($nilaiRealisasiArray, round($nilaiRealisasiForecast));
         }
         // dump($nilaiRkapArray);
-        // dump($nilaiRealisasiArray);
+        // dd($nilaiRealisasiArray);
 
 
         // begin :: Tri Wulan
