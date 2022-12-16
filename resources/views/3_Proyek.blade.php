@@ -135,7 +135,7 @@
 
 
                         <!--begin::Card header-->
-                        <div class="card-header border-0 ps-3 mb-0">
+                        <div class="card-header border-0 ps-3 pt-2 mb-0">
                             <!--begin::Card title-->
                             <div class="card-title">
                                 <!--Begin:: BUTTON FILTER-->
