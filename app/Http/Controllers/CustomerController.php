@@ -46,71 +46,71 @@ class CustomerController extends Controller
             $all_customer = Customer::all(); //untuk delete modal
         } else {
             if (!empty($sort)) {
-                $results = Customer::sortable()->get();
+                $results = Customer::sortable()->orderBy('id_customer')->get();
                 $all_customer = Customer::all(); //untuk delete modal
             } else {
                 // $results = Customer::sortable()->get();
                 $results = Customer::sortable()->orderBy('id_customer')->paginate(50);
                 $all_customer = Customer::all(); //untuk delete modal
-                $artilces = '';
-                if ($request->ajax()) {
-                    foreach ($results as $customers) {
-                        $actButton = "";
-                        if (auth()->user()->check_administrator) {
-                            $actButton = '
-                            <td class="text-center">
-                                <button data-bs-toggle="modal"
-                                    data-bs-target="#kt_modal_delete' . $customers->id_customer . '"
-                                    id="modal-delete"
-                                    class="btn btn-sm btn-light btn-active-primary">Delete
-                                </button>
-                            </td>
-                            ';
-                        }
+                // $artilces = '';
+                // if ($request->ajax()) {
+                //     foreach ($results as $customers) {
+                //         $actButton = "";
+                //         if (auth()->user()->check_administrator) {
+                //             $actButton = '
+                //             <td class="text-center">
+                //                 <button data-bs-toggle="modal"
+                //                     data-bs-target="#kt_modal_delete' . $customers->id_customer . '"
+                //                     id="modal-delete"
+                //                     class="btn btn-sm btn-light btn-active-primary">Delete
+                //                 </button>
+                //             </td>
+                //             ';
+                //         }
 
-                        $artilces .=
-                            '<tr>
-                            <!--begin::Kode Pelanggan=-->
-                            <td>
-                            <a href="/customer/view/' . $customers->id_customer . '" class="text-gray-800 text-hover-primary mb-1">' . $customers->kode_pelanggan . '</a>
-                            </td>
-                            <!--end::Kode Pelanggan-->
-                            <!--begin::Name=-->
-                            <td>
-                            <a href="/customer/view/' . $customers->id_customer . '" class="text-gray-800 text-hover-primary mb-1">' . $customers->name . '</a>
-                            </td>
-                            <!--end::Name=-->
-                            <!--begin::Email=-->
-                            <td>
-                            <a href="#">' . ($customers->email) . '</a>
-                            </td>
-                            <!--end::Email=-->
-                            <!--begin::check_customer-->
-                            <td>
-                            ' . ($customers->check_customer == 1 ? "Yes" : "No") . '
-                            </td>
-                            <!--end::check_customer=-->
-                            <!--begin::check_partner-->
-                            <td>
-                            ' . ($customers->check_partner == 1 ? "Yes" : "No") . '
-                            </td>
-                            <!--end::check_partner-->
-                            <!--begin::check_competitor-->
-                            <td data-filter="mastercard">
-                            ' . ($customers->check_competitor == 1 ? "Yes" : "No") . '
-                            </td>
-                            <!--end::check_competitor-->
-                            <!--begin::Kode Nasabah=-->
-                            <td>
-                            ' . $customers->kode_nasabah . '
-                            </td>
-                            <!--end::Kode Nasabah-->
-                            <!--begin::Action=-->
-                            ' . $actButton . '
-                        </tr>';
-                    }
-                    return $artilces;
-                }
+                //         $artilces .=
+                //             '<tr>
+                //             <!--begin::Kode Pelanggan=-->
+                //             <td>
+                //             <a href="/customer/view/' . $customers->id_customer . '" class="text-gray-800 text-hover-primary mb-1">' . $customers->kode_pelanggan . '</a>
+                //             </td>
+                //             <!--end::Kode Pelanggan-->
+                //             <!--begin::Name=-->
+                //             <td>
+                //             <a href="/customer/view/' . $customers->id_customer . '" class="text-gray-800 text-hover-primary mb-1">' . $customers->name . '</a>
+                //             </td>
+                //             <!--end::Name=-->
+                //             <!--begin::Email=-->
+                //             <td>
+                //             <a href="#">' . ($customers->email) . '</a>
+                //             </td>
+                //             <!--end::Email=-->
+                //             <!--begin::check_customer-->
+                //             <td>
+                //             ' . ($customers->check_customer == 1 ? "Yes" : "No") . '
+                //             </td>
+                //             <!--end::check_customer=-->
+                //             <!--begin::check_partner-->
+                //             <td>
+                //             ' . ($customers->check_partner == 1 ? "Yes" : "No") . '
+                //             </td>
+                //             <!--end::check_partner-->
+                //             <!--begin::check_competitor-->
+                //             <td data-filter="mastercard">
+                //             ' . ($customers->check_competitor == 1 ? "Yes" : "No") . '
+                //             </td>
+                //             <!--end::check_competitor-->
+                //             <!--begin::Kode Nasabah=-->
+                //             <td>
+                //             ' . $customers->kode_nasabah . '
+                //             </td>
+                //             <!--end::Kode Nasabah-->
+                //             <!--begin::Action=-->
+                //             ' . $actButton . '
+                //         </tr>';
+                //     }
+                //     return $artilces;
+                // }
             }
         }
 
@@ -216,7 +216,12 @@ class CustomerController extends Controller
         $id_kabupaten = $customer->provinsi;
         $data_kabupaten = json_decode(Storage::get("/public/data/$id_kabupaten.json"));
         $data_negara = collect(json_decode(Storage::get("/public/data/country.json")));
-        $kode_negara = $data_negara->where("country", "=", $customer->negara)->first()->abbreviation;
+        // dd($customer->negara, $data_negara, $customer->negara);
+        if (strlen($customer->negara) > 2) {
+            $kode_negara = $data_negara->where("country", "=", $customer->negara)->first()->abbreviation;
+        } else {
+            $kode_negara = $data_negara->where("abbreviation", "=", $customer->negara)->first()->abbreviation;
+        }
         $data_provinsi = Provinsi::where("country_id", "=", $kode_negara)->get();
         $pic = CustomerPic::where("id_customer", "=", $id_customer)->get();
         $struktur = StrukturCustomer::where("id_customer", "=", $id_customer)->get();
@@ -451,7 +456,7 @@ class CustomerController extends Controller
         $editCustomer->kode_nasabah = $data["kodenasabah-company"];
         $editCustomer->negara = $data["negara"];
         $editCustomer->provinsi = $data["provinsi"];
-        $editCustomer->kota_kabupaten = $data["kabupaten"];
+        // $editCustomer->kota_kabupaten = $data["kabupaten"];
         $editCustomer->industry_sector = $data["industry-sector"];
         // $editCustomer->journey_company = $data["journey-company"];
         // $editCustomer->segmentation_company = $data["segmentation-company"];
