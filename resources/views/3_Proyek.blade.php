@@ -135,7 +135,7 @@
 
 
                         <!--begin::Card header-->
-                        <div class="card-header border-0 py-1 mb-0">
+                        <div class="card-header border-0 ps-3 mb-0">
                             <!--begin::Card title-->
                             <div class="card-title">
                                 <!--Begin:: BUTTON FILTER-->
@@ -999,6 +999,12 @@
 @section('js-script')
     <!--begin::Data Tables-->
     <script src="datatables/jquery.dataTables.min.js"></script>
+    <script src="datatables/dataTables.buttons.min.js"></script>
+    <script src="datatables/buttons.html5.min.js"></script>
+    <script src="datatables/buttons.colVis.min.js"></script>
+    <script src="datatables/jszip.min.js"></script>
+    <script src="datatables/pdfmake.min.js"></script>
+    <script src="datatables/vfs_fonts.js"></script>
     
     <script>
         $(document).ready(function() {
