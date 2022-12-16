@@ -99,7 +99,7 @@
 
                         <!--begin::Card body-->
                         <div class="card-body py-10">
-                            @if (auth()->user()->check_administrator)
+                            @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)"))
 
                             <!--Begin :: Filter-->
                             <div class="card">
