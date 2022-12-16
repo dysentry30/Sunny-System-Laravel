@@ -37,7 +37,7 @@
                                 <!--end::Title-->
                             </div>
                             <!--end::Page title-->
-                            @if (auth()->user()->check_administrator)
+                            @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)"))
                                 <!--begin::Actions-->
                                 {{-- <div class="d-flex align-items-center py-1">
 
