@@ -181,14 +181,14 @@
                                     <!--begin::Table row-->
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                         {{-- <th class="min-w-auto">No.</th> --}}
-                                        <th class="min-w-auto">@sortablelink('kode_pelanggan','Kode Pelanggan')</th>
-                                        <th class="min-w-auto">@sortablelink('name','Pelanggan')</th>
+                                        <th class="min-w-auto">Kode Pelanggan</th>
+                                        <th class="min-w-auto text-center">Pelanggan</th>
                                         <th class="min-w-auto">Email</th>
                                         {{-- <th class="min-w-auto">Kontak Nomor</th> --}}
-                                        <th class="max-w-auto">@sortablelink('check_customer','Customer')</th>
-                                        <th class="min-w-auto">@sortablelink('check_partner','Partner')</th>
-                                        <th class="min-w-auto">@sortablelink('check_competitor','Competitor')</th>
-                                        <th class="min-w-auto">@sortablelink('kode_nasabah','Kode Nasabah')</th>
+                                        <th class="max-w-auto">Customer</th>
+                                        <th class="min-w-auto">Partner</th>
+                                        <th class="min-w-auto">Competitor</th>
+                                        <th class="min-w-auto">Kode Nasabah</th>
                                         @if (auth()->user()->check_administrator)
                                         <th class="min-w-auto text-center">Action</th>
                                         @endif
@@ -217,7 +217,11 @@
                                             <tr>
                                                 <!--begin::Kode Pelanggan-->
                                                 <td>
-                                                <a target="_blank" href="/customer/view/{{ $customers->id_customer }}" class="text-gray-800 text-hover-primary">{{ $customers->kode_pelanggan ?? "-" }}</a>
+                                                @if (empty($customers->kode_pelanggan))                                                    
+                                                <a target="_blank" href="/customer/view/{{ $customers->id_customer }}" class="text-gray-800 text-hover-primary ps-6">-</a>
+                                                @else
+                                                <a target="_blank" href="/customer/view/{{ $customers->id_customer }}" class="text-gray-800 text-hover-primary">{{ $customers->kode_pelanggan }}</a>
+                                                @endif
                                                 </td>
                                                 <!--end::Kode Pelanggan-->
                                                 <!--begin::Name-->
