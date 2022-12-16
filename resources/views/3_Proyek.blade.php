@@ -317,7 +317,7 @@
                                         <th class="min-w-auto"><small>Pelanggan</small></th>
                                         <th class="min-w-auto text-center"><small>@sortablelink('jenis_proyek', 'Jenis Proyek')</small></th>
                                         <th class="min-w-auto text-center"><small>@sortablelink('tipe_proyek', 'Tipe Proyek')</small></th>
-                                        @if (auth()->user()->check_administrator)
+                                        @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)"))
                                             <th class="min-w-auto text-center"><small>Action</small></th>
                                         @endif
                                     </tr>
