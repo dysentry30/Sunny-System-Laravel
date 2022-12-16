@@ -76,9 +76,9 @@ class ProyekController extends Controller
         if (Auth::user()->check_administrator) {
             $unitkerjas = UnitKerja::all();
             // dd($unitkerjas);
-            $proyeks = Proyek::with(['UnitKerja', 'proyekBerjalan'])->sortable();
+            $proyeks = Proyek::with(['UnitKerja', 'Forecasts', 'proyekBerjalan'])->sortable();
         } else {
-            // $proyeks = Proyek::with(['UnitKerja', 'proyekBerjalan'])->sortable()->where("unit_kerja", "=", Auth::user()->unit_kerja);
+            // $proyeks = Proyek::with(['UnitKerja', 'Forecasts', 'proyekBerjalan'])->sortable()->where("unit_kerja", "=", Auth::user()->unit_kerja);
             $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
             if ($unit_kerja_user instanceof \Illuminate\Support\Collection) {
                 $unitkerjas = UnitKerja::all()->whereIn("divcode", $unit_kerja_user->toArray());
@@ -87,9 +87,9 @@ class ProyekController extends Controller
             }
 
             if ($unit_kerja_user instanceof \Illuminate\Support\Collection) {
-                $proyeks = Proyek::with(['UnitKerja', 'proyekBerjalan'])->sortable()->whereIn("unit_kerja", $unit_kerja_user->toArray());
+                $proyeks = Proyek::with(['UnitKerja', 'Forecasts', 'proyekBerjalan'])->sortable()->whereIn("unit_kerja", $unit_kerja_user->toArray());
             } else {
-                $proyeks = Proyek::with(['UnitKerja', 'proyekBerjalan'])->sortable()->where("unit_kerja", "=", $unit_kerja_user);
+                $proyeks = Proyek::with(['UnitKerja', 'Forecasts', 'proyekBerjalan'])->sortable()->where("unit_kerja", "=", $unit_kerja_user);
             }
         }
 
