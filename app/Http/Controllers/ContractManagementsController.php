@@ -35,6 +35,7 @@ use Illuminate\Support\Facades\Redirect;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -594,24 +595,25 @@ class ContractManagementsController extends Controller
         $id_document = (string) $faker->uuid3();
         $file = $request->file("attach-file-question");
         $data = $request->all();
+        // dd($data);
 
         $messages = [
             "required" => "Field di atas wajib diisi",
-            "numeric" => "Field di atas harus numeric",
-            "file" => "This field must be file only",
+            // "numeric" => "Field di atas harus numeric",
+            // "file" => "This field must be file only",
             "string" => "This field must be alphabet only",
         ];
         $rules = [
-            "attach-file-question" => "required|file",
-            "document-name-question" => "required|string",
-            "note-question" => "required|string",
-            "kategori-Aanwitjzing" => "required|string",
+            // "attach-file-question" => "required|file",
+            // "document-name-question" => "required|string",
+            // "note-question" => "required|string",
+            // "kategori-Aanwitjzing" => "required|string",
             "id-contract" => "required|string",
         ];
         $validation = Validator::make($data, $rules, $messages);
 
         if ($validation->fails()) {
-            Alert::error('Error', "Question gagal ditambahkan");
+            Alert::error('Error', "Aanwitjzing gagal ditambahkan");
             return Redirect::back()->with("modal", $data["modal-name"]);
             // return Redirect::back();
             // dd($validation->errors());
@@ -630,18 +632,19 @@ class ContractManagementsController extends Controller
 
         $is_tender_menang = !empty($data["is-tender-menang"]) ? 1 : 0;
 
-        $questions->document_name_question = $data["document-name-question"];
+        // $questions->document_name_question = $data["document-name-question"];
+        // $questions->id_document = $id_document;
+        $questions->item = $data["item"];
+        $questions->sub_pasal = $data["sub-pasal"];
+        $questions->daftar_pertanyaan = $data["note-question"];
         $questions->id_contract = $data["id-contract"];
-        $questions->id_document = $id_document;
-        $questions->kategori_question = $data["kategori-Aanwitjzing"];
-        $questions->note_question = $data["note-question"];
         $questions->tender_menang = $is_tender_menang;
         if ($questions->save()) {
-            moveFileTemp($file, $id_document);
-            Alert::success('Success', "Question berhasil ditambahkan");
+            // moveFileTemp($file, $id_document);
+            Alert::success('Success', "Aanwitjzing berhasil ditambahkan");
             return Redirect::back();
         }
-        Alert::error('Error', "Question gagal ditambahkan");
+        Alert::error('Error', "Aanwitjzing gagal ditambahkan");
         return Redirect::back()->with("modal", $data["modal-name"]);
         // return redirect($_SERVER["HTTP_REFERER"]);
     }
@@ -650,25 +653,29 @@ class ContractManagementsController extends Controller
     public function riskUpload(Request $request, InputRisks $risk)
     {
         $faker = new Uuid();
-        $id_document = (string) $faker->uuid3();
-        $file = $request->file("attach-file-risk");
-        $data = $request->all();
-
+        // $id_document = (string) $faker->uuid3();
+        // $file = $request->file("attach-file-risk");
+        $data = $request->collect();
+        $key_rules = $data->map(function($val, $key) {
+            if(str_contains($key, "tanggal")) {
+                return $key = "required|date";
+            }
+            return $key = "required|string";
+        })->toArray();
+        dd($key_rules);
         $messages = [
             "required" => "Field di atas wajib diisi",
             "numeric" => "Field di atas harus numeric",
             "file" => "This field must be file only",
             "string" => "This field must be alphabet only",
         ];
-        $rules = [
-            "resiko" => "required|string",
-            "penyebab" => "required|string",
-            "dampak" => "required|string",
-            "mitigasi" => "required|string",
-        ];
+        $rules = $key_rules;
+        $data = $data->toArray();
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
-            Alert::error('Error', "Resiko gagal ditambahkan");
+            // dd($validation->errors());
+            $field_mandatory = self::input_name_to_label(collect($validation->errors()->keys()));
+            Alert::html('Error', "Field <b>$field_mandatory</b> harus terisi!", "error");
             return Redirect::back()->with("modal", $data["modal-name"]);
             // return Redirect::back();
             // dd($validation->errors());
@@ -690,12 +697,32 @@ class ContractManagementsController extends Controller
         }
         $validation->validate();
 
-        $risk->resiko = $data["resiko"];
+        $risk->verifikasi = $data["verifikasi"];
         $risk->id_contract = $data["id-contract"];
         $risk->stage = $is_tender_menang; // Kolom Tender Menang dialihfungsikan menjadi Stage
+        $risk->kategori = $data["kategori"];
+        $risk->kriteria = $data["kriteria"];
+        $risk->probis_1_2 = $data["probis_1_2"];
+        $risk->probis_terganggu = $data["probis_terganggu"];
         $risk->penyebab = $data["penyebab"];
+        $risk->resiko_peluang = $data["resiko_peluang"];
         $risk->dampak = $data["dampak"];
-        $risk->mitigasi = $data["mitigasi"];
+        $risk->nilai_resiko_r0 = $data["nilai_resiko_r0"];
+        $risk->item_kontrol = $data["item_kontrol"];
+        $risk->probabilitas = $data["probabilitas"];
+        $risk->tingkat_efektifitas_kontrol = $data["tingkat_efektifitas_kontrol"];
+        $risk->nilai_resiko_r1 = $data["nilai_resiko_r1"];
+        $risk->tindak_lanjut_mitigasi = $data["tindak_lanjut_mitigasi"];
+        $risk->tingkat_efektifitas_tindak_lanjut = $data["tingkat_efektifitas_tindak_lanjut"];
+        $risk->nilai_resiko_r2 = $data["nilai_resiko_r2"];
+        $risk->biaya_proaktif = $data["biaya_proaktif"];
+        $risk->tanggal_mulai = $data["tanggal_mulai"];
+        $risk->tanggal_selesai = $data["tanggal_selesai"];
+        $risk->tindak_lanjut_reaktif = $data["tindak_lanjut_reaktif"];
+        $risk->biaya_reaktif = $data["biaya_reaktif"];
+        $risk->pic_rtl = $data["pic_rtl"];
+        $risk->uraian = $data["uraian"];
+        $risk->nilai = $data["nilai"];
         if ($risk->save()) {
             // moveFileTemp($file, $id_document);
             Alert::success('Success', "Resiko berhasil ditambahkan");
@@ -1478,5 +1505,21 @@ class ContractManagementsController extends Controller
         Alert::error("Erorr", "Rencana Kerja Manajemen Kontrak gagal ditambahkan");
         return Redirect::back()->with("modal", $data["modal-name"]);
         // return redirect()->back();
+    }
+
+    static function input_name_to_label(SupportCollection $keys) : string {
+        return $keys->map(function($val) {
+            if(str_contains($val, "_")) {
+                $exploded_val = collect(explode("_", $val));
+                return $exploded_val->map(function($exval) {
+                    $exval[0] = strtoupper($exval[0]);
+                    strtoupper($exval[0]);
+                    return $exval;
+                })->join(" ");
+
+            }
+            $val[0] = strtoupper($val[0]);
+            return $val;
+        })->join(", ", " dan ");
     }
 }

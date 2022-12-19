@@ -54,7 +54,7 @@
                                 <!--end::Button-->
 
                                 <!--begin::Button-->
-                                <a href="/contract-management/view/{{ $id_contract }}" class="btn btn-sm btn-primary"
+                                <a href="/contract-management/view/{{ url_encode($id_contract) }}" class="btn btn-sm btn-primary"
                                     id="cloedButton" style="background-color:#f3f6f9;margin-left:10px;color: black;">
                                     Close</a>
                                 <!--end::Button-->

@@ -217,10 +217,13 @@ class CustomerController extends Controller
         $data_kabupaten = json_decode(Storage::get("/public/data/$id_kabupaten.json"));
         $data_negara = collect(json_decode(Storage::get("/public/data/country.json")));
         // dd($customer->negara, $data_negara, $customer->negara);
-        if (strlen($customer->negara) > 2) {
-            $kode_negara = $data_negara->where("country", "=", $customer->negara)->first()->abbreviation;
-        } else {
-            $kode_negara = $data_negara->where("abbreviation", "=", $customer->negara)->first()->abbreviation;
+        $kode_negara = null;
+        if(!empty($customer->negara)) {
+            if (strlen($customer->negara) > 2) {
+                $kode_negara = $data_negara->where("country", "=", $customer->negara)->first()->abbreviation;
+            } else {
+                $kode_negara = $data_negara->where("abbreviation", "=", $customer->negara)->first()->abbreviation;
+            }
         }
         $data_provinsi = Provinsi::where("country_id", "=", $kode_negara)->get();
         $pic = CustomerPic::where("id_customer", "=", $id_customer)->get();
