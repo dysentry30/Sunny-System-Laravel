@@ -834,7 +834,7 @@
                             Draft Kontrak
                             {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
                                         data-bs-target="#kt_modal_create_proyek">+</a> --}}
-                            <a href="/contract-management/view/{{ $contract->id_contract }}/draft-contract"
+                            <a href="/contract-management/view/{{ url_encode($contract->id_contract) }}/draft-contract"
                                 Id="Plus">+</a>
                         </h3>
 
@@ -1602,7 +1602,7 @@
                     <div class="card-title m-0">
                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                             Kontrak
-                            <a href="/contract-management/view/{{ $contract->id_contract }}/draft-contract/tender-menang/1"
+                            <a href="/contract-management/view/{{ url_encode($contract->id_contract) }}/draft-contract/tender-menang/1"
                                 Id="Plus">+</a>
                         </h3>
 
@@ -5133,7 +5133,7 @@
                     <!--end::Input group-->
                 </div>
                 <!--End begin::Col-->
-                <div class="col-1">
+                <div class="col-2">
                     <!--begin::Input group Website-->
                     <div class="fv-row mb-7">
                         <!--begin::Label-->
@@ -6329,47 +6329,360 @@
 
             <form action="/input-risk/upload" method="POST" enctype="multipart/form-data">
                 @csrf
-                <!--begin::Label-->
-                <label class="fs-6 fw-bold form-label mt-3">
-                    <span style="font-weight: normal">Resiko</span>
-                </label>
-                <!--end::Label-->
-                <!--begin::Input-->
                 <input type="hidden" class="modal-name" name="modal-name">
                 <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" name="id-contract">
-                <input type="text" class="form-control form-control-solid" name="resiko" id="resiko"
-                    style="font-weight: normal" value="" placeholder="Resiko" />
-                <!--end::Input-->
 
-                <!--begin::Label-->
-                <label class="fs-6 fw-bold form-label mt-3">
-                    <span style="font-weight: normal">Penyebab</span>
-                </label>
-                <!--end::Label-->
-                <!--begin::Input-->
-                <input type="text" class="form-control form-control-solid" name="penyebab" id="penyebab"
-                    style="font-weight: normal" value="" placeholder="Penyebab" />
-                <!--end::Input-->
+                <div class="row">
+                    <div class="col">
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span style="font-weight: normal">Verifikasi</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input type="text" class="form-control form-control-solid" name="verifikasi" id="verifikasi"
+                            style="font-weight: normal" value="" placeholder="Verifikasi" />
+                        <!--end::Input-->
+                    </div>
+                    <div class="col">
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span style="font-weight: normal">Kategori</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input type="text" class="form-control form-control-solid" name="kategori" id="kategori"
+                            style="font-weight: normal" value="" placeholder="Kategori" />
+                        <!--end::Input-->
+                    </div>
+                </div>
 
-                <!--begin::Label-->
-                <label class="fs-6 fw-bold form-label mt-3">
-                    <span style="font-weight: normal">Dampak</span>
-                </label>
-                <!--end::Label-->
-                <!--begin::Input-->
-                <input type="text" class="form-control form-control-solid" name="dampak" id="dampak"
-                    value="" placeholder="Dampak" style="font-weight: normal" />
-                <!--end::Input-->
+                <div class="row">
+                    <div class="col">
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span style="font-weight: normal">Kriteria</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input type="text" class="form-control form-control-solid" name="kriteria" id="kriteria"
+                            value="" placeholder="Kriteria" style="font-weight: normal" />
+                        <!--end::Input-->
+                    </div>
+                </div>
 
-                <!--begin::Label-->
-                <label class="fs-6 fw-bold form-label mt-3">
-                    <span style="font-weight: normal">Mitigasi</span>
-                </label>
-                <!--end::Label-->
-                <!--begin::Input-->
-                <input type="text" class="form-control form-control-solid mb-3" name="mitigasi"
-                    id="mitigasi" value="" placeholder="Mitigasi" style="font-weight: normal" />
-                <!--end::Input-->
+                <hr>
+                <h5 class="h5 fw-bolder text-center">Sub Kriteria</h5>
+
+                <div class="row">
+                    <div class="col">
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span style="font-weight: normal">Probis Level 1 - 2</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input type="text" class="form-control form-control-solid mb-3" name="probis_1_2"
+                            id="probis_1_2" value="" placeholder="Probis Level 1 - 2" style="font-weight: normal" />
+                        <!--end::Input-->
+                    </div>
+                    <div class="col">
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span style="font-weight: normal">Probis Yang Terganggu</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input type="text" class="form-control form-control-solid mb-3" name="probis_terganggu"
+                            id="probis_terganggu" value="" placeholder="Probis Yang Terganggu" style="font-weight: normal" />
+                        <!--end::Input-->
+                    </div>
+                </div>
+                <hr>
+
+                <div class="row">
+                    <div class="col">
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span style="font-weight: normal">Penyebab</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input type="text" class="form-control form-control-solid mb-3" name="penyebab"
+                            id="penyebab" value="" placeholder="Penyebab" style="font-weight: normal" />
+                        <!--end::Input-->
+                    </div>
+                    <div class="col">
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span style="font-weight: normal">Resiko / Peluang</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input type="text" class="form-control form-control-solid mb-3" name="resiko_peluang"
+                            id="resiko_peluang" value="" placeholder="Resiko / Peluang" style="font-weight: normal" />
+                        <!--end::Input-->
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col">
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span style="font-weight: normal">Dampak</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input type="text" class="form-control form-control-solid mb-3" name="dampak"
+                            id="dampak" value="" placeholder="Dampak" style="font-weight: normal" />
+                        <!--end::Input-->
+                    </div>
+                    <div class="col">
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span style="font-weight: normal">Nilai Resiko / Peluang (Ro)</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input type="text" class="form-control form-control-solid mb-3" name="nilai_resiko_r0"
+                            id="nilai_resiko_r0" value="" placeholder="Nilai Resiko / Peluang (Ro)" style="font-weight: normal" />
+                        <!--end::Input-->
+                    </div>
+                </div>
+                
+                <hr>
+                <h5 class="h5 fw-bolder text-center">Kontrol Eksisting</h5>
+                <div class="row">
+                    <div class="col">
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span style="font-weight: normal">Item Kontrol</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input type="text" class="form-control form-control-solid mb-3" name="item_kontrol"
+                            id="item_kontrol" value="" placeholder="Item Kontrol" style="font-weight: normal" />
+                        <!--end::Input-->
+                    </div>
+                    <div class="col">
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span style="font-weight: normal">Probabilitas</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input type="text" class="form-control form-control-solid mb-3" name="probabilitas"
+                            id="probabilitas" value="" placeholder="Probabilitas" style="font-weight: normal" />
+                        <!--end::Input-->
+                    </div>
+                    <div class="col">
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span style="font-weight: normal">Dampak</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input type="text" class="form-control form-control-solid mb-3" name="dampak"
+                            id="dampak" value="" placeholder="Dampak" style="font-weight: normal" />
+                        <!--end::Input-->
+                    </div>
+                    <div class="col">
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span style="font-weight: normal">Skor</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input type="text" class="form-control form-control-solid mb-3" name="tingkat_efektifitas_kontrol"
+                            id="tingkat_efektifitas_kontrol" value="" placeholder="Skor" style="font-weight: normal" />
+                        <!--end::Input-->
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span style="font-weight: normal">Tingkat Efektifitas Kontrol</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input type="text" class="form-control form-control-solid mb-3" name="tingkat_efektifitas_kontrol"
+                            id="tingkat_efektifitas_kontrol" value="" placeholder="Tingkat Efektifitas Kontrol" style="font-weight: normal" />
+                        <!--end::Input-->
+                    </div>
+                    <div class="col">
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span style="font-weight: normal">Nilai Sisa Risiko / Peluang (R1)</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input type="text" class="form-control form-control-solid mb-3" name="nilai_resiko_r1"
+                            id="nilai_resiko_r1" value="" placeholder="Nilai Sisa Risiko / Peluang (R1)" style="font-weight: normal" />
+                        <!--end::Input-->
+                    </div>
+                </div>
+                <hr>
+                <h5 class="h5 fw-bolder text-center">Rencana Tindak Lanjut Proaktif</h5>
+
+                <div class="row">
+                    <div class="col">
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span style="font-weight: normal">Rencana Tindak Lanjut (Mitigasi) Proaktif</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input type="text" class="form-control form-control-solid mb-3" name="tindak_lanjut_mitigasi"
+                            id="tindak_lanjut_mitigasi" value="" placeholder="Rencana Tindak Lanjut (Mitigasi) Proaktif" style="font-weight: normal" />
+                        <!--end::Input-->
+                    </div>
+                    <div class="col">
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span style="font-weight: normal">Tingkat Efektifitas Tindak Lanjut</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input type="text" class="form-control form-control-solid mb-3" name="tingkat_efektifitas_tindak_lanjut"
+                            id="tingkat_efektifitas_tindak_lanjut" value="" placeholder="Tingkat Efektifitas Tindak Lanjut" style="font-weight: normal" />
+                        <!--end::Input-->
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span style="font-weight: normal">Nilai Sisa Risiko / Peluang (R2)</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input type="text" class="form-control form-control-solid mb-3" name="nilai_resiko_r2"
+                            id="nilai_resiko_r2" value="" placeholder="Nilai Sisa Risiko / Peluang (R2)" style="font-weight: normal" />
+                        <!--end::Input-->
+                    </div>
+                    <div class="col">
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span style="font-weight: normal">Biaya</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input type="text" class="form-control form-control-solid mb-3" name="biaya_proaktif"
+                            id="biaya_proaktif" value="" placeholder="Biaya" style="font-weight: normal" />
+                        <!--end::Input-->
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span style="font-weight: normal">Tanggal Mulai</span>
+                            <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
+                                <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
+                            </a>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input type="date" class="form-control form-control-solid mb-3" name="tanggal_mulai"
+                            id="tanggal_mulai" value="" placeholder="Tanggal Mulai" style="font-weight: normal" />
+                        <!--end::Input-->
+                    </div>
+                    <div class="col">
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span style="font-weight: normal">Tanggal Selesai</span>
+                            <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
+                                <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
+                            </a>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input type="date" class="form-control form-control-solid mb-3" name="tanggal_selesai"
+                            id="tanggal_selesai" value="" placeholder="Tanggal Selesai" style="font-weight: normal" />
+                        <!--end::Input-->
+                    </div>
+                </div>
+
+                <hr>
+                <h5 class="h5 fw-bolder text-center">Rencana Tindak Lanjut Reaktif</h5>
+
+                <div class="row">
+                    <div class="col">
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span style="font-weight: normal">Rencana Tindak Lanjut (Mitigasi) Reaktif</span>
+                            <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
+                                <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
+                            </a>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input type="text" class="form-control form-control-solid mb-3" name="tindak_lanjut_reaktif"
+                            id="tindak_lanjut_reaktif" value="" placeholder="Rencana Tindak Lanjut (Mitigasi) Reaktif" style="font-weight: normal" />
+                        <!--end::Input-->
+                    </div>
+                    <div class="col">
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span style="font-weight: normal">Biaya</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input type="text" class="form-control form-control-solid mb-3" name="biaya_reaktif"
+                            id="biaya_reaktif" value="" placeholder="Biaya" style="font-weight: normal" />
+                        <!--end::Input-->
+                    </div>
+                </div>
+                <hr>
+
+                <div class="row">
+                    <div class="col">
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span style="font-weight: normal">PIC RTL</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input type="text" class="form-control form-control-solid mb-3" name="pic_rtl"
+                            id="pic_rtl" value="" placeholder="PIC RTL" style="font-weight: normal" />
+                        <!--end::Input-->
+                    </div>
+                </div>
+
+                <hr>
+                <h5 class="h5 fw-bolder text-center">Peluang</h5>
+
+                <div class="row">
+                    <div class="col">
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span style="font-weight: normal">Uraian</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input type="text" class="form-control form-control-solid mb-3" name="uraian"
+                            id="uraian" value="" placeholder="Uraian" style="font-weight: normal" />
+                        <!--end::Input-->
+                    </div>
+                    <div class="col">
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span style="font-weight: normal">Nilai</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input type="text" class="form-control form-control-solid mb-3" name="nilai"
+                            id="nilai" value="" placeholder="Nilai" style="font-weight: normal" />
+                        <!--end::Input-->
+                    </div>
+                </div>
+                <hr>
+                <br>
+                
                 <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
 
                 {{-- end::Read File --}}
@@ -6437,7 +6750,7 @@
                     <!--end::Label-->
                     <!--begin::Input-->
                     <input type="text" class="form-control form-control-solid"
-                        name="document-name-question" id="document-name-question" style="font-weight: normal"
+                        name="item" id="item" style="font-weight: normal"
                         value="" placeholder="Item" />
                     <!--end::Input-->
 
@@ -6447,8 +6760,8 @@
                     </label>
                     <!--end::Label-->
                     <!--begin::Input-->
-                    <input type="text" class="form-control form-control-solid" name="note-question"
-                        id="note-question" style="font-weight: normal" value=""
+                    <input type="text" class="form-control form-control-solid" name="sub-pasal"
+                        id="sub-pasal" style="font-weight: normal" value=""
                         placeholder="Sub" />
                     <!--end::Input-->
                     <small id="file-error-msg-question" style="color: rgb(199, 42, 42); display:none"></small>
