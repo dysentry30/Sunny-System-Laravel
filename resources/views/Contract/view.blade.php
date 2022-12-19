@@ -5277,8 +5277,8 @@
                         <!--end::Label-->
                         <!--Begin::Input-->
                         <input disabled type="text" disabled readonly
-                            class="form-control form-control-solid {{ $contract->project->mata_uang_review ?? "Kosong" == null && $contract->project->mata_uang_awal ?? "Kosong" == null ? 'text-danger' : '' }}"
-                            value="{{ $contract->project->mata_uang_review ?? "Kosong" ?? ($contract->project->mata_uang_awal ?? "Kosong" ?? '*Mata Uang Belum Ditentukan') }}"
+                            class="form-control form-control-solid {{ $contract->project->mata_uang_review == null && $contract->project->mata_uang_awal == null ? 'text-danger' : '' }}"
+                            value="{{ $contract->project->mata_uang_review ?? ($contract->project->mata_uang_awal ?? '*Mata Uang Belum Ditentukan') }}"
                             readonly />
                         <!--end::Input-->
                     </div>
@@ -5359,8 +5359,8 @@
                         <!--end::Label-->
                         <!--begin::Input-->
                         <input disabled onkeyup="hitungReview()" type="text" disabled readonly
-                            class="form-control form-control-solid {{ $contract->project->kurs_review ?? "Kosong" == null ? 'text-danger' : '' }}"
-                            value="{{ $contract->project->kurs_review ?? "Kosong" ?? '*Kurs Review Belum Ditentukan' }}"
+                            class="form-control form-control-solid {{ $contract->project->kurs_review == null ? 'text-danger' : '' }}"
+                            value="{{ $contract->project->kurs_review ?? '*Kurs Review Belum Ditentukan' }}"
                             placeholder="Kurs Review" readonly />
                         <!--end::Input-->
                     </div>
