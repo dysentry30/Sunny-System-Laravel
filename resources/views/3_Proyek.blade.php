@@ -305,18 +305,18 @@
                                 <thead>
                                     <!--begin::Table row-->
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase text-sm gs-0">
-                                        <th class="min-w-auto ps-3"><small>@sortablelink('kode_proyek', 'Kode Proyek')</small></th>
-                                        <th class="w-20"><small>@sortablelink('nama_proyek', 'Nama Proyek')</small></th>
-                                        <th class="min-w-auto"><small>@sortablelink('unit_kerja', 'Unit Kerja')</small></th>
-                                        <th class="min-w-auto text-center"><small>@sortablelink('stage', 'Stage')</small></th>
-                                        <th class="min-w-auto"><small>@sortablelink('tahun_perolehan', 'Tahun RA Perolehan')</small></th>
-                                        <th class="min-w-auto"><small>@sortablelink('bulan_pelaksanaan', 'Bulan RA Perolehan')</small></th>
-                                        <th class="min-w-auto"><small>@sortablelink('nilai_rkap', 'Nilai RKAP')</small></th>
-                                        <th class="min-w-auto"><small>@sortablelink('forecast', 'Nilai Forecast')</small></th>
-                                        <th class="min-w-auto"><small>@sortablelink('nilai_perolehan', 'Nilai Realisasi')</small></th>
+                                        <th class="min-w-auto ps-3"><small>Kode Proyek</small></th>
+                                        <th class="w-20"><small>Nama Proyek</small></th>
+                                        <th class="min-w-auto"><small>Unit Kerja</small></th>
+                                        <th class="min-w-auto text-center"><small>Stage</small></th>
+                                        <th class="min-w-auto"><small>Tahun RA Perolehan</small></th>
+                                        <th class="min-w-auto"><small>Bulan RA Perolehan</small></th>
+                                        <th class="min-w-auto"><small>Nilai RKAP</small></th>
+                                        <th class="min-w-auto"><small>Nilai Forecast</small></th>
+                                        <th class="min-w-auto"><small>Nilai Realisasi</small></th>
                                         <th class="min-w-auto"><small>Pelanggan</small></th>
-                                        <th class="min-w-auto text-center"><small>@sortablelink('jenis_proyek', 'Jenis Proyek')</small></th>
-                                        <th class="min-w-auto text-center"><small>@sortablelink('tipe_proyek', 'Tipe Proyek')</small></th>
+                                        <th class="min-w-auto text-center"><small>Jenis Proyek</small></th>
+                                        <th class="min-w-auto text-center"><small>Tipe Proyek</small></th>
                                         @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)"))
                                             <th class="min-w-auto text-center"><small>Action</small></th>
                                         @endif
@@ -414,7 +414,7 @@
                                                         @break
 
                                                         @case('10')
-                                                            Gugur Prakualifikasi
+                                                            Gugur PQ
                                                         @break
 
                                                         @default
