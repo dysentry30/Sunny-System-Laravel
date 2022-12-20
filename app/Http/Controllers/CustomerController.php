@@ -50,7 +50,7 @@ class CustomerController extends Controller
                 $all_customer = Customer::all(); //untuk delete modal
             } else {
                 // $results = Customer::sortable()->get();
-                $results = Customer::sortable()->orderBy('id_customer')->paginate(50);
+                $results = Customer::sortable()->orderBy('id_customer')->get();
                 $all_customer = Customer::all(); //untuk delete modal
                 // $artilces = '';
                 // if ($request->ajax()) {
