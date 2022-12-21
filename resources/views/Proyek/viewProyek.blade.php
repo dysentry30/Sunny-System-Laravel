@@ -4527,47 +4527,47 @@
                                                                 <!--begin::Input-->
                                                                 <div class="d-flex align-items-center position-relative">
                                                                     <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
-                                                                    {{-- <span id="view-kontrak" class="svg-icon svg-icon-1 position-absolute ms-4">
-                                                                            <a href="/contract-management/view/{{ $proyek->nomor_terkontrak }}" class="text-gray-800 text-hover-primary mb-1">{{ $proyek->nomor_terkontrak }}</a>
-                                                                        </span>
-                                                                        <input onclick="viewKontrak(this)" type="text" id="fake-terkontrak"
-                                                                            class="form-control form-control-solid"
-                                                                            value="" readonly/> --}}
+                                                                    <span id="view-kontrak" class="svg-icon svg-icon-1 position-absolute ms-4">
+                                                                        <a target="_blank" href="/contract-management/view/{{ url_encode($proyek->nomor_terkontrak) }}" class="text-gray-800 text-hover-primary mb-1">{{ $proyek->nomor_terkontrak }}</a>
+                                                                    </span>
+                                                                    <input onclick="viewKontrak(this)" type="text" id="fake-terkontrak"
+                                                                        class="form-control form-control-solid"
+                                                                        value="" readonly/>
                                                                     <!--end::Svg Icon-->
-                                                                    <input onfocusout="displayKontrak(this)"
+                                                                    <input style="display: none" onfocusout="displayKontrak(this)"
                                                                         type="text"
                                                                         class="form-control form-control-solid"
                                                                         id="nomor-terkontrak" name="nomor-terkontrak"
                                                                         value="{{ $proyek->nomor_terkontrak }}"
-                                                                        placeholder="" onpaste="return false" />
+                                                                        placeholder="" onpaste="return false" />    
                                                                 </div>
                                                                 <p style="display: none" id="char-error"
                                                                     class="text-danger fw-normal">*Not Allowed : / \ ?
                                                                     #;</p>
                                                                 <script>
-                                                                    // document.getElementById("nomor-terkontrak").onkeypress = function(e) {
-                                                                    //     var chr = String.fromCharCode(e.which);
-                                                                    //     if (`/ \ ? #`.indexOf(chr) >= 0){
-                                                                    //     // if (`!?"'#%&()*/@[\]^_{|}><~;`.indexOf(chr) >= 0){
-                                                                    //         document.getElementById('char-error').style.display = "";
-                                                                    //     // showError(chr)
-                                                                    //     return false;
-                                                                    //     }
-                                                                    //     return true
-                                                                    // };
-                                                                    // function viewKontrak(e) {
-                                                                    //     document.getElementById('fake-terkontrak').style.display = "none";
-                                                                    //     document.getElementById('view-kontrak').style.display = "none";
-                                                                    //     document.getElementById('nomor-terkontrak').style.display = "";
-                                                                    //     // e.value = "{{ $proyek->nomor_terkontrak }}";
-                                                                    // }
-                                                                    // function displayKontrak(e) {
-                                                                    //     document.getElementById('view-kontrak').style.display = "";
-                                                                    //     document.getElementById('view-kontrak').innerHTML = e.value;
-                                                                    //     document.getElementById('fake-terkontrak').style.display = "";
-                                                                    //     document.getElementById('nomor-terkontrak').style.display = "none";
-                                                                    //     // console.log(e);
-                                                                    // }
+                                                                    document.getElementById("nomor-terkontrak").onkeypress = function(e) {
+                                                                        var chr = String.fromCharCode(e.which);
+                                                                        if (`/ \ ? #`.indexOf(chr) >= 0){
+                                                                        // if (`!?"'#%&()*/@[\]^_{|}><~;`.indexOf(chr) >= 0){
+                                                                            document.getElementById('char-error').style.display = "";
+                                                                        // showError(chr)
+                                                                        return false;
+                                                                        }
+                                                                        return true
+                                                                    };
+                                                                    function viewKontrak(e) {
+                                                                        document.getElementById('fake-terkontrak').style.display = "none";
+                                                                        document.getElementById('view-kontrak').style.display = "none";
+                                                                        document.getElementById('nomor-terkontrak').style.display = "";
+                                                                        // e.value = "{{ $proyek->nomor_terkontrak }}";
+                                                                    }
+                                                                    function displayKontrak(e) {
+                                                                        document.getElementById('view-kontrak').style.display = "";
+                                                                        document.getElementById('view-kontrak').innerHTML = e.value;
+                                                                        document.getElementById('fake-terkontrak').style.display = "";
+                                                                        document.getElementById('nomor-terkontrak').style.display = "none";
+                                                                        // console.log(e);
+                                                                    }
                                                                 </script>
                                                                 <!--end::Input-->
                                                             </div>

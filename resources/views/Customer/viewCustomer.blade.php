@@ -1808,12 +1808,13 @@
                                                                     <thead>
                                                                         <!--begin::Table row-->
                                                                         <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                            <th class="min-w-auto">Nama Proyek</th>
                                                                             <th class="min-w-auto">Nomor SPK</th>
+                                                                            <th class="min-w-auto">Nama Proyek</th>
                                                                             <th class="min-w-auto">Unit kerja</th>
                                                                             <th class="min-w-auto">Nilai OK</th>
+                                                                            <th class="min-w-auto">Tanggal Mulai</th>
+                                                                            <th class="min-w-auto">Tanggal Akhir</th>
                                                                             <th class="min-w-auto">Durasi</th>
-                                                                            <th class="min-w-auto">Start/End</th>
                                                                         </tr>
                                                                         <!--end::Table row-->
                                                                     </thead>
@@ -1822,31 +1823,48 @@
                                                                     <tbody class="fw-bold text-gray-600">
                                                                         @if (isset($proyekberjalan))
                                                                             @foreach ($proyekberjalan as $proyekberjalan0)
-                                                                                @if ($proyekberjalan0->stage <= 7)
+                                                                                @if ($proyekberjalan0->stage == 8)
                                                                                     <tr>
+                                                                                        <!--begin::Kode-->
+                                                                                        <td>
+                                                                                            {{-- @if (!empty($proyekberjalan0->proyek->ContractManagements))
+                                                                                                <a target="_blank" href="/contract-management/view/{{ url_encode($proyekberjalan0->proyek->ContractManagements->id_contract) }}" class="text-gray-600 text-hover-primary mb-1">
+                                                                                                    {{ $proyekberjalan0->proyek->nospk_external ?? '-' }}
+                                                                                                </a>
+                                                                                            @endif --}}
+                                                                                            <a href="#" data-bs-toggle="modal"
+                                                                                                data-bs-target="#proyek_berjalan_{{ $proyekberjalan0->kode_proyek }}"
+                                                                                                id="modal-delete"
+                                                                                                class="text-gray-600 {{ !empty($proyekberjalan0->proyek->nospk_external) ? 'text-hover-primary' : 'text-hover-danger' }} mb-1">{{ !empty($proyekberjalan0->proyek->nospk_external) ? $proyekberjalan0->proyek->nospk_external : '*Belum Ditentukan' }}
+                                                                                            </a>
+                                                                                        </td>
+                                                                                        <!--end::Kode-->
                                                                                         <!--begin::Name-->
                                                                                         <td>
-                                                                                            <a href="/proyek/view/{{ $proyekberjalan0->kode_proyek }}" class="text-gray-800 text-hover-primary mb-1">
+                                                                                            <a target="_blank" href="/proyek/view/{{ $proyekberjalan0->kode_proyek }}" class="text-gray-800 text-hover-primary mb-1">
                                                                                                 {{ $proyekberjalan0->nama_proyek }}
                                                                                             </a>
                                                                                         </td>
                                                                                         <!--end::Name-->
-                                                                                        <!--begin::Kode-->
-                                                                                        <td>
-                                                                                            <a href="#" class="text-gray-600 text-hover-primary mb-1">
-                                                                                                {{ $proyekberjalan0->proyek->nospk_external ?? '' }}
-                                                                                            </a>
-                                                                                        </td>
-                                                                                        <!--end::Kode-->
                                                                                         <!--begin::Unit-->
                                                                                         <td>
-                                                                                            {{ $proyekberjalan0->UnitKerja->unit_kerja ?? '' }}
+                                                                                            {{ $proyekberjalan0->UnitKerja->unit_kerja ?? '-' }}
                                                                                         </td>
                                                                                         <!--end::Unit-->
                                                                                         <!--begin::Nilai OK-->
-                                                                                        <td>{{ $proyekberjalan0->nilaiok_proyek }}
+                                                                                        <td>{{ number_format($proyekberjalan0->proyek->nilai_rkap, 0, '.', '.') }}
                                                                                         </td>
                                                                                         <!--end::Nilai OK-->
+                                                                                        <!--begin::Start-->
+                                                                                        <td>
+                                                                                            {{ $proyekberjalan0->proyek->tanggal_mulai_terkontrak }}
+                                                                                        </td>
+                                                                                        <!--end::End-->
+                                                                                        <!--begin::Start-->
+                                                                                        <td>
+                                                                                            {{ $proyekberjalan0->proyek->tanggal_akhir_terkontrak }}
+                                                                                        </td>
+                                                                                        <!--end::End-->
                                                                                         <!--begin::Durasi-->
                                                                                         <td>
                                                                                             @php
@@ -1858,12 +1876,6 @@
                                                                                             {{ $durasi->m }} Bulan
                                                                                         </td>
                                                                                         <!--end::Durasi-->
-                                                                                        <!--begin::Start-->
-                                                                                        <td>{{ date_format($tglawal, 'd-M-Y') }}
-                                                                                            /
-                                                                                            {{ date_format($tglakhir, 'd-M-Y') }}
-                                                                                        </td>
-                                                                                        <!--end::End-->
                                                                                     </tr>
                                                                                 @endif
                                                                             @endforeach
@@ -1885,19 +1897,6 @@
                                                                 <i onclick="hideColumn(this, '#divProyekSelesai')" id="hide-button" style="display: none" class="bi bi-arrows-collapse"></i><i
                                                                     onclick="showColumn(this, '#divProyekSelesai')" id="show-button" class="bi bi-arrows-expand"></i>
                                                             </h3>
-                                                            {{-- <script>
-                                                                function hideColumn() {
-                                                                    document.getElementById("divProyekSelesai").style.display = "none";
-                                                                    document.getElementById("hide-button").style.display = "none";
-                                                                    document.getElementById("show-button").style.display = "";
-                                                                }
-    
-                                                                function showColumn() {
-                                                                    document.getElementById("divProyekSelesai").style.display = "";
-                                                                    document.getElementById("hide-button").style.display = "";
-                                                                    document.getElementById("show-button").style.display = "none";
-                                                                }
-                                                            </script> --}}
                                                             <br>
                                                             <div id="divProyekSelesai" style="display:none">
                                                                 <!--begin::Table-->
@@ -1906,13 +1905,12 @@
                                                                     <thead>
                                                                         <!--begin::Table row-->
                                                                         <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                            <th class="min-w-auto">Nama Proyek</th>
                                                                             <th class="min-w-auto">Nomor SPK</th>
+                                                                            <th class="min-w-auto">Nama Proyek</th>
                                                                             <th class="min-w-auto">Unit kerja</th>
-                                                                            {{-- <th class="min-w-auto">Stage</th> --}}
-                                                                            <th class="min-w-auto">Divisi</th>
                                                                             <th class="min-w-auto">Nilai OK</th>
-                                                                            <th class="min-w-auto">Tgl Mulai Kontrak</th>
+                                                                            <th class="min-w-auto">Tanggal Mulai</th>
+                                                                            <th class="min-w-auto">Tanggal Akhir</th>
                                                                             <th class="min-w-auto">Durasi</th>
                                                                         </tr>
                                                                         <!--end::Table row-->
@@ -1920,89 +1918,51 @@
                                                                     <!--end::Table head-->
                                                                     <!--begin::Table body-->
                                                                     <tbody class="fw-bold text-gray-600">
-
-
                                                                         @if (isset($proyekberjalan))
-                                                                            @foreach ($proyekberjalan as $proyekberjalan6)
-                                                                                @if ($proyekberjalan6->stage > 7)
+                                                                            @foreach ($proyekberjalan as $proyekberjalan0)
+                                                                            @if (!empty($proyekberjalan0->proyek->ContractManagements))
+                                                                                @if ($proyekberjalan0->stage == 8 && $proyekberjalan0->proyek->ContractManagements->stages == 4 )
                                                                                     <tr>
+                                                                                        <!--begin::Kode-->
+                                                                                        <td>
+                                                                                            <a href="#" data-bs-toggle="modal"
+                                                                                                data-bs-target="#proyek_berjalan_{{ $proyekberjalan0->kode_proyek }}"
+                                                                                                id="modal-delete"
+                                                                                                class="text-gray-600 {{ !empty($proyekberjalan0->proyek->nospk_external) ? 'text-hover-primary' : 'text-hover-danger' }} mb-1">{{ !empty($proyekberjalan0->proyek->nospk_external) ? $proyekberjalan0->proyek->nospk_external : '*Belum Ditentukan' }}
+                                                                                            </a>
+                                                                                        </td>
+                                                                                        <!--end::Kode-->
                                                                                         <!--begin::Name-->
                                                                                         <td>
-                                                                                            <a href="/proyek/view/{{ $proyekberjalan6->kode_proyek }}"
-                                                                                                class="text-gray-800 text-hover-primary mb-1 text-break">
-                                                                                                {{ $proyekberjalan6->nama_proyek }}
+                                                                                            <a target="_blank" href="/proyek/view/{{ $proyekberjalan0->kode_proyek }}" class="text-gray-800 text-hover-primary mb-1">
+                                                                                                {{ $proyekberjalan0->nama_proyek }}
                                                                                             </a>
                                                                                         </td>
                                                                                         <!--end::Name-->
-                                                                                        <!--begin::No.SPK-->
-                                                                                        <td>{{ $proyekberjalan6->proyek->nospk_external }}
-                                                                                        </td>
-                                                                                        <!--end::No.SPK-->
                                                                                         <!--begin::Unit-->
-                                                                                        <td>{{ $proyekberjalan6->UnitKerja->unit_kerja }}
+                                                                                        <td>
+                                                                                            {{ $proyekberjalan0->UnitKerja->unit_kerja ?? '-' }}
                                                                                         </td>
                                                                                         <!--end::Unit-->
-                                                                                        <!--begin::Nama Proyek-->
-                                                                                        {{-- <td class="text-center">
-                                                                                        @switch($proyekberjalan6->stage)
-                                                                                            @case('1')
-                                                                                                Pasar Dini
-                                                                                            @break
-
-                                                                                            @case('2')
-                                                                                                Pasar Potensial
-                                                                                            @break
-
-                                                                                            @case('3')
-                                                                                                Prakualifikasi
-                                                                                            @break
-
-                                                                                            @case('4')
-                                                                                                Tender Diikuti
-                                                                                            @break
-
-                                                                                            @case('5')
-                                                                                                Perolehan
-                                                                                            @break
-
-                                                                                            @case('6')
-                                                                                                Menang
-                                                                                            @break
-
-                                                                                            @case('7')
-                                                                                                Kalah
-                                                                                            @break
-
-                                                                                            @case('8')
-                                                                                                Terkontrak
-                                                                                            @break
-
-                                                                                            @case('9')
-                                                                                                Terendah
-                                                                                            @break
-
-                                                                                            @default
-                                                                                                Selesai
-                                                                                        @endswitch
-                                                                                    </td> --}}
-                                                                                        <!--end::Nama Proyek-->
-                                                                                        <!--begin::Divisi-->
-                                                                                        <td>{{ $proyekberjalan6->proyek->UnitKerja->divisi }}
+                                                                                        <!--begin::Nilai OK-->
+                                                                                        <td>{{ number_format($proyekberjalan0->proyek->nilai_rkap, 0, '.', '.') }}
                                                                                         </td>
-                                                                                        <!--end::Divisi-->
-                                                                                        <!--begin::NilaiOK-->
-                                                                                        <td>{{ $proyekberjalan6->proyek->nilai_rkap }}
+                                                                                        <!--end::Nilai OK-->
+                                                                                        <!--begin::Start-->
+                                                                                        <td>
+                                                                                            {{ $proyekberjalan0->proyek->tanggal_mulai_terkontrak }}
                                                                                         </td>
-                                                                                        <!--end::NilaiOK-->
-                                                                                        <!--begin::Tanggal Kontrak-->
-                                                                                        <td>{{ $proyekberjalan6->proyek->tanggal_mulai_terkontrak }}
+                                                                                        <!--end::End-->
+                                                                                        <!--begin::Start-->
+                                                                                        <td>
+                                                                                            {{ $proyekberjalan0->proyek->tanggal_akhir_terkontrak }}
                                                                                         </td>
-                                                                                        <!--end::Tanggal Kontrak-->
+                                                                                        <!--end::End-->
                                                                                         <!--begin::Durasi-->
                                                                                         <td>
                                                                                             @php
-                                                                                                $tglakhir = new DateTime($proyekberjalan6->proyek->tanggal_akhir_terkontrak);
-                                                                                                $tglawal = new DateTime($proyekberjalan6->proyek->tanggal_mulai_terkontrak);
+                                                                                                $tglakhir = new DateTime($proyekberjalan0->proyek->tanggal_akhir_terkontrak ?? date('now'));
+                                                                                                $tglawal = new DateTime($proyekberjalan0->proyek->tanggal_mulai_terkontrak ?? date('now'));
                                                                                                 $durasi = $tglakhir->diff($tglawal);
                                                                                             @endphp
                                                                                             {{ $durasi->y }} Tahun,
@@ -2011,9 +1971,9 @@
                                                                                         <!--end::Durasi-->
                                                                                     </tr>
                                                                                 @endif
+                                                                            @endif
                                                                             @endforeach
                                                                         @endif
-
                                                                     </tbody>
                                                                     <!--end::Table body-->
                                                                 </table>
@@ -2075,7 +2035,7 @@
                                                                                     </td>
                                                                                     <!--end::Name-->
                                                                                     <!--begin::Divisi-->
-                                                                                    <td>{{ $proyekberjalan6->UnitKerja->unit_kerja }}
+                                                                                    <td>{{ $proyekberjalan0->UnitKerja->unit_kerja }}
                                                                                     </td>
                                                                                     <!--end::Divisi-->
                                                                                     <!--begin::Stage-->
@@ -3777,6 +3737,195 @@
         </form>
     @endforeach
     <!--end::DELETE ATTACHMENT-->
+
+        <!--begin::modal Detail Proyek-->
+    @foreach ($proyekberjalan as $proyek)
+    <div class="modal fade" id="proyek_berjalan_{{ $proyek->kode_proyek }}" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-800px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>{{ $proyek->nama_proyek }}
+                    </h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <i class="bi bi-x-lg"></i>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
+                    <!--begin::Input group-->
+                    <div class="row fv-row my-2">
+                        <div class="col-6">
+                            <div class="d-flex align-items-center">
+                                <div class="col text-end me-5">
+                                    <span class="">Durasi Proyek: </span>
+                                </div>
+                                @php
+                                    $tglakhir = new DateTime($proyek->proyek->tanggal_akhir_terkontrak ?? date('now'));
+                                    $tglawal = new DateTime($proyek->proyek->tanggal_mulai_terkontrak ?? date('now'));
+                                    $durasi = $tglakhir->diff($tglawal);
+                                @endphp
+                                <div class="col text-dark text-start">
+                                    <b>
+                                    {{ $durasi->y }} Tahun,
+                                    {{ $durasi->m }} Bulan
+                                    </b>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="d-flex align-items-center">
+                                <div class="col text-end me-5">
+                                    <span class="">Unit Kerja: </span>
+                                </div>
+                                <div class="col text-dark text-start">
+                                    <b>{{ $proyekberjalan0->UnitKerja->unit_kerja ?? '-' }}</b>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--end::Input group-->
+                    <!--begin::Input group-->
+                    <div class="row fv-row my-2">
+                        <div class="col-6">
+                            <div class="d-flex align-items-center">
+                                <div class="col text-end me-5">
+                                    <span class="">Tanggal Mulai Kontrak: </span>
+                                </div>
+                                <div class="col text-dark text-start">
+                                    <b>{{ $proyek->proyek->tanggal_mulai_terkontrak ?? "-" }}</b>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="d-flex align-items-center">
+                                <div class="col text-end me-5">
+                                    <span class="">Tanggal Berakhir Kontrak: </span>
+                                </div>
+                                <div class="col text-dark text-start">
+                                    <b>{{ $proyek->proyek->tanggal_mulai_terkontrak ?? "-" }}</b>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--end::Input group-->
+                    <!--begin::Input group-->
+                    <div class="row fv-row my-2">
+                        <div class="col-6">
+                            <div class="d-flex align-items-center">
+                                <div class="col text-end me-5">
+                                    <span class="">Lokasi: </span>
+                                </div>
+                                <div class="col text-dark text-start">
+                                    <b>{{ $proyek->proyek->lokasi_tender ?? "-" }}</b>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="d-flex align-items-center">
+                                <div class="col text-end me-5">
+                                    <span class="">Nama MP: </span>
+                                </div>
+                                <div class="col text-dark text-start">
+                                    <b>{{ $proyek->customer->name_pic ?? "-" }}</b>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--end::Input group-->
+                    <!--begin::Input group-->
+                    <div class="row fv-row my-2">
+                        <div class="col-6">
+                            <div class="d-flex align-items-center">
+                                <div class="col text-end me-5">
+                                    <span class="">History Adendum: </span>
+                                </div>
+                                <div class="col text-dark text-start">
+                                    <b>{{ $proyek->proyek->lokasi_tender ?? "-" }}</b>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="d-flex align-items-center">
+                                <div class="col text-end me-5">
+                                    <span class="">Lsp: </span>
+                                </div>
+                                <div class="col text-dark text-start">
+                                    <b>{{ $proyek->customer->name_pic ?? "-" }}</b>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--end::Input group-->
+                    <!--begin::Input group-->
+                    <div class="row fv-row my-2">
+                        <div class="col-6">
+                            <div class="d-flex align-items-center">
+                                <div class="col text-end me-5">
+                                    <span class="">Masalah Potensial: </span>
+                                </div>
+                                <div class="col text-dark text-start">
+                                    <b>{{ $proyek->proyek->lokasi_tender ?? "-" }}</b>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="d-flex align-items-center">
+                                <div class="col text-end me-5">
+                                    <span class="">Resume Resiko: </span>
+                                </div>
+                                <div class="col text-dark text-start">
+                                    <b>{{ $proyek->customer->name_pic ?? "-" }}</b>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--end::Input group-->
+                    <!--begin::Input group-->
+                    <div class="row fv-row my-2">
+                        <div class="col-6">
+                            <div class="d-flex align-items-center">
+                                <div class="col text-end me-5">
+                                    <span class="">Curve RA: </span>
+                                </div>
+                                <div class="col text-dark text-start">
+                                    {{-- <b>{{ $proyek->proyek->lokasi_tender ?? "-" }}</b> --}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="d-flex align-items-center">
+                                <div class="col text-end me-5">
+                                    <span class="">Curve RI: </span>
+                                </div>
+                                <div class="col text-dark text-start">
+                                    {{-- <b>{{ $proyek->customer->name_pic ?? "-" }}</b> --}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--end::Input group-->
+                </div>
+                <!--end::Modal body-->
+
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+    </div>
+    @endforeach
+    <!--end::modal Detail Proyek-->
 
     <!--end::Modals-->
 

@@ -189,7 +189,7 @@
                                         <th class="min-w-auto">Partner</th>
                                         <th class="min-w-auto">Competitor</th>
                                         <th class="min-w-auto">Kode Nasabah</th>
-                                        @if (auth()->user()->check_administrator)
+                                        @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)"))
                                         <th class="min-w-auto text-center">Action</th>
                                         @endif
                                         {{-- <th class="max-w-120px"><center>Action</center></th> --}}
@@ -260,12 +260,12 @@
                                                 </td>
                                                 <!--end::Kode Nasabah-->
                                                 <!--begin::Action-->
-                                                @if (auth()->user()->check_administrator)
+                                                @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)"))
                                                     <td class="text-center">
                                                         <button data-bs-toggle="modal"
                                                             data-bs-target="#kt_modal_delete{{ $customers->id_customer }}"
                                                             id="modal-delete"
-                                                            class="btn btn-sm btn-light btn-active-primary">Delete
+                                                            class="btn btn-sm btn-light btn-active-danger">Delete
                                                         </button>
                                                     </td>
                                                 @endif
