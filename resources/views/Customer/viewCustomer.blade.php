@@ -667,7 +667,7 @@
 
                                                         </div>
                                                         <!--End begin::Row-->
-
+                                                        
                                                         <br>
                                                         <br>
                                                         <br>
@@ -1520,6 +1520,95 @@
                                                             <!--End begin::Row-->
                                                         </div>
                                                         <!--end::Data SAP-->
+                                                        <br><br>
+                                                        <!--begin::Data PIC MANRISK-->
+                                                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">MANRISK
+                                                            <i onclick="hideColumn(this, '#divMANRISK')" id="hide-button" style="display: none" class="bi bi-arrows-collapse"></i><i
+                                                                onclick="showColumn(this, '#divMANRISK')" id="show-button" class="bi bi-arrows-expand"></i>
+                                                        </h3>
+                                                        <br>
+                                                        <div id="divMANRISK" style="display:none">
+                                                            <!--begin::Row-->
+                                                            <div class="row">
+                                                                <!--begin::Col-->
+                                                                    <div class="col">
+                                                                        <div class="form-check">
+                                                                            <input class="form-check-input" type="checkbox" value="key-client" id="key-client">
+                                                                            <label class="form-check-label" for="key-client">
+                                                                            Key Client
+                                                                            </label>
+                                                                        </div>
+                                                                    </div>
+                                                                <!--end::Col-->
+                                                            </div>
+                                                            <!--end::Row-->
+                                                            <!--Begin::Row-->
+                                                        <div class="row fv-row my-7">
+                                                            <!--Begin::Coloumn-->
+                                                            <div class="col-6">
+                                                                <label class="fs-6 fw-bold form-label mt-3 required">
+                                                                    <span class="">Forbes Rank</span>
+                                                                </label>
+                                                                <!--Begin::Select-->
+                                                                <div id="div-forbes">
+                                                                    <select name="forbes_rank" id="forbes_rank" class="form-select form-select-solid" data-control="select2" data-hide-search="true"
+                                                                        {{-- onchange="selectProvinsi(this)"  --}}
+                                                                        data-placeholder="Pilih Rank Forbes">
+                                                                        <option value=""></option>
+                                                                        <option value="Urutan 1-50"{{ $customer -> forbes_rank == "Urutan 1-50" ? "selected" : "" }}>Urutan 1-50</option>
+                                                                        <option value="Urutan 51-100"{{ $customer -> forbes_rank == "Urutan 51-100" ? "selected" : "" }}>Urutan 51-100</option>
+                                                                        <option value="Diluar Top 100"{{ $customer -> forbes_rank == "Diluar Top 100" ? "selected" : "" }}>Diluar Top 100</option>                                                                            
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <!--End::Select-->
+                                                            <!--End::Coloumn-->
+
+                                                            <!--Begin::Coloumn-->
+                                                            <div class="col-6">
+                                                                <label class="fs-6 fw-bold form-label mt-3 required">
+                                                                    <span class="">LQ Rank</span>
+                                                                </label>
+                                                                <!--Begin::Select-->
+                                                                <div id="div-lq">
+                                                                    <select name="lq_rank" id="lq_rank" class="form-select form-select-solid" data-control="select2" data-hide-search="true"
+                                                                        {{-- onchange="selectProvinsi(this)"  --}}
+                                                                        data-placeholder="Pilih Rank LQ">
+                                                                        <option value=""></option>
+                                                                        <option value="Urutan 1-20"{{ $customer -> lq_rank == "Urutan 1-20" ? "selected" : "" }}>Urutan 1-20</option>
+                                                                        <option value="Urutan 21-45"{{ $customer -> lq_rank == "Urutan 21-45" ? "selected" : "" }}>Urutan 21-45</option>
+                                                                        <option value="Diluar Top 45"{{ $customer -> lq_rank == "Diluar Top 45" ? "selected" : "" }}>Diluar Top 45</option>                                                                            
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <!--End::Select-->
+                                                            <!--End::Coloumn-->
+                                                        </div>
+
+                                                        <!--Begin::Row-->
+                                                        <div class="row fv-row">
+                                                            <div class="col">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span class="">Layer Segmentasi</span>
+                                                                </label>
+                                                                <!--end::Label-->
+                                                                 <!--begin::Input-->
+                                                                <select name="layer_segmentasi" id="layer_segmentasi" class="form-select form-select-solid pe-5" data-control="select2" data-hide-search="false"
+                                                                    data-placeholder="Pilih Layer Segmentasi">
+                                                                    <option value="" selected></option>
+                                                                    <option value="Decision Maker"{{ $customer -> layer_segmentasi == "Decision Maker" ? "selected" : "" }}>Decision Maker</option>
+                                                                    <option value="Influencer"{{ $customer -> layer_segmentasi == "Influencer" ? "selected" : "" }}>Influencer</option>
+                                                                    <option value="Buyer"{{ $customer -> layer_segmentasi == "Buyer" ? "selected" : "" }}>Buyer</option>
+                                                                    <option value="User"{{ $customer -> layer_segmentasi == "User" ? "selected" : "" }}>User</option>
+                                                                    <option value="Gate Keeper"{{ $customer -> layer_segmentasi == "Gate Keeper" ? "selected" : "" }}>Gate Keeper</option>
+                                                                </select>
+                                                                 <!--end::Input-->
+                                                            </div>
+                                                        </div>
+                                                        <!--End::Row-->
+                                                        </div>
+                                                        <!--end::Data PIC MANRISK-->
                                                     </div>
                                                     <!--end:::Tab pane Informasi Perusahaan-->
 
