@@ -2203,7 +2203,7 @@
                                                                                     <td class="text-center">
                                                                                         @isset($proyekberforecast->proyek->Forecasts)
                                                                                         {{-- @dump($proyekberforecast->proyek->Forecasts->last()) --}}
-                                                                                            @switch($proyekberforecast->proyek->Forecasts->sortByDesc('month_forecast')->last()->month_forecast)
+                                                                                            @switch($proyekberforecast->proyek->Forecasts->sortByDesc('month_forecast')->last()->month_forecast ?? "-")
                                                                                                 @case('1')
                                                                                                     Januari
                                                                                                 @break
