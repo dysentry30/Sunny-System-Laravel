@@ -2837,15 +2837,8 @@
                             <!--begin::Table row-->
                             <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                 <th class="min-w-125px">Issue</th>
-                                <th class="min-w-125px">Status</th>
                                 <th class="min-w-125px">Penyebab</th>
-                                <th class="min-w-125px">Biaya</th>
-                                <th class="min-w-125px">Waktu</th>
-                                <th class="min-w-125px">Mutu</th>
-                                <th class="min-w-125px">Ancaman</th>
-                                <th class="min-w-125px">Peluang</th>
-                                <th class="min-w-125px">Rencana Tindak Lanjut</th>
-                                <th class="min-w-125px">Target Waktu Penyelesaian</th>
+                                <th class="min-w-125px">Status</th>
                             </tr>
                             <!--end::Table row-->
                         </thead>
@@ -2871,6 +2864,10 @@
                                             </td>
                                             <!--end::Name=-->
                                         @endif
+                                        
+                                        <td>
+                                            <p class="text-gray-600">{{ $pending_issue->penyebab }}</p>
+                                        </td>
 
                                         @if ($pending_issue->status)
                                             <!--begin::Name=-->
@@ -2885,41 +2882,6 @@
                                             </td>
                                             <!--end::Name=-->
                                         @endif
-
-                                        <td>
-                                            <p class="text-gray-600">{{ $pending_issue->penyebab }}</p>
-                                        </td>
-
-                                        <td>
-                                            <p class="text-gray-600">
-                                                {{ number_format($pending_issue->biaya, 2, '.', '.') }}</p>
-                                        </td>
-
-                                        <td>
-                                            <p class="text-gray-600">{{ $pending_issue->waktu }}</p>
-                                        </td>
-
-                                        <td>
-                                            <p class="text-gray-600">{{ $pending_issue->mutu }}</p>
-                                        </td>
-
-                                        <td>
-                                            <p class="text-gray-600">{{ $pending_issue->ancaman }}</p>
-                                        </td>
-
-                                        <td>
-                                            <p class="text-gray-600">{{ $pending_issue->peluang }}</p>
-                                        </td>
-
-                                        <td>
-                                            <p class="text-gray-600">{{ $pending_issue->rencana_tindak_lanjut }}</p>
-                                        </td>
-
-                                        <td>
-                                            <p class="text-gray-600">
-                                                {{ Carbon\Carbon::parse($pending_issue->target_waktu_penyelesaian)->translatedFormat('d F Y') }}
-                                            </p>
-                                        </td>
 
                                     </tr>
                                 @endforeach
@@ -5681,7 +5643,7 @@
                         <input type="hidden" class="modal-name" name="modal-name">
 
                         <div class="row">
-                            <div class="col d-flex flex-column justify-content-center">
+                            {{-- <div class="col d-flex flex-column justify-content-center">
                                 <!--begin::Label-->
                                 <label class="fs-6 fw-bold form-label mt-3">
                                     <span style="font-weight: normal">Masukan file dibawah ini</span>
@@ -5689,14 +5651,10 @@
                                 <!--end::Label-->
                                 <input type="file" accept=".jpg,.jpeg,.png" name="pending-issue-file"
                                     class="form-control form-control-solid">
-                                {{-- end::Read File --}}
+                                <!--end::Read File-->
                                 <small>* hanya menerima file dengan format <b>.jpg</b>, <b>.jpeg</b> dan
                                     <b>.png</b></small>
-                            </div>
-
-                            <div class="col-1 d-flex flex-col align-items-center justify-content-center mt-8">
-                                <p><b>atau</b></p>
-                            </div>
+                            </div> --}}
 
                             <div class="col">
                                 <!--begin::Label-->
@@ -5704,7 +5662,69 @@
                                     <span style="font-weight: normal">Issue</span>
                                 </label>
                                 <!--end::Label-->
-                                <textarea name="pending-issue" rows="1" class="form-control form-control-solid"></textarea>
+                                <input type="text" name="pending-issue" value="" class="form-control form-control-solid">
+                            </div>
+                            <div class="col">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Penyebab</span>
+                                </label>
+                                <!--end::Label-->
+                                <textarea name="penyebab-issue" class="form-control form-control-solid"></textarea>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Resiko Biaya</span>
+                                </label>
+                                <!--end::Label-->
+                                <input type="text" name="resiko-biaya" value="" class="form-control form-control-solid">
+                            </div>
+                            <div class="col">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Resiko Waktu</span>
+                                </label>
+                                <!--end::Label-->
+                                <input type="date" name="resiko-waktu" class="form-control form-control-solid">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Resiko Mutu</span>
+                                </label>
+                                <!--end::Label-->
+                                <input type="text" name="resiko-mutu" value="" class="form-control form-control-solid">
+                            </div>
+                            <div class="col">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Ancaman</span>
+                                </label>
+                                <!--end::Label-->
+                                <textarea cols="1" name="ancaman" class="form-control form-control-solid"></textarea>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Peluang</span>
+                                </label>
+                                <!--end::Label-->
+                                <textarea cols="1" name="peluang" value="" class="form-control form-control-solid"></textarea>
+                            </div>
+                            <div class="col">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Rencana Tindak Lanjut</span>
+                                </label>
+                                <!--end::Label-->
+                                <textarea cols="1" name="rencana-tindak-lanjut" class="form-control form-control-solid"></textarea>
                             </div>
                         </div>
                         <br>
@@ -5724,8 +5744,8 @@
                                 </select>
                             </div>
                         </div>
-                        <hr>
-                        <div class="col">
+                        {{-- <hr> --}}
+                        {{-- <div class="col">
                             <h3 class="text-center"><b>Resiko / Dampak</b></h3>
                             <div class="row">
                                 <div class="col">
@@ -5807,7 +5827,7 @@
                                 <input type="date" class="form-control form-control-solid"
                                     name="target-waktu-penyelesaian" id="target-waktu-penyelesaian">
                             </div>
-                        </div>
+                        </div> --}}
 
                         <br> <br>
                         <button type="submit" id="pending-issue" class="btn btn-lg btn-primary">Save</button>
