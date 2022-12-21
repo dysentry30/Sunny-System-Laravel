@@ -2749,6 +2749,13 @@
                                                 </tr>
                                                 @endif
                                             @endforeach
+                                            @if ($contract->ContractBast->count() == 0)
+                                            <tr>
+                                                <td colspan="3" class="text-center">
+                                                    <h6><b>There is no data</b></h6>
+                                                </td>
+                                            </tr>
+                                            @endif
                                         </tbody>
                                         <!--end::Table body-->
                                     </table>
@@ -2775,45 +2782,52 @@
                                         @endphp
                                         <!--begin::Table body-->
                                         <tbody class="fw-bold text-gray-400">
-                                            @foreach ($contract->ContractBast as $dokumen)
-                                                @if ($dokumen->bast == 2)
+                                                @foreach ($contract->ContractBast as $dokumen)
+                                                    @if ($dokumen->bast == 2)
+                                                    <tr>
+                                                        <!--begin::Nomor-->
+                                                        <td class="text-center">
+                                                            {{ $no++ }}
+                                                        </td>
+                                                        <!--end::Nomor-->
+                                                        <!--begin::Column-->
+                                                        <td>
+                                                            {{ $dokumen->jenis_dokumen }}
+                                                        </td>
+                                                        <!--end::Column-->
+                                                        <!--begin::Name-->
+                                                        <td>
+                                                            @if (str_contains("$dokumen->nama_dokumen", '.pdf'))
+                                                                <a href="{{ asset('words/' . $dokumen->id_document . '.pdf') }}"
+                                                                    class="text-hover-primary">{{ $dokumen->nama_dokumen }}</a>
+                                                            @else
+                                                                <a target="_blank" href="{{ asset('words/' . $dokumen->id_document . '.docx') }}"
+                                                                    class="text-hover-primary">{{ $dokumen->nama_dokumen }}</a>
+                                                            @endif
+                                                        </td>
+                                                        <!--end::Name-->
+                                                        <!--begin::Action-->
+                                                        {{-- <td class="text-center">
+                                                            <small>
+                                                                <p data-bs-toggle="modal"
+                                                                    data-bs-target="#kt_dokumen_rks_delete"
+                                                                    id="modal-delete"
+                                                                    class="btn btn-sm btn-light btn-active-primary">
+                                                                    Delete
+                                                                </p>
+                                                            </small>
+                                                        </td> --}}
+                                                        <!--end::Action-->
+                                                    </tr>
+                                                    @endif
+                                                @endforeach
+                                                @if ($contract->ContractBast->count() == 0)
                                                 <tr>
-                                                    <!--begin::Nomor-->
-                                                    <td class="text-center">
-                                                        {{ $no++ }}
+                                                    <td colspan="3" class="text-center">
+                                                        <h6><b>There is no data</b></h6>
                                                     </td>
-                                                    <!--end::Nomor-->
-                                                    <!--begin::Column-->
-                                                    <td>
-                                                        {{ $dokumen->jenis_dokumen }}
-                                                    </td>
-                                                    <!--end::Column-->
-                                                    <!--begin::Name-->
-                                                    <td>
-                                                        @if (str_contains("$dokumen->nama_dokumen", '.pdf'))
-                                                            <a href="{{ asset('words/' . $dokumen->id_document . '.pdf') }}"
-                                                                class="text-hover-primary">{{ $dokumen->nama_dokumen }}</a>
-                                                        @else
-                                                            <a target="_blank" href="{{ asset('words/' . $dokumen->id_document . '.docx') }}"
-                                                                class="text-hover-primary">{{ $dokumen->nama_dokumen }}</a>
-                                                        @endif
-                                                    </td>
-                                                    <!--end::Name-->
-                                                    <!--begin::Action-->
-                                                    {{-- <td class="text-center">
-                                                        <small>
-                                                            <p data-bs-toggle="modal"
-                                                                data-bs-target="#kt_dokumen_rks_delete"
-                                                                id="modal-delete"
-                                                                class="btn btn-sm btn-light btn-active-primary">
-                                                                Delete
-                                                            </p>
-                                                        </small>
-                                                    </td> --}}
-                                                    <!--end::Action-->
                                                 </tr>
                                                 @endif
-                                            @endforeach
                                         </tbody>
                                         <!--end::Table body-->
                                     </table>
@@ -5704,7 +5718,7 @@
                         </label>
                         <!--end::Label-->
                         <!--begin::Input-->
-                        <select id="jenis-bast" name="jenis-bast"
+                        <select name="jenis-bast"
                             class="form-select form-select-solid w-50"
                             data-control="select2" data-hide-search="true"
                             data-placeholder="Jenis Dokumen">
@@ -5781,7 +5795,7 @@
                         </label>
                         <!--end::Label-->
                         <!--begin::Input-->
-                        <select id="jenis-bast" name="jenis-bast"
+                        <select name="jenis-bast"
                             class="form-select form-select-solid w-50"
                             data-control="select2" data-hide-search="true"
                             data-placeholder="Jenis Dokumen">
