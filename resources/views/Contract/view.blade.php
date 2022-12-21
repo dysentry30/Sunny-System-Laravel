@@ -504,10 +504,7 @@
                                                 <span class="">Proyek: </span>
                                             </div>
                                             <div class="text-dark text-start">
-                                                <a href="#"
-                                                    data-bs-toggle="modal" data-bs-target="#detailProyek"
-                                                    id="click-name"
-                                                    class="text-gray-900 text-hover-primary"><b>{{ $contract->project->nama_proyek ?? '' }}</b></a>
+                                                <b>{{ $contract->project->nama_proyek ?? '' }}</b>
                                             </div>
                                         </div>
                                         <!--begin::Input group Website-->
@@ -622,6 +619,11 @@
                                     </div>
                                 </div>
                                 <br>
+                                <div class="row">
+                                    <div class="col text-end">
+                                        <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#detailProyek">Detail Proyek</button>
+                                    </div>
+                                </div>
                                 <!--End begin::Col-->
                                 {{-- <div class="row">
                                     <div class="col-6">
@@ -830,10 +832,8 @@
 
                         <br><br>
 
-                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                        {{-- <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                             Draft Kontrak
-                            {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
-                                        data-bs-target="#kt_modal_create_proyek">+</a> --}}
                             <a href="/contract-management/view/{{ url_encode($contract->id_contract) }}/draft-contract"
                                 Id="Plus">+</a>
                         </h3>
@@ -861,11 +861,6 @@
                                             <tr>
                                                 <!--begin::Name=-->
                                                 <td>
-                                                    {{-- <a target="_blank"
-                                                                href="/document/view/{{ $draftContract->id_draft }}/{{ $draftContract->id_document }}"
-                                                                class="text-gray-600 text-hover-primary mb-1">
-                                                                {{ $draftContract->draft_name }}
-                                                            </a> --}}
                                                     <a target="_blank"
                                                         href="/contract-management/view/{{ $contract->id_contract }}/draft-contract/{{ $draftContract->id_draft }}"
                                                         class="text-gray-600 text-hover-primary mb-1">
@@ -913,10 +908,8 @@
                             <!--end::Table body-->
 
                         </table>
-                        <!--End:Table: Draft Contract-->
+                        <!--End:Table: Draft Contract--> --}}
 
-                        &nbsp;<br>
-                        &nbsp;<br>
 
                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                             Review
@@ -2723,26 +2716,27 @@
                                                     <tr>
                                                         <!--begin::Name=-->
                                                         <td>
-                                                            <p class="text-gray-600 mb-1">{{ $inputRisk->resiko }}
-                                                            </p>
+                                                            <p class="text-gray-600 mb-1">{{ $inputRisk->verifikasi }}</p>
                                                         </td>
                                                         <!--end::Name=-->
                                                         <!--begin::Name=-->
                                                         <td>
-                                                            <p class="text-gray-600 mb-1">{{ $inputRisk->penyebab }}
-                                                            </p>
+                                                            <p class="text-gray-600 mb-1">{{ $inputRisk->kategori }}</p>
                                                         </td>
                                                         <!--end::Name=-->
                                                         <!--begin::Kode=-->
                                                         <td>
-                                                            <p class="text-gray-600 mb-1">{{ $inputRisk->dampak }}
-                                                            </p>
+                                                            <p class="text-gray-600 mb-1">{{ $inputRisk->kriteria }}</p>
                                                         </td>
                                                         <!--end::Kode=-->
                                                         <!--begin::Unit=-->
                                                         <td>
-                                                            <p class="text-gray-600 mb-1">{{ $inputRisk->mitigasi }}
-                                                            </p>
+                                                            <p class="text-gray-600 mb-1">{{ $inputRisk->probis_1_2 }}</p>
+                                                        </td>
+                                                        <!--end::Unit=-->
+                                                        <!--begin::Unit=-->
+                                                        <td>
+                                                            <p class="text-gray-600 mb-1">{{ $inputRisk->probis_terganggu }}</p>
                                                         </td>
                                                         <!--end::Unit=-->
                                                     </tr>
@@ -2849,21 +2843,10 @@
 
                                 @foreach ($contract->PendingIssue as $key => $pending_issue)
                                     <tr>
-                                        @if (Str::isUuid($pending_issue->issue))
-                                            <!--begin::Name=-->
-                                            <td>
-                                                <a href="/document/view/{{ $contract->id_contract }}/{{ $pending_issue->issue }}/pict"
-                                                    class="text-gray-600 text-hover-primary">Gambar
-                                                    #{{ $key + 1 }}</a>
-                                            </td>
-                                            <!--end::Name=-->
-                                        @else
-                                            <!--begin::Name=-->
-                                            <td>
-                                                <p class="text-gray-600">{{ $pending_issue->issue }}</p>
-                                            </td>
-                                            <!--end::Name=-->
-                                        @endif
+                                        <td>
+                                            <p class="text-gray-600">{{ $pending_issue->issue }}</p>
+                                        </td>
+                                        <!--end::Name=-->
                                         
                                         <td>
                                             <p class="text-gray-600">{{ $pending_issue->penyebab }}</p>
@@ -2882,7 +2865,6 @@
                                             </td>
                                             <!--end::Name=-->
                                         @endif
-
                                     </tr>
                                 @endforeach
                             @else

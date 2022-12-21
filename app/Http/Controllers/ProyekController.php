@@ -1474,7 +1474,9 @@ class ProyekController extends Controller
                     return redirect()->back();
                 }
                 $sap = $customer->sap;
-                $pic = $customer->pic->first();
+                $pic = $customer->pic->filter(function($pic) {
+                    return !empty($pic->nama_pic) && !empty($pic->jabatan_pic) && !empty($pic->email_pic) && !empty($pic->phone_pic);
+                })->first();
                 // dump($sap, $pic);
                 // dd();
                 if (empty($customer)) {
@@ -1487,7 +1489,7 @@ class ProyekController extends Controller
                 $data_nasabah_online = collect([
                     "nmnasabah" => "$customer->name",
                     "alamat" => "$customer->address_1",
-                    "kota" => "$customer->kota_kabupaten",
+                    "kota" => explode("-", $provinsi->province_id)[1],
                     "email" => "$customer->email",
                     "ext" => "-",
                     "telepon" => "$customer->phone_number",
