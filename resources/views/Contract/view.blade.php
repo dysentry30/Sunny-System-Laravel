@@ -2647,44 +2647,186 @@
                 <!--begin:::Tab pane Serah Terima-->
                 <div class="tab-pane fade" id="kt_user_view_overview_SerahTerima" role="tabpanel">
                     <div class="card-title m-0">
-                        <form action="/contract-management/document-bast/upload" method="POST"
-                            enctype="multipart/form-data">
+                        {{-- <form action="/contract-management/document-bast/upload" method="POST"
+                            enctype="multipart/form-data"> --}}
                             @csrf
                             <input type="hidden" name="id-contract" value="{{ $contract->id_contract }}">
                             <div class="row">
                                 <div class="col">
-                                    <label for="dokumen-bast-1" class="form-label">Dokumen Bast 1</label>
-                                    <input type="file" name="dokumen-bast-1" accept=".docx"
-                                        class="form-control form-control-solid">
-                                    @if (!empty($contract->dokumen_bast_1))
-                                        <small>Lihat Dokumen Bast 1: <a target="_blank"
-                                                class="text-gray-400 text-hover-primary"
-                                                href="/document/view/{{ $contract->id_contract }}/{{ $contract->dokumen_bast_1 }}">Klik
-                                                disini</a></small>
+                                    <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                        Dokumen Bast 1
+                                        <a href="#" Id="Plus" data-bs-toggle="modal"
+                                            data-bs-target="#kt_modal_bast_1">+</a>
+                                    </h3>
+                                    {{-- <input type="file" name="dokumen-bast-1" accept=".docx"
+                                        class="form-control form-control-solid"> --}}
+                                    {{-- @if (!empty($contract->dokumen_bast_1))
+                                        <small>Lihat Dokumen Bast 1: 
+                                            <a target="_blank" href="{{ asset('words/' . $contract->dokumen_bast_2 . '.docx') }}" class="text-gray-400 text-hover-primary">Klik disini</a>
+                                        </small>
+                                        <a target="_blank" class="text-gray-400 text-hover-primary"
+                                            href="/document/view/{{ url_encode($contract->id_contract) }}/{{ $contract->dokumen_bast_1 }}">Klik disini</a></small>
                                     @else
                                         <small>Belum mendapatkan Dokumen Bast 1</small>
-                                    @endif
+                                    @endif --}}
                                 </div>
                                 <div class="col">
-                                    <label for="dokumen-bast-2" class="form-label">Dokumen Bast 2</label>
-                                    <input type="file" name="dokumen-bast-2" accept=".docx"
-                                        class="form-control form-control-solid">
-                                    @if (!empty($contract->dokumen_bast_1))
-                                        <small>Lihat Dokumen Bast 2: <a target="_blank"
-                                                class="text-gray-400 text-hover-primary"
-                                                href="/document/view/{{ $contract->id_contract }}/{{ $contract->dokumen_bast_2 }}">Klik
-                                                disini</a></small>
+                                    <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                        Dokumen Bast 2
+                                        <a href="#" Id="Plus" data-bs-toggle="modal"
+                                            data-bs-target="#kt_modal_bast_2">+</a>
+                                    </h3>
+                                    {{-- @if (!empty($contract->dokumen_bast_1))
+                                        <small>Lihat Dokumen Bast 2: 
+                                            <a target="_blank" href="{{ asset('words/' . $contract->dokumen_bast_2 . '.docx') }}" class="text-gray-400 text-hover-primary">Klik disini</a>
+                                        </small>
+                                        <a target="_blank" class="text-gray-400 text-hover-primary"
+                                            href="/document/view/{{ url_encode($contract->id_contract) }}/{{ $contract->dokumen_bast_2 }}">Klik disini</a></small>
                                     @else
                                         <small>Belum mendapatkan Dokumen Bast 2</small>
-                                    @endif
+                                    @endif --}}
                                 </div>
                             </div>
                             <br>
-                            <button type="submit" class="btn btn-sm btn-active-primary text-white"
-                                style="background-color: #008cb4;">Save Dokumen Bast</button>
-                        </form>
+                            <div class="row">
+                                <div class="col-6">
+                                    <!--begin::Table-->
+                                    <table class="table align-middle table-row-dashed fs-6 gy-2"
+                                        id="kt_customers_table">
+                                        <!--begin::Table head-->
+                                        <thead>
+                                            <!--begin::Table row-->
+                                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                <th class="w-50px text-center">No.</th>
+                                                <th class="w-auto">Jenis Dokumen</th>
+                                                <th class="w-auto">File</th>
+                                                {{-- <th class="w-auto text-center"></th> --}}
+                                            </tr>
+                                            <!--end::Table row-->
+                                        </thead>
+                                        <!--end::Table head-->
+                                        @php
+                                            $no = 1;
+                                        @endphp
+                                        <!--begin::Table body-->
+                                        <tbody class="fw-bold text-gray-400">
+                                            @foreach ($contract->ContractBast as $dokumen)
+                                                @if ($dokumen->bast == 1)
+                                                <tr>
+                                                    <!--begin::Nomor-->
+                                                    <td class="text-center">
+                                                        {{ $no++ }}
+                                                    </td>
+                                                    <!--end::Nomor-->
+                                                    <!--begin::Column-->
+                                                    <td>
+                                                        {{ $dokumen->jenis_dokumen }}
+                                                    </td>
+                                                    <!--end::Column-->
+                                                    <!--begin::Name-->
+                                                    <td>
+                                                        @if (str_contains("$dokumen->nama_dokumen", '.pdf'))
+                                                            <a href="{{ asset('words/' . $dokumen->id_document . '.pdf') }}"
+                                                                class="text-hover-primary">{{ $dokumen->nama_dokumen }}</a>
+                                                        @else
+                                                            <a target="_blank" href="{{ asset('words/' . $dokumen->id_document . '.docx') }}"
+                                                                class="text-hover-primary">{{ $dokumen->nama_dokumen }}</a>
+                                                        @endif
+                                                    </td>
+                                                    <!--end::Name-->
+                                                    <!--begin::Action-->
+                                                    {{-- <td class="text-center">
+                                                        <small>
+                                                            <p data-bs-toggle="modal"
+                                                                data-bs-target="#kt_dokumen_rks_delete"
+                                                                id="modal-delete"
+                                                                class="btn btn-sm btn-light btn-active-primary">
+                                                                Delete
+                                                            </p>
+                                                        </small>
+                                                    </td> --}}
+                                                    <!--end::Action-->
+                                                </tr>
+                                                @endif
+                                            @endforeach
+                                        </tbody>
+                                        <!--end::Table body-->
+                                    </table>
+                                    <!--end::Table-->
+                                </div>
+                                <div class="col-6">
+                                    <!--begin::Table-->
+                                    <table class="table align-middle table-row-dashed fs-6 gy-2"
+                                        id="kt_customers_table">
+                                        <!--begin::Table head-->
+                                        <thead>
+                                            <!--begin::Table row-->
+                                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                <th class="w-50px text-center">No.</th>
+                                                <th class="w-auto">Jenis Dokumen</th>
+                                                <th class="w-auto">File</th>
+                                                {{-- <th class="w-auto text-center"></th> --}}
+                                            </tr>
+                                            <!--end::Table row-->
+                                        </thead>
+                                        <!--end::Table head-->
+                                        @php
+                                            $no = 1;
+                                        @endphp
+                                        <!--begin::Table body-->
+                                        <tbody class="fw-bold text-gray-400">
+                                            @foreach ($contract->ContractBast as $dokumen)
+                                                @if ($dokumen->bast == 2)
+                                                <tr>
+                                                    <!--begin::Nomor-->
+                                                    <td class="text-center">
+                                                        {{ $no++ }}
+                                                    </td>
+                                                    <!--end::Nomor-->
+                                                    <!--begin::Column-->
+                                                    <td>
+                                                        {{ $dokumen->jenis_dokumen }}
+                                                    </td>
+                                                    <!--end::Column-->
+                                                    <!--begin::Name-->
+                                                    <td>
+                                                        @if (str_contains("$dokumen->nama_dokumen", '.pdf'))
+                                                            <a href="{{ asset('words/' . $dokumen->id_document . '.pdf') }}"
+                                                                class="text-hover-primary">{{ $dokumen->nama_dokumen }}</a>
+                                                        @else
+                                                            <a target="_blank" href="{{ asset('words/' . $dokumen->id_document . '.docx') }}"
+                                                                class="text-hover-primary">{{ $dokumen->nama_dokumen }}</a>
+                                                        @endif
+                                                    </td>
+                                                    <!--end::Name-->
+                                                    <!--begin::Action-->
+                                                    {{-- <td class="text-center">
+                                                        <small>
+                                                            <p data-bs-toggle="modal"
+                                                                data-bs-target="#kt_dokumen_rks_delete"
+                                                                id="modal-delete"
+                                                                class="btn btn-sm btn-light btn-active-primary">
+                                                                Delete
+                                                            </p>
+                                                        </small>
+                                                    </td> --}}
+                                                    <!--end::Action-->
+                                                </tr>
+                                                @endif
+                                            @endforeach
+                                        </tbody>
+                                        <!--end::Table body-->
+                                    </table>
+                                    <!--end::Table-->
+                                </div>
+                            </div>
+                            <br>
+                            {{-- <button type="submit" class="btn btn-sm btn-active-primary text-white"
+                                style="background-color: #008cb4;">Save Dokumen Bast</button> --}}
+                        {{-- </form> --}}
+                        <br>    
 
-                        <hr>
+                        {{-- <hr> --}}
                         <div class="row">
                             <div class="col">
                                 <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
@@ -2716,27 +2858,26 @@
                                                     <tr>
                                                         <!--begin::Name=-->
                                                         <td>
-                                                            <p class="text-gray-600 mb-1">{{ $inputRisk->verifikasi }}</p>
+                                                            <p class="text-gray-600 mb-1">{{ $inputRisk->resiko }}
+                                                            </p>
                                                         </td>
                                                         <!--end::Name=-->
                                                         <!--begin::Name=-->
                                                         <td>
-                                                            <p class="text-gray-600 mb-1">{{ $inputRisk->kategori }}</p>
+                                                            <p class="text-gray-600 mb-1">{{ $inputRisk->penyebab }}
+                                                            </p>
                                                         </td>
                                                         <!--end::Name=-->
                                                         <!--begin::Kode=-->
                                                         <td>
-                                                            <p class="text-gray-600 mb-1">{{ $inputRisk->kriteria }}</p>
+                                                            <p class="text-gray-600 mb-1">{{ $inputRisk->dampak }}
+                                                            </p>
                                                         </td>
                                                         <!--end::Kode=-->
                                                         <!--begin::Unit=-->
                                                         <td>
-                                                            <p class="text-gray-600 mb-1">{{ $inputRisk->probis_1_2 }}</p>
-                                                        </td>
-                                                        <!--end::Unit=-->
-                                                        <!--begin::Unit=-->
-                                                        <td>
-                                                            <p class="text-gray-600 mb-1">{{ $inputRisk->probis_terganggu }}</p>
+                                                            <p class="text-gray-600 mb-1">{{ $inputRisk->mitigasi }}
+                                                            </p>
                                                         </td>
                                                         <!--end::Unit=-->
                                                     </tr>
@@ -2764,6 +2905,7 @@
                         </div>
 
                     </div>
+
                     {{-- list_dokumen_ba_defect --}}
 
                     <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
@@ -5523,6 +5665,160 @@
         <!--end::Modal content-->
     </div>
     <!--end::Modal - Input BA Defect Serah Terima-->
+
+    <!--begin::Modal - Input BAST 1-->
+    <div class="modal fade" id="kt_modal_bast_1" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-800px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Add Dokumen BAST 1</h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <i class="bi bi-x-lg"></i>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <form action="/contract-management/document-bast/upload" method="POST"
+                    enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal-body py-lg-6 px-lg-6">
+
+                        <input type="hidden" name="bast" value="1">
+                        <input type="hidden" class="modal-name" name="modal-name">
+                        <input type="hidden" name="id-contract" value="{{ $contract->id_contract }}">
+
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span class="">Jenis Dokumen</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <select id="jenis-bast" name="jenis-bast"
+                            class="form-select form-select-solid w-50"
+                            data-control="select2" data-hide-search="true"
+                            data-placeholder="Jenis Dokumen">
+                            <option value=""></option>
+                            <option value="Mechanical Completion">Mechanical Completion</option>
+                            <option value="Commisioning">Commisioning</option>
+                            <option value="Performance Test">Performance Test</option>
+                            <option value="BAST 1 / PHO">BAST 1 / PHO</option>
+                        </select>
+                        <!--end::Input-->
+                        <br>
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span style="font-weight: normal">Masukan file dibawah ini</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input type="file" multiple accept=".docx, .pdf" name="dokumen-bast-1"
+                        class="form-control form-control-solid">
+                        <!--end::Input-->
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" id="save-risk" class="btn btn-sm btn-primary"
+                        data-bs-dismiss="modal">Save</button>
+                    </div>
+
+                </form>
+                <!--end::Input group-->
+
+
+            </div>
+            <!--end::Modal body-->
+        </div>
+        <!--end::Modal content-->
+    </div>
+    <!--end::Modal - Input BAST 1-->
+
+    <!--begin::Modal - Input BAST 2-->
+    <div class="modal fade" id="kt_modal_bast_2" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-800px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Add Dokumen BAST 2</h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <i class="bi bi-x-lg"></i>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <form action="/contract-management/document-bast/upload" method="POST"
+                    enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal-body py-lg-6 px-lg-6">
+
+                        <input type="hidden" name="bast" value="2">
+                        <input type="hidden" class="modal-name" name="modal-name">
+                        <input type="hidden" name="id-contract" value="{{ $contract->id_contract }}">
+
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span class="">Jenis Dokumen</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <select id="jenis-bast" name="jenis-bast"
+                            class="form-select form-select-solid w-50"
+                            data-control="select2" data-hide-search="true"
+                            data-placeholder="Jenis Dokumen">
+                            <option value=""></option>
+                            <option value="Mechanical Completion">Mechanical Completion</option>
+                            <option value="Commisioning">Commisioning</option>
+                            <option value="Performance Test">Performance Test</option>
+                            <option value="BAST 1 / PHO">BAST 1 / PHO</option>
+                        </select>
+                        <!--end::Input-->
+                        <br>
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span style="font-weight: normal">Masukan file dibawah ini</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input type="file" multiple accept=".docx, .pdf" name="dokumen-bast-1"
+                        class="form-control form-control-solid">
+                        <!--end::Input-->
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" id="save-risk" class="btn btn-sm btn-primary"
+                        data-bs-dismiss="modal">Save</button>
+                    </div>
+
+                </form>
+                <!--end::Input group-->
+
+
+            </div>
+            <!--end::Modal body-->
+        </div>
+        <!--end::Modal content-->
+    </div>
+    <!--end::Modal - Input BAST 2-->
 
     <!--begin::Modal - Input Dokumen Lainnya Serah Terima-->
     <div class="modal fade" id="kt_modal_dokumen_pendukung_serah_terima" tabindex="-1" aria-hidden="true">
