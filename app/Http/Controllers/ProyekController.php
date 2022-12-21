@@ -1493,12 +1493,12 @@ class ProyekController extends Controller
                     "telepon" => "$customer->phone_number",
                     "fax" => ".",
                     "npwp" => "$customer->npwp_company",
-                    "nama_kontak" => "$pic->nama_pic",
+                    "nama_kontak" => $pic->nama_pic ?? "",
                     "jenisperusahaan" => "$customer->jenis_instansi",
-                    "jabatan" => "$pic->jabatan_pic",
-                    "email1" => "$pic->email_pic",
-                    "telpon1" => "$pic->phone_pic",
-                    "handphone" => "$pic->phone_pic",
+                    "jabatan" => $pic->jabatan_pic ?? "",
+                    "email1" => $pic->email_pic ?? "",
+                    "telpon1" => $pic->phone_pic ?? "",
+                    "handphone" => $pic->phone_pic ?? "",
                     "tipe_perusahaan" => "-",
                     "tipe_lain_perusahaan" => "-",
                     "cotid" => "11",
@@ -1514,7 +1514,7 @@ class ProyekController extends Controller
                                 [
                                     "BPARTNER" => "$customer->kode_nasabah",
         
-                                    "GROUPING" => "$sap->bp_grouping",
+                                    "GROUPING" => "",
         
                                     "LVORM" => "",
         
@@ -1522,25 +1522,26 @@ class ProyekController extends Controller
         
                                     "NAME" => "$customer->name",
         
-                                    "TITLELETTER" => "$sap->search_term_1",
+                                    "TITLELETTER" => "",
         
-                                    "SEARCHTERM1" => "$sap->search_term_1",
+                                    "SEARCHTERM1" => $sap->search_term_1 ?? "",
         
-                                    "SEARCHTERM2" => "$sap->search_term_2",
+                                    "SEARCHTERM2" => $sap->search_term_2 ?? "",
         
-                                    "STREET" => "$sap->street",
+                                    "STREET" => $sap->street ?? "",
         
-                                    "HOUSE_NO" => "NO123",
+                                    "HOUSE_NO" => "",
         
                                     "POSTL_COD1" => "$customer->kode_pos",
         
                                     "CITY" => explode("-", $provinsi->province_id)[1],
         
-                                    "ADDR_COUNTRY" => $provinsi->country_id,
+                                    // "ADDR_COUNTRY" => $provinsi->country_id ?? "ID",
+                                    "ADDR_COUNTRY" => "ID",
         
                                     "REGION" => explode("-", $provinsi->province_id)[1],
         
-                                    "PO_BOX" => "XXXXX",
+                                    "PO_BOX" => "",
         
                                     "POSTL_COD3" => "",
         
@@ -1558,9 +1559,9 @@ class ProyekController extends Controller
         
                                     "E_MAIL" => "$customer->email",
         
-                                    "VALIDFROMDATE" => "$proyekStage->tanggal_mulai_terkontrak",
+                                    "VALIDFROMDATE" => now()->translatedFormat("d-M-Y"),
         
-                                    "VALIDTODATE" => "$proyekStage->tanggal_selesai_fho",
+                                    "VALIDTODATE" => now()->addMonths(5)->translatedFormat("d-M-Y"),
         
                                     "IDENTIFICATION" => [
                                         [
@@ -1594,56 +1595,56 @@ class ProyekController extends Controller
                                         ]
                                     ],
         
-                                    "CUST_BUKRS" => "A000",
+                                    "CUST_BUKRS" => "",
         
-                                    "KUNNR" => "T100000002",
+                                    "KUNNR" => "",
         
-                                    "CUST_AKONT" => "1104111000",
+                                    "CUST_AKONT" => "",
         
-                                    "CUST_C_ZTERM" => "ZC02",
+                                    "CUST_C_ZTERM" => "",
         
                                     "CUST_WTAX" => [
                                         [
         
-                                            "WITHT" => "J3",
+                                            "WITHT" => "",
             
-                                            "WT_AGENT" => "X",
+                                            "WT_AGENT" => "",
             
-                                            "WT_AGTDF" => "2022-10-13",
+                                            "WT_AGTDF" => "",
             
-                                            "WT_AGTDT" => "9999-12-31"
+                                            "WT_AGTDT" => ""
                                         ]
                                     ],
         
-                                    "VKORG" => "A000",
+                                    "VKORG" => "",
         
-                                    "VTWEG" => "00",
+                                    "VTWEG" => "",
         
-                                    "SPART" => "00",
+                                    "SPART" => "",
         
-                                    "KDGRP" => "04",
+                                    "KDGRP" => "",
         
                                     "CUST_WAERS" => "IDR",
         
-                                    "KALKS" => "1",
+                                    "KALKS" => "",
         
-                                    "VERSG" => "1",
+                                    "VERSG" => "",
         
-                                    "VSBED" => "01",
+                                    "VSBED" => "",
         
-                                    "INCO1" => "EXW",
+                                    "INCO1" => "",
         
-                                    "INCO2_L" => "-",
+                                    "INCO2_L" => "",
         
-                                    "CUST_S_ZTERM" => "ZC00",
+                                    "CUST_S_ZTERM" => "",
         
-                                    "KTGRD" => "Z1",
+                                    "KTGRD" => "",
         
-                                    "TAXKD" => "1",
+                                    "TAXKD" => "",
         
                                     "VEND_BUKRS" => "",
         
-                                    "LIFNR" => "T100000002",
+                                    "LIFNR" => "",
         
                                     "VEND_AKONT" => "",
         
@@ -1660,15 +1661,15 @@ class ProyekController extends Controller
         
                                     // ],
         
-                                    "EKORG" => "A000",
+                                    "EKORG" => "",
         
                                     "VEND_P_ZTERM" => "",
         
-                                    "WEBRE" => "X",
+                                    "WEBRE" => "",
         
                                     "VEND_WAERS" => "",
         
-                                    "LEBRE" => "X",
+                                    "LEBRE" => "",
 
                                     "BRAN2" => $customer->IndustrySector->id_industry_sector,
                                 ]

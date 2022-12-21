@@ -131,9 +131,13 @@
                                         <thead>
                                             <!--begin::Table row-->
                                             <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                <th class="min-w-auto">Nomor Kontrak</th>
                                                 <th class="min-w-auto">Nama Proyek</th>
                                                 <th class="min-w-auto">Unit Kerja</th>
+                                                <th class="min-w-auto">Stage</th>
+                                                <th class="min-w-auto">Jenis Proyek</th>
+                                                <th class="min-w-auto">Nilai OK</th>
+                                                <th class="min-w-auto">Tahun Perolehan</th>
+                                                <th class="min-w-auto">Bulan Perolehan</th>
                                                 {{-- <th class="min-w-auto">ID Contract</th> --}}
                                             </tr>
                                             <!--end::Table row-->
@@ -144,21 +148,6 @@
                                             @forelse ($proyeks_perolehan as $proyek)
                                                 <tr>
                                                     <!--begin::Name=-->
-                                                    @if (!empty($proyek->ContractManagements))
-                                                        <td>
-                                                            <a href="/contract-management/view/{{ url_encode($proyek->ContractManagements->id_contract) }}" id="click-name"
-                                                                class="text-hover-primary mb-1">{{ $proyek->ContractManagements->id_contract }}</a>
-                                                        </td>
-                                                    @else
-                                                        <td>
-                                                            <a href="#" id="click-name" class="text-hover-primary mb-1"><small class="badge badge-light-danger">
-
-                                                                    Belum Ditentukan
-                                                                </small></a>
-                                                        </td>
-                                                    @endif
-                                                    <!--end::Name=-->
-                                                    <!--begin::Name=-->
                                                     <td>
                                                         <a href="/proyek/view/{{ $proyek->kode_proyek }}" id="click-name" class="text-hover-primary mb-1">{{ $proyek->nama_proyek }}</a>
                                                     </td>
@@ -166,6 +155,31 @@
                                                     <!--begin::Email=-->
                                                     <td>
                                                         {{ $proyek->UnitKerja->unit_kerja }}
+                                                    </td>
+                                                    <!--end::Email=-->
+                                                    <!--begin::Email=-->
+                                                    <td>
+                                                        {{ $proyek->UnitKerja->unit_kerja }}
+                                                    </td>
+                                                    <!--end::Email=-->
+                                                    <!--begin::Email=-->
+                                                    <td>
+                                                        {{ $proyek->jenis_proyek == "N" ? "External" : "Internal" }}
+                                                    </td>
+                                                    <!--end::Email=-->
+                                                    <!--begin::Email=-->
+                                                    <td>
+                                                        {{ number_format($proyek->nilai_rkap, 0, ".", ".") }}
+                                                    </td>
+                                                    <!--end::Email=-->
+                                                    <!--begin::Email=-->
+                                                    <td>
+                                                        {{ $proyek->tahun_perolehan }}
+                                                    </td>
+                                                    <!--end::Email=-->
+                                                    <!--begin::Email=-->
+                                                    <td>
+                                                        {{ Carbon\Carbon::create(date("Y") ,$proyek->bulan_pelaksanaan)->translatedFormat("F") }}
                                                     </td>
                                                     <!--end::Email=-->
                                                 </tr>
@@ -193,6 +207,10 @@
                                                 <th class="min-w-auto">Nomor Kontrak</th>
                                                 <th class="min-w-auto">Nama Proyek</th>
                                                 <th class="min-w-auto">Unit Kerja</th>
+                                                <th class="min-w-auto">Jenis Proyek</th>
+                                                <th class="min-w-auto">Nilai OK</th>
+                                                <th class="min-w-auto">Tanggal Mulai</th>
+                                                <th class="min-w-auto">Tanggal Selesai</th>
                                                 {{-- <th class="min-w-auto">ID Contract</th> --}}
                                             </tr>
                                             <!--end::Table row-->
@@ -225,6 +243,30 @@
                                                     <!--begin::Email=-->
                                                     <td>
                                                         {{ $proyek->UnitKerja->unit_kerja }}
+                                                    </td>
+                                                    <!--end::Email=-->
+
+                                                    <!--begin::Email=-->
+                                                    <td>
+                                                        {{ $proyek->jenis_proyek == "N" ? "External" : "Internal" }}
+                                                    </td>
+                                                    <!--end::Email=-->
+
+                                                    <!--begin::Email=-->
+                                                    <td>
+                                                        {{ number_format($proyek->nilai_rkap, 0, ".", ".") }}
+                                                    </td>
+                                                    <!--end::Email=-->
+
+                                                    <!--begin::Email=-->
+                                                    <td>
+                                                        {{ Carbon\Carbon::create($proyek->tanggal_mulai_terkontrak)->translatedFormat("d F Y") ?? "-" }}
+                                                    </td>
+                                                    <!--end::Email=-->
+
+                                                    <!--begin::Email=-->
+                                                    <td>
+                                                        {{ Carbon\Carbon::create($proyek->tanggal_akhir_terkontrak)->translatedFormat("d F Y") ?? "-" }}
                                                     </td>
                                                     <!--end::Email=-->
                                                 </tr>
