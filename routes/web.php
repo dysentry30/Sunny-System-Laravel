@@ -331,7 +331,9 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post('/customer/get-kode-nasabah', [CustomerController::class, 'getKodeNasabah']);
 
     // Begin :: get Kabupaten
-    Route::get('/get-kabupaten/{id}', function ($id) {
+    Route::get(
+        '/get-kabupaten/{id}',
+        function ($id) {
             // $data_kabupaten = Http::get("https://emsifa.github.io/api-wilayah-indonesia/api/regencies/$id.json")->json();
             $data_kabupaten = Provinsi::where("country_id", "=", $id)->get()->toJson();
             return $data_kabupaten;
@@ -1102,11 +1104,11 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         try {
             $uname = "WIKA_INT";
             $pass = "Initial123";
-            $author = base64_encode($uname.":".$pass);
+            $author = base64_encode($uname . ":" . $pass);
             $industrySector = getApi("https://fiori.wika.co.id/ywikasd002/industry-sector?sap-client=300", "", ["Authorization: Basic $author"], false);
             $industrySector = collect($industrySector->DATA)->mapInto(\Illuminate\Support\Collection::class);
             // $industrySector = collect(json_decode(Http::get("https://fioridev.wika.co.id/ywikasd002/industry-sector?sap-client=200")));
-            if($industrySector->isEmpty()) {
+            if ($industrySector->isEmpty()) {
                 $data = [
                     "status" => false,
                     "data" => [
@@ -1329,9 +1331,9 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             //         ]
             //     ]
             // ]);
-            $industrySector->each(function($i) {
+            $industrySector->each(function ($i) {
                 $is_industry_sector_exist = IndustrySector::find($i["BRACO"]);
-                if(empty($is_industry_sector_exist)) {
+                if (empty($is_industry_sector_exist)) {
                     $new_industry_sector = new IndustrySector();
                     $new_industry_sector->id_industry_sector = $i["BRACO"];
                     $new_industry_sector->description = $i["VTEXT"];
@@ -1381,7 +1383,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         } else {
             $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("stage", "!=", 7)->where("is_cancel", "!=", true)->where("periode_prognosa", "=", $periodeOtor)->join("dops", "dops.dop", "=", "proyeks.dop")->join("unit_kerjas", "unit_kerjas.divcode", "=", "proyeks.unit_kerja");
         }
-        
+
         // dd($history_forecasts->select(["proyeks.kode_proyek","proyeks.unit_kerja", "unit_kerjas.unit_kerja", "periode_prognosa", "history_forecast.created_at", "nilaiok_review", "nilaiok_awal", "nilai_forecast", "realisasi_forecast"])->get()->first());
         $history_forecasts = $history_forecasts->select(["proyeks.kode_proyek", "proyeks.unit_kerja", "unit_kerjas.unit_kerja", "periode_prognosa", "history_forecast.created_at", "nilaiok_review", "nilaiok_awal", "rkap_forecast", "nilai_forecast", "realisasi_forecast", "is_approved_1"])->get()->groupBy("unit_kerja");
 
@@ -1636,30 +1638,6 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     });
     // End Download Files
 
-    function writeDOCXFile($content)
-    {
-        $php_word = new PhpWord();
-        $section = $php_word->addSection();
-        // $html = "<p>test</p>";
-        // $html .= "<b>test</b>";
-        \PhpOffice\PhpWord\Shared\Html::addHtml($section, $content, false, false);
-        $docx_writer = \PhpOffice\PhpWord\IOFactory::createWriter($php_word);
-        return $docx_writer;
-    }
-
-    function moveFileTemp(UploadedFile $file, $file_name)
-    {
-        $path = "words/";
-        $file_name =  $file_name . "." . $file->getClientOriginalExtension();
-        $result = $file->move(public_path($path), $file_name);
-
-        return $result;
-    }
-
-    function moneyFormatToNumber(string $value)
-    {
-        return (int) str_replace(",", "", $value);
-    }
 });
 
 // Begin API PROYEK XML
@@ -1929,7 +1907,7 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
             $yearOtor = (int) date("Y") - 1;
             $is_forecast_exist = $p->HistoryForecasts->where("periode_prognosa", ((int) $periode[1] + 11))->whereYear("created_at", "=", $yearOtor)->count() > 0;
         } else {
-            $periodeOtor = $periode[1] - 1 ;
+            $periodeOtor = $periode[1] - 1;
             $yearOtor = (int) date("Y");
             $is_forecast_exist = $p->HistoryForecasts->where("periode_prognosa", ((int) $periode[1] - 1))->count() > 0;
         }
@@ -2116,7 +2094,7 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
                     case "50":
                         $jenis_proyek = "JO Mix Integrated - Portion";
                         break;
-                    }
+                }
                 break;
         }
         $p->UsrJenis = [
@@ -2182,7 +2160,9 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
                 "d:UsrBASTPHO" => $p->tanggal_selesai_pho,
                 "d:UsrBASTFHO" => $p->tanggal_selesai_fho,
                 "d:UsrPorsi" => $p->porsi_jo,
-                "d:UsrNilaiKontrak" => $p->HistoryForecasts->where("periode_prognosa", "=", $periodeOtor)->sum(function ($hf) { return (int) $hf->realisasi_forecast; }),
+                "d:UsrNilaiKontrak" => $p->HistoryForecasts->where("periode_prognosa", "=", $periodeOtor)->sum(function ($hf) {
+                    return (int) $hf->realisasi_forecast;
+                }),
                 "d:UsrKlasifikasiProyek" => $p->klasifikasi_terkontrak,
                 "d:UsrNoKontrak" => $p->nomor_terkontrak,
                 "d:UsrNilaiTukar" => $p->kurs_review,
@@ -2280,74 +2260,7 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
 });
 // End API PROYEK XML
 
-function getPeriode($periode)
-{
-    return [(int) substr($periode, 0, 4), (int) substr($periode, 4, 2)];
-}
 
-function arrayToXML($array, &$xml_data)
-{
-    foreach ($array as $key => $value) {
-        // $xml_data->addAttribute('type', 'application/xml');
-        if (is_array($value)) {
-            if (is_numeric($key)) {
-                $key = 'entry'; //dealing with <0/>..<n/> issues
-            }
-            // $subnode = $xml_data->addChild("entry");
-            if ($key == 'Account') {
-                $subnode = $xml_data->addChild("link");
-                $subnode->addAttribute('title', $key);
-            } else if ($key == 'UsrProvinsi') {
-                $subnode = $xml_data->addChild("link");
-                $subnode->addAttribute('title', $key);
-            } else if ($key == 'UsrNegara') {
-                $subnode = $xml_data->addChild("link");
-                $subnode->addAttribute('title', $key);
-            } else if ($key == 'UsrSistemPembayaran') {
-                $subnode = $xml_data->addChild("link");
-                $subnode->addAttribute('title', $key);
-            } else if ($key == 'UsrMataUang') {
-                $subnode = $xml_data->addChild("link");
-                $subnode->addAttribute('title', $key);
-            } else if ($key == 'UsrJenisKontrak') {
-                $subnode = $xml_data->addChild("link");
-                $subnode->addAttribute('title', $key);
-            } else if ($key == 'UsrSumberDanaL') {
-                $subnode = $xml_data->addChild("link");
-                $subnode->addAttribute('title', $key);
-            } else if ($key == 'UsrSBUL') {
-                $subnode = $xml_data->addChild("link");
-                $subnode->addAttribute('title', $key);
-            } else if ($key == 'UsrJenis') {
-                $subnode = $xml_data->addChild("link");
-                $subnode->addAttribute('title', $key);
-            } else {
-                $subnode = $xml_data->addChild($key);
-            }
-            // $subnode = $xml_data->addChild("content");
-            arrayToXML($value, $subnode);
-        } else {
-            $xml_data->addChild("$key", htmlspecialchars("$value"));
-        }
-    }
-    return $xml_data->asXML();
-}
-
-function getApi ($url, $payload, $header, $is_post) {
-    $c = curl_init($url);
-    // $c = curl_init("http://101.255.171.12/dashboard-api/data/report");
-    curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($c, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13');
-    if ($is_post == true) {
-        curl_setopt($c, CURLOPT_POSTFIELDS, $payload);
-    }
-    curl_setopt($c, CURLOPT_HTTPHEADER, $header);
-    // dd($c);
-    $output = curl_exec($c);
-    curl_close($c);
-    $output = json_decode($output);
-    return $output;
-};
 
 Route::get('/abort/{code}/{msg}', function ($code, $msg) {
     return abort($code, $msg);

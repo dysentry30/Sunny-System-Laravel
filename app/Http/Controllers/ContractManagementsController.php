@@ -662,7 +662,6 @@ class ContractManagementsController extends Controller
             }
             return $key = "required|string";
         })->toArray();
-        dd($key_rules);
         $messages = [
             "required" => "Field di atas wajib diisi",
             "numeric" => "Field di atas harus numeric",
@@ -676,7 +675,7 @@ class ContractManagementsController extends Controller
             // dd($validation->errors());
             $field_mandatory = self::input_name_to_label(collect($validation->errors()->keys()));
             Alert::html('Error', "Field <b>$field_mandatory</b> harus terisi!", "error");
-            return Redirect::back()->with("modal", $data["modal-name"]);
+            return Redirect::back(400)->with("modal", $data["modal-name"]);
             // return Redirect::back();
             // dd($validation->errors());
         }
@@ -687,7 +686,7 @@ class ContractManagementsController extends Controller
         if (empty($is_id_contract_exist)) {
             // Session::flash("failed", "Please fill 'Draft Contract' empty field");
             Alert::error('Error', "Pastikan contract sudah dibuat terlebih dahulu");
-            return Redirect::back();
+            return Redirect::back(400);
         }
 
         if (isset($data["stage"])) {
@@ -723,13 +722,14 @@ class ContractManagementsController extends Controller
         $risk->pic_rtl = $data["pic_rtl"];
         $risk->uraian = $data["uraian"];
         $risk->nilai = $data["nilai"];
+        $risk->skor = $data["skor"];
         if ($risk->save()) {
             // moveFileTemp($file, $id_document);
             Alert::success('Success', "Resiko berhasil ditambahkan");
             return Redirect::back();
         }
         Alert::error('Error', "Resiko gagal ditambahkan");
-        return Redirect::back()->with("modal", $data["modal-name"]);
+        return Redirect::back(400)->with("modal", $data["modal-name"]);
         // return redirect($_SERVER["HTTP_REFERER"]);
     }
 
