@@ -17,8 +17,11 @@ use App\Models\CustomerAttachments;
 use App\Models\CustomerSAP;
 use App\Models\IndustryOwner;
 use App\Models\IndustrySector;
+use App\Models\JenisPerusahaan;
 use App\Models\Provinsi;
 use App\Models\StrukturAttachment;
+use App\Models\SyaratPembayaran;
+use App\Models\Tax;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
@@ -233,6 +236,9 @@ class CustomerController extends Controller
         $per = 1000000;
         $industryOwners = IndustryOwner::all();
         $industrySectors = IndustrySector::all();
+        $jenisPerusahaan = JenisPerusahaan::all();
+        $taxs = Tax::all();
+        $syaratPembayaran = SyaratPembayaran::all();
 
         // foreach($proyeks as $p) {
         //     $p = Proyek::find($p->kode_proyek);
@@ -401,7 +407,10 @@ class CustomerController extends Controller
             "proyekOngoing" => $proyekOngoing,
             "proyekClosed" => $proyekClosed,
             "area_proyeks" => $area_proyeks,
-            "industryAttractiveness" => $industryOwners
+            "industryAttractiveness" => $industryOwners,
+            "jenisPerusahaan" => $jenisPerusahaan,
+            "taxs" => $taxs,
+            "syaratPembayaran" => $syaratPembayaran,
         ], compact("namaUnit", "labaProyek", "rugiProyek", "piutangProyek", "proyekOpportunity", "industryOwners", "industrySectors"));
     }
 
@@ -465,6 +474,10 @@ class CustomerController extends Controller
         $editCustomer->forbes_rank = $data["forbes_rank"];
         $editCustomer->lq_rank = $data["lq_rank"];
         $editCustomer->layer_segmentasi = $data["layer_segmentasi"];
+        $editCustomer->jenis_perusahaan = $data["jenis_perusahaan"];
+        $editCustomer->tax = $data["tax"];
+        $editCustomer->syarat_pembayaran = $data["syarat_pembayaran"];
+
         // $editCustomer->journey_company = $data["journey-company"];
         // $editCustomer->segmentation_company = $data["segmentation-company"];
         // $editCustomer->name_pic = $data["name-pic"];

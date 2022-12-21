@@ -62,5 +62,17 @@ class Customer extends Model
     {
         return $this->hasOne(IndustryOwner::class, "code_owner", "industry_sector");
     }
+    public function JenisPerusahaan()
+    {
+        return $this->hasOne(JenisPerusahaan::class, "kode_jenis", "jenis_perusahaan");
+    }
+    public function Tax()
+    {
+        return $this->hasOne(Tax::class, "kode", "tax");
+    }
+    public function SyaratPembayaran()
+    {
+        return $this->hasOne(SyaratPembayaran::class, "kode", "syarat_pembayaran");
+    }
 
 }
