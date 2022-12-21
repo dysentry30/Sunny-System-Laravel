@@ -107,6 +107,10 @@ class ContractManagements extends Model
     {
         return $this->hasMany(RencanKerjaManajemenKontrak::class, "id_contract");
     }
+    public function ContractBast()
+    {
+        return $this->hasMany(ContractBast::class, "id_contract");
+    }
 
     public function getAll()
     {
