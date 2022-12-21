@@ -628,6 +628,7 @@ class CustomerController extends Controller
         $newPIC->jabatan_pic = $data["kode-pic"];
         $newPIC->email_pic = $data["email-pic"];
         $newPIC->phone_pic = $data["phone-number-pic"];
+        $newPIC->ultah_pic = $data["ultah-pic"];
 
         Alert::success("Success", $data["kode-pic"] . ": " . $data["name-pic"] . ", PIC Berhasil Ditambah");
 
@@ -660,6 +661,7 @@ class CustomerController extends Controller
         $editPIC->jabatan_pic = $data["kode-pic"];
         $editPIC->email_pic = $data["email-pic"];
         $editPIC->phone_pic = $data["phone-number-pic"];
+        $editPIC->ultah_pic = $data["ultah-pic"];
 
         Alert::success("Success", $data["kode-pic"] . ": " . $data["name-pic"] . ", PIC Berhasil Diubah");
 

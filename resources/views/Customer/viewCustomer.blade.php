@@ -612,7 +612,7 @@
                                                                          <input type="text"
                                                                          class="form-control form-control-solid"
                                                                          id="attractiveness" name="attractiveness"
-                                                                         value="{{ $customer->IndustryOwner->owner_attractiveness }}"
+                                                                         value="{{ $customer->IndustryOwner->owner_attractiveness ?? null }}"
                                                                          placeholder="Attractiveness" readonly />
                                                                      <!--end::Input-->
                                                                 </div>
@@ -739,6 +739,7 @@
                                                                     <th class="min-w-auto">Email</th>
                                                                     <th class="min-w-auto">Jabatan</th>
                                                                     <th class="min-w-auto">Kontak Nomor</th>
+                                                                    <th class="min-w-auto">Ultah PIC</th>
                                                                     <th class="min-w-auto"></th>
                                                                 </tr>
                                                                 <!--end::Table row-->
@@ -775,6 +776,11 @@
                                                                         <!--begin::Phone-->
                                                                         <td>
                                                                             {{ $pic->phone_pic ?? '-' }}
+                                                                        </td>
+                                                                        <!--end::Phone-->
+                                                                        <!--begin::Phone-->
+                                                                        <td>
+                                                                            {{ $pic->ultah_pic ?? '-' }}
                                                                         </td>
                                                                         <!--end::Phone-->
                                                                         <!--begin::Action-->
@@ -3042,6 +3048,31 @@
                             <!--End begin::Col-->
                         </div>
                         <!--End begin::Row-->
+                        
+                        <!--begin::Row-->
+                        <div class="row fv-row">
+                            <!--begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span>Tanggal Ulang Tahun</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <a href="#" class="btn" style="background: transparent;" id="start-date-modal" onclick="showCalendarModal(this)">
+                                        <i class="bi bi-calendar2-plus-fill" style="color: #008CB4"></i>
+                                    </a>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="date" class="form-control form-control-solid" name="ultah-pic" value="" placeholder="Tanggal Ulang Tahun" />
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End::Col-->
+                        </div>
+                        <!--End begin::Row-->
 
                     </div>
                     <div class="modal-footer">
@@ -3164,6 +3195,31 @@
                             </div>
                             <!--End begin::Row-->
 
+                            <!--begin::Row-->
+                            <div class="row fv-row">
+                                <!--begin::Col-->
+                                <div class="col-6">
+                                    <!--begin::Input group Website-->
+                                    <div class="fv-row mb-7">
+                                        <!--begin::Label-->
+                                        <label class="fs-6 fw-bold form-label mt-3">
+                                            <span>Tanggal Ulang Tahun</span>
+                                        </label>
+                                        <!--end::Label-->
+                                        <a href="#" class="btn" style="background: transparent;" id="start-date-modal" onclick="showCalendarModal(this)">
+                                            <i class="bi bi-calendar2-plus-fill" style="color: #008CB4"></i>
+                                        </a>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <input type="date" class="form-control form-control-solid" name="ultah-pic" value="" placeholder="Tanggal Ulang Tahun" />
+                                        <!--end::Input-->
+                                    </div>
+                                    <!--end::Input group-->
+                                </div>
+                                <!--End::Col-->
+                            </div>
+                            <!--End begin::Row-->
+                            
                         </div>
                         <div class="modal-footer">
 
