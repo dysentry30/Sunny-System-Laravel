@@ -619,6 +619,106 @@
                                                             </div>
                                                             <!--end:: Row-->
 
+                                                            <!--Begin::Row-->
+                                                            <div class="row fv-row my-7">
+                                                                <!--begin::column-->
+                                                                <div class="col-6">
+                                                                    <!--begin::label-->
+                                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                                        <span class="">Jenis Perusahaan</span>
+                                                                    </label>
+                                                                    <!--end::label-->
+                                                                    <!--begin::Input-->
+                                                                    <input type="text" class="form-control form-control-solid" id="input-provinsi" name="jenis_perusahaan"
+                                                                        value="{{ $customer->JenisPerusahaan->kode_jenis ?? null }}" placeholder="Jenis Perusahaan" style="display: none" />
+                                                                    <div id="div-jenis-perusahaan">
+                                                                        <select name="jenis_perusahaan" id="jenis_perusahaan" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
+                                                                            {{-- onchange="selectProvinsi(this)"  --}}
+                                                                            data-placeholder="Pilih Jenis Perusahaan">
+                                                                            <option value=""></option>
+                                                                            @foreach ($jenisPerusahaan as $jp)
+                                                                                @if ( !empty($customer->JenisPerusahaan) && $jp->kode_jenis == $customer->JenisPerusahaan->kode_jenis)
+                                                                                    <option value="{{ $jp->kode_jenis }}" selected>
+                                                                                        {{ $jp->deskripsi }}
+                                                                                    </option>
+                                                                                @else
+                                                                                    <option value="{{ $jp->kode_jenis }}">
+                                                                                        {{ $jp->deskripsi }}
+                                                                                    </option>
+                                                                                @endif
+                                                                            @endforeach
+                                                                        </select>
+                                                                    </div>
+                                                                    <!--end::Input-->
+                                                                </div>
+                                                                <!--end::column-->
+                                                                
+                                                                <!--begin::column-->
+                                                                <div class="col-6">
+                                                                    <!--begin::label-->
+                                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                                        <span class="">Term of Payment</span>
+                                                                    </label>
+                                                                    <!--end::label-->
+                                                                    <!--begin::Input-->
+                                                                    <input type="text" class="form-control form-control-solid" id="input-provinsi" name="syarat_pembayaran"
+                                                                        value="{{ $customer->SyaratPembayaran->kode ?? null }}" placeholder="Term of Payment" style="display: none" />
+                                                                    <div id="div-syarat-pembayaran">
+                                                                        <select name="syarat_pembayaran" id="syarat-pembayaran" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
+                                                                            data-placeholder="Term of Payment">
+                                                                            <option value=""></option>
+                                                                            @foreach ($syaratPembayaran as $sp)
+                                                                                @if (!empty($customer->SyaratPembayaran) && $sp->kode == $customer->SyaratPembayaran->kode)
+                                                                                    <option value="{{ $sp->kode }}" selected>
+                                                                                        {{ $sp->deskripsi }}
+                                                                                    </option>
+                                                                                @else
+                                                                                    <option value="{{ $sp->kode }}">
+                                                                                        {{ $sp->deskripsi }}
+                                                                                    </option>
+                                                                                @endif
+                                                                            @endforeach
+                                                                        </select>
+                                                                    </div>
+                                                                    <!--end::Input-->
+                                                                </div>
+                                                                <!--end::column-->
+                                                            </div>
+                                                            <!--End::Row-->
+
+                                                            <!--Begin::Row-->
+                                                            <!--begin::column-->
+                                                            <div class="col-6">
+                                                                <!--begin::label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span class="">Tax</span>
+                                                                </label>
+                                                                <!--end::label-->
+                                                                <!--begin::Input-->
+                                                                <input type="text" class="form-control form-control-solid" id="input-provinsi" name="tax"
+                                                                    value="{{ $customer->Tax->kode ?? null }}" placeholder="Tax" style="display: none" />
+                                                                <div id="div-tax">
+                                                                    <select name="tax" id="tax" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
+                                                                        data-placeholder="Tax">
+                                                                        <option value=""></option>
+                                                                        @foreach ($taxs as $tax)
+                                                                            @if (!empty($customer->Tax) && $tax->kode == $customer->Tax->kode)
+                                                                                <option value="{{ $tax->kode }}" selected>
+                                                                                    {{ $tax->deskripsi }}
+                                                                                </option>
+                                                                            @else
+                                                                                <option value="{{ $tax->kode }}">
+                                                                                    {{ $tax->deskripsi }}
+                                                                                </option>
+                                                                            @endif
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
+                                                                <!--end::Input-->
+                                                            </div>
+                                                            <!--end::column-->
+                                                            <!--ENd::Row-->
+
                                                             <!--begin::Fungsi Select Provinsi-->
                                                             {{-- <script>
                                                                 async function selectNegara(e) {
