@@ -169,7 +169,7 @@
                                                     <!--end::Email=-->
                                                     <!--begin::Email=-->
                                                     <td>
-                                                        {{ number_format($proyek->nilai_rkap, 0, ".", ".") }}
+                                                        {{ number_format((int) $proyek->nilai_rkap, 0, ".", ".") }}
                                                     </td>
                                                     <!--end::Email=-->
                                                     <!--begin::Email=-->
@@ -254,7 +254,7 @@
 
                                                     <!--begin::Email=-->
                                                     <td>
-                                                        {{ number_format($proyek->nilai_rkap, 0, ".", ".") }}
+                                                        {{ number_format((int) $proyek->nilai_rkap, 0, ".", ".") }}
                                                     </td>
                                                     <!--end::Email=-->
 

@@ -1294,15 +1294,15 @@ class ContractManagementsController extends Controller
             "file" => "This field must be file only",
         ];
         $rules = [
-            "status" => "required",
-            "biaya" => "required",
-            "waktu" => "required",
-            "ancaman" => "required",
-            "peluang" => "required",
+            "pending-issue" => "required",
+            "penyebab-issue" => "required",
+            "resiko-biaya" => "required",
+            "resiko-waktu" => "required",
+            "resiko-mutu" => "required",
             "rencana-tindak-lanjut" => "required",
-            "target-waktu-penyelesaian" => "required",
+            "ancaman" => "required",
             "id-contract" => "required",
-            "penyebab" => "required",
+            "peluang" => "required",
         ];
         if (isset($data["pending-issue-file"])) {
             $rules["pending-issue-file"] = "required|file";
@@ -1324,26 +1324,26 @@ class ContractManagementsController extends Controller
             // return redirect()->back();
         }
 
-        $faker = new Uuid();
-        if (isset($data["pending-issue-file"])) {
-            $id_document = $faker->uuid3();
-            moveFileTemp($data["pending-issue-file"], $id_document);
-            $pendingIssue->issue = $id_document;
-        } else {
-            $pendingIssue->issue = $data["pending-issue"];
-        }
-
-
+        // $faker = new Uuid();
+        // if (isset($data["pending-issue-file"])) {
+        //     $id_document = $faker->uuid3();
+        //     moveFileTemp($data["pending-issue-file"], $id_document);
+        //     $pendingIssue->issue = $id_document;
+        // } else {
+        // }
+        
+        
+        $pendingIssue->issue = $data["pending-issue"];
         $pendingIssue->status = (bool) $data["status"];
         $pendingIssue->id_contract = $contract->id_contract;
-        $pendingIssue->penyebab = $data["penyebab"];
-        $pendingIssue->biaya = (int) str_replace(",", "", $data["biaya"]);
-        $pendingIssue->waktu = $data["waktu"];
-        $pendingIssue->mutu = $data["mutu"];
+        $pendingIssue->penyebab = $data["penyebab-issue"];
+        $pendingIssue->biaya = str_replace(".", "", $data["resiko-biaya"]);
+        $pendingIssue->waktu = $data["resiko-waktu"];
+        $pendingIssue->mutu = $data["resiko-mutu"];
         $pendingIssue->ancaman = $data["ancaman"];
         $pendingIssue->peluang = $data["peluang"];
         $pendingIssue->rencana_tindak_lanjut = $data["rencana-tindak-lanjut"];
-        $pendingIssue->target_waktu_penyelesaian = $data["target-waktu-penyelesaian"];
+        // $pendingIssue->target_waktu_penyelesaian = $data["target-waktu-penyelesaian"];
         if ($pendingIssue->save()) {
             Alert::success("Success", "Pending Issue berhasil ditambahkan");
             return Redirect::back();
