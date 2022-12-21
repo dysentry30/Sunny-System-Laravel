@@ -477,6 +477,7 @@ class CustomerController extends Controller
         $editCustomer->jenis_perusahaan = $data["jenis_perusahaan"];
         $editCustomer->tax = $data["tax"];
         $editCustomer->syarat_pembayaran = $data["syarat_pembayaran"];
+        $editCustomer->unique_code = $data["unique_code"];
 
         // $editCustomer->journey_company = $data["journey-company"];
         // $editCustomer->segmentation_company = $data["segmentation-company"];

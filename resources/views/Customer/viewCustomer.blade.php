@@ -436,18 +436,16 @@
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
                                                                     <input type="text" class="form-control form-control-solid" id="select-kode-unik" name="input-kode-unik"
-                                                                        value="test" placeholder="Pilih Kode Unik" style="display: none" />
+                                                                        value="unique_code" placeholder="Pilih Kode Unik" style="display: none" />
                                                                     <div id="div-provinsi">
-                                                                        <select name="select-kode-unik" id="kode unik" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
-                                                                            {{-- onchange="selectProvinsi(this)"  --}}
+                                                                        <select name="unique_code" id="kode unik" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
                                                                             data-placeholder="Pilih Kode Unik">
-                                                                            <option value=""></option>
-                                                                            <option value="test">Kode Bagian Anggaran</option>
-                                                                            <option value="test">Kode Anggaran Provinsi</option>
-                                                                            <option value="test">NPWP</option>
-                                                                            <option value="test">Businesse Permit License</option>
-                                                                            <option value="test">Tax Identification Number</option>
-                                                                            
+                                                                            <option value=""></option>                                                                                                                                          
+                                                                            <option value="Kode Bagian Anggaran" {{ $customer -> unique_code == "Kode Bagian Anggaran" ? "selected" : "" }}>Kode Bagian Anggaran</option>
+                                                                            <option value="Kode Anggaran Provinsi" {{ $customer -> unique_code == "Kode Anggaran Provinsi" ? "selected" : "" }}>Kode Anggaran Provinsi</option>
+                                                                            <option value="NPWP" {{ $customer -> unique_code == "NPWP" ? "selected" : "" }}>NPWP</option>
+                                                                            <option value="Businesse Permit License" {{ $customer -> unique_code == "Businesse Permit License" ? "selected" : "" }}>Businesse Permit License</option>
+                                                                            <option value="Tax Identification Number" {{ $customer -> unique_code == "Tax Identification Number" ? "selected" : "" }}>Tax Identification Number</option>                                         
                                                                         </select>
                                                                     </div>
                                                                     <!--end::Input-->
