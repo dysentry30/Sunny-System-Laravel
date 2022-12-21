@@ -2110,7 +2110,9 @@
                                                                             <th class="min-w-auto">Nama Proyek</th>
                                                                             <th class="min-w-auto">Unit kerja</th>
                                                                             <th class="min-w-auto">Stage</th>
-                                                                            <th class="min-w-auto">Nilai Forecast</th>
+                                                                            <th class="min-w-auto text-center">Nilai ok</th>
+                                                                            <th class="min-w-auto text-center">Bulan Forecast</th>
+                                                                            <th class="min-w-auto">Layer Segmentasi</th>
                                                                         </tr>
                                                                         <!--end::Table row-->
                                                                     </thead>
@@ -2120,6 +2122,7 @@
 
                                                                         @if (isset($proyekberjalan))
                                                                             @foreach ($proyekberjalan as $proyekberforecast)
+                                                                                @if ($proyekberforecast->stage < 7 || $proyekberforecast->stage == 9 )
                                                                                 <tr>
                                                                                     <!--begin::Name-->
                                                                                     <td>
@@ -2130,7 +2133,8 @@
                                                                                     </td>
                                                                                     <!--end::Name-->
                                                                                     <!--begin::Divisi-->
-                                                                                    <td>{{ $proyekberjalan0->UnitKerja->unit_kerja }}
+                                                                                    <td>
+                                                                                        {{ $proyekberjalan0->UnitKerja->unit_kerja }}
                                                                                     </td>
                                                                                     <!--end::Divisi-->
                                                                                     <!--begin::Stage-->
@@ -2182,69 +2186,85 @@
                                                                                     </td>
                                                                                     <!--end::Stage-->
                                                                                     <!--begin::Nilai Forecast-->
-                                                                                    <td>
+                                                                                    <td class="text-end">
                                                                                         @isset($proyekberforecast->proyek->Forecasts)
-                                                                                            @foreach ($proyekberforecast->proyek->Forecasts as $forecast)
-                                                                                                @switch($forecast->month_forecast)
-                                                                                                    @case('1')
-                                                                                                        Januari
-                                                                                                    @break
-
-                                                                                                    @case('2')
-                                                                                                        Februari
-                                                                                                    @break
-
-                                                                                                    @case('3')
-                                                                                                        Maret
-                                                                                                    @break
-
-                                                                                                    @case('4')
-                                                                                                        April
-                                                                                                    @break
-
-                                                                                                    @case('5')
-                                                                                                        Mei
-                                                                                                    @break
-
-                                                                                                    @case('6')
-                                                                                                        Juni
-                                                                                                    @break
-
-                                                                                                    @case('7')
-                                                                                                        Juli
-                                                                                                    @break
-
-                                                                                                    @case('8')
-                                                                                                        Agustus
-                                                                                                    @break
-
-                                                                                                    @case('9')
-                                                                                                        September
-                                                                                                    @break
-
-                                                                                                    @case('10')
-                                                                                                        Oktober
-                                                                                                    @break
-
-                                                                                                    @case('11')
-                                                                                                        November
-                                                                                                    @break
-
-                                                                                                    @case('12')
-                                                                                                        Desember
-                                                                                                    @break
-
-                                                                                                    @default
-                                                                                                        Selesai
-                                                                                                @endswitch
-
-                                                                                                :
-                                                                                                {{ $forecast->nilai_forecast }};<br>
-                                                                                            @endforeach
+                                                                                        @php
+                                                                                            $nilai_forecast = (int) $proyekberforecast->proyek->Forecasts->sum(function ($f) {
+                                                                                                if (!empty($f->month_forecast)) {
+                                                                                                    return (int) $f->nilai_forecast;
+                                                                                                }
+                                                                                            });
+                                                                                        @endphp
+                                                                                            {{ number_format((int) $nilai_forecast, 0, '.', '.') }}
                                                                                         @endisset
                                                                                     </td>
                                                                                     <!--end::Nilai Forecast-->
+                                                                                    <!--begin::Bulan Forecast-->
+                                                                                    <td class="text-center">
+                                                                                        @isset($proyekberforecast->proyek->Forecasts)
+                                                                                        {{-- @dump($proyekberforecast->proyek->Forecasts->last()) --}}
+                                                                                            @switch($proyekberforecast->proyek->Forecasts->sortByDesc('month_forecast')->last()->month_forecast)
+                                                                                                @case('1')
+                                                                                                    Januari
+                                                                                                @break
+
+                                                                                                @case('2')
+                                                                                                    Februari
+                                                                                                @break
+
+                                                                                                @case('3')
+                                                                                                    Maret
+                                                                                                @break
+
+                                                                                                @case('4')
+                                                                                                    April
+                                                                                                @break
+
+                                                                                                @case('5')
+                                                                                                    Mei
+                                                                                                @break
+
+                                                                                                @case('6')
+                                                                                                    Juni
+                                                                                                @break
+
+                                                                                                @case('7')
+                                                                                                    Juli
+                                                                                                @break
+
+                                                                                                @case('8')
+                                                                                                    Agustus
+                                                                                                @break
+
+                                                                                                @case('9')
+                                                                                                    September
+                                                                                                @break
+
+                                                                                                @case('10')
+                                                                                                    Oktober
+                                                                                                @break
+
+                                                                                                @case('11')
+                                                                                                    November
+                                                                                                @break
+
+                                                                                                @case('12')
+                                                                                                    Desember
+                                                                                                @break
+
+                                                                                                @default
+                                                                                                    -
+                                                                                            @endswitch
+                                                                                        @endisset
+                                                                                    </td>
+                                                                                    <!--end::Bulan Forecast-->
+                                                                                    <!--begin::Layer-->
+                                                                                    <td>
+                                                                                        *Layer
+                                                                                    </td>
+                                                                                    <!--end::Layer-->
                                                                                 </tr>
+                                                                                @endif
                                                                             @endforeach
                                                                         @endif
 
@@ -2254,7 +2274,7 @@
                                                                 <!--end::Table-->
                                                             </div>
                                                         </div>
-                                                        <!--end::Card title-->
+                                                        <!--end::FORECAST Proyek-->
 
                                                         <br><br>
 
