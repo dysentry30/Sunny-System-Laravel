@@ -389,7 +389,7 @@
                                                         <!--End begin::Row-->
 
                                                         <!--begin::Row-->
-                                                        <div class="row fv-row">
+                                                        <div class="row fv-row space-between">
                                                             <!--begin::Col-->
                                                             {{-- <div class="col-6">
                                                                 <!--begin::Input group Website-->
@@ -423,6 +423,39 @@
                                                                 <!--end::Input group-->
                                                             </div>
                                                             <!--End begin::Col-->
+
+                                                            <!--begin::Row-->
+                                                            <!--Begin::Col-->
+                                                            <div class="col-6">
+                                                                <!--begin::Input group Website-->
+                                                                <div class="fv-row mb-7">
+                                                                    <!--begin::Label-->
+                                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                                        <span class="">Pilih Kode Unik</span>
+                                                                    </label>
+                                                                    <!--end::Label-->
+                                                                    <!--begin::Input-->
+                                                                    <input type="text" class="form-control form-control-solid" id="select-kode-unik" name="input-kode-unik"
+                                                                        value="test" placeholder="Pilih Kode Unik" style="display: none" />
+                                                                    <div id="div-provinsi">
+                                                                        <select name="select-kode-unik" id="kode unik" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
+                                                                            {{-- onchange="selectProvinsi(this)"  --}}
+                                                                            data-placeholder="Pilih Kode Unik">
+                                                                            <option value=""></option>
+                                                                            <option value="test">Kode Bagian Anggaran</option>
+                                                                            <option value="test">Kode Anggaran Provinsi</option>
+                                                                            <option value="test">NPWP</option>
+                                                                            <option value="test">Businesse Permit License</option>
+                                                                            <option value="test">Tax Identification Number</option>
+                                                                            
+                                                                        </select>
+                                                                    </div>
+                                                                    <!--end::Input-->
+                                                                </div>
+                                                                <!--end::Input group-->
+                                                            </div>
+                                                            <!--End begin::Col-->
+                                                            <!--end::Row-->
 
                                                             <!--begin::Row-->
                                                             <div class="row fv-row">
@@ -494,19 +527,19 @@
                                                                 <!--end::Input group-->
                                                             </div>
                                                             <!--End begin::Col-->
-                                                            <!--end::Row-->
+                                                            <!--end::Row-->                                                      
 
                                                             <!--begin::Row-->
-                                                            {{-- <div class="col-6">
+                                                            {{-- <div class="col-6"> --}}
                                                                 <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
+                                                                {{-- <div class="fv-row mb-7"> --}}
                                                                     <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                                    {{-- <label class="fs-6 fw-bold form-label mt-3">
                                                                         <span class="">Kota / Kabupaten</span>
-                                                                    </label>
+                                                                    </label> --}}
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
-                                                                    <input type="text" class="form-control form-control-solid" id="input-kabupaten" name="kabupaten"
+                                                                    {{-- <input type="text" class="form-control form-control-solid" id="input-kabupaten" name="kabupaten"
                                                                         value="{{ $customer->kota_kabupaten }}" placeholder="Kabupaten" style="display: none" />
                                                                     <div id="div-kabupaten">
                                                                         <select name="kabupaten" id="kabupaten" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
@@ -527,40 +560,67 @@
                                                                                 @endforeach
                                                                             @endif
                                                                         </select>
-                                                                    </div>
+                                                                    </div> --}}
                                                                     <!--end::Input-->
-                                                                </div>
+                                                                {{-- </div> --}}
                                                                 <!--end::Input group-->
-                                                            </div> --}}
+                                                            {{-- </div> --}}
                                                             <!--End begin::Col-->
 
-                                                            <div class="row">
-                                                                <div class="col">
+                                                            <!--begin:: Row-->
+                                                            <div class="row fv-row">
+                                                                <div class="col-6">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3 required">
                                                                         <span class="">Industry Sector</span>
                                                                     </label>
                                                                     <!--end::Label-->
-                                                                    <select name="industry-sector" id="industry-sector" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
-                                                                            data-placeholder="Pilih Industry Sector">
+                                                                    <select name="industry-sector" id="industry-sector" class="form-select form-select-solid pe-5" data-control="select2" data-hide-search="false"
+                                                                            data-placeholder="Pilih Industry Sector" onchange=getIndustrySector(this)>
                                                                         <option value=""></option>
-                                                                        @foreach ($industrySectors as $is)
-                                                                            @if ($is->id_industry_sector == $customer->industry_sector)
-                                                                                <option value="{{ $is->id_industry_sector }}" selected>
-                                                                                    {{ ucwords(strtolower($is->description)) }}
-                                                                                </option>
+                                                                        @foreach ($industryAttractiveness as $io)
+                                                                            @if ($io->code_owner == $customer->industry_sector)
+                                                                                <option value="{{ $io->code_owner }}" id="test" data-attract="{{ $io->owner_attractiveness }}" selected>
+                                                                                    {{ ucwords(strtolower($io->owner_description)) }}
+                                                                                </option>                                                                                                                                                
                                                                             @else
-                                                                                <option value="{{ $is->id_industry_sector }}">
-                                                                                    {{ ucwords(strtolower($is->description)) }}
+                                                                                <option value="{{ $io->code_owner }}" data-attract="{{ $io->owner_attractiveness }}" >
+                                                                                    {{ ucwords(strtolower($io->owner_description)) }}
                                                                                 </option>
                                                                             @endif
                                                                         @endforeach
                                                                     </select>
                                                                 </div>
+                                                                <script>
+                                                                    function getIndustrySector(e){
+                                                                        let attractiveness = "";
+                                                                        e.options.forEach(option => {
+                                                                            if(option.selected){                                                                                
+                                                                                attractiveness = option.getAttribute("data-attract")
+                                                                            }
+                                                                            document.querySelector("#attractiveness").value = attractiveness                                                                            
+                                                                        })
+                                                                    }
+                                                                </script>  
+                                                                <div class="col-6">
+                                                                    <!--begin::Label-->
+                                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                                        <span class="">Industry Attractiveness</span>
+                                                                    </label>
+                                                                    <!--end::Label-->
+                                                                     <!--begin::Input-->
+                                                                         <input type="text"
+                                                                         class="form-control form-control-solid"
+                                                                         id="attractiveness" name="attractiveness"
+                                                                         value="{{ $customer->IndustryOwner->owner_attractiveness }}"
+                                                                         placeholder="Attractiveness" readonly />
+                                                                     <!--end::Input-->
+                                                                </div>
                                                             </div>
+                                                            <!--end:: Row-->
 
                                                             <!--begin::Fungsi Select Provinsi-->
-                                                            <script>
+                                                            {{-- <script>
                                                                 async function selectNegara(e) {
                                                                     // console.log(e.value);
                                                                     const idProvinsi = e.value;
@@ -602,7 +662,7 @@
                                                                     // });
                                                                     // document.querySelector("#kabupaten").innerHTML = html;
                                                                 }
-                                                            </script>
+                                                            </script> --}}
                                                             <!--end::Fungsi Select Provinsi-->
 
                                                         </div>
