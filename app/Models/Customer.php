@@ -58,4 +58,9 @@ class Customer extends Model
         return $this->hasOne(IndustrySector::class, "id_industry_sector", "industry_sector");
     }
 
+    public function IndustryOwner()
+    {
+        return $this->hasOne(IndustryOwner::class, "code_owner", "industry_sector");
+    }
+
 }
