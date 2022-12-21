@@ -19,6 +19,7 @@ use App\Models\ClaimManagements;
 use App\Models\AddendumContracts;
 use App\Models\ContractManagements;
 use App\Models\AddendumContractDrafts;
+use App\Models\ContractBast;
 use App\Models\DokumenPendukung;
 use App\Models\KlarifikasiNegosiasiCda;
 use App\Models\KontrakBertandatangan;
@@ -35,6 +36,7 @@ use Illuminate\Support\Facades\Redirect;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -1119,59 +1121,74 @@ class ContractManagementsController extends Controller
     public function documentBastContractUpload(Request $request)
     {
         $data = $request->all();
-
-        $messages = [
-            "required" => "Field di atas wajib diisi",
-            "file" => "This field must be file only",
-        ];
-        $rules = [
-            "dokumen-bast-1" => "required|file",
-            "dokumen-bast-2" => "required|file",
-            "id-contract" => "required",
-        ];
-        $validation = Validator::make($data, $rules, $messages);
-        if ($validation->fails()) {
-            Alert::error('Error', "Dokument Bast gagal ditambahkan");
-            return Redirect::back();
-            // dd($validation->errors());
-        }
-        $validation->validate();
-
+        // dd($data);
         $faker = new Uuid();
-        $contract_managements = ContractManagements::find($data["id-contract"]);
+        $dokumen = new ContractBast();
+        $id_document = $faker->uuid3();
+        $file_name = $data['dokumen-bast-1']->getClientOriginalName();
+        $nama_document = date("His_") . $file_name;
+        // $nama_document = date("His_") . substr($uploadedFile->getClientOriginalName(), 0, strlen($uploadedFile->getClientOriginalName()) - 5);
+        moveFileTemp($data['dokumen-bast-1'], $id_document);
+        $dokumen->nama_dokumen = $nama_document;
+        $dokumen->id_contract =  $data["id-contract"];
+        $dokumen->bast =  (int) $data["bast"];
+        $dokumen->jenis_dokumen =  $data["jenis-bast"];
+        $dokumen->id_document = $id_document;
+        // dd($dokumen);
+        $dokumen->save();
 
-        if (isset($data["dokumen-bast-1"])) {
-            if (!empty($contract_managements->dokumen_bast_1)) {
-                $get_dokumen = File::get(public_path("/words/$contract_managements->dokumen_bast_1.docx"));
-                if (!empty($get_dokumen)) {
-                    File::delete(public_path("/words/$contract_managements->dokumen_bast_1.docx"));
-                }
-            }
-            $id_document = $faker->uuid3();
-            $contract_managements->dokumen_bast_1 = $id_document;
-            moveFileTemp($data["dokumen-bast-1"], $id_document);
-        }
+        // $messages = [
+        //     "required" => "Field di atas wajib diisi",
+        //     "file" => "This field must be file only",
+        // ];
+        // $rules = [
+        //     "dokumen-bast-1" => "required|file",
+        //     "dokumen-bast-2" => "required|file",
+        //     "id-contract" => "required",
+        // ];
+        // $validation = Validator::make($data, $rules, $messages);
+        // if ($validation->fails()) {
+        //     Alert::error('Error', "Dokument Bast gagal ditambahkan");
+        //     return Redirect::back();
+        //     // dd($validation->errors());
+        // }
+        // $validation->validate();
 
-        if (isset($data["dokumen-bast-2"])) {
-            if (!empty($contract_managements->dokumen_bast_2)) {
-                $get_dokumen = File::get(public_path("/words/$contract_managements->dokumen_bast_2.docx"));
-                if (!empty($get_dokumen)) {
-                    File::delete(public_path("/words/$contract_managements->dokumen_bast_2.docx"));
-                }
-            }
-            $id_document = $faker->uuid3();
-            $contract_managements->dokumen_bast_2 = $id_document;
-            moveFileTemp($data["dokumen-bast-2"], $id_document);
-        }
+        // $faker = new Uuid();
+        // $contract_managements = ContractManagements::find($data["id-contract"]);
+
+        // if (isset($data["dokumen-bast-1"])) {
+        //     if (!empty($contract_managements->dokumen_bast_1)) {
+        //         $get_dokumen = File::get(public_path("/words/$contract_managements->dokumen_bast_1.docx"));
+        //         if (!empty($get_dokumen)) {
+        //             File::delete(public_path("/words/$contract_managements->dokumen_bast_1.docx"));
+        //         }
+        //     }
+        //     $id_document = $faker->uuid3();
+        //     $contract_managements->dokumen_bast_1 = $id_document;
+        //     moveFileTemp($data["dokumen-bast-1"], $id_document);
+        // }
+
+        // if (isset($data["dokumen-bast-2"])) {
+        //     if (!empty($contract_managements->dokumen_bast_2)) {
+        //         $get_dokumen = File::get(public_path("/words/$contract_managements->dokumen_bast_2.docx"));
+        //         if (!empty($get_dokumen)) {
+        //             File::delete(public_path("/words/$contract_managements->dokumen_bast_2.docx"));
+        //         }
+        //     }
+        //     $id_document = $faker->uuid3();
+        //     $contract_managements->dokumen_bast_2 = $id_document;
+        //     moveFileTemp($data["dokumen-bast-2"], $id_document);
+        // }
 
 
-        if ($contract_managements->save()) {
-            Alert::success("Success", "Dokument Bast berhasil ditambahkan");
-            return redirect()->back();
-        }
-        Alert::error("Erorr", "Dokument Bast gagal ditambahkan");
-        return Redirect::back();
-        // return redirect()->back();
+        // if ($contract_managements->save()) {
+        //     Alert::success("Success", "Dokument Bast berhasil ditambahkan");
+        //     return redirect()->back();
+        // }
+        // Alert::error("Erorr", "Dokument Bast gagal ditambahkan");
+        // return Redirect::back();
+        return redirect()->back();
     }
 
     public function baDefectContractUpload(Request $request)
