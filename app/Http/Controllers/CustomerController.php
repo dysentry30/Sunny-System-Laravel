@@ -231,7 +231,7 @@ class CustomerController extends Controller
         $data_provinsi = Provinsi::where("country_id", "=", $kode_negara)->get();
         $pic = CustomerPic::where("id_customer", "=", $id_customer)->get();
         $struktur = StrukturCustomer::where("id_customer", "=", $id_customer)->get();
-        // $proyeks = ProyekBerjalans::with(["proyek"])->where("id_customer", "=", $id_customer)->get();
+        $proyeks = ProyekBerjalans::with(["proyek"])->where("id_customer", "=", $id_customer)->get();
         $area_proyeks = collect();
         $per = 1000000;
         $industryOwners = IndustryOwner::all();
@@ -395,7 +395,7 @@ class CustomerController extends Controller
             'sumberdanas' => SumberDana::all(),
             // "proyekberjalan0" => $customer->proyekBerjalans->where('stage', ">", 0),
             // "proyekberjalan6" => $customer->proyekBerjalans->where('stage', ">", 6),
-            // "proyeks" => $proyeks,
+            "proyeks" => $proyeks,
             "pics" => $pic,
             "strukturs" => $struktur,
             "data_provinsi" => $data_provinsi,
