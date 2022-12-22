@@ -12,7 +12,7 @@
 </style>
 <!--begin::Main-->
 @section('content')
-
+    {{-- @dd(memory_get_usage(true)) --}}
     <!--begin::Root-->
     <div class=" d-flex flex-column flex-root">
         <!--begin::Page-->
@@ -471,7 +471,7 @@
                                                                             onchange="selectNegara(this)"
                                                                             data-placeholder="Pilih Negara">
                                                                             <option value=""></option>
-                                                                            {{-- @foreach ($data_negara as $negara)
+                                                                            @foreach ($data_negara as $negara)
                                                                                 @if ($negara->abbreviation == $customer->negara || $negara->country == $customer->negara)
                                                                                     <option value="{{ $negara->abbreviation }}" selected>{{ $negara->country }}
                                                                                     </option>
@@ -479,7 +479,7 @@
                                                                                     <option value="{{ $negara->abbreviation }}">
                                                                                         {{ $negara->country }}</option>
                                                                                 @endif
-                                                                            @endforeach --}}
+                                                                            @endforeach
                                                                         </select>
                                                                         <!--end::Input-->
                                                                     </div>
@@ -576,7 +576,7 @@
                                                                     <select name="industry-sector" id="industry-sector" class="form-select form-select-solid pe-5" data-control="select2" data-hide-search="false"
                                                                             data-placeholder="Pilih Industry Sector" onchange=getIndustrySector(this)>
                                                                         <option value=""></option>
-                                                                        {{-- @foreach ($industryOwners as $io)
+                                                                        @foreach ($industryOwners as $io)
                                                                             @if ($io->code_owner == $customer->industry_sector)
                                                                                 <option value="{{ $io->code_owner }}" id="test" data-attract="{{ $io->owner_attractiveness }}" selected>
                                                                                     {{ ucwords(strtolower($io->owner_description)) }}
@@ -586,7 +586,7 @@
                                                                                     {{ ucwords(strtolower($io->owner_description)) }}
                                                                                 </option>
                                                                             @endif
-                                                                        @endforeach --}}
+                                                                        @endforeach
                                                                     </select>
                                                                 </div>
                                                                 <script>
@@ -624,17 +624,22 @@
                                                                     <!--begin::label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
                                                                         <span class="">Jenis Perusahaan</span>
+                                                                        <i class="bi-info-circle-fill" class="btn btn-secondary mx-4"
+                                                                            data-bs-toggle="tooltip" data-bs-placement="top"
+                                                                            data-bs-custom-class="custom-tooltip"
+                                                                            data-bs-title="Belum berfungsi"
+                                                                            data-bs-html="true"></i>
                                                                     </label>
                                                                     <!--end::label-->
                                                                     <!--begin::Input-->
                                                                     <input type="text" class="form-control form-control-solid" id="input-provinsi" name="jenis_perusahaan"
-                                                                        value="{{ $customer->JenisPerusahaan->kode_jenis ?? null }}" placeholder="Jenis Perusahaan" style="display: none" />
+                                                                        value="{{ null }}" placeholder="Jenis Perusahaan" style="display: none" />
                                                                     <div id="div-jenis-perusahaan">
                                                                         <select name="jenis_perusahaan" id="jenis_perusahaan" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
                                                                             {{-- onchange="selectProvinsi(this)"  --}}
                                                                             data-placeholder="Pilih Jenis Perusahaan">
                                                                             <option value=""></option>
-                                                                            @foreach ($jenisPerusahaan as $jp)
+                                                                            {{-- @foreach ($jenisPerusahaan as $jp)
                                                                                 @if ( !empty($customer->JenisPerusahaan) && $jp->kode_jenis == $customer->JenisPerusahaan->kode_jenis)
                                                                                     <option value="{{ $jp->kode_jenis }}" selected>
                                                                                         {{ $jp->deskripsi }}
@@ -644,7 +649,7 @@
                                                                                         {{ $jp->deskripsi }}
                                                                                     </option>
                                                                                 @endif
-                                                                            @endforeach
+                                                                            @endforeach --}}
                                                                         </select>
                                                                     </div>
                                                                     <!--end::Input-->
@@ -656,11 +661,16 @@
                                                                     <!--begin::label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
                                                                         <span class="">Term of Payment</span>
+                                                                        <i class="bi-info-circle-fill" class="btn btn-secondary mx-4"
+                                                                            data-bs-toggle="tooltip" data-bs-placement="top"
+                                                                            data-bs-custom-class="custom-tooltip"
+                                                                            data-bs-title="Belum berfungsi"
+                                                                            data-bs-html="true"></i>
                                                                     </label>
                                                                     <!--end::label-->
                                                                     <!--begin::Input-->
                                                                     <input type="text" class="form-control form-control-solid" id="input-provinsi" name="syarat_pembayaran"
-                                                                        value="{{ $customer->SyaratPembayaran->kode ?? null }}" placeholder="Term of Payment" style="display: none" />
+                                                                        value="{{ null }}" placeholder="Term of Payment" style="display: none" />
                                                                     <div id="div-syarat-pembayaran">
                                                                         <select name="syarat_pembayaran" id="syarat-pembayaran" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
                                                                             data-placeholder="Term of Payment">
@@ -690,11 +700,16 @@
                                                                 <!--begin::label-->
                                                                 <label class="fs-6 fw-bold form-label mt-3">
                                                                     <span class="">Tax</span>
+                                                                    <i class="bi-info-circle-fill" class="btn btn-secondary mx-4"
+                                                                            data-bs-toggle="tooltip" data-bs-placement="top"
+                                                                            data-bs-custom-class="custom-tooltip"
+                                                                            data-bs-title="Belum berfungsi"
+                                                                            data-bs-html="true"></i>
                                                                 </label>
                                                                 <!--end::label-->
                                                                 <!--begin::Input-->
                                                                 <input type="text" class="form-control form-control-solid" id="input-provinsi" name="tax"
-                                                                    value="{{ $customer->Tax->kode ?? null }}" placeholder="Tax" style="display: none" />
+                                                                    value="{{ null }}" placeholder="Tax" style="display: none" />
                                                                 <div id="div-tax">
                                                                     <select name="tax" id="tax" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
                                                                         data-placeholder="Tax">
@@ -1574,7 +1589,7 @@
                                                                 <!--End begin::Col-->
                                                                 {{-- Begin :: Industry Owner --}}
                                                             <!--begin::Row-->
-                                                            <div class="col">
+                                                            {{-- <div class="col">
                                                                 <!--begin::Input group Website-->
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
@@ -1587,13 +1602,13 @@
                                                                         value="{{ $customer->kota_kabupaten }}" placeholder="industry-owner" style="display: none" />
                                                                     <div id="div-industry-owner">
                                                                         <select name="industry-owner" id="industry-owner" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
-                                                                            {{-- onchange="selectKabupaten(this)" --}} data-placeholder="Pilih Industry Owner">
+                                                                            onchange="selectKabupaten(this)" data-placeholder="Pilih Industry Owner">
                                                                             <option value="" selected></option>
-                                                                            {{-- @foreach ($industryOwners as $industryOwner)
+                                                                            @foreach ($industryOwners as $industryOwner)
                                                                                 <option value="{{ $industryOwner->code_owner }}">
                                                                                     {{ $industryOwner->owner_description }}</option>
-                                                                            @endforeach --}}
-                                                                            {{-- @if (isset($data_kabupaten))
+                                                                            @endforeach
+                                                                            @if (isset($data_kabupaten))
                                                                                 @foreach ($data_kabupaten as $kabupaten)
                                                                                     @if ($kabupaten->id == $customer->kota_kabupaten)
                                                                                         <option value="{{ $kabupaten->id }}" selected>
@@ -1605,13 +1620,13 @@
                                                                                         </option>
                                                                                     @endif
                                                                                 @endforeach
-                                                                            @endif --}}
+                                                                            @endif
                                                                         </select>
                                                                     </div>
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
-                                                            </div>
+                                                            </div> --}}
                                                             <!--End begin::Col-->
                                                             {{-- End :: Industry Owner --}}
                                                             </div>

@@ -322,6 +322,7 @@ class CustomerController extends Controller
         $proyekOngoing = collect([$totalProyekOngoing, $totalAmountProyekOngoing]);
         $proyekClosed = collect([$totalProyekClosed, $totalAmountProyekClosed]);
         $proyekOpportunity = collect([$totalProyekOpportunity, $totalAmountProyekOpportunity]);
+        unset($totalProyekForecast, $totalAmountProyekForecast, $totalProyekOngoing, $totalAmountProyekOngoing, $totalProyekClosed, $totalAmountProyekClosed, $totalProyekOpportunity, $totalAmountProyekOpportunity, $totalNilaiOKPerUnit);
         // dd($nilaiForecast, $proyekOngoing, $proyekClosed, $proyekOpportunity);
 
         // foreach ($kategoriProyek as $kategori){
@@ -384,9 +385,10 @@ class CustomerController extends Controller
             //     array_push($rugiProyek, $nilaiRugi);
             // }
         }
+        unset($nilaiTotalRugi, $nilaiTotalLaba, $nilaiTotalPiutang);
+
         // dd($namaUnit, $labaProyek, $rugiProyek );
         // end::chart Laba / Rugi
-
         return view('Customer/viewCustomer', [
             "customer" => $customer,
             "attachment" => $customer->customerAttachments->all(),
@@ -400,7 +402,7 @@ class CustomerController extends Controller
             "strukturs" => $struktur,
             "data_provinsi" => $data_provinsi,
             // "data_kabupaten" => $data_kabupaten,
-            // "data_negara" => $data_negara,
+            "data_negara" => $data_negara,
             "kategoriProyek" => $kategoriProyek,
             "nilaiOK" => $nilaiOK,
             "namaProyek" => $namaProyek,
@@ -410,8 +412,8 @@ class CustomerController extends Controller
             "area_proyeks" => $area_proyeks,
             // "industryAttractiveness" => $industryOwners,
             "jenisPerusahaan" => $jenisPerusahaan,
-            // "taxs" => $taxs,
-            // "syaratPembayaran" => $syaratPembayaran,
+            "taxs" => $taxs,
+            "syaratPembayaran" => $syaratPembayaran,
         ], compact("namaUnit", "labaProyek", "rugiProyek", "piutangProyek", "proyekOpportunity", "industryOwners"));
     }
 
