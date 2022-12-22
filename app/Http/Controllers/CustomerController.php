@@ -399,8 +399,8 @@ class CustomerController extends Controller
             "pics" => $pic,
             "strukturs" => $struktur,
             "data_provinsi" => $data_provinsi,
-            "data_kabupaten" => $data_kabupaten,
-            "data_negara" => $data_negara,
+            // "data_kabupaten" => $data_kabupaten,
+            // "data_negara" => $data_negara,
             "kategoriProyek" => $kategoriProyek,
             "nilaiOK" => $nilaiOK,
             "namaProyek" => $namaProyek,
@@ -410,8 +410,8 @@ class CustomerController extends Controller
             "area_proyeks" => $area_proyeks,
             // "industryAttractiveness" => $industryOwners,
             "jenisPerusahaan" => $jenisPerusahaan,
-            "taxs" => $taxs,
-            "syaratPembayaran" => $syaratPembayaran,
+            // "taxs" => $taxs,
+            // "syaratPembayaran" => $syaratPembayaran,
         ], compact("namaUnit", "labaProyek", "rugiProyek", "piutangProyek", "proyekOpportunity", "industryOwners"));
     }
 
