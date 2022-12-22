@@ -471,7 +471,7 @@
                                                                             onchange="selectNegara(this)"
                                                                             data-placeholder="Pilih Negara">
                                                                             <option value=""></option>
-                                                                            @foreach ($data_negara as $negara)
+                                                                            {{-- @foreach ($data_negara as $negara)
                                                                                 @if ($negara->abbreviation == $customer->negara || $negara->country == $customer->negara)
                                                                                     <option value="{{ $negara->abbreviation }}" selected>{{ $negara->country }}
                                                                                     </option>
@@ -479,7 +479,7 @@
                                                                                     <option value="{{ $negara->abbreviation }}">
                                                                                         {{ $negara->country }}</option>
                                                                                 @endif
-                                                                            @endforeach
+                                                                            @endforeach --}}
                                                                         </select>
                                                                         <!--end::Input-->
                                                                     </div>
