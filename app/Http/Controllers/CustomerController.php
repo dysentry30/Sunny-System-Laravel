@@ -479,7 +479,7 @@ class CustomerController extends Controller
         // $editCustomer->layer_segmentasi = $data["layer_segmentasi"];
         // $editCustomer->jenis_perusahaan = $data["jenis_perusahaan"];
         // $editCustomer->tax = $data["tax"];
-        $editCustomer->syarat_pembayaran = $data["syarat_pembayaran"];
+        // $editCustomer->syarat_pembayaran = $data["syarat_pembayaran"];
         $editCustomer->unique_code = $data["unique_code"];
 
         // $editCustomer->journey_company = $data["journey-company"];
