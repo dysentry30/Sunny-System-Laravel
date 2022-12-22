@@ -5932,7 +5932,7 @@
             const data = {
                 nmnasabah: "{{$customer->name}}",
                 alamat: "{{$customer->address_1}}",
-                kota: "{{$customer->kota_kabupaten}}",
+                kota: "{{$customer->kota_kabupaten ?? 'Jakarta'}}",
                 email: "{{$customer->email}}",
                 ext: "-",
                 telepon: "{{$customer->phone_number}}",
