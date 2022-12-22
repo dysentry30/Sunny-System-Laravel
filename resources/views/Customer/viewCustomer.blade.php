@@ -576,7 +576,7 @@
                                                                     <select name="industry-sector" id="industry-sector" class="form-select form-select-solid pe-5" data-control="select2" data-hide-search="false"
                                                                             data-placeholder="Pilih Industry Sector" onchange=getIndustrySector(this)>
                                                                         <option value=""></option>
-                                                                        @foreach ($industryOwners as $io)
+                                                                        {{-- @foreach ($industryOwners as $io)
                                                                             @if ($io->code_owner == $customer->industry_sector)
                                                                                 <option value="{{ $io->code_owner }}" id="test" data-attract="{{ $io->owner_attractiveness }}" selected>
                                                                                     {{ ucwords(strtolower($io->owner_description)) }}
@@ -586,7 +586,7 @@
                                                                                     {{ ucwords(strtolower($io->owner_description)) }}
                                                                                 </option>
                                                                             @endif
-                                                                        @endforeach
+                                                                        @endforeach --}}
                                                                     </select>
                                                                 </div>
                                                                 <script>
@@ -665,7 +665,7 @@
                                                                         <select name="syarat_pembayaran" id="syarat-pembayaran" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
                                                                             data-placeholder="Term of Payment">
                                                                             <option value=""></option>
-                                                                            @foreach ($syaratPembayaran as $sp)
+                                                                            {{-- @foreach ($syaratPembayaran as $sp)
                                                                                 @if (!empty($customer->SyaratPembayaran) && $sp->kode == $customer->SyaratPembayaran->kode)
                                                                                     <option value="{{ $sp->kode }}" selected>
                                                                                         {{ $sp->deskripsi }}
@@ -675,7 +675,7 @@
                                                                                         {{ $sp->deskripsi }}
                                                                                     </option>
                                                                                 @endif
-                                                                            @endforeach
+                                                                            @endforeach --}}
                                                                         </select>
                                                                     </div>
                                                                     <!--end::Input-->
@@ -699,7 +699,7 @@
                                                                     <select name="tax" id="tax" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
                                                                         data-placeholder="Tax">
                                                                         <option value=""></option>
-                                                                        @foreach ($taxs as $tax)
+                                                                        {{-- @foreach ($taxs as $tax)
                                                                             @if (!empty($customer->Tax) && $tax->kode == $customer->Tax->kode)
                                                                                 <option value="{{ $tax->kode }}" selected>
                                                                                     {{ $tax->deskripsi }}
@@ -709,7 +709,7 @@
                                                                                     {{ $tax->deskripsi }}
                                                                                 </option>
                                                                             @endif
-                                                                        @endforeach
+                                                                        @endforeach --}}
                                                                     </select>
                                                                 </div>
                                                                 <!--end::Input-->
@@ -1589,10 +1589,10 @@
                                                                         <select name="industry-owner" id="industry-owner" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
                                                                             {{-- onchange="selectKabupaten(this)" --}} data-placeholder="Pilih Industry Owner">
                                                                             <option value="" selected></option>
-                                                                            @foreach ($industryOwners as $industryOwner)
+                                                                            {{-- @foreach ($industryOwners as $industryOwner)
                                                                                 <option value="{{ $industryOwner->code_owner }}">
                                                                                     {{ $industryOwner->owner_description }}</option>
-                                                                            @endforeach
+                                                                            @endforeach --}}
                                                                             {{-- @if (isset($data_kabupaten))
                                                                                 @foreach ($data_kabupaten as $kabupaten)
                                                                                     @if ($kabupaten->id == $customer->kota_kabupaten)
