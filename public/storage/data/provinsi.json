@@ -1,138 +1,177 @@
 [
     {
         "id": "11",
-        "name": "ACEH"
+        "province_id": "AC",
+        "name": "ACEH"  
     },
     {
         "id": "12",
+        "province_id": "SU",
         "name": "SUMATERA UTARA"
     },
     {
         "id": "13",
+        "province_id": "SB",
         "name": "SUMATERA BARAT"
     },
     {
         "id": "14",
+        "province_id": "RI",
         "name": "RIAU"
     },
     {
         "id": "15",
+        "province_id": "JA",
         "name": "JAMBI"
     },
     {
         "id": "16",
+        "province_id": "SS",
         "name": "SUMATERA SELATAN"
     },
     {
         "id": "17",
+        "province_id": "BE",
         "name": "BENGKULU"
     },
     {
         "id": "18",
+        "province_id": "LA",
         "name": "LAMPUNG"
     },
     {
         "id": "19",
+        "province_id": "BB",
         "name": "KEPULAUAN BANGKA BELITUNG"
     },
     {
         "id": "21",
+        "province_id": "KR",
         "name": "KEPULAUAN RIAU"
     },
     {
         "id": "31",
+        "province_id": "JK",
         "name": "DKI JAKARTA"
     },
     {
         "id": "32",
+        "province_id": "JB",
         "name": "JAWA BARAT"
     },
     {
         "id": "33",
+        "province_id": "JT",
         "name": "JAWA TENGAH"
     },
     {
         "id": "34",
+        "province_id": "YO",
         "name": "DI YOGYAKARTA"
     },
     {
         "id": "35",
+        "province_id": "JI",
         "name": "JAWA TIMUR"
     },
     {
         "id": "36",
+        "province_id": "BT",
         "name": "BANTEN"
     },
     {
         "id": "51",
+        "province_id": "BA",
         "name": "BALI"
     },
     {
         "id": "52",
+        "province_id": "NB",
         "name": "NUSA TENGGARA BARAT"
     },
     {
         "id": "53",
+        "province_id": "NT",
         "name": "NUSA TENGGARA TIMUR"
     },
     {
         "id": "61",
+        "province_id": "KB",
         "name": "KALIMANTAN BARAT"
     },
     {
         "id": "62",
+        "province_id": "KT",
         "name": "KALIMANTAN TENGAH"
     },
     {
         "id": "63",
+        "province_id": "KS",
         "name": "KALIMANTAN SELATAN"
     },
     {
         "id": "64",
+        "province_id": "KI",
         "name": "KALIMANTAN TIMUR"
     },
     {
         "id": "65",
+        "province_id": "KU",
         "name": "KALIMANTAN UTARA"
     },
     {
         "id": "71",
+        "province_id": "SA",
         "name": "SULAWESI UTARA"
     },
     {
         "id": "72",
+        "province_id": "ST",
         "name": "SULAWESI TENGAH"
     },
     {
         "id": "73",
+        "province_id": "SN",
         "name": "SULAWESI SELATAN"
     },
     {
         "id": "74",
+        "province_id": "SG",
         "name": "SULAWESI TENGGARA"
     },
     {
         "id": "75",
+        "province_id": "GO",
         "name": "GORONTALO"
     },
     {
         "id": "76",
+        "province_id": "SR",
         "name": "SULAWESI BARAT"
     },
     {
         "id": "81",
+        "province_id": "MA",
+        "name": "MALUKU"
+    },
+    {
+        "id": "81",
+        "province_id": "ML",
         "name": "MALUKU"
     },
     {
         "id": "82",
+        "province_id": "MU",
         "name": "MALUKU UTARA"
     },
     {
         "id": "91",
+        "province_id": "PB",
         "name": "PAPUA BARAT"
     },
     {
         "id": "94",
+        "province_id": "PA",
         "name": "PAPUA"
     }
 ]

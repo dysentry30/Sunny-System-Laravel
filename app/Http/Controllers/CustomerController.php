@@ -215,9 +215,13 @@ class CustomerController extends Controller
         // $data_provinsi = Http::get("https://emsifa.github.io/api-wilayah-indonesia/api/provinces.json")->json();
         // $data = Http::get("http://maps.googleapis.com/maps/api/geocode/xml?address=". "Boston, USA" . "&sensor=false");
 
-        // $data_provinsi = json_decode(Storage::get("/public/data/provinsi.json"));
-        $id_kabupaten = $customer->provinsi;
-        $data_kabupaten = json_decode(Storage::get("/public/data/$id_kabupaten.json"));
+        $data_provinsi = json_decode(Storage::get("/public/data/provinsi.json"));
+        $get_kota = collect($data_provinsi)->where("province_id", "=", $customer->provinsi)->first();
+        // dd($customer->provinsi, $get_kota);
+        if (!empty($get_kota)) {
+            $data_kabupaten = json_decode(Storage::get("/public/data/$get_kota->id.json"));
+        }
+        // dd($data_kabupaten);
         $data_negara = collect(json_decode(Storage::get("/public/data/country.json")));
         // dd($customer->negara, $data_negara, $customer->negara);
         $kode_negara = null;
