@@ -480,10 +480,10 @@ class CustomerController extends Controller
         $editCustomer->industry_sector = $data["industry-sector"];
         $editCustomer->forbes_rank = $data["forbes_rank"];
         $editCustomer->lq_rank = $data["lq_rank"];
-        $editCustomer->layer_segmentasi = $data["layer_segmentasi"];
-        $editCustomer->jenis_perusahaan = $data["jenis_perusahaan"];
-        $editCustomer->tax = $data["tax"];
-        $editCustomer->syarat_pembayaran = $data["syarat_pembayaran"];
+        // $editCustomer->layer_segmentasi = $data["layer_segmentasi"];
+        // $editCustomer->jenis_perusahaan = $data["jenis_perusahaan"];
+        // $editCustomer->tax = $data["tax"];
+        // $editCustomer->syarat_pembayaran = $data["syarat_pembayaran"];
         $editCustomer->unique_code = $data["unique_code"];
 
         // $editCustomer->journey_company = $data["journey-company"];
