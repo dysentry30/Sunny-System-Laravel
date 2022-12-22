@@ -1125,7 +1125,9 @@
                                         </td>
                                     </tr>
                                 @empty
-                                    
+                                    <tr>
+                                        <td colspan="2" class="text-center"><b>There is no data</b></td>
+                                    </tr>
                                 @endforelse
                             </tbody>
                             <!--end::Table body-->
@@ -2640,6 +2642,64 @@
 
                         </table>
                         <!--End:Table: Review-->
+                        <br><br>
+                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                            Pasal Kontraktual
+                            <a href="#" Id="Plus" data-bs-toggle="modal"
+                                data-bs-target="#kt_modal_input_pasal_kontraktual">+</a>
+                        </h3>
+
+                        <!--begin:Table: Pasal Kontraktual-->
+                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                            <!--begin::Table head-->
+                            <thead>
+                                <!--begin::Table row-->
+                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                    <th class="min-w-50px">No</th>
+                                    <th class="min-w-125px">Ketentuan</th>
+                                    <th class="min-w-125px">Informasi Kelengkapan <i>Check List</i> ADKON</th>
+                                </tr>
+                                <!--end::Table row-->
+                            </thead>
+                            <!--end::Table head-->
+                            <!--begin::Table body-->
+                            <tbody class="fw-bold text-gray-400">
+                                @if ($contract->RencanaKerjaManajemen->count() > 0)
+                                    @forelse ($contract->RencanaKerjaManajemen as $key => $rencana_kerja)
+                                        <tr>
+                                            <td>
+                                                <p class="text-gray-600 mb-1">{{ $key + 1 }}</p>
+                                            </td>
+                                            <!--begin::Name=-->
+                                            <td>
+                                                <pre class="text-gray-600 mb-1" style="font-family: 'Khula';">{!! $rencana_kerja->ketentuan_rencana_kerja !!}</pre>
+                                            </td>
+                                            <!--end::Name=-->
+                                            <!--begin::Name=-->
+                                            <td>
+                                                <pre class="text-gray-600 mb-1" style="font-family: 'Khula';">{!! $rencana_kerja->informasi_lengkap_adkon !!}</pre>
+                                            </td>
+                                            <!--end::Name=-->
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="3" class="text-center">
+                                                <h6><b>There is no data</b></h6>
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                @else
+                                    <tr>
+                                        <td colspan="3" class="text-center">
+                                            <h6><b>There is no data</b></h6>
+                                        </td>
+                                    </tr>
+                                @endif
+                            </tbody>
+                            <!--end::Table body-->
+
+                        </table>
+                        <!--End:Table: Pasal Kontraktual-->
                     </div>
                 </div>
                 <!--end:::Tab pane Laporan Bulanan-->

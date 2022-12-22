@@ -1484,6 +1484,10 @@ class ProyekController extends Controller
                 // http://nasabah.wika.co.id/index.php/mod_excel/post_json_crm_dev
                 // Begin :: Ngirim data ke nasabah online WIKA
                 $provinsi = Provinsi::where("province_name", "=", $customer->provinsi)->first() ?? Provinsi::find($customer->provinsi);
+                if(empty($provinsi)) {
+                    Alert::html("Error", "Pastikan <b>Provinsi</b> pada Field <b>Customer</b> sudah terisi!");
+                    return redirect()->back();
+                }
                 $data_nasabah_online = collect([
                     "nmnasabah" => "$customer->name",
                     "alamat" => "$customer->address_1",
