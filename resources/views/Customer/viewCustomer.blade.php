@@ -576,7 +576,7 @@
                                                                     <select name="industry-sector" id="industry-sector" class="form-select form-select-solid pe-5" data-control="select2" data-hide-search="false"
                                                                             data-placeholder="Pilih Industry Sector" onchange=getIndustrySector(this)>
                                                                         <option value=""></option>
-                                                                        @foreach ($industryAttractiveness as $io)
+                                                                        @foreach ($industryOwners as $io)
                                                                             @if ($io->code_owner == $customer->industry_sector)
                                                                                 <option value="{{ $io->code_owner }}" id="test" data-attract="{{ $io->owner_attractiveness }}" selected>
                                                                                     {{ ucwords(strtolower($io->owner_description)) }}

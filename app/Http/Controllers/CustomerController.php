@@ -211,7 +211,7 @@ class CustomerController extends Controller
 
     public function view($id_customer)
     {
-        $customer = Customer::find($id_customer);
+        $customer = Customer::with(["customerAttachments", "strukturAttachments", "proyekBerjalans"])->where("id_customer", "=", $id_customer)->first();
         // $data_provinsi = Http::get("https://emsifa.github.io/api-wilayah-indonesia/api/provinces.json")->json();
         // $data = Http::get("http://maps.googleapis.com/maps/api/geocode/xml?address=". "Boston, USA" . "&sensor=false");
 
@@ -231,14 +231,15 @@ class CustomerController extends Controller
         $data_provinsi = Provinsi::where("country_id", "=", $kode_negara)->get();
         $pic = CustomerPic::where("id_customer", "=", $id_customer)->get();
         $struktur = StrukturCustomer::where("id_customer", "=", $id_customer)->get();
-        $proyeks = ProyekBerjalans::where("id_customer", "=", $id_customer)->get();
+        // $proyeks = ProyekBerjalans::with(["proyek"])->where("id_customer", "=", $id_customer)->get();
         $area_proyeks = collect();
         $per = 1000000;
         $industryOwners = IndustryOwner::all();
-        $industrySectors = IndustrySector::all();
+        // $industrySectors = IndustrySector::all();
         $jenisPerusahaan = JenisPerusahaan::all();
         $taxs = Tax::all();
         $syaratPembayaran = SyaratPembayaran::all();
+        // dd($industryOwners, $industrySectors, $syaratPembayaran);
 
         // foreach($proyeks as $p) {
         //     $p = Proyek::find($p->kode_proyek);
@@ -394,7 +395,7 @@ class CustomerController extends Controller
             'sumberdanas' => SumberDana::all(),
             // "proyekberjalan0" => $customer->proyekBerjalans->where('stage', ">", 0),
             // "proyekberjalan6" => $customer->proyekBerjalans->where('stage', ">", 6),
-            "proyeks" => $proyeks,
+            // "proyeks" => $proyeks,
             "pics" => $pic,
             "strukturs" => $struktur,
             "data_provinsi" => $data_provinsi,
@@ -407,11 +408,11 @@ class CustomerController extends Controller
             "proyekOngoing" => $proyekOngoing,
             "proyekClosed" => $proyekClosed,
             "area_proyeks" => $area_proyeks,
-            "industryAttractiveness" => $industryOwners,
+            // "industryAttractiveness" => $industryOwners,
             "jenisPerusahaan" => $jenisPerusahaan,
             "taxs" => $taxs,
             "syaratPembayaran" => $syaratPembayaran,
-        ], compact("namaUnit", "labaProyek", "rugiProyek", "piutangProyek", "proyekOpportunity", "industryOwners", "industrySectors"));
+        ], compact("namaUnit", "labaProyek", "rugiProyek", "piutangProyek", "proyekOpportunity", "industryOwners"));
     }
 
     public function saveEdit(
