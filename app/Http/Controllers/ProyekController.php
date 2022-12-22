@@ -1485,7 +1485,7 @@ class ProyekController extends Controller
                 // Begin :: Ngirim data ke nasabah online WIKA
                 $provinsi = Provinsi::where("province_name", "=", $customer->provinsi)->first() ?? Provinsi::find($customer->provinsi);
                 if(empty($provinsi)) {
-                    Alert::html("Error", "Pastikan <b>Provinsi</b> pada Field <b>Customer</b> sudah terisi!");
+                    Alert::html("Error", "Pastikan <b>Provinsi</b> pada Field <b>Customer</b> sudah terisi!", "error");
                     return redirect()->back();
                 }
                 $data_nasabah_online = collect([
