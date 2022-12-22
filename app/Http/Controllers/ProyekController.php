@@ -1491,7 +1491,7 @@ class ProyekController extends Controller
                 $data_nasabah_online = collect([
                     "nmnasabah" => "$customer->name",
                     "alamat" => "$customer->address_1",
-                    "kota" => "$customer->kota_kabupaten",
+                    "kota" => "Jakarta",
                     "email" => "$customer->email",
                     "ext" => "-",
                     "telepon" => "$customer->phone_number",
