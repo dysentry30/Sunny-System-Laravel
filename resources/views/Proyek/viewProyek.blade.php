@@ -4547,12 +4547,12 @@
                                                                 <script>
                                                                     document.getElementById("nomor-terkontrak").onkeypress = function(e) {
                                                                         var chr = String.fromCharCode(e.which);
-                                                                        if (`/ \ ? #`.indexOf(chr) >= 0){
-                                                                        // if (`!?"'#%&()*/@[\]^_{|}><~;`.indexOf(chr) >= 0){
-                                                                            document.getElementById('char-error').style.display = "";
-                                                                        // showError(chr)
-                                                                        return false;
-                                                                        }
+                                                                        // if (`/ \ ? #`.indexOf(chr) >= 0){
+                                                                        // // if (`!?"'#%&()*/@[\]^_{|}><~;`.indexOf(chr) >= 0){
+                                                                        //     document.getElementById('char-error').style.display = "";
+                                                                        // // showError(chr)
+                                                                        // return false;
+                                                                        // }
                                                                         return true
                                                                     };
                                                                     function viewKontrak(e) {

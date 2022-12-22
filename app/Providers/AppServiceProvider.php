@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Carbon\Carbon;
+use Request;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
@@ -29,6 +30,8 @@ class AppServiceProvider extends ServiceProvider
         Paginator::useBootstrap();
         config(['app.locale' => 'id']);
         Carbon::setLocale('id');
-        URL::forceScheme('https');
+        if (str_contains(Request::url(), 'crm.wika.co.id')) {
+            URL::forceScheme('https');
+        }
     }
 }
