@@ -528,16 +528,16 @@
                                                             <!--end::Row-->                                                      
 
                                                             <!--begin::Row-->
-                                                            {{-- <div class="col-6"> --}}
+                                                            <div class="col-6">
                                                                 <!--begin::Input group Website-->
-                                                                {{-- <div class="fv-row mb-7"> --}}
+                                                                <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
-                                                                    {{-- <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <label class="fs-6 fw-bold form-label mt-3">
                                                                         <span class="">Kota / Kabupaten</span>
-                                                                    </label> --}}
+                                                                    </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
-                                                                    {{-- <input type="text" class="form-control form-control-solid" id="input-kabupaten" name="kabupaten"
+                                                                    <input type="text" class="form-control form-control-solid" id="input-kabupaten" name="kabupaten"
                                                                         value="{{ $customer->kota_kabupaten }}" placeholder="Kabupaten" style="display: none" />
                                                                     <div id="div-kabupaten">
                                                                         <select name="kabupaten" id="kabupaten" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
@@ -558,11 +558,11 @@
                                                                                 @endforeach
                                                                             @endif
                                                                         </select>
-                                                                    </div> --}}
+                                                                    </div>
                                                                     <!--end::Input-->
-                                                                {{-- </div> --}}
+                                                                </div>
                                                                 <!--end::Input group-->
-                                                            {{-- </div> --}}
+                                                            </div>
                                                             <!--End begin::Col-->
 
                                                             <!--begin:: Row-->
