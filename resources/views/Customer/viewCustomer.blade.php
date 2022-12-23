@@ -503,10 +503,9 @@
                                                                         value="{{ $customer->provinsi }}" placeholder="Provinsi" style="display: none" />
                                                                     <div id="div-provinsi">
                                                                         <select name="provinsi" id="provinsi" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
-                                                                            {{-- onchange="selectProvinsi(this)"  --}}
+                                                                            onchange="selectProvinsi(this)" 
                                                                             data-placeholder="Pilih Customer Provinsi">
-                                                                            <option value="{{ $customer->provinsi }}">
-                                                                                {{ $customer->provinsi }}</option>
+                                                                            <option value=""></option>
                                                                             @foreach ($data_provinsi as $provinsi)
                                                                                 @if ($provinsi->province_id == $customer->provinsi)
                                                                                     <option value="{{ $provinsi->province_id }}" selected>
@@ -542,16 +541,15 @@
                                                                     <div id="div-kabupaten">
                                                                         <select name="kabupaten" id="kabupaten" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
                                                                             onchange="selectKabupaten(this)" data-placeholder="Pilih Customer Kabupaten">
-                                                                            <option value="{{ $customer->kota_kabupaten }}">
-                                                                                {{ $customer->kota_kabupaten }}</option>
+                                                                            <option value=""></option>
                                                                             @if (isset($data_kabupaten))
                                                                                 @foreach ($data_kabupaten as $kabupaten)
-                                                                                    @if ($kabupaten->id == $customer->kota_kabupaten)
-                                                                                        <option value="{{ $kabupaten->id }}" selected>
+                                                                                    @if ($kabupaten->name == $customer->kota_kabupaten)
+                                                                                        <option value="{{ $kabupaten->name }}" selected>
                                                                                             {{ ucwords(strtolower($kabupaten->name)) }}
                                                                                         </option>
                                                                                     @else
-                                                                                        <option value="{{ $kabupaten->id }}">
+                                                                                        <option value="{{ $kabupaten->name }}">
                                                                                             {{ ucwords(strtolower($kabupaten->name)) }}
                                                                                         </option>
                                                                                     @endif
@@ -733,49 +731,49 @@
                                                             <!--ENd::Row-->
 
                                                             <!--begin::Fungsi Select Provinsi-->
-                                                            {{-- <script>
-                                                                async function selectNegara(e) {
-                                                                    // console.log(e.value);
-                                                                    const idProvinsi = e.value;
-                                                                    // console.log(elt.value);
-                                                                    let html = ``;
-                                                                    // Get Provinsi
-                                                                    const getKabupaten = await fetch(`/get-kabupaten/${idProvinsi}`).then(res => res.json());
-                                                                    getKabupaten.forEach(kabupaten => {
-                                                                        html += `<option value="${kabupaten.province_id}">${kabupaten.province_name}</option>`;
-                                                                    });
-                                                                    document.querySelector("#provinsi").innerHTML = html;
-                                                                    // if (e.value != "Indonesia") {
-                                                                    //     document.querySelector("#input-provinsi").style.display = "";
-                                                                    //     document.querySelector("#input-provinsi").value = "";
-                                                                    //     document.querySelector("#provinsi").disabled = true;
-                                                                    //     document.querySelector("#div-provinsi").style.display = "none";
+                                                            <script>
+                                                                // async function selectNegara(e) {
+                                                                //     // console.log(e.value);
+                                                                //     const idProvinsi = e.value;
+                                                                //     // console.log(elt.value);
+                                                                //     let html = ``;
+                                                                //     // Get Provinsi
+                                                                //     const getKabupaten = await fetch(`/get-kabupaten/${idProvinsi}`).then(res => res.json());
+                                                                //     getKabupaten.forEach(kabupaten => {
+                                                                //         html += `<option value="${kabupaten.province_id}">${kabupaten.province_name}</option>`;
+                                                                //     });
+                                                                //     document.querySelector("#provinsi").innerHTML = html;
+                                                                //     // if (e.value != "Indonesia") {
+                                                                //     //     document.querySelector("#input-provinsi").style.display = "";
+                                                                //     //     document.querySelector("#input-provinsi").value = "";
+                                                                //     //     document.querySelector("#provinsi").disabled = true;
+                                                                //     //     document.querySelector("#div-provinsi").style.display = "none";
 
-                                                                    //     document.querySelector("#input-kabupaten").style.display = "";
-                                                                    //     document.querySelector("#input-kabupaten").value = "";
-                                                                    //     document.querySelector("#kabupaten").disabled = true;
-                                                                    //     document.querySelector("#div-kabupaten").style.display = "none";
-                                                                    // } else {
-                                                                    //     document.querySelector("#input-provinsi").style.display = "none";
-                                                                    //     document.querySelector("#div-provinsi").style.display = "";
-                                                                    //     document.querySelector("#provinsi").disabled = false;
-                                                                    //     document.querySelector("#input-kabupaten").style.display = "none";
-                                                                    //     document.querySelector("#div-kabupaten").style.display = "";
-                                                                    //     document.querySelector("#kabupaten").disabled = false;
+                                                                //     //     document.querySelector("#input-kabupaten").style.display = "";
+                                                                //     //     document.querySelector("#input-kabupaten").value = "";
+                                                                //     //     document.querySelector("#kabupaten").disabled = true;
+                                                                //     //     document.querySelector("#div-kabupaten").style.display = "none";
+                                                                //     // } else {
+                                                                //     //     document.querySelector("#input-provinsi").style.display = "none";
+                                                                //     //     document.querySelector("#div-provinsi").style.display = "";
+                                                                //     //     document.querySelector("#provinsi").disabled = false;
+                                                                //     //     document.querySelector("#input-kabupaten").style.display = "none";
+                                                                //     //     document.querySelector("#div-kabupaten").style.display = "";
+                                                                //     //     document.querySelector("#kabupaten").disabled = false;
 
-                                                                    // }
-                                                                }
+                                                                //     // }
+                                                                // }
                                                                 async function selectProvinsi(elt) {
-                                                                    // const idProvinsi = elt.value;
-                                                                    // // console.log(elt.value);
-                                                                    // let html = ``;
-                                                                    // const getKabupaten = await fetch(`/get-kabupaten/${idProvinsi}`).then(res => res.json());
-                                                                    // getKabupaten.forEach(kabupaten => {
-                                                                    //     html += `<option value="${kabupaten.id}">${kabupaten.name}</option>`;
-                                                                    // });
-                                                                    // document.querySelector("#kabupaten").innerHTML = html;
+                                                                    const idProvinsi = elt.value.split("-")[1];
+                                                                    let html = ``;
+                                                                    const getKabupaten = await fetch(`/get-kabupaten/${idProvinsi}`).then(res => res.json());
+                                                                    
+                                                                    getKabupaten.forEach(kabupaten => {
+                                                                        html += `<option value="${kabupaten.id}">${kabupaten.name}</option>`;
+                                                                    });
+                                                                    document.querySelector("#kabupaten").innerHTML = html;
                                                                 }
-                                                            </script> --}}
+                                                            </script>
                                                             <!--end::Fungsi Select Provinsi-->
 
                                                         </div>
@@ -5936,7 +5934,7 @@
                 email: "{{$customer->email}}",
                 ext: "-",
                 telepon: "{{$customer->phone_number}}",
-                fax: ".",
+                fax: "{{$customer->address_2}}",
                 npwp: npwp,
                 nama_kontak: pic.nama_pic,
                 jenisperusahaan: "{{$customer->jenis_instansi}}",
@@ -5998,33 +5996,33 @@
     {{-- END :: CONVERT DATA TO TABLE --}}
 
     <!--begin::MAP Leaflet-->
-    {{-- <script>
-    var map = L.map('map').setView([51.505, -0.09], 7);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 13,
-        minZoom: 6,
-        attribution: '© OpenStreetMap'
-    }).addTo(map);
+    <script>
+    // var map = L.map('map').setView([51.505, -0.09], 7);
+    // L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    //     maxZoom: 13,
+    //     minZoom: 6,
+    //     attribution: '© OpenStreetMap'
+    // }).addTo(map);
 
     // let prevCityLayer = null;
     // let prevCityMarker = null;
 
-    const proyekCoord = JSON.parse('{!! $area_proyeks->toJson() !!}');
-    const proyekLocation = JSON.parse('{!! $kategoriProyek->flatten()->toJson() !!}');
+    // const proyekCoord = JSON.parse('{!! $area_proyeks->toJson() !!}');
+    // const proyekLocation = JSON.parse('{!! $kategoriProyek->flatten()->toJson() !!}');
 
     // console.log(proyekCoord[0]["JAWA BARAT"]);
 
-    proyekCoord.forEach(coord => {
-        proyekLocation.forEach(loc => {
-            if (loc.proyek.provinsi == Object.keys(coord)) {
-                const coordGeoJson = L.geoJSON().addTo(map);
-                coordGeoJson.addData(coord[loc.proyek.provinsi].geojson);
-                map.panTo(new L.LatLng(coord[loc.proyek.provinsi].lat, coord[loc.proyek.provinsi].lon));
-            }
-        });
-        // coord.forEach(c => {
-        // });
-    });
+    // proyekCoord.forEach(coord => {
+    //     proyekLocation.forEach(loc => {
+    //         if (loc.proyek.provinsi == Object.keys(coord)) {
+    //             const coordGeoJson = L.geoJSON().addTo(map);
+    //             coordGeoJson.addData(coord[loc.proyek.provinsi].geojson);
+    //             map.panTo(new L.LatLng(coord[loc.proyek.provinsi].lat, coord[loc.proyek.provinsi].lon));
+    //         }
+    //     });
+    //     // coord.forEach(c => {
+    //     // });
+    // });
 
     // begin select kabupaten
     async function selectKabupaten(elt) {
@@ -6047,9 +6045,11 @@
         // kotaCoord.forEach(coor => {
         // });
         // L.polygon([[...kotaCoord]]).addTo(map);
+
+        // console.log(elt.value);
         
     }
     // end select kabupaten
-</script> --}}
+</script>
     <!--end::MAP Leaflet-->
 @endsection

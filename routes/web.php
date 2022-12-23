@@ -331,11 +331,11 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post('/customer/get-kode-nasabah', [CustomerController::class, 'getKodeNasabah']);
 
     // Begin :: get Kabupaten
-    Route::get(
-        '/get-kabupaten/{id}',
-        function ($id) {
+    Route::get('/get-kabupaten/{id}',function ($id) {
+            $data_provinsi = collect(json_decode(Storage::get("/public/data/provinsi.json")))->where("province_id", "=", $id)->first()->id;
+            $data_kabupaten = collect(json_decode(Storage::get("/public/data/$data_provinsi.json")));
             // $data_kabupaten = Http::get("https://emsifa.github.io/api-wilayah-indonesia/api/regencies/$id.json")->json();
-            $data_kabupaten = Provinsi::where("country_id", "=", $id)->get()->toJson();
+            // $data_kabupaten = Provinsi::where("country_id", "=", $id)->get()->toJson();
             return $data_kabupaten;
         }
     );
