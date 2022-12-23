@@ -257,6 +257,11 @@ class CustomerController extends Controller
         $jenisPerusahaan = JenisPerusahaan::all();
         $taxs = Tax::all();
         $syaratPembayaran = SyaratPembayaran::all();
+        $masalahHukum = MasalahHukum::with(['Proyek'])->where("id_customer", "=", $id_customer)->get();
+        $csi = Csi::with(['Proyek'])->where("id_customer", "=", $id_customer)->get();
+        $cli = Cli::with(['Proyek'])->where("id_customer", "=", $id_customer)->get();
+        $nps = Nps::with(['Proyek'])->where("id_customer", "=", $id_customer)->get();
+        $inovasi = KaryaInovasi::with(['Proyek'])->where("id_customer", "=", $id_customer)->get();
         // dd($industryOwners, $industrySectors, $syaratPembayaran);
 
         // foreach($proyeks as $p) {
@@ -432,13 +437,19 @@ class CustomerController extends Controller
             "jenisPerusahaan" => $jenisPerusahaan,
             "taxs" => $taxs,
             "syaratPembayaran" => $syaratPembayaran,
+            "masalahHukum" => $masalahHukum,
+            "csi" => $csi,
+            "cli" => $cli,
+            "nps" => $nps,
+            "inovasi" => $inovasi
         ], compact("namaUnit", "labaProyek", "rugiProyek", "piutangProyek", "proyekOpportunity", "industryOwners"));
     }
 
     public function saveEdit(
         Request $request,
         Customer $editCustomer,
-        CustomerAttachments $customerAttachments
+        CustomerAttachments $customerAttachments,
+        MasalahHukum $editMasalahHukum
     ) {
 
         $data = $request->all();
@@ -602,6 +613,61 @@ class CustomerController extends Controller
 
         $editCustomer->note_attachment = $data["note-attachment"];
         $customerAttachments->id_customer = $data["id-customer"];
+
+        //Save to Masalah Hukum Table
+        $editMasalahHukum = MasalahHukum::where("id_customer", "=", $data["id-customer"])->first();
+        $editMasalahHukum = new MasalahHukum();
+        $editMasalahHukum->id_customer = $data["id-customer"];
+        $editMasalahHukum->kode_proyek = $data["kode-proyek-hukum"];
+        $editMasalahHukum->bentuk_masalah = $data["bentuk_masalah_hukum"];
+        $editMasalahHukum->status = $data["status_hukum"];
+        if ($data["kode-proyek-hukum"] && $data["bentuk_masalah_hukum"] && $data["status_hukum"] !== null) {
+            $editMasalahHukum->save();
+        }
+
+        //Save to CSI Table
+        $editCSI = Csi::where("id_customer", "=", $data["id-customer"])->first();
+        $editCSI = new Csi();
+        $editCSI->id_customer = $data["id-customer"];
+        $editCSI->kode_proyek = $data["kode_proyek_csi"];
+        $editCSI->tanggal = $data["csi_date"];
+        $editCSI->score = $data["score_csi"];
+        if ($data["kode_proyek_csi"] && $data["csi_date"] && $data["score_csi"] != +null) {
+            $editCSI->save();
+        }
+
+        //Save to CLI Table
+        $editCLI = Cli::where("id_customer", "=", $data["id-customer"])->first();
+        $editCLI = new Cli();
+        $editCLI->id_customer = $data["id-customer"];
+        $editCLI->kode_proyek = $data["kode_proyek_cli"];
+        $editCLI->tanggal = $data["cli_date"];
+        $editCLI->score = $data["score_cli"];
+        if ($data["kode_proyek_cli"] && $data["cli_date"] && $data["score_cli"] !== null) {
+            $editCLI->save();
+        }
+
+        //Save to NPS Table
+        $editNPS = Nps::where("id_customer", "=", $data["id-customer"])->first();
+        $editNPS = new Nps();
+        $editNPS->id_customer = $data["id-customer"];
+        $editNPS->kode_proyek = $data["kode_proyek_nps"];
+        $editNPS->tanggal = $data["nps_date"];
+        $editNPS->score = $data["score_nps"];
+        if ($data["kode_proyek_nps"] && $data["nps_date"] && $data["score_nps"] !== null) {
+            $editNPS->save();
+        }
+
+        //Save to Karya Inovasi Table
+        $editInovasi = KaryaInovasi::where("id_customer", "=", $data["id-customer"])->first();
+        $editInovasi = new KaryaInovasi();
+        $editInovasi->id_customer = $data["id-customer"];
+        $editInovasi->kode_proyek = $data["kode_proyek_inovasi"];
+        $editInovasi->tanggal = $data["inovasi_date"];
+        $editInovasi->nama_inovasi = $data["nama_inovasi"];
+        if ($data["kode_proyek_inovasi"] && $data["inovasi_date"] && $data["nama_inovasi"] !== null) {
+            $editInovasi->save();
+        }
         // $customerAttachments->name_customer=$data["name-customer"];
 
         $id_customer = $data["id-customer"];
