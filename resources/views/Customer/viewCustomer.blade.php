@@ -157,13 +157,29 @@
                                                     <!--begin::Input group Phone-->
                                                     <div class="fv-row mb-7">
                                                         <!--begin::Label-->
-                                                        <label class="fs-6 fw-bold form-label mt-3">
+                                                        <label class="fs-6 fw-bold form-label mt-3 required">
                                                             <span>Nomor Handphone</span>
                                                         </label>
                                                         <!--end::Label-->
                                                         <!--begin::Input-->
                                                         <input type="text" class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0" id="handphone" name="handphone"
                                                             value="{{ $customer->handphone }}" placeholder="Nomor Handphone" />
+                                                        {{-- @error('phone-number')
+                                                        <h6 class="text-danger">{{ $message }}eror</h6>
+                                                        @enderror --}}
+                                                        <!--end::Input-->
+                                                    </div>
+                                                    <!--end::Input group-->
+
+                                                    <!--begin::Input group Phone-->
+                                                    <div class="fv-row mb-7">
+                                                        <!--begin::Label-->
+                                                        <label class="fs-6 fw-bold form-label mt-3">
+                                                            <span>fax</span>
+                                                        </label>
+                                                        <!--end::Label-->
+                                                        <!--begin::Input-->
+                                                        <input type="text" class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0" value="" placeholder="Fax" />
                                                         {{-- @error('phone-number')
                                                         <h6 class="text-danger">{{ $message }}eror</h6>
                                                         @enderror --}}
@@ -203,12 +219,12 @@
                                                     <!--begin::Input group Website-->
                                                     <div class="fv-row mb-7">
                                                         <!--begin::Label-->
-                                                        <label class="fs-6 fw-bold form-label mt-3">
+                                                        <label class="fs-6 fw-bold form-label mt-6">
                                                             <span>Website</span>
                                                         </label>
                                                         <!--end::Label-->
                                                         <!--begin::Input-->
-                                                        <input type="text" class="form-control form-control-solid" id="website" name="website" value="{{ $customer->website }}"
+                                                        <input type="text" class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0" id="website" name="website" value="{{ $customer->website }}"
                                                             placeholder="Website" />
                                                         <!--end::Input-->
                                                     </div>
@@ -222,7 +238,7 @@
                                                         </label>
                                                         <!--end::Label-->
                                                         <!--begin::Input-->
-                                                        <textarea class="form-control form-control-solid" name="AddressLine1">{{ $customer->address_1 }}</textarea>
+                                                        <textarea class="form-control form-control-solid" rows="6" name="AddressLine1">{{ $customer->address_1 }}</textarea>
                                                         <!--end::Input-->
                                                     </div>
                                                     <!--end::Input group-->
@@ -235,7 +251,7 @@
                                                         </label>
                                                         <!--end::Label-->
                                                         <!--begin::Input-->
-                                                        <textarea class="form-control form-control-solid" name="AddressLine2">{{ $customer->address_2 }}</textarea>
+                                                        <textarea class="form-control form-control-solid" rows="6" name="AddressLine2">{{ $customer->address_2 }}</textarea>
                                                         <!--end::Input-->
                                                     </div>
                                                     <!--end::Input group-->
@@ -248,7 +264,7 @@
                                                         </label>
                                                         <!--end::Label-->
                                                         <!--begin::Input-->
-                                                        <input type="text" class="form-control form-control-solid" value="{{ $customer->kode_pos }}" name="kode-pos"/>
+                                                        <input type="text" class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0" value="{{ $customer->kode_pos }}" name="kode-pos"/>
                                                         <!--end::Input-->
                                                     </div>
                                                     <!--end::Input group-->
@@ -495,7 +511,7 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="">Provinsi</span>
+                                                                        <span class="required">Provinsi</span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
@@ -532,7 +548,7 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="">Kota / Kabupaten</span>
+                                                                        <span class="required">Kota / Kabupaten</span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
@@ -567,8 +583,8 @@
                                                             <div class="row fv-row">
                                                                 <div class="col-6">
                                                                     <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3 required">
-                                                                        <span class="">Industry Sector</span>
+                                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                                        <span class="required">Industry Sector</span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <select name="industry-sector" id="industry-sector" class="form-select form-select-solid pe-5" data-control="select2" data-hide-search="false"
@@ -769,7 +785,7 @@
                                                                     const getKabupaten = await fetch(`/get-kabupaten/${idProvinsi}`).then(res => res.json());
                                                                     
                                                                     getKabupaten.forEach(kabupaten => {
-                                                                        html += `<option value="${kabupaten.id}">${kabupaten.name}</option>`;
+                                                                        html += `<option value="${kabupaten.name}">${kabupaten.name}</option>`;
                                                                     });
                                                                     document.querySelector("#kabupaten").innerHTML = html;
                                                                 }
@@ -834,7 +850,7 @@
                                                         <br><br>
 
                                                         <!--begin::INPUT PIC-->
-                                                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                                        <h3 class="fw-bolder m-0 required" id="HeadDetail" style="font-size:14px;">
                                                             Contact / PIC
                                                             <a href="#" Id="Plus" data-bs-toggle="modal" data-bs-target="#kt_modal_pic">+</a>
                                                         </h3>
@@ -3219,7 +3235,7 @@
                                 <!--begin::Input group Website-->
                                 <div class="fv-row mb-7">
                                     <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
+                                    <label class="fs-6 fw-bold form-label mt-3 required">
                                         <span>Jabatan</span>
                                     </label>
                                     <!--end::Label-->
@@ -3240,7 +3256,7 @@
                                 <!--begin::Input group Website-->
                                 <div class="fv-row mb-7">
                                     <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
+                                    <label class="fs-6 fw-bold form-label mt-3 required">
                                         <span>Email</span>
                                     </label>
                                     <!--end::Label-->
@@ -3255,7 +3271,7 @@
                                 <!--begin::Input group Website-->
                                 <div class="fv-row mb-7">
                                     <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
+                                    <label class="fs-6 fw-bold form-label mt-3 required">
                                         <span>Kontak Nomor</span>
                                     </label>
                                     <!--end::Label-->
@@ -5929,12 +5945,12 @@
             }
             const data = {
                 nmnasabah: "{{$customer->name}}",
-                alamat: "{{$customer->address_1}}",
+                alamat: `{{$customer->address_1}}`,
                 kota: "{{$customer->kota_kabupaten ?? 'Jakarta'}}",
                 email: "{{$customer->email}}",
                 ext: "-",
                 telepon: "{{$customer->phone_number}}",
-                fax: "{{$customer->address_2}}",
+                fax: `{{$customer->address_2}}`,
                 npwp: npwp,
                 nama_kontak: pic.nama_pic,
                 jenisperusahaan: "{{$customer->jenis_instansi}}",

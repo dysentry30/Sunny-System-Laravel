@@ -1464,28 +1464,44 @@ class ProyekController extends Controller
                     if (empty($customer->industry_sector)) {
                         $error_msg->push("Industry Sector");
                     }
-
+                    if (empty($customer->provinsi)) {
+                        $error_msg->push("Provinsi");
+                    }
+                    if (empty($customer->kota_kabupaten)) {
+                        $error_msg->push("Kota/Kabupaten");
+                    }
+                    if (empty($customer->npwp_company)) {
+                        $error_msg->push("NPWP");
+                    }
                     if ($error_msg->isNotEmpty()) {
-                        Alert::html("Error", "Untuk pindah ke stage terkontrak, pastikan di <b>Customer</b> dengan field <b>" . $error_msg->join(", ", " dan ") . "</b> terisi!", "error");
+                        Alert::html("Error - Pelanggan !", "Untuk pindah ke stage terkontrak, pastikan data <b>Pelanggan</b> dengan field <b>" . $error_msg->join(", ", " </b>dan<b> ") . "</b> sudah terisi!", "error")->autoClose(10000);
                         return redirect()->back();
                     }
                 } else if (empty($customer)) {
-                    Alert::html("Error", "Untuk pindah ke stage terkontrak, pastikan field <b>Customer</b> sudah terpilih!", "error");
+                    Alert::html("Error - Proyek !", "Untuk pindah ke stage terkontrak, pastikan field <b>Pelanggan</b> pada stage Pasar Dini sudah terpilih!", "error")->autoClose(10000);
                     return redirect()->back();
                 }
                 $sap = $customer->sap;
-                $pic = $customer->pic->first();
+                $pic = $customer->pic->filter( function ($p) {
+                    return (!empty($p->nama_pic) && !empty($p->jabatan_pic) && !empty($p->email_pic) && !empty($p->phone_pic));
+                })->first();
+
+                if (empty($pic)) {
+                    Alert::html("Error - PIC Pelanggan !", "Untuk pindah ke stage terkontrak, pastikan mengisi minimal <b>1 PIC Pelanggan</b> !", "error")->autoClose(10000);
+                    return redirect()->back();
+                }
+
                 // dump($sap, $pic);
                 // dd();
                 if (empty($customer)) {
-                    Alert::error("Error", "Pastikan Customer terisi!");
+                    Alert::error("Error", "Pastikan Data Pelanggan sudah terisi!")->autoClose(10000);
                     return redirect()->back();
                 }
                 // http://nasabah.wika.co.id/index.php/mod_excel/post_json_crm_dev
                 // Begin :: Ngirim data ke nasabah online WIKA
                 $provinsi = Provinsi::where("province_name", "=", $customer->provinsi)->first() ?? Provinsi::find($customer->provinsi);
-                if(empty($provinsi)) {
-                    Alert::html("Error", "Pastikan <b>Provinsi</b> pada Field <b>Customer</b> sudah terisi!", "error");
+                if (empty($provinsi)) {
+                    Alert::html("Error", "Pastikan <b>Provinsi</b> pada Field <b>Pelanggan</b> sudah terisi!", "error")->autoClose(10000);
                     return redirect()->back();
                 }
                 $data_nasabah_online = collect([
