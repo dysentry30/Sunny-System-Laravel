@@ -228,19 +228,22 @@ class CustomerController extends Controller
         }
 
         $data_negara = collect(json_decode(Storage::get("/public/data/country.json")));
+        // dd($customer->negara);
         $kode_negara = null;
         if(!empty($customer->negara)) {
-            if (strlen($customer->negara) > 2) {
-                $kode_negara = $data_negara->where("country", "=", $customer->negara)->first()->abbreviation;
+            if (strlen($customer->negara) == 2) {
+                $kode_negara = $customer->negara;
             } else {
-                $kode_negara = $data_negara->where("abbreviation", "=", $customer->negara)->first()->abbreviation;
+                $kode_negara = $data_negara->where("country", "=", $customer->negara)->first()->abbreviation;
+                if ($kode_negara == null) {
+                    $kode_negara = "ID";
+                }
             }
         }
+        // dd($kode_negara);
         $data_provinsi = Provinsi::where("country_id", "=", $kode_negara)->get();
-        // dd($customer->provinsi, $get_kota);
         
 
-        // dd($data_kabupaten);
         // dd($data_kabupaten);
         // dd($customer->negara, $data_negara, $customer->negara);
         
