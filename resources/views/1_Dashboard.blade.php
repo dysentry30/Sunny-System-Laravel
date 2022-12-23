@@ -203,7 +203,7 @@
                                         <select onchange="selectDOP(this)" id="dop" name="dop"
                                             class="form-select form-select-solid w-auto"
                                             style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
-                                            data-placeholder="Direktorat" data-select2-id="select2-data-unit-kerja" tabindex="-1"
+                                            data-placeholder="Direktorat" data-select2-id="select2-data-dop" tabindex="-1"
                                             aria-hidden="true">
                                             <option value="" {{$dop_get == "" ? "selected" : ""}}></option>
                                             @foreach ($dops as $dop)
