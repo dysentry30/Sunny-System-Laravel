@@ -7233,7 +7233,7 @@
             <form action="/contract-management/usulan-perubahan-draft/upload" method="POST"
                 enctype="multipart/form-data">
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col">
 
                         @csrf
                         <!--begin::Label-->
@@ -7298,7 +7298,7 @@
                         <!--end::Label-->
                         
                         <!--Begin::Input-->
-                        <input type="text" class="form-control form-control-solid" name="deskripsi-klausul-awal" placeholder="Deskripsi Klausul Awal">
+                        <textarea class="form-control form-control-solid" name="deskripsi-klausul-awal" cols="2" placeholder="Deskripsi Klausul Awal"></textarea>
                         <!--End::Input-->
                         
                         <br>
@@ -7309,7 +7309,7 @@
                         <!--end::Label-->
                         
                         <!--Begin::Input-->
-                        <input type="text" class="form-control form-control-solid" name="usulan-perubahan-klausul" placeholder="Usulan Perubahan Klausul">
+                        <textarea class="form-control form-control-solid" name="usulan-perubahan-klausul" cols="2" placeholder="Usulan Perubahan Klausul"></textarea>
                         <!--End::Input-->
                         
                         <br>
@@ -7322,14 +7322,6 @@
                         <textarea style="font-weight: normal" class="form-control form-control-solid" name="keterangan" id="keterangan"
                             rows="1" placeholder="Keterangan"></textarea>
                         <!--end::Input-->
-                    </div>
-                    <div class="col-1 d-flex w-20px">
-                        <div class="vr"></div>
-                    </div>
-                    <div class="col-5">
-                        <b>Pilih Pasal yang ingin diperbaiki:</b> <br>
-                        <ul class="list-group list-group-flush" name="pasal-perbaikan" id="pasal-perbaikan">
-                        </ul>
                     </div>
                 </div>
                 <!--end::Input group-->
@@ -8048,7 +8040,7 @@
         <!--begin::Modal header-->
         <div class="modal-header">
             <!--begin::Modal title-->
-            <h2>Add Question</h2>
+            <h2>Add Aanwitjzing</h2>
             <!--end::Modal title-->
             <!--begin::Close-->
             <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
@@ -8085,9 +8077,9 @@
                     </label>
                     <!--end::Label-->
                     <!--begin::Input-->
-                    <input type="text" class="form-control form-control-solid"
+                    <textarea class="form-control form-control-solid"
                         name="item" id="item" style="font-weight: normal"
-                        value="" placeholder="Item" />
+                        value="" placeholder="Item" cols="2" ></textarea>
                     <!--end::Input-->
 
                     <!--begin::Label-->
@@ -8096,21 +8088,21 @@
                     </label>
                     <!--end::Label-->
                     <!--begin::Input-->
-                    <input type="text" class="form-control form-control-solid" name="sub-pasal"
-                        id="sub-pasal" style="font-weight: normal" value=""
-                        placeholder="Sub" />
+                    <textarea class="form-control form-control-solid" name="sub-pasal"
+                        id="sub-pasal" style="font-weight: normal" cols="2" value=""
+                        placeholder="Sub"></textarea>
                     <!--end::Input-->
                     <small id="file-error-msg-question" style="color: rgb(199, 42, 42); display:none"></small>
                     
                     <!--begin::Label-->
                     <label class="fs-6 fw-bold form-label mt-3">
-                        <span style="font-weight: normal">Daftar Pertanyaan</span>
+                        <span style="font-weight: normal">Pertanyaan</span>
                     </label>
                     <!--end::Label-->
                     <!--begin::Input-->
-                    <input type="text" class="form-control form-control-solid" name="note-question"
-                        id="note-question" style="font-weight: normal" value=""
-                        placeholder="Daftar Pertanyaan" />
+                    <textarea class="form-control form-control-solid" name="note-question"
+                        id="note-question" style="font-weight: normal" cols="2" value=""
+                        placeholder="Pertanyaan"></textarea>
                     <!--end::Input-->
                     <small id="file-error-msg-question" style="color: rgb(199, 42, 42); display:none"></small>
 

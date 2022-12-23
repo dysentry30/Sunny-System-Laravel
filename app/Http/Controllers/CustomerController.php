@@ -216,14 +216,9 @@ class CustomerController extends Controller
         // $data = Http::get("http://maps.googleapis.com/maps/api/geocode/xml?address=". "Boston, USA" . "&sensor=false");
 
         $data_provinsi = json_decode(Storage::get("/public/data/provinsi.json"));
-        $get_kota = collect($data_provinsi)->where("province_id", "=", $customer->provinsi)->first();
-        // dd($customer->provinsi, $get_kota);
-        if (!empty($get_kota)) {
-            $data_kabupaten = json_decode(Storage::get("/public/data/$get_kota->id.json"));
-        }
-        // dd($data_kabupaten);
+        $kode_provinsi = explode("-", $customer->provinsi)[1];
+        $get_kota = collect($data_provinsi)->where("province_id", "=", $kode_provinsi)->first();
         $data_negara = collect(json_decode(Storage::get("/public/data/country.json")));
-        // dd($customer->negara, $data_negara, $customer->negara);
         $kode_negara = null;
         if(!empty($customer->negara)) {
             if (strlen($customer->negara) > 2) {
@@ -233,6 +228,14 @@ class CustomerController extends Controller
             }
         }
         $data_provinsi = Provinsi::where("country_id", "=", $kode_negara)->get();
+        // dd($customer->provinsi, $get_kota);
+        if (!empty($get_kota)) {
+            $data_kabupaten = collect(json_decode(Storage::get("/public/data/$get_kota->id.json")));
+        }
+        // dd($data_kabupaten);
+        // dd($data_kabupaten);
+        // dd($customer->negara, $data_negara, $customer->negara);
+        
         $pic = CustomerPic::where("id_customer", "=", $id_customer)->get();
         $struktur = StrukturCustomer::where("id_customer", "=", $id_customer)->get();
         $proyeks = ProyekBerjalans::with(["proyek"])->where("id_customer", "=", $id_customer)->get();
@@ -405,7 +408,7 @@ class CustomerController extends Controller
             "pics" => $pic,
             "strukturs" => $struktur,
             "data_provinsi" => $data_provinsi,
-            // "data_kabupaten" => $data_kabupaten,
+            "data_kabupaten" => $data_kabupaten,
             "data_negara" => $data_negara,
             "kategoriProyek" => $kategoriProyek,
             "nilaiOK" => $nilaiOK,
@@ -476,7 +479,7 @@ class CustomerController extends Controller
         $editCustomer->kode_nasabah = $data["kodenasabah-company"];
         $editCustomer->negara = $data["negara"];
         $editCustomer->provinsi = $data["provinsi"];
-        // $editCustomer->kota_kabupaten = $data["kabupaten"];
+        $editCustomer->kota_kabupaten = $data["kabupaten"];
         $editCustomer->industry_sector = $data["industry-sector"];
         $editCustomer->forbes_rank = $data["forbes_rank"];
         $editCustomer->lq_rank = $data["lq_rank"];
