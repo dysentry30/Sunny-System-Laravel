@@ -74,5 +74,25 @@ class Customer extends Model
     {
         return $this->hasOne(SyaratPembayaran::class, "kode", "syarat_pembayaran");
     }
+    public function MasalahHukum()
+    {
+        return $this->hasMany(MasalahHukum::class, "id_customer", "id_customer");
+    }
+    public function Csi()
+    {
+        return $this->hasMany(Csi::class, "id_customer", "id_customer");
+    }
+    public function Cli()
+    {
+        return $this->hasMany(Cli::class, "id_customer", "id_customer");
+    }
+    public function Nps()
+    {
+        return $this->hasMany(Nps::class, "id_customer", "id_customer");
+    }
+    public function KaryaInovasi()
+    {
+        return $this->hasMany(KaryaInovasi::class, "id_customer", "id_customer");
+    }
 
 }

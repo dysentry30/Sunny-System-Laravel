@@ -12,7 +12,7 @@
 </style>
 <!--begin::Main-->
 @section('content')
-    {{-- @dd(memory_get_usage(true)) --}}
+
     <!--begin::Root-->
     <div class=" d-flex flex-column flex-root">
         <!--begin::Page-->
@@ -157,29 +157,13 @@
                                                     <!--begin::Input group Phone-->
                                                     <div class="fv-row mb-7">
                                                         <!--begin::Label-->
-                                                        <label class="fs-6 fw-bold form-label mt-3 required">
+                                                        <label class="fs-6 fw-bold form-label mt-3">
                                                             <span>Nomor Handphone</span>
                                                         </label>
                                                         <!--end::Label-->
                                                         <!--begin::Input-->
                                                         <input type="text" class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0" id="handphone" name="handphone"
                                                             value="{{ $customer->handphone }}" placeholder="Nomor Handphone" />
-                                                        {{-- @error('phone-number')
-                                                        <h6 class="text-danger">{{ $message }}eror</h6>
-                                                        @enderror --}}
-                                                        <!--end::Input-->
-                                                    </div>
-                                                    <!--end::Input group-->
-
-                                                    <!--begin::Input group Phone-->
-                                                    <div class="fv-row mb-7">
-                                                        <!--begin::Label-->
-                                                        <label class="fs-6 fw-bold form-label mt-3">
-                                                            <span>fax</span>
-                                                        </label>
-                                                        <!--end::Label-->
-                                                        <!--begin::Input-->
-                                                        <input type="text" class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0" value="" placeholder="Fax" />
                                                         {{-- @error('phone-number')
                                                         <h6 class="text-danger">{{ $message }}eror</h6>
                                                         @enderror --}}
@@ -219,12 +203,12 @@
                                                     <!--begin::Input group Website-->
                                                     <div class="fv-row mb-7">
                                                         <!--begin::Label-->
-                                                        <label class="fs-6 fw-bold form-label mt-6">
+                                                        <label class="fs-6 fw-bold form-label mt-3">
                                                             <span>Website</span>
                                                         </label>
                                                         <!--end::Label-->
                                                         <!--begin::Input-->
-                                                        <input type="text" class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0" id="website" name="website" value="{{ $customer->website }}"
+                                                        <input type="text" class="form-control form-control-solid" id="website" name="website" value="{{ $customer->website }}"
                                                             placeholder="Website" />
                                                         <!--end::Input-->
                                                     </div>
@@ -238,7 +222,7 @@
                                                         </label>
                                                         <!--end::Label-->
                                                         <!--begin::Input-->
-                                                        <textarea class="form-control form-control-solid" rows="6" name="AddressLine1">{{ $customer->address_1 }}</textarea>
+                                                        <textarea class="form-control form-control-solid" name="AddressLine1">{{ $customer->address_1 }}</textarea>
                                                         <!--end::Input-->
                                                     </div>
                                                     <!--end::Input group-->
@@ -251,7 +235,7 @@
                                                         </label>
                                                         <!--end::Label-->
                                                         <!--begin::Input-->
-                                                        <textarea class="form-control form-control-solid" rows="6" name="AddressLine2">{{ $customer->address_2 }}</textarea>
+                                                        <textarea class="form-control form-control-solid" name="AddressLine2">{{ $customer->address_2 }}</textarea>
                                                         <!--end::Input-->
                                                     </div>
                                                     <!--end::Input group-->
@@ -264,7 +248,7 @@
                                                         </label>
                                                         <!--end::Label-->
                                                         <!--begin::Input-->
-                                                        <input type="text" class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0" value="{{ $customer->kode_pos }}" name="kode-pos"/>
+                                                        <input type="text" class="form-control form-control-solid" value="{{ $customer->kode_pos }}" name="kode-pos"/>
                                                         <!--end::Input-->
                                                     </div>
                                                     <!--end::Input group-->
@@ -511,7 +495,7 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="required">Provinsi</span>
+                                                                        <span class="">Provinsi</span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
@@ -519,9 +503,10 @@
                                                                         value="{{ $customer->provinsi }}" placeholder="Provinsi" style="display: none" />
                                                                     <div id="div-provinsi">
                                                                         <select name="provinsi" id="provinsi" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
-                                                                            onchange="selectProvinsi(this)" 
+                                                                            {{-- onchange="selectProvinsi(this)"  --}}
                                                                             data-placeholder="Pilih Customer Provinsi">
-                                                                            <option value=""></option>
+                                                                            <option value="{{ $customer->provinsi }}">
+                                                                                {{ $customer->provinsi }}</option>
                                                                             @foreach ($data_provinsi as $provinsi)
                                                                                 @if ($provinsi->province_id == $customer->provinsi)
                                                                                     <option value="{{ $provinsi->province_id }}" selected>
@@ -543,54 +528,55 @@
                                                             <!--end::Row-->                                                      
 
                                                             <!--begin::Row-->
-                                                            <div class="col-6">
+                                                            {{-- <div class="col-6"> --}}
                                                                 <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
+                                                                {{-- <div class="fv-row mb-7"> --}}
                                                                     <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="required">Kota / Kabupaten</span>
-                                                                    </label>
+                                                                    {{-- <label class="fs-6 fw-bold form-label mt-3">
+                                                                        <span class="">Kota / Kabupaten</span>
+                                                                    </label> --}}
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
-                                                                    <input type="text" class="form-control form-control-solid" id="input-kabupaten" name="kabupaten"
+                                                                    {{-- <input type="text" class="form-control form-control-solid" id="input-kabupaten" name="kabupaten"
                                                                         value="{{ $customer->kota_kabupaten }}" placeholder="Kabupaten" style="display: none" />
                                                                     <div id="div-kabupaten">
                                                                         <select name="kabupaten" id="kabupaten" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
                                                                             onchange="selectKabupaten(this)" data-placeholder="Pilih Customer Kabupaten">
-                                                                            <option value=""></option>
+                                                                            <option value="{{ $customer->kota_kabupaten }}">
+                                                                                {{ $customer->kota_kabupaten }}</option>
                                                                             @if (isset($data_kabupaten))
                                                                                 @foreach ($data_kabupaten as $kabupaten)
-                                                                                    @if ($kabupaten->name == $customer->kota_kabupaten)
-                                                                                        <option value="{{ $kabupaten->name }}" selected>
+                                                                                    @if ($kabupaten->id == $customer->kota_kabupaten)
+                                                                                        <option value="{{ $kabupaten->id }}" selected>
                                                                                             {{ ucwords(strtolower($kabupaten->name)) }}
                                                                                         </option>
                                                                                     @else
-                                                                                        <option value="{{ $kabupaten->name }}">
+                                                                                        <option value="{{ $kabupaten->id }}">
                                                                                             {{ ucwords(strtolower($kabupaten->name)) }}
                                                                                         </option>
                                                                                     @endif
                                                                                 @endforeach
                                                                             @endif
                                                                         </select>
-                                                                    </div>
+                                                                    </div> --}}
                                                                     <!--end::Input-->
-                                                                </div>
+                                                                {{-- </div> --}}
                                                                 <!--end::Input group-->
-                                                            </div>
+                                                            {{-- </div> --}}
                                                             <!--End begin::Col-->
 
                                                             <!--begin:: Row-->
                                                             <div class="row fv-row">
                                                                 <div class="col-6">
                                                                     <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="required">Industry Sector</span>
+                                                                    <label class="fs-6 fw-bold form-label mt-3 required">
+                                                                        <span class="">Industry Sector</span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <select name="industry-sector" id="industry-sector" class="form-select form-select-solid pe-5" data-control="select2" data-hide-search="false"
                                                                             data-placeholder="Pilih Industry Sector" onchange=getIndustrySector(this)>
                                                                         <option value=""></option>
-                                                                        @foreach ($industryOwners as $io)
+                                                                        @foreach ($industryAttractiveness as $io)
                                                                             @if ($io->code_owner == $customer->industry_sector)
                                                                                 <option value="{{ $io->code_owner }}" id="test" data-attract="{{ $io->owner_attractiveness }}" selected>
                                                                                     {{ ucwords(strtolower($io->owner_description)) }}
@@ -638,22 +624,17 @@
                                                                     <!--begin::label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
                                                                         <span class="">Jenis Perusahaan</span>
-                                                                        <i class="bi-info-circle-fill" class="btn btn-secondary mx-4"
-                                                                            data-bs-toggle="tooltip" data-bs-placement="top"
-                                                                            data-bs-custom-class="custom-tooltip"
-                                                                            data-bs-title="Belum berfungsi"
-                                                                            data-bs-html="true"></i>
                                                                     </label>
                                                                     <!--end::label-->
                                                                     <!--begin::Input-->
                                                                     <input type="text" class="form-control form-control-solid" id="input-provinsi" name="jenis_perusahaan"
-                                                                        value="{{ null }}" placeholder="Jenis Perusahaan" style="display: none" />
+                                                                        value="{{ $customer->JenisPerusahaan->kode_jenis ?? null }}" placeholder="Jenis Perusahaan" style="display: none" />
                                                                     <div id="div-jenis-perusahaan">
                                                                         <select name="jenis_perusahaan" id="jenis_perusahaan" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
                                                                             {{-- onchange="selectProvinsi(this)"  --}}
                                                                             data-placeholder="Pilih Jenis Perusahaan">
                                                                             <option value=""></option>
-                                                                            {{-- @foreach ($jenisPerusahaan as $jp)
+                                                                            @foreach ($jenisPerusahaan as $jp)
                                                                                 @if ( !empty($customer->JenisPerusahaan) && $jp->kode_jenis == $customer->JenisPerusahaan->kode_jenis)
                                                                                     <option value="{{ $jp->kode_jenis }}" selected>
                                                                                         {{ $jp->deskripsi }}
@@ -663,7 +644,7 @@
                                                                                         {{ $jp->deskripsi }}
                                                                                     </option>
                                                                                 @endif
-                                                                            @endforeach --}}
+                                                                            @endforeach
                                                                         </select>
                                                                     </div>
                                                                     <!--end::Input-->
@@ -675,21 +656,16 @@
                                                                     <!--begin::label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
                                                                         <span class="">Term of Payment</span>
-                                                                        <i class="bi-info-circle-fill" class="btn btn-secondary mx-4"
-                                                                            data-bs-toggle="tooltip" data-bs-placement="top"
-                                                                            data-bs-custom-class="custom-tooltip"
-                                                                            data-bs-title="Belum berfungsi"
-                                                                            data-bs-html="true"></i>
                                                                     </label>
                                                                     <!--end::label-->
                                                                     <!--begin::Input-->
                                                                     <input type="text" class="form-control form-control-solid" id="input-provinsi" name="syarat_pembayaran"
-                                                                        value="{{ null }}" placeholder="Term of Payment" style="display: none" />
+                                                                        value="{{ $customer->SyaratPembayaran->kode ?? null }}" placeholder="Term of Payment" style="display: none" />
                                                                     <div id="div-syarat-pembayaran">
                                                                         <select name="syarat_pembayaran" id="syarat-pembayaran" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
                                                                             data-placeholder="Term of Payment">
                                                                             <option value=""></option>
-                                                                            {{-- @foreach ($syaratPembayaran as $sp)
+                                                                            @foreach ($syaratPembayaran as $sp)
                                                                                 @if (!empty($customer->SyaratPembayaran) && $sp->kode == $customer->SyaratPembayaran->kode)
                                                                                     <option value="{{ $sp->kode }}" selected>
                                                                                         {{ $sp->deskripsi }}
@@ -699,7 +675,7 @@
                                                                                         {{ $sp->deskripsi }}
                                                                                     </option>
                                                                                 @endif
-                                                                            @endforeach --}}
+                                                                            @endforeach
                                                                         </select>
                                                                     </div>
                                                                     <!--end::Input-->
@@ -714,21 +690,16 @@
                                                                 <!--begin::label-->
                                                                 <label class="fs-6 fw-bold form-label mt-3">
                                                                     <span class="">Tax</span>
-                                                                    <i class="bi-info-circle-fill" class="btn btn-secondary mx-4"
-                                                                            data-bs-toggle="tooltip" data-bs-placement="top"
-                                                                            data-bs-custom-class="custom-tooltip"
-                                                                            data-bs-title="Belum berfungsi"
-                                                                            data-bs-html="true"></i>
                                                                 </label>
                                                                 <!--end::label-->
                                                                 <!--begin::Input-->
                                                                 <input type="text" class="form-control form-control-solid" id="input-provinsi" name="tax"
-                                                                    value="{{ null }}" placeholder="Tax" style="display: none" />
+                                                                    value="{{ $customer->Tax->kode ?? null }}" placeholder="Tax" style="display: none" />
                                                                 <div id="div-tax">
                                                                     <select name="tax" id="tax" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
                                                                         data-placeholder="Tax">
                                                                         <option value=""></option>
-                                                                        {{-- @foreach ($taxs as $tax)
+                                                                        @foreach ($taxs as $tax)
                                                                             @if (!empty($customer->Tax) && $tax->kode == $customer->Tax->kode)
                                                                                 <option value="{{ $tax->kode }}" selected>
                                                                                     {{ $tax->deskripsi }}
@@ -738,7 +709,7 @@
                                                                                     {{ $tax->deskripsi }}
                                                                                 </option>
                                                                             @endif
-                                                                        @endforeach --}}
+                                                                        @endforeach
                                                                     </select>
                                                                 </div>
                                                                 <!--end::Input-->
@@ -747,49 +718,49 @@
                                                             <!--ENd::Row-->
 
                                                             <!--begin::Fungsi Select Provinsi-->
-                                                            <script>
-                                                                // async function selectNegara(e) {
-                                                                //     // console.log(e.value);
-                                                                //     const idProvinsi = e.value;
-                                                                //     // console.log(elt.value);
-                                                                //     let html = ``;
-                                                                //     // Get Provinsi
-                                                                //     const getKabupaten = await fetch(`/get-kabupaten/${idProvinsi}`).then(res => res.json());
-                                                                //     getKabupaten.forEach(kabupaten => {
-                                                                //         html += `<option value="${kabupaten.province_id}">${kabupaten.province_name}</option>`;
-                                                                //     });
-                                                                //     document.querySelector("#provinsi").innerHTML = html;
-                                                                //     // if (e.value != "Indonesia") {
-                                                                //     //     document.querySelector("#input-provinsi").style.display = "";
-                                                                //     //     document.querySelector("#input-provinsi").value = "";
-                                                                //     //     document.querySelector("#provinsi").disabled = true;
-                                                                //     //     document.querySelector("#div-provinsi").style.display = "none";
-
-                                                                //     //     document.querySelector("#input-kabupaten").style.display = "";
-                                                                //     //     document.querySelector("#input-kabupaten").value = "";
-                                                                //     //     document.querySelector("#kabupaten").disabled = true;
-                                                                //     //     document.querySelector("#div-kabupaten").style.display = "none";
-                                                                //     // } else {
-                                                                //     //     document.querySelector("#input-provinsi").style.display = "none";
-                                                                //     //     document.querySelector("#div-provinsi").style.display = "";
-                                                                //     //     document.querySelector("#provinsi").disabled = false;
-                                                                //     //     document.querySelector("#input-kabupaten").style.display = "none";
-                                                                //     //     document.querySelector("#div-kabupaten").style.display = "";
-                                                                //     //     document.querySelector("#kabupaten").disabled = false;
-
-                                                                //     // }
-                                                                // }
-                                                                async function selectProvinsi(elt) {
-                                                                    const idProvinsi = elt.value.split("-")[1];
+                                                            {{-- <script>
+                                                                async function selectNegara(e) {
+                                                                    // console.log(e.value);
+                                                                    const idProvinsi = e.value;
+                                                                    // console.log(elt.value);
                                                                     let html = ``;
+                                                                    // Get Provinsi
                                                                     const getKabupaten = await fetch(`/get-kabupaten/${idProvinsi}`).then(res => res.json());
-                                                                    
                                                                     getKabupaten.forEach(kabupaten => {
-                                                                        html += `<option value="${kabupaten.name}">${kabupaten.name}</option>`;
+                                                                        html += `<option value="${kabupaten.province_id}">${kabupaten.province_name}</option>`;
                                                                     });
-                                                                    document.querySelector("#kabupaten").innerHTML = html;
+                                                                    document.querySelector("#provinsi").innerHTML = html;
+                                                                    // if (e.value != "Indonesia") {
+                                                                    //     document.querySelector("#input-provinsi").style.display = "";
+                                                                    //     document.querySelector("#input-provinsi").value = "";
+                                                                    //     document.querySelector("#provinsi").disabled = true;
+                                                                    //     document.querySelector("#div-provinsi").style.display = "none";
+
+                                                                    //     document.querySelector("#input-kabupaten").style.display = "";
+                                                                    //     document.querySelector("#input-kabupaten").value = "";
+                                                                    //     document.querySelector("#kabupaten").disabled = true;
+                                                                    //     document.querySelector("#div-kabupaten").style.display = "none";
+                                                                    // } else {
+                                                                    //     document.querySelector("#input-provinsi").style.display = "none";
+                                                                    //     document.querySelector("#div-provinsi").style.display = "";
+                                                                    //     document.querySelector("#provinsi").disabled = false;
+                                                                    //     document.querySelector("#input-kabupaten").style.display = "none";
+                                                                    //     document.querySelector("#div-kabupaten").style.display = "";
+                                                                    //     document.querySelector("#kabupaten").disabled = false;
+
+                                                                    // }
                                                                 }
-                                                            </script>
+                                                                async function selectProvinsi(elt) {
+                                                                    // const idProvinsi = elt.value;
+                                                                    // // console.log(elt.value);
+                                                                    // let html = ``;
+                                                                    // const getKabupaten = await fetch(`/get-kabupaten/${idProvinsi}`).then(res => res.json());
+                                                                    // getKabupaten.forEach(kabupaten => {
+                                                                    //     html += `<option value="${kabupaten.id}">${kabupaten.name}</option>`;
+                                                                    // });
+                                                                    // document.querySelector("#kabupaten").innerHTML = html;
+                                                                }
+                                                            </script> --}}
                                                             <!--end::Fungsi Select Provinsi-->
 
                                                         </div>
@@ -850,7 +821,7 @@
                                                         <br><br>
 
                                                         <!--begin::INPUT PIC-->
-                                                        <h3 class="fw-bolder m-0 required" id="HeadDetail" style="font-size:14px;">
+                                                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                                             Contact / PIC
                                                             <a href="#" Id="Plus" data-bs-toggle="modal" data-bs-target="#kt_modal_pic">+</a>
                                                         </h3>
@@ -1603,7 +1574,7 @@
                                                                 <!--End begin::Col-->
                                                                 {{-- Begin :: Industry Owner --}}
                                                             <!--begin::Row-->
-                                                            {{-- <div class="col">
+                                                            <div class="col">
                                                                 <!--begin::Input group Website-->
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
@@ -1616,13 +1587,13 @@
                                                                         value="{{ $customer->kota_kabupaten }}" placeholder="industry-owner" style="display: none" />
                                                                     <div id="div-industry-owner">
                                                                         <select name="industry-owner" id="industry-owner" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
-                                                                            onchange="selectKabupaten(this)" data-placeholder="Pilih Industry Owner">
+                                                                            {{-- onchange="selectKabupaten(this)" --}} data-placeholder="Pilih Industry Owner">
                                                                             <option value="" selected></option>
                                                                             @foreach ($industryOwners as $industryOwner)
                                                                                 <option value="{{ $industryOwner->code_owner }}">
                                                                                     {{ $industryOwner->owner_description }}</option>
                                                                             @endforeach
-                                                                            @if (isset($data_kabupaten))
+                                                                            {{-- @if (isset($data_kabupaten))
                                                                                 @foreach ($data_kabupaten as $kabupaten)
                                                                                     @if ($kabupaten->id == $customer->kota_kabupaten)
                                                                                         <option value="{{ $kabupaten->id }}" selected>
@@ -1634,13 +1605,13 @@
                                                                                         </option>
                                                                                     @endif
                                                                                 @endforeach
-                                                                            @endif
+                                                                            @endif --}}
                                                                         </select>
                                                                     </div>
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
-                                                            </div> --}}
+                                                            </div>
                                                             <!--End begin::Col-->
                                                             {{-- End :: Industry Owner --}}
                                                             </div>
@@ -2404,6 +2375,612 @@
                                                         <!--end::FORECAST Proyek-->
 
                                                         <br><br>
+
+                                                        <!--begin::Masalah Hukum-->
+                                                        <div class="card-title m-0">
+                                                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                                                Masalah Hukum   
+                                                                <i onclick="hideColumn(this, '#divMasalahHukum')" id="hide-button" style="display: none" class="bi bi-arrows-collapse"></i>
+                                                                <i onclick="showColumn(this, '#divMasalahHukum')" id="show-button" class="bi bi-arrows-expand"></i>                                         
+                                                            </h3>
+
+                                                            <br>
+
+                                                            <!--Begin::Row-->
+                                                            <div id="divMasalahHukum" style="display: none">
+                                                                <!--Begin:Nama Proyek-->
+                                                                <div class="row fv-row">
+                                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                                        <span class="">Nama Proyek</span>
+                                                                    </label>
+                                                                    <!--Begin::Select-->
+                                                                    <div id="div-namaProyek">
+                                                                        <select name="kode-proyek-hukum" id="namaProyekHukum" class="form-select form-select-solid" data-control="select2" data-hide-search="true"
+                                                                            data-placeholder="Pilih Nama Proyek">
+                                                                            <option value=""></option>
+                                                                            @foreach ($proyekberjalan as $pb)
+                                                                            @if (!empty($pb->id_customer))
+                                                                            <option value="{{ $pb->kode_proyek }}">{{ $pb->nama_proyek }}</option>
+                                                                            @else
+                                                                            <option value="{{ $pb->kode_proyek }}">{{ $pb->nama_proyek }}</option>
+                                                                            @endif                                                                          
+                                                                            @endforeach                                                                           
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <!--End:Nama Proyek-->
+
+                                                                <!--Begin:Jenis Masalah Hukum-->
+                                                                <div class="row fv-row my-3">
+                                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                                        <span class="">Bentuk Masalah Hukum</span>
+                                                                    </label>
+                                                                    <!--Begin::Select-->
+                                                                    <div class="">
+                                                                        <input type="text" name="bentuk_masalah_hukum" class="form-control form-control-solid"
+                                                                            placeholder="Bentuk Masalah Hukum" />                                                                        
+                                                                    </div>
+                                                                    <!--End::Text-->
+                                                                </div>
+                                                                <!--End:Jenis Masalah Hukum-->
+
+                                                                <!--Begin:Status-->
+                                                                <div class="row fv-row my-3">
+                                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                                        <span class="">Status</span>
+                                                                    </label>
+                                                                    <!--Begin::Select-->
+                                                                    <div id="div-status">
+                                                                        <select name="status_hukum" id="status" class="form-select form-select-solid" data-control="select2" data-hide-search="true"
+                                                                            data-placeholder="Pilih status">
+                                                                            <option value=""></option>                                                                            
+                                                                            <option value="WIKA Menang">WIKA Menang</option>                                                                          
+                                                                            <option value="WIKA Kalah">WIKA Kalah</option>                                                                          
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <!--Begin:Status-->
+
+                                                                <br>
+                                                                <div id="table">
+                                                                    <!--begin::Table-->
+                                                                    <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                                                        <!--begin::Table head-->
+                                                                        <thead>
+                                                                            <!--begin::Table row-->
+                                                                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                                <th class="min-w-auto">Nama Proyek</th>
+                                                                                <th class="min-w-auto">Jenis Masalah Hukum</th>
+                                                                                <th class="min-w-auto">Status</th>
+                                                                            </tr>
+                                                                            <!--end::Table row-->
+                                                                        </thead>
+                                                                        <!--end::Table head-->
+                                                                        <!--begin::Table body-->
+                                                                        {{-- @dump($customer->MasalahHukum) --}}
+                                                                        <tbody class="fw-bold text-gray-600">                                                                            
+                                                                            <!--begin::Nama Proyek-->
+                                                                            @if (!empty($masalahHukum))
+                                                                            @foreach ($customer->MasalahHukum as $mh)
+                                                                            <tr>                                                                                    
+                                                                                            {{-- @dump($mh) --}}
+                                                                                            <td>
+                                                                                                <a target="_blank" href="/proyek/view/{{ $mh->kode_proyek }}" class="text-gray-800 text-hover-primary mb-1">
+                                                                                                    {{ $mh->Proyek->nama_proyek }}                                                                                                
+                                                                                                </a>
+                                                                                            </td>
+                                                                                            <!--end::Name-->
+                                                                                            <!--begin::Jenis Masalah Hukum-->
+                                                                                            <td>
+                                                                                            {{ $mh->bentuk_masalah }}
+                                                                                            </td>
+                                                                                            <!--end::Unit-->
+                                                                                            <!--begin::Status-->
+                                                                                            <td>
+                                                                                                {{ $mh->status }}
+                                                                                            </td>
+                                                                                            <!--end::Status-->   
+                                                                            </tr>
+                                                                            @endforeach
+                                                                            @else
+                                                                            <tr>
+                                                                                <td>
+                                                                                    <p class="text-center">Belum ada data</p>
+                                                                                </td>                                                                                
+                                                                            </tr>
+                                                                            @endif   
+                                                                        </tbody>
+                                                                        <!--end::Table body-->
+                                                                    </table>
+                                                                <!--end::Table-->
+                                                                </div>
+                                                            </div>
+                                                            <!--End::Row-->
+
+                                                            
+                                                        </div>
+                                                        <!--end::Masalah Hukum-->
+
+                                                        <br>
+                                                        <!--begin::CSI-->
+                                                        <div class="card-title m-0">
+                                                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                                                CSI   
+                                                                <i onclick="hideColumn(this, '#divInputCSI')" id="hide-button" style="display: none" class="bi bi-arrows-collapse"></i>
+                                                                <i onclick="showColumn(this, '#divInputCSI')" id="show-button" class="bi bi-arrows-expand"></i>                                         
+                                                            </h3>
+
+                                                            <br>
+
+                                                            <!--Begin::Row-->
+                                                            <div id="divInputCSI" style="display: none">
+                                                                <!--Begin:Nama Proyek-->
+                                                                <div class="row fv-row">
+                                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                                        <span class="">Nama Proyek</span>
+                                                                    </label>
+                                                                    <!--Begin::Select-->
+                                                                        <div id="div-namaProyekCSI">
+                                                                            <select name="kode_proyek_csi" id="namaProyekCSI" class="form-select form-select-solid" data-control="select2" data-hide-search="true"
+                                                                                data-placeholder="Pilih Nama Proyek">
+                                                                                <option value=""></option>
+                                                                                @foreach ($proyekberjalan as $pb)
+                                                                                @if (!empty($pb->id_customer))
+                                                                                <option value="{{ $pb->kode_proyek }}">{{ $pb->nama_proyek }}</option>
+                                                                                @else
+                                                                                <option value="{{ $pb->kode_proyek }}">{{ $pb->nama_proyek }}</option>
+                                                                                @endif                                                                          
+                                                                                @endforeach                                                                           
+                                                                            </select>
+                                                                        </div>
+                                                                </div>
+                                                                <!--End:Nama Proyek-->
+
+                                                                <!--Begin:Tanggal CSI-->
+                                                                <div class="row fv-row my-3">
+                                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                                        <span>Tanggal</span>
+                                                                        <a href="#" class="btn" style="background: transparent;" id="date_csi" onclick="showCalendarModal(this)">
+                                                                            <i class="bi bi-calendar2-plus-fill" style="color: #008CB4"></i>
+                                                                        </a>
+                                                                    </label>
+                                                                    <!--Begin::Input-->
+                                                                    <div id="csi_date">                                                                        
+                                                                        <input type="date" name="csi_date" class="form-control form-control-solid" placeholder="Tanggal" />
+                                                                    </div>
+                                                                    <!--End::Input-->
+                                                                </div>
+                                                                <!--End:Tanggal CSI-->
+
+                                                                <!--Begin:Status-->
+                                                                <div class="row fv-row my-3">
+                                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                                        <span class="">Score</span>
+                                                                    </label>
+                                                                    <!--Begin::Select-->
+                                                                    <div id="div-scoreInputCSI">
+                                                                        <input type="number" name="score_csi" id="score-csi" placeholder="Range 1 - 100" class="form-control form-control-solid" max="100">
+                                                                    </div>
+                                                                </div>
+                                                                <!--Begin:Status-->
+
+                                                                <br>
+                                                                <div id="table">
+                                                                    <!--begin::Table-->
+                                                                    <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                                                        <!--begin::Table head-->
+                                                                        <thead>
+                                                                            <!--begin::Table row-->
+                                                                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                                <th class="min-w-auto">Nama Proyek</th>
+                                                                                <th class="min-w-auto">Tanggal</th>
+                                                                                <th class="min-w-auto">Score</th>
+                                                                            </tr>
+                                                                            <!--end::Table row-->
+                                                                        </thead>
+                                                                        <!--end::Table head-->
+                                                                        <!--begin::Table body-->
+                                                                        <tbody class="fw-bold text-gray-600">                                                                            
+                                                                            <!--begin::Nama Proyek-->
+                                                                            @if (!empty($csi))
+                                                                            @foreach ($customer->Csi as $item)
+                                                                            <tr>                                                                                    
+                                                                                             {{-- @dump($mh) --}}
+                                                                                             <td>
+                                                                                                 <a target="_blank" href="/proyek/view/{{ $item->kode_proyek }}" class="text-gray-800 text-hover-primary mb-1">
+                                                                                                     {{ $item->Proyek->nama_proyek }}                                                                                                
+                                                                                                 </a>
+                                                                                             </td>
+                                                                                             <!--end::Name-->
+                                                                                            <!--begin::Tanggal CSI-->
+                                                                                            <td>
+                                                                                                {{ $item->tanggal }}
+                                                                                            </td>
+                                                                                            <!--end::Tanggal CSI-->
+                                                                                            <!--begin::Score CSI-->
+                                                                                            <td>
+                                                                                                {{ $item->score }}
+                                                                                            </td>
+                                                                                            <!--end::Score CSI-->   
+                                                                            @endforeach
+                                                                            </tr>
+                                                                            @else
+                                                                            <tr>
+                                                                                <td>
+                                                                                    <p class="text-center">Belum ada data</p>
+                                                                                </td>
+                                                                            </tr>
+                                                                            @endif                                                                                    
+                                                                        </tbody>
+                                                                        <!--end::Table body-->
+                                                                    </table>
+                                                                <!--end::Table-->
+                                                                </div>
+                                                            </div>
+                                                            <!--End::Row-->                                                            
+                                                        </div>
+                                                        <!--end::CSI-->
+
+                                                        <br>
+                                                        <!--begin::CLI-->
+                                                        <div class="card-title m-0">
+                                                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                                                CLI   
+                                                                <i onclick="hideColumn(this, '#divInputCLI')" id="hide-button" style="display: none" class="bi bi-arrows-collapse"></i>
+                                                                <i onclick="showColumn(this, '#divInputCLI')" id="show-button" class="bi bi-arrows-expand"></i>                                         
+                                                            </h3>
+
+                                                            <br>
+
+                                                            <!--Begin::Row-->
+                                                            <div id="divInputCLI" style="display: none">
+                                                                <!--Begin:Nama Proyek-->
+                                                                <div class="row fv-row">
+                                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                                        <span class="">Nama Proyek</span>
+                                                                    </label>
+                                                                    <!--Begin::Select-->
+                                                                        <div id="div-namaProyekCLI">
+                                                                            <select name="kode_proyek_cli" id="namaProyekCLI" class="form-select form-select-solid" data-control="select2" data-hide-search="true"
+                                                                                data-placeholder="Pilih Nama Proyek">
+                                                                                <option value=""></option>
+                                                                                @foreach ($proyekberjalan as $pb)
+                                                                                @if (!empty($pb->id_customer))
+                                                                                <option value="{{ $pb->kode_proyek }}">{{ $pb->nama_proyek }}</option>
+                                                                                @else
+                                                                                <option value="{{ $pb->kode_proyek }}">{{ $pb->nama_proyek }}</option>
+                                                                                @endif                                                                          
+                                                                                @endforeach                                                                           
+                                                                            </select>
+                                                                        </div>
+                                                                </div>
+                                                                <!--End:Nama Proyek-->
+
+                                                                <!--Begin:Tanggal CLI-->
+                                                                <div class="row fv-row my-3">
+                                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                                        <span>Tanggal</span>
+                                                                        <a href="#" class="btn" style="background: transparent;" id="date_cli" onclick="showCalendarModal(this)">
+                                                                            <i class="bi bi-calendar2-plus-fill" style="color: #008CB4"></i>
+                                                                        </a>
+                                                                    </label>
+                                                                    <!--Begin::Input-->
+                                                                    <div id="cli_date">                                                                        
+                                                                        <input type="date" name="cli_date" class="form-control form-control-solid" placeholder="Tanggal" />
+                                                                    </div>
+                                                                    <!--End::Input-->
+                                                                </div>
+                                                                <!--End:Tanggal CLI-->
+
+                                                                <!--Begin:Status-->
+                                                                <div class="row fv-row my-3">
+                                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                                        <span class="">Score</span>
+                                                                    </label>
+                                                                    <!--Begin::Select-->
+                                                                    <div id="div-scoreInputCLI">
+                                                                        <input type="number" name="score_cli" id="score-cli" placeholder="Range 1 - 100" class="form-control form-control-solid" max="100">
+                                                                    </div>
+                                                                </div>
+                                                                <!--Begin:Status-->
+
+                                                                <br>
+                                                                <div id="table">
+                                                                    <!--begin::Table-->
+                                                                    <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                                                        <!--begin::Table head-->
+                                                                        <thead>
+                                                                            <!--begin::Table row-->
+                                                                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                                <th class="min-w-auto">Nama Proyek</th>
+                                                                                <th class="min-w-auto">Tanggal</th>
+                                                                                <th class="min-w-auto">Score</th>
+                                                                            </tr>
+                                                                            <!--end::Table row-->
+                                                                        </thead>
+                                                                        <!--end::Table head-->
+                                                                        <!--begin::Table body-->
+                                                                        <tbody class="fw-bold text-gray-600">                                                                            
+                                                                            <!--begin::Nama Proyek-->
+                                                                            @if (!empty($cli))
+                                                                            @foreach ($customer->Cli as $item)
+                                                                            <tr>                                                                                    
+                                                                                             {{-- @dump($mh) --}}
+                                                                                             <td>
+                                                                                                 <a target="_blank" href="/proyek/view/{{ $item->kode_proyek }}" class="text-gray-800 text-hover-primary mb-1">
+                                                                                                     {{ $item->Proyek->nama_proyek }}                                                                                                
+                                                                                                 </a>
+                                                                                             </td>
+                                                                                             <!--end::Name-->
+                                                                                            <!--begin::Tanggal CLI-->
+                                                                                            <td>
+                                                                                                {{ $item->tanggal }}
+                                                                                            </td>
+                                                                                            <!--end::Tanggal CLI-->
+                                                                                            <!--begin::Score CLI-->
+                                                                                            <td>
+                                                                                                {{ $item->score }}
+                                                                                            </td>
+                                                                                            <!--end::Score CLI-->   
+                                                                            @endforeach
+                                                                            </tr>
+                                                                            @else
+                                                                            <tr>
+                                                                                <td>
+                                                                                    <p class="text-center">Belum ada data</p>
+                                                                                </td>
+                                                                            </tr>
+                                                                            @endif                                                                                    
+                                                                        </tbody>
+                                                                        <!--end::Table body-->
+                                                                    </table>
+                                                                <!--end::Table-->
+                                                                </div>
+                                                            </div>
+                                                            <!--End::Row-->                                                            
+                                                        </div>
+                                                        <!--end::CLI-->
+
+                                                        <br>
+                                                        <!--begin::NPS-->
+                                                        <div class="card-title m-0">
+                                                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                                                NPS   
+                                                                <i onclick="hideColumn(this, '#divInputNPS')" id="hide-button" style="display: none" class="bi bi-arrows-collapse"></i>
+                                                                <i onclick="showColumn(this, '#divInputNPS')" id="show-button" class="bi bi-arrows-expand"></i>                                         
+                                                            </h3>
+
+                                                            <br>
+
+                                                            <!--Begin::Row-->
+                                                            <div id="divInputNPS" style="display: none">
+                                                                <!--Begin:Nama Proyek-->
+                                                                <div class="row fv-row">
+                                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                                        <span class="">Nama Proyek</span>
+                                                                    </label>
+                                                                    <!--Begin::Select-->
+                                                                        <div id="div-namaProyekNPS">
+                                                                            <select name="kode_proyek_nps" id="namaProyekNPS" class="form-select form-select-solid" data-control="select2" data-hide-search="true"
+                                                                                data-placeholder="Pilih Nama Proyek">
+                                                                                <option value=""></option>
+                                                                                @foreach ($proyekberjalan as $pb)
+                                                                                @if (!empty($pb->id_customer))
+                                                                                <option value="{{ $pb->kode_proyek }}">{{ $pb->nama_proyek }}</option>
+                                                                                @else
+                                                                                <option value="{{ $pb->kode_proyek }}">{{ $pb->nama_proyek }}</option>
+                                                                                @endif                                                                          
+                                                                                @endforeach                                                                           
+                                                                            </select>
+                                                                        </div>
+                                                                </div>
+                                                                <!--End:Nama Proyek-->
+
+                                                                <!--Begin:Tanggal CSI-->
+                                                                <div class="row fv-row my-3">
+                                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                                        <span>Tanggal</span>
+                                                                        <a href="#" class="btn" style="background: transparent;" id="date_csi" onclick="showCalendarModal(this)">
+                                                                            <i class="bi bi-calendar2-plus-fill" style="color: #008CB4"></i>
+                                                                        </a>
+                                                                    </label>
+                                                                    <!--Begin::Input-->
+                                                                    <div id="nps_date">                                                                        
+                                                                        <input type="date" name="nps_date" class="form-control form-control-solid" placeholder="Tanggal" />
+                                                                    </div>
+                                                                    <!--End::Input-->
+                                                                </div>
+                                                                <!--End:Tanggal CSI-->
+
+                                                                <!--Begin:Status-->
+                                                                <div class="row fv-row my-3">
+                                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                                        <span class="">Score</span>
+                                                                    </label>
+                                                                    <!--Begin::Select-->
+                                                                    <div id="div-scoreInputNPS">
+                                                                        <input type="number" name="score_nps" id="score-csi" placeholder="Range 1 - 100" class="form-control form-control-solid" max="100">
+                                                                    </div>
+                                                                </div>
+                                                                <!--Begin:Status-->
+
+                                                                <br>
+                                                                <div id="table">
+                                                                    <!--begin::Table-->
+                                                                    <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                                                        <!--begin::Table head-->
+                                                                        <thead>
+                                                                            <!--begin::Table row-->
+                                                                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                                <th class="min-w-auto">Nama Proyek</th>
+                                                                                <th class="min-w-auto">Tanggal</th>
+                                                                                <th class="min-w-auto">Score</th>
+                                                                            </tr>
+                                                                            <!--end::Table row-->
+                                                                        </thead>
+                                                                        <!--end::Table head-->
+                                                                        <!--begin::Table body-->
+                                                                        <tbody class="fw-bold text-gray-600">                                                                            
+                                                                            <!--begin::Nama Proyek-->
+                                                                            @if (!empty($nps))
+                                                                            @foreach ($customer->Nps as $item)
+                                                                            <tr>                                                                                    
+                                                                                             {{-- @dump($mh) --}}
+                                                                                             <td>
+                                                                                                 <a target="_blank" href="/proyek/view/{{ $item->kode_proyek }}" class="text-gray-800 text-hover-primary mb-1">
+                                                                                                     {{ $item->Proyek->nama_proyek }}                                                                                                
+                                                                                                 </a>
+                                                                                             </td>
+                                                                                             <!--end::Name-->
+                                                                                            <!--begin::Tanggal NPS-->
+                                                                                            <td>
+                                                                                                {{ $item->tanggal }}
+                                                                                            </td>
+                                                                                            <!--end::Tanggal NPS-->
+                                                                                            <!--begin::Score NPS-->
+                                                                                            <td>
+                                                                                                {{ $item->score }}
+                                                                                            </td>
+                                                                                            <!--end::Score NPS-->   
+                                                                            @endforeach
+                                                                            </tr>
+                                                                            @else
+                                                                            <tr>
+                                                                                <td>
+                                                                                    <p class="text-center">Belum ada data</p>
+                                                                                </td>
+                                                                            </tr>
+                                                                            @endif                                                                                    
+                                                                        </tbody>
+                                                                        <!--end::Table body-->
+                                                                    </table>
+                                                                <!--end::Table-->
+                                                                </div>
+                                                            </div>
+                                                            <!--End::Row-->                                                            
+                                                        </div>
+                                                        <!--end::NPS-->
+
+                                                        <br>
+                                                        <!--begin::Karya Inovasi-->
+                                                        <div class="card-title m-0">
+                                                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                                                Karya Inovasi
+                                                                <i onclick="hideColumn(this, '#divInputInovasi')" id="hide-button" style="display: none" class="bi bi-arrows-collapse"></i>
+                                                                <i onclick="showColumn(this, '#divInputInovasi')" id="show-button" class="bi bi-arrows-expand"></i>                                         
+                                                            </h3>
+
+                                                            <br>
+
+                                                            <!--Begin::Row-->
+                                                            <div id="divInputInovasi" style="display: none">
+                                                                <!--Begin:Nama Proyek-->
+                                                                <div class="row fv-row">
+                                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                                        <span class="">Nama Proyek</span>
+                                                                    </label>
+                                                                    <!--Begin::Select-->
+                                                                        <div id="div-namaProyekCLI">
+                                                                            <select name="kode_proyek_inovasi" id="namaProyekInovasi" class="form-select form-select-solid" data-control="select2" data-hide-search="true"
+                                                                                data-placeholder="Pilih Nama Proyek">
+                                                                                <option value=""></option>
+                                                                                @foreach ($proyekberjalan as $pb)
+                                                                                @if (!empty($pb->id_customer))
+                                                                                <option value="{{ $pb->kode_proyek }}">{{ $pb->nama_proyek }}</option>
+                                                                                @else
+                                                                                <option value="{{ $pb->kode_proyek }}">{{ $pb->nama_proyek }}</option>
+                                                                                @endif                                                                          
+                                                                                @endforeach                                                                           
+                                                                            </select>
+                                                                        </div>
+                                                                </div>
+                                                                <!--End:Nama Proyek-->
+
+                                                                <!--Begin:Tanggal CLI-->
+                                                                <div class="row fv-row my-3">
+                                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                                        <span>Tanggal</span>
+                                                                        <a href="#" class="btn" style="background: transparent;" id="date_inovasi" onclick="showCalendarModal(this)">
+                                                                            <i class="bi bi-calendar2-plus-fill" style="color: #008CB4"></i>
+                                                                        </a>
+                                                                    </label>
+                                                                    <!--Begin::Input-->
+                                                                    <div id="inovasi_date">                                                                        
+                                                                        <input type="date" name="inovasi_date" class="form-control form-control-solid" placeholder="Tanggal" />
+                                                                    </div>
+                                                                    <!--End::Input-->
+                                                                </div>
+                                                                <!--End:Tanggal CLI-->
+
+                                                                <!--Begin:Status-->
+                                                                <div class="row fv-row my-3">
+                                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                                        <span class="">Nama Karya Inovasi</span>
+                                                                    </label>
+                                                                    <!--Begin::Select-->
+                                                                    <div id="div-scoreInputInovasi">
+                                                                        <input type="text" name="nama_inovasi" id="score-inovasi" placeholder="Nama Karya Inovasi" class="form-control form-control-solid">
+                                                                    </div>
+                                                                </div>
+                                                                <!--Begin:Status-->
+
+                                                                <br>
+                                                                <div id="table">
+                                                                    <!--begin::Table-->
+                                                                    <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                                                        <!--begin::Table head-->
+                                                                        <thead>
+                                                                            <!--begin::Table row-->
+                                                                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                                <th class="min-w-auto">Nama Proyek</th>
+                                                                                <th class="min-w-auto">Tanggal</th>
+                                                                                <th class="min-w-auto">Nama Karya Inovasi</th>
+                                                                            </tr>
+                                                                            <!--end::Table row-->
+                                                                        </thead>
+                                                                        <!--end::Table head-->
+                                                                        <!--begin::Table body-->
+                                                                        <tbody class="fw-bold text-gray-600">                                                                            
+                                                                            <!--begin::Nama Proyek-->
+                                                                            @if (!empty($inovasi))
+                                                                            @foreach ($customer->KaryaInovasi as $item)
+                                                                            <tr>                                                                                    
+                                                                                             {{-- @dump($mh) --}}
+                                                                                             <td>
+                                                                                                 <a target="_blank" href="/proyek/view/{{ $item->kode_proyek }}" class="text-gray-800 text-hover-primary mb-1">
+                                                                                                     {{ $item->Proyek->nama_proyek }}                                                                                                
+                                                                                                 </a>
+                                                                                             </td>
+                                                                                             <!--end::Name-->
+                                                                                            <!--begin::Tanggal CLI-->
+                                                                                            <td>
+                                                                                                {{ $item->tanggal }}
+                                                                                            </td>
+                                                                                            <!--end::Tanggal CLI-->
+                                                                                            <!--begin::Score CLI-->
+                                                                                            <td>
+                                                                                                {{ $item->nama_inovasi }}
+                                                                                            </td>
+                                                                                            <!--end::Score CLI-->   
+                                                                            @endforeach
+                                                                            </tr>
+                                                                            @else
+                                                                            <tr>
+                                                                                <td>
+                                                                                    <p class="text-center">Belum ada data</p>
+                                                                                </td>
+                                                                            </tr>
+                                                                            @endif                                                                                    
+                                                                        </tbody>
+                                                                        <!--end::Table body-->
+                                                                    </table>
+                                                                <!--end::Table-->
+                                                                </div>
+                                                            </div>
+                                                            <!--End::Row-->                                                            
+                                                        </div>
+                                                        <!--end::Karya Inovasi-->
+
 
                                                         {{-- <!--begin::Input Forecast Proyek-->
                                                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
@@ -3235,7 +3812,7 @@
                                 <!--begin::Input group Website-->
                                 <div class="fv-row mb-7">
                                     <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3 required">
+                                    <label class="fs-6 fw-bold form-label mt-3">
                                         <span>Jabatan</span>
                                     </label>
                                     <!--end::Label-->
@@ -3256,7 +3833,7 @@
                                 <!--begin::Input group Website-->
                                 <div class="fv-row mb-7">
                                     <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3 required">
+                                    <label class="fs-6 fw-bold form-label mt-3">
                                         <span>Email</span>
                                     </label>
                                     <!--end::Label-->
@@ -3271,7 +3848,7 @@
                                 <!--begin::Input group Website-->
                                 <div class="fv-row mb-7">
                                     <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3 required">
+                                    <label class="fs-6 fw-bold form-label mt-3">
                                         <span>Kontak Nomor</span>
                                     </label>
                                     <!--end::Label-->
@@ -5945,12 +6522,12 @@
             }
             const data = {
                 nmnasabah: "{{$customer->name}}",
-                alamat: `{{$customer->address_1}}`,
-                kota: "{{$customer->kota_kabupaten ?? 'Jakarta'}}",
+                alamat: "{{$customer->address_1}}",
+                kota: "{{$customer->kota_kabupaten}}",
                 email: "{{$customer->email}}",
                 ext: "-",
                 telepon: "{{$customer->phone_number}}",
-                fax: `{{$customer->address_2}}`,
+                fax: ".",
                 npwp: npwp,
                 nama_kontak: pic.nama_pic,
                 jenisperusahaan: "{{$customer->jenis_instansi}}",
@@ -6012,33 +6589,33 @@
     {{-- END :: CONVERT DATA TO TABLE --}}
 
     <!--begin::MAP Leaflet-->
-    <script>
-    // var map = L.map('map').setView([51.505, -0.09], 7);
-    // L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    //     maxZoom: 13,
-    //     minZoom: 6,
-    //     attribution: '© OpenStreetMap'
-    // }).addTo(map);
+    {{-- <script>
+    var map = L.map('map').setView([51.505, -0.09], 7);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 13,
+        minZoom: 6,
+        attribution: '© OpenStreetMap'
+    }).addTo(map);
 
     // let prevCityLayer = null;
     // let prevCityMarker = null;
 
-    // const proyekCoord = JSON.parse('{!! $area_proyeks->toJson() !!}');
-    // const proyekLocation = JSON.parse('{!! $kategoriProyek->flatten()->toJson() !!}');
+    const proyekCoord = JSON.parse('{!! $area_proyeks->toJson() !!}');
+    const proyekLocation = JSON.parse('{!! $kategoriProyek->flatten()->toJson() !!}');
 
     // console.log(proyekCoord[0]["JAWA BARAT"]);
 
-    // proyekCoord.forEach(coord => {
-    //     proyekLocation.forEach(loc => {
-    //         if (loc.proyek.provinsi == Object.keys(coord)) {
-    //             const coordGeoJson = L.geoJSON().addTo(map);
-    //             coordGeoJson.addData(coord[loc.proyek.provinsi].geojson);
-    //             map.panTo(new L.LatLng(coord[loc.proyek.provinsi].lat, coord[loc.proyek.provinsi].lon));
-    //         }
-    //     });
-    //     // coord.forEach(c => {
-    //     // });
-    // });
+    proyekCoord.forEach(coord => {
+        proyekLocation.forEach(loc => {
+            if (loc.proyek.provinsi == Object.keys(coord)) {
+                const coordGeoJson = L.geoJSON().addTo(map);
+                coordGeoJson.addData(coord[loc.proyek.provinsi].geojson);
+                map.panTo(new L.LatLng(coord[loc.proyek.provinsi].lat, coord[loc.proyek.provinsi].lon));
+            }
+        });
+        // coord.forEach(c => {
+        // });
+    });
 
     // begin select kabupaten
     async function selectKabupaten(elt) {
@@ -6061,11 +6638,9 @@
         // kotaCoord.forEach(coor => {
         // });
         // L.polygon([[...kotaCoord]]).addTo(map);
-
-        // console.log(elt.value);
         
     }
     // end select kabupaten
-</script>
+</script> --}}
     <!--end::MAP Leaflet-->
 @endsection
