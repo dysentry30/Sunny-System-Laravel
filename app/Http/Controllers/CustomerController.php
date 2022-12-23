@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cli;
+use App\Models\Csi;
 use Faker\Core\Uuid;
 use App\Models\Proyek;
 use App\Models\Customer;
@@ -18,6 +20,9 @@ use App\Models\CustomerSAP;
 use App\Models\IndustryOwner;
 use App\Models\IndustrySector;
 use App\Models\JenisPerusahaan;
+use App\Models\KaryaInovasi;
+use App\Models\MasalahHukum;
+use App\Models\Nps;
 use App\Models\Provinsi;
 use App\Models\StrukturAttachment;
 use App\Models\SyaratPembayaran;
@@ -433,7 +438,7 @@ class CustomerController extends Controller
             "proyekOngoing" => $proyekOngoing,
             "proyekClosed" => $proyekClosed,
             "area_proyeks" => $area_proyeks,
-            // "industryAttractiveness" => $industryOwners,
+            "industryAttractiveness" => $industryOwners,
             "jenisPerusahaan" => $jenisPerusahaan,
             "taxs" => $taxs,
             "syaratPembayaran" => $syaratPembayaran,
