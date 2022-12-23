@@ -168,9 +168,15 @@
                             </select>
                             
                             <select class="rounded-2" name="calendar__year" id="calendar__year">
+                                @if (str_contains(Request::path(), "customer/view"))
+                                @for ($i = $year-70; $i < $year+10; $i++ )
+                                <option {{ $year == $i ? 'selected' : '' }}>{{ $i }}</option>
+                                @endfor
+                                @else
                                 @for ($i = $year-3; $i < $year+10; $i++ )
                                 <option {{ $year == $i ? 'selected' : '' }}>{{ $i }}</option>
                                 @endfor
+                                @endif
                             </select>
                         </div>
 

@@ -216,8 +216,17 @@ class CustomerController extends Controller
         // $data = Http::get("http://maps.googleapis.com/maps/api/geocode/xml?address=". "Boston, USA" . "&sensor=false");
 
         $data_provinsi = json_decode(Storage::get("/public/data/provinsi.json"));
-        $kode_provinsi = explode("-", $customer->provinsi)[1];
-        $get_kota = collect($data_provinsi)->where("province_id", "=", $kode_provinsi)->first();
+        $data_kabupaten = collect(json_decode(Storage::get("/public/data/11.json")));
+        if (!empty($customer->provinsi) && str_contains($customer->provinsi, "-")) {
+            $kode_provinsi = explode("-", $customer->provinsi)[1];
+            $get_kota = collect($data_provinsi)->where("province_id", "=", $kode_provinsi)->first();
+            if (!empty($get_kota)) {
+                $data_kabupaten = collect(json_decode(Storage::get("/public/data/$get_kota->id.json")));
+            } else {
+                $data_kabupaten = collect(json_decode(Storage::get("/public/data/11.json")));
+            }
+        }
+
         $data_negara = collect(json_decode(Storage::get("/public/data/country.json")));
         $kode_negara = null;
         if(!empty($customer->negara)) {
@@ -229,9 +238,8 @@ class CustomerController extends Controller
         }
         $data_provinsi = Provinsi::where("country_id", "=", $kode_negara)->get();
         // dd($customer->provinsi, $get_kota);
-        if (!empty($get_kota)) {
-            $data_kabupaten = collect(json_decode(Storage::get("/public/data/$get_kota->id.json")));
-        }
+        
+
         // dd($data_kabupaten);
         // dd($data_kabupaten);
         // dd($customer->negara, $data_negara, $customer->negara);
