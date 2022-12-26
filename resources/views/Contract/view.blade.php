@@ -389,12 +389,14 @@
                                             style="outline: 0px; cursor: pointer;">
                                             Perolehan
                                         </a> --}}
-                                        <a href="#" role="link" class="stage-button color-is-default "
-                                            style="outline: 0px; cursor: pointer;">
-                                            Terkontrak
+                                        <a href="#" role="link" class="stage-button color-is-default"
+                                            data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-bs-title="Proyek di CRM belum terkontrak"
+                                            style="outline: 0px; cursor: not-allowed;">
+                                            Perolehan
                                         </a>
-                                        <a href="#" role="link" class="stage-button color-is-default "
-                                            style="outline: 0px; cursor: pointer;">
+                                        <a href="#" role="link" class="stage-button"
+                                            data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-bs-title="Bisa ke stage ini ketika <b>Proyek di CRM sudah terkontrak</b>"
+                                            style="outline: 0px; cursor: not-allowed;">
                                             Pelaksanaan
                                         </a>
                                         {{-- <a href="/contract-management/view/{{ $contract->id_contract }}/addendum-contract"
@@ -402,13 +404,13 @@
                                             style="outline: 0px; cursor: pointer;">
                                             Addendum Kontrak
                                         </a> --}}
-                                        <a href="#" role="link" class="stage-button color-is-default"
+                                        {{-- <a href="#" role="link" class="stage-button color-is-default"
                                             style="outline: 0px; cursor: pointer;">
                                             Serah Terima Pekerjaan
-                                        </a>
+                                        </a> --}}
                                         <a href="#" role="link" class="stage-button color-is-default"
                                             style="outline: 0px;">
-                                            Penutupan Proyek
+                                            Pemeliharaan
                                         </a>
 
                                     </div>
@@ -435,7 +437,7 @@
                                 }
 
                             }
-                            if (stage.innerText !== "Addendum Kontrak") {
+                            if (stage.innerText == "Pemeliharaan") {
 
                                 stage.addEventListener("click", async e => {
                                     e.stopPropagation();
@@ -706,7 +708,7 @@
 
                 @endif
 
-                @if ($contract->stages > 3)
+                @if ($contract->stages > 2)
                     <!--begin:::Tab item Atachment & Notes-->
                     <li class="nav-item">
                         <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true" data-bs-toggle="tab"
@@ -775,7 +777,7 @@
                                 <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                     <th class="min-w-125px">Item</th>
                                     <th class="min-w-125px">Sub Pasal</th>
-                                    <th class="min-w-125px">Daftar Pertanyaan</th>
+                                    <th class="min-w-125px">Pertanyaan</th>
                                     <th class="min-w-125px">Tanggal</th>
                                 </tr>
                                 <!--end::Table row-->
@@ -799,7 +801,7 @@
                                                 <!--end::Name=-->
                                                 <!--begin::Name=-->
                                                 <td>
-                                                    {{ $questionProject->daftar_pertanyaan }}
+                                                    {{ $questionProject->note_question }}
                                                 </td>
                                                 <!--end::Name=-->
                                                 <!--begin::Kode=-->
@@ -1501,8 +1503,8 @@
                                                 <b>Surat Perjanjian Kontrak</b>
                                             </td>
                                         </tr>
-                                        <tr>
-                                            @foreach ($contract->UsulanPerubahanDraft as $perubahan_draft)
+                                        @foreach ($contract->UsulanPerubahanDraft as $perubahan_draft)
+                                            <tr>
                                                 @php
                                                     $pasals = collect(explode("|", $perubahan_draft->pasal_perbaikan));
                                                 @endphp
@@ -1512,8 +1514,8 @@
                                                     <td>{{$perubahan_draft->usulan_perubahan_klausul}}</td>
                                                     <td>{{$perubahan_draft->keterangan}}</td>
                                                 @endif
-                                            @endforeach
-                                        </tr>
+                                            </tr>
+                                        @endforeach
                                     @endif
 
                                     @if ($contract->UsulanPerubahanDraft->contains('kategori', 2))
@@ -1522,8 +1524,8 @@
                                                 <b>Syarat-syarat Umum Kontrak (SSUK)</b>
                                             </td>
                                         </tr>
-                                        <tr>
-                                            @foreach ($contract->UsulanPerubahanDraft as $perubahan_draft)
+                                        @foreach ($contract->UsulanPerubahanDraft as $perubahan_draft)
+                                            <tr>
                                                 @php
                                                     $pasals = collect(explode("|", $perubahan_draft->pasal_perbaikan));
                                                 @endphp
@@ -1533,8 +1535,8 @@
                                                     <td>{{$perubahan_draft->usulan_perubahan_klausul}}</td>
                                                     <td>{{$perubahan_draft->keterangan}}</td>
                                                 @endif
-                                            @endforeach
-                                        </tr>
+                                            </tr>
+                                        @endforeach
                                     @endif
 
                                     @if ($contract->UsulanPerubahanDraft->contains('kategori', 3))
@@ -1543,8 +1545,8 @@
                                                 <b>Syarat-syarat Khusus Kontrak (SSKK)</b>
                                             </td>
                                         </tr>
-                                        <tr>
-                                            @foreach ($contract->UsulanPerubahanDraft as $perubahan_draft)
+                                        @foreach ($contract->UsulanPerubahanDraft as $perubahan_draft)
+                                            <tr>
                                                 @php
                                                     $pasals = collect(explode("|", $perubahan_draft->pasal_perbaikan));
                                                 @endphp
@@ -1554,8 +1556,8 @@
                                                     <td>{{$perubahan_draft->usulan_perubahan_klausul}}</td>
                                                     <td>{{$perubahan_draft->keterangan}}</td>
                                                 @endif
-                                            @endforeach
-                                        </tr>
+                                            </tr>
+                                        @endforeach
                                     @endif
                                 </tbody>
                                 <!--end::Table body-->
@@ -1570,7 +1572,7 @@
                 <div class="tab-pane fade" id="kt_user_view_overview_history" role="tabpanel">
 
                     <!--begin::Row-->
-                    <div class="row fv-row">
+                    {{-- <div class="row fv-row">
                         <!--begin::Col-->
                         <div class="col-6">
                             <!--begin::Input group Website-->
@@ -1599,7 +1601,7 @@
                             <!--end::Input group-->
                         </div>
                         <!--End begin::Col-->
-                    </div>
+                    </div> --}}
                     <!--End begin::Row-->
 
                     &nbsp;<br>
@@ -1686,7 +1688,7 @@
                         &nbsp;<br>
 
                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                            Review
+                            Tinjauan Dokumen Kontrak
                             <a href="#" Id="Plus" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_review_menang">+</a>
                         </h3>
@@ -1748,7 +1750,7 @@
                         &nbsp;<br>
                         &nbsp;<br>
 
-                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                        {{-- <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                             Hasil Klarifikasi dan Negosiasi CDA
                             <a href="#" Id="Plus" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_input_klarifikasi_negosiasi">+</a>
@@ -1804,8 +1806,6 @@
                                             </td>
                                             <!--end::Unit=-->
                                         </tr>
-                                        {{-- @if ($KlarifikasiNegosiasiCDA->tender_menang == 0)
-                                            @endif --}}
                                     @empty
                                         <tr>
                                             <td colspan="4" class="text-center">
@@ -1826,9 +1826,9 @@
                         </table>
                         <!--End:Table: Review-->
                         &nbsp;<br>
-                        &nbsp;<br>
+                        &nbsp;<br> --}}
 
-                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                        {{-- <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                             Kontrak Tanda Tangan
                             <a href="#" Id="Plus" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_input_kontrak_bertandatangan">+</a>
@@ -1901,9 +1901,9 @@
                         </table>
                         <!--End:Table: Review-->
                         &nbsp;<br>
-                        &nbsp;<br>
+                        &nbsp;<br> --}}
 
-                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                        {{-- <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                             Review Pembatalan Kontrak
                             <a href="#" Id="Plus" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_input_review_pembatalan">+</a>
@@ -1977,9 +1977,9 @@
                         </table>
                         <!--End:Table: Review-->
                         &nbsp;<br>
-                        &nbsp;<br>
+                        &nbsp;<br> --}}
 
-                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                        {{-- <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                             Perjanjian KSO
                             <a href="#" Id="Plus" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_input_perjanjian_kso">+</a>
@@ -2052,7 +2052,7 @@
                         <!--End:Table: Review-->
 
                         &nbsp;<br>
-                        &nbsp;<br>
+                        &nbsp;<br> --}}
 
                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                             Input Resiko
@@ -2655,46 +2655,49 @@
                             <thead>
                                 <!--begin::Table row-->
                                 <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-50px">No</th>
-                                    <th class="min-w-125px">Ketentuan</th>
-                                    <th class="min-w-125px">Informasi Kelengkapan <i>Check List</i> ADKON</th>
+                                    <th class="min-w-50px" colspan="1">No</th>
+                                    <th class="min-w-50px" colspan="1">Item</th>
+                                    <th class="min-w-125px" colspan="1">Pasal</th>
+                                    <th class="min-w-125px" colspan="1">Perpanjangan Waktu</th>
+                                    <th class="min-w-125px" colspan="1">Tambahan Biaya</th>
                                 </tr>
                                 <!--end::Table row-->
                             </thead>
                             <!--end::Table head-->
                             <!--begin::Table body-->
                             <tbody class="fw-bold text-gray-400">
-                                @if ($contract->RencanaKerjaManajemen->count() > 0)
-                                    @forelse ($contract->RencanaKerjaManajemen as $key => $rencana_kerja)
-                                        <tr>
-                                            <td>
-                                                <p class="text-gray-600 mb-1">{{ $key + 1 }}</p>
-                                            </td>
-                                            <!--begin::Name=-->
-                                            <td>
-                                                <pre class="text-gray-600 mb-1" style="font-family: 'Khula';">{!! $rencana_kerja->ketentuan_rencana_kerja !!}</pre>
-                                            </td>
-                                            <!--end::Name=-->
-                                            <!--begin::Name=-->
-                                            <td>
-                                                <pre class="text-gray-600 mb-1" style="font-family: 'Khula';">{!! $rencana_kerja->informasi_lengkap_adkon !!}</pre>
-                                            </td>
-                                            <!--end::Name=-->
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="3" class="text-center">
-                                                <h6><b>There is no data</b></h6>
-                                            </td>
-                                        </tr>
-                                    @endforelse
-                                @else
+                                @forelse ($contract->PasalKontraktual as $key => $ps)
                                     <tr>
-                                        <td colspan="3" class="text-center">
-                                            <h6><b>There is no data</b></h6>
+                                        <td>
+                                            <p class="text-gray-600 mb-1">{{ $key + 1 }}</p>
                                         </td>
+                                        <!--begin::Name=-->
+                                        <td>
+                                            <pre class="text-gray-600 mb-1" style="font-family: 'Khula';">{!! $ps->item !!}</pre>
+                                        </td>
+                                        <!--end::Name=-->
+                                        <!--begin::Name=-->
+                                        <td>
+                                            <pre class="text-gray-600 mb-1" style="font-family: 'Khula';">{!! $ps->pasal !!}</pre>
+                                        </td>
+                                        <!--end::Name=-->
+                                        <!--begin::Name=-->
+                                        <td>
+                                            <pre class="text-gray-600 mb-1" style="font-family: 'Khula';">{!! $ps->perpanjangan_waktu !!}</pre>
+                                        </td>
+                                        <!--end::Name=-->
+                                        <!--begin::Name=-->
+                                        <td>
+                                            <pre class="text-gray-600 mb-1" style="font-family: 'Khula';">{!! number_format($ps->tambahan_biaya, 0, ".", ".") !!}</pre>
+                                        </td>
+                                        <!--end::Name=-->
                                     </tr>
-                                @endif
+                                @empty
+                                    <tr>
+                                        <td colspan="4" class="fw-bolder">There is no data</td>
+                                    </tr>
+                                @endforelse
+                                
                             </tbody>
                             <!--end::Table body-->
 
@@ -8137,6 +8140,119 @@
 <!--end::Modal dialog-->
 </div>
 <!--end::Modal - List Questions-->
+
+
+<!--begin::Modal - Pasal Kontraktual-->
+<div class="modal fade" id="kt_modal_input_pasal_kontraktual" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog modal-dialog-centered mw-900px">
+        <!--begin::Modal content-->
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header">
+                <!--begin::Modal title-->
+                <h2>Add Pasal Kontraktual</h2>
+                <!--end::Modal title-->
+                <!--begin::Close-->
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                            viewBox="0 0 24 24" fill="none">
+                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2"
+                                rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
+                            <rect x="7.41422" y="6" width="16" height="2" rx="1"
+                                transform="rotate(45 7.41422 6)" fill="black" />
+                        </svg>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--end::Modal header-->
+            <!--begin::Modal body-->
+            <div class="modal-body py-lg-6 px-lg-6">
+    
+                <!--begin::Input group Website-->
+                <div class="fv-row mb-5">
+                    <form action="/pasal-kontraktual/upload" method="POST">
+                        @csrf
+                        <!--begin::Input-->
+                        <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            name="id-contract">
+                        <input type="hidden" class="modal-name" name="modal-name">
+    
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span style="font-weight: normal">Item</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <textarea class="form-control form-control-solid"
+                            name="item" id="item" style="font-weight: normal"
+                            value="" placeholder="Item" cols="1" ></textarea>
+                        <!--end::Input-->
+                        <br>
+    
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span style="font-weight: normal">Pasal</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <textarea class="form-control form-control-solid" name="pasal"
+                            id="pasal" style="font-weight: normal" cols="1" value=""
+                            placeholder="Pasal"></textarea>
+                        <!--end::Input-->
+                        <br>
+                        
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span style="font-weight: normal">Perpanjangan Waktu</span>
+                            <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
+                                <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
+                            </a>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input type="date" class="form-control form-control-solid" name="perpanjangan-waktu"
+                            id="perpanjangan-waktu" style="font-weight: normal" value=""
+                            placeholder="Perpanjangan Waktu"/>
+                        <!--end::Input-->
+                        <br>
+                        
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span style="font-weight: normal">Tambahan Biaya</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input type="text" class="form-control form-control-solid reformat" name="tambahan-biaya"
+                            id="tambahan-biaya" style="font-weight: normal" value="0"
+                            placeholder="Tambahan Biaya"/>
+                        <!--end::Input-->
+
+                        <br><br>
+                        <button type="submit" id="save-pasal-kontraktual" class="btn btn-lg btn-primary"
+                            data-bs-dismiss="modal">Save</button>
+                    </form>
+                </div>
+                <!--end::Input group-->
+    
+            </div>
+            <!--end::Input group-->
+    
+    
+        </div>
+        <!--end::Modal body-->
+    </div>
+    <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+    </div>
+<!--end::Modal - Pasal Kontraktual-->
+
+
 <!--begin::Modal - Calendar Start -->
 <div class="modal fade" id="kt_modal_calendar-start" data-bs-backdrop="static" tabindex="-1"
 aria-hidden="true">

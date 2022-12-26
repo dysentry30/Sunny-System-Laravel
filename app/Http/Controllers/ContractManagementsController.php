@@ -24,6 +24,7 @@ use App\Models\DokumenPendukung;
 use App\Models\KlarifikasiNegosiasiCda;
 use App\Models\KontrakBertandatangan;
 use App\Models\MomKickOffMeeting;
+use App\Models\PasalKontraktual;
 use App\Models\PendingIssue;
 use App\Models\PerjanjianKso;
 use App\Models\RencanKerjaManajemenKontrak;
@@ -638,7 +639,7 @@ class ContractManagementsController extends Controller
         // $questions->id_document = $id_document;
         $questions->item = $data["item"];
         $questions->sub_pasal = $data["sub-pasal"];
-        $questions->daftar_pertanyaan = $data["note-question"];
+        $questions->note_question = $data["note-question"];
         $questions->id_contract = $data["id-contract"];
         $questions->tender_menang = $is_tender_menang;
         if ($questions->save()) {
@@ -1438,7 +1439,6 @@ class ContractManagementsController extends Controller
     public function usulanPerubahanDraftContractUpload(Request $request, UsulanPerubahanDraft $usulanPerubahanDraft)
     {
         $data = $request->all();
-        // dd($data);
         $messages = [
             "required" => "Field di atas wajib diisi",
             // "file" => "This field must be file only",
@@ -1522,6 +1522,22 @@ class ContractManagementsController extends Controller
         Alert::error("Erorr", "Rencana Kerja Manajemen Kontrak gagal ditambahkan");
         return Redirect::back()->with("modal", $data["modal-name"]);
         // return redirect()->back();
+    }
+
+    public function uploadPasalKontraktual(Request $request) {
+        $data = $request->all();
+        $kontraktual = new PasalKontraktual();
+        $kontraktual->id_contract = $data["id-contract"];
+        $kontraktual->item = $data["item"];
+        $kontraktual->pasal = $data["pasal"];
+        $kontraktual->perpanjangan_waktu = $data["perpanjangan-waktu"];
+        $kontraktual->tambahan_biaya = str_replace(".", "", $data["tambahan-biaya"]);
+        if ($kontraktual->save()) {
+            Alert::success("Success", "Pasal Kontraktual berhasil ditambahkan");
+            return redirect()->back();
+        }
+        Alert::error("Erorr", "Pasal Kontraktual gagal ditambahkan");
+        return Redirect::back()->with("modal", $data["modal-name"]);
     }
 
     static function input_name_to_label(SupportCollection $keys) : string {
