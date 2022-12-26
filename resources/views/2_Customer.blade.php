@@ -218,15 +218,15 @@
                                                 <!--begin::Kode Pelanggan-->
                                                 <td>
                                                 @if (empty($customers->kode_pelanggan))                                                    
-                                                <a target="_blank" href="/customer/view/{{ $customers->id_customer }}" class="text-gray-800 text-hover-primary ps-6">-</a>
+                                                <a target="_blank" href="/customer/view/{{ $customers->id_customer }}/{{ $customers->name }}" class="text-gray-800 text-hover-primary ps-6">-</a>
                                                 @else
-                                                <a target="_blank" href="/customer/view/{{ $customers->id_customer }}" class="text-gray-800 text-hover-primary">{{ $customers->kode_pelanggan }}</a>
+                                                <a target="_blank" href="/customer/view/{{ $customers->id_customer }}/{{ $customers->name }}" class="text-gray-800 text-hover-primary">{{ $customers->kode_pelanggan }}</a>
                                                 @endif
                                                 </td>
                                                 <!--end::Kode Pelanggan-->
                                                 <!--begin::Name-->
                                                 <td>
-                                                <a target="_blank" href="/customer/view/{{ $customers->id_customer }}" class="text-gray-800 text-hover-primary">{{ $customers->name }}</a>
+                                                <a target="_blank" href="/customer/view/{{ $customers->id_customer }}/{{ $customers->name }}" class="text-gray-800 text-hover-primary">{{ $customers->name }}</a>
                                                 </td>
                                                 <!--end::Name-->
                                                 <!--begin::Email-->

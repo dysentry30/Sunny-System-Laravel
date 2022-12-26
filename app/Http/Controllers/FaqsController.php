@@ -94,6 +94,11 @@ class FaqsController extends Controller
     {
         $id = Faqs::find($id);
         $judul = $id->judul;
+
+        $files = collect(File::allFiles(public_path("faqs")))->filter(function ($f) use ($id) {
+            return str_contains($f->getFilename(), $id->faq_attachment);
+        })->first();
+        File::delete($files);
         
         $id->delete();
         Alert::success('Delete', $judul.", Berhasil Dihapus")->hideCloseButton();

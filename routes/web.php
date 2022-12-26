@@ -283,7 +283,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post('/customer/save', [CustomerController::class, 'saveNew']);
 
     // view customer by id_customer #1
-    Route::get('/customer/view/{id_customer}', [CustomerController::class, 'view']);
+    Route::get('/customer/view/{id_customer}/{nama}', [CustomerController::class, 'view']);
 
     // EDIT customer by view id_customer #2   
     Route::post('/customer/save-edit', [CustomerController::class, 'saveEdit']);
@@ -1444,6 +1444,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     Route::post("/mom-meeting/upload", [ContractManagementsController::class, "momMeeting"]);
 
+    Route::post("/pasal-kontraktual/upload", [ContractManagementsController::class, "uploadPasalKontraktual"]);
 
     Route::get("/document/view/{id}/{id_document}", [DocumentController::class, "documentView"]);
 

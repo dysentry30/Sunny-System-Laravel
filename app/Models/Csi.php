@@ -9,7 +9,7 @@ class Csi extends Model
 {
     use HasFactory;
     protected $primaryKey = "id_csi";  
-    protected $table = 'csi';
+    protected $table = 'proyek_csi';
 
     public function Proyek()
     {
