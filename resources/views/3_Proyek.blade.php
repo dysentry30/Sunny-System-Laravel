@@ -776,7 +776,7 @@
                         <!--begin::Row Kanan+Kiri-->
                         <div class="row fv-row">
                             <!--begin::Col-->
-                            <div class="col-6">
+                            <div class="col-6" style="visibility: hidden">
                                 <!--begin::Input group Website-->
                                 <div class="fv-row mb-7" id="input-jo-detail" style="display: none;">
                                     <!--begin::Label-->
