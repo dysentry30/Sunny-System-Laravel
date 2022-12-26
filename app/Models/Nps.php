@@ -9,7 +9,7 @@ class Nps extends Model
 {
     use HasFactory;
     protected $primaryKey = "id_nps";  
-    protected $table = 'nps';
+    protected $table = 'proyek_nps';
 
     public function Proyek()
     {

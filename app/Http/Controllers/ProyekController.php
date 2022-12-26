@@ -1511,7 +1511,7 @@ class ProyekController extends Controller
                     "email" => "$customer->email",
                     "ext" => "-",
                     "telepon" => "$customer->phone_number",
-                    "fax" => "$customer->address_2",
+                    "fax" => "$customer->fax",
                     "npwp" => "$customer->npwp_company",
                     "nama_kontak" => $pic->nama_pic ?? "",
                     "jenisperusahaan" => "$customer->jenis_instansi",

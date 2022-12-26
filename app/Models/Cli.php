@@ -9,7 +9,7 @@ class Cli extends Model
 {
     use HasFactory;
     protected $primaryKey = "id_cli";  
-    protected $table = 'cli';
+    protected $table = 'proyek_cli';
 
     public function Proyek()
     {

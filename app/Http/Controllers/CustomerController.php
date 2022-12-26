@@ -495,6 +495,7 @@ class CustomerController extends Controller
         $editCustomer->email = $data["email"];
         $editCustomer->phone_number = $data["phone-number"];
         $editCustomer->website = $data["website"];
+        $editCustomer->fax = $data["fax"];
         // $editCustomer->tax_number = $data["npwp_company"];
         $editCustomer->kode_pos = $data["kode-pos"];
 
