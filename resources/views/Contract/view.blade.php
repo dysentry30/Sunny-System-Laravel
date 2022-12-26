@@ -390,12 +390,12 @@
                                             Perolehan
                                         </a> --}}
                                         <a href="#" role="link" class="stage-button color-is-default"
-                                            data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-bs-title="Proyek di CRM belum terkontrak"
+                                            data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-bs-title="Masuk ke <b>Perolehan</b> ketika <b>Proyek di CRM belum terkontrak</b>"
                                             style="outline: 0px; cursor: not-allowed;">
                                             Perolehan
                                         </a>
                                         <a href="#" role="link" class="stage-button"
-                                            data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-bs-title="Bisa ke stage ini ketika <b>Proyek di CRM sudah terkontrak</b>"
+                                            data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-bs-title="Masuk ke <b>Pelaksanaan</b> secara otomatis ketika <b>Proyek di CRM sudah terkontrak</b>"
                                             style="outline: 0px; cursor: not-allowed;">
                                             Pelaksanaan
                                         </a>
