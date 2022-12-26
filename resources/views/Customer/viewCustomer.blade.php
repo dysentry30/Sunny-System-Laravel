@@ -141,7 +141,7 @@
                                                     <div class="fv-row mb-7">
                                                         <!--begin::Label-->
                                                         <label class="fs-6 fw-bold form-label mt-3 required">
-                                                            <span class="required">Nomor Telp</span>
+                                                            <span class="">Nomor Telp</span>
                                                         </label>
                                                         <!--end::Label-->
                                                         <!--begin::Input-->
