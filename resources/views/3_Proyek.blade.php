@@ -533,7 +533,7 @@
                                                 <small class="{{ $proyek->proyekBerjalan ? '' : 'badge badge-light-danger' }}">
                                                     {{-- {{ $proyek->proyekBerjalan->name_customer ?? "*Belum Ditentukan" }} --}}
                                                     @if ($proyek->proyekBerjalan)
-                                                    <a target="_blank" href="/customer/view/{{ $proyek->proyekBerjalan->id_customer }}" class="text-gray-800 text-hover-primary">{{ $proyek->proyekBerjalan->name_customer }}</a>
+                                                    <a target="_blank" href="/customer/view/{{ $proyek->proyekBerjalan->id_customer }}/{{ $proyek->proyekBerjalan->name_customer }}" class="text-gray-800 text-hover-primary">{{ $proyek->proyekBerjalan->name_customer }}</a>
                                                     @else
                                                     *Belum Ditentukan
                                                     @endif

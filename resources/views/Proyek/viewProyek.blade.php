@@ -1041,7 +1041,7 @@
                                                                     <label class="mt-12 fs-6 fw-bold form-label mt-3">
                                                                         <a class="btn btn-sm btn-light btn-active-primary ms-2"
                                                                             target="_blank"
-                                                                            href="/customer/view/{{ $proyekberjalans->id_customer }}"
+                                                                            href="/customer/view/{{ $proyekberjalans->id_customer }}/{{ $proyekberjalans->name_customer }}"
                                                                             id="kt_toolbar_export"><i
                                                                                 class="bi bi-search"></i> Cek Pemberi Kerja
                                                                         </a>
@@ -4365,9 +4365,9 @@
                                                                 </label>
                                                                 <!--end::Label-->
                                                                 <!--begin::Input-->
-                                                                <input type="text"
+                                                                <input type="number"
                                                                     class="form-control form-control-solid {{ $proyek->porsi_jo == null ? 'text-danger' : '' }}"
-                                                                    value="{{ (int) $proyek->porsi_jo ?? '*Porsi JO Belum Ditentukan' }}"
+                                                                    value="{{ $proyek->porsi_jo ?? '*Porsi JO Belum Ditentukan' }}"
                                                                     placeholder="Porsi JO" readonly />
                                                                 <!--end::Input-->
                                                             </div>
@@ -4629,8 +4629,9 @@
                                                             if ($proyek->stage == 8 || $proyek->stage == 9) {
                                                                 if ($proyek->nilai_perolehan != null && $proyek->porsi_jo != null) {
                                                                     $nilaiPerolehan = (int) str_replace('.', '', $proyek->nilai_perolehan);
-                                                                    $kontrakKeseluruhan = ($nilaiPerolehan * 100) / (int) $proyek->porsi_jo;
+                                                                    $kontrakKeseluruhan = ($nilaiPerolehan * 100) / (float) $proyek->porsi_jo;
                                                                     $nilaiKontrakKeseluruhan = number_format((int) str_replace('.', '', round($kontrakKeseluruhan)), 0, '.', '.');
+                                                                    // dd($nilaiPerolehan, $proyek->porsi_jo, $nilaiKontrakKeseluruhan);
                                                                 }
                                                             } else {
                                                                 $nilaiKontrakKeseluruhan = 0;
@@ -7443,7 +7444,7 @@
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
-                                    <input type="number" min="1" max="{{ $proyek->porsi_jo }}"
+                                    <input type="number" step=0.01 min="1" max="{{ $proyek->porsi_jo }}"
                                         onkeyup="getJO()" onchange="getJO()" class="form-control form-control-solid"
                                         id="porsijo-company" name="porsijo-company" placeholder="Porsi JO" />
                                     <!--end::Input-->
@@ -7665,7 +7666,7 @@
                                         </label>
                                         <!--end::Label-->
                                         <!--begin::Input-->
-                                        <input type="number" min="1" max="{{ $proyek->porsi_jo }}"
+                                        <input type="number" step=0.01 min="1" max="{{ $proyek->porsi_jo }}"
                                             value="{{ $porsi->porsi_jo }}" onkeyup="getJO()" onchange="getJO()"
                                             class="form-control form-control-solid" id="porsijo-company"
                                             name="porsijo-company" placeholder="Porsi JO" />

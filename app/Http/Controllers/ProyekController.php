@@ -1702,7 +1702,7 @@ class ProyekController extends Controller
                 // dd($proyekStage->nilai_perolehan, $proyekStage->porsi_jo, $proyekStage->nilai_kontrak_keseluruhan);
                 if ($proyekStage->nilai_perolehan != null && $proyekStage->porsi_jo != null) {
                     $nilaiPerolehan = (int) str_replace('.', '', $proyekStage->nilai_perolehan);
-                    $kontrakKeseluruhan = ($nilaiPerolehan * 100) / $proyekStage->porsi_jo;
+                    $kontrakKeseluruhan = ($nilaiPerolehan * 100) / (float) $proyekStage->porsi_jo;
 
                     $proyekStage->nilai_kontrak_keseluruhan = round($kontrakKeseluruhan);
                     $proyekStage->save();
