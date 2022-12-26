@@ -237,7 +237,7 @@
                                                     <!--end::Name=-->
                                                     <!--begin::Name=-->
                                                     <td>
-                                                        <a href="/proyek/view/{{ $proyek->kode_proyek }}" id="click-name" class="text-hover-primary mb-1">{{ $proyek->nama_proyek }}</a>
+                                                        <p>{{ $proyek->nama_proyek }}</p>
                                                     </td>
                                                     <!--end::Name=-->
                                                     <!--begin::Email=-->
