@@ -339,6 +339,10 @@
                                                 <th class="min-w-auto">Nomor Kontrak</th>
                                                 <th class="min-w-auto">Nama Proyek</th>
                                                 <th class="min-w-auto">Unit Kerja</th>
+                                                <th class="min-w-auto">Jenis Proyek</th>
+                                                <th class="min-w-auto">Nilai OK</th>
+                                                <th class="min-w-auto">Tanggal Mulai</th>
+                                                <th class="min-w-auto">Tanggal Selesai</th>
                                                 {{-- <th class="min-w-auto">ID Contract</th> --}}
                                             </tr>
                                             <!--end::Table row-->
@@ -372,6 +376,26 @@
                                                         {{ $proyek->UnitKerja->unit_kerja }}
                                                     </td>
                                                     <!--end::Email=-->
+                                                    <!--begin::Jenis Proyek=-->
+                                                    <td>
+                                                        {{ $proyek->jenis_proyek }}
+                                                    </td>
+                                                    <!--end::Jenis Proyek=-->
+                                                    <!--begin::Nilai OK=-->
+                                                    <td>
+                                                        {{ $proyek->nilai_rkap }}
+                                                    </td>
+                                                    <!--end::Nilai OK=-->
+                                                    <!--begin::Tanggal Mulai=-->
+                                                    <td>
+                                                        {{ $proyek->tanggal_mulai_terkontrak }}
+                                                    </td>
+                                                    <!--end::Tanggal Mulai=-->
+                                                    <!--begin::Tanggal Selesai=-->
+                                                    <td>
+                                                        {{ $proyek->tanggal_akhir_terkontrak }}
+                                                    </td>
+                                                    <!--end::Tanggal Selesai=-->
                                                 </tr>
                                             @empty
                                                 <tr>
