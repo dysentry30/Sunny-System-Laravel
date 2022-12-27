@@ -437,7 +437,7 @@
                                 }
 
                             }
-                            if (stage.innerText !== "Addendum Kontrak") {
+                            if (stage.innerText == "Pemeliharaan") {
 
                                 stage.addEventListener("click", async e => {
                                     e.stopPropagation();
