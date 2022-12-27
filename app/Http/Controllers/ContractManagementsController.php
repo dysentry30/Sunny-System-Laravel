@@ -27,6 +27,7 @@ use App\Models\MomKickOffMeeting;
 use App\Models\PasalKontraktual;
 use App\Models\PendingIssue;
 use App\Models\PerjanjianKso;
+use App\Models\PerubahanKontrak;
 use App\Models\RencanKerjaManajemenKontrak;
 use App\Models\ReviewPembatalanKontrak;
 use App\Models\UsulanPerubahanDraft;
@@ -66,8 +67,8 @@ class ContractManagementsController extends Controller
             // $proyeks_pelaksanaan_closing_proyek = DB::table("proyeks as p")->select(["p.*", "c.stages"])->join("contract_managements as c", "c.project_id", "=", "p.kode_proyek")->where("c.stages", 5)->get()->map(function ($data) {
             //     return self::stdClassToModel($data, Proyek::class);
             // });
-            $proyeks_all = Proyek::all();
-            $proyeks_perolehan = $proyeks_all->whereIn("stage", [2, 3, 4, 5, 6])->where("is_cancel", "=", false);
+            $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->get();
+            $proyeks_perolehan = $proyeks_all->where("stage", "<", 7)->where("is_cancel", "=", false);
             $proyeks_pelaksanaan = $proyeks_all->where("stage", "=", 8)->where("is_cancel", "=", false)->sortByDesc(function($p) {
                 return !empty($p->ContractManagements) && $p->ContractManagements->id_contract;
             });
@@ -1538,6 +1539,56 @@ class ContractManagementsController extends Controller
         }
         Alert::error("Erorr", "Pasal Kontraktual gagal ditambahkan");
         return Redirect::back()->with("modal", $data["modal-name"]);
+    }
+
+    public function uploadPerubahanKontrak(Request $request) {
+        $data = $request->all();
+        if(isset($data["id-perubahan-kontrak"])) {
+            $perubahan_kontrak = PerubahanKontrak::find($data["id-perubahan-kontrak"]);
+            $perubahan_kontrak->id_contract = $data["id-contract"];
+            $perubahan_kontrak->jenis_perubahan = $data["jenis-perubahan"];
+            $perubahan_kontrak->tanggal_perubahan = $data["tanggal-perubahan"];
+            $perubahan_kontrak->uraian_perubahan = $data["uraian-perubahan"];
+            $perubahan_kontrak->jenis_dokumen = $data["jenis-dokumen"];
+            $perubahan_kontrak->instruksi_owner = $data["instruksi-owner"];
+            $perubahan_kontrak->proposal_klaim = $data["proposal-klaim"];
+            $perubahan_kontrak->tanggal_pengajuan = $data["tanggal-pengajuan"];
+            $perubahan_kontrak->biaya_pengajuan = str_replace(".", "", $data["biaya-pengajuan"]);
+            $perubahan_kontrak->waktu_pengajuan = $data["waktu-pengajuan"];
+            $perubahan_kontrak->stage = 1;
+            if ($perubahan_kontrak->save()) {
+                Alert::success("Success", "Perubahan Kontrak berhasil diperbarui");
+                return redirect()->back();
+            }
+            Alert::error("Erorr", "Perubahan Kontrak gagal diperbarui");
+            return Redirect::back();
+        } else {
+            $perubahan_kontrak = new PerubahanKontrak();
+            $perubahan_kontrak->id_contract = $data["id-contract"];
+            $perubahan_kontrak->jenis_perubahan = $data["jenis-perubahan"];
+            $perubahan_kontrak->tanggal_perubahan = $data["tanggal-perubahan"];
+            $perubahan_kontrak->uraian_perubahan = $data["uraian-perubahan"];
+            $perubahan_kontrak->jenis_dokumen = $data["jenis-dokumen"];
+            $perubahan_kontrak->instruksi_owner = $data["instruksi-owner"];
+            $perubahan_kontrak->proposal_klaim = $data["proposal-klaim"];
+            $perubahan_kontrak->tanggal_pengajuan = $data["tanggal-pengajuan"];
+            $perubahan_kontrak->biaya_pengajuan = str_replace(".", "", $data["biaya-pengajuan"]);
+            $perubahan_kontrak->waktu_pengajuan = $data["waktu-pengajuan"];
+            $perubahan_kontrak->stage = 1;
+            if ($perubahan_kontrak->save()) {
+                Alert::success("Success", "Perubahan Kontrak berhasil ditambahkan");
+                return redirect()->back();
+            }
+            Alert::error("Erorr", "Perubahan Kontrak gagal ditambahkan");
+            return Redirect::back()->with("modal", $data["modal-name"]);
+        }
+    }
+
+    public function perubahanKontrakView($id_contract, PerubahanKontrak $perubahan_kontrak) {
+        $contract = ContractManagements::find(url_decode($id_contract));
+
+        // dd($contract, $perubahan_kontrak);
+        return view("perubahanKontrak/view", compact(["contract", "perubahan_kontrak"]));
     }
 
     static function input_name_to_label(SupportCollection $keys) : string {

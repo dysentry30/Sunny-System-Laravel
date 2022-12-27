@@ -1530,6 +1530,7 @@ class ProyekController extends Controller
                     Alert::html("Error", "Pastikan <b>Provinsi</b> pada Field <b>Pelanggan</b> sudah terisi!", "error")->autoClose(10000);
                     return redirect()->back();
                 }
+                // dd($customer);
                 $data_nasabah_online = collect([
                     "nmnasabah" => "$customer->name",
                     "alamat" => "$customer->address_1",
@@ -1545,7 +1546,7 @@ class ProyekController extends Controller
                     "email1" => $pic->email_pic ?? "",
                     "telpon1" => $pic->phone_pic ?? "",
                     "handphone" => $pic->phone_pic ?? "",
-                    "tipe_perusahaan" => "-",
+                    "tipe_perusahaan" => "$customer->jenis_perusahaan",
                     "tipe_lain_perusahaan" => "-",
                     "cotid" => "11",
                     "dtsap" => [
@@ -1647,7 +1648,7 @@ class ProyekController extends Controller
         
                                     "CUST_AKONT" => "",
         
-                                    "CUST_C_ZTERM" => "",
+                                    "CUST_C_ZTERM" => "$customer->syarat_pembayaran",
         
                                     "CUST_WTAX" => [
                                         [
@@ -1682,11 +1683,11 @@ class ProyekController extends Controller
         
                                     "INCO2_L" => "",
         
-                                    "CUST_S_ZTERM" => "",
+                                    "CUST_S_ZTERM" => "$customer->syarat_pembayaran",
         
                                     "KTGRD" => "",
         
-                                    "TAXKD" => "",
+                                    "TAXKD" => "$customer->tax",
         
                                     "VEND_BUKRS" => "",
         

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\AddendumContracts;
 use App\Models\ContractManagements;
+use App\Models\PerubahanKontrak;
 use Illuminate\Http\Request;
 
 class StageController extends Controller
@@ -47,6 +48,17 @@ class StageController extends Controller
             return response()->json([
                 "status" => "success",
                 "link" => true,
+            ]);
+        }
+    }
+
+    public function stagePerubahanKontrakSave(Request $request) {
+        $data = $request->all();
+        $perubahan_kontrak = PerubahanKontrak::find($data["id_perubahan_kontrak"]);
+        $perubahan_kontrak->stage = $data["stage"];
+        if($perubahan_kontrak->save()) {
+            return response()->json([
+                "status" => "success",
             ]);
         }
     }
