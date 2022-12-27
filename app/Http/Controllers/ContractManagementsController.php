@@ -20,7 +20,11 @@ use App\Models\AddendumContracts;
 use App\Models\ContractManagements;
 use App\Models\AddendumContractDrafts;
 use App\Models\ContractBast;
+use App\Models\ContractChangeNotice;
+use App\Models\ContractChangeOrder;
+use App\Models\ContractChangeProposal;
 use App\Models\DokumenPendukung;
+use App\Models\FieldChange;
 use App\Models\KlarifikasiNegosiasiCda;
 use App\Models\KontrakBertandatangan;
 use App\Models\MomKickOffMeeting;
@@ -28,6 +32,9 @@ use App\Models\PendingIssue;
 use App\Models\PerjanjianKso;
 use App\Models\RencanKerjaManajemenKontrak;
 use App\Models\ReviewPembatalanKontrak;
+use App\Models\SiteInstruction;
+use App\Models\TechnicalForm;
+use App\Models\TechnicalQuery;
 use App\Models\UsulanPerubahanDraft;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Session;
@@ -786,6 +793,382 @@ class ContractManagementsController extends Controller
         return Redirect::back()->with("modal", $data["modal-name"]);
         // return redirect($_SERVER["HTTP_REFERER"]);
     }
+    // Upload Dokumen Site Instruction to server or database
+    public function siteInstruction(Request $request, SiteInstruction $siteInstruction)
+    {
+        $faker = new Uuid();
+        $id_document = (string) $faker->uuid3();
+        $file = $request->file("file-dokumen-instruction");
+        $data = $request->all();
+
+        $messages = [
+            "required" => "Field di atas wajib diisi",
+            "numeric" => "Field di atas harus numeric",
+            "string" => "This field must be alphabet only",
+            "file" => "This field must be file only",
+        ];
+        $rules = [
+            "file-dokumen-instruction" => "required|file",
+            "nomor-dokumen-instruction" => "required|string",
+            "tanggal-dokumen-instruction" => "required|date",
+            "uraian-dokumen-instruction" => "required|string",
+            "id-contract" => "required|string",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            $request->old("nomor-dokumen-instruction");
+            Alert::error('Error', "Review Contract gagal ditambahkan");
+            return Redirect::back()->with("modal", $data["modal-name"]);
+            // return Redirect::back();
+        }
+        $validation->validate();
+
+        // Check ID Contract exist
+        $is_id_contract_exist = ContractManagements::find($data["id-contract"]);
+
+        if (empty($is_id_contract_exist)) {
+            // Session::flash("failed", "Please fill 'Draft Contract' empty field");$request->old("nomor-dokumen-instruction");
+            Alert::error('Error', "Pastikan contract sudah dibuat terlebih dahulu");
+            return Redirect::back()->with("modal", $data["modal-name"]);
+            // return Redirect::back();
+        }
+
+        $siteInstruction->id_contract = $data["id-contract"];
+        $siteInstruction->nomor_dokumen = $data["nomor-dokumen-instruction"];
+        $siteInstruction->tanggal_dokumen = $data["tanggal-dokumen-instruction"];
+        $siteInstruction->uraian_dokumen = $data["uraian-dokumen-instruction"];
+        if ($siteInstruction->save()) {
+            moveFileTemp($file, $id_document);
+            Alert::success('Success', "Dokumen Site Instruction berhasil ditambahkan");
+            return Redirect::back();
+        }
+        Alert::error('Error', "Dokumen Site Instruction gagal ditambahkan");
+        return Redirect::back()->with("modal", $data["modal-name"]);
+        // return redirect($_SERVER["HTTP_REFERER"]);
+    }
+    // Upload Dokumen Technical Form to server or database
+    public function technicalForm(Request $request, TechnicalForm $technicalForm)
+    {
+        $faker = new Uuid();
+        $id_document = (string) $faker->uuid3();
+        $file = $request->file("file-technical-form");
+        $data = $request->all();
+
+        $messages = [
+            "required" => "Field di atas wajib diisi",
+            "numeric" => "Field di atas harus numeric",
+            "date" => "Field di atas harus date",
+            "string" => "This field must be alphabet only",
+            "file" => "This field must be file only",
+        ];
+        $rules = [
+            "file-technical-form" => "required|file",
+            "nomor-technical-form" => "required|string",
+            "tanggal-technical-form" => "required|date",
+            "uraian-technical-form" => "required|string",
+            "id-contract" => "required|string",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            $request->old("nomor-technical-form");
+            Alert::error('Error', "Review Contract gagal ditambahkan");
+            return Redirect::back()->with("modal", $data["modal-name"]);
+            // return Redirect::back();
+        }
+        $validation->validate();
+
+        // Check ID Contract exist
+        $is_id_contract_exist = ContractManagements::find($data["id-contract"]);
+
+        if (empty($is_id_contract_exist)) {
+            // Session::flash("failed", "Please fill 'Draft Contract' empty field");$request->old("nomor-dokumen-instruction");
+            Alert::error('Error', "Pastikan contract sudah dibuat terlebih dahulu");
+            return Redirect::back()->with("modal", $data["modal-name"]);
+            // return Redirect::back();
+        }
+
+        $technicalForm->id_contract = $data["id-contract"];
+        $technicalForm->nomor_dokumen = $id_document;
+        $technicalForm->tanggal_dokumen = $data["tanggal-technical-form"];
+        $technicalForm->uraian_dokumen = $data["uraian-technical-form"];
+        if ($technicalForm->save()) {
+            moveFileTemp($file, $id_document);
+            Alert::success('Success', "Dokumen Technical Form berhasil ditambahkan");
+            return Redirect::back();
+        }
+        Alert::error('Error', "Dokumen Technical Form gagal ditambahkan");
+        return Redirect::back()->with("modal", $data["modal-name"]);
+        // return redirect($_SERVER["HTTP_REFERER"]);
+    }
+    // Upload Dokumen Technical Query to server or database
+    public function technicalQuery(Request $request, TechnicalQuery $technicalQuery)
+    {
+        $faker = new Uuid();
+        $id_document = (string) $faker->uuid3();
+        $file = $request->file("file-technical-query");
+        $data = $request->all();
+
+        $messages = [
+            "required" => "Field di atas wajib diisi",
+            "numeric" => "Field di atas harus numeric",
+            "date" => "Field di atas harus date",
+            "string" => "This field must be alphabet only",
+            "file" => "This field must be file only",
+        ];
+        $rules = [
+            "file-technical-query" => "required|file",
+            "nomor-technical-query" => "required|string",
+            "tanggal-technical-query" => "required|date",
+            "uraian-technical-query" => "required|string",
+            "id-contract" => "required|string",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            $request->old("nomor-technical-query");
+            Alert::error('Error', "Review Contract gagal ditambahkan");
+            return Redirect::back()->with("modal", $data["modal-name"]);
+            // return Redirect::back();
+        }
+        $validation->validate();
+
+        // Check ID Contract exist
+        $is_id_contract_exist = ContractManagements::find($data["id-contract"]);
+
+        if (empty($is_id_contract_exist)) {
+            // Session::flash("failed", "Please fill 'Draft Contract' empty field");$request->old("nomor-dokumen-instruction");
+            Alert::error('Error', "Pastikan contract sudah dibuat terlebih dahulu");
+            return Redirect::back()->with("modal", $data["modal-name"]);
+            // return Redirect::back();
+        }
+
+        $technicalQuery->id_contract = $data["id-contract"];
+        $technicalQuery->nomor_dokumen = $id_document;
+        $technicalQuery->tanggal_dokumen = $data["tanggal-technical-query"];
+        $technicalQuery->uraian_dokumen = $data["uraian-technical-query"];
+        if ($technicalQuery->save()) {
+            moveFileTemp($file, $id_document);
+            Alert::success('Success', "Dokumen Technical Query berhasil ditambahkan");
+            return Redirect::back();
+        }
+        Alert::error('Error', "Dokumen Technical Query gagal ditambahkan");
+        return Redirect::back()->with("modal", $data["modal-name"]);
+        // return redirect($_SERVER["HTTP_REFERER"]);
+    }
+    // Upload Dokumen Field Design Change to server or database
+    public function fieldChange(Request $request, FieldChange $fieldChange)
+    {
+        $faker = new Uuid();
+        $id_document = (string) $faker->uuid3();
+        $file = $request->file("file-field-design-change");
+        $data = $request->all();
+
+        $messages = [
+            "required" => "Field di atas wajib diisi",
+            "numeric" => "Field di atas harus numeric",
+            "date" => "Field di atas harus date",
+            "string" => "This field must be alphabet only",
+            "file" => "This field must be file only",
+        ];
+        $rules = [
+            "file-field-design-change" => "required|file",
+            "nomor-field-design-change" => "required|string",
+            "tanggal-field-design-change" => "required|date",
+            "uraian-field-design-change" => "required|string",
+            "id-contract" => "required|string",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            $request->old("nomor-field-design-change");
+            Alert::error('Error', "Review Contract gagal ditambahkan");
+            return Redirect::back()->with("modal", $data["modal-name"]);
+            // return Redirect::back();
+        }
+        $validation->validate();
+
+        // Check ID Contract exist
+        $is_id_contract_exist = ContractManagements::find($data["id-contract"]);
+
+        if (empty($is_id_contract_exist)) {
+            // Session::flash("failed", "Please fill 'Draft Contract' empty field");$request->old("nomor-dokumen-instruction");
+            Alert::error('Error', "Pastikan contract sudah dibuat terlebih dahulu");
+            return Redirect::back()->with("modal", $data["modal-name"]);
+            // return Redirect::back();
+        }
+
+        $fieldChange->id_contract = $data["id-contract"];
+        $fieldChange->nomor_dokumen = $id_document;
+        $fieldChange->tanggal_dokumen = $data["tanggal-field-design-change"];
+        $fieldChange->uraian_dokumen = $data["uraian-field-design-change"];
+        if ($fieldChange->save()) {
+            moveFileTemp($file, $id_document);
+            Alert::success('Success', "Dokumen Field Design Change berhasil ditambahkan");
+            return Redirect::back();
+        }
+        Alert::error('Error', "Dokumen Field Design Change gagal ditambahkan");
+        return Redirect::back()->with("modal", $data["modal-name"]);
+        // return redirect($_SERVER["HTTP_REFERER"]);
+    }
+    // Upload Dokumen Contract Change Notice to server or database
+    public function changeNotice(Request $request, ContractChangeNotice $changeNotice)
+    {
+        $faker = new Uuid();
+        $id_document = (string) $faker->uuid3();
+        $file = $request->file("file-contract-change-notice");
+        $data = $request->all();
+
+        $messages = [
+            "required" => "Field di atas wajib diisi",
+            "numeric" => "Field di atas harus numeric",
+            "date" => "Field di atas harus date",
+            "string" => "This field must be alphabet only",
+            "file" => "This field must be file only",
+        ];
+        $rules = [
+            "file-contract-change-notice" => "required|file",
+            "nomor-contract-change-notice" => "required|string",
+            "tanggal-contract-change-notice" => "required|date",
+            "uraian-contract-change-notice" => "required|string",
+            "id-contract" => "required|string",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            Alert::error('Error', "Review Contract gagal ditambahkan");
+            return Redirect::back()->with("modal", $data["modal-name"]);
+            // return Redirect::back();
+        }
+        $validation->validate();
+
+        // Check ID Contract exist
+        $is_id_contract_exist = ContractManagements::find($data["id-contract"]);
+
+        if (empty($is_id_contract_exist)) {
+            // Session::flash("failed", "Please fill 'Draft Contract' empty field");$request->old("nomor-dokumen-instruction");
+            Alert::error('Error', "Pastikan contract sudah dibuat terlebih dahulu");
+            return Redirect::back()->with("modal", $data["modal-name"]);
+            // return Redirect::back();
+        }
+
+        $changeNotice->id_contract = $data["id-contract"];
+        $changeNotice->nomor_dokumen = $data["nomor-contract-change-notice"];
+        $changeNotice->tanggal_dokumen = $data["tanggal-contract-change-notice"];
+        $changeNotice->uraian_dokumen = $data["uraian-contract-change-notice"];
+        if ($changeNotice->save()) {
+            moveFileTemp($file, $id_document);
+            Alert::success('Success', "Dokumen Field Design Change berhasil ditambahkan");
+            return Redirect::back();
+        }
+        Alert::error('Error', "Dokumen Field Design Change gagal ditambahkan");
+        return Redirect::back()->with("modal", $data["modal-name"]);
+        // return redirect($_SERVER["HTTP_REFERER"]);
+    }
+    // Upload Dokumen Contract Change Order to server or database
+    public function changeOrder(Request $request, ContractChangeOrder $changeOrder)
+    {
+        $faker = new Uuid();
+        $id_document = (string) $faker->uuid3();
+        $file = $request->file("file-contract-change-order");
+        $data = $request->all();
+
+        $messages = [
+            "required" => "Field di atas wajib diisi",
+            "numeric" => "Field di atas harus numeric",
+            "date" => "Field di atas harus date",
+            "string" => "This field must be alphabet only",
+            "file" => "This field must be file only",
+        ];
+        $rules = [
+            "file-contract-change-order" => "required|file",
+            "nomor-contract-change-order" => "required|string",
+            "tanggal-contract-change-order" => "required|date",
+            "uraian-contract-change-order" => "required|string",
+            "id-contract" => "required|string",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            Alert::error('Error', "Review Contract gagal ditambahkan");
+            return Redirect::back()->with("modal", $data["modal-name"]);
+            // return Redirect::back();
+        }
+        $validation->validate();
+
+        // Check ID Contract exist
+        $is_id_contract_exist = ContractManagements::find($data["id-contract"]);
+
+        if (empty($is_id_contract_exist)) {
+            // Session::flash("failed", "Please fill 'Draft Contract' empty field");$request->old("nomor-dokumen-instruction");
+            Alert::error('Error', "Pastikan contract sudah dibuat terlebih dahulu");
+            return Redirect::back()->with("modal", $data["modal-name"]);
+            // return Redirect::back();
+        }
+
+        $changeOrder->id_contract = $data["id-contract"];
+        $changeOrder->nomor_dokumen = $data["nomor-contract-change-order"];
+        $changeOrder->tanggal_dokumen = $data["tanggal-contract-change-order"];
+        $changeOrder->uraian_dokumen = $data["uraian-contract-change-order"];
+        if ($changeOrder->save()) {
+            moveFileTemp($file, $id_document);
+            Alert::success('Success', "Dokumen Field Design Change berhasil ditambahkan");
+            return Redirect::back();
+        }
+        Alert::error('Error', "Dokumen Field Design Change gagal ditambahkan");
+        return Redirect::back()->with("modal", $data["modal-name"]);
+        // return redirect($_SERVER["HTTP_REFERER"]);
+    }
+    // Upload Dokumen Contract Change Proposal to server or database
+    public function changeProposal(Request $request, ContractChangeProposal $changeProposal)
+    {
+        $faker = new Uuid();
+        $id_document = (string) $faker->uuid3();
+        $file = $request->file("file-contract-change-proposal");
+        $data = $request->all();
+
+        $messages = [
+            "required" => "Field di atas wajib diisi",
+            "numeric" => "Field di atas harus numeric",
+            "date" => "Field di atas harus date",
+            "string" => "This field must be alphabet only",
+            "file" => "This field must be file only",
+        ];
+        $rules = [
+            "file-contract-change-proposal" => "required|file",
+            "nomor-contract-change-proposal" => "required|string",
+            "tanggal-contract-change-proposal" => "required|date",
+            "uraian-contract-change-proposal" => "required|string",
+            "id-contract" => "required|string",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            Alert::error('Error', "Review Contract gagal ditambahkan");
+            return Redirect::back()->with("modal", $data["modal-name"]);
+            // return Redirect::back();
+        }
+        $validation->validate();
+
+        // Check ID Contract exist
+        $is_id_contract_exist = ContractManagements::find($data["id-contract"]);
+
+        if (empty($is_id_contract_exist)) {
+            // Session::flash("failed", "Please fill 'Draft Contract' empty field");$request->old("nomor-dokumen-instruction");
+            Alert::error('Error', "Pastikan contract sudah dibuat terlebih dahulu");
+            return Redirect::back()->with("modal", $data["modal-name"]);
+            // return Redirect::back();
+        }
+
+        $changeProposal->id_contract = $data["id-contract"];
+        $changeProposal->nomor_dokumen = $data["nomor-contract-change-proposal"];
+        $changeProposal->tanggal_dokumen = $data["tanggal-contract-change-proposal"];
+        $changeProposal->uraian_dokumen = $data["uraian-contract-change-proposal"];
+        if ($changeProposal->save()) {
+            moveFileTemp($file, $id_document);
+            Alert::success('Success', "Dokumen Field Design Change berhasil ditambahkan");
+            return Redirect::back();
+        }
+        Alert::error('Error', "Dokumen Field Design Change gagal ditambahkan");
+        return Redirect::back()->with("modal", $data["modal-name"]);
+        // return redirect($_SERVER["HTTP_REFERER"]);
+    }
+
+
 
     // Uplaod Serah Terima of Contract to server or database
     public function handOverUpload(Request $request, HandOvers $handOver)
