@@ -1446,6 +1446,20 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     Route::post("/pasal-kontraktual/upload", [ContractManagementsController::class, "uploadPasalKontraktual"]);
 
+    Route::post("/dokumen-site-instruction/upload", [ContractManagementsController::class, "siteInstruction"]);
+    
+    Route::post("/dokumen-technical-form/upload", [ContractManagementsController::class, "technicalForm"]);
+    
+    Route::post("/dokumen-technical-query/upload", [ContractManagementsController::class, "technicalQuery"]);
+    
+    Route::post("/dokumen-field-design-change/upload", [ContractManagementsController::class, "fieldChange"]);
+    
+    Route::post("/dokumen-contract-change-notice/upload", [ContractManagementsController::class, "changeNotice"]);
+    
+    Route::post("/dokumen-contract-change-order/upload", [ContractManagementsController::class, "changeOrder"]);
+    
+    Route::post("/dokumen-contract-change-proposal/upload", [ContractManagementsController::class, "changeProposal"]);    
+    
     Route::get("/document/view/{id}/{id_document}", [DocumentController::class, "documentView"]);
 
     Route::get("/document/view/{id}/{id_document}/history", [DocumentController::class, "documentViewHistory"]);

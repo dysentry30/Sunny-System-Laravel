@@ -111,6 +111,34 @@ class ContractManagements extends Model
     {
         return $this->hasMany(ContractBast::class, "id_contract");
     }
+    public function SiteInstruction()
+    {
+        return $this->hasMany(SiteInstruction::class, "id_contract");
+    }
+    public function TechnicalForm()
+    {
+        return $this->hasMany(TechnicalForm::class, "id_contract");
+    }
+    public function TechnicalQuery()
+    {
+        return $this->hasMany(TechnicalQuery::class, "id_contract");
+    }
+    public function FieldChange()
+    {
+        return $this->hasMany(FieldChange::class, "id_contract");
+    }
+    public function ChangeNotice()
+    {
+        return $this->hasMany(ContractChangeNotice::class, "id_contract");
+    }
+    public function ChangeOrder()
+    {
+        return $this->hasMany(ContractChangeOrder::class, "id_contract");
+    }
+    public function ChangeProposal()
+    {
+        return $this->hasMany(ContractChangeProposal::class, "id_contract");
+    }
 
     public function getAll()
     {

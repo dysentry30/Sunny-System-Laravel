@@ -2700,6 +2700,521 @@
 
                         </table>
                         <!--End:Table: Pasal Kontraktual-->
+
+                        <br>
+                        <!--Begin::Document Site Instruction-->
+                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                            Dokumen Site Instruction
+                            <a href="#" Id="Plus" data-bs-toggle="modal"
+                                data-bs-target="#kt_modal_dokumen_site_instruction">+</a>
+                        </h3>
+                        <!--begin:Table:Dokumen Site Instruction-->
+                        
+                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                            <!--begin::Table head-->
+                            <thead>
+                                <!--begin::Table row-->
+                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                    <th class="min-w-125px">No. Dokumen</th>
+                                    <th class="min-w-125px">Tanggal</th>
+                                    <th class="min-w-125px">Uraian</th>
+                                </tr>
+                                <!--end::Table row-->
+                            </thead>
+                                                           
+                            <!--end::Table head-->
+                            <!--begin::Table body-->
+                            <tbody class="fw-bold text-gray-400">
+                                @php
+                                    $classes = '';
+                                    if (isset($contract)) {
+                                        $classes = 'form-control-solid';
+                                    } else {
+                                        $classes = 'border-bottom-dashed border-top-0 border-left-0 border-right-0';
+                                    }
+                                @endphp
+                                @if (isset($contract))
+                                    @if (!empty($contract->SiteInstruction))
+                                        @forelse ($contract->SiteInstruction as $site_instruction)
+                                        <tr>
+                                            <!--begin::Nomor Dokumen-->
+                                            <td>
+                                                <a href="{{ asset('word/'.$site_instruction->nomor_dokumen) }}">
+                                                    {{ $site_instruction->nomor_dokumen }}
+                                                </a>
+                                            </td>
+                                            <!--end::Nomor Dokumen-->
+                                            <!--begin::Nomor Dokumen-->
+                                            <td>
+                                                {{ $site_instruction->tanggal_dokumen }}
+                                            </td>
+                                            <!--end::Nomor Dokumen-->
+                                            <!--begin::Uraian-->
+                                            <td>
+                                                {{ $site_instruction->uraian_dokumen }}
+                                            </td>
+                                            <!--end::Uraian-->
+                                        </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="4" class="text-center">
+                                                    <h6><b>There is no data</b></h6>
+                                                </td>
+                                            </tr>
+                                        @endforelse
+                                    @else
+                                    <tr>
+                                        <td colspan="4" class="text-center">
+                                            <h6><b>There is no data</b></h6>
+                                        </td>
+                                    </tr>
+                                    @endif
+                                @endif
+                            </tbody>
+                            <!--end::Table body-->
+                        </table>
+                        <!--End:Table: Dokumen Site Instruction-->
+                        <br>
+                        <!--End::Document Site Instruction-->
+
+                        <!--Begin::Document Technical Form-->
+                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                            Dokumen Technical Form
+                            <a href="#" Id="Plus" data-bs-toggle="modal"
+                                data-bs-target="#kt_modal_dokumen_technical_form">+</a>
+                        </h3>
+                        
+                        <!--begin:: Table Dokumen Technical Form-->
+                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                            <!--begin::Table head-->
+                            <thead>
+                                <!--begin::Table row-->
+                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                    <th class="min-w-125px">No. Dokumen</th>
+                                    <th class="min-w-125px">Tanggal</th>
+                                    <th class="min-w-125px">Uraian</th>
+                                </tr>
+                                <!--end::Table row-->
+                            </thead>
+                            <!--end::Table head-->
+                            <!--begin::Table body-->
+                            <tbody class="fw-bold text-gray-400">
+                                @php
+                                    $classes = '';
+                                    if (isset($contract)) {
+                                        $classes = 'form-control-solid';
+                                    } else {
+                                        $classes = 'border-bottom-dashed border-top-0 border-left-0 border-right-0';
+                                    }
+                                @endphp
+                                @if (isset($contract))
+                                @if (!empty($contract->TechnicalForm))
+                                    @forelse ($contract->TechnicalForm as $technical_form)
+                                    <tr>
+                                        <!--begin::Nomor Dokumen-->
+                                        <td>
+                                            <a href="{{ asset('word/'.$technical_form->nomor_dokumen) }}">
+                                                {{ $technical_form->nomor_dokumen }}
+                                            </a>
+                                        </td>
+                                        <!--end::Nomor Dokumen-->
+                                            <!--begin::Nomor Dokumen-->
+                                        <td>
+                                            {{ $technical_form->tanggal_dokumen }}
+                                        </td>
+                                        <!--end::Nomor Dokumen-->
+                                        <!--begin::Uraian-->
+                                        <td>
+                                            {{ $technical_form->uraian_dokumen }}
+                                        </td>
+                                        <!--end::Uraian-->
+                                    </tr>
+                                    @empty
+                                    <tr>
+                                        <td colspan="4" class="text-center">
+                                            <h6><b>There is no data</b></h6>
+                                        </td>
+                                    </tr>
+                                    @endforelse
+                                @else
+                                <tr>
+                                    <td colspan="4" class="text-center">
+                                        <h6><b>There is no data</b></h6>
+                                    </td>
+                                </tr>
+                                @endif
+                                @endif
+                            </tbody>
+                            <!--end::Table body-->
+                        </table>
+                        <!--end:: Table Dokumen Technical Form-->
+                        <br>
+                        <!--End::Document Technical Form-->
+
+                        <!--Begin::Document Technical Query-->
+                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                            Dokumen Technical Query
+                            <a href="#" Id="Plus" data-bs-toggle="modal"
+                                data-bs-target="#kt_modal_dokumen_technical_query">+</a>
+                        </h3>
+                        <!--begin:: Table Dokumen Technical Query-->
+                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                            <!--begin::Table head-->
+                            <thead>
+                                <!--begin::Table row-->
+                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                    <th class="min-w-125px">No. Dokumen</th>
+                                    <th class="min-w-125px">Tanggal</th>
+                                    <th class="min-w-125px">Uraian</th>
+                                </tr>
+                                <!--end::Table row-->
+                            </thead>
+                            <!--end::Table head-->
+                            <!--begin::Table body-->
+                            <tbody class="fw-bold text-gray-400">
+                                @php
+                                    $classes = '';
+                                    if (isset($contract)) {
+                                        $classes = 'form-control-solid';
+                                    } else {
+                                        $classes = 'border-bottom-dashed border-top-0 border-left-0 border-right-0';
+                                    }
+                                @endphp
+                                @if (isset($contract))
+                                @if (!empty($contract->TechnicalQuery))
+                                    @forelse ($contract->TechnicalQuery as $technical_query)
+                                    <tr>
+                                        <!--begin::Nomor Dokumen-->
+                                        <td>
+                                            <a href="{{ asset('word/'.$technical_query->nomor_dokumen) }}">
+                                                {{ $technical_query->nomor_dokumen }}
+                                            </a>
+                                        </td>
+                                        <!--end::Nomor Dokumen-->
+                                            <!--begin::Nomor Dokumen-->
+                                        <td>
+                                            {{ $technical_query->tanggal_dokumen }}
+                                        </td>
+                                        <!--end::Nomor Dokumen-->
+                                        <!--begin::Uraian-->
+                                        <td>
+                                            {{ $technical_query->uraian_dokumen }}
+                                        </td>
+                                        <!--end::Uraian-->
+                                    </tr>
+                                    @empty
+                                    <tr>
+                                        <td colspan="4" class="text-center">
+                                            <h6><b>There is no data</b></h6>
+                                        </td>
+                                    </tr>
+                                    @endforelse
+                                @else
+                                <tr>
+                                    <td colspan="4" class="text-center">
+                                        <h6><b>There is no data</b></h6>
+                                    </td>
+                                </tr>
+                                @endif
+                                @endif
+                            </tbody>
+                            <!--end::Table body-->
+                        </table>
+                        <!--end:: Table Dokumen Technical Query-->
+                        <br>
+                        <!--End::Document Technical Query-->
+                        
+                        <!--Begin::Document Field Design Change-->
+                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                            Dokumen Field Design Change
+                            <a href="#" Id="Plus" data-bs-toggle="modal"
+                                data-bs-target="#kt_modal_dokumen_field_design_change">+</a>
+                        </h3>
+
+                        <!--begin:: Table Dokumen Field Design Change-->
+                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                            <!--begin::Table head-->
+                            <thead>
+                                <!--begin::Table row-->
+                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                    <th class="min-w-125px">No. Dokumen</th>
+                                    <th class="min-w-125px">Tanggal</th>
+                                    <th class="min-w-125px">Uraian</th>
+                                </tr>
+                                <!--end::Table row-->
+                            </thead>
+                            <!--end::Table head-->
+                            <!--begin::Table body-->
+                            <tbody class="fw-bold text-gray-400">
+                                @php
+                                    $classes = '';
+                                    if (isset($contract)) {
+                                        $classes = 'form-control-solid';
+                                    } else {
+                                        $classes = 'border-bottom-dashed border-top-0 border-left-0 border-right-0';
+                                    }
+                                @endphp
+                                @if (isset($contract))
+                                @if (!empty($contract->FieldChange))
+                                    @forelse ($contract->FieldChange as $field_change)
+                                    <tr>
+                                        <!--begin::Nomor Dokumen-->
+                                        <td>
+                                            <a href="{{ asset('word/'.$field_change->nomor_dokumen) }}">
+                                                {{ $field_change->nomor_dokumen }}
+                                            </a>
+                                        </td>
+                                        <!--end::Nomor Dokumen-->
+                                            <!--begin::Nomor Dokumen-->
+                                        <td>
+                                            {{ $field_change->tanggal_dokumen }}
+                                        </td>
+                                        <!--end::Nomor Dokumen-->
+                                        <!--begin::Uraian-->
+                                        <td>
+                                            {{ $field_change->uraian_dokumen }}
+                                        </td>
+                                        <!--end::Uraian-->
+                                    </tr>
+                                    @empty
+                                    <tr>
+                                        <td colspan="4" class="text-center">
+                                            <h6><b>There is no data</b></h6>
+                                        </td>
+                                    </tr>
+                                    @endforelse
+                                @else
+                                <tr>
+                                    <td colspan="4" class="text-center">
+                                        <h6><b>There is no data</b></h6>
+                                    </td>
+                                </tr>
+                                @endif
+                                @endif
+                            </tbody>
+                            <!--end::Table body-->
+                        </table>
+                        <!--end:: Table Dokumen Field Design Change-->
+                        <!--End::Document Field Design Change-->
+
+                        <!--Begin::Document Contract Change Notice-->
+                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                            Dokumen Contract Change Notice
+                            <a href="#" Id="Plus" data-bs-toggle="modal"
+                                data-bs-target="#kt_modal_dokumen_contract_change_notice">+</a>
+                        </h3>
+
+                        <!--begin:: Table Dokumen Contract Change Notice-->
+                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                            <!--begin::Table head-->
+                            <thead>
+                                <!--begin::Table row-->
+                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                    <th class="min-w-125px">No. Dokumen</th>
+                                    <th class="min-w-125px">Tanggal</th>
+                                    <th class="min-w-125px">Uraian</th>
+                                </tr>
+                                <!--end::Table row-->
+                            </thead>
+                            <!--end::Table head-->
+                            <!--begin::Table body-->
+                            <tbody class="fw-bold text-gray-400">
+                                @php
+                                    $classes = '';
+                                    if (isset($contract)) {
+                                        $classes = 'form-control-solid';
+                                    } else {
+                                        $classes = 'border-bottom-dashed border-top-0 border-left-0 border-right-0';
+                                    }
+                                @endphp
+                                @if (isset($contract))
+                                @if (!empty($contract->ChangeNotice))
+                                    @forelse ($contract->ChangeNotice as $change_notice)
+                                    <tr>
+                                        <!--begin::Nomor Dokumen-->
+                                        <td>
+                                            <a href="{{ asset('word/'.$change_notice->nomor_dokumen) }}">
+                                                {{ $change_notice->nomor_dokumen }}
+                                            </a>
+                                        </td>
+                                        <!--end::Nomor Dokumen-->
+                                            <!--begin::Nomor Dokumen-->
+                                        <td>
+                                            {{ $change_notice->tanggal_dokumen }}
+                                        </td>
+                                        <!--end::Nomor Dokumen-->
+                                        <!--begin::Uraian-->
+                                        <td>
+                                            {{ $change_notice->uraian_dokumen }}
+                                        </td>
+                                        <!--end::Uraian-->
+                                    </tr>
+                                    @empty
+                                    <tr>
+                                        <td colspan="4" class="text-center">
+                                            <h6><b>There is no data</b></h6>
+                                        </td>
+                                    </tr>
+                                    @endforelse
+                                @else
+                                <tr>
+                                    <td colspan="4" class="text-center">
+                                        <h6><b>There is no data</b></h6>
+                                    </td>
+                                </tr>
+                                @endif
+                                @endif
+                            </tbody>
+                            <!--end::Table body-->
+                        </table>
+                        <!--end:: Table Dokumen Table Dokumen Contract Change Notice-->
+                        <!--End::Document Table Dokumen Contract Change Notice-->
+
+                        <!--Begin::Document Contract Change Proposal-->
+                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                            Dokumen Contract Change Proposal
+                            <a href="#" Id="Plus" data-bs-toggle="modal"
+                                data-bs-target="#kt_modal_dokumen_contract_change_proposal">+</a>
+                        </h3>
+
+                        <!--begin:: Table Dokumen Contract Change Proposal-->
+                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                            <!--begin::Table head-->
+                            <thead>
+                                <!--begin::Table row-->
+                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                    <th class="min-w-125px">No. Dokumen</th>
+                                    <th class="min-w-125px">Tanggal</th>
+                                    <th class="min-w-125px">Uraian</th>
+                                </tr>
+                                <!--end::Table row-->
+                            </thead>
+                            <!--end::Table head-->
+                            <!--begin::Table body-->
+                            <tbody class="fw-bold text-gray-400">
+                                @php
+                                    $classes = '';
+                                    if (isset($contract)) {
+                                        $classes = 'form-control-solid';
+                                    } else {
+                                        $classes = 'border-bottom-dashed border-top-0 border-left-0 border-right-0';
+                                    }
+                                @endphp
+                                @if (isset($contract))
+                                @if (!empty($contract->ChangeProposal))
+                                    @forelse ($contract->ChangeProposal as $change_proposal)
+                                    <tr>
+                                        <!--begin::Nomor Dokumen-->
+                                        <td>
+                                            <a href="{{ asset('word/'.$change_proposal->nomor_dokumen) }}">
+                                                {{ $change_proposal->nomor_dokumen }}
+                                            </a>
+                                        </td>
+                                        <!--end::Nomor Dokumen-->
+                                            <!--begin::Nomor Dokumen-->
+                                        <td>
+                                            {{ $change_proposal->tanggal_dokumen }}
+                                        </td>
+                                        <!--end::Nomor Dokumen-->
+                                        <!--begin::Uraian-->
+                                        <td>
+                                            {{ $change_proposal->uraian_dokumen }}
+                                        </td>
+                                        <!--end::Uraian-->
+                                    </tr>
+                                    @empty
+                                    <tr>
+                                        <td colspan="4" class="text-center">
+                                            <h6><b>There is no data</b></h6>
+                                        </td>
+                                    </tr>
+                                    @endforelse
+                                @else
+                                <tr>
+                                    <td colspan="4" class="text-center">
+                                        <h6><b>There is no data</b></h6>
+                                    </td>
+                                </tr>
+                                @endif
+                                @endif
+                            </tbody>
+                            <!--end::Table body-->
+                        </table>
+                        <!--end:: Table Dokumen Table Dokumen Contract Change Proposal-->
+                        <!--End::Document Table Dokumen Contract Change Proposal-->
+
+                        <!--Begin::Document Contract Change Order-->
+                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                            Dokumen Contract Change Order
+                            <a href="#" Id="Plus" data-bs-toggle="modal"
+                                data-bs-target="#kt_modal_dokumen_contract_change_order">+</a>
+                        </h3>
+
+                        <!--begin:: Table Dokumen Contract Change Order-->
+                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                            <!--begin::Table head-->
+                            <thead>
+                                <!--begin::Table row-->
+                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                    <th class="min-w-125px">No. Dokumen</th>
+                                    <th class="min-w-125px">Tanggal</th>
+                                    <th class="min-w-125px">Uraian</th>
+                                </tr>
+                                <!--end::Table row-->
+                            </thead>
+                            <!--end::Table head-->
+                            <!--begin::Table body-->
+                            <tbody class="fw-bold text-gray-400">
+                                @php
+                                    $classes = '';
+                                    if (isset($contract)) {
+                                        $classes = 'form-control-solid';
+                                    } else {
+                                        $classes = 'border-bottom-dashed border-top-0 border-left-0 border-right-0';
+                                    }
+                                @endphp
+                                @if (isset($contract))
+                                @if (!empty($contract->ChangeOrder))
+                                    @forelse ($contract->ChangeOrder as $change_order)
+                                    <tr>
+                                        <!--begin::Nomor Dokumen-->
+                                        <td>
+                                            <a href="{{ asset('word/'.$change_order->nomor_dokumen) }}">
+                                                {{ $change_order->nomor_dokumen }}
+                                            </a>
+                                        </td>
+                                        <!--end::Nomor Dokumen-->
+                                            <!--begin::Nomor Dokumen-->
+                                        <td>
+                                            {{ $change_order->tanggal_dokumen }}
+                                        </td>
+                                        <!--end::Nomor Dokumen-->
+                                        <!--begin::Uraian-->
+                                        <td>
+                                            {{ $change_order->uraian_dokumen }}
+                                        </td>
+                                        <!--end::Uraian-->
+                                    </tr>
+                                    @empty
+                                    <tr>
+                                        <td colspan="4" class="text-center">
+                                            <h6><b>There is no data</b></h6>
+                                        </td>
+                                    </tr>
+                                    @endforelse
+                                @else
+                                <tr>
+                                    <td colspan="4" class="text-center">
+                                        <h6><b>There is no data</b></h6>
+                                    </td>
+                                </tr>
+                                @endif
+                                @endif
+                            </tbody>
+                            <!--end::Table body-->
+                        </table>
+                        <!--end:: Table Dokumen Table Dokumen Contract Change Order-->
+                        <!--End::Document Table Dokumen Contract Change Order-->
                     </div>
                 </div>
                 <!--end:::Tab pane Laporan Bulanan-->
@@ -6390,6 +6905,677 @@
         <!--end::Modal dialog-->
     </div>
     <!--end::Modal - Question Tender Menang-->
+
+    <br><br>
+    <!--Begin::Modal - Dokumen Site Instruction-->
+    <div class="modal fade" id="kt_modal_dokumen_site_instruction" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-900px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Add Attachment | Document Site Instruction</h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none">
+                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2"
+                                    rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
+                                <rect x="7.41422" y="6" width="16" height="2" rx="1"
+                                    transform="rotate(45 7.41422 6)" fill="black" />
+                            </svg>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
+        
+                    <!--begin::Input group Website-->
+                    <div class="fv-row mb-5">
+                        <form action="/dokumen-site-instruction/upload" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <!--begin::Input-->
+                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                name="id-contract">
+                            <input type="hidden" class="modal-name" name="modal-name">
+                            <!--end::Input-->
+        
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Nomor Dokumen</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" class="form-control form-control-solid" name="nomor-dokumen-instruction"
+                                id="nomor-dokumen" value="{{ old('nomorDokumen') }}" style="font-weight: normal"
+                                placeholder="No. Dokumen Site Instruction" />
+                            <!--end::Input-->
+        
+                            
+                            <!--begin::Input-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Tanggal</span>
+                                <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="tanggal_dokumen">
+                                    <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
+                                </a>
+                            </label>
+                            <input type="date" class="form-control form-control-solid mb-3" name="tanggal-dokumen-instruction"
+                            id="tanggal_dokumen" value="" placeholder="Tanggal Dokumen" style="font-weight: normal" />
+                            <!--end::Input-->
+
+                            <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
+        
+        
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Uraian</span>
+                            </label>
+                            <textarea class="form-control form-control-solid" name="uraian-dokumen-instruction"></textarea>
+                            <label class="fs-6 fw-bold form-label mt-5">
+                                <span style="font-weight: normal">Upload File</span>
+                            </label>
+                            <input type="file" class="form-control form-control-solid" name="file-dokumen-instruction"
+                            id="file-dokumen-instruction" value="" style="font-weight: normal" accept=".docx,.pdf" />
+                    </div>
+                    <!--end::Input group-->
+        
+                    <button type="submit" id="save-dokumen-site-instruction" class="btn btn-lg btn-primary"
+                        data-bs-dismiss="modal">Save</button>
+                    </form>
+        
+        
+                </div>
+                <!--end::Modal body-->
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+    </div>
+    <!--End::Modal = Dokumen Site Instruction-->
+
+    <br><br>
+    <!--Begin::Modal - Dokumen Technical Form-->
+    <div class="modal fade" id="kt_modal_dokumen_technical_form" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-900px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Add Attachment | Document Technical Form</h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none">
+                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2"
+                                    rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
+                                <rect x="7.41422" y="6" width="16" height="2" rx="1"
+                                    transform="rotate(45 7.41422 6)" fill="black" />
+                            </svg>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
+
+                    <!--begin::Input group Website-->
+                    <div class="fv-row mb-5">
+                        <form action="/dokumen-technical-form/upload" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <!--begin::Input-->
+                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                name="id-contract">
+                            <input type="hidden" class="modal-name" name="modal-name">
+                            <!--end::Input-->
+
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Nomor Dokumen</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" class="form-control form-control-solid" name="nomor-technical-form"
+                                id="nomor-technical-form" value="" style="font-weight: normal"
+                                placeholder="No. Dokumen Technical Form" />
+                            <!--end::Input-->
+
+                            
+                            <!--begin::Input-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Tanggal</span>
+                                <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="tanggal-technical-form">
+                                    <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
+                                </a>
+                            </label>
+                            <input type="date" class="form-control form-control-solid mb-3" name="tanggal-technical-form"
+                            id="tanggal-technical-form" value="" placeholder="Tanggal Dokumen Technical Form" style="font-weight: normal" />
+                            <!--end::Input-->
+
+                            <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
+
+                            <!--Begin::Text Area-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Uraian</span>
+                            </label>
+                            <textarea class="form-control form-control-solid" name="uraian-technical-form"></textarea>
+                            <!--End::Text Area-->
+
+                            <!--Begin::Text Input File-->
+                            <label class="fs-6 fw-bold form-label mt-5">
+                                <span style="font-weight: normal">Upload File</span>
+                            </label>
+                            <input type="file" class="form-control form-control-solid" name="file-technical-form"
+                            id="file-dokumen-instruction" value="" style="font-weight: normal" accept=".docx,.pdf" />
+                            <!--End::Text Input File-->
+                    </div>
+                    <!--end::Input group-->
+
+                    <button type="submit" id="save-dokumen-technical-form" class="btn btn-lg btn-primary"
+                        data-bs-dismiss="modal">Save</button>
+                    </form>
+                </div>
+                <!--end::Modal body--> 
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+    </div>
+    <!--End::Modal = Dokumen Technical Form-->
+
+    <br><br>
+    <!--Begin::Modal - Dokumen Technical Query-->
+    <div class="modal fade" id="kt_modal_dokumen_technical_query" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-900px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Add Attachement | Document Technical Query</h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none">
+                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2"
+                                    rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
+                                <rect x="7.41422" y="6" width="16" height="2" rx="1"
+                                    transform="rotate(45 7.41422 6)" fill="black" />
+                            </svg>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
+
+                    <!--begin::Input group Website-->
+                    <div class="fv-row mb-5">
+                        <form action="/dokumen-technical-query/upload" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <!--begin::Input-->
+                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                name="id-contract">
+                            <input type="hidden" class="modal-name" name="modal-name">
+                            <!--end::Input-->
+
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Nomor Dokumen</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" class="form-control form-control-solid" name="nomor-technical-query"
+                                id="nomor-technical-query" value="" style="font-weight: normal"
+                                placeholder="No. Dokumen Technical Query" />
+                            <!--end::Input-->
+
+                            
+                            <!--begin::Input-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Tanggal</span>
+                                <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="tanggal-technical-query">
+                                    <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
+                                </a>
+                            </label>
+                            <input type="date" class="form-control form-control-solid mb-3" name="tanggal-technical-query"
+                            id="tanggal-technical-query" value="" placeholder="Tanggal Dokumen Technical Query" style="font-weight: normal" />
+                            <!--end::Input-->
+
+                            <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
+
+                            <!--Begin::Text Area-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Uraian</span>
+                            </label>
+                            <textarea class="form-control form-control-solid" name="uraian-technical-query"></textarea>
+                            <!--End::Text Area-->
+
+                            <!--Begin::Input File-->
+                            <label class="fs-6 fw-bold form-label mt-5">
+                                <span style="font-weight: normal">Upload File</span>
+                            </label>
+                            <input type="file" class="form-control form-control-solid" name="file-technical-query"
+                            id="file-dokumen-instruction" value="" style="font-weight: normal" accept=".docx,.pdf" />
+                            <!--End::Input File-->
+                    </div>
+                    <!--end::Input group-->
+
+                    <button type="submit" id="save-dokumen-technical-query" class="btn btn-lg btn-primary"
+                        data-bs-dismiss="modal">Save</button>
+                    </form>
+                </div>
+                <!--end::Modal body--> 
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+    </div>
+    <!--End::Modal = Dokumen Technical Query-->
+
+    <br><br>
+    <!--Begin::Modal - Dokumen Field Design Change-->
+    <div class="modal fade" id="kt_modal_dokumen_field_design_change" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-900px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Add Attachement | Document Field Design Change</h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none">
+                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2"
+                                    rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
+                                <rect x="7.41422" y="6" width="16" height="2" rx="1"
+                                    transform="rotate(45 7.41422 6)" fill="black" />
+                            </svg>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
+
+                    <!--begin::Input group Website-->
+                    <div class="fv-row mb-5">
+                        <form action="/dokumen-field-design-change/upload" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <!--begin::Input-->
+                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                name="id-contract">
+                            <input type="hidden" class="modal-name" name="modal-name">
+                            <!--end::Input-->
+
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Nomor Dokumen</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" class="form-control form-control-solid" name="nomor-field-design-change"
+                                id="nomor-field-design-change" value="" style="font-weight: normal"
+                                placeholder="No. Dokumen Field Design Change" />
+                            <!--end::Input-->
+
+                            
+                            <!--begin::Input-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Tanggal</span>
+                                <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="tanggal-field-design-change">
+                                    <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
+                                </a>
+                            </label>
+                            <input type="date" class="form-control form-control-solid mb-3" name="tanggal-field-design-change"
+                            id="tanggal-field-design-change" value="" placeholder="Tanggal Dokumen Field Design Change" style="font-weight: normal" />
+                            <!--end::Input-->
+
+                            <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
+
+                            <!--Begin::Text Area-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Uraian</span>
+                            </label>
+                            <textarea class="form-control form-control-solid" name="uraian-field-design-change"></textarea>
+                            <!--End::Text Area-->
+
+                            <!--Begin::Input File-->
+                            <label class="fs-6 fw-bold form-label mt-5">
+                                <span style="font-weight: normal">Upload File</span>
+                            </label>
+                            <input type="file" class="form-control form-control-solid" name="file-field-design-change"
+                            id="file-dokumen-instruction" value="" style="font-weight: normal" accept=".docx,.pdf" />
+                            <!--End::Input File-->
+                    </div>
+                    <!--end::Input group-->
+
+                    <button type="submit" id="save-dokumen-field-design-change" class="btn btn-lg btn-primary"
+                        data-bs-dismiss="modal">Save</button>
+                    </form>
+                </div>
+                <!--end::Modal body--> 
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+    </div>
+    <!--End::Modal = Dokumen Field Design Change-->
+
+    <br><br>
+    <!--Begin::Modal - Dokumen Contract Change Notice-->
+    <div class="modal fade" id="kt_modal_dokumen_contract_change_notice" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-900px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Add Attachement | Document Contract Change Notice</h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none">
+                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2"
+                                    rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
+                                <rect x="7.41422" y="6" width="16" height="2" rx="1"
+                                    transform="rotate(45 7.41422 6)" fill="black" />
+                            </svg>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
+
+                    <!--begin::Input group Website-->
+                    <div class="fv-row mb-5">
+                        <form action="/dokumen-contract-change-notice/upload" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <!--begin::Input-->
+                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                name="id-contract">
+                            <input type="hidden" class="modal-name" name="modal-name">
+                            <!--end::Input-->
+
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Nomor Dokumen</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" class="form-control form-control-solid" name="nomor-contract-change-notice"
+                                id="nomor-contract-change-notice" value="" style="font-weight: normal"
+                                placeholder="No. Dokumen Contract Change Notice" />
+                            <!--end::Input-->
+
+                            
+                            <!--begin::Input-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Tanggal</span>
+                                <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="tanggal-contract-change-notice">
+                                    <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
+                                </a>
+                            </label>
+                            <input type="date" class="form-control form-control-solid mb-3" name="tanggal-contract-change-notice"
+                            id="tanggal-contract-change-notice" value="" placeholder="Tanggal Dokumen Contract Change Notice" style="font-weight: normal" />
+                            <!--end::Input-->
+
+                            <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
+
+                            <!--Begin::Text Area-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Uraian</span>
+                            </label>
+                            <textarea class="form-control form-control-solid" name="uraian-contract-change-notice"></textarea>
+                            <!--End::Text Area-->
+
+                            <!--Begin::Input File-->
+                            <label class="fs-6 fw-bold form-label mt-5">
+                                <span style="font-weight: normal">Upload File</span>
+                            </label>
+                            <input type="file" class="form-control form-control-solid" name="file-contract-change-notice"
+                            id="file-dokumen-contract-change-notice" value="" style="font-weight: normal" accept=".docx,.pdf" />
+                            <!--End::Input File-->
+                    </div>
+                    <!--end::Input group-->
+
+                    <button type="submit" id="save-dokumen-contract-change-notice" class="btn btn-lg btn-primary"
+                        data-bs-dismiss="modal">Save</button>
+                    </form>
+                </div>
+                <!--end::Modal body--> 
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+    </div>
+    <!--End::Modal = Dokumen Contract Change Notice-->
+
+    <br><br>
+    <!--Begin::Modal - Dokumen Contract Change Proposal-->
+    <div class="modal fade" id="kt_modal_dokumen_contract_change_proposal" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-900px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Add Attachement | Document Contract Change Proposal</h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none">
+                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2"
+                                    rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
+                                <rect x="7.41422" y="6" width="16" height="2" rx="1"
+                                    transform="rotate(45 7.41422 6)" fill="black" />
+                            </svg>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
+
+                    <!--begin::Input group Website-->
+                    <div class="fv-row mb-5">
+                        <form action="/dokumen-contract-change-proposal/upload" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <!--begin::Input-->
+                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                name="id-contract">
+                            <input type="hidden" class="modal-name" name="modal-name">
+                            <!--end::Input-->
+
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Nomor Dokumen</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" class="form-control form-control-solid" name="nomor-contract-change-proposal"
+                                id="nomor-contract-change-proposal" value="" style="font-weight: normal"
+                                placeholder="No. Dokumen Contract Change Proposal" />
+                            <!--end::Input-->
+
+                            
+                            <!--begin::Input-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Tanggal</span>
+                                <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="tanggal-contract-change-proposal">
+                                    <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
+                                </a>
+                            </label>
+                            <input type="date" class="form-control form-control-solid mb-3" name="tanggal-contract-change-proposal"
+                            id="tanggal-contract-change-proposal" value="" placeholder="Tanggal Dokumen Contract Change Proposal" style="font-weight: normal" />
+                            <!--end::Input-->
+
+                            <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
+
+                            <!--Begin::Text Area-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Uraian</span>
+                            </label>
+                            <textarea class="form-control form-control-solid" name="uraian-contract-change-proposal"></textarea>
+                            <!--End::Text Area-->
+
+                            <!--Begin::Input File-->
+                            <label class="fs-6 fw-bold form-label mt-5">
+                                <span style="font-weight: normal">Upload File</span>
+                            </label>
+                            <input type="file" class="form-control form-control-solid" name="file-contract-change-proposal"
+                            id="file-dokumen-contract-change-proposal" value="" style="font-weight: normal" accept=".docx,.pdf" />
+                            <!--End::Input File-->
+                    </div>
+                    <!--end::Input group-->
+
+                    <button type="submit" id="save-dokumen-contract-change-proposal" class="btn btn-lg btn-primary"
+                        data-bs-dismiss="modal">Save</button>
+                    </form>
+                </div>
+                <!--end::Modal body--> 
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+    </div>
+    <!--End::Modal = Dokumen Contract Change Proposal-->
+
+    <br><br>
+    <!--Begin::Modal - Dokumen Contract Change Order-->
+    <div class="modal fade" id="kt_modal_dokumen_contract_change_order" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-900px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Add Attachement | Document Contract Change order</h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none">
+                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2"
+                                    rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
+                                <rect x="7.41422" y="6" width="16" height="2" rx="1"
+                                    transform="rotate(45 7.41422 6)" fill="black" />
+                            </svg>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
+
+                    <!--begin::Input group Website-->
+                    <div class="fv-row mb-5">
+                        <form action="/dokumen-contract-change-order/upload" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <!--begin::Input-->
+                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                name="id-contract">
+                            <input type="hidden" class="modal-name" name="modal-name">
+                            <!--end::Input-->
+
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Nomor Dokumen</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" class="form-control form-control-solid" name="nomor-contract-change-order"
+                                id="nomor-contract-change-order" value="" style="font-weight: normal"
+                                placeholder="No. Dokumen Contract Change Order" />
+                            <!--end::Input-->
+
+                            
+                            <!--begin::Input-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Tanggal</span>
+                                <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="tanggal-contract-change-order">
+                                    <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
+                                </a>
+                            </label>
+                            <input type="date" class="form-control form-control-solid mb-3" name="tanggal-contract-change-order"
+                            id="tanggal-contract-change-order" value="" placeholder="Tanggal Dokumen Contract Change Order" style="font-weight: normal" />
+                            <!--end::Input-->
+
+                            <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
+
+                            <!--Begin::Text Area-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Uraian</span>
+                            </label>
+                            <textarea class="form-control form-control-solid" name="uraian-contract-change-order"></textarea>
+                            <!--End::Text Area-->
+
+                            <!--Begin::Input File-->
+                            <label class="fs-6 fw-bold form-label mt-5">
+                                <span style="font-weight: normal">Upload File</span>
+                            </label>
+                            <input type="file" class="form-control form-control-solid" name="file-contract-change-order"
+                            id="file-dokumen-contract-change-order" value="" style="font-weight: normal" accept=".docx,.pdf" />
+                            <!--End::Input File-->
+                    </div>
+                    <!--end::Input group-->
+
+                    <button type="submit" id="save-dokumen-contract-change-order" class="btn btn-lg btn-primary"
+                        data-bs-dismiss="modal">Save</button>
+                    </form>
+                </div>
+                <!--end::Modal body--> 
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+    </div>
+    <!--End::Modal = Dokumen Contract Change Order-->
+
 @endif
 @endisset
 
