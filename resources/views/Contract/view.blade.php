@@ -2062,7 +2062,7 @@
                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                             Input Resiko
                             <a href="#" Id="Plus" data-bs-toggle="modal"
-                                data-bs-target="#kt_modal_input_resiko_menang">+</a>
+                                data-bs-target="#kt_modal_input_resiko_perolehan">+</a>
                         </h3>
 
                         <!--begin:Table: Review-->
@@ -2539,9 +2539,9 @@
                             <!--end::Table head-->
                             <!--begin::Table body-->
                             <tbody class="fw-bold text-gray-400">
-                                @if ($contract->inputRisks->contains('stage', 3))
+                                @if ($contract->inputRisks->contains('stage', 2))
                                     @forelse ($contract->inputRisks as $inputRisk)
-                                        @if ($inputRisk->stage == 3)
+                                        @if ($inputRisk->stage == 2)
                                             <tr>
                                                 <!--begin::Name=-->
                                                 <td>
@@ -2734,13 +2734,13 @@
                             <!--begin::Table body-->
                             <tbody class="fw-bold text-gray-400">
                                 @forelse ($contract->PerubahanKontrak as $key => $pk)
-                                    <tr>
+                                    <tr class="fw-bold">
                                         <td>
                                             <a href="/contract-management/view/{{url_encode($contract->id_contract)}}/perubahan-kontrak/{{$pk->id_perubahan_kontrak}}" class="text-gray-600 mb-1">{{ $pk->jenis_perubahan }}</a>
                                         </td>
                                         <!--begin::Name=-->
                                         <td>
-                                            <pre class="text-gray-600 mb-1" style="font-family: 'BpmOpenSans-woff';">{!! $pk->tanggal_perubahan !!}</pre>
+                                            <pre class="text-gray-600 mb-1" style="font-family: 'BpmOpenSans-woff';">{!! Carbon\Carbon::create($pk->tanggal_perubahan)->translatedFormat("d F Y") !!}</pre>
                                         </td>
                                         <!--end::Name=-->
                                         <!--begin::Name=-->
@@ -2765,7 +2765,7 @@
                                         <!--end::Name=-->
                                         <!--begin::Name=-->
                                         <td>
-                                            <pre class="text-gray-600 mb-1" style="font-family: 'BpmOpenSans-woff';">{!! $pk->tanggal_pengajuan !!}</pre>
+                                            <pre class="text-gray-600 mb-1" style="font-family: 'BpmOpenSans-woff';">{!! Carbon\Carbon::create($pk->tanggal_pengajuan)->translatedFormat("d F Y") !!}</pre>
                                         </td>
                                         <!--end::Name=-->
                                         <!--begin::Name=-->
@@ -2775,7 +2775,7 @@
                                         <!--end::Name=-->
                                         <!--begin::Name=-->
                                         <td>
-                                            <pre class="text-gray-600 mb-1" style="font-family: 'BpmOpenSans-woff';">{!! $pk->waktu_pengajuan !!}</pre>
+                                            <pre class="text-gray-600 mb-1" style="font-family: 'BpmOpenSans-woff';">{!! Carbon\Carbon::create($pk->waktu_pengajuan)->translatedFormat("d F Y") !!}</pre>
                                         </td>
                                         <!--end::Name=-->
                                     </tr>
@@ -3531,9 +3531,9 @@
                                     <!--end::Table head-->
                                     <!--begin::Table body-->
                                     <tbody class="fw-bold text-gray-400">
-                                        @if ($contract->inputRisks->contains('stage', 4))
+                                        @if ($contract->inputRisks->contains('stage', 3))
                                             @forelse ($contract->inputRisks as $inputRisk)
-                                                @if ($inputRisk->stage == 4)
+                                                @if ($inputRisk->stage == 3)
                                                     <tr>
                                                         <!--begin::Name=-->
                                                         <td>
@@ -4991,8 +4991,8 @@
     </div>
     <!--end::Modal - Issue Project Tender Menang-->
 
-    <!--begin::Modal - Input Resiko Tender Menang-->
-    <div class="modal fade" id="kt_modal_input_resiko_menang" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal - Input Resiko Perolehan-->
+    <div class="modal fade" id="kt_modal_input_resiko_perolehan" tabindex="-1" aria-hidden="true">
         <!--begin::Modal dialog-->
         <div class="modal-dialog modal-dialog-centered mw-900px">
             <!--begin::Modal content-->
@@ -5043,7 +5043,7 @@
                                 <!--begin::Input-->
                                 <select name="kategori" class="form-select form-select-solid"
                                     data-control="select2" data-hide-search="true" data-placeholder="Pilih kategori"
-                                    data-select2-id="select2-data-project-id" tabindex="-1" aria-hidden="true">
+                                    tabindex="-1" aria-hidden="true">
                                     <option value=""></option>
                                     <option value="Kategori 1">Kategori 1</option>
                                     <option value="Kategori 2">Kategori 2</option>
@@ -5060,8 +5060,13 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid" name="kriteria" id="kriteria"
-                                    value="" placeholder="Kriteria" style="font-weight: normal" />
+                                <select name="kriteria" class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true" data-placeholder="Pilih Kategori"
+                                    tabindex="-1" aria-hidden="true">
+                                    <option value=""></option>
+                                    <option value="Kriteria 1">Kriteria 1</option>
+                                    <option value="Kriteria 2">Kriteria 2</option>
+                                </select>
                                 <!--end::Input-->
                             </div>
                         </div>
@@ -5077,8 +5082,13 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3" name="probis_1_2"
-                                    id="probis_1_2" value="" placeholder="Probis Level 1 - 2" style="font-weight: normal" />
+                                <select name="probis_1_2" class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true" data-placeholder="Probis Level 1 - 2"
+                                    tabindex="-1" aria-hidden="true">
+                                    <option value=""></option>
+                                    <option value="Probis 1">Probis 1</option>
+                                    <option value="Probis 2">Probis 2</option>
+                                </select>
                                 <!--end::Input-->
                             </div>
                             <div class="col">
@@ -5088,8 +5098,13 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3" name="probis_terganggu"
-                                    id="probis_terganggu" value="" placeholder="Probis Yang Terganggu" style="font-weight: normal" />
+                                <select name="probis_terganggu" class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true" data-placeholder="Probis Yang Terganggu"
+                                    tabindex="-1" aria-hidden="true">
+                                    <option value=""></option>
+                                    <option value="Probis Terganggu 1">Probis Terganggu 1</option>
+                                    <option value="Probis Terganggu 2">Probis Terganggu 2</option>
+                                </select>
                                 <!--end::Input-->
                             </div>
                         </div>
@@ -5103,8 +5118,13 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3" name="penyebab"
-                                    id="penyebab" value="" placeholder="Penyebab" style="font-weight: normal" />
+                                <select name="penyebab" class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true" data-placeholder="Penyebab"
+                                    tabindex="-1" aria-hidden="true">
+                                    <option value=""></option>
+                                    <option value="Penyebab 1">Penyebab 1</option>
+                                    <option value="Penyebab 2">Penyebab 2</option>
+                                </select>
                                 <!--end::Input-->
                             </div>
                             <div class="col">
@@ -5128,8 +5148,13 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3" name="dampak"
-                                    id="dampak" value="" placeholder="Dampak" style="font-weight: normal" />
+                                <select name="dampak" class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true" data-placeholder="Dampak"
+                                    tabindex="-1" aria-hidden="true">
+                                    <option value=""></option>
+                                    <option value="Dampak 1">Dampak 1</option>
+                                    <option value="Dampak 2">Dampak 2</option>
+                                </select>
                                 <!--end::Input-->
                             </div>
                             <div class="col">
@@ -5166,8 +5191,15 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3" name="probabilitas"
-                                    id="probabilitas" value="" placeholder="Probabilitas" style="font-weight: normal" />
+                                <select name="probabilitas" class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true" data-placeholder="Probabilitas"
+                                    tabindex="-1" aria-hidden="true">
+                                    <option value=""></option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                </select>
                                 <!--end::Input-->
                             </div>
                             <div class="col">
@@ -5189,7 +5221,7 @@
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                 <input type="text" class="form-control form-control-solid mb-3" name="skor"
-                                    id="skor" value="" placeholder="Skor" style="font-weight: normal" />
+                                    id="skor" value="100" placeholder="Skor" style="font-weight: normal" readonly />
                                 <!--end::Input-->
                             </div>
                         </div>
@@ -5202,8 +5234,13 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3" name="tingkat_efektifitas_kontrol"
-                                    id="tingkat_efektifitas_kontrol" value="" placeholder="Tingkat Efektifitas Kontrol" style="font-weight: normal" />
+                                <select name="tingkat_efektifitas_kontrol" class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true" data-placeholder="Tingkat Efektifitas Kontrol"
+                                    tabindex="-1" aria-hidden="true">
+                                    <option value=""></option>
+                                    <option value="Tingkat Efektifitas Kontrol 1">Tingkat Efektifitas Kontrol 1</option>
+                                    <option value="Tingkat Efektifitas Kontrol 2">Tingkat Efektifitas Kontrol 2</option>
+                                </select>
                                 <!--end::Input-->
                             </div>
                             <div class="col">
@@ -5240,8 +5277,13 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3" name="tingkat_efektifitas_tindak_lanjut"
-                                    id="tingkat_efektifitas_tindak_lanjut" value="" placeholder="Tingkat Efektifitas Tindak Lanjut" style="font-weight: normal" />
+                                <select name="tingkat_efektifitas_tindak_lanjut" class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true" data-placeholder="Tingkat Efektifitas Tindak lanjut"
+                                    tabindex="-1" aria-hidden="true">
+                                    <option value=""></option>
+                                    <option value="Tingkat Efektifitas Tindak lanjut 1">Tingkat Efektifitas Tindak lanjut 1</option>
+                                    <option value="Tingkat Efektifitas Tindak lanjut 2">Tingkat Efektifitas Tindak lanjut 2</option>
+                                </select>
                                 <!--end::Input-->
                             </div>
                         </div>
@@ -5342,8 +5384,13 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3" name="pic_rtl"
-                                    id="pic_rtl" value="" placeholder="PIC RTL" style="font-weight: normal" />
+                                <select name="pic_rtl" class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true" data-placeholder="PIC RTL"
+                                    tabindex="-1" aria-hidden="true">
+                                    <option value=""></option>
+                                    <option value="PIC RTL 1">PIC RTL 1</option>
+                                    <option value="PIC RTL 2">PIC RTL 2</option>
+                                </select>
                                 <!--end::Input-->
                             </div>
                         </div>
@@ -5394,7 +5441,7 @@
         </div>
         <!--end::Modal content-->
     </div>
-    <!--end::Modal - Input Resiko Tender Menang-->
+    <!--end::Modal - Input Resiko Perolehan-->
 
     <!--begin::Modal - Input Resiko Tender Menang-->
     <div class="modal fade" id="kt_modal_input_resiko_pelaksanaan" tabindex="-1" aria-hidden="true">
@@ -5423,7 +5470,7 @@
 
                     <form action="/input-risk/upload" method="POST" enctype="multipart/form-data">
                         @csrf
-                        <input type="hidden" value="3" name="stage">
+                        <input type="hidden" value="2" name="stage">
                         <input type="hidden" class="modal-name" name="modal-name">
                         <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" name="id-contract">
         
@@ -5436,7 +5483,7 @@
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                 <input type="text" class="form-control form-control-solid" name="verifikasi" id="verifikasi"
-                                    style="font-weight: normal" value="" placeholder="Verifikasi" />
+                                    style="font-weight: normal" value="{{ auth()->user()->UnitKerja->unit_kerja ?? auth()->user()->name }}" placeholder="Verifikasi" readonly/>
                                 <!--end::Input-->
                             </div>
                             <div class="col">
@@ -5446,8 +5493,13 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid" name="kategori" id="kategori"
-                                    style="font-weight: normal" value="" placeholder="Kategori" />
+                                <select name="kategori" class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true" data-placeholder="Pilih kategori"
+                                    tabindex="-1" aria-hidden="true">
+                                    <option value=""></option>
+                                    <option value="Kategori 1">Kategori 1</option>
+                                    <option value="Kategori 2">Kategori 2</option>
+                                </select>
                                 <!--end::Input-->
                             </div>
                         </div>
@@ -5460,8 +5512,13 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid" name="kriteria" id="kriteria"
-                                    value="" placeholder="Kriteria" style="font-weight: normal" />
+                                <select name="kriteria" class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true" data-placeholder="Pilih Kategori"
+                                    tabindex="-1" aria-hidden="true">
+                                    <option value=""></option>
+                                    <option value="Kriteria 1">Kriteria 1</option>
+                                    <option value="Kriteria 2">Kriteria 2</option>
+                                </select>
                                 <!--end::Input-->
                             </div>
                         </div>
@@ -5477,8 +5534,13 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3" name="probis_1_2"
-                                    id="probis_1_2" value="" placeholder="Probis Level 1 - 2" style="font-weight: normal" />
+                                <select name="probis_1_2" class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true" data-placeholder="Probis Level 1 - 2"
+                                    tabindex="-1" aria-hidden="true">
+                                    <option value=""></option>
+                                    <option value="Probis 1">Probis 1</option>
+                                    <option value="Probis 2">Probis 2</option>
+                                </select>
                                 <!--end::Input-->
                             </div>
                             <div class="col">
@@ -5488,8 +5550,13 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3" name="probis_terganggu"
-                                    id="probis_terganggu" value="" placeholder="Probis Yang Terganggu" style="font-weight: normal" />
+                                <select name="probis_terganggu" class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true" data-placeholder="Probis Yang Terganggu"
+                                    tabindex="-1" aria-hidden="true">
+                                    <option value=""></option>
+                                    <option value="Probis Terganggu 1">Probis Terganggu 1</option>
+                                    <option value="Probis Terganggu 2">Probis Terganggu 2</option>
+                                </select>
                                 <!--end::Input-->
                             </div>
                         </div>
@@ -5503,8 +5570,13 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3" name="penyebab"
-                                    id="penyebab" value="" placeholder="Penyebab" style="font-weight: normal" />
+                                <select name="penyebab" class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true" data-placeholder="Penyebab"
+                                    tabindex="-1" aria-hidden="true">
+                                    <option value=""></option>
+                                    <option value="Penyebab 1">Penyebab 1</option>
+                                    <option value="Penyebab 2">Penyebab 2</option>
+                                </select>
                                 <!--end::Input-->
                             </div>
                             <div class="col">
@@ -5528,8 +5600,13 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3" name="dampak"
-                                    id="dampak" value="" placeholder="Dampak" style="font-weight: normal" />
+                                <select name="dampak" class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true" data-placeholder="Dampak"
+                                    tabindex="-1" aria-hidden="true">
+                                    <option value=""></option>
+                                    <option value="Dampak 1">Dampak 1</option>
+                                    <option value="Dampak 2">Dampak 2</option>
+                                </select>
                                 <!--end::Input-->
                             </div>
                             <div class="col">
@@ -5566,8 +5643,15 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3" name="probabilitas"
-                                    id="probabilitas" value="" placeholder="Probabilitas" style="font-weight: normal" />
+                                <select name="probabilitas" class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true" data-placeholder="Probabilitas"
+                                    tabindex="-1" aria-hidden="true">
+                                    <option value=""></option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                </select>
                                 <!--end::Input-->
                             </div>
                             <div class="col">
@@ -5589,7 +5673,7 @@
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                 <input type="text" class="form-control form-control-solid mb-3" name="skor"
-                                    id="skor" value="" placeholder="Skor" style="font-weight: normal" />
+                                    id="skor" value="100" placeholder="Skor" style="font-weight: normal" readonly />
                                 <!--end::Input-->
                             </div>
                         </div>
@@ -5602,8 +5686,13 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3" name="tingkat_efektifitas_kontrol"
-                                    id="tingkat_efektifitas_kontrol" value="" placeholder="Tingkat Efektifitas Kontrol" style="font-weight: normal" />
+                                <select name="tingkat_efektifitas_kontrol" class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true" data-placeholder="Tingkat Efektifitas Kontrol"
+                                    tabindex="-1" aria-hidden="true">
+                                    <option value=""></option>
+                                    <option value="Tingkat Efektifitas Kontrol 1">Tingkat Efektifitas Kontrol 1</option>
+                                    <option value="Tingkat Efektifitas Kontrol 2">Tingkat Efektifitas Kontrol 2</option>
+                                </select>
                                 <!--end::Input-->
                             </div>
                             <div class="col">
@@ -5640,8 +5729,13 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3" name="tingkat_efektifitas_tindak_lanjut"
-                                    id="tingkat_efektifitas_tindak_lanjut" value="" placeholder="Tingkat Efektifitas Tindak Lanjut" style="font-weight: normal" />
+                                <select name="tingkat_efektifitas_tindak_lanjut" class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true" data-placeholder="Tingkat Efektifitas Tindak lanjut"
+                                    tabindex="-1" aria-hidden="true">
+                                    <option value=""></option>
+                                    <option value="Tingkat Efektifitas Tindak lanjut 1">Tingkat Efektifitas Tindak lanjut 1</option>
+                                    <option value="Tingkat Efektifitas Tindak lanjut 2">Tingkat Efektifitas Tindak lanjut 2</option>
+                                </select>
                                 <!--end::Input-->
                             </div>
                         </div>
@@ -5742,8 +5836,13 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3" name="pic_rtl"
-                                    id="pic_rtl" value="" placeholder="PIC RTL" style="font-weight: normal" />
+                                <select name="pic_rtl" class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true" data-placeholder="PIC RTL"
+                                    tabindex="-1" aria-hidden="true">
+                                    <option value=""></option>
+                                    <option value="PIC RTL 1">PIC RTL 1</option>
+                                    <option value="PIC RTL 2">PIC RTL 2</option>
+                                </select>
                                 <!--end::Input-->
                             </div>
                         </div>
@@ -5823,7 +5922,7 @@
 
                     <form action="/input-risk/upload" method="POST" enctype="multipart/form-data">
                         @csrf
-                        <input type="hidden" value="4" name="stage">
+                        <input type="hidden" value="3" name="stage">
                         <input type="hidden" class="modal-name" name="modal-name">
                         <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" name="id-contract">
         
@@ -5836,7 +5935,7 @@
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                 <input type="text" class="form-control form-control-solid" name="verifikasi" id="verifikasi"
-                                    style="font-weight: normal" value="" placeholder="Verifikasi" />
+                                    style="font-weight: normal" value="{{ auth()->user()->UnitKerja->unit_kerja ?? auth()->user()->name }}" placeholder="Verifikasi" readonly/>
                                 <!--end::Input-->
                             </div>
                             <div class="col">
@@ -5846,8 +5945,13 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid" name="kategori" id="kategori"
-                                    style="font-weight: normal" value="" placeholder="Kategori" />
+                                <select name="kategori" class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true" data-placeholder="Pilih kategori"
+                                    tabindex="-1" aria-hidden="true">
+                                    <option value=""></option>
+                                    <option value="Kategori 1">Kategori 1</option>
+                                    <option value="Kategori 2">Kategori 2</option>
+                                </select>
                                 <!--end::Input-->
                             </div>
                         </div>
@@ -5860,8 +5964,13 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid" name="kriteria" id="kriteria"
-                                    value="" placeholder="Kriteria" style="font-weight: normal" />
+                                <select name="kriteria" class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true" data-placeholder="Pilih Kategori"
+                                    tabindex="-1" aria-hidden="true">
+                                    <option value=""></option>
+                                    <option value="Kriteria 1">Kriteria 1</option>
+                                    <option value="Kriteria 2">Kriteria 2</option>
+                                </select>
                                 <!--end::Input-->
                             </div>
                         </div>
@@ -5877,8 +5986,13 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3" name="probis_1_2"
-                                    id="probis_1_2" value="" placeholder="Probis Level 1 - 2" style="font-weight: normal" />
+                                <select name="probis_1_2" class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true" data-placeholder="Probis Level 1 - 2"
+                                    tabindex="-1" aria-hidden="true">
+                                    <option value=""></option>
+                                    <option value="Probis 1">Probis 1</option>
+                                    <option value="Probis 2">Probis 2</option>
+                                </select>
                                 <!--end::Input-->
                             </div>
                             <div class="col">
@@ -5888,8 +6002,13 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3" name="probis_terganggu"
-                                    id="probis_terganggu" value="" placeholder="Probis Yang Terganggu" style="font-weight: normal" />
+                                <select name="probis_terganggu" class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true" data-placeholder="Probis Yang Terganggu"
+                                    tabindex="-1" aria-hidden="true">
+                                    <option value=""></option>
+                                    <option value="Probis Terganggu 1">Probis Terganggu 1</option>
+                                    <option value="Probis Terganggu 2">Probis Terganggu 2</option>
+                                </select>
                                 <!--end::Input-->
                             </div>
                         </div>
@@ -5903,8 +6022,13 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3" name="penyebab"
-                                    id="penyebab" value="" placeholder="Penyebab" style="font-weight: normal" />
+                                <select name="penyebab" class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true" data-placeholder="Penyebab"
+                                    tabindex="-1" aria-hidden="true">
+                                    <option value=""></option>
+                                    <option value="Penyebab 1">Penyebab 1</option>
+                                    <option value="Penyebab 2">Penyebab 2</option>
+                                </select>
                                 <!--end::Input-->
                             </div>
                             <div class="col">
@@ -5928,8 +6052,13 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3" name="dampak"
-                                    id="dampak" value="" placeholder="Dampak" style="font-weight: normal" />
+                                <select name="dampak" class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true" data-placeholder="Dampak"
+                                    tabindex="-1" aria-hidden="true">
+                                    <option value=""></option>
+                                    <option value="Dampak 1">Dampak 1</option>
+                                    <option value="Dampak 2">Dampak 2</option>
+                                </select>
                                 <!--end::Input-->
                             </div>
                             <div class="col">
@@ -5966,8 +6095,15 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3" name="probabilitas"
-                                    id="probabilitas" value="" placeholder="Probabilitas" style="font-weight: normal" />
+                                <select name="probabilitas" class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true" data-placeholder="Probabilitas"
+                                    tabindex="-1" aria-hidden="true">
+                                    <option value=""></option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                </select>
                                 <!--end::Input-->
                             </div>
                             <div class="col">
@@ -5989,7 +6125,7 @@
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                 <input type="text" class="form-control form-control-solid mb-3" name="skor"
-                                    id="skor" value="" placeholder="Skor" style="font-weight: normal" />
+                                    id="skor" value="100" placeholder="Skor" style="font-weight: normal" readonly />
                                 <!--end::Input-->
                             </div>
                         </div>
@@ -6002,8 +6138,13 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3" name="tingkat_efektifitas_kontrol"
-                                    id="tingkat_efektifitas_kontrol" value="" placeholder="Tingkat Efektifitas Kontrol" style="font-weight: normal" />
+                                <select name="tingkat_efektifitas_kontrol" class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true" data-placeholder="Tingkat Efektifitas Kontrol"
+                                    tabindex="-1" aria-hidden="true">
+                                    <option value=""></option>
+                                    <option value="Tingkat Efektifitas Kontrol 1">Tingkat Efektifitas Kontrol 1</option>
+                                    <option value="Tingkat Efektifitas Kontrol 2">Tingkat Efektifitas Kontrol 2</option>
+                                </select>
                                 <!--end::Input-->
                             </div>
                             <div class="col">
@@ -6040,8 +6181,13 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3" name="tingkat_efektifitas_tindak_lanjut"
-                                    id="tingkat_efektifitas_tindak_lanjut" value="" placeholder="Tingkat Efektifitas Tindak Lanjut" style="font-weight: normal" />
+                                <select name="tingkat_efektifitas_tindak_lanjut" class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true" data-placeholder="Tingkat Efektifitas Tindak lanjut"
+                                    tabindex="-1" aria-hidden="true">
+                                    <option value=""></option>
+                                    <option value="Tingkat Efektifitas Tindak lanjut 1">Tingkat Efektifitas Tindak lanjut 1</option>
+                                    <option value="Tingkat Efektifitas Tindak lanjut 2">Tingkat Efektifitas Tindak lanjut 2</option>
+                                </select>
                                 <!--end::Input-->
                             </div>
                         </div>
@@ -6142,8 +6288,13 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3" name="pic_rtl"
-                                    id="pic_rtl" value="" placeholder="PIC RTL" style="font-weight: normal" />
+                                <select name="pic_rtl" class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true" data-placeholder="PIC RTL"
+                                    tabindex="-1" aria-hidden="true">
+                                    <option value=""></option>
+                                    <option value="PIC RTL 1">PIC RTL 1</option>
+                                    <option value="PIC RTL 2">PIC RTL 2</option>
+                                </select>
                                 <!--end::Input-->
                             </div>
                         </div>
