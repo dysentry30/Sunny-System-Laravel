@@ -494,7 +494,7 @@
                                             </div>
                                             <div class="text-dark text-start">
                                                 {{-- <b>{{ urldecode(urldecode($contract->id_contract)) ?? '' }}</b> --}}
-                                                <b>{{ $contract->id_contract ?? '' }}</b>
+                                                <b>{{ $contract->no_contract ?? '' }}</b>
                                             </div>
                                         </div>
                                         <!--end::Input group Name-->
