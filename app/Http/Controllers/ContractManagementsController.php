@@ -77,7 +77,7 @@ class ContractManagementsController extends Controller
             $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->get()->whereNotIn("unit_kerja", ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "8"]);
             $proyeks_perolehan = $proyeks_all->whereIn("stage", [2, 3, 4, 5, 6])->where("is_cancel", "!=", true)->where("is_tidak_lulus_pq", "!=", true);
             $proyeks_pelaksanaan = $proyeks_all->where("stage", "=", 8)->where("is_cancel", "!=", true)->sortByDesc(function($p) {
-                return !empty($p->ContractManagements) && $p->ContractManagements->id_contract;
+                return !empty($p->ContractManagements) && $p->ContractManagements->stages == 2 && $p->ContractManagements->id_contract;
             });
             $proyeks_pemeliharaan = $proyeks_all->where("is_cancel", "=", false)->filter(function ($p) {
                 return !empty($p->ContractManagements) && $p->ContractManagements->stages == 3;
@@ -100,7 +100,7 @@ class ContractManagementsController extends Controller
             $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->get()->whereNotIn("unit_kerja", ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "8"])->whereIn("unit_kerja", $unit_kerja_user->toArray());
             $proyeks_perolehan = $proyeks_all->whereIn("stage", [2, 3, 4, 5, 6])->where("is_cancel", "!=", true)->where("is_tidak_lulus_pq", "!=", true);
             $proyeks_pelaksanaan = $proyeks_all->where("stage", "=", 8)->where("is_cancel", "!=", true)->sortByDesc(function ($p) {
-                return !empty($p->ContractManagements) && $p->ContractManagements->id_contract;
+                return !empty($p->ContractManagements) && $p->ContractManagements->stages == 2 && $p->ContractManagements->id_contract;
             });
             $proyeks_pemeliharaan = $proyeks_all->where("is_cancel", "=", false)->filter(function ($p) {
                 return !empty($p->ContractManagements) && $p->ContractManagements->stages == 3;
