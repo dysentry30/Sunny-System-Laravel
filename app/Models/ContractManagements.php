@@ -140,6 +140,16 @@ class ContractManagements extends Model
         return $this->hasMany(ContractChangeProposal::class, "id_contract");
     }
 
+    public function PasalKontraktual()
+    {
+        return $this->hasMany(PasalKontraktual::class, "id_contract");
+    }
+
+    public function PerubahanKontrak()
+    {
+        return $this->hasMany(PerubahanKontrak::class, "id_contract");
+    }
+
     public function getAll()
     {
         $data = [];
