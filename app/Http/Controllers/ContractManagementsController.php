@@ -74,7 +74,7 @@ class ContractManagementsController extends Controller
             // $proyeks_pelaksanaan_closing_proyek = DB::table("proyeks as p")->select(["p.*", "c.stages"])->join("contract_managements as c", "c.project_id", "=", "p.kode_proyek")->where("c.stages", 5)->get()->map(function ($data) {
             //     return self::stdClassToModel($data, Proyek::class);
             // });
-            $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->get();
+            $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->get()->whereNotIn("unit_kerja", ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "8"]);
             $proyeks_perolehan = $proyeks_all->whereIn("stage", [2, 3, 4, 5, 6])->where("is_cancel", "!=", true)->where("is_tidak_lulus_pq", "!=", true);
             $proyeks_pelaksanaan = $proyeks_all->where("stage", "=", 8)->where("is_cancel", "!=", true)->sortByDesc(function($p) {
                 return !empty($p->ContractManagements) && $p->ContractManagements->id_contract;
@@ -97,7 +97,7 @@ class ContractManagementsController extends Controller
             //     return self::stdClassToModel($data, Proyek::class);
             // });
             $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja);
-            $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->get()->whereIn("unit_kerja", $unit_kerja_user->toArray());
+            $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->get()->whereNotIn("unit_kerja", ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "8"])->whereIn("unit_kerja", $unit_kerja_user->toArray());
             $proyeks_perolehan = $proyeks_all->whereIn("stage", [2, 3, 4, 5, 6])->where("is_cancel", "!=", true)->where("is_tidak_lulus_pq", "!=", true);
             $proyeks_pelaksanaan = $proyeks_all->where("stage", "=", 8)->where("is_cancel", "!=", true)->sortByDesc(function ($p) {
                 return !empty($p->ContractManagements) && $p->ContractManagements->id_contract;

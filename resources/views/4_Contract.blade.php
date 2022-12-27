@@ -270,7 +270,7 @@
                                                     <!--begin::Name=-->
                                                     @if (!empty($proyek->ContractManagements))
                                                         <td>
-                                                            <a href="/contract-management/view/{{ url_encode($proyek->ContractManagements->id_contract) }}" id="click-name"
+                                                            <a target="_blank" href="/contract-management/view/{{ url_encode($proyek->ContractManagements->id_contract) }}" id="click-name"
                                                                 class="text-hover-primary">{{ $proyek->ContractManagements->no_contract }}</a>
                                                         </td>
                                                     @else
@@ -299,7 +299,7 @@
 
                                                     <!--begin::Email=-->
                                                     <td>
-                                                        {{ number_format((int) $proyek->nilai_rkap, 0, ".", ".") }}
+                                                        {{ number_format((int) $proyek->nilai_perolehan, 0, ".", ".") }}
                                                     </td>
                                                     <!--end::Email=-->
 
@@ -355,7 +355,7 @@
                                                     <!--begin::Name=-->
                                                     @if (!empty($proyek->ContractManagements))
                                                         <td>
-                                                            <a href="/contract-management/view/{{ url_encode($proyek->ContractManagements->id_contract) }}" id="click-name"
+                                                            <a target="_blank" href="/contract-management/view/{{ url_encode($proyek->ContractManagements->id_contract) }}" id="click-name"
                                                                 class="text-hover-primary">{{ $proyek->ContractManagements->no_contract }}</a>
                                                         </td>
                                                     @else
@@ -383,7 +383,7 @@
                                                     <!--end::Jenis Proyek=-->
                                                     <!--begin::Nilai OK=-->
                                                     <td>
-                                                        {{ $proyek->nilai_rkap }}
+                                                        {{ number_format((int) $proyek->nilai_perolehan, 0, ".", ".") }}
                                                     </td>
                                                     <!--end::Nilai OK=-->
                                                     <!--begin::Tanggal Mulai=-->
