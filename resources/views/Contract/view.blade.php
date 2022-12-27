@@ -2703,6 +2703,91 @@
                         </table>
                         <!--End:Table: Pasal Kontraktual-->
 
+                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                            Perubahan Kontrak
+                            <a href="#" Id="Plus" data-bs-toggle="modal"
+                                data-bs-target="#kt_modal_input_perubahan_kontrak">+</a>
+                        </h3>
+
+                        <!--begin:Table: Perubahan Kontrak-->
+                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                            <!--begin::Table head-->
+                            <thead>
+                                <!--begin::Table row-->
+                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                    <th class="min-w-50px">Jenis Perubahan</th>
+                                    <th class="min-w-50px">Tanggal Perubahan</th>
+                                    <th class="min-w-125px">Uraian Perubahan</th>
+                                    <th class="min-w-125px">Jenis Dokumen</th>
+                                    <th class="min-w-125px">No Surat / Instruksi Owner</th>
+                                    <th class="min-w-125px">No Proposal Klaim</th>
+                                    <th class="min-w-125px">Tanggal Pengajuan</th>
+                                    <th class="min-w-125px">Biaya Pengajuan</th>
+                                    <th class="min-w-125px">Waktu Pengajuan</th>
+                                </tr>
+                                <!--end::Table row-->
+                            </thead>
+                            <!--end::Table head-->
+                            <!--begin::Table body-->
+                            <tbody class="fw-bold text-gray-400">
+                                @forelse ($contract->PerubahanKontrak as $key => $pk)
+                                    <tr>
+                                        <td>
+                                            <a href="/contract-management/view/{{url_encode($contract->id_contract)}}/perubahan-kontrak/{{$pk->id_perubahan_kontrak}}" class="text-gray-600 mb-1">{{ $pk->jenis_perubahan }}</a>
+                                        </td>
+                                        <!--begin::Name=-->
+                                        <td>
+                                            <pre class="text-gray-600 mb-1" style="font-family: 'BpmOpenSans-woff';">{!! $pk->tanggal_perubahan !!}</pre>
+                                        </td>
+                                        <!--end::Name=-->
+                                        <!--begin::Name=-->
+                                        <td>
+                                            <pre class="text-gray-600 mb-1" style="font-family: 'BpmOpenSans-woff';">{!! $pk->uraian_perubahan !!}</pre>
+                                        </td>
+                                        <!--end::Name=-->
+                                        <!--begin::Name=-->
+                                        <td>
+                                            <pre class="text-gray-600 mb-1" style="font-family: 'BpmOpenSans-woff';">{!! $pk->jenis_dokumen !!}</pre>
+                                        </td>
+                                        <!--end::Name=-->
+                                        <!--begin::Name=-->
+                                        <td>
+                                            <pre class="text-gray-600 mb-1" style="font-family: 'BpmOpenSans-woff';">{!! $pk->instruksi_owner !!}</pre>
+                                        </td>
+                                        <!--end::Name=-->
+                                        <!--begin::Name=-->
+                                        <td>
+                                            <pre class="text-gray-600 mb-1" style="font-family: 'BpmOpenSans-woff';">{!! $pk->proposal_klaim !!}</pre>
+                                        </td>
+                                        <!--end::Name=-->
+                                        <!--begin::Name=-->
+                                        <td>
+                                            <pre class="text-gray-600 mb-1" style="font-family: 'BpmOpenSans-woff';">{!! $pk->tanggal_pengajuan !!}</pre>
+                                        </td>
+                                        <!--end::Name=-->
+                                        <!--begin::Name=-->
+                                        <td>
+                                            <pre class="text-gray-600 mb-1" style="font-family: 'BpmOpenSans-woff';">{!! number_format($pk->biaya_pengajuan, 0, ".", ".") !!}</pre>
+                                        </td>
+                                        <!--end::Name=-->
+                                        <!--begin::Name=-->
+                                        <td>
+                                            <pre class="text-gray-600 mb-1" style="font-family: 'BpmOpenSans-woff';">{!! $pk->waktu_pengajuan !!}</pre>
+                                        </td>
+                                        <!--end::Name=-->
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="4" class="fw-bolder">There is no data</td>
+                                    </tr>
+                                @endforelse
+                                
+                            </tbody>
+                            <!--end::Table body-->
+
+                        </table>
+                        <!--End:Table: Perubahan Kontrak-->
+
                         <br>
                         <!--Begin::Document Site Instruction-->
                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
@@ -7398,6 +7483,164 @@
         <!--end::Modal dialog-->
     </div>
     <!--End::Modal = Dokumen Contract Change Order-->
+
+    <div class="modal fade" id="kt_modal_input_perubahan_kontrak" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-900px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Add Perubahan Kontrak</h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none">
+                                <rect opacity="0.5" x="6" y="17.3137" width="16"
+                                    height="2" rx="1" transform="rotate(-45 6 17.3137)"
+                                    fill="black" />
+                                <rect x="7.41422" y="6" width="16" height="2"
+                                    rx="1" transform="rotate(45 7.41422 6)" fill="black" />
+                            </svg>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
+
+                    <!--begin::Input group Website-->
+                    <form action="/perubahan-kontrak/upload" method="POST"
+                        enctype="multipart/form-data">
+                        @csrf
+                        <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            name="id-contract">
+                        <input type="hidden" class="modal-name" name="modal-name">
+                        <br>
+                        <div class="row">
+                            <div class="col">
+                                <label class="fs-6 fw-bold form-label">
+                                    <span style="font-weight: normal">Jenis Perubahan</span>
+                                </label>
+                                <select name="jenis-perubahan" id="jenis-perubahan" class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true" data-placeholder="Pilih Jenis Perubahan" tabindex="-1" aria-hidden="true">
+                                    <option value=""></option>
+                                    <option value="VO">Variation Order (VO)</option>
+                                    <option value="Klaim">Klaim</option>
+                                    <option value="Anti Klaim">Anti Klaim</option>
+                                </select>
+                            </div>
+
+                            <div class="col">
+                                <label class="fs-6 fw-bold form-label">
+                                    <span style="font-weight: normal">Tanggal Perubahan</span>
+                                    <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
+                                        <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
+                                    </a>
+                                </label>
+                                <input type="date" name="tanggal-perubahan" class="form-control form-control-solid">
+                            </div>
+                        </div>
+
+                        <br>
+                        <div class="row">
+                            <div class="col">
+                                <label class="fs-6 fw-bold form-label">
+                                    <span style="font-weight: normal">Uraian Perubahan</span>
+                                </label>
+                                <textarea cols="2" name="uraian-perubahan" class="form-control form-control-solid"></textarea>
+                            </div>
+                            <div class="col">
+                                <label class="fs-6 fw-bold form-label">
+                                    <span style="font-weight: normal">Jenis Dokumen</span>
+                                </label>
+                                <select name="jenis-dokumen" id="jenis-dokumen" class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true" data-placeholder="Pilih Jenis Dokumen" tabindex="-1" aria-hidden="true">
+                                    <option value=""></option>
+                                    <option value="Site Instruction">Site Instruction</option>
+                                    <option value="Technical Form">Technical Form</option>
+                                    <option value="Technical Query">Technical Query</option>
+                                    <option value="Field Design Change">Field Design Change</option>
+                                    <option value="Contract Change Notice">Contract Change Notice</option>
+                                    <option value="Contract Change Proposal">Contract Change Proposal</option>
+                                    <option value="Contract Change Order">Contract Change Order</option>
+                                </select>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col">
+                                <label class="fs-6 fw-bold form-label">
+                                    <span style="font-weight: normal">No Surat / Instruksi Owner</span>
+                                </label>
+                                <select name="instruksi-owner" id="instruksi-owner" class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true" data-placeholder="Pilih No Surat" tabindex="-1" aria-hidden="true">
+                                    <option value=""></option>
+                                    <option value="Site Instruction">Site Instruction</option>
+                                    <option value="Technical Form">Technical Form</option>
+                                    <option value="Technical Query">Technical Query</option>
+                                    <option value="Field Design Change">Field Design Change</option>
+                                    <option value="Contract Change Notice">Contract Change Notice</option>
+                                    <option value="Contract Change Proposal">Contract Change Proposal</option>
+                                    <option value="Contract Change Order">Contract Change Order</option>
+                                </select>
+                            </div>
+                            <div class="col">
+                                <label class="fs-6 fw-bold form-label">
+                                    <span style="font-weight: normal">No Proposal Klaim</span>
+                                </label>
+                                <input type="text" name="proposal-klaim" class="form-control form-control-solid"/>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col">
+                                <label class="fs-6 fw-bold form-label">
+                                    <span style="font-weight: normal">Tanggal Pengajuan</span>
+                                    <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
+                                        <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
+                                    </a>
+                                </label>
+                                <input type="date" name="tanggal-pengajuan" class="form-control form-control-solid"/>
+                            </div>
+                            <div class="col mt-3">
+                                <label class="fs-6 fw-bold form-label">
+                                    <span style="font-weight: normal">Biaya Pengajuan</span>
+                                </label>
+                                <input type="text" name="biaya-pengajuan" class="form-control form-control-solid reformat"/>
+                            </div>
+                            <div class="col">
+                                <label class="fs-6 fw-bold form-label">
+                                    <span style="font-weight: normal">Waktu Pengajuan</span>
+                                    <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
+                                        <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
+                                    </a>
+                                </label>
+                                <input type="date" name="waktu-pengajuan" class="form-control form-control-solid"/>
+                            </div>
+                        </div>
+                        <!--end::Input group-->
+                        <div class="modal-footer mt-4">
+                            <button type="submit" id="save-perubahan-kontrak"
+                                class="btn btn-sm btn-primary">Save</button>
+                        </div>
+                    </form>
+
+
+                </div>
+                <!--end::Modal body-->
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+    </div>
+    <!--end::Modal - Perubahan Kontrak Menang-->
 
 @endif
 @endisset
