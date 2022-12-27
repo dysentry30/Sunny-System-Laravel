@@ -912,7 +912,7 @@
 
 
                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                            Review
+                            Tinjauan Dokumen Kontrak
                             <a href="#" Id="Plus" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_create_review">+</a>
                         </h3>
@@ -972,7 +972,7 @@
                         <!--End:Table: Review-->
 
 
-                        &nbsp;<br>
+                        {{-- &nbsp;<br>
                         &nbsp;<br>
 
                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
@@ -1046,7 +1046,7 @@
                             </tbody>
                             <!--end::Table body-->
 
-                        </table>
+                        </table> --}}
                         <!--End:Table: Review-->
                         <br>
                         
@@ -8700,7 +8700,7 @@
             <!--begin::Modal header-->
             <div class="modal-header">
                 <!--begin::Modal title-->
-                <h2>Add Review</h2>
+                <h2>Add Tinjauan Dokumen Kontrak</h2>
                 <!--end::Modal title-->
                 <!--begin::Close-->
                 <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
@@ -8865,7 +8865,7 @@
 <!--end::Modal - Review-->
 
 <!--begin::Modal - Risk Project-->
-<div class="modal fade" id="kt_modal_risk_proyek" tabindex="-1" aria-hidden="true">
+{{-- <div class="modal fade" id="kt_modal_risk_proyek" tabindex="-1" aria-hidden="true">
 <!--begin::Modal dialog-->
 <div class="modal-dialog modal-dialog-centered mw-900px">
     <!--begin::Modal content-->
@@ -9177,9 +9177,9 @@
                         <!--begin::Label-->
                         <label class="fs-6 fw-bold form-label mt-3">
                             <span style="font-weight: normal">Rencana Tindak Lanjut (Mitigasi) Reaktif</span>
-                            {{-- <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
+                            <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
                                 <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
-                            </a> --}}
+                            </a>
                         </label>
                         <!--end::Label-->
                         <!--begin::Input-->
@@ -9246,8 +9246,6 @@
                 <br>
                 
                 <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
-
-                {{-- end::Read File --}}
                 <button type="submit" id="save-risk" class="btn btn-lg btn-primary"
                     data-bs-dismiss="modal">Save</button>
 
@@ -9262,7 +9260,7 @@
 <!--end::Modal content-->
 </div>
 <!--end::Modal dialog-->
-</div>
+</div> --}}
 <!--end::Modal - Add Risk Project-->
 
 <!--begin::Modal - List Questions-->
