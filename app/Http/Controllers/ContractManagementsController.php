@@ -68,8 +68,8 @@ class ContractManagementsController extends Controller
             //     return self::stdClassToModel($data, Proyek::class);
             // });
             $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->get();
-            $proyeks_perolehan = $proyeks_all->where("stage", "<", 7)->where("is_cancel", "=", false);
-            $proyeks_pelaksanaan = $proyeks_all->where("stage", "=", 8)->where("is_cancel", "=", false)->sortByDesc(function($p) {
+            $proyeks_perolehan = $proyeks_all->whereIn("stage", [2, 3, 4, 5, 6])->where("is_cancel", "!=", true)->where("is_tidak_lulus_pq", "!=", true);
+            $proyeks_pelaksanaan = $proyeks_all->where("stage", "=", 8)->where("is_cancel", "!=", true)->sortByDesc(function($p) {
                 return !empty($p->ContractManagements) && $p->ContractManagements->id_contract;
             });
             $proyeks_pemeliharaan = $proyeks_all->where("is_cancel", "=", false)->filter(function ($p) {
