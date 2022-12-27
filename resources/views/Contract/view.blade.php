@@ -5000,7 +5000,7 @@
                 <!--begin::Modal header-->
                 <div class="modal-header">
                     <!--begin::Modal title-->
-                    <h2>Add Resiko Proyek</h2>
+                    <h2>Add Resiko Proyek - Perolehan</h2>
                     <!--end::Modal title-->
                     <!--begin::Close-->
                     <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
@@ -5031,7 +5031,7 @@
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                 <input type="text" class="form-control form-control-solid" name="verifikasi" id="verifikasi"
-                                    style="font-weight: normal" value="" placeholder="Verifikasi" />
+                                    style="font-weight: normal" value="{{ auth()->user()->UnitKerja->unit_kerja ?? auth()->user()->name }}" placeholder="Verifikasi" readonly/>
                                 <!--end::Input-->
                             </div>
                             <div class="col">
@@ -5041,8 +5041,13 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid" name="kategori" id="kategori"
-                                    style="font-weight: normal" value="" placeholder="Kategori" />
+                                <select name="kategori" class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true" data-placeholder="Pilih kategori"
+                                    data-select2-id="select2-data-project-id" tabindex="-1" aria-hidden="true">
+                                    <option value=""></option>
+                                    <option value="Kategori 1">Kategori 1</option>
+                                    <option value="Kategori 2">Kategori 2</option>
+                                </select>
                                 <!--end::Input-->
                             </div>
                         </div>
@@ -5400,7 +5405,7 @@
                 <!--begin::Modal header-->
                 <div class="modal-header">
                     <!--begin::Modal title-->
-                    <h2>Add Resiko Proyek</h2>
+                    <h2>Add Resiko Proyek - Pelaksanaan</h2>
                     <!--end::Modal title-->
                     <!--begin::Close-->
                     <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
