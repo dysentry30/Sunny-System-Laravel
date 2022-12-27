@@ -2049,7 +2049,7 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
             case "Fixed Price":
                 $jenis_terkontrak = "JKT05";
                 break;
-            case "Lumpsum+":
+            case "Lumpsum+Unit Price":
                 $jenis_terkontrak = "JKT06";
                 break;
         };
