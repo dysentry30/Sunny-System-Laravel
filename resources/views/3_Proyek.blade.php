@@ -533,7 +533,7 @@
                                                 <small class="{{ $proyek->proyekBerjalan ? '' : 'badge badge-light-danger' }}">
                                                     {{-- {{ $proyek->proyekBerjalan->name_customer ?? "*Belum Ditentukan" }} --}}
                                                     @if ($proyek->proyekBerjalan)
-                                                    <a target="_blank" href="/customer/view/{{ $proyek->proyekBerjalan->id_customer }}" class="text-gray-800 text-hover-primary">{{ $proyek->proyekBerjalan->name_customer }}</a>
+                                                    <a target="_blank" href="/customer/view/{{ $proyek->proyekBerjalan->id_customer }}/{{ $proyek->proyekBerjalan->name_customer }}" class="text-gray-800 text-hover-primary">{{ $proyek->proyekBerjalan->name_customer }}</a>
                                                     @else
                                                     *Belum Ditentukan
                                                     @endif
@@ -776,7 +776,7 @@
                         <!--begin::Row Kanan+Kiri-->
                         <div class="row fv-row">
                             <!--begin::Col-->
-                            <div class="col-6">
+                            <div class="col-6" style="visibility: hidden">
                                 <!--begin::Input group Website-->
                                 <div class="fv-row mb-7" id="input-jo-detail" style="display: none;">
                                     <!--begin::Label-->

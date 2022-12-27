@@ -141,7 +141,7 @@
                                                     <div class="fv-row mb-7">
                                                         <!--begin::Label-->
                                                         <label class="fs-6 fw-bold form-label mt-3 required">
-                                                            <span class="required">Nomor Telp</span>
+                                                            <span class="">Nomor Telp</span>
                                                         </label>
                                                         <!--end::Label-->
                                                         <!--begin::Input-->
@@ -512,79 +512,80 @@
                                                             </div>
                                                             <!--End begin::Row-->
 
-                                                            <!--Begin::Col-->
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="required">Provinsi</span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-                                                                    <!--begin::Input-->
-                                                                    <input type="text" class="form-control form-control-solid" id="input-provinsi" name="provinsi"
-                                                                        value="{{ $customer->provinsi }}" placeholder="Provinsi" style="display: none" />
-                                                                    <div id="div-provinsi">
-                                                                        <select name="provinsi" id="provinsi" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
-                                                                            onchange="selectProvinsi(this)" 
-                                                                            data-placeholder="Pilih Customer Provinsi">
-                                                                            <option value=""></option>
-                                                                            @foreach ($data_provinsi as $provinsi)
-                                                                                @if ($provinsi->province_id == $customer->provinsi)
-                                                                                    <option value="{{ $provinsi->province_id }}" selected>
-                                                                                        {{ ucwords(strtolower($provinsi->province_name)) }}
-                                                                                    </option>
-                                                                                @else
-                                                                                    <option value="{{ $provinsi->province_id }}">
-                                                                                        {{ ucwords(strtolower($provinsi->province_name)) }}
-                                                                                    </option>
-                                                                                @endif
-                                                                            @endforeach
-                                                                        </select>
-                                                                    </div>
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
-                                                            </div>
-                                                            <!--End begin::Col-->
-                                                            <!--end::Row-->                                                      
-
                                                             <!--begin::Row-->
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="required">Kota / Kabupaten</span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-                                                                    <!--begin::Input-->
-                                                                    <input type="text" class="form-control form-control-solid" id="input-kabupaten" name="kabupaten"
-                                                                        value="{{ $customer->kota_kabupaten }}" placeholder="Kabupaten" style="display: none" />
-                                                                    <div id="div-kabupaten">
-                                                                        <select name="kabupaten" id="kabupaten" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
-                                                                            onchange="selectKabupaten(this)" data-placeholder="Pilih Customer Kabupaten">
-                                                                            <option value=""></option>
-                                                                            @if (isset($data_kabupaten))
-                                                                                @foreach ($data_kabupaten as $kabupaten)
-                                                                                    @if ($kabupaten->name == $customer->kota_kabupaten)
-                                                                                        <option value="{{ $kabupaten->name }}" selected>
-                                                                                            {{ ucwords(strtolower($kabupaten->name)) }}
+                                                            <div class="row fv-row">
+                                                                <!--Begin::Col-->
+                                                                <div class="col-6">
+                                                                    <!--begin::Input group Website-->
+                                                                    <div class="fv-row mb-7">
+                                                                        <!--begin::Label-->
+                                                                        <label class="fs-6 fw-bold form-label mt-3">
+                                                                            <span class="required">Provinsi</span>
+                                                                        </label>
+                                                                        <!--end::Label-->
+                                                                        <!--begin::Input-->
+                                                                        <input type="text" class="form-control form-control-solid" id="input-provinsi" name="provinsi"
+                                                                            value="{{ $customer->provinsi }}" placeholder="Provinsi" style="display: none" />
+                                                                        <div id="div-provinsi">
+                                                                            <select name="provinsi" id="provinsi" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
+                                                                                onchange="selectProvinsi(this)" 
+                                                                                data-placeholder="Pilih Customer Provinsi">
+                                                                                <option value=""></option>
+                                                                                @foreach ($data_provinsi as $provinsi)
+                                                                                    @if ($provinsi->province_id == $customer->provinsi)
+                                                                                        <option value="{{ $provinsi->province_id }}" selected>
+                                                                                            {{ ucwords(strtolower($provinsi->province_name)) }}
                                                                                         </option>
                                                                                     @else
-                                                                                        <option value="{{ $kabupaten->name }}">
-                                                                                            {{ ucwords(strtolower($kabupaten->name)) }}
+                                                                                        <option value="{{ $provinsi->province_id }}">
+                                                                                            {{ ucwords(strtolower($provinsi->province_name)) }}
                                                                                         </option>
                                                                                     @endif
                                                                                 @endforeach
-                                                                            @endif
-                                                                        </select>
+                                                                            </select>
+                                                                        </div>
+                                                                        <!--end::Input-->
                                                                     </div>
-                                                                    <!--end::Input-->
+                                                                    <!--end::Input group-->
                                                                 </div>
-                                                                <!--end::Input group-->
+                                                                <!--End begin::Col-->
+                                                                <div class="col-6">
+                                                                    <!--begin::Input group Website-->
+                                                                    <div class="fv-row mb-7">
+                                                                        <!--begin::Label-->
+                                                                        <label class="fs-6 fw-bold form-label mt-3">
+                                                                            <span class="required">Kota / Kabupaten</span>
+                                                                        </label>
+                                                                        <!--end::Label-->
+                                                                        <!--begin::Input-->
+                                                                        <input type="text" class="form-control form-control-solid" id="input-kabupaten" name="kabupaten"
+                                                                            value="{{ $customer->kota_kabupaten }}" placeholder="Kabupaten" style="display: none" />
+                                                                        <div id="div-kabupaten">
+                                                                            <select name="kabupaten" id="kabupaten" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
+                                                                                onchange="selectKabupaten(this)" data-placeholder="Pilih Customer Kabupaten">
+                                                                                <option value=""></option>
+                                                                                @if (isset($data_kabupaten))
+                                                                                    @foreach ($data_kabupaten as $kabupaten)
+                                                                                        @if ($kabupaten->name == $customer->kota_kabupaten)
+                                                                                            <option value="{{ $kabupaten->name }}" selected>
+                                                                                                {{ ucwords(strtolower($kabupaten->name)) }}
+                                                                                            </option>
+                                                                                        @else
+                                                                                            <option value="{{ $kabupaten->name }}">
+                                                                                                {{ ucwords(strtolower($kabupaten->name)) }}
+                                                                                            </option>
+                                                                                        @endif
+                                                                                    @endforeach
+                                                                                @endif
+                                                                            </select>
+                                                                        </div>
+                                                                        <!--end::Input-->
+                                                                    </div>
+                                                                    <!--end::Input group-->
+                                                                </div>
+                                                                <!--End begin::Col-->
                                                             </div>
-                                                            <!--End begin::Col-->
+                                                            <!--End begin::Row-->
 
                                                             <!--begin:: Row-->
                                                             <div class="row fv-row">
@@ -660,7 +661,7 @@
                                                                             {{-- onchange="selectProvinsi(this)"  --}}
                                                                             data-placeholder="Pilih Jenis Perusahaan">
                                                                             <option value=""></option>
-                                                                            {{-- @foreach ($jenisPerusahaan as $jp)
+                                                                            @foreach ($jenisPerusahaan as $jp)
                                                                                 @if ( !empty($customer->JenisPerusahaan) && $jp->kode_jenis == $customer->JenisPerusahaan->kode_jenis)
                                                                                     <option value="{{ $jp->kode_jenis }}" selected>
                                                                                         {{ $jp->deskripsi }}
@@ -670,7 +671,7 @@
                                                                                         {{ $jp->deskripsi }}
                                                                                     </option>
                                                                                 @endif
-                                                                            @endforeach --}}
+                                                                            @endforeach
                                                                         </select>
                                                                     </div>
                                                                     <!--end::Input-->
@@ -696,7 +697,7 @@
                                                                         <select name="syarat_pembayaran" id="syarat-pembayaran" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
                                                                             data-placeholder="Term of Payment">
                                                                             <option value=""></option>
-                                                                            {{-- @foreach ($syaratPembayaran as $sp)
+                                                                            @foreach ($syaratPembayaran as $sp)
                                                                                 @if (!empty($customer->SyaratPembayaran) && $sp->kode == $customer->SyaratPembayaran->kode)
                                                                                     <option value="{{ $sp->kode }}" selected>
                                                                                         {{ $sp->deskripsi }}
@@ -706,7 +707,7 @@
                                                                                         {{ $sp->deskripsi }}
                                                                                     </option>
                                                                                 @endif
-                                                                            @endforeach --}}
+                                                                            @endforeach
                                                                         </select>
                                                                     </div>
                                                                     <!--end::Input-->
@@ -729,13 +730,13 @@
                                                                 </label>
                                                                 <!--end::label-->
                                                                 <!--begin::Input-->
-                                                                <input type="text" class="form-control form-control-solid" id="input-provinsi" name="tax"
-                                                                    value="{{ null }}" placeholder="Tax" style="display: none" />
+                                                                {{-- <input type="text" class="form-control form-control-solid" id="input-provinsi" name="tax"
+                                                                    value="{{ null }}" placeholder="Tax" style="display: none" /> --}}
                                                                 <div id="div-tax">
                                                                     <select name="tax" id="tax" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
                                                                         data-placeholder="Tax">
                                                                         <option value=""></option>
-                                                                        {{-- @foreach ($taxs as $tax)
+                                                                        @foreach ($taxs as $tax)
                                                                             @if (!empty($customer->Tax) && $tax->kode == $customer->Tax->kode)
                                                                                 <option value="{{ $tax->kode }}" selected>
                                                                                     {{ $tax->deskripsi }}
@@ -745,7 +746,7 @@
                                                                                     {{ $tax->deskripsi }}
                                                                                 </option>
                                                                             @endif
-                                                                        @endforeach --}}
+                                                                        @endforeach
                                                                     </select>
                                                                 </div>
                                                                 <!--end::Input-->
@@ -854,7 +855,7 @@
                                                             <!--End begin::Row-->
                                                         </div>
 
-                                                        <br><br>
+                                                        <br>
 
                                                         <!--begin::INPUT PIC-->
                                                         <h3 class="fw-bolder m-0 required" id="HeadDetail" style="font-size:14px;">
@@ -933,6 +934,108 @@
                                                             <!--end::Table body-->
                                                         </table>
                                                         <!--end::Table-->
+
+                                                        <br>
+
+                                                        <!--begin::Data PIC MANRISK-->
+                                                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">MANRISK
+                                                            <i onclick="hideColumn(this, '#divMANRISK')" id="hide-button" style="display: none" class="bi bi-arrows-collapse"></i><i
+                                                                onclick="showColumn(this, '#divMANRISK')" id="show-button" class="bi bi-arrows-expand"></i>
+                                                        </h3>
+                                                        <br>
+                                                        <div id="divMANRISK" style="display:none">
+                                                            <!--begin::Row-->
+                                                            <div class="row">
+                                                                <!--begin::Col-->
+                                                                    <div class="col">
+                                                                        <div class="form-check">
+                                                                            <input class="form-check-input" type="checkbox" value="key-client" id="key-client">
+                                                                            <label class="form-check-label" for="key-client">
+                                                                            Key Client
+                                                                            </label>
+                                                                            <i class="bi-info-circle-fill" class="btn btn-secondary mx-4"
+                                                                            data-bs-toggle="tooltip" data-bs-placement="top"
+                                                                            data-bs-custom-class="custom-tooltip"
+                                                                            data-bs-title="On Development"
+                                                                            data-bs-html="true"></i>
+                                                                        </div>
+                                                                    </div>
+                                                                <!--end::Col-->
+                                                            </div>
+                                                            <!--end::Row-->
+                                                            <!--Begin::Row-->
+                                                            <div class="row fv-row my-7">
+                                                                <!--Begin::Coloumn-->
+                                                                <div class="col-6">
+                                                                    <label class="fs-6 fw-bold form-label mt-3 required">
+                                                                        <span class="">Forbes Rank</span>
+                                                                    </label>
+                                                                    <!--Begin::Select-->
+                                                                    <div id="div-forbes">
+                                                                        <select name="forbes_rank" id="forbes_rank" class="form-select form-select-solid" data-control="select2" data-hide-search="true"
+                                                                            {{-- onchange="selectProvinsi(this)"  --}}
+                                                                            data-placeholder="Pilih Rank Forbes">
+                                                                            <option value=""></option>
+                                                                            <option value="Urutan 1-50"{{ $customer -> forbes_rank == "Urutan 1-50" ? "selected" : "" }}>Urutan 1-50</option>
+                                                                            <option value="Urutan 51-100"{{ $customer -> forbes_rank == "Urutan 51-100" ? "selected" : "" }}>Urutan 51-100</option>
+                                                                            <option value="Diluar Top 100"{{ $customer -> forbes_rank == "Diluar Top 100" ? "selected" : "" }}>Diluar Top 100</option>                                                                            
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <!--End::Select-->
+                                                                <!--End::Coloumn-->
+
+                                                                <!--Begin::Coloumn-->
+                                                                <div class="col-6">
+                                                                    <label class="fs-6 fw-bold form-label mt-3 required">
+                                                                        <span class="">LQ Rank</span>
+                                                                    </label>
+                                                                    <!--Begin::Select-->
+                                                                    <div id="div-lq">
+                                                                        <select name="lq_rank" id="lq_rank" class="form-select form-select-solid" data-control="select2" data-hide-search="true"
+                                                                            {{-- onchange="selectProvinsi(this)"  --}}
+                                                                            data-placeholder="Pilih Rank LQ">
+                                                                            <option value=""></option>
+                                                                            <option value="Urutan 1-20"{{ $customer -> lq_rank == "Urutan 1-20" ? "selected" : "" }}>Urutan 1-20</option>
+                                                                            <option value="Urutan 21-45"{{ $customer -> lq_rank == "Urutan 21-45" ? "selected" : "" }}>Urutan 21-45</option>
+                                                                            <option value="Diluar Top 45"{{ $customer -> lq_rank == "Diluar Top 45" ? "selected" : "" }}>Diluar Top 45</option>                                                                            
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <!--End::Select-->
+                                                                <!--End::Coloumn-->
+                                                            </div>
+
+                                                            <!--Begin::Row-->
+                                                            <div class="row fv-row">
+                                                                <div class="col">
+                                                                    <!--begin::Label-->
+                                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                                        <span class="">Layer Segmentasi</span>
+                                                                        <i class="bi-info-circle-fill" class="btn btn-secondary mx-4"
+                                                                        data-bs-toggle="tooltip" data-bs-placement="top"
+                                                                        data-bs-custom-class="custom-tooltip"
+                                                                        data-bs-title="On Development"
+                                                                        data-bs-html="true"></i>
+                                                                    </label>
+                                                                    <!--end::Label-->
+                                                                    <!--begin::Input-->
+                                                                    <select name="layer_segmentasi" id="layer_segmentasi" class="form-select form-select-solid pe-5" data-control="select2" data-hide-search="false"
+                                                                        data-placeholder="Pilih Layer Segmentasi">
+                                                                        <option value="" selected></option>
+                                                                        <option value="Decision Maker"{{ $customer -> layer_segmentasi == "Decision Maker" ? "selected" : "" }}>Decision Maker</option>
+                                                                        <option value="Influencer"{{ $customer -> layer_segmentasi == "Influencer" ? "selected" : "" }}>Influencer</option>
+                                                                        <option value="Buyer"{{ $customer -> layer_segmentasi == "Buyer" ? "selected" : "" }}>Buyer</option>
+                                                                        <option value="User"{{ $customer -> layer_segmentasi == "User" ? "selected" : "" }}>User</option>
+                                                                        <option value="Gate Keeper"{{ $customer -> layer_segmentasi == "Gate Keeper" ? "selected" : "" }}>Gate Keeper</option>
+                                                                    </select>
+                                                                    <!--end::Input-->
+                                                                </div>
+                                                            </div>
+                                                            <!--End::Row-->
+                                                        </div>
+                                                        <!--end::Data PIC MANRISK-->
+
                                                         <br><br>
 
                                                         <!--begin::Data SAP-->
@@ -1654,105 +1757,8 @@
                                                             <!--End begin::Row-->
                                                         </div>
                                                         <!--end::Data SAP-->
-                                                        <br><br>
-                                                        <!--begin::Data PIC MANRISK-->
-                                                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">MANRISK
-                                                            <i onclick="hideColumn(this, '#divMANRISK')" id="hide-button" style="display: none" class="bi bi-arrows-collapse"></i><i
-                                                                onclick="showColumn(this, '#divMANRISK')" id="show-button" class="bi bi-arrows-expand"></i>
-                                                        </h3>
                                                         <br>
-                                                        <div id="divMANRISK" style="display:none">
-                                                            <!--begin::Row-->
-                                                            <div class="row">
-                                                                <!--begin::Col-->
-                                                                    <div class="col">
-                                                                        <div class="form-check">
-                                                                            <input class="form-check-input" type="checkbox" value="key-client" id="key-client">
-                                                                            <label class="form-check-label" for="key-client">
-                                                                            Key Client
-                                                                            </label>
-                                                                            <i class="bi-info-circle-fill" class="btn btn-secondary mx-4"
-                                                                            data-bs-toggle="tooltip" data-bs-placement="top"
-                                                                            data-bs-custom-class="custom-tooltip"
-                                                                            data-bs-title="On Development"
-                                                                            data-bs-html="true"></i>
-                                                                        </div>
-                                                                    </div>
-                                                                <!--end::Col-->
-                                                            </div>
-                                                            <!--end::Row-->
-                                                            <!--Begin::Row-->
-                                                        <div class="row fv-row my-7">
-                                                            <!--Begin::Coloumn-->
-                                                            <div class="col-6">
-                                                                <label class="fs-6 fw-bold form-label mt-3 required">
-                                                                    <span class="">Forbes Rank</span>
-                                                                </label>
-                                                                <!--Begin::Select-->
-                                                                <div id="div-forbes">
-                                                                    <select name="forbes_rank" id="forbes_rank" class="form-select form-select-solid" data-control="select2" data-hide-search="true"
-                                                                        {{-- onchange="selectProvinsi(this)"  --}}
-                                                                        data-placeholder="Pilih Rank Forbes">
-                                                                        <option value=""></option>
-                                                                        <option value="Urutan 1-50"{{ $customer -> forbes_rank == "Urutan 1-50" ? "selected" : "" }}>Urutan 1-50</option>
-                                                                        <option value="Urutan 51-100"{{ $customer -> forbes_rank == "Urutan 51-100" ? "selected" : "" }}>Urutan 51-100</option>
-                                                                        <option value="Diluar Top 100"{{ $customer -> forbes_rank == "Diluar Top 100" ? "selected" : "" }}>Diluar Top 100</option>                                                                            
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                            <!--End::Select-->
-                                                            <!--End::Coloumn-->
 
-                                                            <!--Begin::Coloumn-->
-                                                            <div class="col-6">
-                                                                <label class="fs-6 fw-bold form-label mt-3 required">
-                                                                    <span class="">LQ Rank</span>
-                                                                </label>
-                                                                <!--Begin::Select-->
-                                                                <div id="div-lq">
-                                                                    <select name="lq_rank" id="lq_rank" class="form-select form-select-solid" data-control="select2" data-hide-search="true"
-                                                                        {{-- onchange="selectProvinsi(this)"  --}}
-                                                                        data-placeholder="Pilih Rank LQ">
-                                                                        <option value=""></option>
-                                                                        <option value="Urutan 1-20"{{ $customer -> lq_rank == "Urutan 1-20" ? "selected" : "" }}>Urutan 1-20</option>
-                                                                        <option value="Urutan 21-45"{{ $customer -> lq_rank == "Urutan 21-45" ? "selected" : "" }}>Urutan 21-45</option>
-                                                                        <option value="Diluar Top 45"{{ $customer -> lq_rank == "Diluar Top 45" ? "selected" : "" }}>Diluar Top 45</option>                                                                            
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                            <!--End::Select-->
-                                                            <!--End::Coloumn-->
-                                                        </div>
-
-                                                        <!--Begin::Row-->
-                                                        <div class="row fv-row">
-                                                            <div class="col">
-                                                                <!--begin::Label-->
-                                                                <label class="fs-6 fw-bold form-label mt-3">
-                                                                    <span class="">Layer Segmentasi</span>
-                                                                    <i class="bi-info-circle-fill" class="btn btn-secondary mx-4"
-                                                                    data-bs-toggle="tooltip" data-bs-placement="top"
-                                                                    data-bs-custom-class="custom-tooltip"
-                                                                    data-bs-title="On Development"
-                                                                    data-bs-html="true"></i>
-                                                                </label>
-                                                                <!--end::Label-->
-                                                                 <!--begin::Input-->
-                                                                <select name="layer_segmentasi" id="layer_segmentasi" class="form-select form-select-solid pe-5" data-control="select2" data-hide-search="false"
-                                                                    data-placeholder="Pilih Layer Segmentasi">
-                                                                    <option value="" selected></option>
-                                                                    <option value="Decision Maker"{{ $customer -> layer_segmentasi == "Decision Maker" ? "selected" : "" }}>Decision Maker</option>
-                                                                    <option value="Influencer"{{ $customer -> layer_segmentasi == "Influencer" ? "selected" : "" }}>Influencer</option>
-                                                                    <option value="Buyer"{{ $customer -> layer_segmentasi == "Buyer" ? "selected" : "" }}>Buyer</option>
-                                                                    <option value="User"{{ $customer -> layer_segmentasi == "User" ? "selected" : "" }}>User</option>
-                                                                    <option value="Gate Keeper"{{ $customer -> layer_segmentasi == "Gate Keeper" ? "selected" : "" }}>Gate Keeper</option>
-                                                                </select>
-                                                                 <!--end::Input-->
-                                                            </div>
-                                                        </div>
-                                                        <!--End::Row-->
-                                                        </div>
-                                                        <!--end::Data PIC MANRISK-->
                                                     </div>
                                                     <!--end:::Tab pane Informasi Perusahaan-->
 

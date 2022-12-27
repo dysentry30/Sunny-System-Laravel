@@ -53,6 +53,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Google\Service\FactCheckTools\Resource\Claims;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\URL;
 
 class ProyekController extends Controller
 {
@@ -244,6 +245,23 @@ class ProyekController extends Controller
         // dd($newProyek);
 
         if ($newProyek->save()) {
+
+            if ($tipe_proyek == "P"){
+                $uuid = new Uuid();
+                $contractManagements = new ContractManagements();
+                // dd($contractManagements);
+                $contractManagements->project_id = $kode_proyek;
+                $contractManagements->id_contract = $uuid->uuid3();
+                // $contractManagements->contract_in = $dataProyek["tanggal-mulai-kontrak"];
+                // $contractManagements->contract_out = $dataProyek["tanggal-akhir-kontrak"];
+                // $contractManagements->number_spk = $dataProyek["nospk-external"];
+                // $contractManagements->value = preg_replace("/[^0-9]/i", "", $dataProyek["nilai-perolehan"]);
+                // $contractManagements->value_review = 0;
+                $contractManagements->contract_proceed = "Belum Selesai";
+                $contractManagements->stages = (int) 1;
+                $contractManagements->save();
+            }   
+
             if ($idCustomer != null) {
                 $customerHistory = ProyekBerjalans::where('kode_proyek', "=", $kode_proyek)->get()->first();
                 // dd($customerHistory);
@@ -354,7 +372,7 @@ class ProyekController extends Controller
         // }
         $validation = Validator::make($dataProyek, $rules, $messages);
         if ($validation->fails()) {
-            dd($validation);
+            // dd($validation);
             Alert::error('Error', "Proyek Gagal Diubah, Periksa Kembali !");
             $request->old("nama-proyek");
             Session::flash('failed', 'Proyek gagal dibuat, Periksa kembali button "NEW" !');
@@ -568,39 +586,45 @@ class ProyekController extends Controller
 
         Alert::toast("Edit Berhasil", "success")->autoClose(3000);
 
-        if (isset($kode_proyek) && isset($dataProyek["nilai-perolehan"]) && isset($dataProyek["nospk-external"]) && isset($dataProyek["nomor-terkontrak"]) && isset($dataProyek["tanggal-mulai-kontrak"]) && isset($dataProyek["tanggal-akhir-kontrak"])) {
-            $contractManagements = ContractManagements::get()->where("project_id", "=", $kode_proyek)->first();
-            // $contractManagements = ContractManagements::find($newProyek->nomor_terkontrak);
-            // dd($contractManagements);
-
-            if (empty($contractManagements)) {
-                $contractManagements = new ContractManagements();
-                // dd($contractManagements);
-                $contractManagements->project_id = $kode_proyek;
-                // $contractManagements->id_contract = urlencode(urlencode($dataProyek["nomor-terkontrak"]));
-                $contractManagements->id_contract = $dataProyek["nomor-terkontrak"];
-                $contractManagements->contract_in = $dataProyek["tanggal-mulai-kontrak"];
-                $contractManagements->contract_out = $dataProyek["tanggal-akhir-kontrak"];
-                $contractManagements->number_spk = $dataProyek["nospk-external"];
-                $contractManagements->contract_proceed = "Belum Selesai";
-                $contractManagements->value = preg_replace("/[^0-9]/i", "", $dataProyek["nilai-perolehan"]);
-                $contractManagements->stages = (int) 1;
-                $contractManagements->value_review = 0;
-                $contractManagements->save();
+        // if (isset($kode_proyek) && isset($dataProyek["nilai-perolehan"]) && isset($dataProyek["nospk-external"]) && isset($dataProyek["nomor-terkontrak"]) && isset($dataProyek["tanggal-mulai-kontrak"]) && isset($dataProyek["tanggal-akhir-kontrak"])) {
+        $contractManagements = ContractManagements::get()->where("project_id", "=", $kode_proyek)->first();
+        if (empty($contractManagements)) {
+            $uuid = new Uuid();
+            $contractManagements = new ContractManagements();
+            $contractManagements->project_id = $kode_proyek;
+            // $contractManagements->id_contract = urlencode(urlencode($dataProyek["nomor-terkontrak"]));
+            $contractManagements->id_contract = $uuid->uuid3();
+            $contractManagements->no_contract = $dataProyek["nomor-terkontrak"];
+            $contractManagements->contract_in = $dataProyek["tanggal-mulai-kontrak"];
+            $contractManagements->contract_out = $dataProyek["tanggal-akhir-kontrak"];
+            $contractManagements->number_spk = $dataProyek["nospk-external"];
+            $contractManagements->contract_proceed = "Belum Selesai";
+            $contractManagements->value = preg_replace("/[^0-9]/i", "", $dataProyek["nilai-perolehan"]);
+            if ($newProyek->stage == 8) {
+                $contractManagements->stages = (int) 2;
             } else {
-                // dd($contractManagements);
-                $contractManagements->project_id = $kode_proyek;
-                $contractManagements->id_contract = $newProyek->nomor_terkontrak;
-                $contractManagements->contract_in = $dataProyek["tanggal-mulai-kontrak"];
-                $contractManagements->contract_out = $dataProyek["tanggal-akhir-kontrak"];
-                $contractManagements->number_spk = $dataProyek["nospk-external"];
-                $contractManagements->contract_proceed = "Belum Selesai";
-                $contractManagements->value = preg_replace("/[^0-9]/i", "", $dataProyek["nilai-perolehan"]);
                 $contractManagements->stages = (int) 1;
-                $contractManagements->value_review = 0;
-                $contractManagements->save();
             }
+            $contractManagements->value_review = 0;
+            $contractManagements->save();
+        } else {
+            // dd($contractManagements);
+            $contractManagements->project_id = $kode_proyek;
+            $contractManagements->no_contract = $newProyek->nomor_terkontrak;
+            $contractManagements->contract_in = $dataProyek["tanggal-mulai-kontrak"];
+            $contractManagements->contract_out = $dataProyek["tanggal-akhir-kontrak"];
+            $contractManagements->number_spk = $dataProyek["nospk-external"];
+            $contractManagements->contract_proceed = "Belum Selesai";
+            $contractManagements->value = preg_replace("/[^0-9]/i", "", $dataProyek["nilai-perolehan"]);
+            if ($newProyek->stage == 8) {
+                $contractManagements->stages = (int) 2;
+            } else {
+                $contractManagements->stages = (int) 1;
+            }
+            $contractManagements->value_review = 0;
+            $contractManagements->save();
         }
+        // }
 
         // dd($dataProyek);
         // if ($dataProyek["nilai-perolehan"] != null && $newProyek->stage == 8 && $dataProyek["bulan-ri-perolehan"] != null){
@@ -813,31 +837,31 @@ class ProyekController extends Controller
             // dd($contractManagements);
 
             if (empty($contractManagements)) {
-                $contractManagements = new ContractManagements();
-                // dd($contractManagements);
-                $contractManagements->project_id = $kode_proyek;
-                // $contractManagements->id_contract = urlencode(urlencode($dataProyek["nomor-terkontrak"]));
-                $contractManagements->id_contract = $dataProyek["nomor-terkontrak"];
-                $contractManagements->contract_in = $dataProyek["tanggal-mulai-kontrak"];
-                $contractManagements->contract_out = $dataProyek["tanggal-akhir-kontrak"];
-                $contractManagements->number_spk = $dataProyek["nospk-external"];
-                $contractManagements->contract_proceed = "Belum Selesai";
-                $contractManagements->value = preg_replace("/[^0-9]/i", "", $dataProyek["nilai-perolehan"]);
-                $contractManagements->stages = (int) 1;
-                $contractManagements->value_review = 0;
-                $contractManagements->save();
+                // $contractManagements = new ContractManagements();
+                // // dd($contractManagements);
+                // $contractManagements->project_id = $kode_proyek;
+                // // $contractManagements->id_contract = urlencode(urlencode($dataProyek["nomor-terkontrak"]));
+                // $contractManagements->id_contract = $dataProyek["nomor-terkontrak"];
+                // $contractManagements->contract_in = $dataProyek["tanggal-mulai-kontrak"];
+                // $contractManagements->contract_out = $dataProyek["tanggal-akhir-kontrak"];
+                // $contractManagements->number_spk = $dataProyek["nospk-external"];
+                // $contractManagements->contract_proceed = "Belum Selesai";
+                // $contractManagements->value = preg_replace("/[^0-9]/i", "", $dataProyek["nilai-perolehan"]);
+                // $contractManagements->stages = (int) 1;
+                // $contractManagements->value_review = 0;
+                // $contractManagements->save();
             } else {
                 // dd($contractManagements);
-                $contractManagements->project_id = $kode_proyek;
-                $contractManagements->id_contract = $newProyek->nomor_terkontrak;
-                $contractManagements->contract_in = $dataProyek["tanggal-mulai-kontrak"];
-                $contractManagements->contract_out = $dataProyek["tanggal-akhir-kontrak"];
-                $contractManagements->number_spk = $dataProyek["nospk-external"];
-                $contractManagements->contract_proceed = "Belum Selesai";
-                $contractManagements->value = preg_replace("/[^0-9]/i", "", $dataProyek["nilai-perolehan"]);
-                $contractManagements->stages = (int) 1;
-                $contractManagements->value_review = 0;
-                $contractManagements->save();
+                // $contractManagements->project_id = $kode_proyek;
+                // $contractManagements->id_contract = $newProyek->nomor_terkontrak;
+                // $contractManagements->contract_in = $dataProyek["tanggal-mulai-kontrak"];
+                // $contractManagements->contract_out = $dataProyek["tanggal-akhir-kontrak"];
+                // $contractManagements->number_spk = $dataProyek["nospk-external"];
+                // $contractManagements->contract_proceed = "Belum Selesai";
+                // $contractManagements->value = preg_replace("/[^0-9]/i", "", $dataProyek["nilai-perolehan"]);
+                // $contractManagements->stages = (int) 1;
+                // $contractManagements->value_review = 0;
+                // $contractManagements->save();
             }
         }
 
@@ -1390,6 +1414,8 @@ class ProyekController extends Controller
 
     public function stage(Request $request)
     {
+        // $url = $request->url;
+        // dd($url);
         $kodeProyek = $request->kode_proyek;
         $proyekStage = Proyek::find($kodeProyek);
         $proyekAttach = $proyekStage->AttachmentMenang;
@@ -1504,6 +1530,7 @@ class ProyekController extends Controller
                     Alert::html("Error", "Pastikan <b>Provinsi</b> pada Field <b>Pelanggan</b> sudah terisi!", "error")->autoClose(10000);
                     return redirect()->back();
                 }
+                // dd($customer);
                 $data_nasabah_online = collect([
                     "nmnasabah" => "$customer->name",
                     "alamat" => "$customer->address_1",
@@ -1519,7 +1546,7 @@ class ProyekController extends Controller
                     "email1" => $pic->email_pic ?? "",
                     "telpon1" => $pic->phone_pic ?? "",
                     "handphone" => $pic->phone_pic ?? "",
-                    "tipe_perusahaan" => "-",
+                    "tipe_perusahaan" => "$customer->jenis_perusahaan",
                     "tipe_lain_perusahaan" => "-",
                     "cotid" => "11",
                     "dtsap" => [
@@ -1621,7 +1648,7 @@ class ProyekController extends Controller
         
                                     "CUST_AKONT" => "",
         
-                                    "CUST_C_ZTERM" => "",
+                                    "CUST_C_ZTERM" => "$customer->syarat_pembayaran",
         
                                     "CUST_WTAX" => [
                                         [
@@ -1656,11 +1683,11 @@ class ProyekController extends Controller
         
                                     "INCO2_L" => "",
         
-                                    "CUST_S_ZTERM" => "",
+                                    "CUST_S_ZTERM" => "$customer->syarat_pembayaran",
         
                                     "KTGRD" => "",
         
-                                    "TAXKD" => "",
+                                    "TAXKD" => "$customer->tax",
         
                                     "VEND_BUKRS" => "",
         
@@ -1702,7 +1729,7 @@ class ProyekController extends Controller
                 // dd($proyekStage->nilai_perolehan, $proyekStage->porsi_jo, $proyekStage->nilai_kontrak_keseluruhan);
                 if ($proyekStage->nilai_perolehan != null && $proyekStage->porsi_jo != null) {
                     $nilaiPerolehan = (int) str_replace('.', '', $proyekStage->nilai_perolehan);
-                    $kontrakKeseluruhan = ($nilaiPerolehan * 100) / $proyekStage->porsi_jo;
+                    $kontrakKeseluruhan = ($nilaiPerolehan * 100) / (float) $proyekStage->porsi_jo;
 
                     $proyekStage->nilai_kontrak_keseluruhan = round($kontrakKeseluruhan);
                     $proyekStage->save();
@@ -1711,13 +1738,25 @@ class ProyekController extends Controller
                     Alert::error("Error", "Silahkan Isi Attachment Menang Terlebih Dahulu !");
                     return redirect()->back();
                 } else {
-                    $nasabah_online_response = Http::post("http://nasabah.wika.co.id/index.php/mod_excel/post_json_crm_dev", $data_nasabah_online)->json();
-                    if (!$nasabah_online_response["status"] && !str_contains($nasabah_online_response["msg"], "sudah ada dalam nasabah online")) {
-                        Alert::error("Error", $nasabah_online_response["msg"]);
-                        return redirect()->back();
+                    $contractManagements = ContractManagements::get()->where("project_id", "=", $proyekStage->kode_proyek)->first();
+                    if (str_contains(URL::full() , 'crm.wika.co.id')) {
+                        $nasabah_online_response = Http::post("http://nasabah.wika.co.id/index.php/mod_excel/post_json_crm_dev", $data_nasabah_online)->json();
+                        if (!$nasabah_online_response["status"] && !str_contains($nasabah_online_response["msg"], "sudah ada dalam nasabah online")) {
+                            Alert::error("Error", $nasabah_online_response["msg"]);
+                            return redirect()->back();
+                        }
+                        $request->stage = 8;
+                        if (!empty($contractManagements)) {
+                                $contractManagements->stages = (int) 2;
+                            $contractManagements->save();
+                        }
+                    } else {
+                        $request->stage = 8;
+                        if (!empty($contractManagements)) {
+                                $contractManagements->stages = (int) 2;
+                            $contractManagements->save();
+                        }
                     }
-                    // dd($nasabah_online_response);
-                    $request->stage = 8;
                 }
             } elseif (!empty($data["stage-terendah"]) && $data["stage-terendah"] == "Terendah") {
                 if ($proyekAttach->count() == 0) {
