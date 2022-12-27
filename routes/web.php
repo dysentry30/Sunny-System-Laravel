@@ -182,6 +182,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     Route::get('/contract-management/view/{id_contract}/draft-contract/{draftContracts}', [ContractManagementsController::class, 'draftContractView']);
 
+    Route::get('/contract-management/view/{id_contract}/perubahan-kontrak/{perubahan_kontrak}', [ContractManagementsController::class, 'perubahanKontrakView']);
+
     // Route::get('/contract-management/view/{id_contract}/draft-contract/{is_tender_menang}', [ContractManagementsController::class, 'draftContractView']);
     Route::get('/contract-management/view/{id_contract}/draft-contract/tender-menang/1', [ContractManagementsController::class, 'tenderMenang']);
 
@@ -1444,6 +1446,10 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     Route::post("/mom-meeting/upload", [ContractManagementsController::class, "momMeeting"]);
 
+    Route::post("/perubahan-kontrak/upload", [ContractManagementsController::class, "uploadPerubahanKontrak"]);
+
+    Route::post("/perubahan-kontrak/update", [ContractManagementsController::class, "uploadPerubahanKontrak"]);
+
     Route::post("/pasal-kontraktual/upload", [ContractManagementsController::class, "uploadPasalKontraktual"]);
 
     Route::get("/document/view/{id}/{id_document}", [DocumentController::class, "documentView"]);
@@ -1457,6 +1463,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post('/stage/save', [StageController::class, "stageSave"]);
 
     Route::post('/stage/addendum/save', [StageController::class, "stageAddendumSave"]);
+
+    Route::post('/stage/perubahan-kontrak/save', [StageController::class, "stagePerubahanKontrakSave"]);
 
     Route::post('/pasal/save', [PasalController::class, "pasalSave"]);
 
@@ -2069,7 +2077,7 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
                 ]
             ]
         ];
-        $jenis_proyek = 0;
+        $jenis_proyek = "";
         switch ($p->jenis_proyek) {
             case "I":
                 $jenis_proyek = "Internal";
@@ -2078,25 +2086,25 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
                 $jenis_proyek = "Non JO";
                 break;
             case "J":
-                // $jenis_proyek = "JO Portion Member";
-                switch ($p->kategori_jo) {
-                    case "30":
-                        $jenis_proyek = "JO Integrated Leader";
-                        break;
-                    case "31":
-                        $jenis_proyek = "JO Integrated Member";
-                        break;
-                    case "40":
-                        $jenis_proyek = "JO Portion Leader";
-                        break;
-                    case "41":
-                        $jenis_proyek = "JO Portion Member";
-                        break;
-                    case "50":
-                        $jenis_proyek = "JO Mix Integrated - Portion";
-                        break;
-                }
-                break;
+                $jenis_proyek = "JO";
+                // switch ($p->kategori_jo) {
+                //     case "30":
+                //         $jenis_proyek = "JO Integrated Leader";
+                //         break;
+                //     case "31":
+                //         $jenis_proyek = "JO Integrated Member";
+                //         break;
+                //     case "40":
+                //         $jenis_proyek = "JO Portion Leader";
+                //         break;
+                //     case "41":
+                //         $jenis_proyek = "JO Portion Member";
+                //         break;
+                //     case "50":
+                //         $jenis_proyek = "JO Mix Integrated - Portion";
+                //         break;
+                // }
+                // break;
         }
         $p->UsrJenis = [
             "inline" => [
