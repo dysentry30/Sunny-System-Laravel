@@ -2049,7 +2049,7 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
             case "Fixed Price":
                 $jenis_terkontrak = "JKT05";
                 break;
-            case "Lumpsum+Unit Price":
+            case "Lumsump+Unit Price":
                 $jenis_terkontrak = "JKT06";
                 break;
         };
@@ -2118,7 +2118,7 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
                 //         $jenis_proyek = "JO Mix Integrated - Portion";
                 //         break;
                 // }
-                // break;
+                break;
         }
         $p->UsrJenis = [
             "inline" => [
