@@ -677,15 +677,14 @@
                 </li>
                 <!--end:::Tab item Informasi Perusahaan-->
 
-                @if ($contract->stages > 0)
+                {{-- @if ($contract->stages > 0)
                     <!--begin:::Tab item History-->
                     <li class="nav-item">
                         <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true" data-bs-toggle="tab"
                             href="#kt_user_view_overview_history" style="font-size:14px;">Terkontrak</a>
                     </li>
                     <!--end:::Tab item History-->
-
-                @endif
+                @endif --}}
 
                 @if ($contract->stages > 1)
                     <!--begin:::Tab item Atachment & Notes-->
@@ -1565,11 +1564,12 @@
                             </table>
                             <!--End:Table: Review-->
                     </div>
-                </div>
+                    
+                {{-- </div>
                 <!--end:::Tab pane Informasi Perusahaan-->
 
                 <!--begin:::Tab pane History-->
-                <div class="tab-pane fade" id="kt_user_view_overview_history" role="tabpanel">
+                <div class="tab-pane fade" id="kt_user_view_overview_history" role="tabpanel"> --}}
 
                     <!--begin::Row-->
                     <div class="row fv-row">
@@ -3752,13 +3752,7 @@
             <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
                 <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
                 <span class="svg-icon svg-icon-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                        fill="none">
-                        <rect opacity="0.5" x="6" y="17.3137" width="16" height="2"
-                            rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
-                        <rect x="7.41422" y="6" width="16" height="2" rx="1"
-                            transform="rotate(45 7.41422 6)" fill="black" />
-                    </svg>
+                    <i class="bi bi-x-lg"></i>
                 </span>
                 <!--end::Svg Icon-->
             </div>
@@ -3865,13 +3859,7 @@
             <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
                 <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
                 <span class="svg-icon svg-icon-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                        fill="none">
-                        <rect opacity="0.5" x="6" y="17.3137" width="16" height="2"
-                            rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
-                        <rect x="7.41422" y="6" width="16" height="2" rx="1"
-                            transform="rotate(45 7.41422 6)" fill="black" />
-                    </svg>
+                    <i class="bi bi-x-lg"></i>
                 </span>
                 <!--end::Svg Icon-->
             </div>
@@ -3969,14 +3957,7 @@
                     <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
                         <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
                         <span class="svg-icon svg-icon-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                viewBox="0 0 24 24" fill="none">
-                                <rect opacity="0.5" x="6" y="17.3137" width="16"
-                                    height="2" rx="1" transform="rotate(-45 6 17.3137)"
-                                    fill="black" />
-                                <rect x="7.41422" y="6" width="16" height="2"
-                                    rx="1" transform="rotate(45 7.41422 6)" fill="black" />
-                            </svg>
+                            <i class="bi bi-x-lg"></i>
                         </span>
                         <!--end::Svg Icon-->
                     </div>
@@ -4075,14 +4056,7 @@
                         <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
                             <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
                             <span class="svg-icon svg-icon-1">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                    viewBox="0 0 24 24" fill="none">
-                                    <rect opacity="0.5" x="6" y="17.3137" width="16"
-                                        height="2" rx="1" transform="rotate(-45 6 17.3137)"
-                                        fill="black" />
-                                    <rect x="7.41422" y="6" width="16" height="2"
-                                        rx="1" transform="rotate(45 7.41422 6)" fill="black" />
-                                </svg>
+                                <i class="bi bi-x-lg"></i>
                             </span>
                             <!--end::Svg Icon-->
                         </div>
@@ -4259,14 +4233,7 @@
                     <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
                         <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
                         <span class="svg-icon svg-icon-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                viewBox="0 0 24 24" fill="none">
-                                <rect opacity="0.5" x="6" y="17.3137" width="16"
-                                    height="2" rx="1" transform="rotate(-45 6 17.3137)"
-                                    fill="black" />
-                                <rect x="7.41422" y="6" width="16" height="2"
-                                    rx="1" transform="rotate(45 7.41422 6)" fill="black" />
-                            </svg>
+                            <i class="bi bi-x-lg"></i>
                         </span>
                         <!--end::Svg Icon-->
                     </div>
@@ -4364,14 +4331,7 @@
                     <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
                         <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
                         <span class="svg-icon svg-icon-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                viewBox="0 0 24 24" fill="none">
-                                <rect opacity="0.5" x="6" y="17.3137" width="16"
-                                    height="2" rx="1" transform="rotate(-45 6 17.3137)"
-                                    fill="black" />
-                                <rect x="7.41422" y="6" width="16" height="2"
-                                    rx="1" transform="rotate(45 7.41422 6)" fill="black" />
-                            </svg>
+                            <i class="bi bi-x-lg"></i>
                         </span>
                         <!--end::Svg Icon-->
                     </div>
@@ -4468,14 +4428,7 @@
                     <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
                         <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
                         <span class="svg-icon svg-icon-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                viewBox="0 0 24 24" fill="none">
-                                <rect opacity="0.5" x="6" y="17.3137" width="16"
-                                    height="2" rx="1" transform="rotate(-45 6 17.3137)"
-                                    fill="black" />
-                                <rect x="7.41422" y="6" width="16" height="2"
-                                    rx="1" transform="rotate(45 7.41422 6)" fill="black" />
-                            </svg>
+                            <i class="bi bi-x-lg"></i>
                         </span>
                         <!--end::Svg Icon-->
                     </div>
@@ -4572,14 +4525,7 @@
                     <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
                         <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
                         <span class="svg-icon svg-icon-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                viewBox="0 0 24 24" fill="none">
-                                <rect opacity="0.5" x="6" y="17.3137" width="16"
-                                    height="2" rx="1" transform="rotate(-45 6 17.3137)"
-                                    fill="black" />
-                                <rect x="7.41422" y="6" width="16" height="2"
-                                    rx="1" transform="rotate(45 7.41422 6)" fill="black" />
-                            </svg>
+                            <i class="bi bi-x-lg"></i>
                         </span>
                         <!--end::Svg Icon-->
                     </div>
@@ -4678,14 +4624,7 @@
                     <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
                         <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
                         <span class="svg-icon svg-icon-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                viewBox="0 0 24 24" fill="none">
-                                <rect opacity="0.5" x="6" y="17.3137" width="16"
-                                    height="2" rx="1" transform="rotate(-45 6 17.3137)"
-                                    fill="black" />
-                                <rect x="7.41422" y="6" width="16" height="2"
-                                    rx="1" transform="rotate(45 7.41422 6)" fill="black" />
-                            </svg>
+                            <i class="bi bi-x-lg"></i>
                         </span>
                         <!--end::Svg Icon-->
                     </div>
@@ -4782,14 +4721,7 @@
                     <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
                         <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
                         <span class="svg-icon svg-icon-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                viewBox="0 0 24 24" fill="none">
-                                <rect opacity="0.5" x="6" y="17.3137" width="16"
-                                    height="2" rx="1" transform="rotate(-45 6 17.3137)"
-                                    fill="black" />
-                                <rect x="7.41422" y="6" width="16" height="2"
-                                    rx="1" transform="rotate(45 7.41422 6)" fill="black" />
-                            </svg>
+                            <i class="bi bi-x-lg"></i>
                         </span>
                         <!--end::Svg Icon-->
                     </div>
@@ -4886,14 +4818,7 @@
                     <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
                         <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
                         <span class="svg-icon svg-icon-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                viewBox="0 0 24 24" fill="none">
-                                <rect opacity="0.5" x="6" y="17.3137" width="16"
-                                    height="2" rx="1" transform="rotate(-45 6 17.3137)"
-                                    fill="black" />
-                                <rect x="7.41422" y="6" width="16" height="2"
-                                    rx="1" transform="rotate(45 7.41422 6)" fill="black" />
-                            </svg>
+                            <i class="bi bi-x-lg"></i>
                         </span>
                         <!--end::Svg Icon-->
                     </div>
@@ -4989,14 +4914,7 @@
                     <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
                         <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
                         <span class="svg-icon svg-icon-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                viewBox="0 0 24 24" fill="none">
-                                <rect opacity="0.5" x="6" y="17.3137" width="16"
-                                    height="2" rx="1" transform="rotate(-45 6 17.3137)"
-                                    fill="black" />
-                                <rect x="7.41422" y="6" width="16" height="2"
-                                    rx="1" transform="rotate(45 7.41422 6)" fill="black" />
-                            </svg>
+                            <i class="bi bi-x-lg"></i>
                         </span>
                         <!--end::Svg Icon-->
                     </div>
@@ -5396,14 +5314,7 @@
                     <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
                         <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
                         <span class="svg-icon svg-icon-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                viewBox="0 0 24 24" fill="none">
-                                <rect opacity="0.5" x="6" y="17.3137" width="16"
-                                    height="2" rx="1" transform="rotate(-45 6 17.3137)"
-                                    fill="black" />
-                                <rect x="7.41422" y="6" width="16" height="2"
-                                    rx="1" transform="rotate(45 7.41422 6)" fill="black" />
-                            </svg>
+                            <i class="bi bi-x-lg"></i>
                         </span>
                         <!--end::Svg Icon-->
                     </div>
@@ -5803,14 +5714,7 @@
                     <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
                         <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
                         <span class="svg-icon svg-icon-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                viewBox="0 0 24 24" fill="none">
-                                <rect opacity="0.5" x="6" y="17.3137" width="16"
-                                    height="2" rx="1" transform="rotate(-45 6 17.3137)"
-                                    fill="black" />
-                                <rect x="7.41422" y="6" width="16" height="2"
-                                    rx="1" transform="rotate(45 7.41422 6)" fill="black" />
-                            </svg>
+                            <i class="bi bi-x-lg"></i>
                         </span>
                         <!--end::Svg Icon-->
                     </div>
@@ -6210,14 +6114,7 @@
                     <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
                         <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
                         <span class="svg-icon svg-icon-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                viewBox="0 0 24 24" fill="none">
-                                <rect opacity="0.5" x="6" y="17.3137" width="16"
-                                    height="2" rx="1" transform="rotate(-45 6 17.3137)"
-                                    fill="black" />
-                                <rect x="7.41422" y="6" width="16" height="2"
-                                    rx="1" transform="rotate(45 7.41422 6)" fill="black" />
-                            </svg>
+                            <i class="bi bi-x-lg"></i>
                         </span>
                         <!--end::Svg Icon-->
                     </div>
@@ -6426,14 +6323,7 @@
                     <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
                         <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
                         <span class="svg-icon svg-icon-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                viewBox="0 0 24 24" fill="none">
-                                <rect opacity="0.5" x="6" y="17.3137" width="16"
-                                    height="2" rx="1" transform="rotate(-45 6 17.3137)"
-                                    fill="black" />
-                                <rect x="7.41422" y="6" width="16" height="2"
-                                    rx="1" transform="rotate(45 7.41422 6)" fill="black" />
-                            </svg>
+                            <i class="bi bi-x-lg"></i>
                         </span>
                         <!--end::Svg Icon-->
                     </div>
@@ -6488,14 +6378,7 @@
                     <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
                         <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
                         <span class="svg-icon svg-icon-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                viewBox="0 0 24 24" fill="none">
-                                <rect opacity="0.5" x="6" y="17.3137" width="16"
-                                    height="2" rx="1" transform="rotate(-45 6 17.3137)"
-                                    fill="black" />
-                                <rect x="7.41422" y="6" width="16" height="2"
-                                    rx="1" transform="rotate(45 7.41422 6)" fill="black" />
-                            </svg>
+                            <i class="bi bi-x-lg"></i>
                         </span>
                         <!--end::Svg Icon-->
                     </div>
@@ -6728,14 +6611,7 @@
                     <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
                         <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
                         <span class="svg-icon svg-icon-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                viewBox="0 0 24 24" fill="none">
-                                <rect opacity="0.5" x="6" y="17.3137" width="16"
-                                    height="2" rx="1" transform="rotate(-45 6 17.3137)"
-                                    fill="black" />
-                                <rect x="7.41422" y="6" width="16" height="2"
-                                    rx="1" transform="rotate(45 7.41422 6)" fill="black" />
-                            </svg>
+                            <i class="bi bi-x-lg"></i>
                         </span>
                         <!--end::Svg Icon-->
                     </div>
@@ -6832,14 +6708,7 @@
                     <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
                         <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
                         <span class="svg-icon svg-icon-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                viewBox="0 0 24 24" fill="none">
-                                <rect opacity="0.5" x="6" y="17.3137" width="16"
-                                    height="2" rx="1" transform="rotate(-45 6 17.3137)"
-                                    fill="black" />
-                                <rect x="7.41422" y="6" width="16" height="2"
-                                    rx="1" transform="rotate(45 7.41422 6)" fill="black" />
-                            </svg>
+                            <i class="bi bi-x-lg"></i>
                         </span>
                         <!--end::Svg Icon-->
                     </div>
@@ -6924,13 +6793,7 @@
                     <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
                         <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
                         <span class="svg-icon svg-icon-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                viewBox="0 0 24 24" fill="none">
-                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2"
-                                    rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
-                                <rect x="7.41422" y="6" width="16" height="2" rx="1"
-                                    transform="rotate(45 7.41422 6)" fill="black" />
-                            </svg>
+                            <i class="bi bi-x-lg"></i>
                         </span>
                         <!--end::Svg Icon-->
                     </div>
@@ -7018,13 +6881,7 @@
                     <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
                         <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
                         <span class="svg-icon svg-icon-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                viewBox="0 0 24 24" fill="none">
-                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2"
-                                    rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
-                                <rect x="7.41422" y="6" width="16" height="2" rx="1"
-                                    transform="rotate(45 7.41422 6)" fill="black" />
-                            </svg>
+                            <i class="bi bi-x-lg"></i>
                         </span>
                         <!--end::Svg Icon-->
                     </div>
@@ -7114,13 +6971,7 @@
                     <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
                         <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
                         <span class="svg-icon svg-icon-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                viewBox="0 0 24 24" fill="none">
-                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2"
-                                    rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
-                                <rect x="7.41422" y="6" width="16" height="2" rx="1"
-                                    transform="rotate(45 7.41422 6)" fill="black" />
-                            </svg>
+                            <i class="bi bi-x-lg"></i>
                         </span>
                         <!--end::Svg Icon-->
                     </div>
@@ -7210,13 +7061,7 @@
                     <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
                         <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
                         <span class="svg-icon svg-icon-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                viewBox="0 0 24 24" fill="none">
-                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2"
-                                    rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
-                                <rect x="7.41422" y="6" width="16" height="2" rx="1"
-                                    transform="rotate(45 7.41422 6)" fill="black" />
-                            </svg>
+                            <i class="bi bi-x-lg"></i>
                         </span>
                         <!--end::Svg Icon-->
                     </div>
@@ -7306,14 +7151,6 @@
                     <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
                         <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
                         <span class="svg-icon svg-icon-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                viewBox="0 0 24 24" fill="none">
-                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2"
-                                    rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
-                                <rect x="7.41422" y="6" width="16" height="2" rx="1"
-                                    transform="rotate(45 7.41422 6)" fill="black" />
-                            </svg>
-                        </span>
                         <!--end::Svg Icon-->
                     </div>
                     <!--end::Close-->
@@ -7401,15 +7238,7 @@
                     <!--begin::Close-->
                     <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
                         <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                        <span class="svg-icon svg-icon-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                viewBox="0 0 24 24" fill="none">
-                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2"
-                                    rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
-                                <rect x="7.41422" y="6" width="16" height="2" rx="1"
-                                    transform="rotate(45 7.41422 6)" fill="black" />
-                            </svg>
-                        </span>
+                                                        <i class="bi bi-x-lg"></i>
                         <!--end::Svg Icon-->
                     </div>
                     <!--end::Close-->
@@ -7497,15 +7326,7 @@
                     <!--begin::Close-->
                     <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
                         <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                        <span class="svg-icon svg-icon-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                viewBox="0 0 24 24" fill="none">
-                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2"
-                                    rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
-                                <rect x="7.41422" y="6" width="16" height="2" rx="1"
-                                    transform="rotate(45 7.41422 6)" fill="black" />
-                            </svg>
-                        </span>
+                                                    </span>
                         <!--end::Svg Icon-->
                     </div>
                     <!--end::Close-->
@@ -8401,13 +8222,7 @@
             <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
                 <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
                 <span class="svg-icon svg-icon-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                        viewBox="0 0 24 24" fill="none">
-                        <rect opacity="0.5" x="6" y="17.3137" width="16" height="2"
-                            rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
-                        <rect x="7.41422" y="6" width="16" height="2" rx="1"
-                            transform="rotate(45 7.41422 6)" fill="black" />
-                    </svg>
+                    <i class="bi bi-x-lg"></i>
                 </span>
                 <!--end::Svg Icon-->
             </div>
@@ -8544,13 +8359,7 @@
             <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
                 <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
                 <span class="svg-icon svg-icon-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                        viewBox="0 0 24 24" fill="none">
-                        <rect opacity="0.5" x="6" y="17.3137" width="16" height="2"
-                            rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
-                        <rect x="7.41422" y="6" width="16" height="2" rx="1"
-                            transform="rotate(45 7.41422 6)" fill="black" />
-                    </svg>
+                    <i class="bi bi-x-lg"></i>
                 </span>
                 <!--end::Svg Icon-->
             </div>
@@ -8647,14 +8456,7 @@
                 <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
                     <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
                     <span class="svg-icon svg-icon-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                            viewBox="0 0 24 24" fill="none">
-                            <rect opacity="0.5" x="6" y="17.3137" width="16"
-                                height="2" rx="1" transform="rotate(-45 6 17.3137)"
-                                fill="black" />
-                            <rect x="7.41422" y="6" width="16" height="2"
-                                rx="1" transform="rotate(45 7.41422 6)" fill="black" />
-                        </svg>
+                        <i class="bi bi-x-lg"></i>
                     </span>
                     <!--end::Svg Icon-->
                 </div>
@@ -8827,13 +8629,7 @@
             <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
                 <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
                 <span class="svg-icon svg-icon-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                        viewBox="0 0 24 24" fill="none">
-                        <rect opacity="0.5" x="6" y="17.3137" width="16" height="2"
-                            rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
-                        <rect x="7.41422" y="6" width="16" height="2" rx="1"
-                            transform="rotate(45 7.41422 6)" fill="black" />
-                    </svg>
+                    <i class="bi bi-x-lg"></i>
                 </span>
                 <!--end::Svg Icon-->
             </div>
@@ -9234,13 +9030,7 @@
             <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
                 <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
                 <span class="svg-icon svg-icon-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                        viewBox="0 0 24 24" fill="none">
-                        <rect opacity="0.5" x="6" y="17.3137" width="16" height="2"
-                            rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
-                        <rect x="7.41422" y="6" width="16" height="2" rx="1"
-                            transform="rotate(45 7.41422 6)" fill="black" />
-                    </svg>
+                    <i class="bi bi-x-lg"></i>
                 </span>
                 <!--end::Svg Icon-->
             </div>
@@ -9341,13 +9131,7 @@ aria-hidden="true">
             <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
                 <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
                 <span class="svg-icon svg-icon-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                        viewBox="0 0 24 24" fill="none">
-                        <rect opacity="0.5" x="6" y="17.3137" width="16" height="2"
-                            rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
-                        <rect x="7.41422" y="6" width="16" height="2" rx="1"
-                            transform="rotate(45 7.41422 6)" fill="black" />
-                    </svg>
+                    <i class="bi bi-x-lg"></i>
                 </span>
                 <!--end::Svg Icon-->
             </div>
@@ -9486,13 +9270,7 @@ aria-hidden="true">
             <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
                 <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
                 <span class="svg-icon svg-icon-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                        viewBox="0 0 24 24" fill="none">
-                        <rect opacity="0.5" x="6" y="17.3137" width="16" height="2"
-                            rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
-                        <rect x="7.41422" y="6" width="16" height="2" rx="1"
-                            transform="rotate(45 7.41422 6)" fill="black" />
-                    </svg>
+                    <i class="bi bi-x-lg"></i>
                 </span>
                 <!--end::Svg Icon-->
             </div>
