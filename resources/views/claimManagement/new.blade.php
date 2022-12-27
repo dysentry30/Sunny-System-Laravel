@@ -285,7 +285,7 @@
                                                                 data-select2-id="select2-data-contract-id"
                                                                 data-placeholder="Pilih Contract">
                                                                 <option value="{{ $currentContract->id_contract }}" sel>
-                                                                    {{ $currentContract->id_contract }}</option>
+                                                                    {{ $currentContract->no_contract }}</option>
                                                                 {{-- @foreach ($contractManagements as $contract)
                                                                     <option value="{{ $contract->id_contract }}"
                                                                         {{ $contract->id_contract == (old('id-contract') ?? ($claimContract->id_contract ?? $currentContract->id_contract)) ? 'selected' : '' }}>

@@ -2739,7 +2739,7 @@
                                         <tr>
                                             <!--begin::Nomor Dokumen-->
                                             <td>
-                                                <a href="{{ asset('word/'.$site_instruction->nomor_dokumen) }}">
+                                                <a href="{{ asset('words/'.$site_instruction->id_document) }}">
                                                     {{ $site_instruction->nomor_dokumen }}
                                                 </a>
                                             </td>
@@ -2751,7 +2751,7 @@
                                             <!--end::Nomor Dokumen-->
                                             <!--begin::Uraian-->
                                             <td>
-                                                {{ $site_instruction->uraian_dokumen }}
+                                                <pre style="font-family: BpmOpenSans-woff">{!! $site_instruction->uraian_dokumen !!}</pre>
                                             </td>
                                             <!--end::Uraian-->
                                         </tr>

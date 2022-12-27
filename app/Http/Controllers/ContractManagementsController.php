@@ -803,11 +803,9 @@ class ContractManagementsController extends Controller
     // Upload Dokumen Site Instruction to server or database
     public function siteInstruction(Request $request, SiteInstruction $siteInstruction)
     {
-        $faker = new Uuid();
-        $id_document = (string) $faker->uuid3();
         $file = $request->file("file-dokumen-instruction");
         $data = $request->all();
-
+        $id_document = date("His_") . $file->getClientOriginalName();
         $messages = [
             "required" => "Field di atas wajib diisi",
             "numeric" => "Field di atas harus numeric",
@@ -841,11 +839,12 @@ class ContractManagementsController extends Controller
         }
 
         $siteInstruction->id_contract = $data["id-contract"];
+        $siteInstruction->id_document = $id_document;
         $siteInstruction->nomor_dokumen = $data["nomor-dokumen-instruction"];
         $siteInstruction->tanggal_dokumen = $data["tanggal-dokumen-instruction"];
         $siteInstruction->uraian_dokumen = $data["uraian-dokumen-instruction"];
         if ($siteInstruction->save()) {
-            moveFileTemp($file, $id_document);
+            moveFileTemp($file, explode(".", $id_document)[0]);
             Alert::success('Success', "Dokumen Site Instruction berhasil ditambahkan");
             return Redirect::back();
         }
