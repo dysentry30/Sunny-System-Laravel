@@ -2739,14 +2739,14 @@
                                         <tr>
                                             <!--begin::Nomor Dokumen-->
                                             <td>
-                                                <a href="{{ asset('words/'.$site_instruction->id_document) }}">
+                                                <a target="_blank" href="{{ asset('words/'.$site_instruction->id_document) }}">
                                                     {{ $site_instruction->nomor_dokumen }}
                                                 </a>
                                             </td>
                                             <!--end::Nomor Dokumen-->
                                             <!--begin::Nomor Dokumen-->
                                             <td>
-                                                {{ $site_instruction->tanggal_dokumen }}
+                                                {{ Carbon\Carbon::parse($site_instruction->tanggal_dokumen)->translatedFormat("d F Y") }}
                                             </td>
                                             <!--end::Nomor Dokumen-->
                                             <!--begin::Uraian-->
@@ -2780,7 +2780,7 @@
                         <!--Begin::Document Technical Form-->
                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                             Dokumen Technical Form
-                            <a href="#" Id="Plus" data-bs-toggle="modal"
+                            <a target="_blank" href="#" Id="Plus" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_dokumen_technical_form">+</a>
                         </h3>
                         
@@ -2813,19 +2813,19 @@
                                     <tr>
                                         <!--begin::Nomor Dokumen-->
                                         <td>
-                                            <a href="{{ asset('word/'.$technical_form->nomor_dokumen) }}">
+                                            <a target="_blank" href="{{ asset('words/'.$technical_form->id_document) }}">
                                                 {{ $technical_form->nomor_dokumen }}
                                             </a>
                                         </td>
                                         <!--end::Nomor Dokumen-->
                                             <!--begin::Nomor Dokumen-->
                                         <td>
-                                            {{ $technical_form->tanggal_dokumen }}
+                                            {{ Carbon\Carbon::parse($technical_form->tanggal_dokumen)->translatedFormat("d F Y") }}
                                         </td>
                                         <!--end::Nomor Dokumen-->
                                         <!--begin::Uraian-->
                                         <td>
-                                            {{ $technical_form->uraian_dokumen }}
+                                            <pre style="font-family: BpmOpenSans-woff">{!! $technical_form->uraian_dokumen !!}</pre>
                                         </td>
                                         <!--end::Uraian-->
                                     </tr>
@@ -2886,19 +2886,19 @@
                                     <tr>
                                         <!--begin::Nomor Dokumen-->
                                         <td>
-                                            <a href="{{ asset('word/'.$technical_query->nomor_dokumen) }}">
+                                            <a target="_blank" href="{{ asset('words/'.$technical_query->id_document) }}">
                                                 {{ $technical_query->nomor_dokumen }}
                                             </a>
                                         </td>
                                         <!--end::Nomor Dokumen-->
                                             <!--begin::Nomor Dokumen-->
                                         <td>
-                                            {{ $technical_query->tanggal_dokumen }}
+                                            {{ Carbon\Carbon::parse($technical_query->tanggal_dokumen)->translatedFormat("d F Y")  }}
                                         </td>
                                         <!--end::Nomor Dokumen-->
                                         <!--begin::Uraian-->
                                         <td>
-                                            {{ $technical_query->uraian_dokumen }}
+                                            <pre style="font-family: BpmOpenSans-woff">{!! $technical_query->uraian_dokumen !!}</pre>
                                         </td>
                                         <!--end::Uraian-->
                                     </tr>
@@ -2927,7 +2927,7 @@
                         <!--Begin::Document Field Design Change-->
                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                             Dokumen Field Design Change
-                            <a href="#" Id="Plus" data-bs-toggle="modal"
+                            <a target="_blank" href="#" Id="Plus" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_dokumen_field_design_change">+</a>
                         </h3>
 
@@ -2960,19 +2960,19 @@
                                     <tr>
                                         <!--begin::Nomor Dokumen-->
                                         <td>
-                                            <a href="{{ asset('word/'.$field_change->nomor_dokumen) }}">
+                                            <a target="_blank" href="{{ asset('words/'.$field_change->id_document) }}">
                                                 {{ $field_change->nomor_dokumen }}
                                             </a>
                                         </td>
                                         <!--end::Nomor Dokumen-->
                                             <!--begin::Nomor Dokumen-->
                                         <td>
-                                            {{ $field_change->tanggal_dokumen }}
+                                            {{ Carbon\Carbon::parse($field_change->tanggal_dokumen)->translatedFormat("d F Y") }}
                                         </td>
                                         <!--end::Nomor Dokumen-->
                                         <!--begin::Uraian-->
                                         <td>
-                                            {{ $field_change->uraian_dokumen }}
+                                            <pre style="font-family: BpmOpenSans-woff">{!! $field_change->uraian_dokumen !!}</pre>
                                         </td>
                                         <!--end::Uraian-->
                                     </tr>
@@ -3000,7 +3000,7 @@
                         <!--Begin::Document Contract Change Notice-->
                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                             Dokumen Contract Change Notice
-                            <a href="#" Id="Plus" data-bs-toggle="modal"
+                            <a target="_blank" href="#" Id="Plus" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_dokumen_contract_change_notice">+</a>
                         </h3>
 
@@ -3033,19 +3033,19 @@
                                     <tr>
                                         <!--begin::Nomor Dokumen-->
                                         <td>
-                                            <a href="{{ asset('word/'.$change_notice->nomor_dokumen) }}">
+                                            <a target="_blank" href="{{ asset('words/'.$change_notice->id_document) }}">
                                                 {{ $change_notice->nomor_dokumen }}
                                             </a>
                                         </td>
                                         <!--end::Nomor Dokumen-->
                                             <!--begin::Nomor Dokumen-->
                                         <td>
-                                            {{ $change_notice->tanggal_dokumen }}
+                                            {{ Carbon\Carbon::parse($change_notice->tanggal_dokumen)->translatedFormat("d F Y") }}
                                         </td>
                                         <!--end::Nomor Dokumen-->
                                         <!--begin::Uraian-->
                                         <td>
-                                            {{ $change_notice->uraian_dokumen }}
+                                            <pre style="font-family: BpmOpenSans-woff">{!! $change_notice->uraian_dokumen !!}</pre>
                                         </td>
                                         <!--end::Uraian-->
                                     </tr>
@@ -3073,7 +3073,7 @@
                         <!--Begin::Document Contract Change Proposal-->
                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                             Dokumen Contract Change Proposal
-                            <a href="#" Id="Plus" data-bs-toggle="modal"
+                            <a target="_blank" href="#" Id="Plus" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_dokumen_contract_change_proposal">+</a>
                         </h3>
 
@@ -3106,19 +3106,19 @@
                                     <tr>
                                         <!--begin::Nomor Dokumen-->
                                         <td>
-                                            <a href="{{ asset('word/'.$change_proposal->nomor_dokumen) }}">
+                                            <a target="_blank" href="{{ asset('words/'.$change_proposal->id_document) }}">
                                                 {{ $change_proposal->nomor_dokumen }}
                                             </a>
                                         </td>
                                         <!--end::Nomor Dokumen-->
                                             <!--begin::Nomor Dokumen-->
                                         <td>
-                                            {{ $change_proposal->tanggal_dokumen }}
+                                            {{ Carbon\Carbon::parse($change_proposal->tanggal_dokumen)->translatedFormat("d F Y") }}
                                         </td>
                                         <!--end::Nomor Dokumen-->
                                         <!--begin::Uraian-->
                                         <td>
-                                            {{ $change_proposal->uraian_dokumen }}
+                                            <pre style="font-family: BpmOpenSans-woff">{!! $change_proposal->uraian_dokumen !!}</pre>
                                         </td>
                                         <!--end::Uraian-->
                                     </tr>
@@ -3146,7 +3146,7 @@
                         <!--Begin::Document Contract Change Order-->
                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                             Dokumen Contract Change Order
-                            <a href="#" Id="Plus" data-bs-toggle="modal"
+                            <a target="_blank" href="#" Id="Plus" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_dokumen_contract_change_order">+</a>
                         </h3>
 
@@ -3179,19 +3179,19 @@
                                     <tr>
                                         <!--begin::Nomor Dokumen-->
                                         <td>
-                                            <a href="{{ asset('word/'.$change_order->nomor_dokumen) }}">
+                                            <a target="_blank" href="{{ asset('words/'.$change_order->id_document) }}">
                                                 {{ $change_order->nomor_dokumen }}
                                             </a>
                                         </td>
                                         <!--end::Nomor Dokumen-->
                                             <!--begin::Nomor Dokumen-->
                                         <td>
-                                            {{ $change_order->tanggal_dokumen }}
+                                            {{  Carbon\Carbon::parse($change_order->tanggal_dokumen)->translatedFormat("d F Y") }}
                                         </td>
                                         <!--end::Nomor Dokumen-->
                                         <!--begin::Uraian-->
                                         <td>
-                                            {{ $change_order->uraian_dokumen }}
+                                            <pre style="font-family: BpmOpenSans-woff">{!! $change_order->uraian_dokumen !!}</pre>
                                         </td>
                                         <!--end::Uraian-->
                                     </tr>
@@ -6910,7 +6910,7 @@
     <!--Begin::Modal - Dokumen Site Instruction-->
     <div class="modal fade" id="kt_modal_dokumen_site_instruction" tabindex="-1" aria-hidden="true">
         <!--begin::Modal dialog-->
-        <div class="modal-dialog modal-dialog-centered mw-900px">
+        <div class="modal-dialog modal-dialog-centered mw-600px">
             <!--begin::Modal content-->
             <div class="modal-content">
                 <!--begin::Modal header-->
@@ -6955,7 +6955,7 @@
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="text" class="form-control form-control-solid" name="nomor-dokumen-instruction"
-                                id="nomor-dokumen" value="{{ old('nomorDokumen') }}" style="font-weight: normal"
+                                id="nomor-dokumen" value="" style="font-weight: normal"
                                 placeholder="No. Dokumen Site Instruction" />
                             <!--end::Input-->
         
@@ -7004,7 +7004,7 @@
     <!--Begin::Modal - Dokumen Technical Form-->
     <div class="modal fade" id="kt_modal_dokumen_technical_form" tabindex="-1" aria-hidden="true">
         <!--begin::Modal dialog-->
-        <div class="modal-dialog modal-dialog-centered mw-900px">
+        <div class="modal-dialog modal-dialog-centered mw-600px">
             <!--begin::Modal content-->
             <div class="modal-content">
                 <!--begin::Modal header-->
@@ -7100,7 +7100,7 @@
     <!--Begin::Modal - Dokumen Technical Query-->
     <div class="modal fade" id="kt_modal_dokumen_technical_query" tabindex="-1" aria-hidden="true">
         <!--begin::Modal dialog-->
-        <div class="modal-dialog modal-dialog-centered mw-900px">
+        <div class="modal-dialog modal-dialog-centered mw-600px">
             <!--begin::Modal content-->
             <div class="modal-content">
                 <!--begin::Modal header-->
@@ -7196,7 +7196,7 @@
     <!--Begin::Modal - Dokumen Field Design Change-->
     <div class="modal fade" id="kt_modal_dokumen_field_design_change" tabindex="-1" aria-hidden="true">
         <!--begin::Modal dialog-->
-        <div class="modal-dialog modal-dialog-centered mw-900px">
+        <div class="modal-dialog modal-dialog-centered mw-600px">
             <!--begin::Modal content-->
             <div class="modal-content">
                 <!--begin::Modal header-->
@@ -7292,7 +7292,7 @@
     <!--Begin::Modal - Dokumen Contract Change Notice-->
     <div class="modal fade" id="kt_modal_dokumen_contract_change_notice" tabindex="-1" aria-hidden="true">
         <!--begin::Modal dialog-->
-        <div class="modal-dialog modal-dialog-centered mw-900px">
+        <div class="modal-dialog modal-dialog-centered mw-600px">
             <!--begin::Modal content-->
             <div class="modal-content">
                 <!--begin::Modal header-->
@@ -7388,7 +7388,7 @@
     <!--Begin::Modal - Dokumen Contract Change Proposal-->
     <div class="modal fade" id="kt_modal_dokumen_contract_change_proposal" tabindex="-1" aria-hidden="true">
         <!--begin::Modal dialog-->
-        <div class="modal-dialog modal-dialog-centered mw-900px">
+        <div class="modal-dialog modal-dialog-centered mw-600px">
             <!--begin::Modal content-->
             <div class="modal-content">
                 <!--begin::Modal header-->
@@ -7484,7 +7484,7 @@
     <!--Begin::Modal - Dokumen Contract Change Order-->
     <div class="modal fade" id="kt_modal_dokumen_contract_change_order" tabindex="-1" aria-hidden="true">
         <!--begin::Modal dialog-->
-        <div class="modal-dialog modal-dialog-centered mw-900px">
+        <div class="modal-dialog modal-dialog-centered mw-600px">
             <!--begin::Modal content-->
             <div class="modal-content">
                 <!--begin::Modal header-->

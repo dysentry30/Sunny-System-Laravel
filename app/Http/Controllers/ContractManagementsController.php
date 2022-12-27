@@ -855,10 +855,9 @@ class ContractManagementsController extends Controller
     // Upload Dokumen Technical Form to server or database
     public function technicalForm(Request $request, TechnicalForm $technicalForm)
     {
-        $faker = new Uuid();
-        $id_document = (string) $faker->uuid3();
         $file = $request->file("file-technical-form");
         $data = $request->all();
+        $id_document = date("His_") . $file->getClientOriginalName();
 
         $messages = [
             "required" => "Field di atas wajib diisi",
@@ -894,11 +893,12 @@ class ContractManagementsController extends Controller
         }
 
         $technicalForm->id_contract = $data["id-contract"];
-        $technicalForm->nomor_dokumen = $id_document;
+        $technicalForm->id_document = $id_document;
+        $technicalForm->nomor_dokumen = $data["nomor-technical-form"];
         $technicalForm->tanggal_dokumen = $data["tanggal-technical-form"];
         $technicalForm->uraian_dokumen = $data["uraian-technical-form"];
         if ($technicalForm->save()) {
-            moveFileTemp($file, $id_document);
+            moveFileTemp($file, explode(".", $id_document)[0]);
             Alert::success('Success', "Dokumen Technical Form berhasil ditambahkan");
             return Redirect::back();
         }
@@ -909,10 +909,9 @@ class ContractManagementsController extends Controller
     // Upload Dokumen Technical Query to server or database
     public function technicalQuery(Request $request, TechnicalQuery $technicalQuery)
     {
-        $faker = new Uuid();
-        $id_document = (string) $faker->uuid3();
         $file = $request->file("file-technical-query");
         $data = $request->all();
+        $id_document = date("His_") . $file->getClientOriginalName();
 
         $messages = [
             "required" => "Field di atas wajib diisi",
@@ -948,11 +947,12 @@ class ContractManagementsController extends Controller
         }
 
         $technicalQuery->id_contract = $data["id-contract"];
-        $technicalQuery->nomor_dokumen = $id_document;
+        $technicalQuery->id_document = $id_document;
+        $technicalQuery->nomor_dokumen = $data["nomor-technical-query"];
         $technicalQuery->tanggal_dokumen = $data["tanggal-technical-query"];
         $technicalQuery->uraian_dokumen = $data["uraian-technical-query"];
         if ($technicalQuery->save()) {
-            moveFileTemp($file, $id_document);
+            moveFileTemp($file, explode(".", $id_document)[0]);
             Alert::success('Success', "Dokumen Technical Query berhasil ditambahkan");
             return Redirect::back();
         }
@@ -963,10 +963,9 @@ class ContractManagementsController extends Controller
     // Upload Dokumen Field Design Change to server or database
     public function fieldChange(Request $request, FieldChange $fieldChange)
     {
-        $faker = new Uuid();
-        $id_document = (string) $faker->uuid3();
         $file = $request->file("file-field-design-change");
         $data = $request->all();
+        $id_document = date("His_") . $file->getClientOriginalName();
 
         $messages = [
             "required" => "Field di atas wajib diisi",
@@ -1002,11 +1001,12 @@ class ContractManagementsController extends Controller
         }
 
         $fieldChange->id_contract = $data["id-contract"];
-        $fieldChange->nomor_dokumen = $id_document;
+        $fieldChange->id_document = $id_document;
+        $fieldChange->nomor_dokumen = $data["nomor-field-design-change"];
         $fieldChange->tanggal_dokumen = $data["tanggal-field-design-change"];
         $fieldChange->uraian_dokumen = $data["uraian-field-design-change"];
         if ($fieldChange->save()) {
-            moveFileTemp($file, $id_document);
+            moveFileTemp($file, explode(".", $id_document)[0]);
             Alert::success('Success', "Dokumen Field Design Change berhasil ditambahkan");
             return Redirect::back();
         }
@@ -1017,10 +1017,9 @@ class ContractManagementsController extends Controller
     // Upload Dokumen Contract Change Notice to server or database
     public function changeNotice(Request $request, ContractChangeNotice $changeNotice)
     {
-        $faker = new Uuid();
-        $id_document = (string) $faker->uuid3();
         $file = $request->file("file-contract-change-notice");
         $data = $request->all();
+        $id_document = date("His_") . $file->getClientOriginalName();
 
         $messages = [
             "required" => "Field di atas wajib diisi",
@@ -1055,25 +1054,25 @@ class ContractManagementsController extends Controller
         }
 
         $changeNotice->id_contract = $data["id-contract"];
+        $changeNotice->id_document = $id_document;
         $changeNotice->nomor_dokumen = $data["nomor-contract-change-notice"];
         $changeNotice->tanggal_dokumen = $data["tanggal-contract-change-notice"];
         $changeNotice->uraian_dokumen = $data["uraian-contract-change-notice"];
         if ($changeNotice->save()) {
-            moveFileTemp($file, $id_document);
-            Alert::success('Success', "Dokumen Field Design Change berhasil ditambahkan");
+            moveFileTemp($file, explode(".", $id_document)[0]);
+            Alert::success('Success', "Dokumen Change Notice berhasil ditambahkan");
             return Redirect::back();
         }
-        Alert::error('Error', "Dokumen Field Design Change gagal ditambahkan");
+        Alert::error('Error', "Dokumen Change Notice gagal ditambahkan");
         return Redirect::back()->with("modal", $data["modal-name"]);
         // return redirect($_SERVER["HTTP_REFERER"]);
     }
     // Upload Dokumen Contract Change Order to server or database
     public function changeOrder(Request $request, ContractChangeOrder $changeOrder)
     {
-        $faker = new Uuid();
-        $id_document = (string) $faker->uuid3();
         $file = $request->file("file-contract-change-order");
         $data = $request->all();
+        $id_document = date("His_") . $file->getClientOriginalName();
 
         $messages = [
             "required" => "Field di atas wajib diisi",
@@ -1108,25 +1107,25 @@ class ContractManagementsController extends Controller
         }
 
         $changeOrder->id_contract = $data["id-contract"];
+        $changeOrder->id_document = $id_document;
         $changeOrder->nomor_dokumen = $data["nomor-contract-change-order"];
         $changeOrder->tanggal_dokumen = $data["tanggal-contract-change-order"];
         $changeOrder->uraian_dokumen = $data["uraian-contract-change-order"];
         if ($changeOrder->save()) {
-            moveFileTemp($file, $id_document);
-            Alert::success('Success', "Dokumen Field Design Change berhasil ditambahkan");
+            moveFileTemp($file, explode(".", $id_document)[0]);
+            Alert::success('Success', "Dokumen Change Order berhasil ditambahkan");
             return Redirect::back();
         }
-        Alert::error('Error', "Dokumen Field Design Change gagal ditambahkan");
+        Alert::error('Error', "Dokumen Change Order gagal ditambahkan");
         return Redirect::back()->with("modal", $data["modal-name"]);
         // return redirect($_SERVER["HTTP_REFERER"]);
     }
     // Upload Dokumen Contract Change Proposal to server or database
     public function changeProposal(Request $request, ContractChangeProposal $changeProposal)
     {
-        $faker = new Uuid();
-        $id_document = (string) $faker->uuid3();
         $file = $request->file("file-contract-change-proposal");
         $data = $request->all();
+        $id_document = date("His_") . $file->getClientOriginalName();
 
         $messages = [
             "required" => "Field di atas wajib diisi",
@@ -1161,15 +1160,16 @@ class ContractManagementsController extends Controller
         }
 
         $changeProposal->id_contract = $data["id-contract"];
+        $changeProposal->id_document = $id_document;
         $changeProposal->nomor_dokumen = $data["nomor-contract-change-proposal"];
         $changeProposal->tanggal_dokumen = $data["tanggal-contract-change-proposal"];
         $changeProposal->uraian_dokumen = $data["uraian-contract-change-proposal"];
         if ($changeProposal->save()) {
-            moveFileTemp($file, $id_document);
-            Alert::success('Success', "Dokumen Field Design Change berhasil ditambahkan");
+            moveFileTemp($file, explode(".", $id_document)[0]);
+            Alert::success('Success', "Dokumen Change Proposal berhasil ditambahkan");
             return Redirect::back();
         }
-        Alert::error('Error', "Dokumen Field Design Change gagal ditambahkan");
+        Alert::error('Error', "Dokumen Change Proposal gagal ditambahkan");
         return Redirect::back()->with("modal", $data["modal-name"]);
         // return redirect($_SERVER["HTTP_REFERER"]);
     }
