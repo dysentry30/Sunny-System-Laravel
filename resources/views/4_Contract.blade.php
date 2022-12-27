@@ -126,7 +126,7 @@
                                 {{-- Begin :: Tab Content Tender Awal --}}
                                 <div class="tab-pane fade show active" id="kt_user_view_tender_awal" role="tabpanel">
                                     <!--begin::Table Claim-->
-                                    <table class="table align-middle table-row-dashed fs-6 gy-2" id="kt_proyek_table">
+                                    <table class="table align-middle table-row-dashed fs-6" id="kt_proyek_table">
                                         <!--begin::Table head-->
                                         <thead>
                                             <!--begin::Table row-->
@@ -149,7 +149,7 @@
                                                 <tr>
                                                     <!--begin::Name=-->
                                                     <td>
-                                                        <a href="/proyek/view/{{ $proyek->kode_proyek }}" id="click-name" class="text-hover-primary mb-1">{{ $proyek->nama_proyek }}</a>
+                                                        <a target="_blank" href="/proyek/view/{{ $proyek->kode_proyek }}" id="click-name" class="text-hover-primary mb-1">{{ $proyek->nama_proyek }}</a>
                                                     </td>
                                                     <!--end::Name=-->
                                                     <!--begin::Email=-->
@@ -159,7 +159,54 @@
                                                     <!--end::Email=-->
                                                     <!--begin::Email=-->
                                                     <td>
-                                                        {{ $proyek->UnitKerja->unit_kerja }}
+                                                        @switch($proyek->stage)
+                                                            @case('0')
+                                                                Gugur PQ
+                                                            @break
+
+                                                            @case('1')
+                                                                Pasar Dini
+                                                            @break
+
+                                                            @case('2')
+                                                                Pasar Potensial
+                                                            @break
+
+                                                            @case('3')
+                                                                Prakualifikasi
+                                                            @break
+
+                                                            @case('4')
+                                                                Tender Diikuti
+                                                            @break
+
+                                                            @case('5')
+                                                                Perolehan
+                                                            @break
+
+                                                            @case('6')
+                                                                Menang
+                                                            @break
+
+                                                            @case('7')
+                                                                Kalah
+                                                            @break
+
+                                                            @case('8')
+                                                                Terkontrak
+                                                            @break
+
+                                                            @case('9')
+                                                                Terendah
+                                                            @break
+
+                                                            @case('10')
+                                                                Gugur PQ
+                                                            @break
+
+                                                            @default
+                                                                *Belum Ditentukan
+                                                        @endswitch
                                                     </td>
                                                     <!--end::Email=-->
                                                     <!--begin::Email=-->
@@ -185,7 +232,7 @@
                                                 </tr>
                                             @empty
                                                 <tr>
-                                                    <td colspan="3">
+                                                    <td colspan="7">
                                                         <p class="text-center bg-gray-200">Data proyek tidak ditemukan</p>
                                                     </td>
                                                 </tr>
@@ -199,7 +246,7 @@
                                 {{-- Begin :: Tab Content Pelaksanaan --}}
                                 <div class="tab-pane fade" id="kt_user_view_overview_pelaksanaan" role="tabpanel">
                                     <!--begin::Table Claim-->
-                                    <table class="table align-middle table-row-dashed" id="kt_proyek_table">
+                                    <table class="table table-row-dashed" id="kt_proyek_table">
                                         <!--begin::Table head-->
                                         <thead>
                                             <!--begin::Table row-->
@@ -224,14 +271,12 @@
                                                     @if (!empty($proyek->ContractManagements))
                                                         <td>
                                                             <a href="/contract-management/view/{{ url_encode($proyek->ContractManagements->id_contract) }}" id="click-name"
-                                                                class="text-hover-primary mb-1">{{ $proyek->ContractManagements->id_contract }}</a>
+                                                                class="text-hover-primary">{{ $proyek->ContractManagements->no_contract }}</a>
                                                         </td>
                                                     @else
                                                         <td>
-                                                            <a href="#" id="click-name" class="text-hover-primary mb-1"><small class="badge badge-light-danger">
-
-                                                                    Belum Ditentukan
-                                                                </small></a>
+                                                            <a href="#" id="click-name" class="text-hover-primary"><small class="badge badge-light-danger">
+                                                                Belum Ditentukan</small></a>
                                                         </td>
                                                     @endif
                                                     <!--end::Name=-->
@@ -272,7 +317,7 @@
                                                 </tr>
                                             @empty
                                                 <tr>
-                                                    <td colspan="3">
+                                                    <td colspan="7">
                                                         <p class="text-center bg-gray-200">Data proyek tidak ditemukan</p>
                                                     </td>
                                                 </tr>
@@ -286,7 +331,7 @@
                                 {{-- Begin :: Tab Content Closing Proyek --}}
                                 <div class="tab-pane fade" id="kt_user_view_overview_closing_proyek" role="tabpanel">
                                     <!--begin::Table Claim-->
-                                    <table class="table align-middle table-row-dashed" id="kt_proyek_table">
+                                    <table class="table table-row-dashed" id="kt_proyek_table">
                                         <!--begin::Table head-->
                                         <thead>
                                             <!--begin::Table row-->
@@ -307,12 +352,11 @@
                                                     @if (!empty($proyek->ContractManagements))
                                                         <td>
                                                             <a href="/contract-management/view/{{ url_encode($proyek->ContractManagements->id_contract) }}" id="click-name"
-                                                                class="text-hover-primary mb-1">{{ $proyek->ContractManagements->id_contract }}</a>
+                                                                class="text-hover-primary">{{ $proyek->ContractManagements->no_contract }}</a>
                                                         </td>
                                                     @else
                                                         <td>
-                                                            <a href="#" id="click-name" class="text-hover-primary mb-1"><small class="badge badge-light-danger">
-
+                                                            <a href="#" id="click-name" class="text-hover-primary"><small class="badge badge-light-danger">
                                                                     Belum Ditentukan
                                                                 </small></a>
                                                         </td>
@@ -320,7 +364,7 @@
                                                     <!--end::Name=-->
                                                     <!--begin::Name=-->
                                                     <td>
-                                                        <a href="/proyek/view/{{ $proyek->kode_proyek }}" id="click-name" class="text-hover-primary mb-1">{{ $proyek->nama_proyek }}</a>
+                                                        <a target="_blank" href="/proyek/view/{{ $proyek->kode_proyek }}" id="click-name" class="text-hover-primary mb-1">{{ $proyek->nama_proyek }}</a>
                                                     </td>
                                                     <!--end::Name=-->
                                                     <!--begin::Email=-->
@@ -331,7 +375,7 @@
                                                 </tr>
                                             @empty
                                                 <tr>
-                                                    <td colspan="3">
+                                                    <td colspan="7">
                                                         <p class="text-center bg-gray-200">Data proyek tidak ditemukan</p>
                                                     </td>
                                                 </tr>
