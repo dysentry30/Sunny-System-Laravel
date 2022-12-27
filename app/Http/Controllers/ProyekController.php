@@ -1531,6 +1531,42 @@ class ProyekController extends Controller
                     return redirect()->back();
                 }
                 // dd($customer);
+                $grouping = "";
+                $kdgrp = "";
+                $ktgrd = "";
+                $cust_akont = "";
+                $witht = "";
+                if($customer->jenis_instansi == "Kementrian / Pemerintah Pusat" || $customer->jenis_instansi == "Pemerintah Provinsi" || $customer->jenis_instansi == "Pemerintah Kota / Kabupaten") {
+                    $kdgrp = "03";
+                    $grouping = "ZN01";
+                    $ktgrd = "Z1";
+                    $cust_akont = "1104111000";
+                    $witht = "J7";
+                } else if($customer->jenis_instansi == "BUMN") {
+                    $kdgrp = "04";
+                    $grouping = "ZN01";
+                    $ktgrd = "Z1";
+                    $cust_akont = "1104111000";
+                    $witht = "J7";
+                } else if($customer->jenis_instansi == "BUMD" || $customer->jenis_instansi == "Swasta Nasional") {
+                    $kdgrp = "05";
+                    $grouping = "ZN02";
+                    $ktgrd = "Z2";
+                    $cust_akont = "1104211000";
+                    $witht = "J7";
+                } else if($customer->jenis_instansi == "Pemerintah Asing" || $customer->jenis_instansi == "Swasta Asing") {
+                    $kdgrp = "06";
+                    $grouping = "ZN02";
+                    $ktgrd = "Z2";
+                    $cust_akont = "1104211000";
+                    $witht = "J7";
+                } else if($customer->jenis_instansi == "Perusahaan JO") {
+                    $kdgrp = "08";
+                    $grouping = "ZN05";
+                    $ktgrd = "Z4";
+                    $cust_akont = "";
+                    $witht = "s";
+                }
                 $data_nasabah_online = collect([
                     "nmnasabah" => "$customer->name",
                     "alamat" => "$customer->address_1",
@@ -1561,7 +1597,7 @@ class ProyekController extends Controller
                                 [
                                     "BPARTNER" => "$customer->kode_nasabah",
         
-                                    "GROUPING" => "",
+                                    "GROUPING" => "$grouping",
         
                                     "LVORM" => "",
         
@@ -1571,9 +1607,9 @@ class ProyekController extends Controller
         
                                     "TITLELETTER" => "",
         
-                                    "SEARCHTERM1" => $sap->search_term_1 ?? "",
+                                    "SEARCHTERM1" => substr($customer->name, 0, 40) ?? "",
         
-                                    "SEARCHTERM2" => $sap->search_term_2 ?? "",
+                                    "SEARCHTERM2" => substr($customer->name, 0, 40) ?? "",
         
                                     "STREET" => $sap->street ?? "",
         
@@ -1600,15 +1636,15 @@ class ProyekController extends Controller
         
                                     "MOBPHONE" => "$customer->handphone",
         
-                                    "FAX" => "",
+                                    "FAX" => "$customer->fax",
         
                                     "FAX_EXTENSION" => "",
         
                                     "E_MAIL" => "$customer->email",
         
-                                    "VALIDFROMDATE" => now()->translatedFormat("d-M-Y"),
+                                    "VALIDFROMDATE" => now()->translatedFormat("d-m-Y"),
         
-                                    "VALIDTODATE" => now()->addMonths(5)->translatedFormat("d-M-Y"),
+                                    "VALIDTODATE" => now()->addMonths(5)->translatedFormat("d-m-Y"),
         
                                     "IDENTIFICATION" => [
                                         [
@@ -1646,14 +1682,14 @@ class ProyekController extends Controller
         
                                     "KUNNR" => "",
         
-                                    "CUST_AKONT" => "",
+                                    "CUST_AKONT" => "$cust_akont",
         
                                     "CUST_C_ZTERM" => "$customer->syarat_pembayaran",
         
                                     "CUST_WTAX" => [
                                         [
         
-                                            "WITHT" => "",
+                                            "WITHT" => "$witht",
             
                                             "WT_AGENT" => "",
             
@@ -1669,7 +1705,7 @@ class ProyekController extends Controller
         
                                     "SPART" => "",
         
-                                    "KDGRP" => "",
+                                    "KDGRP" => "$kdgrp",
         
                                     "CUST_WAERS" => "IDR",
         
@@ -1685,7 +1721,7 @@ class ProyekController extends Controller
         
                                     "CUST_S_ZTERM" => "$customer->syarat_pembayaran",
         
-                                    "KTGRD" => "",
+                                    "KTGRD" => "$ktgrd",
         
                                     "TAXKD" => "$customer->tax",
         
@@ -1724,6 +1760,7 @@ class ProyekController extends Controller
                         ]
                     ]
                 ]);
+                // dd($data_nasabah_online);
                 // End :: Ngirim data ke nasabah online WIKA
 
                 // dd($proyekStage->nilai_perolehan, $proyekStage->porsi_jo, $proyekStage->nilai_kontrak_keseluruhan);
