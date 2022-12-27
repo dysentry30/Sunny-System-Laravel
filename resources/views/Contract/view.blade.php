@@ -662,9 +662,9 @@
 <!--end::Header Contract-->
 </form>
 <!--begin::Content-->
-<div class="col-xl-15">
+<div class="col-xl-15 mx-6">
     <!--begin::Contacts-->
-    <div class="card card-flush h-lg-100" id="kt_contacts_main">
+    <div class="card card-flush" id="kt_contacts_main">
 
         <!--begin::Card body-->
         <div class="card-body pt-5">
@@ -672,7 +672,7 @@
             <ul class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-8">
                 <!--begin:::Tab item Informasi Perusahaan-->
                 <li class="nav-item">
-                    <a class="nav-link text-active-primary pb-4 active" data-bs-toggle="tab"
+                    <a class="nav-link text-active-primary pb-4 ms-6 active" data-bs-toggle="tab"
                         href="#kt_user_view_overview_tab" style="font-size:14px;">Perolehan</a>
                 </li>
                 <!--end:::Tab item Informasi Perusahaan-->
@@ -680,7 +680,7 @@
                 {{-- @if ($contract->stages > 0)
                     <!--begin:::Tab item History-->
                     <li class="nav-item">
-                        <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true" data-bs-toggle="tab"
+                        <a class="nav-link text-active-primary pb-4 ms-6" data-kt-countup-tabs="true" data-bs-toggle="tab"
                             href="#kt_user_view_overview_history" style="font-size:14px;">Terkontrak</a>
                     </li>
                     <!--end:::Tab item History-->
@@ -689,7 +689,7 @@
                 @if ($contract->stages > 1)
                     <!--begin:::Tab item Atachment & Notes-->
                     <li class="nav-item">
-                        <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true" data-bs-toggle="tab"
+                        <a class="nav-link text-active-primary pb-4 ms-6" data-kt-countup-tabs="true" data-bs-toggle="tab"
                             href="#kt_user_view_overview_Performance" style="font-size:14px;">Pelaksanaan</a>
                     </li>
                     <!--end:::Tab item Atachment & Notes-->
@@ -699,9 +699,8 @@
                 @if ($contract->stages > 2)
                     <!--begin:::Tab item Atachment & Notes-->
                     <li class="nav-item">
-                        <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true" data-bs-toggle="tab"
-                            href="#kt_user_view_overview_SerahTerima" style="font-size:14px;">Serah Terima
-                            Pekerjaan</a>
+                        <a class="nav-link text-active-primary pb-4 ms-6" data-kt-countup-tabs="true" data-bs-toggle="tab"
+                            href="#kt_user_view_overview_SerahTerima" style="font-size:14px;">Pemeliharaan</a>
                     </li>
                     <!--end:::Tab item Atachment & Notes-->
 
@@ -1425,7 +1424,9 @@
 
                         </table>
                         <!--End:Table: Review-->
+                        
                         <br><br>
+
                         <!--End:Table: Review-->
                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                             Dokumen LOI
@@ -1473,6 +1474,8 @@
 
                         </table>
                         <!--End:Table: Review-->
+                        
+                        <br><br>
 
                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Usulan Perubahan Draft Kontrak
@@ -3748,9 +3751,13 @@
                         <!--end::Table body-->
 
                     </table>
-                </div>
+
+                    <br>
+
+                {{-- </div>
                 <!--begin:::Tab pane Serah Terima-->
-                <div class="tab-pane fade" id="kt_user_view_overview_penutupan_proyek" role="tabpanel">
+                <div class="tab-pane fade" id="kt_user_view_overview_penutupan_proyek" role="tabpanel"> --}}
+                    
                     <div class="card-title m-0">
                         <h3 class="fw-normal mb-2" style="font-size:14px;">
                             Upload Dokumen Kontrak dan Addendum
