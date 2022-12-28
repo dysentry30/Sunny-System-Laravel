@@ -1760,7 +1760,7 @@ class ProyekController extends Controller
                         ]
                     ]
                 ]);
-                // dd($data_nasabah_online);
+                dd($data_nasabah_online);
                 // End :: Ngirim data ke nasabah online WIKA
 
                 // dd($proyekStage->nilai_perolehan, $proyekStage->porsi_jo, $proyekStage->nilai_kontrak_keseluruhan);
@@ -1776,12 +1776,12 @@ class ProyekController extends Controller
                     return redirect()->back();
                 } else {
                     $contractManagements = ContractManagements::get()->where("project_id", "=", $proyekStage->kode_proyek)->first();
+                    $nasabah_online_response = Http::post("http://nasabah.wika.co.id/index.php/mod_excel/post_json_crm_dev", $data_nasabah_online)->json();
+                    if (!$nasabah_online_response["status"] && !str_contains($nasabah_online_response["msg"], "sudah ada dalam nasabah online")) {
+                        Alert::error("Error", $nasabah_online_response["msg"]);
+                        return redirect()->back();
+                    }
                     if (str_contains(URL::full() , 'crm.wika.co.id')) {
-                        $nasabah_online_response = Http::post("http://nasabah.wika.co.id/index.php/mod_excel/post_json_crm_dev", $data_nasabah_online)->json();
-                        if (!$nasabah_online_response["status"] && !str_contains($nasabah_online_response["msg"], "sudah ada dalam nasabah online")) {
-                            Alert::error("Error", $nasabah_online_response["msg"]);
-                            return redirect()->back();
-                        }
                         $request->stage = 8;
                         if (!empty($contractManagements)) {
                                 $contractManagements->stages = (int) 2;

@@ -237,41 +237,10 @@
                                                                     </label>
                                                                     <textarea cols="2" name="uraian-perubahan" class="form-control form-control-solid">{!! $perubahan_kontrak->uraian_perubahan !!}</textarea>
                                                                 </div>
-                                                                <div class="col">
-                                                                    <label class="fs-6 fw-bold form-label">
-                                                                        <span style="font-weight: normal">Jenis Dokumen</span>
-                                                                    </label>
-                                                                    <select name="jenis-dokumen" id="jenis-dokumen" class="form-select form-select-solid" data-control="select2"
-                                                                        data-hide-search="true" data-placeholder="Pilih Jenis Dokumen" tabindex="-1" aria-hidden="true">
-                                                                        <option value=""></option>
-                                                                        <option {{$perubahan_kontrak->jenis_dokumen == "Site Instruction" ? "selected" : ""}} value="Site Instruction">Site Instruction</option>
-                                                                        <option {{$perubahan_kontrak->jenis_dokumen == "Technical Form" ? "selected" : ""}} value="Technical Form">Technical Form</option>
-                                                                        <option {{$perubahan_kontrak->jenis_dokumen == "Technical Query" ? "selected" : ""}} value="Technical Query">Technical Query</option>
-                                                                        <option {{$perubahan_kontrak->jenis_dokumen == "Field Design Change" ? "selected" : ""}} value="Field Design Change">Field Design Change</option>
-                                                                        <option {{$perubahan_kontrak->jenis_dokumen == "Contract Change Notice" ? "selected" : ""}} value="Contract Change Notice">Contract Change Notice</option>
-                                                                        <option {{$perubahan_kontrak->jenis_dokumen == "Contract Change Proposal" ? "selected" : ""}} value="Contract Change Proposal">Contract Change Proposal</option>
-                                                                        <option {{$perubahan_kontrak->jenis_dokumen == "Contract Change Order" ? "selected" : ""}} value="Contract Change Order">Contract Change Order</option>
-                                                                    </select>
-                                                                </div>
+                                                                
                                                             </div>
                                                             <br>
                                                             <div class="row">
-                                                                <div class="col">
-                                                                    <label class="fs-6 fw-bold form-label">
-                                                                        <span style="font-weight: normal">No Surat / Instruksi Owner</span>
-                                                                    </label>
-                                                                    <select name="instruksi-owner" id="instruksi-owner" class="form-select form-select-solid" data-control="select2"
-                                                                        data-hide-search="true" data-placeholder="Pilih No Surat" tabindex="-1" aria-hidden="true">
-                                                                        <option value=""></option>
-                                                                        <option {{$perubahan_kontrak->jenis_dokumen == "Site Instruction" ? "selected" : ""}} value="Site Instruction">Site Instruction</option>
-                                                                        <option {{$perubahan_kontrak->jenis_dokumen == "Technical Form" ? "selected" : ""}} value="Technical Form">Technical Form</option>
-                                                                        <option {{$perubahan_kontrak->jenis_dokumen == "Technical Query" ? "selected" : ""}} value="Technical Query">Technical Query</option>
-                                                                        <option {{$perubahan_kontrak->jenis_dokumen == "Field Design Change" ? "selected" : ""}} value="Field Design Change">Field Design Change</option>
-                                                                        <option {{$perubahan_kontrak->jenis_dokumen == "Contract Change Notice" ? "selected" : ""}} value="Contract Change Notice">Contract Change Notice</option>
-                                                                        <option {{$perubahan_kontrak->jenis_dokumen == "Contract Change Proposal" ? "selected" : ""}} value="Contract Change Proposal">Contract Change Proposal</option>
-                                                                        <option {{$perubahan_kontrak->jenis_dokumen == "Contract Change Order" ? "selected" : ""}} value="Contract Change Order">Contract Change Order</option>
-                                                                    </select>
-                                                                </div>
                                                                 <div class="col">
                                                                     <label class="fs-6 fw-bold form-label">
                                                                         <span style="font-weight: normal">No Proposal Klaim</span>
@@ -327,7 +296,7 @@
                                     <div class="card card-flush h-lg-80 my-5">
                                         <div class="card-body">
                                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                                                Dokumen Pendukung
+                                                List Jenis Dokumen
                                                 <a href="#" Id="Plus" data-bs-toggle="modal"
                                                     data-bs-target="#kt_modal_input_dokumen_pendukung">+</a>
                                             </h3>
@@ -338,61 +307,31 @@
                                                 <thead>
                                                     <!--begin::Table row-->
                                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                        <th class="min-w-125px">Nama Dokumen</th>
-                                                        <th class="min-w-125px">Dibuat Oleh</th>
-                                                        <th class="min-w-125px">Dibuat Tanggal</th>
-                                                        <th class="min-w-125px">Catatan</th>
+                                                        <th class="min-w-125px">Jenis Dokumen</th>
+                                                        <th class="min-w-125px">No Surat / Instruksi Owner</th>
                                                     </tr>
                                                     <!--end::Table row-->
                                                 </thead>
                                                 <!--end::Table head-->
                                                 <!--begin::Table body-->
                                                 <tbody class="fw-bold text-gray-400">
-                                                    @if (!empty($perubahanKontrak->DokumenPendukung))
-                                                        @forelse ($perubahanKontrak->DokumenPendukung as $dokumen_pendukung)
-                                                            <tr>
-                                                                <!--begin::Name=-->
-                                                                <td>
-                                                                    <a target="_blank"
-                                                                        href="/document/view/{{ $dokumen_pendukung->id_dokumen_pendukung }}/{{ $dokumen_pendukung->id_document }}"
-                                                                        class="text-gray-600 text-hover-primary mb-1">
-                                                                        {{ $dokumen_pendukung->document_name }}
-                                                                    </a>
-                                                                </td>
-                                                                <!--end::Name=-->
-                                                                <!--begin::Name=-->
-                                                                <td>
-                                                                    <p class="text-gray-600 mb-1">{{ $dokumen_pendukung->User->name }}
-                                                                    </p>
-                                                                </td>
-                                                                <!--end::Name=-->
-                                                                <!--begin::Kode=-->
-                                                                <td>
-                                                                    <p class="text-gray-600 mb-1">
-                                                                        {{ date_format(new DateTime($dokumen_pendukung->created_at), 'd-m-Y') }}
-                                                                    </p>
-                                                                </td>
-                                                                <!--end::Kode=-->
-                                                                <!--begin::Unit=-->
-                                                                <td>
-                                                                    <p class="text-gray-600 mb-1">{{ $dokumen_pendukung->note }}</p>
-                                                                </td>
-                                                                <!--end::Unit=-->
-                                                            </tr>
-                                                        @empty
-                                                            <tr>
-                                                                <td colspan="4" class="text-center">
-                                                                    <h6><b>There is no data</b></h6>
-                                                                </td>
-                                                            </tr>
-                                                        @endforelse
-                                                    @else
+                                                    @forelse ($perubahan_kontrak->JenisDokumen as $jd)
+                                                        @php
+                                                            $list_instruksi_owner = explode(",", $jd->list_instruksi_owner);
+                                                        @endphp
                                                         <tr>
-                                                            <td colspan="4" class="text-center">
-                                                                <h6><b>There is no data</b></h6>
+                                                            <td>{{ $jd->jenis_dokumen}}</td>
+                                                            <td>
+                                                                @foreach ($list_instruksi_owner as $io)
+                                                                    - {{$io}} <br>
+                                                                @endforeach
                                                             </td>
                                                         </tr>
-                                                    @endif
+                                                    @empty
+                                                        <tr>
+                                                            <td class="fw-bolder">Data Tidak Ditemukan</td>
+                                                        </tr>
+                                                    @endforelse
                                                 </tbody>
                                                 <!--end::Table body-->
                     
@@ -422,7 +361,7 @@
                         <!--begin::Modal header-->
                         <div class="modal-header">
                             <!--begin::Modal title-->
-                            <h2>Add Attachment | Dokumen Pendukung </h2>
+                            <h2>Add Jenis Dokumen</h2>
                             <!--end::Modal title-->
                             <!--begin::Close-->
                             <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
@@ -440,60 +379,43 @@
 
                             <!--begin::Input group Website-->
                             <div class="fv-row mb-5">
-                                <form action="/dokumen-pendukung/upload" method="POST" enctype="multipart/form-data">
+                                <form action="/jenis-dokumen/upload" method="POST" enctype="multipart/form-data">
                                     @csrf
-                                    <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span style="font-weight: normal">Attachment</span>
-                                    </label>
-                                    <!--end::Label-->
-                                    <!--begin::Input-->
-                                    <input type="hidden" value="1" name="is-tender-menang">
-                                    <input type="hidden" class="modal-name" name="modal-name">
-                                    <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
-                                        name="id-contract">
-                                    <input type="file" style="font-weight: normal"
-                                        class="form-control form-control-solid" name="attach-file"
-                                        id="attach-file-dokumen-pendukung" value="" accept=".docx"
-                                        placeholder="" />
-                                    <!--end::Input-->
-
-                                    <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span style="font-weight: normal">Nama Dokumen</span>
-                                    </label>
-                                    <!--end::Label-->
-                                    <!--begin::Input-->
-                                    <input type="text" class="form-control form-control-solid" name="document-name"
-                                        id="document-name-pendukung" value="" style="font-weight: normal"
-                                        placeholder="Nama Document" />
-                                    <!--end::Input-->
-
-                                    <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span style="font-weight: normal">Catatan</span>
-                                    </label>
-                                    <!--end::Label-->
-                                    <!--begin::Input-->
-                                    <input type="text" class="form-control form-control-solid" name="note"
-                                        id="note" value="" style="font-weight: normal"
-                                        placeholder="Catatan" />
-                                    <!--end::Input-->
-                                    <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
-
-
-                                    {{-- begin::Froala Editor --}}
-                                    {{-- <div id="froala-editor-dokumen-pendukung">
-                                        <h1>Attach file with <b>.DOCX</b> format only</h1>
-                                    </div> --}}
-                                    {{-- end::Froala Editor --}}
-                                    {{-- begin::Read File --}}
-                                    {{-- <script>
-                                        document.getElementById("attach-file-dokumen-pendukung").addEventListener("change", async function() {
-                                            await readFile(this.files[0], "#froala-editor-dokumen-pendukung");
-                                        });
-                                    </script> --}}
-                                    {{-- end::Read File --}}
+                                    <input type="hidden" name="id-perubahan-kontrak" value="{{$perubahan_kontrak->id_perubahan_kontrak}}">
+                                    <div class="row">
+                                        <div class="col-5">
+                                            <label class="fs-6 fw-bold form-label">
+                                                <span style="font-weight: normal">Jenis Dokumen</span>
+                                            </label>
+                                            <select name="jenis-dokumen" id="jenis-dokumen" class="form-select form-select-solid" data-control="select2"
+                                                data-hide-search="true" onchange="getJenisDokumen(this)" data-placeholder="Pilih Jenis Dokumen" tabindex="-1" aria-hidden="true">
+                                                <option value=""></option>
+                                                <option  value="Site Instruction">Site Instruction</option>
+                                                <option  value="Technical Form">Technical Form</option>
+                                                <option  value="Technical Query">Technical Query</option>
+                                                <option  value="Field Design Change">Field Design Change</option>
+                                                <option  value="Contract Change Notice">Contract Change Notice</option>
+                                                <option  value="Contract Change Proposal">Contract Change Proposal</option>
+                                                <option  value="Contract Change Order">Contract Change Order</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-1 d-flex flex-col" style="height: 250px; width: 25px !important">
+                                            <div class="vr"></div>
+                                        </div>
+                                        <div class="col-5">
+                                            <label class="fs-6 fw-bold form-label">
+                                                <span style="font-weight: normal">No Surat / Instruksi Owner: </span>
+                                            </label>
+                                            <br>
+                                            <div id="instruksi-owner" style="max-height: 250px; overflow: scroll; scroll-behavior: smooth;">
+                                                <h5 class="text-center">Pilih Jenis Dokumen!</h5>
+                                            </div>
+                                            {{-- <select name="instruksi-owner" id="instruksi-owner" class="form-select form-select-solid" data-control="select2"
+                                                data-hide-search="true" data-placeholder="Pilih No Surat" tabindex="-1" aria-hidden="true">
+                                                <option value=""></option>
+                                            </select> --}}
+                                        </div>
+                                    </div>
                             </div>
                             <!--end::Input group-->
 
@@ -568,6 +490,32 @@
             })
         });
     </script>
+
+    {{-- Begin :: Get Jenis Dokumen --}}
+    <script>
+        async function getJenisDokumen(e) {
+            const val = e.value;
+            let html = `<option value=""></option>`;
+            const getJenisDokumenRes = await fetch(`/get-jenis-dokumen/${val}`).then(res => res.json());
+            if(getJenisDokumenRes.length > 0) {
+                getJenisDokumenRes.forEach(element => {
+                    html += `
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="instruksi-owner[]" value="${element.nomor_dokumen}" id="${element.nomor_dokumen}">
+                        <label class="form-check-label" for="${element.nomor_dokumen}">
+                            ${element.nomor_dokumen}
+                        </label>
+                    </div>
+                    <br>
+                    `
+                });
+            } else {
+                html = `<h5 class="text-center">Data tidak ditemukan!</h5>`;
+            }
+            document.querySelector("#instruksi-owner").innerHTML = html;
+        }
+    </script>
+    {{-- End :: Get Jenis Dokumen --}}
 
 
 @endsection
