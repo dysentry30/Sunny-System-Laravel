@@ -368,8 +368,8 @@ Route::middleware(["web"])->group(function () {
         $new_class->periode = date("Ymd");
         $new_class->data = $industry_attractivness->map(function($ia) {
             $new_ia = new stdClass();
-            $new_ia->kode_pelanggan = "";
-            $new_ia->industry_sector = $ia->code_owner;
+            $new_ia->code_customer = "";
+            $new_ia->industry_code = $ia->code_owner;
             $new_ia->attractivness_status = $ia->owner_attractiveness;
             return $new_ia;
         });
