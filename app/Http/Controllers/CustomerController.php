@@ -439,15 +439,15 @@ class CustomerController extends Controller
             "proyekClosed" => $proyekClosed,
             "area_proyeks" => $area_proyeks,
             "industryAttractiveness" => $industryOwners,
-            "jenisPerusahaan" => $jenisPerusahaan,
-            "taxs" => $taxs,
-            "syaratPembayaran" => $syaratPembayaran,
+            // "jenisPerusahaan" => $jenisPerusahaan,
+            // "taxs" => $taxs,
+            // "syaratPembayaran" => $syaratPembayaran,
             "masalahHukum" => $masalahHukum,
             "csi" => $csi,
             "cli" => $cli,
             "nps" => $nps,
             "inovasi" => $inovasi
-        ], compact("namaUnit", "labaProyek", "rugiProyek", "piutangProyek", "proyekOpportunity", "industryOwners"));
+        ], compact("jenisPerusahaan", "taxs", "syaratPembayaran", "namaUnit", "labaProyek", "rugiProyek", "piutangProyek", "proyekOpportunity", "industryOwners"));
     }
 
     public function saveEdit(
