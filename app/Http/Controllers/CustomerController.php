@@ -259,7 +259,7 @@ class CustomerController extends Controller
         $per = 1000000;
         $industryOwners = IndustryOwner::all();
         // $industrySectors = IndustrySector::all();
-        $jenisPerusahaan = JenisPerusahaan::all();
+        // $jenisPerusahaan = JenisPerusahaan::all();
         // $taxs = Tax::all();
         // $syaratPembayaran = SyaratPembayaran::all();
         $masalahHukum = MasalahHukum::with(['Proyek'])->where("id_customer", "=", $id_customer)->get();
@@ -439,7 +439,7 @@ class CustomerController extends Controller
             "proyekClosed" => $proyekClosed,
             "area_proyeks" => $area_proyeks,
             "industryAttractiveness" => $industryOwners,
-            "jenisPerusahaan" => $jenisPerusahaan,
+            // "jenisPerusahaan" => $jenisPerusahaan,
             // "taxs" => $taxs,
             // "syaratPembayaran" => $syaratPembayaran,
             "masalahHukum" => $masalahHukum,
