@@ -9,6 +9,7 @@ use App\Models\AddendumContractDrafts;
 use App\Models\AddendumContractNegoisasi;
 use App\Models\AddendumContracts;
 use App\Models\ContractManagements;
+use App\Models\JenisDokumen;
 use DateTime;
 use Faker\Core\Uuid;
 use Illuminate\Http\Request;
@@ -707,6 +708,22 @@ class AddendumContractController extends Controller
         }
 
         Alert::error("Error", "Buat Kontrak Amandemen gagal");
+        return Redirect::back();
+    }
+
+    public function jenisDokumenUpload(Request $request) {
+        $data = $request->all();
+        $jenis_dokumen = new JenisDokumen();
+        $jenis_dokumen->id_perubahan_kontrak = $data["id-perubahan-kontrak"];
+        $jenis_dokumen->jenis_dokumen = $data["jenis-dokumen"];
+        $jenis_dokumen->list_instruksi_owner = collect($data["instruksi-owner"])->join(",");
+        if ($jenis_dokumen->save()) {
+            // Session::forget("pasals");
+            Alert::success("Success", "Jenis Dokumen berhasil ditambahkan");
+            return redirect()->back();
+        }
+
+        Alert::error("Error", "Jenis Dokumen gagal ditambahkan");
         return Redirect::back();
     }
 }

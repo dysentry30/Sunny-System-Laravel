@@ -41,13 +41,21 @@ use App\Http\Controllers\ContractManagementsController;
 use App\Http\Controllers\JenisProyekController;
 use App\Http\Controllers\MataUangController;
 use App\Http\Controllers\TipeProyekController;
+use App\Models\ContractChangeNotice;
+use App\Models\ContractChangeOrder;
+use App\Models\ContractChangeProposal;
+use App\Models\FieldChange;
 use App\Models\IndustrySector;
 use App\Models\JenisProyek;
 use App\Models\MataUang;
 use App\Models\Provinsi;
 use App\Models\ProyekBerjalans;
 use App\Models\Sbu;
+use App\Models\SiteInstruction;
+use App\Models\TechnicalForm;
+use App\Models\TechnicalQuery;
 use BeyondCode\LaravelWebSockets\Facades\WebSocketsRouter;
+use Illuminate\Routing\RouteGroup;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\URL;
@@ -203,6 +211,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post("/addendum-contract/disetujui/upload", [AddendumContractController::class, "draftDisetujuiUpload"]);
 
     Route::post("/addendum-contract/amandemen/upload", [AddendumContractController::class, "draftAmandemenUpload"]);
+
+    Route::post("/jenis-dokumen/upload", [AddendumContractController::class, "jenisDokumenUpload"]);
 
     Route::post("/addendum-contract/draft/update", [AddendumContractController::class, "draftUpdate"]);
 
@@ -1433,6 +1443,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     Route::post("/input-risk/upload", [ContractManagementsController::class, "riskUpload"]);
 
+    Route::post("/input-risk/edit", [ContractManagementsController::class, "riskUpdate"]);
+
     Route::post("/laporan-bulanan/upload", [ContractManagementsController::class, "monthlyReportUpload"]);
 
     Route::post("/serah-terima/upload", [ContractManagementsController::class, "handOverUpload"]);
@@ -2293,6 +2305,55 @@ Route::get('/send-data-industry-attractivness', function (Request $request) {
 });
 // End Send Data Industry Attractivness ke SAP
 
+// Begin Get Jenis Dokumen
+Route::get('/get-jenis-dokumen/{jenis_dokumen}', function ($jenis_dokumen) {
+    // <option  value="Site Instruction">Site Instruction</option>
+    //                                             <option  value="Technical Form">Technical Form</option>
+    //                                             <option  value="Technical Query">Technical Query</option>
+    //                                             <option  value="Field Design Change">Field Design Change</option>
+    //                                             <option  value="Contract Change Notice">Contract Change Notice</option>
+    //                                             <option  value="Contract Change Proposal">Contract Change Proposal</option>
+    //                                             <option  value="Contract Change Order">Contract Change Order</option>
+    switch($jenis_dokumen) {
+        case "Site Instruction":
+            $data = SiteInstruction::all();
+            return response()->json($data);
+            break;
+        
+        case "Technical Form":
+            $data = TechnicalForm::all();
+            return response()->json($data);
+            break;
+        
+        case "Technical Query":
+            $data = TechnicalQuery::all();
+            return response()->json($data);
+            break;
+        
+        case "Field Design Change":
+            $data = FieldChange::all();
+            return response()->json($data);
+            break;
+        
+        case "Contract Change Notice":
+            $data = ContractChangeNotice::all();
+            return response()->json($data);
+            break;
+        
+        case "Contract Change Proposal":
+            $data = ContractChangeProposal::all();
+            return response()->json($data);
+            break;
+        
+        case "Contract Change Order":
+            $data = ContractChangeOrder::all();
+            return response()->json($data);
+            break;
+        
+
+    }
+});
+// End Get Jenis Dokumen
 
 Route::get('/abort/{code}/{msg}', function ($code, $msg) {
     return abort($code, $msg);
