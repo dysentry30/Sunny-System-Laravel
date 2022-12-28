@@ -38,7 +38,7 @@
                                 <!--end::Button-->
 
                                 <!--begin::Wrapper-->
-                                <div class="me-4" style="margin-left:10px;">
+                                {{-- <div class="me-4" style="margin-left:10px;">
                                     <!--begin::Menu-->
                                     <a href="#" class="btn btn-sm btn-flex btn-light btn-active-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
                                         <i class="bi bi-folder2-open"></i>Action</a>
@@ -67,7 +67,7 @@
                                     </div>
                                     <!--end::Menu 1-->
                                     <!--end::Menu-->
-                                </div>
+                                </div> --}}
                                 <!--end::Wrapper-->
 
 
@@ -86,6 +86,84 @@
 
                         <!--begin::Card header-->
                         <div class="card-header border-0 pt-">
+
+                            <!--begin::Card title-->
+                            <div class="card-title">
+                                <!--Begin:: BUTTON FILTER-->
+                                <form action="" class="d-flex flex-row w-auto" method="get">
+                                    <!--Begin:: Select Options-->
+                                    {{-- <select style="display: none !important" id="column" name="column" onchange="changes(this)"
+                                        class="form-select form-select-solid select2-hidden-accessible"
+                                        style="margin-right: 2rem" data-control="select2" data-hide-search="true"
+                                        data-placeholder="Column" data-select2-id="select2-data-bulan" tabindex="-1"
+                                        aria-hidden="true">
+                                        <option value="unit_kerja" {{$column == "unit_kerja" ? "selected" : ""}}>Unit Kerja</option>
+                                        <option value="jenis_proyek" {{$column == "jenis_proyek" ? "selected" : ""}}>Jenis Proyek</option>
+
+                                    </select> --}}
+                                    <!--End:: Select Options-->
+
+                                    <!--begin:: Input Filter-->
+                                    <div id="filterUnit" class="d-flex align-items-center position-relative">
+                                        <select onchange="this.form.submit()" name="filter" class="form-select form-select-solid w-200px ms-2"
+                                            data-control="select2" data-hide-search="true" data-placeholder="Unit Kerja">
+                                            <option></option>
+                                            @foreach ($unitkerjas as $unitkerja)
+                                                <option value="{{ $unitkerja->divcode }}"
+                                                    {{ $filterUnit == $unitkerja->divcode ? 'selected' : '' }}>
+                                                    {{ $unitkerja->unit_kerja }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <div id="filterJenis" class="d-flex align-items-center position-relative">
+                                        <select onchange="this.form.submit()" name="filter-jenis"
+                                            class="form-select form-select-solid select2-hidden-accessible w-auto ms-2"
+                                            data-control="select2" data-hide-search="true" data-placeholder="Jenis Proyek"
+                                            tabindex="-1" aria-hidden="true">
+                                            <option></option>
+                                            <option value="I" {{ $filterJenis == 'I' ? 'selected' : '' }}>Internal</option>
+                                            <option value="N" {{ $filterJenis == 'N' ? 'selected' : '' }}>External</option>
+                                            <option value="J" {{ $filterJenis == 'J' ? 'selected' : '' }}>JO</option>
+                                        </select>
+                                    </div>
+
+
+                                    {{-- <script>
+                                        function changes(e) {
+                                            if (e.value == "unit_kerja") {
+                                                document.getElementById("filterUnit").style.display = "";
+                                                document.getElementById("filterJenis").style.setProperty("display", "none", "important");
+                                                document.getElementById("filterJenis").value = "";
+                                            } else {
+                                                document.getElementById("filterJenis").style.display = "";
+                                                document.getElementById("filterUnit").style.setProperty("display", "none", "important");
+                                                document.getElementById("filterUnit").value = "";
+                                            } 
+                                        }
+                                    </script> --}}
+                                    <!--end:: Input Filter-->
+
+                                    <!--begin:: Filter-->
+                                    <button type="submit" class="btn btn-sm btn-light btn-active-primary ms-4"
+                                        id="kt_toolbar_primary_button">
+                                        Filter</button>
+                                    <!--end:: Filter-->
+
+                                    <!--begin:: RESET-->
+                                    <button type="button" class="btn btn-sm btn-light btn-active-primary ms-2"
+                                        onclick="resetFilter()" id="kt_toolbar_primary_button">Reset</button>
+                                        
+                                    <script>
+                                        function resetFilter() {
+                                            window.location.href = "/contract-management";
+                                        }
+                                    </script>
+                                    <!--end:: RESET-->
+                                </form>
+                                <!--end:: BUTTON FILTER-->
+                            </div>
+                            <!--begin::Card title-->
 
                             <!--begin::Card title-->
                             <div class="card-title" style="width: 100%">
@@ -223,7 +301,20 @@
                                                     <!--end::Email=-->
                                                     <!--begin::Email=-->
                                                     <td>
-                                                        {{ $proyek->jenis_proyek == "N" ? "External" : "Internal" }}
+                                                        @switch($proyek->jenis_proyek)
+                                                            @case('I')
+                                                                Internal
+                                                            @break
+
+                                                            @case('N')
+                                                                Eksternal
+                                                            @break
+
+                                                            @case('J')
+                                                                JO
+                                                            @break
+
+                                                        @endswitch
                                                     </td>
                                                     <!--end::Email=-->
                                                     <!--begin::Email=-->
@@ -305,7 +396,20 @@
 
                                                     <!--begin::Email=-->
                                                     <td>
-                                                        {{ $proyek->jenis_proyek == "N" ? "External" : "Internal" }}
+                                                        @switch($proyek->jenis_proyek)
+                                                            @case('I')
+                                                                Internal
+                                                            @break
+
+                                                            @case('N')
+                                                                Eksternal
+                                                            @break
+
+                                                            @case('J')
+                                                                JO
+                                                            @break
+
+                                                        @endswitch
                                                     </td>
                                                     <!--end::Email=-->
 
@@ -380,7 +484,7 @@
                                                     <!--end::Name=-->
                                                     <!--begin::Name=-->
                                                     <td>
-                                                        <a target="_blank" href="/proyek/view/{{ $proyek->kode_proyek }}" id="click-name" class="text-hover-primary mb-1">{{ $proyek->nama_proyek }}</a>
+                                                        {{ $proyek->nama_proyek }}
                                                     </td>
                                                     <!--end::Name=-->
                                                     <!--begin::Email=-->
@@ -390,7 +494,20 @@
                                                     <!--end::Email=-->
                                                     <!--begin::Jenis Proyek=-->
                                                     <td>
-                                                        {{ $proyek->jenis_proyek }}
+                                                        @switch($proyek->jenis_proyek)
+                                                            @case('I')
+                                                                Internal
+                                                            @break
+
+                                                            @case('N')
+                                                                Eksternal
+                                                            @break
+
+                                                            @case('J')
+                                                                JO
+                                                            @break
+
+                                                        @endswitch
                                                     </td>
                                                     <!--end::Jenis Proyek=-->
                                                     <!--begin::Nilai OK=-->
