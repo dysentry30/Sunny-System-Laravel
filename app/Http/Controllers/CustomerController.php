@@ -447,7 +447,7 @@ class CustomerController extends Controller
             "cli" => $cli,
             "nps" => $nps,
             "inovasi" => $inovasi
-        ], compact("syaratPembayaran", "namaUnit", "labaProyek", "rugiProyek", "piutangProyek", "proyekOpportunity", "industryOwners"));
+        ], compact("namaUnit", "labaProyek", "rugiProyek", "piutangProyek", "proyekOpportunity", "industryOwners"));
     }
 
     public function saveEdit(
