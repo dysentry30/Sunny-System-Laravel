@@ -148,9 +148,21 @@
                                             @forelse ($proyeks_perolehan as $proyek)
                                                 <tr>
                                                     <!--begin::Name=-->
-                                                    <td>
+                                                    @if (!empty($proyek->ContractManagements))
+                                                        <td>
+                                                            <a target="_blank" href="/contract-management/view/{{ url_encode($proyek->ContractManagements->id_contract) }}" id="click-name"
+                                                                class="text-hover-primary">{{ $proyek->nama_proyek }}</a>
+                                                        </td>
+                                                    @else
+                                                        <td>
+                                                            <a href="#" id="click-name" class="text-hover-primary"><small class="badge badge-light-danger">
+                                                                    Belum Ditentukan
+                                                                </small></a>
+                                                        </td>
+                                                    @endif
+                                                    {{-- <td>
                                                         <a target="_blank" href="/proyek/view/{{ $proyek->kode_proyek }}" id="click-name" class="text-hover-primary mb-1">{{ $proyek->nama_proyek }}</a>
-                                                    </td>
+                                                    </td> --}}
                                                     <!--end::Name=-->
                                                     <!--begin::Email=-->
                                                     <td>
