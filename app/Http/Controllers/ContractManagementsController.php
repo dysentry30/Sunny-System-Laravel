@@ -707,6 +707,95 @@ class ContractManagementsController extends Controller
 
         if (isset($data["stage"])) {
             $is_tender_menang = $data["stage"];
+            $is_closed = 0;
+        } else {
+            $is_tender_menang = !empty($data["is-tender-menang"]) ? 1 : 0;
+            $is_closed = !empty($data["is-closed"]) ? 1 : 0;
+        }
+        $validation->validate();
+
+        $risk->verifikasi = $data["verifikasi"];
+        $risk->id_contract = $data["id-contract"];
+        $risk->stage = $is_tender_menang; // Kolom Tender Menang dialihfungsikan menjadi Stage
+        $risk->kategori = $data["kategori"];
+        $risk->kriteria = $data["kriteria"];
+        $risk->probis_1_2 = $data["probis_1_2"];
+        $risk->probis_terganggu = $data["probis_terganggu"];
+        $risk->penyebab = $data["penyebab"];
+        $risk->resiko_peluang = $data["resiko_peluang"];
+        $risk->dampak = $data["dampak"];
+        $risk->nilai_resiko_r0 = $data["nilai_resiko_r0"];
+        $risk->item_kontrol = $data["item_kontrol"];
+        $risk->probabilitas = $data["probabilitas"];
+        $risk->tingkat_efektifitas_kontrol = $data["tingkat_efektifitas_kontrol"];
+        $risk->nilai_resiko_r1 = $data["nilai_resiko_r1"];
+        $risk->tindak_lanjut_mitigasi = $data["tindak_lanjut_mitigasi"];
+        $risk->tingkat_efektifitas_tindak_lanjut = $data["tingkat_efektifitas_tindak_lanjut"];
+        $risk->nilai_resiko_r2 = $data["nilai_resiko_r2"];
+        $risk->biaya_proaktif = $data["biaya_proaktif"];
+        $risk->tanggal_mulai = $data["tanggal_mulai"];
+        $risk->tanggal_selesai = $data["tanggal_selesai"];
+        $risk->tindak_lanjut_reaktif = $data["tindak_lanjut_reaktif"];
+        $risk->biaya_reaktif = $data["biaya_reaktif"];
+        $risk->pic_rtl = $data["pic_rtl"];
+        $risk->uraian = $data["uraian"];
+        $risk->nilai = $data["nilai"];
+        $risk->skor = $data["skor"];
+        $risk->is_closed = $is_closed;
+        if ($risk->save()) {
+            // moveFileTemp($file, $id_document);
+            Alert::success('Success', "Resiko berhasil ditambahkan");
+            return Redirect::back();
+        }
+        Alert::error('Error', "Resiko gagal ditambahkan");
+        return Redirect::back()->with("modal", $data["modal-name"]);
+        // return redirect($_SERVER["HTTP_REFERER"]);
+    }
+
+    // Upload Risk of Contract to server or database
+    public function riskUpdate(Request $request)
+    {
+        
+        // $id_document = (string) $faker->uuid3();
+        // $file = $request->file("attach-file-risk");
+        $data = $request->collect();
+        $risk = InputRisks::find($data["id-risk"]);
+        // dd($risk);
+        $key_rules = $data->map(function($val, $key) {
+            if(str_contains($key, "tanggal")) {
+                return $key = "required|date";
+            }
+            return $key = "required|string";
+        })->toArray();
+        $messages = [
+            "required" => "Field di atas wajib diisi",
+            "numeric" => "Field di atas harus numeric",
+            "file" => "This field must be file only",
+            "string" => "This field must be alphabet only",
+        ];
+        $rules = $key_rules;
+        $data = $data->toArray();
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            // dd($validation->errors());
+            $field_mandatory = self::input_name_to_label(collect($validation->errors()->keys()));
+            Alert::html('Error', "Field <b>$field_mandatory</b> harus terisi!", "error");
+            return Redirect::back()->with("modal", $data["modal-name"]);
+            // return Redirect::back();
+            // dd($validation->errors());
+        }
+
+        // Check ID Contract exist
+        $is_id_contract_exist = ContractManagements::find($data["id-contract"]);
+
+        if (empty($is_id_contract_exist)) {
+            // Session::flash("failed", "Please fill 'Draft Contract' empty field");
+            Alert::error('Error', "Pastikan contract sudah dibuat terlebih dahulu");
+            return Redirect::back();
+        }
+
+        if (isset($data["stage"])) {
+            $is_tender_menang = $data["stage"];
         } else {
             $is_tender_menang = !empty($data["is-tender-menang"]) ? 1 : 0;
         }
@@ -739,6 +828,7 @@ class ContractManagementsController extends Controller
         $risk->uraian = $data["uraian"];
         $risk->nilai = $data["nilai"];
         $risk->skor = $data["skor"];
+        $risk->is_closed = (bool)$data["status"];
         if ($risk->save()) {
             // moveFileTemp($file, $id_document);
             Alert::success('Success', "Resiko berhasil ditambahkan");

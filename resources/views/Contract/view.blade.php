@@ -1063,11 +1063,12 @@
                             <thead>
                                 <!--begin::Table row-->
                                 <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-125px">Verifikasi</th>
                                     <th class="min-w-125px">Kategori</th>
                                     <th class="min-w-125px">Kriteria</th>
-                                    <th class="min-w-125px">Probis Level 1 - 2</th>
-                                    <th class="min-w-125px">Probis Yang Terganggu</th>
+                                    <th class="min-w-125px">Penyebab</th>
+                                    <th class="min-w-125px">Risiko</th>
+                                    <th class="min-w-125px">Dampak</th>
+                                    <th class="min-w-125px">Status</th>
                                 </tr>
                                 <!--end::Table row-->
                             </thead>
@@ -1080,12 +1081,8 @@
                                             <tr>
                                                 <!--begin::Name=-->
                                                 <td>
-                                                    <p class="text-gray-600 mb-1">{{ $inputRisk->verifikasi }}</p>
-                                                </td>
-                                                <!--end::Name=-->
-                                                <!--begin::Name=-->
-                                                <td>
-                                                    <p class="text-gray-600 mb-1">{{ $inputRisk->kategori }}</p>
+                                                    <a href="#" Id="edit_resiko_perolehan" data-bs-toggle="modal"
+                                                        data-bs-target="#kt_modal_edit_resiko_perolehan_{{ $inputRisk->id_risk }}"><p class="text-gray-600 mb-1 text-hover-primary">{{ $inputRisk->kategori }}</p></a>
                                                 </td>
                                                 <!--end::Name=-->
                                                 <!--begin::Kode=-->
@@ -1095,12 +1092,25 @@
                                                 <!--end::Kode=-->
                                                 <!--begin::Unit=-->
                                                 <td>
-                                                    <p class="text-gray-600 mb-1">{{ $inputRisk->probis_1_2 }}</p>
+                                                    <p class="text-gray-600 mb-1">{{ $inputRisk->penyebab }}</p>
                                                 </td>
                                                 <!--end::Unit=-->
                                                 <!--begin::Unit=-->
                                                 <td>
-                                                    <p class="text-gray-600 mb-1">{{ $inputRisk->probis_terganggu }}</p>
+                                                    <p class="text-gray-600 mb-1">{{ $inputRisk->resiko_peluang }}</p>
+                                                </td>
+                                                <!--end::Unit=-->
+                                                <!--begin::Unit=-->
+                                                <td>
+                                                    <p class="text-gray-600 mb-1">{{ $inputRisk->dampak }}</p>
+                                                </td>
+                                                <!--end::Unit=-->
+                                                <!--begin::Unit=-->
+                                                <td>
+                                                    @php
+                                                        $status = $inputRisk->is_closed == 0 ? "Open" : "Closed";
+                                                    @endphp
+                                                    <p class="text-gray-600 mb-1">{{ $status }}</p>
                                                 </td>
                                                 <!--end::Unit=-->
                                             </tr>
@@ -2540,51 +2550,43 @@
                             <!--end::Table head-->
                             <!--begin::Table body-->
                             <tbody class="fw-bold text-gray-400">
-                                @if ($contract->inputRisks->contains('stage', 2))
-                                    @forelse ($contract->inputRisks as $inputRisk)
-                                        @if ($inputRisk->stage == 2)
-                                            <tr>
-                                                <!--begin::Name=-->
-                                                <td>
-                                                    <p class="text-gray-600 mb-1">{{ $inputRisk->verifikasi }}</p>
-                                                </td>
-                                                <!--end::Name=-->
-                                                <!--begin::Name=-->
-                                                <td>
-                                                    <p class="text-gray-600 mb-1">{{ $inputRisk->kategori }}</p>
-                                                </td>
-                                                <!--end::Name=-->
-                                                <!--begin::Kode=-->
-                                                <td>
-                                                    <p class="text-gray-600 mb-1">{{ $inputRisk->kriteria }}</p>
-                                                </td>
-                                                <!--end::Kode=-->
-                                                <!--begin::Unit=-->
-                                                <td>
-                                                    <p class="text-gray-600 mb-1">{{ $inputRisk->probis_1_2 }}</p>
-                                                </td>
-                                                <!--end::Unit=-->
-                                                <!--begin::Unit=-->
-                                                <td>
-                                                    <p class="text-gray-600 mb-1">{{ $inputRisk->probis_terganggu }}</p>
-                                                </td>
-                                                <!--end::Unit=-->
-                                            </tr>
-                                        @endif
-                                    @empty
+                                @forelse ($contract->inputRisks as $inputRisk)
+                                    @if ($inputRisk->stage <= 2)
                                         <tr>
-                                            <td colspan="5" class="text-center">
-                                                <h6><b>There is no data</b></h6>
+                                            <!--begin::Name=-->
+                                            <td>
+                                                <p class="text-gray-600 mb-1">{{ $inputRisk->verifikasi }}</p>
                                             </td>
+                                            <!--end::Name=-->
+                                            <!--begin::Name=-->
+                                            <td>
+                                                <p class="text-gray-600 mb-1">{{ $inputRisk->kategori }}</p>
+                                            </td>
+                                            <!--end::Name=-->
+                                            <!--begin::Kode=-->
+                                            <td>
+                                                <p class="text-gray-600 mb-1">{{ $inputRisk->kriteria }}</p>
+                                            </td>
+                                            <!--end::Kode=-->
+                                            <!--begin::Unit=-->
+                                            <td>
+                                                <p class="text-gray-600 mb-1">{{ $inputRisk->probis_1_2 }}</p>
+                                            </td>
+                                            <!--end::Unit=-->
+                                            <!--begin::Unit=-->
+                                            <td>
+                                                <p class="text-gray-600 mb-1">{{ $inputRisk->probis_terganggu }}</p>
+                                            </td>
+                                            <!--end::Unit=-->
                                         </tr>
-                                    @endforelse
-                                @else
+                                    @endif
+                                @empty
                                     <tr>
                                         <td colspan="5" class="text-center">
                                             <h6><b>There is no data</b></h6>
                                         </td>
                                     </tr>
-                                @endif
+                                @endforelse
                             </tbody>
                             <!--end::Table body-->
 
@@ -3574,50 +3576,42 @@
                                     <!--end::Table head-->
                                     <!--begin::Table body-->
                                     <tbody class="fw-bold text-gray-400">
-                                        @if ($contract->inputRisks->contains('stage', 3))
-                                            @forelse ($contract->inputRisks as $inputRisk)
-                                                @if ($inputRisk->stage == 3)
-                                                    <tr>
-                                                        <!--begin::Name=-->
-                                                        <td>
-                                                            <p class="text-gray-600 mb-1">{{ $inputRisk->resiko }}
-                                                            </p>
-                                                        </td>
-                                                        <!--end::Name=-->
-                                                        <!--begin::Name=-->
-                                                        <td>
-                                                            <p class="text-gray-600 mb-1">{{ $inputRisk->penyebab }}
-                                                            </p>
-                                                        </td>
-                                                        <!--end::Name=-->
-                                                        <!--begin::Kode=-->
-                                                        <td>
-                                                            <p class="text-gray-600 mb-1">{{ $inputRisk->dampak }}
-                                                            </p>
-                                                        </td>
-                                                        <!--end::Kode=-->
-                                                        <!--begin::Unit=-->
-                                                        <td>
-                                                            <p class="text-gray-600 mb-1">{{ $inputRisk->mitigasi }}
-                                                            </p>
-                                                        </td>
-                                                        <!--end::Unit=-->
-                                                    </tr>
-                                                @endif
-                                            @empty
+                                        @forelse ($contract->inputRisks as $inputRisk)
+                                            @if ($inputRisk->stage <= 3)
                                                 <tr>
-                                                    <td colspan="5" class="text-center">
-                                                        <h6><b>There is no data</b></h6>
+                                                    <!--begin::Name=-->
+                                                    <td>
+                                                        <p class="text-gray-600 mb-1">{{ $inputRisk->resiko }}
+                                                        </p>
                                                     </td>
+                                                    <!--end::Name=-->
+                                                    <!--begin::Name=-->
+                                                    <td>
+                                                        <p class="text-gray-600 mb-1">{{ $inputRisk->penyebab }}
+                                                        </p>
+                                                    </td>
+                                                    <!--end::Name=-->
+                                                    <!--begin::Kode=-->
+                                                    <td>
+                                                        <p class="text-gray-600 mb-1">{{ $inputRisk->dampak }}
+                                                        </p>
+                                                    </td>
+                                                    <!--end::Kode=-->
+                                                    <!--begin::Unit=-->
+                                                    <td>
+                                                        <p class="text-gray-600 mb-1">{{ $inputRisk->mitigasi }}
+                                                        </p>
+                                                    </td>
+                                                    <!--end::Unit=-->
                                                 </tr>
-                                            @endforelse
-                                        @else
+                                            @endif
+                                        @empty
                                             <tr>
                                                 <td colspan="5" class="text-center">
                                                     <h6><b>There is no data</b></h6>
                                                 </td>
                                             </tr>
-                                        @endif
+                                        @endforelse
                                     </tbody>
                                     <!--end::Table body-->
 
@@ -3965,7 +3959,7 @@
             </div>
             <!--end::Input group-->
 
-            <button type="submit" id="save-terima" class="btn btn-lg btn-primary"
+            <button type="submit" id="save-terima" class="btn btn-sm btn-primary"
                 data-bs-dismiss="modal">Save</button>
             </form>
 
@@ -4060,7 +4054,7 @@
             </div>
             <!--end::Input group-->
 
-            <button type="submit" id="save-draft" class="btn btn-lg btn-primary"
+            <button type="submit" id="save-draft" class="btn btn-sm btn-primary"
                 data-bs-dismiss="modal">Save</button>
             </form>
 
@@ -4161,7 +4155,7 @@
                     </div>
                     <!--end::Input group-->
 
-                    <button type="submit" id="save-draft-tender-menang" class="btn btn-lg btn-primary"
+                    <button type="submit" id="save-draft-tender-menang" class="btn btn-sm btn-primary"
                         data-bs-dismiss="modal">Save</button>
                     </form>
 
@@ -4336,7 +4330,7 @@
                 </div> --}}
                         <!--end::Input group-->
 
-                        {{-- <button type="submit" id="save-review" class="btn btn-lg btn-primary"
+                        {{-- <button type="submit" id="save-review" class="btn btn-sm btn-primary"
                     data-bs-dismiss="modal">Save</button>
 
                 </form> --}}
@@ -4437,7 +4431,7 @@
                     </div>
                     <!--end::Input group-->
 
-                    <button type="submit" id="save-review-klarifikasi-negosiasi" class="btn btn-lg btn-primary"
+                    <button type="submit" id="save-review-klarifikasi-negosiasi" class="btn btn-sm btn-primary"
                         data-bs-dismiss="modal">Save</button>
                     </form>
 
@@ -4534,7 +4528,7 @@
                     </div>
                     <!--end::Input group-->
 
-                    <button type="submit" id="save-review-kontrak-tanda-tangan" class="btn btn-lg btn-primary"
+                    <button type="submit" id="save-review-kontrak-tanda-tangan" class="btn btn-sm btn-primary"
                         data-bs-dismiss="modal">Save</button>
                     </form>
 
@@ -4631,7 +4625,7 @@
                     </div>
                     <!--end::Input group-->
 
-                    <button type="submit" id="save-review-perjanjian-kso" class="btn btn-lg btn-primary"
+                    <button type="submit" id="save-review-perjanjian-kso" class="btn btn-sm btn-primary"
                         data-bs-dismiss="modal">Save</button>
                     </form>
 
@@ -4730,7 +4724,7 @@
                     </div>
                     <!--end::Input group-->
 
-                    <button type="submit" id="save-review-pembatalan-kontrak" class="btn btn-lg btn-primary"
+                    <button type="submit" id="save-review-pembatalan-kontrak" class="btn btn-sm btn-primary"
                         data-bs-dismiss="modal">Save</button>
                     </form>
 
@@ -4828,7 +4822,7 @@
                     </div>
                     <!--end::Input group-->
 
-                    <button type="submit" id="save-review-dokumen-pendukung" class="btn btn-lg btn-primary"
+                    <button type="submit" id="save-review-dokumen-pendukung" class="btn btn-sm btn-primary"
                         data-bs-dismiss="modal">Save</button>
                     </form>
 
@@ -4924,7 +4918,7 @@
                     </div>
                     <!--end::Input group-->
 
-                    <button type="submit" id="save-review-mom-meeting" class="btn btn-lg btn-primary"
+                    <button type="submit" id="save-review-mom-meeting" class="btn btn-sm btn-primary"
                         data-bs-dismiss="modal">Save</button>
                     </form>
 
@@ -5020,7 +5014,7 @@
                     </div>
                     <!--end::Input group-->
 
-                    <button type="submit" id="save-issue-project-tender-menang" class="btn btn-lg btn-primary"
+                    <button type="submit" id="save-issue-project-tender-menang" class="btn btn-sm btn-primary"
                         data-bs-dismiss="modal">Save</button>
                     </form>
 
@@ -5062,6 +5056,7 @@
                     <form action="/input-risk/upload" method="POST" enctype="multipart/form-data">
                         @csrf
                         <input type="hidden" value="1" name="is-tender-menang">
+                        <input type="hidden" value="0" name="is-closed">
                         <input type="hidden" class="modal-name" name="modal-name">
                         <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" name="id-contract">
         
@@ -5079,14 +5074,14 @@
                             </div>
                             <div class="col">
                                 <!--begin::Label-->
-                                <label class="fs-6 fw-bold form-label mt-3">
+                                <label class="fs-6 fw-bold form-label mt-3 required">
                                     <span style="font-weight: normal">Kategori</span>
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                 <select name="kategori" class="form-select form-select-solid"
                                     data-control="select2" data-hide-search="true" data-placeholder="Pilih kategori"
-                                    tabindex="-1" aria-hidden="true">
+                                    tabindex="-1" aria-hidden="true" required>
                                     <option value=""></option>
                                     <option value="Kategori 1">Kategori 1</option>
                                     <option value="Kategori 2">Kategori 2</option>
@@ -5098,7 +5093,7 @@
                         <div class="row">
                             <div class="col">
                                 <!--begin::Label-->
-                                <label class="fs-6 fw-bold form-label mt-3">
+                                <label class="fs-6 fw-bold form-label mt-3 required">
                                     <span style="font-weight: normal">Kriteria</span>
                                 </label>
                                 <!--end::Label-->
@@ -5156,7 +5151,7 @@
                         <div class="row">
                             <div class="col">
                                 <!--begin::Label-->
-                                <label class="fs-6 fw-bold form-label mt-3">
+                                <label class="fs-6 fw-bold form-label mt-3 required">
                                     <span style="font-weight: normal">Penyebab</span>
                                 </label>
                                 <!--end::Label-->
@@ -5172,13 +5167,12 @@
                             </div>
                             <div class="col">
                                 <!--begin::Label-->
-                                <label class="fs-6 fw-bold form-label mt-3">
+                                <label class="fs-6 fw-bold form-label mt-3 required">
                                     <span style="font-weight: normal">Resiko / Peluang</span>
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3" name="resiko_peluang"
-                                    id="resiko_peluang" value="" placeholder="Resiko / Peluang" style="font-weight: normal" />
+                                <textarea name="resiko_peluang" id="resiko_peluang" class="form-control form-control-solid mb-3" style="font-weight: normal" value=""></textarea>
                                 <!--end::Input-->
                             </div>
                         </div>
@@ -5186,18 +5180,12 @@
                         <div class="row">
                             <div class="col">
                                 <!--begin::Label-->
-                                <label class="fs-6 fw-bold form-label mt-3">
+                                <label class="fs-6 fw-bold form-label mt-3 required">
                                     <span style="font-weight: normal">Dampak</span>
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <select name="dampak" class="form-select form-select-solid"
-                                    data-control="select2" data-hide-search="true" data-placeholder="Dampak"
-                                    tabindex="-1" aria-hidden="true">
-                                    <option value=""></option>
-                                    <option value="Dampak 1">Dampak 1</option>
-                                    <option value="Dampak 2">Dampak 2</option>
-                                </select>
+                                <textarea name="dampak" id="dampak" class="form-control form-control-solid mb-3" style="font-weight: normal" value=""></textarea>
                                 <!--end::Input-->
                             </div>
                             <div class="col">
@@ -5207,7 +5195,7 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3" name="nilai_resiko_r0"
+                                <input type="text" class="form-control form-control-solid mb-3 reformat" name="nilai_resiko_r0"
                                     id="nilai_resiko_r0" value="" placeholder="Nilai Resiko / Peluang (Ro)" style="font-weight: normal" />
                                 <!--end::Input-->
                             </div>
@@ -5245,7 +5233,7 @@
                                 </select>
                                 <!--end::Input-->
                             </div>
-                            <div class="col">
+                            {{-- <div class="col">
                                 <!--begin::Label-->
                                 <label class="fs-6 fw-bold form-label mt-3">
                                     <span style="font-weight: normal">Dampak</span>
@@ -5255,7 +5243,7 @@
                                 <input type="text" class="form-control form-control-solid mb-3" name="dampak"
                                     id="dampak" value="" placeholder="Dampak" style="font-weight: normal" />
                                 <!--end::Input-->
-                            </div>
+                            </div> --}}
                             <div class="col">
                                 <!--begin::Label-->
                                 <label class="fs-6 fw-bold form-label mt-3">
@@ -5293,7 +5281,7 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3" name="nilai_resiko_r1"
+                                <input type="text" class="form-control form-control-solid mb-3 reformat" name="nilai_resiko_r1"
                                     id="nilai_resiko_r1" value="" placeholder="Nilai Sisa Risiko / Peluang (R1)" style="font-weight: normal" />
                                 <!--end::Input-->
                             </div>
@@ -5309,8 +5297,7 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3" name="tindak_lanjut_mitigasi"
-                                    id="tindak_lanjut_mitigasi" value="" placeholder="Rencana Tindak Lanjut (Mitigasi) Proaktif" style="font-weight: normal" />
+                                <textarea name="tindak_lanjut_mitigasi" id="tindak_lanjut_mitigasi" class="form-control form-control-solid mb-3"></textarea>
                                 <!--end::Input-->
                             </div>
                             <div class="col">
@@ -5350,7 +5337,7 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3" name="biaya_proaktif"
+                                <input type="text" class="form-control form-control-solid mb-3 reformat" name="biaya_proaktif"
                                     id="biaya_proaktif" value="" placeholder="Biaya" style="font-weight: normal" />
                                 <!--end::Input-->
                             </div>
@@ -5412,7 +5399,7 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3" name="biaya_reaktif"
+                                <input type="text" class="form-control form-control-solid mb-3 reformat" name="biaya_reaktif"
                                     id="biaya_reaktif" value="" placeholder="Biaya" style="font-weight: normal" />
                                 <!--end::Input-->
                             </div>
@@ -5449,8 +5436,7 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3" name="uraian"
-                                    id="uraian" value="" placeholder="Uraian" style="font-weight: normal" />
+                                <textarea name="uraian" id="uraian" class="form-control form-control-solid mb-3"></textarea>
                                 <!--end::Input-->
                             </div>
                             <div class="col">
@@ -5460,7 +5446,7 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3" name="nilai"
+                                <input type="text" class="form-control form-control-solid mb-3 reformat" name="nilai"
                                     id="nilai" value="" placeholder="Nilai" style="font-weight: normal" />
                                 <!--end::Input-->
                             </div>
@@ -5471,7 +5457,7 @@
                         <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
         
                         {{-- end::Read File --}}
-                        <button type="submit" id="save-risk" class="btn btn-lg btn-primary"
+                        <button type="submit" id="save-risk" class="btn btn-sm btn-primary"
                             data-bs-dismiss="modal">Save</button>
         
                     </form>
@@ -5484,6 +5470,523 @@
         </div>
         <!--end::Modal content-->
     </div>
+    <!--end::Modal - Input Resiko Perolehan-->
+
+    <!--begin::Modal - Input Resiko Perolehan-->
+    @foreach ($contract->inputRisks as $inputRisk)
+    <div class="modal fade" id="kt_modal_edit_resiko_perolehan_{{$inputRisk->id_risk}}" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-900px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Edit Resiko Proyek - Perolehan</h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <i class="bi bi-x-lg"></i>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
+
+                    <form action="/input-risk/edit" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <input type="hidden" value="1" name="is-tender-menang">
+                        <input type="hidden" class="modal-name" name="modal-name">
+                        <input type="hidden" value="{{ $contract->id_contract}}" name="id-contract">
+                        <input type="hidden" value="{{ $inputRisk->id_risk}}" name="id-risk">
+        
+                        <div class="row">
+                            <div class="col">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Verifikasi</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" class="form-control form-control-solid" name="verifikasi" id="verifikasi"
+                                    style="font-weight: normal" value="{{ auth()->user()->UnitKerja->unit_kerja ?? auth()->user()->name }}" placeholder="Verifikasi" readonly/>
+                                <!--end::Input-->
+                            </div>
+                            <div class="col">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3 required">
+                                    <span style="font-weight: normal">Kategori</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <select name="kategori" class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true" data-placeholder="Pilih kategori"
+                                    tabindex="-1" aria-hidden="true" required>
+                                    <option value=""></option>
+                                    @if (!empty($inputRisk->kategori))
+                                    <option value="{{ $inputRisk->kategori }}" selected>{{ $inputRisk->kategori }}</option>
+                                    <option value="Kategori 1">Kategori 1</option>
+                                    @else
+                                    <option value="Kategori 1">Kategori 1</option>
+                                    <option value="Kategori 2">Kategori 2</option>    
+                                    @endif
+                                </select>
+                                <!--end::Input-->
+                            </div>
+                        </div>
+        
+                        <div class="row">
+                            <div class="col">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3 required">
+                                    <span style="font-weight: normal">Kriteria</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <select name="kriteria" class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true" data-placeholder="Pilih Kategori"
+                                    tabindex="-1" aria-hidden="true">
+                                    <option value=""></option>
+                                    @if (!empty($inputRisk->kriteria))
+                                    <option value="{{ $inputRisk->kriteria }}" selected>{{ $inputRisk->kriteria }}</option>
+                                    <option value="Kriteria 1">Kriteria 1</option>
+                                    @else
+                                    <option value="Kriteria 1">Kriteria 1</option>
+                                    <option value="Kriteria 2">Kriteria 2</option>    
+                                    @endif
+                                </select>
+                                <!--end::Input-->
+                            </div>
+                        </div>
+        
+                        <hr>
+                        <h5 class="h5 fw-bolder text-center">Sub Kriteria</h5>
+        
+                        <div class="row">
+                            <div class="col">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Probis Level 1 - 2</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <select name="probis_1_2" class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true" data-placeholder="Probis Level 1 - 2"
+                                    tabindex="-1" aria-hidden="true">
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                    @if (!empty($inputRisk->probis_1_2))
+                                    <option value="{{ $inputRisk->probis_1_2 }}" selected>{{ $inputRisk->probis_1_2 }}</option>
+                                    <option value="Probis 1">Probis 1</option>
+                                    <option value="Probis 2">Probis 2</option>
+                                    @else
+                                    <option value="Probis 1">Probis 1</option>
+                                    <option value="Probis 2">Probis 2</option>    
+                                    @endif
+                                </select>
+                                <!--end::Input-->
+                            </div>
+                            <div class="col">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Probis Yang Terganggu</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <select name="probis_terganggu" class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true" data-placeholder="Probis Yang Terganggu"
+                                    tabindex="-1" aria-hidden="true">
+                                    <option value=""></option>
+                                    @if (!empty($inputRisk->probis_terganggu))
+                                    <option value="{{ $inputRisk->probis_terganggu }}" selected>{{ $inputRisk->probis_terganggu }}</option>
+                                    <option value="Probis Terganggu 1">Probis Terganggu 1</option>
+                                    <option value="Probis Terganggu 2">Probis Terganggu 2</option>
+                                    @else
+                                    <option value="Probis Terganggu 1">Probis Terganggu 1</option>
+                                    <option value="Probis Terganggu 2">Probis Terganggu 2</option>
+                                    @endif
+                                </select>
+                                <!--end::Input-->
+                            </div>
+                        </div>
+                        <hr>
+        
+                        <div class="row">
+                            <div class="col">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3 required">
+                                    <span style="font-weight: normal">Penyebab</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <select name="penyebab" class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true" data-placeholder="Penyebab"
+                                    tabindex="-1" aria-hidden="true">
+                                    <option value=""></option>
+                                    @if (!empty($inputRisk->penyebab))
+                                    <option value="{{ $inputRisk->penyebab }}" selected>{{ $inputRisk->penyebab }}</option>
+                                    <option value="Penyebab 1">Penyebab 1</option>
+                                    <option value="Penyebab 2">Penyebab 2</option>
+                                    @else
+                                    <option value="Penyebab 1">Penyebab 1</option>
+                                    <option value="Penyebab 2">Penyebab 2</option>
+                                    @endif
+                                </select>
+                                <!--end::Input-->
+                            </div>
+                            <div class="col">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3 required">
+                                    <span style="font-weight: normal">Resiko / Peluang</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <textarea name="resiko_peluang" id="resiko_peluang" class="form-control form-control-solid mb-3" value="{{ $inputRisk->resiko_peluang }}"></textarea>
+                                <!--end::Input-->
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3 required">
+                                    <span style="font-weight: normal">Dampak</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <textarea name="dampak" id="dampak" class="form-control form-control-solid mb-3" value="{{ $inputRisk->dampak }}"></textarea>
+                                <!--end::Input-->
+                            </div>
+                            <div class="col">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Nilai Resiko / Peluang (Ro)</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" class="form-control form-control-solid mb-3 reformat" name="nilai_resiko_r0"
+                                    id="nilai_resiko_r0" value="{{ $inputRisk->nilai_resiko_r0 }}" placeholder="Nilai Resiko / Peluang (Ro)" style="font-weight: normal" />
+                                <!--end::Input-->
+                            </div>
+                        </div>
+                        
+                        <hr>
+                        <h5 class="h5 fw-bolder text-center">Kontrol Eksisting</h5>
+                        <div class="row">
+                            <div class="col">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Item Kontrol</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" class="form-control form-control-solid mb-3" name="item_kontrol"
+                                    id="item_kontrol" value="{{ $inputRisk->item_kontrol }}" placeholder="Item Kontrol" style="font-weight: normal" />
+                                <!--end::Input-->
+                            </div>
+                            <div class="col">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Probabilitas</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <select name="probabilitas" class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true" data-placeholder="Probabilitas"
+                                    tabindex="-1" aria-hidden="true">
+                                    <option value=""></option>
+                                    @if (!empty($inputRisk->probabilitas))
+                                    <option value="{{ $inputRisk->probabilitas }}" selected>{{ $inputRisk->probabilitas }}</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    @else
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    @endif
+                                </select>
+                                <!--end::Input-->
+                            </div>
+                            <div class="col">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Skor</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" class="form-control form-control-solid mb-3" name="skor"
+                                    id="skor" value="{{ $inputRisk->skor }}" placeholder="Skor" style="font-weight: normal" readonly />
+                                <!--end::Input-->
+                            </div>
+                        </div>
+        
+                        <div class="row">
+                            <div class="col">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Tingkat Efektifitas Kontrol</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <select name="tingkat_efektifitas_kontrol" class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true" data-placeholder="Tingkat Efektifitas Kontrol"
+                                    tabindex="-1" aria-hidden="true">
+                                    <option value=""></option>
+                                    @if (!empty($inputRisk->tingkat_efektifitas_kontrol))
+                                    <option value="{{ $inputRisk->tingkat_efektifitas_kontrol }}" selected>{{ $inputRisk->tingkat_efektifitas_kontrol }}</option>
+                                    <option value="Tingkat Efektifitas Kontrol 1">Tingkat Efektifitas Kontrol 1</option>
+                                    <option value="Tingkat Efektifitas Kontrol 2">Tingkat Efektifitas Kontrol 2</option>
+                                    @else
+                                    <option value="Tingkat Efektifitas Kontrol 1">Tingkat Efektifitas Kontrol 1</option>
+                                    <option value="Tingkat Efektifitas Kontrol 2">Tingkat Efektifitas Kontrol 2</option>
+                                    @endif
+                                </select>
+                                <!--end::Input-->
+                            </div>
+                            <div class="col">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Nilai Sisa Risiko / Peluang (R1)</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" class="form-control form-control-solid mb-3" name="nilai_resiko_r1"
+                                    id="nilai_resiko_r1" value="{{ $inputRisk->nilai_resiko_r1 }}" placeholder="Nilai Sisa Risiko / Peluang (R1)" style="font-weight: normal" />
+                                <!--end::Input-->
+                            </div>
+                        </div>
+                        <hr>
+                        <h5 class="h5 fw-bolder text-center">Rencana Tindak Lanjut Proaktif</h5>
+        
+                        <div class="row">
+                            <div class="col">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Rencana Tindak Lanjut (Mitigasi) Proaktif</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <textarea name="tindak_lanjut_mitigasi" id="tindak_lanjut_mitigasi" class="form-control form-control-solid mb-3" value="{{ $inputRisk->tindak_lanjut_mitigasi }}"></textarea>
+                                <!--end::Input-->
+                            </div>
+                            <div class="col">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Tingkat Efektifitas Tindak Lanjut</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <select name="tingkat_efektifitas_tindak_lanjut" class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true" data-placeholder="Tingkat Efektifitas Tindak lanjut"
+                                    tabindex="-1" aria-hidden="true">
+                                    <option value=""></option>
+                                    @if (!empty($inputRisk->tingkat_efektifitas_tindak_lanjut))
+                                    <option value="{{ $inputRisk->tingkat_efektifitas_tindak_lanjut }}" selected>{{ $inputRisk->tingkat_efektifitas_tindak_lanjut }}</option>
+                                    <option value="Tingkat Efektifitas Tindak lanjut 1">Tingkat Efektifitas Tindak lanjut 1</option>
+                                    <option value="Tingkat Efektifitas Tindak lanjut 2">Tingkat Efektifitas Tindak lanjut 2</option>
+                                    @else
+                                    <option value="Tingkat Efektifitas Tindak lanjut 1">Tingkat Efektifitas Tindak lanjut 1</option>
+                                    <option value="Tingkat Efektifitas Tindak lanjut 2">Tingkat Efektifitas Tindak lanjut 2</option>
+                                    @endif
+                                </select>
+                                <!--end::Input-->
+                            </div>
+                        </div>
+        
+                        <div class="row">
+                            <div class="col">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Nilai Sisa Risiko / Peluang (R2)</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" class="form-control form-control-solid mb-3" name="nilai_resiko_r2"
+                                    id="nilai_resiko_r2" value="{{ $inputRisk->nilai_resiko_r2 }}" placeholder="Nilai Sisa Risiko / Peluang (R2)" style="font-weight: normal" />
+                                <!--end::Input-->
+                            </div>
+                            <div class="col">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Biaya</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" class="form-control form-control-solid mb-3 reformat" name="biaya_proaktif"
+                                    id="biaya_proaktif" value="{{ $inputRisk->biaya_proaktif }}" placeholder="Biaya" style="font-weight: normal" />
+                                <!--end::Input-->
+                            </div>
+                        </div>
+        
+                        <div class="row">
+                            <div class="col">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Tanggal Mulai</span>
+                                    <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
+                                        <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
+                                    </a>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="date" class="form-control form-control-solid mb-3" name="tanggal_mulai"
+                                    id="tanggal_mulai" value="{{ Carbon\Carbon::parse($inputRisk->tanggal_mulai)->translatedFormat('Y-m-d') }}" placeholder="Tanggal Mulai" style="font-weight: normal" />
+                                <!--end::Input-->
+                            </div>
+                            <div class="col">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Tanggal Selesai</span>
+                                    <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
+                                        <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
+                                    </a>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="date" class="form-control form-control-solid mb-3" name="tanggal_selesai"
+                                    id="tanggal_selesai" value="{{ Carbon\Carbon::parse($inputRisk->tanggal_selesai)->translatedFormat('Y-m-d') }}" placeholder="Tanggal Selesai" style="font-weight: normal" />
+                                <!--end::Input-->
+                            </div>
+                        </div>
+        
+                        <hr>
+                        <h5 class="h5 fw-bolder text-center">Rencana Tindak Lanjut Reaktif</h5>
+        
+                        <div class="row">
+                            <div class="col">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Rencana Tindak Lanjut (Mitigasi) Reaktif</span>
+                                    {{-- <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
+                                        <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
+                                    </a> --}}
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" class="form-control form-control-solid mb-3" name="tindak_lanjut_reaktif"
+                                    id="tindak_lanjut_reaktif" value="{{ $inputRisk->tindak_lanjut_reaktif }}" placeholder="Rencana Tindak Lanjut (Mitigasi) Reaktif" style="font-weight: normal" />
+                                <!--end::Input-->
+                            </div>
+                            <div class="col">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Biaya</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" class="form-control form-control-solid mb-3 reformat" name="biaya_reaktif"
+                                    id="biaya_reaktif" value="{{ $inputRisk->biaya_reaktif }}" placeholder="Biaya" style="font-weight: normal" />
+                                <!--end::Input-->
+                            </div>
+                        </div>
+                        <hr>
+        
+                        <div class="row">
+                            <div class="col">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">PIC RTL</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <select name="pic_rtl" class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true" data-placeholder="PIC RTL"
+                                    tabindex="-1" aria-hidden="true">
+                                    <option value=""></option>
+                                    @if (!empty($inputRisk->pic_rtl))
+                                    <option value="{{ $inputRisk->pic_rtl }}" selected>{{ $inputRisk->pic_rtl }}</option>
+                                    <option value="PIC RTL 1">PIC RTL 1</option>
+                                    <option value="PIC RTL 2">PIC RTL 2</option>
+                                    @else
+                                    <option value="PIC RTL 1">PIC RTL 1</option>
+                                    <option value="PIC RTL 2">PIC RTL 2</option>
+                                    @endif
+                                </select>
+                                <!--end::Input-->
+                            </div>
+                        </div>
+        
+                        <hr>
+                        <h5 class="h5 fw-bolder text-center">Peluang</h5>
+        
+                        <div class="row">
+                            <div class="col">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Uraian</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" class="form-control form-control-solid mb-3" name="uraian"
+                                    id="uraian" value="{{ $inputRisk->uraian }}" placeholder="Uraian" style="font-weight: normal" />
+                                <!--end::Input-->
+                            </div>
+                            <div class="col">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Nilai</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" class="form-control form-control-solid mb-3" name="nilai"
+                                    id="nilai" value="{{ $inputRisk->nilai }}" placeholder="Nilai" style="font-weight: normal" />
+                                <!--end::Input-->
+                            </div>
+                        </div>
+                        <hr>
+                        <br>
+                        <div class="row">
+                            <div class="col-6">
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Status</span>
+                                </label>
+                                <!--begin::Input-->
+                                <select name="status" class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true" data-placeholder="Status"
+                                    tabindex="-1" aria-hidden="true">
+                                    <option value=""></option>
+                                    @if (!empty($inputRisk->is_closed))
+                                    <option value="{{ $inputRisk->is_closed }}" selected>{{ $inputRisk->is_closed }}</option>
+                                    <option value="0">Open</option>
+                                    <option value="1">Closed</option>
+                                    @else
+                                    <option value="0">Open</option>
+                                    <option value="1">Closed</option>
+                                    @endif
+                                </select>
+                                <!--end::Input-->
+                            </div>
+                        </div>
+                        
+                        <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
+        
+                        {{-- end::Read File --}}
+                        <br>
+
+                        <div class="modal-footer">
+                            <button type="submit" id="edit-risk" class="btn btn-sm btn-primary"
+                                data-bs-dismiss="modal">Save</button>
+                        </div>
+        
+                    </form>
+                </div>
+                <!--end::Input group-->
+
+
+            </div>
+            <!--end::Modal body-->
+        </div>
+        <!--end::Modal content-->
+    </div>
+    @endforeach
     <!--end::Modal - Input Resiko Perolehan-->
 
     <!--begin::Modal - Input Resiko Tender Menang-->
@@ -5514,6 +6017,7 @@
                     <form action="/input-risk/upload" method="POST" enctype="multipart/form-data">
                         @csrf
                         <input type="hidden" value="2" name="stage">
+                        <input type="hidden" value="0" name="is-closed">
                         <input type="hidden" class="modal-name" name="modal-name">
                         <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" name="id-contract">
         
@@ -5923,7 +6427,7 @@
                         <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
         
                         {{-- end::Read File --}}
-                        <button type="submit" id="save-risk" class="btn btn-lg btn-primary"
+                        <button type="submit" id="save-risk" class="btn btn-sm btn-primary"
                             data-bs-dismiss="modal">Save</button>
         
                     </form>
@@ -5966,6 +6470,7 @@
                     <form action="/input-risk/upload" method="POST" enctype="multipart/form-data">
                         @csrf
                         <input type="hidden" value="3" name="stage">
+                        <input type="hidden" value="0" name="is-closed">
                         <input type="hidden" class="modal-name" name="modal-name">
                         <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" name="id-contract">
         
@@ -6375,7 +6880,7 @@
                         <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
         
                         {{-- end::Read File --}}
-                        <button type="submit" id="save-risk" class="btn btn-lg btn-primary"
+                        <button type="submit" id="save-risk" class="btn btn-sm btn-primary"
                             data-bs-dismiss="modal">Save</button>
         
                     </form>
@@ -6430,7 +6935,7 @@
                         {{-- end::Read File --}}
                         <small>* Support multi file upload</small>
                         <br> <br>
-                        <button type="submit" id="save-risk" class="btn btn-lg btn-primary"
+                        <button type="submit" id="save-risk" class="btn btn-sm btn-primary"
                             data-bs-dismiss="modal">Save</button>
 
                     </form>
@@ -6639,7 +7144,7 @@
                         {{-- end::Read File --}}
                         <small>* Support multi file upload</small>
                         <br> <br>
-                        <button type="submit" id="save-risk" class="btn btn-lg btn-primary"
+                        <button type="submit" id="save-risk" class="btn btn-sm btn-primary"
                             data-bs-dismiss="modal">Save</button>
 
                     </form>
@@ -6873,7 +7378,7 @@
                         </div> --}}
 
                         <br> <br>
-                        <button type="submit" id="pending-issue" class="btn btn-lg btn-primary">Save</button>
+                        <button type="submit" id="pending-issue" class="btn btn-sm btn-primary">Save</button>
 
                     </form>
                 </div>
@@ -6970,7 +7475,7 @@
                     </div>
                     <!--end::Input group-->
 
-                    <button type="submit" id="save-question-tender-menang" class="btn btn-lg btn-primary"
+                    <button type="submit" id="save-question-tender-menang" class="btn btn-sm btn-primary"
                         data-bs-dismiss="modal">Save</button>
                     </form>
 
@@ -7142,7 +7647,7 @@
                     </div>
                     <!--end::Input group-->
         
-                    <button type="submit" id="save-dokumen-site-instruction" class="btn btn-lg btn-primary"
+                    <button type="submit" id="save-dokumen-site-instruction" class="btn btn-sm btn-primary"
                         data-bs-dismiss="modal">Save</button>
                     </form>
         
@@ -7234,7 +7739,7 @@
                     </div>
                     <!--end::Input group-->
 
-                    <button type="submit" id="save-dokumen-technical-form" class="btn btn-lg btn-primary"
+                    <button type="submit" id="save-dokumen-technical-form" class="btn btn-sm btn-primary"
                         data-bs-dismiss="modal">Save</button>
                     </form>
                 </div>
@@ -7324,7 +7829,7 @@
                     </div>
                     <!--end::Input group-->
 
-                    <button type="submit" id="save-dokumen-technical-query" class="btn btn-lg btn-primary"
+                    <button type="submit" id="save-dokumen-technical-query" class="btn btn-sm btn-primary"
                         data-bs-dismiss="modal">Save</button>
                     </form>
                 </div>
@@ -7414,7 +7919,7 @@
                     </div>
                     <!--end::Input group-->
 
-                    <button type="submit" id="save-dokumen-field-design-change" class="btn btn-lg btn-primary"
+                    <button type="submit" id="save-dokumen-field-design-change" class="btn btn-sm btn-primary"
                         data-bs-dismiss="modal">Save</button>
                     </form>
                 </div>
@@ -7502,7 +8007,7 @@
                     </div>
                     <!--end::Input group-->
 
-                    <button type="submit" id="save-dokumen-contract-change-notice" class="btn btn-lg btn-primary"
+                    <button type="submit" id="save-dokumen-contract-change-notice" class="btn btn-sm btn-primary"
                         data-bs-dismiss="modal">Save</button>
                     </form>
                 </div>
@@ -7590,7 +8095,7 @@
                     </div>
                     <!--end::Input group-->
 
-                    <button type="submit" id="save-dokumen-contract-change-proposal" class="btn btn-lg btn-primary"
+                    <button type="submit" id="save-dokumen-contract-change-proposal" class="btn btn-sm btn-primary"
                         data-bs-dismiss="modal">Save</button>
                     </form>
                 </div>
@@ -7678,7 +8183,7 @@
                     </div>
                     <!--end::Input group-->
 
-                    <button type="submit" id="save-dokumen-contract-change-order" class="btn btn-lg btn-primary"
+                    <button type="submit" id="save-dokumen-contract-change-order" class="btn btn-sm btn-primary"
                         data-bs-dismiss="modal">Save</button>
                     </form>
                 </div>
@@ -7762,41 +8267,9 @@
                                 </label>
                                 <textarea cols="2" name="uraian-perubahan" class="form-control form-control-solid"></textarea>
                             </div>
-                            <div class="col">
-                                <label class="fs-6 fw-bold form-label">
-                                    <span style="font-weight: normal">Jenis Dokumen</span>
-                                </label>
-                                <select name="jenis-dokumen" id="jenis-dokumen" class="form-select form-select-solid"
-                                    data-control="select2" data-hide-search="true" data-placeholder="Pilih Jenis Dokumen" tabindex="-1" aria-hidden="true">
-                                    <option value=""></option>
-                                    <option value="Site Instruction">Site Instruction</option>
-                                    <option value="Technical Form">Technical Form</option>
-                                    <option value="Technical Query">Technical Query</option>
-                                    <option value="Field Design Change">Field Design Change</option>
-                                    <option value="Contract Change Notice">Contract Change Notice</option>
-                                    <option value="Contract Change Proposal">Contract Change Proposal</option>
-                                    <option value="Contract Change Order">Contract Change Order</option>
-                                </select>
-                            </div>
                         </div>
                         <br>
                         <div class="row">
-                            <div class="col">
-                                <label class="fs-6 fw-bold form-label">
-                                    <span style="font-weight: normal">No Surat / Instruksi Owner</span>
-                                </label>
-                                <select name="instruksi-owner" id="instruksi-owner" class="form-select form-select-solid"
-                                    data-control="select2" data-hide-search="true" data-placeholder="Pilih No Surat" tabindex="-1" aria-hidden="true">
-                                    <option value=""></option>
-                                    <option value="Site Instruction">Site Instruction</option>
-                                    <option value="Technical Form">Technical Form</option>
-                                    <option value="Technical Query">Technical Query</option>
-                                    <option value="Field Design Change">Field Design Change</option>
-                                    <option value="Contract Change Notice">Contract Change Notice</option>
-                                    <option value="Contract Change Proposal">Contract Change Proposal</option>
-                                    <option value="Contract Change Order">Contract Change Order</option>
-                                </select>
-                            </div>
                             <div class="col">
                                 <label class="fs-6 fw-bold form-label">
                                     <span style="font-weight: normal">No Proposal Klaim</span>
@@ -8780,7 +9253,7 @@
                 <br><br>
 
                 <button type="submit" id="save-question-tender-menang"
-                    class="btn btn-lg btn-primary">Save</button>
+                    class="btn btn-sm btn-primary">Save</button>
             </form>
 
 
@@ -8875,7 +9348,7 @@
             </div>
             <!--end::Input group-->
 
-            <button type="submit" id="save-bulanan-tender-menang" class="btn btn-lg btn-primary"
+            <button type="submit" id="save-bulanan-tender-menang" class="btn btn-sm btn-primary"
                 data-bs-dismiss="modal">Save</button>
             </form>
 
@@ -9046,7 +9519,7 @@
                 </div> --}}
                 <!--end::Input group-->
 
-                {{-- <button type="submit" id="save-review" class="btn btn-lg btn-primary"
+                {{-- <button type="submit" id="save-review" class="btn btn-sm btn-primary"
                     data-bs-dismiss="modal">Save</button>
 
                 </form> --}}
@@ -9445,7 +9918,7 @@
                 <br>
                 
                 <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
-                <button type="submit" id="save-risk" class="btn btn-lg btn-primary"
+                <button type="submit" id="save-risk" class="btn btn-sm btn-primary"
                     data-bs-dismiss="modal">Save</button>
 
             </form>
@@ -9544,7 +10017,7 @@
                     </script> --}}
                     {{-- end::Read File --}}
                     <br><br>
-                    <button type="submit" id="save-question" class="btn btn-lg btn-primary"
+                    <button type="submit" id="save-question" class="btn btn-sm btn-primary"
                         data-bs-dismiss="modal">Save</button>
                 </form>
             </div>
