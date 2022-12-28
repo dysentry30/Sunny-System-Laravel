@@ -8,55 +8,62 @@ use App\Models\Pasals;
 use App\Models\Proyek;
 use App\Models\HandOvers;
 use App\Models\Questions;
+use App\Models\UnitKerja;
 use App\Models\InputRisks;
+use App\Models\FieldChange;
+use Illuminate\Support\Str;
 use App\Models\ClaimDetails;
+use App\Models\ContractBast;
+use App\Models\PendingIssue;
 use Illuminate\Http\Request;
 use App\Models\IssueProjects;
+use App\Models\PerjanjianKso;
+use App\Models\TechnicalForm;
 use App\Models\DraftContracts;
 use App\Models\MonthlyReports;
-use App\Models\ReviewContracts;
-use App\Models\ClaimManagements;
-use App\Models\AddendumContracts;
-use App\Models\ContractManagements;
-use App\Models\AddendumContractDrafts;
-use App\Models\ContractBast;
-use App\Models\ContractChangeNotice;
-use App\Models\ContractChangeOrder;
-use App\Models\ContractChangeProposal;
-use App\Models\DokumenPendukung;
-use App\Models\FieldChange;
-use App\Models\KlarifikasiNegosiasiCda;
-use App\Models\KontrakBertandatangan;
-use App\Models\MomKickOffMeeting;
-use App\Models\PasalKontraktual;
-use App\Models\PendingIssue;
-use App\Models\PerjanjianKso;
-use App\Models\PerubahanKontrak;
-use App\Models\RencanKerjaManajemenKontrak;
-use App\Models\ReviewPembatalanKontrak;
-use App\Models\SiteInstruction;
-use App\Models\TechnicalForm;
 use App\Models\TechnicalQuery;
+use App\Models\ReviewContracts;
+use App\Models\SiteInstruction;
+use App\Models\ClaimManagements;
+use App\Models\DokumenPendukung;
+use App\Models\PasalKontraktual;
+use App\Models\PerubahanKontrak;
+use App\Models\AddendumContracts;
+use App\Models\MomKickOffMeeting;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\DB;
+use App\Models\ContractChangeOrder;
+use App\Models\ContractManagements;
+use App\Models\ContractChangeNotice;
 use App\Models\UsulanPerubahanDraft;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+use App\Models\KontrakBertandatangan;
+use App\Models\AddendumContractDrafts;
+use App\Models\ContractChangeProposal;
+use App\Models\KlarifikasiNegosiasiCda;
+use App\Models\ReviewPembatalanKontrak;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Validator;
+use App\Models\RencanKerjaManajemenKontrak;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection as SupportCollection;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Str;
 
 class ContractManagementsController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
+
+        // $column = $request->get("column");
+        $filterUnit = $request->query("filter");
+        $filterJenis = $request->query("filter-jenis");
+        // dd($column, $filterUnit, $filterJenis);
+
         // $contract_managements = ContractManagements::all();
         // $sorted_contracts = $contract_managements->sortBy("contract_in");
         // return view('4_Contract', ["contracts" => $sorted_contracts]);
@@ -74,9 +81,17 @@ class ContractManagementsController extends Controller
             // $proyeks_pelaksanaan_closing_proyek = DB::table("proyeks as p")->select(["p.*", "c.stages"])->join("contract_managements as c", "c.project_id", "=", "p.kode_proyek")->where("c.stages", 5)->get()->map(function ($data) {
             //     return self::stdClassToModel($data, Proyek::class);
             // });
-            $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->get()->whereNotIn("unit_kerja", ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "8"]);
+            $unitkerjas = UnitKerja::get()->whereNotIn("unit_kerja", ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "8"]);
+            if (!empty($filterUnit)) {
+                $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("unit_kerja", "=", $filterUnit)->get()->whereNotIn("unit_kerja", ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "8"]);
+            } else if (!empty($filterJenis)) {
+                $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("jenis_proyek", "=", $filterJenis)->get()->whereNotIn("unit_kerja", ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "8"]);
+            } else {
+                $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->get()->whereNotIn("unit_kerja", ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "8"]);
+            }
+            // dd($proyeks_all);
             $proyeks_perolehan = $proyeks_all->whereIn("stage", [2, 3, 4, 5, 6])->where("is_cancel", "!=", true)->where("is_tidak_lulus_pq", "!=", true);
-            $proyeks_pelaksanaan = $proyeks_all->where("stage", "=", 8)->where("is_cancel", "!=", true)->filter(function($p) {
+            $proyeks_pelaksanaan = $proyeks_all->where("stage", "=", 8)->where("is_cancel", "!=", true)->filter(function ($p) {
                 return !empty($p->ContractManagements) && $p->ContractManagements->stages == 2;
             });
             $proyeks_pemeliharaan = $proyeks_all->where("is_cancel", "!=", true)->filter(function ($p) {
@@ -97,20 +112,28 @@ class ContractManagementsController extends Controller
             //     return self::stdClassToModel($data, Proyek::class);
             // });
             $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja);
-            $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->get()->whereNotIn("unit_kerja", ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "8"])->whereIn("unit_kerja", $unit_kerja_user->toArray());
+            $unitkerjas = UnitKerja::all()->whereIn("divcode", $unit_kerja_user->toArray());
+            if (!empty($filterUnit)) {
+                $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("unit_kerja", "=", $filterUnit)->get()->whereNotIn("unit_kerja", ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "8"])->whereIn("unit_kerja", $unit_kerja_user->toArray());
+            } else if (!empty($filterJenis)) {
+                $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("jenis_proyek", "=", $filterJenis)->get()->whereNotIn("unit_kerja", ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "8"])->whereIn("unit_kerja", $unit_kerja_user->toArray());
+            } else {
+                $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->get()->whereNotIn("unit_kerja", ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "8"])->whereIn("unit_kerja", $unit_kerja_user->toArray());
+            }
+            // dd($proyeks_all);
             $proyeks_perolehan = $proyeks_all->whereIn("stage", [2, 3, 4, 5, 6])->where("is_cancel", "!=", true)->where("is_tidak_lulus_pq", "!=", true);
             $proyeks_pelaksanaan = $proyeks_all->where("stage", "=", 8)->where("is_cancel", "!=", true)->filter(function ($p) {
                 return !empty($p->ContractManagements) && $p->ContractManagements->stages == 2;
             });
             $proyeks_pemeliharaan = $proyeks_all->where("is_cancel", "!=", true)->filter(function ($p) {
-                    return !empty($p->ContractManagements) && $p->ContractManagements->stages == 3;
-                });
+                return !empty($p->ContractManagements) && $p->ContractManagements->stages == 3;
+            });
             // $proyeks_pelaksanaan = $proyeks_all->filter(function($p) {
             //     return !empty($p->ContractManagements) && $p->ContractManagements->where("stages", "=", )
             // });
         }
         // return view("4_Contract", compact(["proyeks"]));
-        return view("4_Contract", compact(["proyeks_perolehan", "proyeks_pelaksanaan", "proyeks_pemeliharaan"]));
+        return view("4_Contract", compact(["proyeks_perolehan", "proyeks_pelaksanaan", "proyeks_pemeliharaan", "filterUnit", "filterJenis", "unitkerjas"]));
     }
 
     private function stdClassToModel($data, $instance)
