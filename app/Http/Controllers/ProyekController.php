@@ -1565,7 +1565,7 @@ class ProyekController extends Controller
                     $grouping = "ZN05";
                     $ktgrd = "Z4";
                     $cust_akont = "";
-                    $witht = "s";
+                    $witht = "";
                 }
                 $data_nasabah_online = collect([
                     "nmnasabah" => "$customer->name",
