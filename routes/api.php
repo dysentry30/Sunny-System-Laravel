@@ -364,10 +364,9 @@ Route::middleware(["web"])->group(function () {
     // Begin - Industry Owner ke SAP
     Route::post('/get-industry-attract', function () {
         $industry_attractivness = IndustryOwner::all();
-        $new_class = new stdClass();
-        $new_class->periode = date("Ymd");
-        $new_class->data = $industry_attractivness->map(function($ia) {
+        $new_class = $industry_attractivness->map(function($ia) {
             $new_ia = new stdClass();
+            $new_ia->periode = date("Ymd");
             $new_ia->code_customer = "";
             $new_ia->industry_code = $ia->code_owner;
             $new_ia->attractivness_status = $ia->owner_attractiveness;
