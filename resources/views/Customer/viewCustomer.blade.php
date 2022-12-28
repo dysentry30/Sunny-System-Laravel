@@ -1971,7 +1971,7 @@
                                                                 $no = 1;
                                                             @endphp
                                                             <tbody class="fw-bold text-gray-600">
-                                                                @foreach ($strukturs as $struktur)
+                                                                {{-- @foreach ($strukturs as $struktur)
                                                                     <tr>
                                                                         <!--begin::Name-->
                                                                         <td class="text-center">
@@ -2031,7 +2031,7 @@
                                                                         </td>
                                                                         <!--end::Action-->
                                                                     </tr>
-                                                                @endforeach
+                                                                @endforeach --}}
                                                             </tbody>
                                                             <!--end::Table body-->
                                                         </table>
@@ -4366,7 +4366,7 @@
     <!--end::modal Struktur Organisasi-->
 
     <!--begin::modal EDIT Struktur Organisasi-->
-    @foreach ($strukturs as $struktur)
+    {{-- @foreach ($strukturs as $struktur)
         <form action="/customer/struktur/{{ $struktur->id }}/edit" method="post" enctype="multipart/form-data">
             @csrf
 
@@ -4576,11 +4576,11 @@
             </div>
             <!--end::Modal - Create App-->
         </form>
-    @endforeach
+    @endforeach --}}
     <!--end::modal EDIT Struktur Organisasi-->
 
     <!--begin::DELETE STRUKTUR-->
-    @foreach ($strukturs as $struktur)
+    {{-- @foreach ($strukturs as $struktur)
         <form action="/customer/struktur/{{ $struktur->id }}/delete" method="post" enctype="multipart/form-data">
             @method('delete')
             @csrf
@@ -4624,7 +4624,7 @@
             <!--end::Modal dialog-->
             </div>
         </form>
-    @endforeach
+    @endforeach --}}
     <!--end::DELETE STRUKTUR-->
 
     <!--begin::DELETE ATTACHMENT-->
