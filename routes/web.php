@@ -50,6 +50,7 @@ use App\Models\Sbu;
 use BeyondCode\LaravelWebSockets\Facades\WebSocketsRouter;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\URL;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
@@ -2050,7 +2051,7 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
                 $jenis_terkontrak = "JKT05";
                 break;
             case "Lumsump+Unit Price":
-                $jenis_terkontrak = "JKT06";
+                $jenis_terkontrak = "JKT08";
                 break;
         };
 
@@ -2283,6 +2284,14 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
 });
 // End API PROYEK XML
 
+// Begin Send Data Industry Attractivness ke SAP
+Route::get('/send-data-industry-attractivness', function (Request $request) {
+    // $get_data_industry_attractivness = Http::post($request->getHttpHost() . "/api/get-industry-attract");
+    // $get_data_industry_attractivness = Http::withoutVerifying()->post("localhost:8000/api/get-industry-attract");
+    $get_data_industry_attractivness = getApi("localhost:8000/api/get-industry-attract", [], [], true);
+    dd($get_data_industry_attractivness);
+});
+// End Send Data Industry Attractivness ke SAP
 
 
 Route::get('/abort/{code}/{msg}', function ($code, $msg) {
