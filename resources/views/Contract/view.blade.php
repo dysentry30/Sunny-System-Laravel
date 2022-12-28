@@ -10022,7 +10022,7 @@ aria-hidden="true">
     });
 
     const proyekStage = Number("{{ $contract->stages ?? 0 }}");
-    const tabContent = document.querySelector(`.nav li:nth-child(${proyekStage + 1}) a`);
+    const tabContent = document.querySelector(`.nav li:nth-child(${proyekStage}) a`);
     const tabBoots = new bootstrap.Tab(tabContent, {});
     tabBoots.show();
 
