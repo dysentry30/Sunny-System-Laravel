@@ -2653,7 +2653,7 @@
                                                     <!--end:::Tab pane History-->
 
                                                     <!--begin:::Tab pane Excellence-->
-                                                    <div class="tab-pane fade" id="kt_user_view_excellence" role="tabpanel">
+                                                    {{-- <div class="tab-pane fade" id="kt_user_view_excellence" role="tabpanel">
                                                         <!--begin::CSI-->
                                                         <div class="card-title m-0">
                                                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
@@ -2737,7 +2737,6 @@
                                                                             @if (!empty($csi))
                                                                             @foreach ($customer->Csi as $item)
                                                                             <tr>                                                                                    
-                                                                                {{-- @dump($mh) --}}
                                                                                 <td>
                                                                                     <a target="_blank" href="/proyek/view/{{ $item->kode_proyek }}" class="text-gray-800 text-hover-primary mb-1">
                                                                                         {{ $item->Proyek->nama_proyek }}                                                                                                
@@ -2857,7 +2856,6 @@
                                                                             @if (!empty($cli))
                                                                             @foreach ($customer->Cli as $item)
                                                                             <tr>                                                                                    
-                                                                                {{-- @dump($mh) --}}
                                                                                 <td>
                                                                                     <a target="_blank" href="/proyek/view/{{ $item->kode_proyek }}" class="text-gray-800 text-hover-primary mb-1">
                                                                                         {{ $item->Proyek->nama_proyek }}                                                                                                
@@ -2977,7 +2975,6 @@
                                                                             @if (!empty($nps))
                                                                             @foreach ($customer->Nps as $item)
                                                                             <tr>                                                                                    
-                                                                                {{-- @dump($mh) --}}
                                                                                 <td>
                                                                                     <a target="_blank" href="/proyek/view/{{ $item->kode_proyek }}" class="text-gray-800 text-hover-primary mb-1">
                                                                                         {{ $item->Proyek->nama_proyek }}                                                                                                
@@ -3097,13 +3094,12 @@
                                                                             @if (!empty($inovasi))
                                                                             @foreach ($customer->KaryaInovasi as $item)
                                                                             <tr>                                                                                    
-                                                                                    {{-- @dump($mh) --}}
-                                                                                    <td>
-                                                                                        <a target="_blank" href="/proyek/view/{{ $item->kode_proyek }}" class="text-gray-800 text-hover-primary mb-1">
-                                                                                            {{ $item->Proyek->nama_proyek }}                                                                                                
-                                                                                        </a>
-                                                                                    </td>
-                                                                                    <!--end::Name-->
+                                                                                <td>
+                                                                                    <a target="_blank" href="/proyek/view/{{ $item->kode_proyek }}" class="text-gray-800 text-hover-primary mb-1">
+                                                                                        {{ $item->Proyek->nama_proyek }}                                                                                                
+                                                                                    </a>
+                                                                                </td>
+                                                                                <!--end::Name-->
                                                                                 <!--begin::Tanggal CLI-->
                                                                                 <td>
                                                                                     {{ $item->tanggal }}
@@ -3132,13 +3128,12 @@
                                                             <!--End::Row-->                                                            
                                                         </div>
                                                         <!--end::Karya Inovasi-->
-                                                    </div>
+                                                    </div> --}}
                                                     <!--end:::Tab pane Excellence-->
 
 
                                                     <!--begin:::Tab pane Atachment & Notes-->
                                                     <div class="tab-pane fade" id="kt_user_view_Notes" role="tabpanel">
-                                                        {{-- <input type="file" id="file" class="file" hidden> --}}
                                                         <!--begin::Attachment-->
                                                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                                             Attachments
@@ -3152,7 +3147,6 @@
 
                                                         <br>
                                                         <br>
-                                                        {{-- <button type="submit" class="btn btn-sm btn-primary" id="proyek_new_save">Save</button> --}}
 
                                                         <!--End::Attachment-->
 
