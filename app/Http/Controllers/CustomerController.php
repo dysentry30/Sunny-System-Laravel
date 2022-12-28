@@ -216,7 +216,7 @@ class CustomerController extends Controller
 
     public function view($id_customer)
     {
-        $customer = Customer::with(["customerAttachments", "strukturAttachments", "proyekBerjalans", "JenisPerusahaan", "Tax", "SyaratPembayaran", "MasalahHukum"])->where("id_customer", "=", $id_customer)->first();
+        $customer = Customer::with(["customerAttachments", "strukturAttachments", "proyekBerjalans"])->where("id_customer", "=", $id_customer)->first();
         // $data_provinsi = Http::get("https://emsifa.github.io/api-wilayah-indonesia/api/provinces.json")->json();
         // $data = Http::get("http://maps.googleapis.com/maps/api/geocode/xml?address=". "Boston, USA" . "&sensor=false");
 
@@ -262,11 +262,11 @@ class CustomerController extends Controller
         $jenisPerusahaan = JenisPerusahaan::all();
         // $taxs = Tax::all();
         // $syaratPembayaran = SyaratPembayaran::all();
-        $masalahHukum = MasalahHukum::with(['Proyek'])->where("id_customer", "=", $id_customer)->get();
-        $csi = Csi::with(['Proyek'])->where("id_customer", "=", $id_customer)->get();
-        $cli = Cli::with(['Proyek'])->where("id_customer", "=", $id_customer)->get();
-        $nps = Nps::with(['Proyek'])->where("id_customer", "=", $id_customer)->get();
-        $inovasi = KaryaInovasi::with(['Proyek'])->where("id_customer", "=", $id_customer)->get();
+        $masalahHukum = MasalahHukum::where("id_customer", "=", $id_customer)->get();
+        $csi = Csi::where("id_customer", "=", $id_customer)->get();
+        $cli = Cli::where("id_customer", "=", $id_customer)->get();
+        $nps = Nps::where("id_customer", "=", $id_customer)->get();
+        $inovasi = KaryaInovasi::where("id_customer", "=", $id_customer)->get();
         // dd($industryOwners, $industrySectors, $syaratPembayaran);
 
         // foreach($proyeks as $p) {
@@ -304,48 +304,48 @@ class CustomerController extends Controller
         $totalAmountProyekForecast = 0;
         $totalAmountProyekClosed = 0;
         $totalAmountProyekOpportunity = 0;
-        // if (!empty($kategoriProyek)) {
-        //     foreach ($kategoriProyek as $kode_unit_kerja => $proyekBerjalans) {
-        //         if (!empty($proyekBerjalans)) {
-        //             foreach ($proyekBerjalans as $proyekBerjalan) {
-        //                 // dd($proyekBerjalan, $proyekBerjalan->proyek);
-        //                 $totalNilaiOKPerUnit += $proyekBerjalan->proyek->nilai_rkap ?? 0;
+        if (!empty($kategoriProyek)) {
+            foreach ($kategoriProyek as $kode_unit_kerja => $proyekBerjalans) {
+                if (!empty($proyekBerjalans)) {
+                    foreach ($proyekBerjalans as $proyekBerjalan) {
+                        // dd($proyekBerjalan, $proyekBerjalan->proyek);
+                        $totalNilaiOKPerUnit += $proyekBerjalan->proyek->nilai_rkap ?? 0;
                         
-        //                 $proyek = $proyekBerjalan->proyek;
-        //                 if ($proyek->stage <= 3) {
-        //                     $totalProyekOpportunity++;
-        //                     $totalAmountProyekOpportunity += $proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->sum(function($f) {
-        //                         return (int) $f->nilai_forecast;
-        //                     }) / $per;
-        //                 }
-        //                 if ($proyek->stage <= 5) {
-        //                     $totalProyekOngoing++;
-        //                     $totalAmountProyekOngoing += $proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->sum(function($f) {
-        //                         return (int) $f->nilai_forecast;
-        //                     }) / $per;
-        //                 }
-        //                 if ($proyek->stage == 6 || $proyek->stage > 7) {
-        //                     $totalProyekClosed++;
-        //                     $totalAmountProyekClosed += $proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->sum(function($f) {
-        //                         return (int) $f->nilai_forecast;
-        //                     }) / $per;
-        //                 }
-        //                 if($proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->count() > 0) {
-        //                     $totalProyekForecast++;
-        //                     $totalAmountProyekForecast += $proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->sum(function($f) {
-        //                         return (int) $f->nilai_forecast;
-        //                     }) / $per;
-        //                 }
-        //             }
-        //             $unitKerja = UnitKerja::where("divcode", "=", $kode_unit_kerja)->first();
-        //             if (!empty($unitKerja)) {
-        //                 $totalOkLegend = number_format($totalNilaiOKPerUnit / $per, 0, '.', '.');
-        //                 array_push($nilaiOK, ["name" => $unitKerja->unit_kerja." : $totalOkLegend", "y" => $totalNilaiOKPerUnit]);
-        //             }
-        //             $totalNilaiOKPerUnit = 0;
-        //         }
-        //     }
-        // };
+                        $proyek = $proyekBerjalan->proyek;
+                        if ($proyek->stage <= 3) {
+                            $totalProyekOpportunity++;
+                            $totalAmountProyekOpportunity += $proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->sum(function($f) {
+                                return (int) $f->nilai_forecast;
+                            }) / $per;
+                        }
+                        if ($proyek->stage <= 5) {
+                            $totalProyekOngoing++;
+                            $totalAmountProyekOngoing += $proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->sum(function($f) {
+                                return (int) $f->nilai_forecast;
+                            }) / $per;
+                        }
+                        if ($proyek->stage == 6 || $proyek->stage > 7) {
+                            $totalProyekClosed++;
+                            $totalAmountProyekClosed += $proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->sum(function($f) {
+                                return (int) $f->nilai_forecast;
+                            }) / $per;
+                        }
+                        if($proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->count() > 0) {
+                            $totalProyekForecast++;
+                            $totalAmountProyekForecast += $proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->sum(function($f) {
+                                return (int) $f->nilai_forecast;
+                            }) / $per;
+                        }
+                    }
+                    $unitKerja = UnitKerja::where("divcode", "=", $kode_unit_kerja)->first();
+                    if (!empty($unitKerja)) {
+                        $totalOkLegend = number_format($totalNilaiOKPerUnit / $per, 0, '.', '.');
+                        array_push($nilaiOK, ["name" => $unitKerja->unit_kerja." : $totalOkLegend", "y" => $totalNilaiOKPerUnit]);
+                    }
+                    $totalNilaiOKPerUnit = 0;
+                }
+            }
+        };
         $nilaiForecast = collect([$totalProyekForecast, $totalAmountProyekForecast]);
         $proyekOngoing = collect([$totalProyekOngoing, $totalAmountProyekOngoing]);
         $proyekClosed = collect([$totalProyekClosed, $totalAmountProyekClosed]);
@@ -378,41 +378,41 @@ class CustomerController extends Controller
         $nilaiTotalLaba = 0;
         $nilaiTotalRugi = 0;
         $nilaiTotalPiutang = 0;
-        // foreach ($kategoriProyek as $kode_unit_kerja => $proyekBerjalans) {
-        //     foreach ($proyekBerjalans as $proyekBerjalan) {
-        //         $nilaiTotalLaba += $proyekBerjalan->proyek->laba / $per ?? 0;
-        //         $nilaiTotalRugi += $proyekBerjalan->proyek->rugi / $per ?? 0;
-        //         $nilaiTotalPiutang += $proyekBerjalan->proyek->piutang / $per ?? 0;
-        //     }
-        //     $unitKerja = UnitKerja::where("divcode", "=", $kode_unit_kerja)->first();
-        //     if (!empty($unitKerja) && !in_array($unitKerja->unit_kerja, $namaUnit)) {
-        //         array_push($namaUnit, $unitKerja->unit_kerja);
-        //     }
-        //     array_push($labaProyek, $nilaiTotalLaba);
-        //     array_push($rugiProyek, $nilaiTotalRugi);
-        //     $totalPiutangLegend = number_format($nilaiTotalPiutang, 0, '.', '.');
-        //     array_push($piutangProyek, ["name" => $unitKerja->unit_kerja." : $totalPiutangLegend", "y" => $nilaiTotalPiutang, "x" => "$totalPiutangLegend"]);
-        //     $nilaiTotalRugi = 0;
-        //     $nilaiTotalLaba = 0;
-        //     $nilaiTotalPiutang = 0;
+        foreach ($kategoriProyek as $kode_unit_kerja => $proyekBerjalans) {
+            foreach ($proyekBerjalans as $proyekBerjalan) {
+                $nilaiTotalLaba += $proyekBerjalan->proyek->laba / $per ?? 0;
+                $nilaiTotalRugi += $proyekBerjalan->proyek->rugi / $per ?? 0;
+                $nilaiTotalPiutang += $proyekBerjalan->proyek->piutang / $per ?? 0;
+            }
+            $unitKerja = UnitKerja::where("divcode", "=", $kode_unit_kerja)->first();
+            if (!empty($unitKerja) && !in_array($unitKerja->unit_kerja, $namaUnit)) {
+                array_push($namaUnit, $unitKerja->unit_kerja);
+            }
+            array_push($labaProyek, $nilaiTotalLaba);
+            array_push($rugiProyek, $nilaiTotalRugi);
+            $totalPiutangLegend = number_format($nilaiTotalPiutang, 0, '.', '.');
+            array_push($piutangProyek, ["name" => $unitKerja->unit_kerja." : $totalPiutangLegend", "y" => $nilaiTotalPiutang, "x" => "$totalPiutangLegend"]);
+            $nilaiTotalRugi = 0;
+            $nilaiTotalLaba = 0;
+            $nilaiTotalPiutang = 0;
 
 
-        //     // $proyekPiutang = $proyekBerjalan->proyek;
-        //     // // $namaUnitIndex = array_search($proyekBerjalan->unit_kerja, $namaUnit);
-        //     // // if($namaUnitIndex != false) {
-        //     // //     dd($namaUnitIndex, $namaUnit);
-        //     // // }
-        //     // $nilaiLaba = (int) str_replace(",", "", $proyekPiutang->laba ?? 0);
-        //     // if($nilaiLaba != 0) {
-        //     //     array_push($labaProyek, $nilaiLaba);
-        //     // }
+            // $proyekPiutang = $proyekBerjalan->proyek;
+            // // $namaUnitIndex = array_search($proyekBerjalan->unit_kerja, $namaUnit);
+            // // if($namaUnitIndex != false) {
+            // //     dd($namaUnitIndex, $namaUnit);
+            // // }
+            // $nilaiLaba = (int) str_replace(",", "", $proyekPiutang->laba ?? 0);
+            // if($nilaiLaba != 0) {
+            //     array_push($labaProyek, $nilaiLaba);
+            // }
 
-        //     // $proyekPiutang = $proyekBerjalan->proyek;
-        //     // $nilaiRugi = (int) str_replace(",", "", $proyekPiutang->rugi ?? 0);
-        //     // if($nilaiRugi != 0) {
-        //     //     array_push($rugiProyek, $nilaiRugi);
-        //     // }
-        // }
+            // $proyekPiutang = $proyekBerjalan->proyek;
+            // $nilaiRugi = (int) str_replace(",", "", $proyekPiutang->rugi ?? 0);
+            // if($nilaiRugi != 0) {
+            //     array_push($rugiProyek, $nilaiRugi);
+            // }
+        }
         unset($nilaiTotalRugi, $nilaiTotalLaba, $nilaiTotalPiutang);
 
         // dd($namaUnit, $labaProyek, $rugiProyek );

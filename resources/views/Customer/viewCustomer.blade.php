@@ -705,17 +705,6 @@
                                                                             <option value="ZC05" {{ $customer->SyaratPembayaran == "ZC05" ? "selected" : ""}}>within 90 days Due net</option>
                                                                             <option value="ZC06" {{ $customer->SyaratPembayaran == "ZC06" ? "selected" : ""}}>within 120 days Due net</option>
                                                                             <option value="ZC07" {{ $customer->SyaratPembayaran == "ZC07" ? "selected" : ""}}>within 180 days Due net</option>
-                                                                            {{-- @foreach ($syaratPembayaran as $sp)
-                                                                                @if (!empty($customer->SyaratPembayaran) && $sp->kode == $customer->SyaratPembayaran->kode)
-                                                                                    <option value="{{ $sp->kode }}" selected>
-                                                                                        {{ $sp->deskripsi }}
-                                                                                    </option>
-                                                                                @else
-                                                                                    <option value="{{ $sp->kode }}">
-                                                                                        {{ $sp->deskripsi }}
-                                                                                    </option>
-                                                                                @endif
-                                                                            @endforeach --}}
                                                                         </select>
                                                                     </div>
                                                                     <!--end::Input-->
@@ -738,8 +727,6 @@
                                                                 </label>
                                                                 <!--end::label-->
                                                                 <!--begin::Input-->
-                                                                {{-- <input type="text" class="form-control form-control-solid" id="input-provinsi" name="tax"
-                                                                    value="{{ null }}" placeholder="Tax" style="display: none" /> --}}
                                                                 <div id="div-tax">
                                                                     <select name="tax" id="tax" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
                                                                         data-placeholder="Tax">
@@ -752,17 +739,6 @@
                                                                         <option value="5" {{ $customer->tax == "5" ? "selected" : ""}}>Ditanggung Pemerintah</option>
                                                                         <option value="6" {{ $customer->tax == "6" ? "selected" : ""}}>Dibebaskan</option>
                                                                         <option value="7" {{ $customer->tax == "7" ? "selected" : ""}}>Luar Negeri</option>
-                                                                        {{-- @foreach ($taxs as $tax)
-                                                                            @if (!empty($customer->Tax) && $tax->kode == $customer->Tax->kode)
-                                                                                <option value="{{ $tax->kode }}" selected>
-                                                                                    {{ $tax->deskripsi }}
-                                                                                </option>
-                                                                                @else
-                                                                                <option value="{{ $tax->kode }}">
-                                                                                    {{ $tax->deskripsi }}
-                                                                                </option>
-                                                                                @endif
-                                                                                @endforeach --}}
                                                                     </select>
                                                                 </div>
                                                                 <!--end::Input-->
