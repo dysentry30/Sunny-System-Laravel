@@ -2848,7 +2848,7 @@
                                             <!--end::Uraian-->
                                             <!--begin::Nomor Dokumen-->
                                             <td>
-                                                <a target="_blank" href="{{ asset('words/'.$site_instruction->id_document) }}">
+                                                <a target="_blank" href="{{ asset('words/'.$site_instruction->id_document) }}" class="text-hover-primary">
                                                     {{ $site_instruction->id_document }}
                                                 </a>
                                             </td>
@@ -2928,7 +2928,7 @@
                                         <!--end::Uraian-->
                                         <!--begin::Nomor Dokumen-->
                                         <td>
-                                            <a target="_blank" href="{{ asset('words/'.$technical_form->id_document) }}">
+                                            <a target="_blank" href="{{ asset('words/'.$technical_form->id_document) }}" class="text-hover-primary">
                                                 {{ $technical_form->id_document }}
                                             </a>
                                         </td>
@@ -3007,7 +3007,7 @@
                                         <!--end::Uraian-->
                                         <!--begin::Nomor Dokumen-->
                                         <td>
-                                            <a target="_blank" href="{{ asset('words/'.$technical_query->id_document) }}">
+                                            <a target="_blank" href="{{ asset('words/'.$technical_query->id_document) }}" class="text-hover-primary">
                                                 {{ $technical_query->id_document }}
                                             </a>
                                         </td>
@@ -3087,7 +3087,7 @@
                                         <!--end::Uraian-->
                                         <!--begin::Nomor Dokumen-->
                                         <td>
-                                            <a target="_blank" href="{{ asset('words/'.$field_change->id_document) }}">
+                                            <a target="_blank" href="{{ asset('words/'.$field_change->id_document) }}" class="text-hover-primary">
                                                 {{ $field_change->id_document }}
                                             </a>
                                         </td>
@@ -3166,7 +3166,7 @@
                                         <!--end::Uraian-->
                                         <!--begin::Nomor Dokumen-->
                                         <td>
-                                            <a target="_blank" href="{{ asset('words/'.$change_notice->id_document) }}">
+                                            <a target="_blank" href="{{ asset('words/'.$change_notice->id_document) }}" class="text-hover-primary">
                                                 {{ $field_change->id_document }}
                                             </a>
                                         </td>
@@ -3245,7 +3245,7 @@
                                         <!--end::Uraian-->
                                         <!--begin::Nomor Dokumen-->
                                         <td>
-                                            <a target="_blank" href="{{ asset('words/'.$change_proposal->id_document) }}">
+                                            <a target="_blank" href="{{ asset('words/'.$change_proposal->id_document) }}" class="text-hover-primary">
                                                 {{ $change_proposal->id_document }}
                                             </a>
                                         </td>
@@ -3324,7 +3324,7 @@
                                         <!--end::Uraian-->
                                         <!--begin::Nomor Dokumen-->
                                         <td>
-                                            <a target="_blank" href="{{ asset('words/'.$change_order->id_document) }}">
+                                            <a target="_blank" href="{{ asset('words/'.$change_order->id_document) }}" class="text-hover-primary">
                                                 {{ $change_order->id_document }}
                                             </a>
                                         </td>
