@@ -1049,6 +1049,84 @@
                         </table> --}}
                         <!--End:Table: Review-->
                         <br>
+
+                        
+                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                            Input Resiko - Perolehan
+                            <a href="#" Id="Plus" data-bs-toggle="modal"
+                                data-bs-target="#kt_modal_input_resiko_perolehan">+</a>
+                        </h3>
+
+                        <!--begin:Table: Review-->
+                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                            <!--begin::Table head-->
+                            <thead>
+                                <!--begin::Table row-->
+                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                    <th class="min-w-125px">Verifikasi</th>
+                                    <th class="min-w-125px">Kategori</th>
+                                    <th class="min-w-125px">Kriteria</th>
+                                    <th class="min-w-125px">Probis Level 1 - 2</th>
+                                    <th class="min-w-125px">Probis Yang Terganggu</th>
+                                </tr>
+                                <!--end::Table row-->
+                            </thead>
+                            <!--end::Table head-->
+                            <!--begin::Table body-->
+                            <tbody class="fw-bold text-gray-400">
+                                @if ($contract->inputRisks->contains('stage', 1))
+                                    @forelse ($contract->inputRisks as $inputRisk)
+                                        @if ($inputRisk->stage == 1)
+                                            <tr>
+                                                <!--begin::Name=-->
+                                                <td>
+                                                    <p class="text-gray-600 mb-1">{{ $inputRisk->verifikasi }}</p>
+                                                </td>
+                                                <!--end::Name=-->
+                                                <!--begin::Name=-->
+                                                <td>
+                                                    <p class="text-gray-600 mb-1">{{ $inputRisk->kategori }}</p>
+                                                </td>
+                                                <!--end::Name=-->
+                                                <!--begin::Kode=-->
+                                                <td>
+                                                    <p class="text-gray-600 mb-1">{{ $inputRisk->kriteria }}</p>
+                                                </td>
+                                                <!--end::Kode=-->
+                                                <!--begin::Unit=-->
+                                                <td>
+                                                    <p class="text-gray-600 mb-1">{{ $inputRisk->probis_1_2 }}</p>
+                                                </td>
+                                                <!--end::Unit=-->
+                                                <!--begin::Unit=-->
+                                                <td>
+                                                    <p class="text-gray-600 mb-1">{{ $inputRisk->probis_terganggu }}</p>
+                                                </td>
+                                                <!--end::Unit=-->
+                                            </tr>
+                                        @endif
+                                    @empty
+                                        <tr>
+                                            <td colspan="5" class="text-center">
+                                                <h6><b>There is no data</b></h6>
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                @else
+                                    <tr>
+                                        <td colspan="5" class="text-center">
+                                            <h6><b>There is no data</b></h6>
+                                        </td>
+                                    </tr>
+                                @endif
+                            </tbody>
+                            <!--end::Table body-->
+
+                        </table>
+                        <!--End:Table: Review-->
+
+                        &nbsp;<br>
+                        &nbsp;<br>
                         
                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                             Dokumen NDA
@@ -2060,83 +2138,6 @@
                         &nbsp;<br>
 
                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                            Input Resiko
-                            <a href="#" Id="Plus" data-bs-toggle="modal"
-                                data-bs-target="#kt_modal_input_resiko_perolehan">+</a>
-                        </h3>
-
-                        <!--begin:Table: Review-->
-                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
-                            <!--begin::Table head-->
-                            <thead>
-                                <!--begin::Table row-->
-                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-125px">Verifikasi</th>
-                                    <th class="min-w-125px">Kategori</th>
-                                    <th class="min-w-125px">Kriteria</th>
-                                    <th class="min-w-125px">Probis Level 1 - 2</th>
-                                    <th class="min-w-125px">Probis Yang Terganggu</th>
-                                </tr>
-                                <!--end::Table row-->
-                            </thead>
-                            <!--end::Table head-->
-                            <!--begin::Table body-->
-                            <tbody class="fw-bold text-gray-400">
-                                @if ($contract->inputRisks->contains('stage', 1))
-                                    @forelse ($contract->inputRisks as $inputRisk)
-                                        @if ($inputRisk->stage == 1)
-                                            <tr>
-                                                <!--begin::Name=-->
-                                                <td>
-                                                    <p class="text-gray-600 mb-1">{{ $inputRisk->verifikasi }}</p>
-                                                </td>
-                                                <!--end::Name=-->
-                                                <!--begin::Name=-->
-                                                <td>
-                                                    <p class="text-gray-600 mb-1">{{ $inputRisk->kategori }}</p>
-                                                </td>
-                                                <!--end::Name=-->
-                                                <!--begin::Kode=-->
-                                                <td>
-                                                    <p class="text-gray-600 mb-1">{{ $inputRisk->kriteria }}</p>
-                                                </td>
-                                                <!--end::Kode=-->
-                                                <!--begin::Unit=-->
-                                                <td>
-                                                    <p class="text-gray-600 mb-1">{{ $inputRisk->probis_1_2 }}</p>
-                                                </td>
-                                                <!--end::Unit=-->
-                                                <!--begin::Unit=-->
-                                                <td>
-                                                    <p class="text-gray-600 mb-1">{{ $inputRisk->probis_terganggu }}</p>
-                                                </td>
-                                                <!--end::Unit=-->
-                                            </tr>
-                                        @endif
-                                    @empty
-                                        <tr>
-                                            <td colspan="5" class="text-center">
-                                                <h6><b>There is no data</b></h6>
-                                            </td>
-                                        </tr>
-                                    @endforelse
-                                @else
-                                    <tr>
-                                        <td colspan="5" class="text-center">
-                                            <h6><b>There is no data</b></h6>
-                                        </td>
-                                    </tr>
-                                @endif
-                            </tbody>
-                            <!--end::Table body-->
-
-                        </table>
-                        <!--End:Table: Review-->
-
-                        &nbsp;<br>
-                        &nbsp;<br>
-
-                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                             Dokumen Pendukung
                             <a href="#" Id="Plus" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_input_dokumen_pendukung">+</a>
@@ -2517,7 +2518,7 @@
                         &nbsp;<br>
 
                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                            Input Resiko
+                            Input Resiko - Pelaksanaan
                             <a href="#" Id="Plus" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_input_resiko_pelaksanaan">+</a>
                         </h3>
@@ -3551,7 +3552,7 @@
                         <div class="row">
                             <div class="col">
                                 <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                                    Input Resiko
+                                    Input Resiko - Pemeliharaan
                                     <a href="#" Id="Plus" data-bs-toggle="modal"
                                         data-bs-target="#kt_modal_input_resiko_serah_terima">+</a>
                                 </h3>
@@ -5946,7 +5947,7 @@
                 <!--begin::Modal header-->
                 <div class="modal-header">
                     <!--begin::Modal title-->
-                    <h2>Add Resiko Serah Terima Pekerjaan</h2>
+                    <h2>Add Resiko Proyek - Pemeliharaan</h2>
                     <!--end::Modal title-->
                     <!--begin::Close-->
                     <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
