@@ -697,14 +697,14 @@
                                                                         <select name="syarat_pembayaran" id="syarat-pembayaran" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
                                                                             data-placeholder="Term of Payment">
                                                                             <option value=""></option>
-                                                                            <option value="ZC00" {{ $customer->SyaratPembayaran == "ZC00" ? "selected" : ""}}>Payable immediately Due Net</option>
+                                                                            {{-- <option value="ZC00" {{ $customer->SyaratPembayaran == "ZC00" ? "selected" : ""}}>Payable immediately Due Net</option>
                                                                             <option value="ZC01" {{ $customer->SyaratPembayaran == "ZC01" ? "selected" : ""}}>within 14 days Due net</option>
                                                                             <option value="ZC02" {{ $customer->SyaratPembayaran == "ZC02" ? "selected" : ""}}>within 30 days Due net</option>
                                                                             <option value="ZC03" {{ $customer->SyaratPembayaran == "ZC03" ? "selected" : ""}}>within 45 days Due net</option>
                                                                             <option value="ZC04" {{ $customer->SyaratPembayaran == "ZC04" ? "selected" : ""}}>within 60 days Due net</option>
                                                                             <option value="ZC05" {{ $customer->SyaratPembayaran == "ZC05" ? "selected" : ""}}>within 90 days Due net</option>
                                                                             <option value="ZC06" {{ $customer->SyaratPembayaran == "ZC06" ? "selected" : ""}}>within 120 days Due net</option>
-                                                                            <option value="ZC07" {{ $customer->SyaratPembayaran == "ZC07" ? "selected" : ""}}>within 180 days Due net</option>
+                                                                            <option value="ZC07" {{ $customer->SyaratPembayaran == "ZC07" ? "selected" : ""}}>within 180 days Due net</option> --}}
                                                                             {{-- @foreach ($syaratPembayaran as $sp)
                                                                                 @if (!empty($customer->SyaratPembayaran) && $sp->kode == $customer->SyaratPembayaran->kode)
                                                                                     <option value="{{ $sp->kode }}" selected>
@@ -744,14 +744,14 @@
                                                                     <select name="tax" id="tax" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
                                                                         data-placeholder="Tax">
                                                                         <option value=""></option>
-                                                                        <option value="0" {{ $customer->tax == "0" ? "selected" : ""}}>Tax Exempt</option>
+                                                                        {{-- <option value="0" {{ $customer->tax == "0" ? "selected" : ""}}>Tax Exempt</option>
                                                                         <option value="1" {{ $customer->tax == "1" ? "selected" : ""}}>Non WAPU Pihak 3</option>
                                                                         <option value="2" {{ $customer->tax == "2" ? "selected" : ""}}>Non WAPU Berelasi</option>
                                                                         <option value="3" {{ $customer->tax == "3" ? "selected" : ""}}>WAPU Pemerintah</option>
                                                                         <option value="4" {{ $customer->tax == "4" ? "selected" : ""}}>WAPU BUMN/PIHAK LAIN</option>
                                                                         <option value="5" {{ $customer->tax == "5" ? "selected" : ""}}>Ditanggung Pemerintah</option>
                                                                         <option value="6" {{ $customer->tax == "6" ? "selected" : ""}}>Dibebaskan</option>
-                                                                        <option value="7" {{ $customer->tax == "7" ? "selected" : ""}}>Luar Negeri</option>
+                                                                        <option value="7" {{ $customer->tax == "7" ? "selected" : ""}}>Luar Negeri</option> --}}
                                                                         {{-- @foreach ($taxs as $tax)
                                                                             @if (!empty($customer->Tax) && $tax->kode == $customer->Tax->kode)
                                                                                 <option value="{{ $tax->kode }}" selected>
