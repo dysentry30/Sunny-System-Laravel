@@ -2808,6 +2808,7 @@
                                     <th class="min-w-125px">No. Dokumen</th>
                                     <th class="min-w-125px">Tanggal</th>
                                     <th class="min-w-125px">Uraian</th>
+                                    <th class="min-w-125px">File</th>
                                 </tr>
                                 <!--end::Table row-->
                             </thead>
@@ -2827,13 +2828,11 @@
                                     @if (!empty($contract->SiteInstruction))
                                         @forelse ($contract->SiteInstruction as $site_instruction)
                                         <tr>
-                                            <!--begin::Nomor Dokumen-->
+                                            <!--begin::Uraian-->
                                             <td>
-                                                <a target="_blank" href="{{ asset('words/'.$site_instruction->id_document) }}">
-                                                    {{ $site_instruction->nomor_dokumen }}
-                                                </a>
+                                                {{ $site_instruction->nomor_dokumen }}
                                             </td>
-                                            <!--end::Nomor Dokumen-->
+                                            <!--end::Uraian-->
                                             <!--begin::Nomor Dokumen-->
                                             <td>
                                                 {{ Carbon\Carbon::parse($site_instruction->tanggal_dokumen)->translatedFormat("d F Y") }}
@@ -2844,23 +2843,30 @@
                                                 <pre style="font-family: BpmOpenSans-woff">{!! $site_instruction->uraian_dokumen !!}</pre>
                                             </td>
                                             <!--end::Uraian-->
+                                            <!--begin::Nomor Dokumen-->
+                                            <td>
+                                                <a target="_blank" href="{{ asset('words/'.$site_instruction->id_document) }}">
+                                                    {{ $site_instruction->id_document }}
+                                                </a>
+                                            </td>
+                                            <!--end::Nomor Dokumen-->
                                         </tr>
                                         @empty
+                                        <tr>
+                                                <td colspan="4" class="text-center">
+                                                    <h6><b>There is no data</b></h6>
+                                                </td>
+                                            </tr>
+                                            @endforelse
+                                            @else
                                             <tr>
                                                 <td colspan="4" class="text-center">
                                                     <h6><b>There is no data</b></h6>
                                                 </td>
                                             </tr>
-                                        @endforelse
-                                    @else
-                                    <tr>
-                                        <td colspan="4" class="text-center">
-                                            <h6><b>There is no data</b></h6>
-                                        </td>
-                                    </tr>
-                                    @endif
-                                @endif
-                            </tbody>
+                                            @endif
+                                            @endif
+                                        </tbody>
                             <!--end::Table body-->
                         </table>
                         <!--End:Table: Dokumen Site Instruction-->
@@ -2883,6 +2889,7 @@
                                     <th class="min-w-125px">No. Dokumen</th>
                                     <th class="min-w-125px">Tanggal</th>
                                     <th class="min-w-125px">Uraian</th>
+                                    <th class="min-w-125px">File</th>
                                 </tr>
                                 <!--end::Table row-->
                             </thead>
@@ -2901,14 +2908,12 @@
                                 @if (!empty($contract->TechnicalForm))
                                     @forelse ($contract->TechnicalForm as $technical_form)
                                     <tr>
-                                        <!--begin::Nomor Dokumen-->
-                                        <td>
-                                            <a target="_blank" href="{{ asset('words/'.$technical_form->id_document) }}">
-                                                {{ $technical_form->nomor_dokumen }}
-                                            </a>
+                                         <!--begin::Uraian-->
+                                         <td>
+                                            {{ $technical_form->nomor_dokumen }}
                                         </td>
-                                        <!--end::Nomor Dokumen-->
-                                            <!--begin::Nomor Dokumen-->
+                                        <!--end::Uraian-->
+                                        <!--begin::Nomor Dokumen-->
                                         <td>
                                             {{ Carbon\Carbon::parse($technical_form->tanggal_dokumen)->translatedFormat("d F Y") }}
                                         </td>
@@ -2918,6 +2923,13 @@
                                             <pre style="font-family: BpmOpenSans-woff">{!! $technical_form->uraian_dokumen !!}</pre>
                                         </td>
                                         <!--end::Uraian-->
+                                        <!--begin::Nomor Dokumen-->
+                                        <td>
+                                            <a target="_blank" href="{{ asset('words/'.$technical_form->id_document) }}">
+                                                {{ $technical_form->id_document }}
+                                            </a>
+                                        </td>
+                                        <!--end::Nomor Dokumen-->
                                     </tr>
                                     @empty
                                     <tr>
@@ -2956,6 +2968,7 @@
                                     <th class="min-w-125px">No. Dokumen</th>
                                     <th class="min-w-125px">Tanggal</th>
                                     <th class="min-w-125px">Uraian</th>
+                                    <th class="min-w-125px">File</th>
                                 </tr>
                                 <!--end::Table row-->
                             </thead>
@@ -2974,16 +2987,14 @@
                                 @if (!empty($contract->TechnicalQuery))
                                     @forelse ($contract->TechnicalQuery as $technical_query)
                                     <tr>
+                                        <!--begin::Uraian-->
+                                        <td>
+                                            {{ $technical_query->nomor_dokumen }}
+                                        </td>
+                                        <!--end::Uraian-->
                                         <!--begin::Nomor Dokumen-->
                                         <td>
-                                            <a target="_blank" href="{{ asset('words/'.$technical_query->id_document) }}">
-                                                {{ $technical_query->nomor_dokumen }}
-                                            </a>
-                                        </td>
-                                        <!--end::Nomor Dokumen-->
-                                            <!--begin::Nomor Dokumen-->
-                                        <td>
-                                            {{ Carbon\Carbon::parse($technical_query->tanggal_dokumen)->translatedFormat("d F Y")  }}
+                                            {{ Carbon\Carbon::parse($technical_query->tanggal_dokumen)->translatedFormat("d F Y") }}
                                         </td>
                                         <!--end::Nomor Dokumen-->
                                         <!--begin::Uraian-->
@@ -2991,6 +3002,13 @@
                                             <pre style="font-family: BpmOpenSans-woff">{!! $technical_query->uraian_dokumen !!}</pre>
                                         </td>
                                         <!--end::Uraian-->
+                                        <!--begin::Nomor Dokumen-->
+                                        <td>
+                                            <a target="_blank" href="{{ asset('words/'.$technical_query->id_document) }}">
+                                                {{ $technical_query->id_document }}
+                                            </a>
+                                        </td>
+                                        <!--end::Nomor Dokumen-->
                                     </tr>
                                     @empty
                                     <tr>
@@ -3030,6 +3048,7 @@
                                     <th class="min-w-125px">No. Dokumen</th>
                                     <th class="min-w-125px">Tanggal</th>
                                     <th class="min-w-125px">Uraian</th>
+                                    <th class="min-w-125px">File</th>
                                 </tr>
                                 <!--end::Table row-->
                             </thead>
@@ -3048,14 +3067,12 @@
                                 @if (!empty($contract->FieldChange))
                                     @forelse ($contract->FieldChange as $field_change)
                                     <tr>
-                                        <!--begin::Nomor Dokumen-->
-                                        <td>
-                                            <a target="_blank" href="{{ asset('words/'.$field_change->id_document) }}">
-                                                {{ $field_change->nomor_dokumen }}
-                                            </a>
+                                         <!--begin::Uraian-->
+                                         <td>
+                                            {{ $field_change->nomor_dokumen }}
                                         </td>
-                                        <!--end::Nomor Dokumen-->
-                                            <!--begin::Nomor Dokumen-->
+                                        <!--end::Uraian-->
+                                        <!--begin::Nomor Dokumen-->
                                         <td>
                                             {{ Carbon\Carbon::parse($field_change->tanggal_dokumen)->translatedFormat("d F Y") }}
                                         </td>
@@ -3065,6 +3082,13 @@
                                             <pre style="font-family: BpmOpenSans-woff">{!! $field_change->uraian_dokumen !!}</pre>
                                         </td>
                                         <!--end::Uraian-->
+                                        <!--begin::Nomor Dokumen-->
+                                        <td>
+                                            <a target="_blank" href="{{ asset('words/'.$field_change->id_document) }}">
+                                                {{ $field_change->id_document }}
+                                            </a>
+                                        </td>
+                                        <!--end::Nomor Dokumen-->
                                     </tr>
                                     @empty
                                     <tr>
@@ -3103,6 +3127,7 @@
                                     <th class="min-w-125px">No. Dokumen</th>
                                     <th class="min-w-125px">Tanggal</th>
                                     <th class="min-w-125px">Uraian</th>
+                                    <th class="min-w-125px">File</th>
                                 </tr>
                                 <!--end::Table row-->
                             </thead>
@@ -3121,14 +3146,12 @@
                                 @if (!empty($contract->ChangeNotice))
                                     @forelse ($contract->ChangeNotice as $change_notice)
                                     <tr>
-                                        <!--begin::Nomor Dokumen-->
+                                        <!--begin::Uraian-->
                                         <td>
-                                            <a target="_blank" href="{{ asset('words/'.$change_notice->id_document) }}">
-                                                {{ $change_notice->nomor_dokumen }}
-                                            </a>
+                                            {{ $change_notice->nomor_dokumen }}
                                         </td>
-                                        <!--end::Nomor Dokumen-->
-                                            <!--begin::Nomor Dokumen-->
+                                        <!--end::Uraian-->
+                                        <!--begin::Nomor Dokumen-->
                                         <td>
                                             {{ Carbon\Carbon::parse($change_notice->tanggal_dokumen)->translatedFormat("d F Y") }}
                                         </td>
@@ -3138,6 +3161,13 @@
                                             <pre style="font-family: BpmOpenSans-woff">{!! $change_notice->uraian_dokumen !!}</pre>
                                         </td>
                                         <!--end::Uraian-->
+                                        <!--begin::Nomor Dokumen-->
+                                        <td>
+                                            <a target="_blank" href="{{ asset('words/'.$change_notice->id_document) }}">
+                                                {{ $field_change->id_document }}
+                                            </a>
+                                        </td>
+                                        <!--end::Nomor Dokumen-->
                                     </tr>
                                     @empty
                                     <tr>
@@ -3176,6 +3206,7 @@
                                     <th class="min-w-125px">No. Dokumen</th>
                                     <th class="min-w-125px">Tanggal</th>
                                     <th class="min-w-125px">Uraian</th>
+                                    <th class="min-w-125px">File</th>
                                 </tr>
                                 <!--end::Table row-->
                             </thead>
@@ -3194,14 +3225,12 @@
                                 @if (!empty($contract->ChangeProposal))
                                     @forelse ($contract->ChangeProposal as $change_proposal)
                                     <tr>
-                                        <!--begin::Nomor Dokumen-->
+                                        <!--begin::Uraian-->
                                         <td>
-                                            <a target="_blank" href="{{ asset('words/'.$change_proposal->id_document) }}">
-                                                {{ $change_proposal->nomor_dokumen }}
-                                            </a>
+                                            {{ $change_proposal->nomor_dokumen }}
                                         </td>
-                                        <!--end::Nomor Dokumen-->
-                                            <!--begin::Nomor Dokumen-->
+                                        <!--end::Uraian-->
+                                        <!--begin::Nomor Dokumen-->
                                         <td>
                                             {{ Carbon\Carbon::parse($change_proposal->tanggal_dokumen)->translatedFormat("d F Y") }}
                                         </td>
@@ -3211,6 +3240,13 @@
                                             <pre style="font-family: BpmOpenSans-woff">{!! $change_proposal->uraian_dokumen !!}</pre>
                                         </td>
                                         <!--end::Uraian-->
+                                        <!--begin::Nomor Dokumen-->
+                                        <td>
+                                            <a target="_blank" href="{{ asset('words/'.$change_proposal->id_document) }}">
+                                                {{ $change_proposal->id_document }}
+                                            </a>
+                                        </td>
+                                        <!--end::Nomor Dokumen-->
                                     </tr>
                                     @empty
                                     <tr>
@@ -3249,6 +3285,7 @@
                                     <th class="min-w-125px">No. Dokumen</th>
                                     <th class="min-w-125px">Tanggal</th>
                                     <th class="min-w-125px">Uraian</th>
+                                    <th class="min-w-125px">File</th>
                                 </tr>
                                 <!--end::Table row-->
                             </thead>
@@ -3267,16 +3304,14 @@
                                 @if (!empty($contract->ChangeOrder))
                                     @forelse ($contract->ChangeOrder as $change_order)
                                     <tr>
+                                        <!--begin::Uraian-->
+                                        <td>
+                                            {{ $change_order->nomor_dokumen }}
+                                        </td>
+                                        <!--end::Uraian-->
                                         <!--begin::Nomor Dokumen-->
                                         <td>
-                                            <a target="_blank" href="{{ asset('words/'.$change_order->id_document) }}">
-                                                {{ $change_order->nomor_dokumen }}
-                                            </a>
-                                        </td>
-                                        <!--end::Nomor Dokumen-->
-                                            <!--begin::Nomor Dokumen-->
-                                        <td>
-                                            {{  Carbon\Carbon::parse($change_order->tanggal_dokumen)->translatedFormat("d F Y") }}
+                                            {{ Carbon\Carbon::parse($change_order->tanggal_dokumen)->translatedFormat("d F Y") }}
                                         </td>
                                         <!--end::Nomor Dokumen-->
                                         <!--begin::Uraian-->
@@ -3284,6 +3319,13 @@
                                             <pre style="font-family: BpmOpenSans-woff">{!! $change_order->uraian_dokumen !!}</pre>
                                         </td>
                                         <!--end::Uraian-->
+                                        <!--begin::Nomor Dokumen-->
+                                        <td>
+                                            <a target="_blank" href="{{ asset('words/'.$change_order->id_document) }}">
+                                                {{ $change_order->id_document }}
+                                            </a>
+                                        </td>
+                                        <!--end::Nomor Dokumen-->
                                     </tr>
                                     @empty
                                     <tr>
