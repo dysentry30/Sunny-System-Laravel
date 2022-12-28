@@ -697,8 +697,8 @@
                                                                         <select name="syarat_pembayaran" id="syarat-pembayaran" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
                                                                             data-placeholder="Term of Payment">
                                                                             <option value=""></option>
-                                                                            @foreach ($syaratPembayaran as $sp)
-                                                                                {{-- @if (!empty($customer->SyaratPembayaran) && $sp->kode == $customer->SyaratPembayaran->kode)
+                                                                            {{-- @foreach ($syaratPembayaran as $sp)
+                                                                                @if (!empty($customer->SyaratPembayaran) && $sp->kode == $customer->SyaratPembayaran->kode)
                                                                                     <option value="{{ $sp->kode }}" selected>
                                                                                         {{ $sp->deskripsi }}
                                                                                     </option>
