@@ -728,16 +728,25 @@
                                                                 <!--end::label-->
                                                                 <!--begin::Input-->
                                                                 <div id="div-tax">
-                                                                    <select name="tax" id="tax" class="form-select form-select-solid">
+                                                                    <select name="tax" id="tax" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
+                                                                        data-placeholder="Tax">
                                                                         <option value=""></option>
-                                                                        <option value="0" {{ $customer->tax == "0" ? "selected" : ""}}>Tax Exempt</option>
+                                                                        <option value="0">Tax Exempt</option>
+                                                                        <option value="1">Non WAPU Pihak 3</option>
+                                                                        <option value="2">Non WAPU Berelasi</option>
+                                                                        <option value="3">WAPU Pemerintah</option>
+                                                                        <option value="4">WAPU BUMN/PIHAK LAIN</option>
+                                                                        <option value="5">Ditanggung Pemerintah</option>
+                                                                        <option value="6">Dibebaskan</option>
+                                                                        <option value="7">Luar Negeri</option>
+                                                                        {{-- <option value="0" {{ $customer->tax == "0" ? "selected" : ""}}>Tax Exempt</option>
                                                                         <option value="1" {{ $customer->tax == "1" ? "selected" : ""}}>Non WAPU Pihak 3</option>
                                                                         <option value="2" {{ $customer->tax == "2" ? "selected" : ""}}>Non WAPU Berelasi</option>
                                                                         <option value="3" {{ $customer->tax == "3" ? "selected" : ""}}>WAPU Pemerintah</option>
                                                                         <option value="4" {{ $customer->tax == "4" ? "selected" : ""}}>WAPU BUMN/PIHAK LAIN</option>
                                                                         <option value="5" {{ $customer->tax == "5" ? "selected" : ""}}>Ditanggung Pemerintah</option>
                                                                         <option value="6" {{ $customer->tax == "6" ? "selected" : ""}}>Dibebaskan</option>
-                                                                        <option value="7" {{ $customer->tax == "7" ? "selected" : ""}}>Luar Negeri</option>
+                                                                        <option value="7" {{ $customer->tax == "7" ? "selected" : ""}}>Luar Negeri</option> --}}
                                                                     </select>
                                                                 </div>
                                                                 <!--end::Input-->
