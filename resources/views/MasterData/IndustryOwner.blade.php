@@ -48,10 +48,8 @@
                                 <div class="d-flex align-items-center py-1">
 
                                     <!--begin::Button-->
-                                    <a href="#" class="btn btn-sm btn-primary w-80px" data-bs-toggle="modal"
-                                        data-bs-target="#kt_modal_create" id="kt_toolbar_primary_button"
-                                        style="background-color:#008CB4; padding: 6px">
-                                        New</a>
+                                    <a href="/send-data-industry-attractivness" class="btn btn-sm btn-primary" id="kt_toolbar_primary_button"
+                                        style="background-color:#008CB4">Send Data</a>
 
                                     <!--begin::Wrapper-->
                                     {{-- <div class="me-4" style="margin-left:10px;">

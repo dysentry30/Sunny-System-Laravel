@@ -1,6 +1,6 @@
 @extends('template.main')
 
-@section('title', 'Change Request')
+@section('title', 'Perubahan Kontrak')
 @section('content')
     <!--begin::Root-->
     <div class=" d-flex flex-column flex-root">
@@ -320,6 +320,90 @@
                                 </div>
                             </div>
                             <!--end::Header Contract-->
+                            
+                            <!--begin::Content Card-->
+                            <div class="row">
+                                <div class="col">
+                                    <div class="card card-flush h-lg-80 my-5">
+                                        <div class="card-body">
+                                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                                Dokumen Pendukung
+                                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                                    data-bs-target="#kt_modal_input_dokumen_pendukung">+</a>
+                                            </h3>
+                    
+                                            <!--begin:Table: Review-->
+                                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                                <!--begin::Table head-->
+                                                <thead>
+                                                    <!--begin::Table row-->
+                                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                        <th class="min-w-125px">Nama Dokumen</th>
+                                                        <th class="min-w-125px">Dibuat Oleh</th>
+                                                        <th class="min-w-125px">Dibuat Tanggal</th>
+                                                        <th class="min-w-125px">Catatan</th>
+                                                    </tr>
+                                                    <!--end::Table row-->
+                                                </thead>
+                                                <!--end::Table head-->
+                                                <!--begin::Table body-->
+                                                <tbody class="fw-bold text-gray-400">
+                                                    @if (!empty($perubahanKontrak->DokumenPendukung))
+                                                        @forelse ($perubahanKontrak->DokumenPendukung as $dokumen_pendukung)
+                                                            <tr>
+                                                                <!--begin::Name=-->
+                                                                <td>
+                                                                    <a target="_blank"
+                                                                        href="/document/view/{{ $dokumen_pendukung->id_dokumen_pendukung }}/{{ $dokumen_pendukung->id_document }}"
+                                                                        class="text-gray-600 text-hover-primary mb-1">
+                                                                        {{ $dokumen_pendukung->document_name }}
+                                                                    </a>
+                                                                </td>
+                                                                <!--end::Name=-->
+                                                                <!--begin::Name=-->
+                                                                <td>
+                                                                    <p class="text-gray-600 mb-1">{{ $dokumen_pendukung->User->name }}
+                                                                    </p>
+                                                                </td>
+                                                                <!--end::Name=-->
+                                                                <!--begin::Kode=-->
+                                                                <td>
+                                                                    <p class="text-gray-600 mb-1">
+                                                                        {{ date_format(new DateTime($dokumen_pendukung->created_at), 'd-m-Y') }}
+                                                                    </p>
+                                                                </td>
+                                                                <!--end::Kode=-->
+                                                                <!--begin::Unit=-->
+                                                                <td>
+                                                                    <p class="text-gray-600 mb-1">{{ $dokumen_pendukung->note }}</p>
+                                                                </td>
+                                                                <!--end::Unit=-->
+                                                            </tr>
+                                                        @empty
+                                                            <tr>
+                                                                <td colspan="4" class="text-center">
+                                                                    <h6><b>There is no data</b></h6>
+                                                                </td>
+                                                            </tr>
+                                                        @endforelse
+                                                    @else
+                                                        <tr>
+                                                            <td colspan="4" class="text-center">
+                                                                <h6><b>There is no data</b></h6>
+                                                            </td>
+                                                        </tr>
+                                                    @endif
+                                                </tbody>
+                                                <!--end::Table body-->
+                    
+                                            </table>
+                                            <!--End:Table: Review-->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--end::Content Card-->
+
                         </div>
                     </div>
                     </form>
@@ -328,6 +412,104 @@
             </div>
             <!--end::Contacts-->
         </div>
+
+        <!--begin::Modal - Dokumen Pendukung -->
+            <div class="modal fade" id="kt_modal_input_dokumen_pendukung" tabindex="-1" aria-hidden="true">
+                <!--begin::Modal dialog-->
+                <div class="modal-dialog modal-dialog-centered mw-900px">
+                    <!--begin::Modal content-->
+                    <div class="modal-content">
+                        <!--begin::Modal header-->
+                        <div class="modal-header">
+                            <!--begin::Modal title-->
+                            <h2>Add Attachment | Dokumen Pendukung </h2>
+                            <!--end::Modal title-->
+                            <!--begin::Close-->
+                            <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                                <span class="svg-icon svg-icon-1">
+                                    <i class="bi bi-x-lg"></i>
+                                </span>
+                                <!--end::Svg Icon-->
+                            </div>
+                            <!--end::Close-->
+                        </div>
+                        <!--end::Modal header-->
+                        <!--begin::Modal body-->
+                        <div class="modal-body py-lg-6 px-lg-6">
+
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-5">
+                                <form action="/dokumen-pendukung/upload" method="POST" enctype="multipart/form-data">
+                                    @csrf
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Attachment</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="hidden" value="1" name="is-tender-menang">
+                                    <input type="hidden" class="modal-name" name="modal-name">
+                                    <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                        name="id-contract">
+                                    <input type="file" style="font-weight: normal"
+                                        class="form-control form-control-solid" name="attach-file"
+                                        id="attach-file-dokumen-pendukung" value="" accept=".docx"
+                                        placeholder="" />
+                                    <!--end::Input-->
+
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Nama Dokumen</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text" class="form-control form-control-solid" name="document-name"
+                                        id="document-name-pendukung" value="" style="font-weight: normal"
+                                        placeholder="Nama Document" />
+                                    <!--end::Input-->
+
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Catatan</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text" class="form-control form-control-solid" name="note"
+                                        id="note" value="" style="font-weight: normal"
+                                        placeholder="Catatan" />
+                                    <!--end::Input-->
+                                    <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
+
+
+                                    {{-- begin::Froala Editor --}}
+                                    {{-- <div id="froala-editor-dokumen-pendukung">
+                                        <h1>Attach file with <b>.DOCX</b> format only</h1>
+                                    </div> --}}
+                                    {{-- end::Froala Editor --}}
+                                    {{-- begin::Read File --}}
+                                    {{-- <script>
+                                        document.getElementById("attach-file-dokumen-pendukung").addEventListener("change", async function() {
+                                            await readFile(this.files[0], "#froala-editor-dokumen-pendukung");
+                                        });
+                                    </script> --}}
+                                    {{-- end::Read File --}}
+                            </div>
+                            <!--end::Input group-->
+
+                            <button type="submit" id="save-review-dokumen-pendukung" class="btn btn-lg btn-primary"
+                                data-bs-dismiss="modal">Save</button>
+                            </form>
+
+
+                        </div>
+                        <!--end::Modal body-->
+                    </div>
+                    <!--end::Modal content-->
+                </div>
+                <!--end::Modal dialog-->
+            </div>
+        <!--end::Modal - Dokumen Pendukung -->
 
         <!--end::Content-->
     </div>

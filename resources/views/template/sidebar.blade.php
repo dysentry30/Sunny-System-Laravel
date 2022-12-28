@@ -179,7 +179,7 @@
                             str_contains(Request::Path(), 'pasal/edit') ||
                             str_contains(Request::Path(), 'user') ||
                             str_contains(Request::Path(), 'kriteria-pasar') ||
-                            str_contains(Request::Path(), 'industry-owner') ||
+                            str_contains(Request::Path(), 'industry-attractivness') ||
                             str_contains(Request::Path(), 'industry-sector') ||
                             str_contains(Request::Path(), 'team-proyek') ? 'background-color:#008CB4' : '' }}">
 
@@ -365,14 +365,14 @@
                                     @if (!auth()->user()->check_user_sales)
                                     <!--begin::Menu Colapse-->
                                     <div id="#kt_aside_menu" data-kt-menu="true"
-                                        style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'industry-owner' ? 'background-color:#008CB4' : '' }}">
-                                        <a class="menu-link " href="/industry-owner" style="color:white; padding-left:20px;">
+                                        style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'industry-attractivness' ? 'background-color:#008CB4' : '' }}">
+                                        <a class="menu-link " href="/industry-attractivness" style="color:white; padding-left:20px;">
                                             <span class="menu-icon">
                                                 <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
                                                 <i class="bi bi-building text-white"></i>
                                                 <!--end::Svg Icon-->
                                             </span>
-                                            <span class="menu-title" style="font-size: 16px; padding-left: 10px">Industry Owner</span>
+                                            <span class="menu-title" style="font-size: 16px; padding-left: 10px">Industri Attractiveness</span>
                                         </a>
                                     </div>
                                     <!--end::Menu Colapse-->

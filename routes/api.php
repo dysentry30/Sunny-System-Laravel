@@ -5,6 +5,7 @@ use App\Http\Controllers\UserController;
 use App\Models\Customer;
 use App\Models\Forecast;
 use App\Models\HistoryForecast;
+use App\Models\IndustryOwner;
 use App\Models\Proyek;
 use App\Models\ProyekBerjalans;
 use App\Models\UnitKerja;
@@ -359,6 +360,22 @@ Route::middleware(["web"])->group(function () {
         ], 400);
     })->middleware("userAuth");
     // End - RKAP
+
+    // Begin - Industry Owner ke SAP
+    Route::post('/get-industry-attract', function () {
+        $industry_attractivness = IndustryOwner::all();
+        $new_class = new stdClass();
+        $new_class->periode = date("Ymd");
+        $new_class->data = $industry_attractivness->map(function($ia) {
+            $new_ia = new stdClass();
+            $new_ia->kode_pelanggan = "";
+            $new_ia->industry_sector = $ia->code_owner;
+            $new_ia->attractivness_status = $ia->owner_attractiveness;
+            return $new_ia;
+        });
+        return response()->json($new_class);
+    });
+    // End - Industry Owner ke SAP
 
     // get periode year and month
     // function getPeriode($periode)
