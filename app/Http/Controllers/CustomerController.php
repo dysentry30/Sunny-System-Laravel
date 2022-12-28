@@ -260,8 +260,8 @@ class CustomerController extends Controller
         $industryOwners = IndustryOwner::all();
         // $industrySectors = IndustrySector::all();
         $jenisPerusahaan = JenisPerusahaan::all();
-        $taxs = Tax::all();
-        $syaratPembayaran = SyaratPembayaran::all();
+        // $taxs = Tax::all();
+        // $syaratPembayaran = SyaratPembayaran::all();
         $masalahHukum = MasalahHukum::with(['Proyek'])->where("id_customer", "=", $id_customer)->get();
         $csi = Csi::with(['Proyek'])->where("id_customer", "=", $id_customer)->get();
         $cli = Cli::with(['Proyek'])->where("id_customer", "=", $id_customer)->get();
@@ -439,7 +439,7 @@ class CustomerController extends Controller
             "proyekClosed" => $proyekClosed,
             "area_proyeks" => $area_proyeks,
             "industryAttractiveness" => $industryOwners,
-            // "jenisPerusahaan" => $jenisPerusahaan,
+            "jenisPerusahaan" => $jenisPerusahaan,
             // "taxs" => $taxs,
             // "syaratPembayaran" => $syaratPembayaran,
             "masalahHukum" => $masalahHukum,
@@ -447,7 +447,7 @@ class CustomerController extends Controller
             "cli" => $cli,
             "nps" => $nps,
             "inovasi" => $inovasi
-        ], compact("jenisPerusahaan", "taxs", "syaratPembayaran", "namaUnit", "labaProyek", "rugiProyek", "piutangProyek", "proyekOpportunity", "industryOwners"));
+        ], compact("syaratPembayaran", "namaUnit", "labaProyek", "rugiProyek", "piutangProyek", "proyekOpportunity", "industryOwners"));
     }
 
     public function saveEdit(

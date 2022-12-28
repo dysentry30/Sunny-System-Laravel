@@ -697,7 +697,15 @@
                                                                         <select name="syarat_pembayaran" id="syarat-pembayaran" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
                                                                             data-placeholder="Term of Payment">
                                                                             <option value=""></option>
-                                                                            @foreach ($syaratPembayaran as $sp)
+                                                                            <option value="ZC00" {{ $customer->SyaratPembayaran == "ZC00" ? "selected" : ""}}>Payable immediately Due Net</option>
+                                                                            <option value="ZC01" {{ $customer->SyaratPembayaran == "ZC01" ? "selected" : ""}}>within 14 days Due net</option>
+                                                                            <option value="ZC02" {{ $customer->SyaratPembayaran == "ZC02" ? "selected" : ""}}>within 30 days Due net</option>
+                                                                            <option value="ZC03" {{ $customer->SyaratPembayaran == "ZC03" ? "selected" : ""}}>within 45 days Due net</option>
+                                                                            <option value="ZC04" {{ $customer->SyaratPembayaran == "ZC04" ? "selected" : ""}}>within 60 days Due net</option>
+                                                                            <option value="ZC05" {{ $customer->SyaratPembayaran == "ZC05" ? "selected" : ""}}>within 90 days Due net</option>
+                                                                            <option value="ZC06" {{ $customer->SyaratPembayaran == "ZC06" ? "selected" : ""}}>within 120 days Due net</option>
+                                                                            <option value="ZC07" {{ $customer->SyaratPembayaran == "ZC07" ? "selected" : ""}}>within 180 days Due net</option>
+                                                                            {{-- @foreach ($syaratPembayaran as $sp)
                                                                                 @if (!empty($customer->SyaratPembayaran) && $sp->kode == $customer->SyaratPembayaran->kode)
                                                                                     <option value="{{ $sp->kode }}" selected>
                                                                                         {{ $sp->deskripsi }}
@@ -707,7 +715,7 @@
                                                                                         {{ $sp->deskripsi }}
                                                                                     </option>
                                                                                 @endif
-                                                                            @endforeach
+                                                                            @endforeach --}}
                                                                         </select>
                                                                     </div>
                                                                     <!--end::Input-->
