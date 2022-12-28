@@ -216,7 +216,7 @@ class CustomerController extends Controller
 
     public function view($id_customer)
     {
-        $customer = Customer::with(["customerAttachments", "strukturAttachments", "proyekBerjalans"])->where("id_customer", "=", $id_customer)->first();
+        $customer = Customer::with(["customerAttachments", "strukturAttachments", "proyekBerjalans", "JenisPerusahaan", "Tax", "SyaratPembayaran", "MasalahHukum"])->where("id_customer", "=", $id_customer)->first();
         // $data_provinsi = Http::get("https://emsifa.github.io/api-wilayah-indonesia/api/provinces.json")->json();
         // $data = Http::get("http://maps.googleapis.com/maps/api/geocode/xml?address=". "Boston, USA" . "&sensor=false");
 
@@ -259,9 +259,9 @@ class CustomerController extends Controller
         $per = 1000000;
         $industryOwners = IndustryOwner::all();
         // $industrySectors = IndustrySector::all();
-        $jenisPerusahaan = JenisPerusahaan::all();
-        $taxs = Tax::all();
-        $syaratPembayaran = SyaratPembayaran::all();
+        $jenisPerusahaan = JenisPerusahaan::get();
+        $taxs = Tax::get();
+        $syaratPembayaran = SyaratPembayaran::get();
         $masalahHukum = MasalahHukum::with(['Proyek'])->where("id_customer", "=", $id_customer)->get();
         $csi = Csi::with(['Proyek'])->where("id_customer", "=", $id_customer)->get();
         $cli = Cli::with(['Proyek'])->where("id_customer", "=", $id_customer)->get();
