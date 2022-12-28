@@ -661,7 +661,7 @@
                                                                             {{-- onchange="selectProvinsi(this)"  --}}
                                                                             data-placeholder="Pilih Jenis Perusahaan">
                                                                             <option value=""></option>
-                                                                            {{-- @foreach ($jenisPerusahaan as $jp)
+                                                                            @foreach ($jenisPerusahaan as $jp)
                                                                                 @if ( !empty($customer->JenisPerusahaan) && $jp->kode_jenis == $customer->JenisPerusahaan->kode_jenis)
                                                                                     <option value="{{ $jp->kode_jenis }}" selected>
                                                                                         {{ $jp->deskripsi }}
@@ -671,7 +671,7 @@
                                                                                         {{ $jp->deskripsi }}
                                                                                     </option>
                                                                                 @endif
-                                                                            @endforeach --}}
+                                                                            @endforeach
                                                                         </select>
                                                                     </div>
                                                                     <!--end::Input-->
