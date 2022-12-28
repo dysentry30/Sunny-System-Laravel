@@ -259,9 +259,9 @@ class CustomerController extends Controller
         $per = 1000000;
         $industryOwners = IndustryOwner::all();
         // $industrySectors = IndustrySector::all();
-        $jenisPerusahaan = JenisPerusahaan::get();
-        $taxs = Tax::get();
-        $syaratPembayaran = SyaratPembayaran::get();
+        $jenisPerusahaan = JenisPerusahaan::all();
+        $taxs = Tax::all();
+        $syaratPembayaran = SyaratPembayaran::all();
         $masalahHukum = MasalahHukum::with(['Proyek'])->where("id_customer", "=", $id_customer)->get();
         $csi = Csi::with(['Proyek'])->where("id_customer", "=", $id_customer)->get();
         $cli = Cli::with(['Proyek'])->where("id_customer", "=", $id_customer)->get();
