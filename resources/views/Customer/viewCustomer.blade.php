@@ -2595,7 +2595,7 @@
                                                     <!--end:::Tab pane History-->
 
                                                     <!--begin:::Tab pane Excellence-->
-                                                    {{-- <div class="tab-pane fade" id="kt_user_view_excellence" role="tabpanel">
+                                                    <div class="tab-pane fade" id="kt_user_view_excellence" role="tabpanel">
                                                         <!--begin::CSI-->
                                                         <div class="card-title m-0">
                                                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
@@ -3070,7 +3070,7 @@
                                                             <!--End::Row-->                                                            
                                                         </div>
                                                         <!--end::Karya Inovasi-->
-                                                    </div> --}}
+                                                    </div>
                                                     <!--end:::Tab pane Excellence-->
 
 
