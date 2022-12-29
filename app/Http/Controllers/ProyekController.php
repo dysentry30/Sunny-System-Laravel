@@ -1478,9 +1478,9 @@ class ProyekController extends Controller
                 $customer = $proyekStage->ProyekBerjalan->Customer ?? null;
                 if (!empty($customer)) {
                     $error_msg = collect();
-                    if (empty($customer->kode_nasabah)) {
-                        $error_msg->push("Email");
-                    }
+                    // if (empty($customer->kode_nasabah)) {
+                    //     $error_msg->push("Kode Nasabah");
+                    // }
                     if (empty($customer->email)) {
                         $error_msg->push("Email");
                     }
