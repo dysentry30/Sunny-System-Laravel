@@ -242,12 +242,12 @@
                                                         <a target="_blank" href="/proyek/view/{{ $proyek->kode_proyek }}" id="click-name" class="text-hover-primary mb-1">{{ $proyek->nama_proyek }}</a>
                                                     </td> --}}
                                                     <!--end::Name=-->
-                                                    <!--begin::Email=-->
+                                                    <!--begin::Email-->
                                                     <td>
                                                         {{ $proyek->UnitKerja->unit_kerja }}
                                                     </td>
-                                                    <!--end::Email=-->
-                                                    <!--begin::Email=-->
+                                                    <!--end::Email-->
+                                                    <!--begin::Email-->
                                                     <td>
                                                         @switch($proyek->stage)
                                                             @case('0')
@@ -298,8 +298,8 @@
                                                                 *Belum Ditentukan
                                                         @endswitch
                                                     </td>
-                                                    <!--end::Email=-->
-                                                    <!--begin::Email=-->
+                                                    <!--end::Email-->
+                                                    <!--begin::Email-->
                                                     <td>
                                                         @switch($proyek->jenis_proyek)
                                                             @case('I')
@@ -316,22 +316,33 @@
 
                                                         @endswitch
                                                     </td>
-                                                    <!--end::Email=-->
-                                                    <!--begin::Email=-->
-                                                    <td>
-                                                        {{ number_format((int) $proyek->nilai_rkap, 0, ".", ".") }}
+                                                    <!--end::Email-->
+                                                    <!--begin::Forecast-->
+                                                    <td class="text-end">
+                                                        @php
+                                                            $total_forecast = $proyek->Forecasts->filter(function($f) {
+                                                                $date = date_create($f->created_at);
+                                                                return $f->periode_prognosa == (int) date("m") && date_format($date, "Y") == date("Y");
+                                                            })->sum(function($f) {
+                                                                return (int) $f->nilai_forecast;
+                                                            });
+                                                        @endphp
+                                                        <small>
+                                                            {{-- {{ $proyek->forecast }} --}}
+                                                            {{ number_format((int)$total_forecast, 0, '.', '.') ?? '-' }}
+                                                        </small>
                                                     </td>
-                                                    <!--end::Email=-->
-                                                    <!--begin::Email=-->
+                                                    <!--end::Forecast-->
+                                                    <!--begin::Email-->
                                                     <td>
                                                         {{ $proyek->tahun_perolehan }}
                                                     </td>
-                                                    <!--end::Email=-->
-                                                    <!--begin::Email=-->
+                                                    <!--end::Email-->
+                                                    <!--begin::Email-->
                                                     <td>
                                                         {{ Carbon\Carbon::create(date("Y") ,$proyek->bulan_pelaksanaan)->translatedFormat("F") }}
                                                     </td>
-                                                    <!--end::Email=-->
+                                                    <!--end::Email-->
                                                 </tr>
                                             @empty
                                                 <tr>
@@ -388,13 +399,13 @@
                                                         <p>{{ $proyek->nama_proyek }}</p>
                                                     </td>
                                                     <!--end::Name=-->
-                                                    <!--begin::Email=-->
+                                                    <!--begin::Email-->
                                                     <td>
                                                         {{ $proyek->UnitKerja->unit_kerja }}
                                                     </td>
-                                                    <!--end::Email=-->
+                                                    <!--end::Email-->
 
-                                                    <!--begin::Email=-->
+                                                    <!--begin::Email-->
                                                     <td>
                                                         @switch($proyek->jenis_proyek)
                                                             @case('I')
@@ -411,25 +422,25 @@
 
                                                         @endswitch
                                                     </td>
-                                                    <!--end::Email=-->
+                                                    <!--end::Email-->
 
-                                                    <!--begin::Email=-->
+                                                    <!--begin::Email-->
                                                     <td>
                                                         {{ number_format((int) $proyek->nilai_perolehan, 0, ".", ".") }}
                                                     </td>
-                                                    <!--end::Email=-->
+                                                    <!--end::Email-->
 
-                                                    <!--begin::Email=-->
+                                                    <!--begin::Email-->
                                                     <td>
                                                         {{ Carbon\Carbon::create($proyek->tanggal_mulai_terkontrak)->translatedFormat("d F Y") ?? "-" }}
                                                     </td>
-                                                    <!--end::Email=-->
+                                                    <!--end::Email-->
 
-                                                    <!--begin::Email=-->
+                                                    <!--begin::Email-->
                                                     <td>
                                                         {{ Carbon\Carbon::create($proyek->tanggal_akhir_terkontrak)->translatedFormat("d F Y") ?? "-" }}
                                                     </td>
-                                                    <!--end::Email=-->
+                                                    <!--end::Email-->
                                                 </tr>
                                             @empty
                                                 <tr>
@@ -487,11 +498,11 @@
                                                         {{ $proyek->nama_proyek }}
                                                     </td>
                                                     <!--end::Name=-->
-                                                    <!--begin::Email=-->
+                                                    <!--begin::Email-->
                                                     <td>
                                                         {{ $proyek->UnitKerja->unit_kerja }}
                                                     </td>
-                                                    <!--end::Email=-->
+                                                    <!--end::Email-->
                                                     <!--begin::Jenis Proyek=-->
                                                     <td>
                                                         @switch($proyek->jenis_proyek)
