@@ -2342,7 +2342,7 @@
                                     @endforelse
                                 @else
                                     <tr>
-                                        <td colspan="3" class="text-center">
+                                        <td colspan="5" class="text-center">
                                             <h6><b>There is no data</b></h6>
                                         </td>
                                     </tr>
@@ -2406,9 +2406,43 @@
                                                 @endphp
                                                 <td>
                                                     @foreach ($list_instruksi_owner as $lio)
-                                                        @php
-                                                            $lio = App\Models\SiteInstruction::where("nomor_dokumen" , "=", $lio)->get()->first();
-                                                        @endphp
+                                                        @switch($jd->jenis_dokumen)
+                                                            @case("Site Instruction")
+                                                                    @php
+                                                                        $lio = App\Models\SiteInstruction::where("nomor_dokumen" , "=", $lio)->get()->first();
+                                                                    @endphp
+                                                                @break
+                                                            @case("Technical Form")
+                                                                    @php
+                                                                        $lio = App\Models\TechnicalForm::where("nomor_dokumen" , "=", $lio)->get()->first();
+                                                                    @endphp
+                                                                @break
+                                                            @case("Technical Query")
+                                                                    @php
+                                                                        $lio = App\Models\TechnicalQuery::where("nomor_dokumen" , "=", $lio)->get()->first();
+                                                                    @endphp
+                                                                @break
+                                                            @case("Field Design Change")
+                                                                    @php
+                                                                        $lio = App\Models\FieldDesignChange::where("nomor_dokumen" , "=", $lio)->get()->first();
+                                                                    @endphp
+                                                                @break
+                                                            @case("Contract Change Notice")
+                                                                    @php
+                                                                        $lio = App\Models\ContractChangeNotice::where("nomor_dokumen" , "=", $lio)->get()->first();
+                                                                    @endphp
+                                                                @break
+                                                            @case("Contract Change Proposal")
+                                                                    @php
+                                                                        $lio = App\Models\ContractChangeProposal::where("nomor_dokumen" , "=", $lio)->get()->first();
+                                                                    @endphp
+                                                                @break
+                                                            @case("Contract Change Order")
+                                                                    @php
+                                                                        $lio = App\Models\ContractChangeOrder::where("nomor_dokumen" , "=", $lio)->get()->first();
+                                                                    @endphp
+                                                                @break
+                                                        @endswitch
                                                         - <a target="_blank" href="{{ asset("words/$lio->id_document.pdf"); }}">{{$lio->nomor_dokumen}}</a> <br>
                                                     @endforeach
                                                 </td>
