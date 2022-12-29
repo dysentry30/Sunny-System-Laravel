@@ -233,7 +233,7 @@
                                                     <!--begin::Input group Address 1-->
                                                     <div class="fv-row mb-7" style="margin-top:10px;">
                                                         <!--begin::Label-->
-                                                        <label class="fs-6 fw-bold form-label mt-3">
+                                                        <label class="fs-6 fw-bold form-label mt-3 required">
                                                             <span>Address Line 1</span>
                                                         </label>
                                                         <!--end::Label-->
@@ -367,7 +367,7 @@
                                                                 <!--begin::Input group Website-->
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <label class="fs-6 fw-bold form-label mt-3 required">
                                                                         <span class="">Instansi</span>
                                                                     </label>
                                                                     <!--end::Label-->
@@ -434,13 +434,14 @@
                                                                 <!--begin::Input group Website-->
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="">Kode Nasabah</span>
+                                                                    <label class="fs-6 fw-bold form-label mt-3 required">
+                                                                        <span class="">Kode Nasabah</span><i
+                                                                            class="bi bi-lock"></i>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
                                                                     <input type="text" class="form-control form-control-solid" id="kode-nasabah" name="kodenasabah-company" value="{{ $customer->kode_nasabah }}"
-                                                                        placeholder="Kode Nasabah" />
+                                                                        placeholder="Kode Nasabah" readonly/>
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
@@ -486,12 +487,12 @@
                                                                     <div class="fv-row mb-7">
                                                                         <!--begin::Label-->
                                                                         <label class="fs-6 fw-bold form-label mt-3">
-                                                                            <span class="">Negara</span>
+                                                                            <span class="required">Negara</span>
                                                                         </label>
                                                                         <!--end::Label-->
                                                                         <!--begin::Input-->
-                                                                        <select name="negara" id="negara" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
-                                                                            onchange="selectNegara(this)"
+                                                                        <select onchange="this.form.submit()" name="negara" id="negara" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
+                                                                            {{-- onchange="selectNegara(this)" --}}
                                                                             data-placeholder="Pilih Negara">
                                                                             <option value=""></option>
                                                                             @foreach ($data_negara as $negara)
@@ -645,7 +646,7 @@
                                                                 <div class="col-6">
                                                                     <!--begin::label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="">Jenis Perusahaan</span>
+                                                                        <span class="required">Jenis Perusahaan</span>
                                                                         <i class="bi-info-circle-fill" class="btn btn-secondary mx-4"
                                                                             data-bs-toggle="tooltip" data-bs-placement="top"
                                                                             data-bs-custom-class="custom-tooltip"
@@ -682,7 +683,7 @@
                                                                 <div class="col-6">
                                                                     <!--begin::label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="">Term of Payment</span>
+                                                                        <span class="required">Term of Payment</span>
                                                                         <i class="bi-info-circle-fill" class="btn btn-secondary mx-4"
                                                                             data-bs-toggle="tooltip" data-bs-placement="top"
                                                                             data-bs-custom-class="custom-tooltip"

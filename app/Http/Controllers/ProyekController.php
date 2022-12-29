@@ -1478,17 +1478,35 @@ class ProyekController extends Controller
                 $customer = $proyekStage->ProyekBerjalan->Customer ?? null;
                 if (!empty($customer)) {
                     $error_msg = collect();
+                    if (empty($customer->kode_nasabah)) {
+                        $error_msg->push("Email");
+                    }
                     if (empty($customer->email)) {
                         $error_msg->push("Email");
+                    }
+                    if (empty($customer->address_1)) {
+                        $error_msg->push("Alamat");
                     }
                     if (empty($customer->kode_pos)) {
                         $error_msg->push("Kode Pos");
                     }
+                    if (empty($customer->fax)) {
+                        $error_msg->push("Fax");
+                    }
                     if (empty($customer->phone_number)) {
-                        $error_msg->push("Phone Number");
+                        $error_msg->push("No Telp");
+                    }
+                    if (empty($customer->handphone)) {
+                        $error_msg->push("Handphone");
                     }
                     if (empty($customer->industry_sector)) {
                         $error_msg->push("Industry Sector");
+                    }
+                    if (empty($customer->jenis_instansi)) {
+                        $error_msg->push("Instansi");
+                    }
+                    if (empty($customer->jenis_perusahaan)) {
+                        $error_msg->push("Jenis Perusahaan");
                     }
                     if (empty($customer->provinsi)) {
                         $error_msg->push("Provinsi");
@@ -1498,6 +1516,12 @@ class ProyekController extends Controller
                     }
                     if (empty($customer->npwp_company)) {
                         $error_msg->push("NPWP");
+                    }
+                    if (empty($customer->syarat_pembayaran)) {
+                        $error_msg->push("Term Payment");
+                    }
+                    if (empty($customer->tax)) {
+                        $error_msg->push("Tax");
                     }
                     if ($error_msg->isNotEmpty()) {
                         Alert::html("Error - Pelanggan !", "Untuk pindah ke stage terkontrak, pastikan data <b>Pelanggan</b> dengan field <b>" . $error_msg->join(", ", " </b>dan<b> ") . "</b> sudah terisi!", "error")->autoClose(10000);
