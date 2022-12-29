@@ -1093,7 +1093,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::delete('/tipe-proyek/delete/{id}', [TipeProyekController::class, 'delete']);
 
     // Master Data Industry Owner
-    Route::get('/industry-owner', function (Request $request) {
+    Route::get('/industry-attractivness', function (Request $request) {
         $industryOwners = IndustryOwner::all();
         return view("/MasterData/IndustryOwner", compact(["industryOwners"]));
     });
