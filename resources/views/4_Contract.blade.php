@@ -326,8 +326,9 @@
                                                             })->sum(function($f) {
                                                                 return (int) $f->nilai_forecast;
                                                             });
+                                                            // @dump($total_forecast)
                                                             if ($total_forecast == 0) {
-                                                                $total_forecast = $proyek->nilai_perolehan;
+                                                                $total_forecast = $proyek->nilai_rkap;
                                                             }
                                                         @endphp
                                                         <small>
