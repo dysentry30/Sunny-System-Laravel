@@ -1760,7 +1760,7 @@ class ProyekController extends Controller
                         ]
                     ]
                 ]);
-                dd($data_nasabah_online);
+                // dd($data_nasabah_online);
                 // End :: Ngirim data ke nasabah online WIKA
 
                 // dd($proyekStage->nilai_perolehan, $proyekStage->porsi_jo, $proyekStage->nilai_kontrak_keseluruhan);

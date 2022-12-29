@@ -1315,7 +1315,7 @@
                                 <input type="file" name="dokumen-pendukung[]" multiple accept=".docx,.xsls,.pdf"
                                     class="form-control form-control-solid fw-normal">
                             </div>
-                            {{-- <button type="button" id="save-pasal" data-bs-dismiss="modal" class="btn btn-lg mt-5 btn-primary">
+                            {{-- <button type="button" id="save-pasal" data-bs-dismiss="modal" class="btn btn-sm mt-5 btn-primary">
                                 <span>Save</span>
                                 <span class="spinner-border spinner-border-sm" style="display: none;" aria-hidden="true"
                                     role="status"></span>
@@ -1421,7 +1421,7 @@
                                 <input type="file" name="dokumen-pendukung[]" multiple accept=".docx,.xsls,.pdf"
                                     class="form-control form-control-solid fw-normal">
                             </div>
-                            {{-- <button type="button" id="save-pasal" data-bs-dismiss="modal" class="btn btn-lg mt-5 btn-primary">
+                            {{-- <button type="button" id="save-pasal" data-bs-dismiss="modal" class="btn btn-sm mt-5 btn-primary">
                                 <span>Save</span>
                                 <span class="spinner-border spinner-border-sm" style="display: none;" aria-hidden="true"
                                     role="status"></span>
@@ -1512,7 +1512,7 @@
                                     <textarea name="keterangan" rows="1" class="form-control form-control-solid fw-normal"></textarea>
                                 </div>
                             </div>
-                            {{-- <button type="button" id="save-pasal" data-bs-dismiss="modal" class="btn btn-lg mt-5 btn-primary">
+                            {{-- <button type="button" id="save-pasal" data-bs-dismiss="modal" class="btn btn-sm mt-5 btn-primary">
                                 <span>Save</span>
                                 <span class="spinner-border spinner-border-sm" style="display: none;" aria-hidden="true"
                                     role="status"></span>

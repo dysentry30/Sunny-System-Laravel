@@ -1063,7 +1063,7 @@
 
                                 </div>
                             </div>
-                            {{-- <button type="button" id="save-pasal" data-bs-dismiss="modal" class="btn btn-lg mt-5 btn-primary">
+                            {{-- <button type="button" id="save-pasal" data-bs-dismiss="modal" class="btn btn-sm mt-5 btn-primary">
                                 <span>Save</span>
                                 <span class="spinner-border spinner-border-sm" style="display: none;" aria-hidden="true"
                                     role="status"></span>
@@ -1183,7 +1183,7 @@
                                 <input type="file" name="dokumen-pendukung[]" multiple accept=".docx,.xsls"
                                     class="form-control form-control-solid fw-normal">
                             </div>
-                            {{-- <button type="button" id="save-pasal" data-bs-dismiss="modal" class="btn btn-lg mt-5 btn-primary">
+                            {{-- <button type="button" id="save-pasal" data-bs-dismiss="modal" class="btn btn-sm mt-5 btn-primary">
                                 <span>Save</span>
                                 <span class="spinner-border spinner-border-sm" style="display: none;" aria-hidden="true"
                                     role="status"></span>
@@ -1288,7 +1288,7 @@
                                     @enderror
                                 </div>
                             </div>
-                            {{-- <button type="button" id="save-pasal" data-bs-dismiss="modal" class="btn btn-lg mt-5 btn-primary">
+                            {{-- <button type="button" id="save-pasal" data-bs-dismiss="modal" class="btn btn-sm mt-5 btn-primary">
                                 <span>Save</span>
                                 <span class="spinner-border spinner-border-sm" style="display: none;" aria-hidden="true"
                                     role="status"></span>
@@ -1545,7 +1545,7 @@
                             <div class="vr"></div>
                             <div class="">
                                 <a href="#" onclick="showModalPasalImport()"
-                                    class="btn btn-lg mt-5 btn-secondary">Import Pasal</a>
+                                    class="btn btn-sm mt-5 btn-secondary">Import Pasal</a>
                             </div>
                         </div>
                     </div>

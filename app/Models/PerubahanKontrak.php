@@ -14,4 +14,8 @@ class PerubahanKontrak extends Model
     public function JenisDokumen() {
         return $this->hasMany(JenisDokumen::class, "id_perubahan_kontrak");
     }
+
+    public function DokumenPendukungs() {
+        return $this->hasMany(DokumenPendukung::class, "id_perubahan_kontrak");
+    }
 }

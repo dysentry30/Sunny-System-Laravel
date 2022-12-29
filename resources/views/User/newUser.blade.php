@@ -1048,7 +1048,7 @@
                                 <div class="d-flex flex-stack pt-10">
                                     <!--begin::Wrapper-->
                                     <div class="me-2">
-                                        <button type="button" class="btn btn-lg btn-light-primary me-3"
+                                        <button type="button" class="btn btn-sm btn-light-primary me-3"
                                             data-kt-stepper-action="previous">
                                             <!--begin::Svg Icon | path: icons/duotune/arrows/arr063.svg-->
                                             <span class="svg-icon svg-icon-3 me-1">
@@ -1067,7 +1067,7 @@
                                     <!--end::Wrapper-->
                                     <!--begin::Wrapper-->
                                     <div>
-                                        <button type="button" class="btn btn-lg btn-primary"
+                                        <button type="button" class="btn btn-sm btn-primary"
                                             data-kt-stepper-action="submit">
                                             <span class="indicator-label">Submit
                                                 <!--begin::Svg Icon | path: icons/duotune/arrows/arr064.svg-->
@@ -1088,7 +1088,7 @@
                                                 <span
                                                     class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
                                         </button>
-                                        <button type="button" class="btn btn-lg btn-primary"
+                                        <button type="button" class="btn btn-sm btn-primary"
                                             data-kt-stepper-action="next">Continue
                                             <!--begin::Svg Icon | path: icons/duotune/arrows/arr064.svg-->
                                             <span class="svg-icon svg-icon-3 ms-1 me-0">
