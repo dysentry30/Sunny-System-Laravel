@@ -1538,7 +1538,7 @@ class ContractManagementsController extends Controller
         ];
         $rules = [
             "attach-file" => "required|file",
-            "document-name" => "required|string",
+            // "document-name" => "required|string",
             "note" => "required|string",
             "id-perubahan-kontrak" => "required|string",
         ];
@@ -1559,12 +1559,14 @@ class ContractManagementsController extends Controller
         $file = $request->file("attach-file");
         $model = new DokumenPendukung();
         $model->id_perubahan_kontrak = $data["id-perubahan-kontrak"];
-        $model->id_document = Str::uuid();
-        $model->document_name = $data["document-name"];
+        // $model->id_document = Str::uuid();
+        $id_document = date("His_") . $file->getClientOriginalName();
+        $model->id_document = $id_document;
+        // $model->document_name = $data["document-name"];
         $model->created_by = auth()->user()->id;
         $model->note = $data["note"];
         if ($model->save()) {
-            moveFileTemp($file, $model->id_document);
+            moveFileTemp($file, explode(".", $id_document)[0]);
             Alert::success("Success", "Dokumen Pendukung berhasil dibuat");
             return redirect()->back();
         }
