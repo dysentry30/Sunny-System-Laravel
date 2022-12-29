@@ -1540,7 +1540,7 @@ class ContractManagementsController extends Controller
             "attach-file" => "required|file",
             "document-name" => "required|string",
             "note" => "required|string",
-            "id-contract" => "required|string",
+            "id-perubahan-kontrak" => "required|string",
         ];
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
@@ -1550,7 +1550,7 @@ class ContractManagementsController extends Controller
         }
         $validation->validate();
 
-        $contract = ContractManagements::find($data["id-contract"]);
+        $contract = PerubahanKontrak::find($data["id-perubahan-kontrak"]);
         if (empty($contract)) {
             Alert::error("Error", "Pastikan contract sudah dibuat terlebih dahulu");
             return Redirect::back()->with("modal", $data["modal-name"]);
@@ -1558,7 +1558,7 @@ class ContractManagementsController extends Controller
         }
         $file = $request->file("attach-file");
         $model = new DokumenPendukung();
-        $model->id_contract = $data["id-contract"];
+        $model->id_perubahan_kontrak = $data["id-perubahan-kontrak"];
         $model->id_document = Str::uuid();
         $model->document_name = $data["document-name"];
         $model->created_by = auth()->user()->id;
@@ -1988,15 +1988,17 @@ class ContractManagementsController extends Controller
     public function rencanaKerjaManajemenContractUpload(Request $request, RencanKerjaManajemenKontrak $rencanKerjaManajemenKontrak)
     {
         $data = $request->all();
+        $file = $request->file("file-document");
+        $id_document = date("His_") . $file->getClientOriginalName();
+        $nama_file = $file->getClientOriginalName();
 
         $messages = [
             "required" => "Field di atas wajib diisi",
             "file" => "This field must be file only",
         ];
         $rules = [
-            "ketentuan-rencana-kerja" => "required",
             "id-contract" => "required",
-            "kelengkapan-adkon" => "required",
+            "file-document" => "required|file",
         ];
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
@@ -2014,9 +2016,11 @@ class ContractManagementsController extends Controller
         }
 
         $rencanKerjaManajemenKontrak->id_contract = $contract->id_contract;
-        $rencanKerjaManajemenKontrak->ketentuan_rencana_kerja = $data["ketentuan-rencana-kerja"];
-        $rencanKerjaManajemenKontrak->informasi_lengkap_adkon = $data["kelengkapan-adkon"];
+        $rencanKerjaManajemenKontrak->id_document = $id_document;
+        $rencanKerjaManajemenKontrak->nama_document = $nama_file;
+
         if ($rencanKerjaManajemenKontrak->save()) {
+            moveFileTemp($file, explode(".", $id_document)[0]);
             Alert::success("Success", "Rencana Kerja Manajemen Kontrak berhasil ditambahkan");
             return redirect()->back();
         }
@@ -2049,8 +2053,8 @@ class ContractManagementsController extends Controller
             $perubahan_kontrak->jenis_perubahan = $data["jenis-perubahan"];
             $perubahan_kontrak->tanggal_perubahan = $data["tanggal-perubahan"];
             $perubahan_kontrak->uraian_perubahan = $data["uraian-perubahan"];
-            $perubahan_kontrak->jenis_dokumen = $data["jenis-dokumen"];
-            $perubahan_kontrak->instruksi_owner = $data["instruksi-owner"];
+            // $perubahan_kontrak->jenis_dokumen = $data["jenis-dokumen"];
+            // $perubahan_kontrak->instruksi_owner = $data["instruksi-owner"];
             $perubahan_kontrak->proposal_klaim = $data["proposal-klaim"];
             $perubahan_kontrak->tanggal_pengajuan = $data["tanggal-pengajuan"];
             $perubahan_kontrak->biaya_pengajuan = str_replace(".", "", $data["biaya-pengajuan"]);
@@ -2068,8 +2072,8 @@ class ContractManagementsController extends Controller
             $perubahan_kontrak->jenis_perubahan = $data["jenis-perubahan"];
             $perubahan_kontrak->tanggal_perubahan = $data["tanggal-perubahan"];
             $perubahan_kontrak->uraian_perubahan = $data["uraian-perubahan"];
-            $perubahan_kontrak->jenis_dokumen = $data["jenis-dokumen"];
-            $perubahan_kontrak->instruksi_owner = $data["instruksi-owner"];
+            // $perubahan_kontrak->jenis_dokumen = $data["jenis-dokumen"];
+            // $perubahan_kontrak->instruksi_owner = $data["instruksi-owner"];
             $perubahan_kontrak->proposal_klaim = $data["proposal-klaim"];
             $perubahan_kontrak->tanggal_pengajuan = $data["tanggal-pengajuan"];
             $perubahan_kontrak->biaya_pengajuan = str_replace(".", "", $data["biaya-pengajuan"]);

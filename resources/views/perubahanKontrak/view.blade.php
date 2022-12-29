@@ -207,25 +207,27 @@
                                                                 <div class="col">
                                                                     <label class="fs-6 fw-bold form-label">
                                                                         <span style="font-weight: normal">Jenis Perubahan</span>
-                                                                    </label>
-                                                                    <select name="jenis-perubahan" id="jenis-perubahan" class="form-select form-select-solid" data-control="select2"
+                                                                    </label><br>
+                                                                    <b>{{$perubahan_kontrak->jenis_perubahan}}</b>
+                                                                    {{-- <select name="jenis-perubahan" id="jenis-perubahan" class="form-select form-select-solid" data-control="select2"
                                                                         data-hide-search="true" data-placeholder="Pilih Jenis Perubahan" tabindex="-1" aria-hidden="true">
                                                                         <option value=""></option>
                                                                         <option value="VO" {{ $perubahan_kontrak->jenis_perubahan == "VO" ? "selected" : ""}}>Variation Order (VO)</option>
                                                                         <option value="Klaim" {{ $perubahan_kontrak->jenis_perubahan == "Klaim" ? "selected" : ""}}>Klaim</option>
                                                                         <option value="Anti Klaim" {{ $perubahan_kontrak->jenis_perubahan == "Anti Klaim" ? "selected" : ""}}>Anti Klaim</option>
-                                                                    </select>
+                                                                    </select> --}}
                                                                 </div>
 
                                                                 <div class="col">
                                                                     <label class="fs-6 fw-bold form-label">
                                                                         <span style="font-weight: normal">Tanggal Perubahan</span>
-                                                                        <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)"
+                                                                        {{-- <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem"
                                                                             id="start-date-modal">
                                                                             <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
-                                                                        </a>
-                                                                    </label>
-                                                                    <input type="date" name="tanggal-perubahan" class="form-control form-control-solid" value="{{Carbon\Carbon::create($perubahan_kontrak->tanggal_perubahan)->format("Y-m-d")}}">
+                                                                        </a> --}}
+                                                                    </label><br>
+                                                                    <b>{{Carbon\Carbon::create($perubahan_kontrak->tanggal_perubahan)->format("Y-m-d")}}</b>
+                                                                    {{-- <input type="date" name="tanggal-perubahan" class="form-control form-control-solid" value="{{Carbon\Carbon::create($perubahan_kontrak->tanggal_perubahan)->format("Y-m-d")}}"> --}}
                                                                 </div>
                                                             </div>
 
@@ -244,8 +246,9 @@
                                                                 <div class="col">
                                                                     <label class="fs-6 fw-bold form-label">
                                                                         <span style="font-weight: normal">No Proposal Klaim</span>
-                                                                    </label>
-                                                                    <input type="text" value="{{ $perubahan_kontrak->proposal_klaim }}" name="proposal-klaim" class="form-control form-control-solid" />
+                                                                    </label><br>
+                                                                    <b>{{ $perubahan_kontrak->proposal_klaim }}</b>
+                                                                    {{-- <input type="text" value="{{ $perubahan_kontrak->proposal_klaim }}" name="proposal-klaim" class="form-control form-control-solid" /> --}}
                                                                 </div>
                                                             </div>
                                                             <br>
@@ -253,28 +256,31 @@
                                                                 <div class="col">
                                                                     <label class="fs-6 fw-bold form-label">
                                                                         <span style="font-weight: normal">Tanggal Pengajuan</span>
-                                                                        <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)"
+                                                                        {{-- <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)"
                                                                             id="start-date-modal">
                                                                             <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
-                                                                        </a>
-                                                                    </label>
-                                                                    <input type="date" name="tanggal-pengajuan" value="{{Carbon\Carbon::create($perubahan_kontrak->tanggal_pengajuan)->format("Y-m-d")}}" class="form-control form-control-solid" />
+                                                                        </a> --}}
+                                                                    </label><br>
+                                                                    <b>{{Carbon\Carbon::create($perubahan_kontrak->tanggal_pengajuan)->format("Y-m-d")}}</b>
+                                                                    {{-- <input type="date" name="tanggal-pengajuan" value="{{Carbon\Carbon::create($perubahan_kontrak->tanggal_pengajuan)->format("Y-m-d")}}" class="form-control form-control-solid" /> --}}
                                                                 </div>
                                                                 <div class="col mt-3">
                                                                     <label class="fs-6 fw-bold form-label">
                                                                         <span style="font-weight: normal">Biaya Pengajuan</span>
-                                                                    </label>
-                                                                    <input type="text" name="biaya-pengajuan" value="{{ number_format($perubahan_kontrak->biaya_pengajuan, 0, ".", ".") }}" class="form-control form-control-solid reformat" />
+                                                                    </label><br>
+                                                                    <b>{{ number_format($perubahan_kontrak->biaya_pengajuan, 0, ".", ".") }}</b>
+                                                                    {{-- <input type="text" name="biaya-pengajuan" value="{{ number_format($perubahan_kontrak->biaya_pengajuan, 0, ".", ".") }}" class="form-control form-control-solid reformat" /> --}}
                                                                 </div>
                                                                 <div class="col">
                                                                     <label class="fs-6 fw-bold form-label">
                                                                         <span style="font-weight: normal">Waktu Pengajuan</span>
-                                                                        <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)"
+                                                                        {{-- <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)"
                                                                             id="start-date-modal">
                                                                             <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
-                                                                        </a>
-                                                                    </label>
-                                                                    <input type="date" name="waktu-pengajuan" value="{{Carbon\Carbon::create($perubahan_kontrak->waktu_pengajuan)->format("Y-m-d")}}" class="form-control form-control-solid" />
+                                                                        </a> --}}
+                                                                    </label><br>
+                                                                    <b>{{Carbon\Carbon::create($perubahan_kontrak->waktu_pengajuan)->format("Y-m-d")}}</b>
+                                                                    {{-- <input type="date" name="waktu-pengajuan" value="{{Carbon\Carbon::create($perubahan_kontrak->waktu_pengajuan)->format("Y-m-d")}}" class="form-control form-control-solid" /> --}}
                                                                 </div>
                                                             </div>
                                                             <!--end::Input group-->
@@ -298,7 +304,7 @@
                                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                                 List Jenis Dokumen
                                                 <a href="#" Id="Plus" data-bs-toggle="modal"
-                                                    data-bs-target="#kt_modal_input_dokumen_pendukung">+</a>
+                                                    data-bs-target="#kt_modal_input_list_jenis_dokumen">+</a>
                                             </h3>
                     
                                             <!--begin:Table: Review-->
@@ -308,7 +314,7 @@
                                                     <!--begin::Table row-->
                                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                                         <th class="min-w-125px">Jenis Dokumen</th>
-                                                        <th class="min-w-125px">No Surat / Instruksi Owner</th>
+                                                        <th class="min-w-125px">Nomor Dokumen</th>
                                                     </tr>
                                                     <!--end::Table row-->
                                                 </thead>
@@ -322,16 +328,92 @@
                                                         <tr>
                                                             <td>{{ $jd->jenis_dokumen}}</td>
                                                             <td>
-                                                                @foreach ($list_instruksi_owner as $io)
-                                                                    - {{$io}} <br>
+                                                                @foreach ($list_instruksi_owner as $lio)
+                                                                    @php
+                                                                        $lio = App\Models\SiteInstruction::where("nomor_dokumen" , "=", $lio)->get()->first();
+                                                                    @endphp
+                                                                    - <a href="{{ asset("words/$lio->id_document.pdf"); }}">{{$lio->nomor_dokumen}}</a> <br>
                                                                 @endforeach
                                                             </td>
                                                         </tr>
                                                     @empty
                                                         <tr>
-                                                            <td class="fw-bolder">Data Tidak Ditemukan</td>
+                                                            <td colspan="2" class="fw-bolder text-center">Data Tidak Ditemukan</td>
                                                         </tr>
                                                     @endforelse
+                                                </tbody>
+                                                <!--end::Table body-->
+                    
+                                            </table>
+                                            <!--End:Table: Review-->
+
+                                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                                Dokumen Pendukung
+                                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                                    data-bs-target="#kt_modal_input_dokumen_pendukung">+</a>
+                                            </h3>
+                    
+                                            <!--begin:Table: Review-->
+                                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                                <!--begin::Table head-->
+                                                <thead>
+                                                    <!--begin::Table row-->
+                                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                        <th class="min-w-125px">Nama Dokumen</th>
+                                                        <th class="min-w-125px">Dibuat Oleh</th>
+                                                        <th class="min-w-125px">Dibuat Tanggal</th>
+                                                        <th class="min-w-125px">Catatan</th>
+                                                    </tr>
+                                                    <!--end::Table row-->
+                                                </thead>
+                                                <!--end::Table head-->
+                                                <!--begin::Table body-->
+                                                <tbody class="fw-bold text-gray-400">
+                                                    @if (!empty($perubahan_kontrak->DokumenPendukungs))
+                                                        @forelse ($perubahan_kontrak->DokumenPendukungs as $dokumen_pendukung)
+                                                            <tr>
+                                                                <!--begin::Name=-->
+                                                                <td>
+                                                                    <a target="_blank"
+                                                                        href="/document/view/{{ $dokumen_pendukung->id_dokumen_pendukung }}/{{ $dokumen_pendukung->id_document }}"
+                                                                        class="text-gray-600 text-hover-primary mb-1">
+                                                                        {{ $dokumen_pendukung->document_name }}
+                                                                    </a>
+                                                                </td>
+                                                                <!--end::Name=-->
+                                                                <!--begin::Name=-->
+                                                                <td>
+                                                                    <p class="text-gray-600 mb-1">{{ $dokumen_pendukung->User->name }}
+                                                                    </p>
+                                                                </td>
+                                                                <!--end::Name=-->
+                                                                <!--begin::Kode=-->
+                                                                <td>
+                                                                    <p class="text-gray-600 mb-1">
+                                                                        {{ date_format(new DateTime($dokumen_pendukung->created_at), 'd-m-Y') }}
+                                                                    </p>
+                                                                </td>
+                                                                <!--end::Kode=-->
+                                                                <!--begin::Unit=-->
+                                                                <td>
+                                                                    <p class="text-gray-600 mb-1">{{ $dokumen_pendukung->note }}</p>
+                                                                </td>
+                                                                <!--end::Unit=-->
+                                                            </tr>
+                                                        @empty
+                                                            <tr>
+                                                                <td colspan="4" class="text-center">
+                                                                    <h6><b>There is no data</b></h6>
+                                                                </td>
+                                                            </tr>
+                                                        @endforelse
+                                                    @else
+                                                        <tr>
+                                                            <td colspan="4" class="text-center">
+                                                                <h6><b>There is no data</b></h6>
+                                                            </td>
+                                                        </tr>
+                                                    @endif
                                                 </tbody>
                                                 <!--end::Table body-->
                     
@@ -352,8 +434,8 @@
             <!--end::Contacts-->
         </div>
 
-        <!--begin::Modal - Dokumen Pendukung -->
-            <div class="modal fade" id="kt_modal_input_dokumen_pendukung" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal - List Jenis Dokumen -->
+            <div class="modal fade" id="kt_modal_input_list_jenis_dokumen" tabindex="-1" aria-hidden="true">
                 <!--begin::Modal dialog-->
                 <div class="modal-dialog modal-dialog-centered mw-900px">
                     <!--begin::Modal content-->
@@ -404,7 +486,7 @@
                                         </div>
                                         <div class="col-5">
                                             <label class="fs-6 fw-bold form-label">
-                                                <span style="font-weight: normal">No Surat / Instruksi Owner: </span>
+                                                <span style="font-weight: normal">Nomor Dokumen </span>
                                             </label>
                                             <br>
                                             <div id="instruksi-owner" style="max-height: 250px; overflow: scroll; scroll-behavior: smooth;">
@@ -419,7 +501,7 @@
                             </div>
                             <!--end::Input group-->
 
-                            <button type="submit" id="save-review-dokumen-pendukung" class="btn btn-lg btn-primary"
+                            <button type="submit" id="save-review-dokumen-pendukung" class="btn btn-sm btn-primary"
                                 data-bs-dismiss="modal">Save</button>
                             </form>
 
@@ -431,7 +513,90 @@
                 </div>
                 <!--end::Modal dialog-->
             </div>
-        <!--end::Modal - Dokumen Pendukung -->
+        <!--end::Modal - List Jenis Dokumen -->
+
+        <!--begin::Modal - Dokumen Pendukung -->
+    <div class="modal fade" id="kt_modal_input_dokumen_pendukung" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-900px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Add Attachment | Dokumen Pendukung </h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <i class="bi bi-x-lg"></i>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
+
+                    <!--begin::Input group Website-->
+                    <div class="fv-row mb-5">
+                        <form action="/dokumen-pendukung/upload" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Attachment</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="hidden" class="modal-name" name="modal-name">
+                            <input type="hidden" value="{{ $perubahan_kontrak->id_perubahan_kontrak ?? 0 }}" id="id-perubahan-kontrak"
+                                name="id-perubahan-kontrak">
+                            <input type="file" style="font-weight: normal"
+                                class="form-control form-control-solid" name="attach-file"
+                                id="attach-file-dokumen-pendukung" value="" accept=".docx"
+                                placeholder="" />
+                            <!--end::Input-->
+
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Nama Dokumen</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" class="form-control form-control-solid" name="document-name"
+                                id="document-name-pendukung" value="" style="font-weight: normal"
+                                placeholder="Nama Document" />
+                            <!--end::Input-->
+
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Catatan</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <textarea cols="3" class="form-control form-control-solid" name="note"
+                                id="note" value="" style="font-weight: normal"
+                                placeholder="Catatan" ></textarea>
+                            <!--end::Input-->
+                            <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
+                    </div>
+                    <!--end::Input group-->
+
+                    <button type="submit" id="save-review-dokumen-pendukung" class="btn btn-sm btn-primary"
+                        data-bs-dismiss="modal">Save</button>
+                    </form>
+
+
+                </div>
+                <!--end::Modal body-->
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+    </div>
+    <!--end::Modal - Dokumen Pendukung -->
 
         <!--end::Content-->
     </div>

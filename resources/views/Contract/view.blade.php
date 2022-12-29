@@ -726,9 +726,9 @@
                 <div class="tab-pane fade show active" id="kt_user_view_overview_tab" role="tabpanel">
 
                     <!--begin::Row-->
-                    <div class="row fv-row">
+                    {{-- <div class="row fv-row">
                         <!--begin::Col-->
-                        {{-- <div class="col-6">
+                        <div class="col-6">
                             <!--begin::Input group Website-->
                             <div class="fv-row mb-7">
                                 <!--begin::Label-->
@@ -745,7 +745,7 @@
                                 <!--end::Input-->
                             </div>
                             <!--end::Input group-->
-                        </div> --}}
+                        </div>
                         <!--End begin::Col-->
                         <div class="col">
                             <!--begin::Input group Website-->
@@ -755,7 +755,7 @@
                             <!--end::Input group-->
                         </div>
                         <!--End begin::Col-->
-                    </div>
+                    </div> --}}
                     <!--End begin::Row-->
 
                     <!--begin::Card title-->
@@ -1854,7 +1854,7 @@
                 <div class="tab-pane fade" id="kt_user_view_overview_Performance" role="tabpanel">
                     <!--begin::Card title-->
                     <div class="card-title m-0">
-                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                        {{-- <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                             Laporan Bulanan
                             <a href="#" Id="Plus" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_laporan_bulanan">+</a>
@@ -1936,10 +1936,9 @@
                             </tbody>
                             <!--end::Table body-->
                         </table>
-                        <!--End:Table: Laporan Bulanan-->
-                        <br>
+                        <!--End:Table: Laporan Bulanan--> --}}
 
-                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                        {{-- <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                             Change Request
                             <a href="/contract-management/view/{{ $contract->id_contract }}/addendum-contract"
                                 Id="Plus">+</a>
@@ -2006,10 +2005,10 @@
                             <!--end::Table body-->
                         </table>
                         <!--End:Table: Addendum Kontrak-->
-                        <br>
+                        <br> --}}
 
 
-                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                        {{-- <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                             Klaim Kontrak
                             <a href="/claim-management/{{ $contract->project->kode_proyek }}/{{ urlencode(urlencode($contract->id_contract)) }}/new"
                                 Id="Plus">+</a>
@@ -2076,11 +2075,11 @@
                             </tbody>
                             <!--end::Table body-->
                         </table>
-                        <!--End:Table: Claim Contract-->
+                        <!--End:Table: Claim Contract--> --}}
 
-                        <br>
+                        {{-- <br> --}}
 
-                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                        {{-- <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                             MoM Kick Off Meeting
                             <a href="#" Id="Plus" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_mom_meeting">+</a>
@@ -2149,10 +2148,7 @@
                             </tbody>
                             <!--end::Table body-->
                         </table>
-                        <!--End:Table: Claim Contract-->
-
-                        &nbsp;<br>
-                        &nbsp;<br>
+                        <!--End:Table: Claim Contract--> --}}
 
                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                             Input Resiko - Pelaksanaan
@@ -2243,9 +2239,8 @@
                             <thead>
                                 <!--begin::Table row-->
                                 <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-50px">No</th>
-                                    <th class="min-w-125px">Ketentuan</th>
-                                    <th class="min-w-125px">Informasi Kelengkapan <i>Check List</i> ADKON</th>
+                                    <th class="min-w-125px">Nama File</th>
+                                    <th class="min-w-125px">Tanggal Upload</th>
                                 </tr>
                                 <!--end::Table row-->
                             </thead>
@@ -2255,17 +2250,16 @@
                                 @if ($contract->RencanaKerjaManajemen->count() > 0)
                                     @forelse ($contract->RencanaKerjaManajemen as $key => $rencana_kerja)
                                         <tr>
-                                            <td>
-                                                <p class="text-gray-600 mb-1">{{ $key + 1 }}</p>
-                                            </td>
                                             <!--begin::Name=-->
                                             <td>
-                                                <pre class="text-gray-600 mb-1" style="font-family: 'Khula';">{!! $rencana_kerja->ketentuan_rencana_kerja !!}</pre>
+                                                <a target="_blank" href="{{ asset('words/'.$rencana_kerja->id_document) }}" class="text-hover-primary">
+                                                    {{ $rencana_kerja->nama_document }}
+                                                </a>
                                             </td>
                                             <!--end::Name=-->
                                             <!--begin::Name=-->
                                             <td>
-                                                <pre class="text-gray-600 mb-1" style="font-family: 'Khula';">{!! $rencana_kerja->informasi_lengkap_adkon !!}</pre>
+                                                <p class="text-gray-600 mb-1">{{ Carbon\Carbon::parse($rencana_kerja->created_at)->translatedFormat("d F Y") }}</p>
                                             </td>
                                             <!--end::Name=-->
                                         </tr>
@@ -2302,28 +2296,40 @@
                                 <!--begin::Table row-->
                                 <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                     <th class="min-w-50px">No</th>
-                                    <th class="min-w-125px">Ketentuan</th>
-                                    <th class="min-w-125px">Informasi Kelengkapan <i>Check List</i> ADKON</th>
+                                    <th class="min-w-125px">Item</th>
+                                    <th class="min-w-125px">Pasal</th>
+                                    <th class="min-w-125px">Perpanjangan Waktu</th>
+                                    <th class="min-w-125px">Tambahan Biaya</th>
                                 </tr>
                                 <!--end::Table row-->
                             </thead>
                             <!--end::Table head-->
                             <!--begin::Table body-->
                             <tbody class="fw-bold text-gray-400">
-                                @if ($contract->RencanaKerjaManajemen->count() > 0)
-                                    @forelse ($contract->RencanaKerjaManajemen as $key => $rencana_kerja)
+                                @if ($contract->PasalKontraktual->count() > 0)
+                                    @forelse ($contract->PasalKontraktual as $key => $pk)
                                         <tr>
                                             <td>
                                                 <p class="text-gray-600 mb-1">{{ $key + 1 }}</p>
                                             </td>
                                             <!--begin::Name=-->
                                             <td>
-                                                <pre class="text-gray-600 mb-1" style="font-family: 'Khula';">{!! $rencana_kerja->ketentuan_rencana_kerja !!}</pre>
+                                                <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! $pk->item !!}</pre>
                                             </td>
                                             <!--end::Name=-->
                                             <!--begin::Name=-->
                                             <td>
-                                                <pre class="text-gray-600 mb-1" style="font-family: 'Khula';">{!! $rencana_kerja->informasi_lengkap_adkon !!}</pre>
+                                                <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! $pk->pasal !!}</pre>
+                                            </td>
+                                            <!--end::Name=-->
+                                            <!--begin::Name=-->
+                                            <td>
+                                                <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! Carbon\Carbon::create($pk->perpanjangan_waktu)->translatedFormat("d F Y") !!}</pre>
+                                            </td>
+                                            <!--end::Name=-->
+                                            <!--begin::Name=-->
+                                            <td>
+                                                <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! number_format($pk->tambahan_biaya, 0, ".", ".") !!}</pre>
                                             </td>
                                             <!--end::Name=-->
                                         </tr>
@@ -2363,7 +2369,7 @@
                                     <th class="min-w-50px">Tanggal Perubahan</th>
                                     <th class="min-w-125px">Uraian Perubahan</th>
                                     <th class="min-w-125px">Jenis Dokumen</th>
-                                    <th class="min-w-125px">No Surat / Instruksi Owner</th>
+                                    <th class="min-w-250px">Nomor Dokumen</th>
                                     <th class="min-w-125px">No Proposal Klaim</th>
                                     <th class="min-w-125px">Tanggal Pengajuan</th>
                                     <th class="min-w-125px">Biaya Pengajuan</th>
@@ -2377,52 +2383,69 @@
                                 @forelse ($contract->PerubahanKontrak as $key => $pk)
                                     <tr class="fw-bold">
                                         <td>
-                                            <a href="/contract-management/view/{{url_encode($contract->id_contract)}}/perubahan-kontrak/{{$pk->id_perubahan_kontrak}}" class="text-gray-600 mb-1">{{ $pk->jenis_perubahan }}</a>
+                                            <a target="_blank" href="/contract-management/view/{{url_encode($contract->id_contract)}}/perubahan-kontrak/{{$pk->id_perubahan_kontrak}}" class="text-gray-600 mb-1">{{ $pk->jenis_perubahan }}</a>
                                         </td>
                                         <!--begin::Name=-->
                                         <td>
-                                            <pre class="text-gray-600 mb-1" style="font-family: 'BpmOpenSans-woff';">{!! Carbon\Carbon::create($pk->tanggal_perubahan)->translatedFormat("d F Y") !!}</pre>
-                                        </td>
-                                        <!--end::Name=-->
-                                        <!--begin::Name=-->
-                                        <td>
-                                            <pre class="text-gray-600 mb-1" style="font-family: 'BpmOpenSans-woff';">{!! $pk->uraian_perubahan !!}</pre>
+                                            <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! Carbon\Carbon::create($pk->tanggal_perubahan)->translatedFormat("d F Y") !!}</pre>
                                         </td>
                                         <!--end::Name=-->
                                         <!--begin::Name=-->
                                         <td>
-                                            <pre class="text-gray-600 mb-1" style="font-family: 'BpmOpenSans-woff';">{!! $pk->jenis_dokumen !!}</pre>
+                                            <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! $pk->uraian_perubahan !!}</pre>
+                                        </td>
+                                        <!--end::Name=-->
+                                        <!--begin::Name=-->
+                                        @if (!empty($pk->JenisDokumen))
+                                            @foreach ($pk->JenisDokumen as $jd)
+                                                <td>
+                                                    <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! $jd->jenis_dokumen !!}</pre>
+                                                </td>
+                                                @php
+                                                    $list_instruksi_owner = collect(explode(",", $jd->list_instruksi_owner));
+                                                @endphp
+                                                <td>
+                                                    @foreach ($list_instruksi_owner as $lio)
+                                                        @php
+                                                            $lio = App\Models\SiteInstruction::where("nomor_dokumen" , "=", $lio)->get()->first();
+                                                        @endphp
+                                                        - <a target="_blank" href="{{ asset("words/$lio->id_document.pdf"); }}">{{$lio->nomor_dokumen}}</a> <br>
+                                                    @endforeach
+                                                </td>
+                                            @endforeach
+                                        @else
+                                            <td>
+                                                <p class="mb-1 fw-normal badge badge-light-danger" style="font-family: 'Poppins';">Belum Ditentukan</p>
+                                            </td>
+                                            <td>
+                                                <p class="mb-1 fw-normal badge badge-light-danger" style="font-family: 'Poppins';">Belum Ditentukan</p>
+                                            </td>
+                                        @endif
+                                        <!--end::Name=-->
+                                        <!--begin::Name=-->
+                                        <td>
+                                            <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! $pk->proposal_klaim !!}</pre>
                                         </td>
                                         <!--end::Name=-->
                                         <!--begin::Name=-->
                                         <td>
-                                            <pre class="text-gray-600 mb-1" style="font-family: 'BpmOpenSans-woff';">{!! $pk->instruksi_owner !!}</pre>
+                                            <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! Carbon\Carbon::create($pk->tanggal_pengajuan)->translatedFormat("d F Y") !!}</pre>
                                         </td>
                                         <!--end::Name=-->
                                         <!--begin::Name=-->
                                         <td>
-                                            <pre class="text-gray-600 mb-1" style="font-family: 'BpmOpenSans-woff';">{!! $pk->proposal_klaim !!}</pre>
+                                            <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! number_format($pk->biaya_pengajuan, 0, ".", ".") !!}</pre>
                                         </td>
                                         <!--end::Name=-->
                                         <!--begin::Name=-->
                                         <td>
-                                            <pre class="text-gray-600 mb-1" style="font-family: 'BpmOpenSans-woff';">{!! Carbon\Carbon::create($pk->tanggal_pengajuan)->translatedFormat("d F Y") !!}</pre>
-                                        </td>
-                                        <!--end::Name=-->
-                                        <!--begin::Name=-->
-                                        <td>
-                                            <pre class="text-gray-600 mb-1" style="font-family: 'BpmOpenSans-woff';">{!! number_format($pk->biaya_pengajuan, 0, ".", ".") !!}</pre>
-                                        </td>
-                                        <!--end::Name=-->
-                                        <!--begin::Name=-->
-                                        <td>
-                                            <pre class="text-gray-600 mb-1" style="font-family: 'BpmOpenSans-woff';">{!! Carbon\Carbon::create($pk->waktu_pengajuan)->translatedFormat("d F Y") !!}</pre>
+                                            <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! Carbon\Carbon::create($pk->waktu_pengajuan)->translatedFormat("d F Y") !!}</pre>
                                         </td>
                                         <!--end::Name=-->
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="4" class="fw-bolder">There is no data</td>
+                                        <td colspan="9" class="fw-bolder text-center">There is no data</td>
                                     </tr>
                                 @endforelse
                                 
@@ -2481,7 +2504,7 @@
                                             <!--end::Nomor Dokumen-->
                                             <!--begin::Uraian-->
                                             <td>
-                                                <pre style="font-family: BpmOpenSans-woff">{!! $site_instruction->uraian_dokumen !!}</pre>
+                                                <pre style="font-family: Poppins">{!! $site_instruction->uraian_dokumen !!}</pre>
                                             </td>
                                             <!--end::Uraian-->
                                             <!--begin::Nomor Dokumen-->
@@ -2561,7 +2584,7 @@
                                         <!--end::Nomor Dokumen-->
                                         <!--begin::Uraian-->
                                         <td>
-                                            <pre style="font-family: BpmOpenSans-woff">{!! $technical_form->uraian_dokumen !!}</pre>
+                                            <pre style="font-family: Poppins">{!! $technical_form->uraian_dokumen !!}</pre>
                                         </td>
                                         <!--end::Uraian-->
                                         <!--begin::Nomor Dokumen-->
@@ -2640,7 +2663,7 @@
                                         <!--end::Nomor Dokumen-->
                                         <!--begin::Uraian-->
                                         <td>
-                                            <pre style="font-family: BpmOpenSans-woff">{!! $technical_query->uraian_dokumen !!}</pre>
+                                            <pre style="font-family: Poppins">{!! $technical_query->uraian_dokumen !!}</pre>
                                         </td>
                                         <!--end::Uraian-->
                                         <!--begin::Nomor Dokumen-->
@@ -2720,7 +2743,7 @@
                                         <!--end::Nomor Dokumen-->
                                         <!--begin::Uraian-->
                                         <td>
-                                            <pre style="font-family: BpmOpenSans-woff">{!! $field_change->uraian_dokumen !!}</pre>
+                                            <pre style="font-family: Poppins">{!! $field_change->uraian_dokumen !!}</pre>
                                         </td>
                                         <!--end::Uraian-->
                                         <!--begin::Nomor Dokumen-->
@@ -2799,7 +2822,7 @@
                                         <!--end::Nomor Dokumen-->
                                         <!--begin::Uraian-->
                                         <td>
-                                            <pre style="font-family: BpmOpenSans-woff">{!! $change_notice->uraian_dokumen !!}</pre>
+                                            <pre style="font-family: Poppins">{!! $change_notice->uraian_dokumen !!}</pre>
                                         </td>
                                         <!--end::Uraian-->
                                         <!--begin::Nomor Dokumen-->
@@ -2878,7 +2901,7 @@
                                         <!--end::Nomor Dokumen-->
                                         <!--begin::Uraian-->
                                         <td>
-                                            <pre style="font-family: BpmOpenSans-woff">{!! $change_proposal->uraian_dokumen !!}</pre>
+                                            <pre style="font-family: Poppins">{!! $change_proposal->uraian_dokumen !!}</pre>
                                         </td>
                                         <!--end::Uraian-->
                                         <!--begin::Nomor Dokumen-->
@@ -2957,7 +2980,7 @@
                                         <!--end::Nomor Dokumen-->
                                         <!--begin::Uraian-->
                                         <td>
-                                            <pre style="font-family: BpmOpenSans-woff">{!! $change_order->uraian_dokumen !!}</pre>
+                                            <pre style="font-family: Poppins">{!! $change_order->uraian_dokumen !!}</pre>
                                         </td>
                                         <!--end::Uraian-->
                                         <!--begin::Nomor Dokumen-->
@@ -7151,21 +7174,23 @@
                         enctype="multipart/form-data">
                         <div class="row">
                             @csrf
-                            <div class="col">
+                            <div class="col mt-4">
                                 <!--begin::Label-->
                                 <label for="ketentuan-rencana-kerja" class="fs-6 fw-bold form-label">
-                                    <span style="font-weight: normal">Ketentuan</span>
+                                    <span style="font-weight: normal">Upload RKAP Bab 12</span>
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                 {{-- <input type="hidden" value="1" name="is-tender-menang">
                     <input type="hidden" class="modal-name" name="modal-name">
                                  --}}
-                                <textarea name="ketentuan-rencana-kerja" id="ketentuan-rencana-kerja" rows="10"
-                                    class="form-control form-control-solid"></textarea>
+                                {{-- <textarea name="ketentuan-rencana-kerja" id="ketentuan-rencana-kerja" rows="10"
+                                    class="form-control form-control-solid"></textarea> --}}
+                                <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
+
                                 <!--end::Input-->
                             </div>
-
+{{-- 
                             <br><br>
 
                             <div class="col">
@@ -7173,7 +7198,7 @@
                                 <label class="fs-6 fw-bold form-label">
                                     <span style="font-weight: normal">Informasi Kelengkapan <i>Check List</i>
                                         ADKON</span>
-                                </label>
+                                </label> --}}
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                 {{-- <input type="hidden" value="1" name="is-tender-menang">
@@ -7182,8 +7207,8 @@
                                 <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
                                     name="id-contract">
                                 <input type="hidden" class="modal-name" name="modal-name">
-                                <textarea name="kelengkapan-adkon" id="kelengkapan-adkon" rows="10"
-                                    class="form-control form-control-solid"></textarea>
+                                {{-- <textarea name="kelengkapan-adkon" id="kelengkapan-adkon" rows="10"
+                                    class="form-control form-control-solid"></textarea> --}}
                                 <!--end::Input-->
                             </div>
 
@@ -7952,6 +7977,116 @@
         <!--end::Modal dialog-->
     </div>
     <!--end::Modal - Perubahan Kontrak Menang-->
+
+    <!--begin::Modal - Pasal Kontraktual-->
+<div class="modal fade" id="kt_modal_input_pasal_kontraktual" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog modal-dialog-centered mw-900px">
+        <!--begin::Modal content-->
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header">
+                <!--begin::Modal title-->
+                <h2>Add Pasal Kontraktual</h2>
+                <!--end::Modal title-->
+                <!--begin::Close-->
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                            viewBox="0 0 24 24" fill="none">
+                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2"
+                                rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
+                            <rect x="7.41422" y="6" width="16" height="2" rx="1"
+                                transform="rotate(45 7.41422 6)" fill="black" />
+                        </svg>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--end::Modal header-->
+            <!--begin::Modal body-->
+            <div class="modal-body py-lg-6 px-lg-6">
+    
+                <!--begin::Input group Website-->
+                <div class="fv-row mb-5">
+                    <form action="/pasal-kontraktual/upload" method="POST">
+                        @csrf
+                        <!--begin::Input-->
+                        <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            name="id-contract">
+                        <input type="hidden" class="modal-name" name="modal-name">
+    
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span style="font-weight: normal">Item</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <textarea class="form-control form-control-solid"
+                            name="item" id="item" style="font-weight: normal"
+                            value="" placeholder="Item" cols="1" ></textarea>
+                        <!--end::Input-->
+                        <br>
+    
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span style="font-weight: normal">Pasal</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <textarea class="form-control form-control-solid" name="pasal"
+                            id="pasal" style="font-weight: normal" cols="1" value=""
+                            placeholder="Pasal"></textarea>
+                        <!--end::Input-->
+                        <br>
+                        
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span style="font-weight: normal">Perpanjangan Waktu</span>
+                            <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
+                                <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
+                            </a>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input type="date" class="form-control form-control-solid" name="perpanjangan-waktu"
+                            id="perpanjangan-waktu" style="font-weight: normal" value=""
+                            placeholder="Perpanjangan Waktu"/>
+                        <!--end::Input-->
+                        <br>
+                        
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span style="font-weight: normal">Tambahan Biaya</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input type="text" class="form-control form-control-solid reformat" name="tambahan-biaya"
+                            id="tambahan-biaya" style="font-weight: normal" value="0"
+                            placeholder="Tambahan Biaya"/>
+                        <!--end::Input-->
+
+                        <br><br>
+                        <button type="submit" id="save-pasal-kontraktual" class="btn btn-lg btn-primary"
+                            data-bs-dismiss="modal">Save</button>
+                    </form>
+                </div>
+                <!--end::Input group-->
+    
+            </div>
+            <!--end::Input group-->
+    
+    
+        </div>
+        <!--end::Modal body-->
+    </div>
+    <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+    </div>
+<!--end::Modal - Pasal Kontraktual-->
 
 @endif
 @endisset

@@ -372,7 +372,7 @@
                                                                         {{-- Begin::input textarea --}}
                                                                         {{-- end::Read File --}}
                                                                         {{-- <button type="submit" id="save-attachment"
-                                                                            class="btn btn-lg btn-primary"
+                                                                            class="btn btn-sm btn-primary"
                                                                             data-bs-dismiss="modal">Save</button> --}}
                                                                     </div>
                                                                     <!--end::Input group-->
@@ -1005,13 +1005,13 @@
                         </div>
                     @endisset
                     <button type="button" id="save-pasal" style="background: #008CB4" data-bs-dismiss="modal"
-                        class="btn btn-lg mt-5 btn-primary">
+                        class="btn btn-sm mt-5 btn-primary">
                         <span>Save</span>
                         <span class="spinner-border spinner-border-sm" style="display: none;" aria-hidden="true"
                             role="status"></span>
                     </button>
                     <a href="#kt_modal_import_pasal" onclick="showModalPasal()"
-                        class="btn btn-lg mt-5 btn-secondary">Import Pasal</a>
+                        class="btn btn-sm mt-5 btn-secondary">Import Pasal</a>
                 </div>
                 <!--end::Input group-->
 
