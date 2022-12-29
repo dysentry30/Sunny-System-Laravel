@@ -98,7 +98,7 @@
                             </div>
                         @endif
 
-                        @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak || auth()->user()->check_user_sales)
+                        @if (auth()->user()->check_administrator || auth()->user()->check_user_sales)
                             <div class="menu-item">
                                 <a class="menu-link " href="/forecast"
                                     style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'forecast') ? 'background-color:#008CB4' : '' }}">

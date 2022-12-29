@@ -240,7 +240,7 @@
                                                 <!--begin:::Tab content -->
                                                 <div class="tab-content" id="myTabContent">
 
-                                                    @if (str_contains(auth()->user()->name, "(PIC)"))
+                                                    @if (Auth::user()->check_administrator || str_contains(auth()->user()->name, "(PIC)"))
                                                         <!--begin:::Tab pane Hak Akses-->
                                                         <div class="tab-pane fade show active" id="kt_user_view_overview_tab"
                                                             role="tabpanel">
