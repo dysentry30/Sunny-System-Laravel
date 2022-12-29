@@ -2365,15 +2365,15 @@
                             <thead>
                                 <!--begin::Table row-->
                                 <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-50px">Jenis Perubahan</th>
-                                    <th class="min-w-50px">Tanggal Perubahan</th>
-                                    <th class="min-w-125px">Uraian Perubahan</th>
-                                    <th class="min-w-125px">Jenis Dokumen</th>
-                                    <th class="min-w-250px">Nomor Dokumen</th>
-                                    <th class="min-w-125px">No Proposal Klaim</th>
-                                    <th class="min-w-125px">Tanggal Pengajuan</th>
-                                    <th class="min-w-125px">Biaya Pengajuan</th>
-                                    <th class="min-w-125px">Waktu Pengajuan</th>
+                                    <th class="min-w-auto">Jenis Perubahan</th>
+                                    <th class="min-w-auto">Tanggal Perubahan</th>
+                                    <th class="min-w-auto">Uraian Perubahan</th>
+                                    <th class="min-w-auto">Jenis Dokumen</th>
+                                    <th class="min-w-auto">Nomor Dokumen</th>
+                                    <th class="min-w-auto">No Proposal Klaim</th>
+                                    <th class="min-w-auto">Tanggal Pengajuan</th>
+                                    <th class="min-w-auto">Biaya Pengajuan</th>
+                                    <th class="min-w-auto">Waktu Pengajuan</th>
                                 </tr>
                                 <!--end::Table row-->
                             </thead>
@@ -2383,7 +2383,7 @@
                                 @forelse ($contract->PerubahanKontrak as $key => $pk)
                                     <tr class="fw-bold">
                                         <td>
-                                            <a target="_blank" href="/contract-management/view/{{url_encode($contract->id_contract)}}/perubahan-kontrak/{{$pk->id_perubahan_kontrak}}" class="text-gray-600 mb-1">{{ $pk->jenis_perubahan }}</a>
+                                            <a target="_blank" href="/contract-management/view/{{url_encode($contract->id_contract)}}/perubahan-kontrak/{{$pk->id_perubahan_kontrak}}" class="text-hover-primary">{{ $pk->jenis_perubahan }}</a>
                                         </td>
                                         <!--begin::Name=-->
                                         <td>
@@ -2396,7 +2396,7 @@
                                         </td>
                                         <!--end::Name=-->
                                         <!--begin::Name=-->
-                                        @if (!empty($pk->JenisDokumen))
+                                        @if (!empty($pk->JenisDokumen->toArray()))
                                             @foreach ($pk->JenisDokumen as $jd)
                                                 <td>
                                                     <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! $jd->jenis_dokumen !!}</pre>
