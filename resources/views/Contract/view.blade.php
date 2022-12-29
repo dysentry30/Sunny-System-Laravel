@@ -1109,8 +1109,9 @@
                                                 <td>
                                                     @php
                                                         $status = $inputRisk->is_closed == 0 ? "Open" : "Closed";
+                                                        $class = $inputRisk->is_closed == 0 ? "badge-light-success text-success" : "badge-light-danger text-danger";
                                                     @endphp
-                                                    <p class="text-gray-600 mb-1">{{ $status }}</p>
+                                                    <p class="mb-1 badge {{$class}}">{{ $status }}</p>
                                                 </td>
                                                 <!--end::Unit=-->
                                             </tr>
@@ -1663,7 +1664,7 @@
                 <div class="tab-pane fade" id="kt_user_view_overview_history" role="tabpanel"> --}}
 
                     <!--begin::Row-->
-                    <div class="row fv-row">
+                    {{-- <div class="row fv-row">
                         <!--begin::Col-->
                         <div class="col-6">
                             <!--begin::Input group Website-->
@@ -1692,7 +1693,7 @@
                             <!--end::Input group-->
                         </div>
                         <!--End begin::Col-->
-                    </div>
+                    </div> --}}
                     <!--End begin::Row-->
 
                     &nbsp;<br>
@@ -1700,377 +1701,6 @@
 
                     <!--begin::Card title-->
                     <div class="card-title m-0">
-                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                            Kontrak
-                            <a href="/contract-management/view/{{ url_encode($contract->id_contract) }}/draft-contract/tender-menang/1"
-                                Id="Plus">+</a>
-                        </h3>
-
-                        <!--begin:Table: Review-->
-                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
-                            <!--begin::Table head-->
-                            <thead>
-                                <!--begin::Table row-->
-                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-125px">Nama Dokumen
-                                    </th>
-                                    <th class="min-w-125px">No. Dokumen</th>
-                                    <th class="min-w-125px">Tanggal</th>
-                                    <th class="min-w-125px">Catatan</th>
-                                </tr>
-                                <!--end::Table row-->
-                            </thead>
-                            <!--end::Table head-->
-                            <!--begin::Table body-->
-                            <tbody class="fw-bold text-gray-400">
-                                @if (isset($contract))
-                                    @forelse ($contract->draftContracts as $draftContract)
-                                        <tr>
-                                            <!--begin::Name=-->
-                                            <td>
-                                                <a target="_blank"
-                                                    href="/contract-management/view/{{ $contract->id_contract }}/draft-contract/{{ $draftContract->id_draft }}"
-                                                    class="text-gray-600 text-hover-primary mb-1">
-                                                    {{ $draftContract->title_draft }}
-                                                </a>
-                                            </td>
-                                            <!--end::Name=-->
-                                            <!--begin::Name=-->
-                                            <td>
-                                                <a target="_blank"
-                                                    href="/document/view/{{ $draftContract->id_draft }}/{{ $draftContract->id_document }}"
-                                                    class="text-gray-600 text-hover-primary mb-1">
-                                                    {{ $draftContract->id_document }}
-                                                </a>
-                                            </td>
-                                            <!--end::Name=-->
-                                            <!--begin::Kode=-->
-                                            <td>
-                                                <a href="#" class="text-gray-400 text-hover-primary mb-1">
-                                                    {{ date_format(new DateTime($draftContract->created_at), 'd M, Y') }}</a>
-                                                </a>
-                                            </td>
-                                            <!--end::Kode=-->
-                                            <!--begin::Unit=-->
-                                            <td>{{ $draftContract->draft_note }}
-                                            </td>
-                                            <!--end::Unit=-->
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="4" class="text-center">
-                                                <h6><b>There is no data</b></h6>
-                                            </td>
-                                        </tr>
-                                    @endforelse
-                                @else
-                                    <tr>
-                                        <td colspan="4" class="text-center">
-                                            <h6><b>There is no data</b></h6>
-                                        </td>
-                                    </tr>
-                                @endif
-                            </tbody>
-                            <!--end::Table body-->
-                        </table>
-                        <!--End:Table: Review-->
-
-                        &nbsp;<br>
-                        &nbsp;<br>
-
-                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                            Review
-                            <a href="#" Id="Plus" data-bs-toggle="modal"
-                                data-bs-target="#kt_modal_review_menang">+</a>
-                        </h3>
-
-                        <!--begin:Table: Review-->
-                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
-                            <!--begin::Table head-->
-                            <thead>
-                                <!--begin::Table row-->
-                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-125px">Draft Contract Review</th>
-                                    <th class="min-w-125px">Ketentuan</th>
-                                </tr>
-                                <!--end::Table row-->
-                            </thead>
-                            <!--end::Table head-->
-                            <!--begin::Table body-->
-                            <tbody class="fw-bold text-gray-400">
-                                @if (isset($contract))
-                                    @forelse ($contract->reviewProjects as $reviewProject)
-                                        @if ($reviewProject->stage >= 2)
-                                            <tr>
-                                                <!--begin::Name=-->
-                                                <td>
-                                                    <a href="/contract-management/view/{{ $contract->id_contract }}/draft-contract/{{ $reviewProject->id_draft_contract }}"
-                                                        target="_blank">
-                                                        <p>{{ $reviewProject->draftContract->title_draft }}</p>
-                                                    </a>
-                                                </td>
-                                                <!--end::Name=-->
-                                                <!--begin::Name=-->
-                                                <td>
-                                                    <p>{{ $reviewProject->ketentuan }}</p>
-                                                </td>
-                                                <!--end::Name=-->
-                                            </tr>
-                                        @endif
-
-                                    @empty
-                                        <tr>
-                                            <td colspan="5" class="text-center">
-                                                <h6><b>There is no data</b></h6>
-                                            </td>
-                                        </tr>
-                                    @endforelse
-                                @else
-                                    <tr>
-                                        <td colspan="5" class="text-center">
-                                            <h6><b>There is no data</b></h6>
-                                        </td>
-                                    </tr>
-                                @endif
-                            </tbody>
-                            <!--end::Table body-->
-
-                        </table>
-                        <!--End:Table: Review-->
-
-                        &nbsp;<br>
-                        &nbsp;<br>
-
-                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                            Hasil Klarifikasi dan Negosiasi CDA
-                            <a href="#" Id="Plus" data-bs-toggle="modal"
-                                data-bs-target="#kt_modal_input_klarifikasi_negosiasi">+</a>
-                        </h3>
-
-                        <!--begin:Table: Review-->
-                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
-                            <!--begin::Table head-->
-                            <thead>
-                                <!--begin::Table row-->
-                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-125px">Nama Dokumen</th>
-                                    <th class="min-w-125px">Dibuat Oleh</th>
-                                    <th class="min-w-125px">Dibuat Tanggal</th>
-                                    <th class="min-w-125px">Catatan</th>
-                                </tr>
-                                <!--end::Table row-->
-                            </thead>
-                            <!--end::Table head-->
-                            <!--begin::Table body-->
-                            <tbody class="fw-bold text-gray-400">
-                                @if (!empty($contract->KlarifikasiNegosiasiCDA))
-                                    @php
-                                        // dd($contract->KlarifikasiNegosiasiCDA);
-                                    @endphp
-                                    @forelse ($contract->KlarifikasiNegosiasiCDA as $klarifikasi_negosiasi)
-                                        <tr>
-                                            <!--begin::Name=-->
-                                            <td>
-                                                <a target="_blank"
-                                                    href="/document/view/{{ $klarifikasi_negosiasi->id_klarifikasi }}/{{ $klarifikasi_negosiasi->id_document }}"
-                                                    class="text-gray-600 text-hover-primary mb-1">
-                                                    {{ $klarifikasi_negosiasi->document_name }}
-                                                </a>
-                                            </td>
-                                            <!--end::Name=-->
-                                            <!--begin::Name=-->
-                                            <td>
-                                                <p class="text-gray-600 mb-1">{{ $klarifikasi_negosiasi->User->name }}
-                                                </p>
-                                            </td>
-                                            <!--end::Name=-->
-                                            <!--begin::Kode=-->
-                                            <td>
-                                                <p class="text-gray-600 mb-1">
-                                                    {{ date_format(new DateTime($klarifikasi_negosiasi->created_at), 'd-m-Y') }}
-                                                </p>
-                                            </td>
-                                            <!--end::Kode=-->
-                                            <!--begin::Unit=-->
-                                            <td>
-                                                <p class="text-gray-600 mb-1">{{ $klarifikasi_negosiasi->note }}</p>
-                                            </td>
-                                            <!--end::Unit=-->
-                                        </tr>
-                                        {{-- @if ($KlarifikasiNegosiasiCDA->tender_menang == 0)
-                                            @endif --}}
-                                    @empty
-                                        <tr>
-                                            <td colspan="4" class="text-center">
-                                                <h6><b>There is no data</b></h6>
-                                            </td>
-                                        </tr>
-                                    @endforelse
-                                @else
-                                    <tr>
-                                        <td colspan="4" class="text-center">
-                                            <h6><b>There is no data</b></h6>
-                                        </td>
-                                    </tr>
-                                @endif
-                            </tbody>
-                            <!--end::Table body-->
-
-                        </table>
-                        <!--End:Table: Review-->
-                        &nbsp;<br>
-                        &nbsp;<br>
-
-                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                            Kontrak Tanda Tangan
-                            <a href="#" Id="Plus" data-bs-toggle="modal"
-                                data-bs-target="#kt_modal_input_kontrak_bertandatangan">+</a>
-                        </h3>
-
-                        <!--begin:Table: Review-->
-                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
-                            <!--begin::Table head-->
-                            <thead>
-                                <!--begin::Table row-->
-                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-125px">Nama Dokumen</th>
-                                    <th class="min-w-125px">Dibuat Oleh</th>
-                                    <th class="min-w-125px">Dibuat Tanggal</th>
-                                    <th class="min-w-125px">Catatan</th>
-                                </tr>
-                                <!--end::Table row-->
-                            </thead>
-                            <!--end::Table head-->
-                            <!--begin::Table body-->
-                            <tbody class="fw-bold text-gray-400">
-                                @if (!empty($contract->KontrakTandaTangan))
-                                    @forelse ($contract->KontrakTandaTangan as $kontrak_tanda_tangan)
-                                        <tr>
-                                            <!--begin::Name=-->
-                                            <td>
-                                                <a target="_blank"
-                                                    href="/document/view/{{ $kontrak_tanda_tangan->id_kontrak_bertandatangan }}/{{ $kontrak_tanda_tangan->id_document }}"
-                                                    class="text-gray-600 text-hover-primary mb-1">
-                                                    {{ $kontrak_tanda_tangan->document_name }}
-                                                </a>
-                                            </td>
-                                            <!--end::Name=-->
-                                            <!--begin::Name=-->
-                                            <td>
-                                                <p class="text-gray-600 mb-1">{{ $kontrak_tanda_tangan->User->name }}
-                                                </p>
-                                            </td>
-                                            <!--end::Name=-->
-                                            <!--begin::Kode=-->
-                                            <td>
-                                                <p class="text-gray-600 mb-1">
-                                                    {{ date_format(new DateTime($kontrak_tanda_tangan->created_at), 'd-m-Y') }}
-                                                </p>
-                                            </td>
-                                            <!--end::Kode=-->
-                                            <!--begin::Unit=-->
-                                            <td>
-                                                <p class="text-gray-600 mb-1">{{ $kontrak_tanda_tangan->note }}</p>
-                                            </td>
-                                            <!--end::Unit=-->
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="4" class="text-center">
-                                                <h6><b>There is no data</b></h6>
-                                            </td>
-                                        </tr>
-                                    @endforelse
-                                @else
-                                    <tr>
-                                        <td colspa colspan="4" class="text-center">
-                                            <h6><b>There is no data</b></h6>
-                                        </td>
-                                    </tr>
-                                @endif
-                            </tbody>
-                            <!--end::Table body-->
-
-                        </table>
-                        <!--End:Table: Review-->
-                        &nbsp;<br>
-                        &nbsp;<br>
-
-                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                            Review Pembatalan Kontrak
-                            <a href="#" Id="Plus" data-bs-toggle="modal"
-                                data-bs-target="#kt_modal_input_review_pembatalan">+</a>
-                        </h3>
-
-                        <!--begin:Table: Review-->
-                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
-                            <!--begin::Table head-->
-                            <thead>
-                                <!--begin::Table row-->
-                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-125px">Nama Dokumen</th>
-                                    <th class="min-w-125px">Dibuat Oleh</th>
-                                    <th class="min-w-125px">Dibuat Tanggal</th>
-                                    <th class="min-w-125px">Catatan</th>
-                                </tr>
-                                <!--end::Table row-->
-                            </thead>
-                            <!--end::Table head-->
-                            <!--begin::Table body-->
-                            <tbody class="fw-bold text-gray-400">
-                                @if (!empty($contract->ReviewPembatalanKontrak))
-                                    @forelse ($contract->ReviewPembatalanKontrak as $review_pembatalan_kontrak)
-                                        <tr>
-                                            <!--begin::Name=-->
-                                            <td>
-                                                <a target="_blank"
-                                                    href="/document/view/{{ $review_pembatalan_kontrak->id_review_pembatalan_kontrak }}/{{ $review_pembatalan_kontrak->id_document }}"
-                                                    class="text-gray-600 text-hover-primary mb-1">
-                                                    {{ $review_pembatalan_kontrak->document_name }}
-                                                </a>
-                                            </td>
-                                            <!--end::Name=-->
-                                            <!--begin::Name=-->
-                                            <td>
-                                                <p class="text-gray-600 mb-1">
-                                                    {{ $review_pembatalan_kontrak->User->name }}</p>
-                                            </td>
-                                            <!--end::Name=-->
-                                            <!--begin::Kode=-->
-                                            <td>
-                                                <p class="text-gray-600 mb-1">
-                                                    {{ date_format(new DateTime($review_pembatalan_kontrak->created_at), 'd-m-Y') }}
-                                                </p>
-                                            </td>
-                                            <!--end::Kode=-->
-                                            <!--begin::Unit=-->
-                                            <td>
-                                                <p class="text-gray-600 mb-1">{{ $review_pembatalan_kontrak->note }}
-                                                </p>
-                                            </td>
-                                            <!--end::Unit=-->
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="4" class="text-center">
-                                                <h6><b>There is no data</b></h6>
-                                            </td>
-                                        </tr>
-                                    @endforelse
-                                @else
-                                    <tr>
-                                        <td colspa colspan="4" class="text-center">
-                                            <h6><b>There is no data</b></h6>
-                                        </td>
-                                    </tr>
-                                @endif
-                            </tbody>
-                            <!--end::Table body-->
-
-                        </table>
-                        <!--End:Table: Review-->
-                        &nbsp;<br>
-                        &nbsp;<br>
 
                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                             Perjanjian KSO
@@ -2144,10 +1774,7 @@
                         </table>
                         <!--End:Table: Review-->
 
-                        &nbsp;<br>
-                        &nbsp;<br>
-
-                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                        {{-- <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                             Dokumen Pendukung
                             <a href="#" Id="Plus" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_input_dokumen_pendukung">+</a>
@@ -2218,7 +1845,7 @@
                             <!--end::Table body-->
 
                         </table>
-                        <!--End:Table: Review-->
+                        <!--End:Table: Review--> --}}
                     </div>
                 </div>
                 <!--end:::Tab pane History-->
@@ -2539,11 +2166,12 @@
                             <thead>
                                 <!--begin::Table row-->
                                 <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-125px">Verifikasi</th>
                                     <th class="min-w-125px">Kategori</th>
                                     <th class="min-w-125px">Kriteria</th>
-                                    <th class="min-w-125px">Probis Level 1 - 2</th>
-                                    <th class="min-w-125px">Probis Yang Terganggu</th>
+                                    <th class="min-w-125px">Penyebab</th>
+                                    <th class="min-w-125px">Risiko</th>
+                                    <th class="min-w-125px">Dampak</th>
+                                    <th class="min-w-125px">Status</th>
                                 </tr>
                                 <!--end::Table row-->
                             </thead>
@@ -2552,33 +2180,43 @@
                             <tbody class="fw-bold text-gray-400">
                                 @forelse ($contract->inputRisks as $inputRisk)
                                     @if ($inputRisk->stage <= 2)
-                                        <tr>
-                                            <!--begin::Name=-->
-                                            <td>
-                                                <p class="text-gray-600 mb-1">{{ $inputRisk->verifikasi }}</p>
-                                            </td>
-                                            <!--end::Name=-->
-                                            <!--begin::Name=-->
-                                            <td>
-                                                <p class="text-gray-600 mb-1">{{ $inputRisk->kategori }}</p>
-                                            </td>
-                                            <!--end::Name=-->
-                                            <!--begin::Kode=-->
-                                            <td>
-                                                <p class="text-gray-600 mb-1">{{ $inputRisk->kriteria }}</p>
-                                            </td>
-                                            <!--end::Kode=-->
-                                            <!--begin::Unit=-->
-                                            <td>
-                                                <p class="text-gray-600 mb-1">{{ $inputRisk->probis_1_2 }}</p>
-                                            </td>
-                                            <!--end::Unit=-->
-                                            <!--begin::Unit=-->
-                                            <td>
-                                                <p class="text-gray-600 mb-1">{{ $inputRisk->probis_terganggu }}</p>
-                                            </td>
-                                            <!--end::Unit=-->
-                                        </tr>
+                                    <tr>
+                                        <!--begin::Name=-->
+                                        <td>
+                                            <a href="#" Id="edit_resiko_perolehan" data-bs-toggle="modal"
+                                                data-bs-target="#kt_modal_edit_resiko_perolehan_{{ $inputRisk->id_risk }}"><p class="text-gray-600 mb-1 text-hover-primary">{{ $inputRisk->kategori }}</p></a>
+                                        </td>
+                                        <!--end::Name=-->
+                                        <!--begin::Kode=-->
+                                        <td>
+                                            <p class="text-gray-600 mb-1">{{ $inputRisk->kriteria }}</p>
+                                        </td>
+                                        <!--end::Kode=-->
+                                        <!--begin::Unit=-->
+                                        <td>
+                                            <p class="text-gray-600 mb-1">{{ $inputRisk->penyebab }}</p>
+                                        </td>
+                                        <!--end::Unit=-->
+                                        <!--begin::Unit=-->
+                                        <td>
+                                            <p class="text-gray-600 mb-1">{{ $inputRisk->resiko_peluang }}</p>
+                                        </td>
+                                        <!--end::Unit=-->
+                                        <!--begin::Unit=-->
+                                        <td>
+                                            <p class="text-gray-600 mb-1">{{ $inputRisk->dampak }}</p>
+                                        </td>
+                                        <!--end::Unit=-->
+                                        <!--begin::Unit=-->
+                                        <td>
+                                            @php
+                                                $status = $inputRisk->is_closed == 0 ? "Open" : "Closed";
+                                                $class = $inputRisk->is_closed == 0 ? "badge-light-success text-success" : "badge-light-danger text-danger";
+                                            @endphp
+                                            <p class="mb-1 badge {{$class}}">{{ $status }}</p>
+                                        </td>
+                                        <!--end::Unit=-->
+                                    </tr>
                                     @endif
                                 @empty
                                     <tr>
@@ -3556,7 +3194,7 @@
                                 <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                     Input Resiko - Pemeliharaan
                                     <a href="#" Id="Plus" data-bs-toggle="modal"
-                                        data-bs-target="#kt_modal_input_resiko_serah_terima">+</a>
+                                        data-bs-target="#kt_modal_input_resiko_pemeliharaan">+</a>
                                 </h3>
 
                                 <!--begin:Table: Review-->
@@ -3565,11 +3203,12 @@
                                     <thead>
                                         <!--begin::Table row-->
                                         <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                            <th class="min-w-125px">Verifikasi</th>
                                             <th class="min-w-125px">Kategori</th>
                                             <th class="min-w-125px">Kriteria</th>
-                                            <th class="min-w-125px">Probis Level 1 - 2</th>
-                                            <th class="min-w-125px">Probis Yang Terganggu</th>
+                                            <th class="min-w-125px">Penyebab</th>
+                                            <th class="min-w-125px">Risiko</th>
+                                            <th class="min-w-125px">Dampak</th>
+                                            <th class="min-w-125px">Status</th>
                                         </tr>
                                         <!--end::Table row-->
                                     </thead>
@@ -3578,32 +3217,43 @@
                                     <tbody class="fw-bold text-gray-400">
                                         @forelse ($contract->inputRisks as $inputRisk)
                                             @if ($inputRisk->stage <= 3)
-                                                <tr>
-                                                    <!--begin::Name=-->
-                                                    <td>
-                                                        <p class="text-gray-600 mb-1">{{ $inputRisk->resiko }}
-                                                        </p>
-                                                    </td>
-                                                    <!--end::Name=-->
-                                                    <!--begin::Name=-->
-                                                    <td>
-                                                        <p class="text-gray-600 mb-1">{{ $inputRisk->penyebab }}
-                                                        </p>
-                                                    </td>
-                                                    <!--end::Name=-->
-                                                    <!--begin::Kode=-->
-                                                    <td>
-                                                        <p class="text-gray-600 mb-1">{{ $inputRisk->dampak }}
-                                                        </p>
-                                                    </td>
-                                                    <!--end::Kode=-->
-                                                    <!--begin::Unit=-->
-                                                    <td>
-                                                        <p class="text-gray-600 mb-1">{{ $inputRisk->mitigasi }}
-                                                        </p>
-                                                    </td>
-                                                    <!--end::Unit=-->
-                                                </tr>
+                                            <tr>
+                                                <!--begin::Name=-->
+                                                <td>
+                                                    <a href="#" Id="edit_resiko_perolehan" data-bs-toggle="modal"
+                                                        data-bs-target="#kt_modal_edit_resiko_perolehan_{{ $inputRisk->id_risk }}"><p class="text-gray-600 mb-1 text-hover-primary">{{ $inputRisk->kategori }}</p></a>
+                                                </td>
+                                                <!--end::Name=-->
+                                                <!--begin::Kode=-->
+                                                <td>
+                                                    <p class="text-gray-600 mb-1">{{ $inputRisk->kriteria }}</p>
+                                                </td>
+                                                <!--end::Kode=-->
+                                                <!--begin::Unit=-->
+                                                <td>
+                                                    <p class="text-gray-600 mb-1">{{ $inputRisk->penyebab }}</p>
+                                                </td>
+                                                <!--end::Unit=-->
+                                                <!--begin::Unit=-->
+                                                <td>
+                                                    <p class="text-gray-600 mb-1">{{ $inputRisk->resiko_peluang }}</p>
+                                                </td>
+                                                <!--end::Unit=-->
+                                                <!--begin::Unit=-->
+                                                <td>
+                                                    <p class="text-gray-600 mb-1">{{ $inputRisk->dampak }}</p>
+                                                </td>
+                                                <!--end::Unit=-->
+                                                <!--begin::Unit=-->
+                                                <td>
+                                                    @php
+                                                        $status = $inputRisk->is_closed == 0 ? "Open" : "Closed";
+                                                        $class = $inputRisk->is_closed == 0 ? "badge-light-success text-success" : "badge-light-danger text-danger";
+                                                    @endphp
+                                                    <p class="mb-1 badge {{$class}}">{{ $status }}</p>
+                                                </td>
+                                                <!--end::Unit=-->
+                                            </tr>
                                             @endif
                                         @empty
                                             <tr>
@@ -5646,9 +5296,9 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <textarea name="resiko_peluang" id="resiko_peluang" class="form-control form-control-solid mb-3" value="{{ $inputRisk->resiko_peluang }}"></textarea>
+                                <textarea name="resiko_peluang" id="resiko_peluang" class="form-control form-control-solid mb-3">{!! $inputRisk->resiko_peluang !!}</textarea>
                                 <!--end::Input-->
-                            </div>
+                            </div> 
                         </div>
                         
                         <div class="row">
@@ -5659,7 +5309,7 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <textarea name="dampak" id="dampak" class="form-control form-control-solid mb-3" value="{{ $inputRisk->dampak }}"></textarea>
+                                <textarea name="dampak" id="dampak" class="form-control form-control-solid mb-3">{!! $inputRisk->dampak !!}</textarea>
                                 <!--end::Input-->
                             </div>
                             <div class="col">
@@ -5774,7 +5424,7 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <textarea name="tindak_lanjut_mitigasi" id="tindak_lanjut_mitigasi" class="form-control form-control-solid mb-3" value="{{ $inputRisk->tindak_lanjut_mitigasi }}"></textarea>
+                                <textarea name="tindak_lanjut_mitigasi" id="tindak_lanjut_mitigasi" class="form-control form-control-solid mb-3">{!! $inputRisk->tindak_lanjut_mitigasi !!}</textarea>
                                 <!--end::Input-->
                             </div>
                             <div class="col">
@@ -5925,8 +5575,8 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3" name="uraian"
-                                    id="uraian" value="{{ $inputRisk->uraian }}" placeholder="Uraian" style="font-weight: normal" />
+                                <textarea cols="2" class="form-control form-control-solid mb-3" name="uraian"
+                                    id="uraian" placeholder="Uraian" style="font-weight: normal" >{{ $inputRisk->uraian }}</textarea>
                                 <!--end::Input-->
                             </div>
                             <div class="col">
@@ -5953,13 +5603,13 @@
                                     data-control="select2" data-hide-search="true" data-placeholder="Status"
                                     tabindex="-1" aria-hidden="true">
                                     <option value=""></option>
-                                    @if (!empty($inputRisk->is_closed))
-                                    <option value="{{ $inputRisk->is_closed }}" selected>{{ $inputRisk->is_closed }}</option>
-                                    <option value="0">Open</option>
-                                    <option value="1">Closed</option>
+                                    @if (isset($inputRisk->is_closed))
+                                        <option value="{{ $inputRisk->is_closed }}" selected>{{ (bool) $inputRisk->is_closed == true ? "Closed" : "Open" }}</option>
+                                        <option value="0">Open</option>
+                                        <option value="1">Closed</option>
                                     @else
-                                    <option value="0">Open</option>
-                                    <option value="1">Closed</option>
+                                        <option value="0">Open</option>
+                                        <option value="1">Closed</option>
                                     @endif
                                 </select>
                                 <!--end::Input-->
@@ -5989,7 +5639,7 @@
     @endforeach
     <!--end::Modal - Input Resiko Perolehan-->
 
-    <!--begin::Modal - Input Resiko Tender Menang-->
+    <!--begin::Modal - Input Resiko Pelaksanaan-->
     <div class="modal fade" id="kt_modal_input_resiko_pelaksanaan" tabindex="-1" aria-hidden="true">
         <!--begin::Modal dialog-->
         <div class="modal-dialog modal-dialog-centered mw-900px">
@@ -5998,7 +5648,7 @@
                 <!--begin::Modal header-->
                 <div class="modal-header">
                     <!--begin::Modal title-->
-                    <h2>Add Resiko Proyek - Pelaksanaan</h2>
+                    <h2>Add Resiko Proyek - Perolehan</h2>
                     <!--end::Modal title-->
                     <!--begin::Close-->
                     <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
@@ -6035,14 +5685,14 @@
                             </div>
                             <div class="col">
                                 <!--begin::Label-->
-                                <label class="fs-6 fw-bold form-label mt-3">
+                                <label class="fs-6 fw-bold form-label mt-3 required">
                                     <span style="font-weight: normal">Kategori</span>
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                 <select name="kategori" class="form-select form-select-solid"
                                     data-control="select2" data-hide-search="true" data-placeholder="Pilih kategori"
-                                    tabindex="-1" aria-hidden="true">
+                                    tabindex="-1" aria-hidden="true" required>
                                     <option value=""></option>
                                     <option value="Kategori 1">Kategori 1</option>
                                     <option value="Kategori 2">Kategori 2</option>
@@ -6054,7 +5704,7 @@
                         <div class="row">
                             <div class="col">
                                 <!--begin::Label-->
-                                <label class="fs-6 fw-bold form-label mt-3">
+                                <label class="fs-6 fw-bold form-label mt-3 required">
                                     <span style="font-weight: normal">Kriteria</span>
                                 </label>
                                 <!--end::Label-->
@@ -6112,7 +5762,7 @@
                         <div class="row">
                             <div class="col">
                                 <!--begin::Label-->
-                                <label class="fs-6 fw-bold form-label mt-3">
+                                <label class="fs-6 fw-bold form-label mt-3 required">
                                     <span style="font-weight: normal">Penyebab</span>
                                 </label>
                                 <!--end::Label-->
@@ -6128,13 +5778,12 @@
                             </div>
                             <div class="col">
                                 <!--begin::Label-->
-                                <label class="fs-6 fw-bold form-label mt-3">
+                                <label class="fs-6 fw-bold form-label mt-3 required">
                                     <span style="font-weight: normal">Resiko / Peluang</span>
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3" name="resiko_peluang"
-                                    id="resiko_peluang" value="" placeholder="Resiko / Peluang" style="font-weight: normal" />
+                                <textarea name="resiko_peluang" id="resiko_peluang" class="form-control form-control-solid mb-3" style="font-weight: normal" value=""></textarea>
                                 <!--end::Input-->
                             </div>
                         </div>
@@ -6142,18 +5791,12 @@
                         <div class="row">
                             <div class="col">
                                 <!--begin::Label-->
-                                <label class="fs-6 fw-bold form-label mt-3">
+                                <label class="fs-6 fw-bold form-label mt-3 required">
                                     <span style="font-weight: normal">Dampak</span>
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <select name="dampak" class="form-select form-select-solid"
-                                    data-control="select2" data-hide-search="true" data-placeholder="Dampak"
-                                    tabindex="-1" aria-hidden="true">
-                                    <option value=""></option>
-                                    <option value="Dampak 1">Dampak 1</option>
-                                    <option value="Dampak 2">Dampak 2</option>
-                                </select>
+                                <textarea name="dampak" id="dampak" class="form-control form-control-solid mb-3" style="font-weight: normal" value=""></textarea>
                                 <!--end::Input-->
                             </div>
                             <div class="col">
@@ -6163,7 +5806,7 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3" name="nilai_resiko_r0"
+                                <input type="text" class="form-control form-control-solid mb-3 reformat" name="nilai_resiko_r0"
                                     id="nilai_resiko_r0" value="" placeholder="Nilai Resiko / Peluang (Ro)" style="font-weight: normal" />
                                 <!--end::Input-->
                             </div>
@@ -6201,7 +5844,7 @@
                                 </select>
                                 <!--end::Input-->
                             </div>
-                            <div class="col">
+                            {{-- <div class="col">
                                 <!--begin::Label-->
                                 <label class="fs-6 fw-bold form-label mt-3">
                                     <span style="font-weight: normal">Dampak</span>
@@ -6211,7 +5854,7 @@
                                 <input type="text" class="form-control form-control-solid mb-3" name="dampak"
                                     id="dampak" value="" placeholder="Dampak" style="font-weight: normal" />
                                 <!--end::Input-->
-                            </div>
+                            </div> --}}
                             <div class="col">
                                 <!--begin::Label-->
                                 <label class="fs-6 fw-bold form-label mt-3">
@@ -6249,7 +5892,7 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3" name="nilai_resiko_r1"
+                                <input type="text" class="form-control form-control-solid mb-3 reformat" name="nilai_resiko_r1"
                                     id="nilai_resiko_r1" value="" placeholder="Nilai Sisa Risiko / Peluang (R1)" style="font-weight: normal" />
                                 <!--end::Input-->
                             </div>
@@ -6265,8 +5908,7 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3" name="tindak_lanjut_mitigasi"
-                                    id="tindak_lanjut_mitigasi" value="" placeholder="Rencana Tindak Lanjut (Mitigasi) Proaktif" style="font-weight: normal" />
+                                <textarea name="tindak_lanjut_mitigasi" id="tindak_lanjut_mitigasi" class="form-control form-control-solid mb-3"></textarea>
                                 <!--end::Input-->
                             </div>
                             <div class="col">
@@ -6306,7 +5948,7 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3" name="biaya_proaktif"
+                                <input type="text" class="form-control form-control-solid mb-3 reformat" name="biaya_proaktif"
                                     id="biaya_proaktif" value="" placeholder="Biaya" style="font-weight: normal" />
                                 <!--end::Input-->
                             </div>
@@ -6368,7 +6010,7 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3" name="biaya_reaktif"
+                                <input type="text" class="form-control form-control-solid mb-3 reformat" name="biaya_reaktif"
                                     id="biaya_reaktif" value="" placeholder="Biaya" style="font-weight: normal" />
                                 <!--end::Input-->
                             </div>
@@ -6405,8 +6047,7 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3" name="uraian"
-                                    id="uraian" value="" placeholder="Uraian" style="font-weight: normal" />
+                                <textarea name="uraian" id="uraian" class="form-control form-control-solid mb-3"></textarea>
                                 <!--end::Input-->
                             </div>
                             <div class="col">
@@ -6416,7 +6057,7 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3" name="nilai"
+                                <input type="text" class="form-control form-control-solid mb-3 reformat" name="nilai"
                                     id="nilai" value="" placeholder="Nilai" style="font-weight: normal" />
                                 <!--end::Input-->
                             </div>
@@ -6440,10 +6081,10 @@
         </div>
         <!--end::Modal content-->
     </div>
-    <!--end::Modal - Input Resiko Tender Menang-->
+    <!--end::Modal - Input Resiko Pelaksanaan-->
 
-    <!--begin::Modal - Input Resiko Serah Terima-->
-    <div class="modal fade" id="kt_modal_input_resiko_serah_terima" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal - Input Resiko Pemeliharaan-->
+    <div class="modal fade" id="kt_modal_input_resiko_pemeliharaan" tabindex="-1" aria-hidden="true">
         <!--begin::Modal dialog-->
         <div class="modal-dialog modal-dialog-centered mw-900px">
             <!--begin::Modal content-->
@@ -6488,14 +6129,14 @@
                             </div>
                             <div class="col">
                                 <!--begin::Label-->
-                                <label class="fs-6 fw-bold form-label mt-3">
+                                <label class="fs-6 fw-bold form-label mt-3 required">
                                     <span style="font-weight: normal">Kategori</span>
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                 <select name="kategori" class="form-select form-select-solid"
                                     data-control="select2" data-hide-search="true" data-placeholder="Pilih kategori"
-                                    tabindex="-1" aria-hidden="true">
+                                    tabindex="-1" aria-hidden="true" required>
                                     <option value=""></option>
                                     <option value="Kategori 1">Kategori 1</option>
                                     <option value="Kategori 2">Kategori 2</option>
@@ -6507,7 +6148,7 @@
                         <div class="row">
                             <div class="col">
                                 <!--begin::Label-->
-                                <label class="fs-6 fw-bold form-label mt-3">
+                                <label class="fs-6 fw-bold form-label mt-3 required">
                                     <span style="font-weight: normal">Kriteria</span>
                                 </label>
                                 <!--end::Label-->
@@ -6565,7 +6206,7 @@
                         <div class="row">
                             <div class="col">
                                 <!--begin::Label-->
-                                <label class="fs-6 fw-bold form-label mt-3">
+                                <label class="fs-6 fw-bold form-label mt-3 required">
                                     <span style="font-weight: normal">Penyebab</span>
                                 </label>
                                 <!--end::Label-->
@@ -6581,13 +6222,12 @@
                             </div>
                             <div class="col">
                                 <!--begin::Label-->
-                                <label class="fs-6 fw-bold form-label mt-3">
+                                <label class="fs-6 fw-bold form-label mt-3 required">
                                     <span style="font-weight: normal">Resiko / Peluang</span>
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3" name="resiko_peluang"
-                                    id="resiko_peluang" value="" placeholder="Resiko / Peluang" style="font-weight: normal" />
+                                <textarea name="resiko_peluang" id="resiko_peluang" class="form-control form-control-solid mb-3" style="font-weight: normal" value=""></textarea>
                                 <!--end::Input-->
                             </div>
                         </div>
@@ -6595,18 +6235,12 @@
                         <div class="row">
                             <div class="col">
                                 <!--begin::Label-->
-                                <label class="fs-6 fw-bold form-label mt-3">
+                                <label class="fs-6 fw-bold form-label mt-3 required">
                                     <span style="font-weight: normal">Dampak</span>
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <select name="dampak" class="form-select form-select-solid"
-                                    data-control="select2" data-hide-search="true" data-placeholder="Dampak"
-                                    tabindex="-1" aria-hidden="true">
-                                    <option value=""></option>
-                                    <option value="Dampak 1">Dampak 1</option>
-                                    <option value="Dampak 2">Dampak 2</option>
-                                </select>
+                                <textarea name="dampak" id="dampak" class="form-control form-control-solid mb-3" style="font-weight: normal" value=""></textarea>
                                 <!--end::Input-->
                             </div>
                             <div class="col">
@@ -6616,7 +6250,7 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3" name="nilai_resiko_r0"
+                                <input type="text" class="form-control form-control-solid mb-3 reformat" name="nilai_resiko_r0"
                                     id="nilai_resiko_r0" value="" placeholder="Nilai Resiko / Peluang (Ro)" style="font-weight: normal" />
                                 <!--end::Input-->
                             </div>
@@ -6654,7 +6288,7 @@
                                 </select>
                                 <!--end::Input-->
                             </div>
-                            <div class="col">
+                            {{-- <div class="col">
                                 <!--begin::Label-->
                                 <label class="fs-6 fw-bold form-label mt-3">
                                     <span style="font-weight: normal">Dampak</span>
@@ -6664,7 +6298,7 @@
                                 <input type="text" class="form-control form-control-solid mb-3" name="dampak"
                                     id="dampak" value="" placeholder="Dampak" style="font-weight: normal" />
                                 <!--end::Input-->
-                            </div>
+                            </div> --}}
                             <div class="col">
                                 <!--begin::Label-->
                                 <label class="fs-6 fw-bold form-label mt-3">
@@ -6702,7 +6336,7 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3" name="nilai_resiko_r1"
+                                <input type="text" class="form-control form-control-solid mb-3 reformat" name="nilai_resiko_r1"
                                     id="nilai_resiko_r1" value="" placeholder="Nilai Sisa Risiko / Peluang (R1)" style="font-weight: normal" />
                                 <!--end::Input-->
                             </div>
@@ -6718,8 +6352,7 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3" name="tindak_lanjut_mitigasi"
-                                    id="tindak_lanjut_mitigasi" value="" placeholder="Rencana Tindak Lanjut (Mitigasi) Proaktif" style="font-weight: normal" />
+                                <textarea name="tindak_lanjut_mitigasi" id="tindak_lanjut_mitigasi" class="form-control form-control-solid mb-3"></textarea>
                                 <!--end::Input-->
                             </div>
                             <div class="col">
@@ -6759,7 +6392,7 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3" name="biaya_proaktif"
+                                <input type="text" class="form-control form-control-solid mb-3 reformat" name="biaya_proaktif"
                                     id="biaya_proaktif" value="" placeholder="Biaya" style="font-weight: normal" />
                                 <!--end::Input-->
                             </div>
@@ -6821,7 +6454,7 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3" name="biaya_reaktif"
+                                <input type="text" class="form-control form-control-solid mb-3 reformat" name="biaya_reaktif"
                                     id="biaya_reaktif" value="" placeholder="Biaya" style="font-weight: normal" />
                                 <!--end::Input-->
                             </div>
@@ -6858,8 +6491,7 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3" name="uraian"
-                                    id="uraian" value="" placeholder="Uraian" style="font-weight: normal" />
+                                <textarea name="uraian" id="uraian" class="form-control form-control-solid mb-3"></textarea>
                                 <!--end::Input-->
                             </div>
                             <div class="col">
@@ -6869,7 +6501,7 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3" name="nilai"
+                                <input type="text" class="form-control form-control-solid mb-3 reformat" name="nilai"
                                     id="nilai" value="" placeholder="Nilai" style="font-weight: normal" />
                                 <!--end::Input-->
                             </div>
@@ -6893,7 +6525,7 @@
         </div>
         <!--end::Modal content-->
     </div>
-    <!--end::Modal - Input Resiko Serah Terima-->
+    <!--end::Modal - Input Resiko Pemeliharaan-->
 
     <!--begin::Modal - Input BA Defect Serah Terima-->
     <div class="modal fade" id="kt_modal_defect_ba" tabindex="-1" aria-hidden="true">
