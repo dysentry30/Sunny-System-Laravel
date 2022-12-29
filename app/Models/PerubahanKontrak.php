@@ -18,4 +18,12 @@ class PerubahanKontrak extends Model
     public function DokumenPendukungs() {
         return $this->hasMany(DokumenPendukung::class, "id_perubahan_kontrak");
     }
+
+    public function ContractManagement() {
+        return $this->belongsTo(ContractManagements::class, "id_contract");
+    }
+
+    // public function Proyek() {
+    //     return $this->belongsTo(Proyek::class, "project_id", "kode_proyek");
+    // }
 }

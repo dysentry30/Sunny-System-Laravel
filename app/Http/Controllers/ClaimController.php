@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use App\Models\ClaimManagements;
 use App\Models\ContractManagements;
 use App\Models\Pasals;
+use App\Models\PerubahanKontrak;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
@@ -33,37 +34,38 @@ class ClaimController extends Controller
     {
         $column = $request->get("column");
         $filter = $request->get("filter");
-        if (Auth::user()->check_administrator) {
-            $claims = ClaimManagements::sortable()->join("proyeks", "proyeks.kode_proyek", "=", "claim_managements.kode_proyek")->select("claim_managements.*")->get();
-        } else {
-            $claims = ClaimManagements::sortable()->join("proyeks", "proyeks.kode_proyek", "=", "claim_managements.kode_proyek")->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->select("claim_managements.*")->get();
-        }
+        // if (Auth::user()->check_administrator) {
+        //     $claims = PerubahanKontrak::join("contract_managements", "contract_managements.id_contract", "=", "perubahan_kontrak.id_contract")->select("perubahan_kontrak.*")->get();
+        // } else {
+        //     $claims = PerubahanKontrak::join("contract_managements", "contract_managements.id_contract", "=", "perubahan_kontrak.id_contract")->where("contract_managements.unit_kerja", "=", Auth::user()->unit_kerja)->select("perubahan_kontrak.*")->get();
+        // }
+        $claims = PerubahanKontrak::with(["ContractManagement"])->get();
         if (!empty($column)) {
 
-            $proyekClaim = $claims->where('jenis_claim', '=', "Claim")->filter(function($data) use($column, $filter) {
+            $proyekClaim = $claims->where('jenis_perubahan', '=', "Klaim")->filter(function($data) use($column, $filter) {
                 return preg_match("/^$filter/", $data[$column]);
             });
             
-            $proyekAnti = $claims->where('jenis_claim', '=', "Anti Claim")->filter(function($data) use($column, $filter) {
+            $proyekAnti = $claims->where('jenis_perubahan', '=', "Anti Klaim")->filter(function($data) use($column, $filter) {
                 return preg_match("/^$filter/", $data[$column]);
             });
 
-            $proyekAsuransi = $claims->where('jenis_claim', '=', "Claim Asuransi")->filter(function($data) use($column, $filter) {
+            $proyekAsuransi = $claims->where('jenis_perubahan', '=', "Klaim Asuransi")->filter(function($data) use($column, $filter) {
                 return preg_match("/^$filter/", $data[$column]);
             });
             
-            $proyekVos = $claims->where('jenis_claim', '=', "VO")->filter(function($data) use($column, $filter) {
+            $proyekVos = $claims->where('jenis_perubahan', '=', "VO")->filter(function($data) use($column, $filter) {
                 return preg_match("/^$filter/", $data[$column]);
             });
             
         } else {
-            $proyekClaim = $claims->where('jenis_claim', '=', "Claim");
+            $proyekClaim = $claims->where('jenis_perubahan', '=', "Klaim");
 
-            $proyekAnti = $claims->where('jenis_claim', '=', "Anti Claim");
+            $proyekAnti = $claims->where('jenis_perubahan', '=', "Anti Klaim");
 
-            $proyekAsuransi = $claims->where('jenis_claim', '=', "Claim Asuransi");
+            $proyekAsuransi = $claims->where('jenis_perubahan', '=', "Klaim Asuransi");
 
-            $proyekVos = $claims->where('jenis_claim', '=', "VO");
+            $proyekVos = $claims->where('jenis_perubahan', '=', "VO");
         }
         return view("5_Claim", compact(["proyekVos" ,"proyekClaim", "proyekAnti", "proyekAsuransi", "column", "filter"]));
     }

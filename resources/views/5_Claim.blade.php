@@ -193,12 +193,12 @@
                                                         <!--end::Name-->
                                                         <!--begin::Name Proyek-->
                                                         <td>
-                                                            {{ $proyekClaims->project->nama_proyek }}
+                                                            {{ $proyekClaims->ContractManagements->project->nama_proyek }}
                                                         </td>
                                                         <!--end::Name Proyek-->
                                                         <!--begin::Unit Kerja-->
                                                         <td>
-                                                            {{ $proyekClaims->project->UnitKerja->unit_kerja }}
+                                                            {{ $proyekClaims->ContractManagements->project->UnitKerja->unit_kerja }}
                                                         </td>
                                                         <!--end::Unit Kerja-->
                                                         <!--begin::Action-->
@@ -249,12 +249,12 @@
                                                     <!--end::Name-->
                                                     <!--begin::Name Proyek-->
                                                     <td>
-                                                        {{ $proyekAntis->project->nama_proyek }}
+                                                        {{ $proyekAntis->ContractManagements->project->nama_proyek }}
                                                     </td>
                                                     <!--end::Name Proyek-->
                                                     <!--begin::Unit Kerja-->
                                                     <td>
-                                                        {{ $proyekAntis->project->UnitKerja->unit_kerja }}
+                                                        {{ $proyekAntis->ContractManagements->project->UnitKerja->unit_kerja }}
                                                     </td>
                                                     <!--end::Unit Kerja-->
                                                     <!--begin::Action-->
@@ -304,12 +304,12 @@
                                                         <!--end::Name-->
                                                         <!--begin::Name Proyek-->
                                                         <td>
-                                                            {{ $proyekAsuransis->project->nama_proyek }}
+                                                            {{ $proyekAsuransis->ContractManagements->project->nama_proyek }}
                                                         </td>
                                                         <!--end::Name Proyek-->
                                                         <!--begin::Unit Kerja-->
                                                         <td>
-                                                            {{ $proyekAsuransis->project->UnitKerja->unit_kerja }}
+                                                            {{ $proyekAsuransis->ContractManagements->project->UnitKerja->unit_kerja }}
                                                         </td>
                                                         <!--end::Unit Kerja-->
                                                         <!--begin::Action-->
@@ -358,12 +358,12 @@
                                                         <!--end::Name-->
                                                         <!--begin::Name Proyek-->
                                                         <td>
-                                                            {{ $proyekVo->project->nama_proyek }}
+                                                            {{ $proyekVo->ContractManagements->project->nama_proyek }}
                                                         </td>
                                                         <!--end::Name Proyek-->
                                                         <!--begin::Unit Kerja-->
                                                         <td>
-                                                            {{ $proyekVo->project->UnitKerja->unit_kerja }}
+                                                            {{ $proyekVo->ContractManagements->project->UnitKerja->unit_kerja }}
                                                         </td>
                                                         <!--end::Unit Kerja-->
                                                         <!--begin::Action-->
