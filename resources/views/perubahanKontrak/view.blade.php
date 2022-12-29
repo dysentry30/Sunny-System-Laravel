@@ -237,7 +237,7 @@
                                                                     <label class="fs-6 fw-bold form-label">
                                                                         <span style="font-weight: normal">Uraian Perubahan</span>
                                                                     </label>
-                                                                    <textarea cols="2" name="uraian-perubahan" class="form-control form-control-solid">{!! $perubahan_kontrak->uraian_perubahan !!}</textarea>
+                                                                    <textarea cols="4" name="uraian-perubahan" class="form-control">{!! $perubahan_kontrak->uraian_perubahan !!}</textarea>
                                                                 </div>
                                                                 
                                                             </div>
@@ -315,6 +315,7 @@
                                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                                         <th class="min-w-125px">Jenis Dokumen</th>
                                                         <th class="min-w-125px">Nomor Dokumen</th>
+                                                        <th class="min-w-125px">File</th>
                                                     </tr>
                                                     <!--end::Table row-->
                                                 </thead>
@@ -327,14 +328,51 @@
                                                         @endphp
                                                         <tr>
                                                             <td>{{ $jd->jenis_dokumen}}</td>
+                                                            @foreach ($list_instruksi_owner as $lio)
                                                             <td>
-                                                                @foreach ($list_instruksi_owner as $lio)
-                                                                    @php
-                                                                        $lio = App\Models\SiteInstruction::where("nomor_dokumen" , "=", $lio)->get()->first();
-                                                                    @endphp
-                                                                    - <a href="{{ asset("words/$lio->id_document.pdf"); }}">{{$lio->nomor_dokumen}}</a> <br>
-                                                                @endforeach
-                                                            </td>
+                                                                    @switch($jd->jenis_dokumen)
+                                                                        @case("Site Instruction")
+                                                                                @php
+                                                                                    $lio = App\Models\SiteInstruction::where("nomor_dokumen" , "=", $lio)->get()->first();
+                                                                                @endphp
+                                                                            @break
+                                                                        @case("Technical Form")
+                                                                                @php
+                                                                                    $lio = App\Models\TechnicalForm::where("nomor_dokumen" , "=", $lio)->get()->first();
+                                                                                @endphp
+                                                                            @break
+                                                                        @case("Technical Query")
+                                                                                @php
+                                                                                    $lio = App\Models\TechnicalQuery::where("nomor_dokumen" , "=", $lio)->get()->first();
+                                                                                @endphp
+                                                                            @break
+                                                                        @case("Field Design Change")
+                                                                                @php
+                                                                                    $lio = App\Models\FieldDesignChange::where("nomor_dokumen" , "=", $lio)->get()->first();
+                                                                                @endphp
+                                                                            @break
+                                                                        @case("Contract Change Notice")
+                                                                                @php
+                                                                                    $lio = App\Models\ContractChangeNotice::where("nomor_dokumen" , "=", $lio)->get()->first();
+                                                                                @endphp
+                                                                            @break
+                                                                        @case("Contract Change Proposal")
+                                                                                @php
+                                                                                    $lio = App\Models\ContractChangeProposal::where("nomor_dokumen" , "=", $lio)->get()->first();
+                                                                                @endphp
+                                                                            @break
+                                                                        @case("Contract Change Order")
+                                                                                @php
+                                                                                    $lio = App\Models\ContractChangeOrder::where("nomor_dokumen" , "=", $lio)->get()->first();
+                                                                                @endphp
+                                                                            @break
+                                                                    @endswitch
+                                                                    {{$lio->nomor_dokumen}}
+                                                                </td>
+                                                                <td>
+                                                                    - <a target="blank" href="{{ asset("words/$lio->id_document"); }}">{{$lio->id_document}}</a> <br>
+                                                                </td>
+                                                            @endforeach
                                                         </tr>
                                                     @empty
                                                         <tr>
@@ -348,7 +386,7 @@
                                             <!--End:Table: Review-->
 
                                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                                                Dokumen Pendukung
+                                                Dokumen Pendukung Lain
                                                 <a href="#" Id="Plus" data-bs-toggle="modal"
                                                     data-bs-target="#kt_modal_input_dokumen_pendukung">+</a>
                                             </h3>
@@ -359,10 +397,11 @@
                                                 <thead>
                                                     <!--begin::Table row-->
                                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                        <th class="min-w-125px">Nama Dokumen</th>
+                                                        {{-- <th class="min-w-125px">Nama Dokumen</th> --}}
                                                         <th class="min-w-125px">Dibuat Oleh</th>
                                                         <th class="min-w-125px">Dibuat Tanggal</th>
                                                         <th class="min-w-125px">Catatan</th>
+                                                        <th class="min-w-125px">File</th>
                                                     </tr>
                                                     <!--end::Table row-->
                                                 </thead>
@@ -372,33 +411,35 @@
                                                     @if (!empty($perubahan_kontrak->DokumenPendukungs))
                                                         @forelse ($perubahan_kontrak->DokumenPendukungs as $dokumen_pendukung)
                                                             <tr>
-                                                                <!--begin::Name=-->
-                                                                <td>
-                                                                    <a target="_blank"
-                                                                        href="/document/view/{{ $dokumen_pendukung->id_dokumen_pendukung }}/{{ $dokumen_pendukung->id_document }}"
-                                                                        class="text-gray-600 text-hover-primary mb-1">
-                                                                        {{ $dokumen_pendukung->document_name }}
-                                                                    </a>
-                                                                </td>
-                                                                <!--end::Name=-->
-                                                                <!--begin::Name=-->
+                                                                <!--begin::Name-->
+                                                                {{-- <td>
+                                                                    <p class="text-gray-600 mb-1">{{ $dokumen_pendukung->document_name }}
+                                                                    </p>
+                                                                </td> --}}
+                                                                <!--end::Name-->
+                                                                <!--begin::Name-->
                                                                 <td>
                                                                     <p class="text-gray-600 mb-1">{{ $dokumen_pendukung->User->name }}
                                                                     </p>
                                                                 </td>
-                                                                <!--end::Name=-->
-                                                                <!--begin::Kode=-->
+                                                                <!--end::Name-->
+                                                                <!--begin::Kode-->
                                                                 <td>
                                                                     <p class="text-gray-600 mb-1">
                                                                         {{ date_format(new DateTime($dokumen_pendukung->created_at), 'd-m-Y') }}
                                                                     </p>
                                                                 </td>
-                                                                <!--end::Kode=-->
-                                                                <!--begin::Unit=-->
+                                                                <!--end::Kode-->
+                                                                <!--begin::Unit-->
                                                                 <td>
                                                                     <p class="text-gray-600 mb-1">{{ $dokumen_pendukung->note }}</p>
                                                                 </td>
-                                                                <!--end::Unit=-->
+                                                                <!--end::Unit-->
+                                                                <!--begin::Unit-->
+                                                                <td>
+                                                                    <a target="_blank" href="{{ asset("words/$dokumen_pendukung->id_document"); }}">{{$dokumen_pendukung->id_document}}</a>
+                                                                </td>
+                                                                <!--end::Unit-->
                                                             </tr>
                                                         @empty
                                                             <tr>
@@ -555,19 +596,19 @@
                                 name="id-perubahan-kontrak">
                             <input type="file" style="font-weight: normal"
                                 class="form-control form-control-solid" name="attach-file"
-                                id="attach-file-dokumen-pendukung" value="" accept=".docx"
+                                id="attach-file-dokumen-pendukung" value="" accept=".pdf"
                                 placeholder="" />
                             <!--end::Input-->
 
                             <!--begin::Label-->
-                            <label class="fs-6 fw-bold form-label mt-3">
+                            {{-- <label class="fs-6 fw-bold form-label mt-3">
                                 <span style="font-weight: normal">Nama Dokumen</span>
                             </label>
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="text" class="form-control form-control-solid" name="document-name"
                                 id="document-name-pendukung" value="" style="font-weight: normal"
-                                placeholder="Nama Document" />
+                                placeholder="Nama Document" /> --}}
                             <!--end::Input-->
 
                             <!--begin::Label-->
@@ -576,7 +617,7 @@
                             </label>
                             <!--end::Label-->
                             <!--begin::Input-->
-                            <textarea cols="3" class="form-control form-control-solid" name="note"
+                            <textarea cols="4" class="form-control form-control-solid" name="note"
                                 id="note" value="" style="font-weight: normal"
                                 placeholder="Catatan" ></textarea>
                             <!--end::Input-->

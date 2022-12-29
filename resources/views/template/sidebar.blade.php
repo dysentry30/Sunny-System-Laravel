@@ -522,7 +522,7 @@
                             </div>
                         @endif
 
-                        @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
+                        @if (auth()->user()->check_administrator)
                             <div class="menu-item">
                                 <a class="menu-link " href="/change-request"
                                     style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'change-request') ? 'background-color:#008CB4' : '' }}">
