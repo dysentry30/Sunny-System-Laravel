@@ -719,7 +719,7 @@
                                                             <div class="col-6">
                                                                 <!--begin::label-->
                                                                 <label class="fs-6 fw-bold form-label mt-3">
-                                                                    <span class="">Tax</span>
+                                                                    <span class="required">Tax</span>
                                                                     <i class="bi-info-circle-fill" class="btn btn-secondary mx-4"
                                                                             data-bs-toggle="tooltip" data-bs-placement="top"
                                                                             data-bs-custom-class="custom-tooltip"
