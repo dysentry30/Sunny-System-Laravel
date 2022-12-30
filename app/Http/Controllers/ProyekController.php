@@ -1478,9 +1478,9 @@ class ProyekController extends Controller
                 $customer = $proyekStage->ProyekBerjalan->Customer ?? null;
                 if (!empty($customer)) {
                     $error_msg = collect();
-                    // if (empty($customer->kode_nasabah)) {
-                    //     $error_msg->push("Kode Nasabah");
-                    // }
+                    if (empty($customer->kode_nasabah)) {
+                        $error_msg->push("Kode Nasabah");
+                    }
                     if (empty($customer->email)) {
                         $error_msg->push("Email");
                     }
@@ -1517,12 +1517,12 @@ class ProyekController extends Controller
                     if (empty($customer->npwp_company)) {
                         $error_msg->push("NPWP");
                     }
-                    // if (empty($customer->syarat_pembayaran)) {
-                    //     $error_msg->push("Term Payment");
-                    // }
-                    // if (empty($customer->tax)) {
-                    //     $error_msg->push("Tax");
-                    // }
+                    if (empty($customer->syarat_pembayaran)) {
+                        $error_msg->push("Term Payment");
+                    }
+                    if (empty($customer->tax)) {
+                        $error_msg->push("Tax");
+                    }
                     if ($error_msg->isNotEmpty()) {
                         Alert::html("Error - Pelanggan !", "Untuk pindah ke stage terkontrak, pastikan data <b>Pelanggan</b> dengan field <b>" . $error_msg->join(", ", " </b>dan<b> ") . "</b> sudah terisi!", "error")->autoClose(10000);
                         return redirect()->back();

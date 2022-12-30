@@ -24,7 +24,18 @@
         border-radius: 0 !important;
         background-color: #eff2f5 !important;
     }
+    .buttons-html5 {
+        border-radius: 5px !important;
+        border: none !important;
+        padding: 10 20 10 20 !important;
+        font-weight: normal !important;
+    }
+    .buttons-colvis {
+        border: none !important;
+        border-radius: 5px !important;
+    }
 </style>
+
 @empty($contract)
     @section('title', 'New Contract')
 @else
@@ -761,14 +772,14 @@
                     <!--begin::Card title-->
                     <div class="card-title m-0">
 
-                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                        <h3 class="fw-bolder m-0 mb-3" id="HeadDetail" style="font-size:14px;">
                             Aanwitjzing
                             <a href="#" Id="Plus" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_question_proyek">+</a>
                         </h3>
 
                         <!--begin:Table: Review-->
-                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="data-aanwitjzing">
                             <!--begin::Table head-->
                             <thead>
                                 <!--begin::Table row-->
@@ -787,21 +798,21 @@
                                     @forelse ($contract->questionsProjects as $questionProject)
                                         @if ($questionProject->tender_menang == 0)
                                             <tr>
-                                                <!--begin::Name=-->
+                                                <!--begin::Column-->
                                                 <td>
                                                     {{ $questionProject->item }}
                                                 </td>
-                                                <!--end::Name=-->
-                                                <!--begin::Name=-->
+                                                <!--end::Column-->
+                                                <!--begin::Column-->
                                                 <td>
                                                     {{ $questionProject->sub_pasal }}
                                                 </td>
-                                                <!--end::Name=-->
-                                                <!--begin::Name=-->
+                                                <!--end::Column-->
+                                                <!--begin::Column-->
                                                 <td>
-                                                    {{ $questionProject->daftar_pertanyaan }}
+                                                    {{ $questionProject->note_question }}
                                                 </td>
-                                                <!--end::Name=-->
+                                                <!--end::Column-->
                                                 <!--begin::Kode=-->
                                                 <td>
                                                     <a href="#" class="text-gray-400 text-hover-primary mb-1">
@@ -811,18 +822,18 @@
                                             </tr>
                                         @endif
                                     @empty
-                                        <tr>
-                                            <td colspan="5" class="text-center">
+                                        {{-- <tr>
+                                            <td colspan="4" class="text-center">
                                                 <h6><b>There is no data</b></h6>
                                             </td>
-                                        </tr>
+                                        </tr> --}}
                                     @endforelse
                                 @else
-                                    <tr>
-                                        <td colspan="5" class="text-center">
+                                    {{-- <tr>
+                                        <td colspan="4" class="text-center">
                                             <h6><b>There is no data</b></h6>
                                         </td>
-                                    </tr>
+                                    </tr> --}}
                                 @endif
                             </tbody>
                             <!--end::Table body-->
@@ -859,7 +870,7 @@
                                     @forelse ($contract->draftContracts as $draftContract)
                                         @if ($draftContract->tender_menang == 0)
                                             <tr>
-                                                <!--begin::Name=-->
+                                                <!--begin::Column-->
                                                 <td>
                                                     <a target="_blank"
                                                         href="/contract-management/view/{{ $contract->id_contract }}/draft-contract/{{ $draftContract->id_draft }}"
@@ -867,8 +878,8 @@
                                                         {{ $draftContract->title_draft }}
                                                     </a>
                                                 </td>
-                                                <!--end::Name=-->
-                                                <!--begin::Name=-->
+                                                <!--end::Column-->
+                                                <!--begin::Column-->
                                                 <td>
                                                     <a target="_blank"
                                                         href="/document/view/{{ $draftContract->id_draft }}/{{ $draftContract->id_document }}"
@@ -876,7 +887,7 @@
                                                         {{ $draftContract->id_document }}
                                                     </a>
                                                 </td>
-                                                <!--end::Name=-->
+                                                <!--end::Column-->
                                                 <!--begin::Kode=-->
                                                 <td>
                                                     <a href="#" class="text-gray-400 text-hover-primary mb-1">
@@ -912,7 +923,7 @@
 
 
                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                            Tinjauan Dokumen Kontrak
+                            Tinjauan Dokumen Kontrak (<i>Mengubah input Review Kontrak sesuai dengan file id_20</i>)
                             <a href="#" Id="Plus" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_create_review">+</a>
                         </h3>
@@ -935,19 +946,19 @@
                                     @forelse ($contract->reviewProjects as $reviewProject)
                                         @if ($reviewProject->stage == 1)
                                             <tr>
-                                                <!--begin::Name=-->
+                                                <!--begin::Column-->
                                                 <td>
                                                     <a href="/contract-management/view/{{ $contract->id_contract }}/draft-contract/{{ $reviewProject->id_draft_contract }}"
                                                         target="_blank">
                                                         <p>{{ $reviewProject->draftContract->title_draft }}</p>
                                                     </a>
                                                 </td>
-                                                <!--end::Name=-->
-                                                <!--begin::Name=-->
+                                                <!--end::Column-->
+                                                <!--begin::Column-->
                                                 <td>
                                                     <p>{{ $reviewProject->ketentuan }}</p>
                                                 </td>
-                                                <!--end::Name=-->
+                                                <!--end::Column-->
                                             </tr>
                                         @endif
 
@@ -1002,16 +1013,16 @@
                                     @forelse ($contract->inputRisks as $inputRisk)
                                         @if ($inputRisk->stage == 0)
                                             <tr>
-                                                <!--begin::Name=-->
+                                                <!--begin::Column-->
                                                 <td>
                                                     <p class="text-gray-600 mb-1">{{ $inputRisk->verifikasi }}</p>
                                                 </td>
-                                                <!--end::Name=-->
-                                                <!--begin::Name=-->
+                                                <!--end::Column-->
+                                                <!--begin::Column-->
                                                 <td>
                                                     <p class="text-gray-600 mb-1">{{ $inputRisk->kategori }}</p>
                                                 </td>
-                                                <!--end::Name=-->
+                                                <!--end::Column-->
                                                 <!--begin::Kode=-->
                                                 <td>
                                                     <p class="text-gray-600 mb-1">{{ $inputRisk->kriteria }}</p>
@@ -1051,14 +1062,14 @@
                         <br>
 
                         
-                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                            Input Resiko - Perolehan
+                        <h3 class="fw-bolder m-0 mb-3" id="HeadDetail" style="font-size:14px;">
+                            Input Resiko - Perolehan (<i>Upload File</i>)
                             <a href="#" Id="Plus" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_input_resiko_perolehan">+</a>
                         </h3>
 
                         <!--begin:Table: Review-->
-                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                        <table class="table align-middle table-row-dashed fs-6 gy-5">
                             <!--begin::Table head-->
                             <thead>
                                 <!--begin::Table row-->
@@ -1079,12 +1090,12 @@
                                     @forelse ($contract->inputRisks as $inputRisk)
                                         @if ($inputRisk->stage == 1)
                                             <tr>
-                                                <!--begin::Name=-->
+                                                <!--begin::Column-->
                                                 <td>
                                                     <a href="#" Id="edit_resiko_perolehan" data-bs-toggle="modal"
                                                         data-bs-target="#kt_modal_edit_resiko_perolehan_{{ $inputRisk->id_risk }}"><p class="text-gray-600 mb-1 text-hover-primary">{{ $inputRisk->kategori }}</p></a>
                                                 </td>
-                                                <!--end::Name=-->
+                                                <!--end::Column-->
                                                 <!--begin::Kode=-->
                                                 <td>
                                                     <p class="text-gray-600 mb-1">{{ $inputRisk->kriteria }}</p>
@@ -1136,6 +1147,98 @@
                         </table>
                         <!--End:Table: Review-->
 
+                        <br><br>
+
+                        <h3 class="fw-bolder m-0 mb-3" id="HeadDetail" style="font-size:14px;">
+                            Usulan Perubahan Draft Kontrak
+                            <a href="#" Id="Plus" data-bs-toggle="modal"
+                                data-bs-target="#kt_modal_usulan_perubahan_draft_kontrak">+</a>
+                        </h3>
+
+                        <!--begin:Table: Review-->
+                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="usulan-draft">
+                            <!--begin::Table head-->
+                            <thead>
+                                <!--begin::Table row-->
+                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                    <th class="min-w-125px">Isu</th>
+                                    <th class="min-w-125px">Deskripsi Klausul Awal</th>
+                                    <th class="min-w-125px">Usulan Perubahan</th>
+                                    <th class="min-w-125px">Keterangan</th>
+                                </tr>
+                                <!--end::Table row-->
+                            </thead>
+                            <!--end::Table head-->
+                            <!--begin::Table body-->
+                            <tbody class="fw-bold text-gray-600">
+                                @if ($contract->UsulanPerubahanDraft->contains('kategori', 1))
+                                    <tr>
+                                        <td colspan="5" class= "px-4 text-bg-dark">
+                                            <b>Surat Perjanjian Kontrak</b>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        @foreach ($contract->UsulanPerubahanDraft as $perubahan_draft)
+                                            @php
+                                                $pasals = collect(explode("|", $perubahan_draft->pasal_perbaikan));
+                                            @endphp
+                                            @if ($perubahan_draft->kategori == 1)
+                                                <td>{{$perubahan_draft->isu}}</td>
+                                                <td>{{$perubahan_draft->deskripsi_klausul_awal}}</td>
+                                                <td>{{$perubahan_draft->usulan_perubahan_klausul}}</td>
+                                                <td>{{$perubahan_draft->keterangan}}</td>
+                                            @endif
+                                        @endforeach
+                                    </tr>
+                                @endif
+
+                                @if ($contract->UsulanPerubahanDraft->contains('kategori', 2))
+                                    <tr>
+                                        <td colspan="5" class= "px-4 text-bg-dark">
+                                            <b>Syarat-syarat Umum Kontrak (SSUK)</b>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        @foreach ($contract->UsulanPerubahanDraft as $perubahan_draft)
+                                            @php
+                                                $pasals = collect(explode("|", $perubahan_draft->pasal_perbaikan));
+                                            @endphp
+                                            @if ($perubahan_draft->kategori == 2)
+                                                <td>{{$perubahan_draft->isu}}</td>
+                                                <td>{{$perubahan_draft->deskripsi_klausul_awal}}</td>
+                                                <td>{{$perubahan_draft->usulan_perubahan_klausul}}</td>
+                                                <td>{{$perubahan_draft->keterangan}}</td>
+                                            @endif
+                                        @endforeach
+                                    </tr>
+                                @endif
+
+                                @if ($contract->UsulanPerubahanDraft->contains('kategori', 3))
+                                    <tr>
+                                        <td colspan="5" class= "px-4 text-bg-dark">
+                                            <b>Syarat-syarat Khusus Kontrak (SSKK)</b>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        @foreach ($contract->UsulanPerubahanDraft as $perubahan_draft)
+                                            @php
+                                                $pasals = collect(explode("|", $perubahan_draft->pasal_perbaikan));
+                                            @endphp
+                                            @if ($perubahan_draft->kategori == 3)
+                                                <td>{{$perubahan_draft->isu}}</td>
+                                                <td>{{$perubahan_draft->deskripsi_klausul_awal}}</td>
+                                                <td>{{$perubahan_draft->usulan_perubahan_klausul}}</td>
+                                                <td>{{$perubahan_draft->keterangan}}</td>
+                                            @endif
+                                        @endforeach
+                                    </tr>
+                                @endif
+                            </tbody>
+                            <!--end::Table body-->
+
+                        </table>
+                        <!--End:Table: Review-->
+
                         &nbsp;<br>
                         &nbsp;<br>
                         
@@ -1168,16 +1271,16 @@
                                     @forelse ($contract->inputRisks as $inputRisk)
                                         @if ($inputRisk->stage == 0)
                                             <tr>
-                                                <!--begin::Name=-->
+                                                <!--begin::Column-->
                                                 <td>
                                                     <p class="text-gray-600 mb-1">{{ $inputRisk->resiko }}</p>
                                                 </td>
-                                                <!--end::Name=-->
-                                                <!--begin::Name=-->
+                                                <!--end::Column-->
+                                                <!--begin::Column-->
                                                 <td>
                                                     <p class="text-gray-600 mb-1">{{ $inputRisk->penyebab }}</p>
                                                 </td>
-                                                <!--end::Name=-->
+                                                <!--end::Column-->
                                                 <!--begin::Kode=-->
                                                 <td>
                                                     <p class="text-gray-600 mb-1">{{ $inputRisk->dampak }}</p>
@@ -1563,98 +1666,7 @@
 
                         </table>
                         <!--End:Table: Review-->
-                        
-                        <br><br>
-
-                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                                Usulan Perubahan Draft Kontrak
-                                <a href="#" Id="Plus" data-bs-toggle="modal"
-                                    data-bs-target="#kt_modal_usulan_perubahan_draft_kontrak">+</a>
-                            </h3>
-
-                            <!--begin:Table: Review-->
-                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
-                                <!--begin::Table head-->
-                                <thead>
-                                    <!--begin::Table row-->
-                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                        <th class="min-w-125px">Isu</th>
-                                        <th class="min-w-125px">Deskripsi Klausul Awal</th>
-                                        <th class="min-w-125px">Usulan Perubahan</th>
-                                        <th class="min-w-125px">Keterangan</th>
-                                    </tr>
-                                    <!--end::Table row-->
-                                </thead>
-                                <!--end::Table head-->
-                                <!--begin::Table body-->
-                                <tbody class="fw-bold text-gray-600">
-                                    @if ($contract->UsulanPerubahanDraft->contains('kategori', 1))
-                                        <tr>
-                                            <td colspan="5" class= "px-4 text-bg-dark">
-                                                <b>Surat Perjanjian Kontrak</b>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            @foreach ($contract->UsulanPerubahanDraft as $perubahan_draft)
-                                                @php
-                                                    $pasals = collect(explode("|", $perubahan_draft->pasal_perbaikan));
-                                                @endphp
-                                                @if ($perubahan_draft->kategori == 1)
-                                                    <td>{{$perubahan_draft->isu}}</td>
-                                                    <td>{{$perubahan_draft->deskripsi_klausul_awal}}</td>
-                                                    <td>{{$perubahan_draft->usulan_perubahan_klausul}}</td>
-                                                    <td>{{$perubahan_draft->keterangan}}</td>
-                                                @endif
-                                            @endforeach
-                                        </tr>
-                                    @endif
-
-                                    @if ($contract->UsulanPerubahanDraft->contains('kategori', 2))
-                                        <tr>
-                                            <td colspan="5" class= "px-4 text-bg-dark">
-                                                <b>Syarat-syarat Umum Kontrak (SSUK)</b>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            @foreach ($contract->UsulanPerubahanDraft as $perubahan_draft)
-                                                @php
-                                                    $pasals = collect(explode("|", $perubahan_draft->pasal_perbaikan));
-                                                @endphp
-                                                @if ($perubahan_draft->kategori == 2)
-                                                    <td>{{$perubahan_draft->isu}}</td>
-                                                    <td>{{$perubahan_draft->deskripsi_klausul_awal}}</td>
-                                                    <td>{{$perubahan_draft->usulan_perubahan_klausul}}</td>
-                                                    <td>{{$perubahan_draft->keterangan}}</td>
-                                                @endif
-                                            @endforeach
-                                        </tr>
-                                    @endif
-
-                                    @if ($contract->UsulanPerubahanDraft->contains('kategori', 3))
-                                        <tr>
-                                            <td colspan="5" class= "px-4 text-bg-dark">
-                                                <b>Syarat-syarat Khusus Kontrak (SSKK)</b>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            @foreach ($contract->UsulanPerubahanDraft as $perubahan_draft)
-                                                @php
-                                                    $pasals = collect(explode("|", $perubahan_draft->pasal_perbaikan));
-                                                @endphp
-                                                @if ($perubahan_draft->kategori == 3)
-                                                    <td>{{$perubahan_draft->isu}}</td>
-                                                    <td>{{$perubahan_draft->deskripsi_klausul_awal}}</td>
-                                                    <td>{{$perubahan_draft->usulan_perubahan_klausul}}</td>
-                                                    <td>{{$perubahan_draft->keterangan}}</td>
-                                                @endif
-                                            @endforeach
-                                        </tr>
-                                    @endif
-                                </tbody>
-                                <!--end::Table body-->
-
-                            </table>
-                            <!--End:Table: Review-->
+ 
                     </div>
                     
                 {{-- </div>
@@ -1727,7 +1739,7 @@
                                 @if (!empty($contract->PerjanjianKSO))
                                     @forelse ($contract->PerjanjianKSO as $perjanjian_kso)
                                         <tr>
-                                            <!--begin::Name=-->
+                                            <!--begin::Column-->
                                             <td>
                                                 <a target="_blank"
                                                     href="/document/view/{{ $perjanjian_kso->id_perjanjian_kso }}/{{ $perjanjian_kso->id_document }}"
@@ -1735,12 +1747,12 @@
                                                     {{ $perjanjian_kso->document_name }}
                                                 </a>
                                             </td>
-                                            <!--end::Name=-->
-                                            <!--begin::Name=-->
+                                            <!--end::Column-->
+                                            <!--begin::Column-->
                                             <td>
                                                 <p class="text-gray-600 mb-1">{{ $perjanjian_kso->User->name }}</p>
                                             </td>
-                                            <!--end::Name=-->
+                                            <!--end::Column-->
                                             <!--begin::Kode=-->
                                             <td>
                                                 <p class="text-gray-600 mb-1">
@@ -1799,7 +1811,7 @@
                                 @if (!empty($contract->DokumenPendukung))
                                     @forelse ($contract->DokumenPendukung as $dokumen_pendukung)
                                         <tr>
-                                            <!--begin::Name=-->
+                                            <!--begin::Column-->
                                             <td>
                                                 <a target="_blank"
                                                     href="/document/view/{{ $dokumen_pendukung->id_dokumen_pendukung }}/{{ $dokumen_pendukung->id_document }}"
@@ -1807,13 +1819,13 @@
                                                     {{ $dokumen_pendukung->document_name }}
                                                 </a>
                                             </td>
-                                            <!--end::Name=-->
-                                            <!--begin::Name=-->
+                                            <!--end::Column-->
+                                            <!--begin::Column-->
                                             <td>
                                                 <p class="text-gray-600 mb-1">{{ $dokumen_pendukung->User->name }}
                                                 </p>
                                             </td>
-                                            <!--end::Name=-->
+                                            <!--end::Column-->
                                             <!--begin::Kode=-->
                                             <td>
                                                 <p class="text-gray-600 mb-1">
@@ -1888,7 +1900,7 @@
                                 @if (isset($contract))
                                     @forelse ($contract->monthlyReports as $monthlyReport)
                                         <tr>
-                                            <!--begin::Name=-->
+                                            <!--begin::Column-->
                                             <td>
                                                 <a target="_blank"
                                                     href="/document/view/{{ $monthlyReport->id_report }}/{{ $monthlyReport->id_document }}"
@@ -1896,8 +1908,8 @@
                                                     {{ $monthlyReport->document_name_report }}
                                                 </a>
                                             </td>
-                                            <!--end::Name=-->
-                                            <!--begin::Name=-->
+                                            <!--end::Column-->
+                                            <!--begin::Column-->
                                             <td>
                                                 <a target="_blank"
                                                     href="/document/view/{{ $monthlyReport->id_report }}/{{ $monthlyReport->id_document }}"
@@ -1905,7 +1917,7 @@
                                                     {{ $monthlyReport->id_document }}
                                                 </a>
                                             </td>
-                                            <!--end::Name=-->
+                                            <!--end::Column-->
                                             <!--begin::Kode=-->
                                             <td>
                                                 <a href="#" class="text-gray-400 text-hover-primary mb-1">
@@ -1963,7 +1975,7 @@
                                 @if (isset($contract))
                                     @forelse ($contract->addendumContracts as $addendumContract)
                                         <tr>
-                                            <!--begin::Name=-->
+                                            <!--begin::Column-->
                                             <td>
                                                 <a target="_blank"
                                                     href="/contract-management/view/{{ $contract->id_contract }}/addendum-contract/{{ $addendumContract->id_addendum }}"
@@ -1971,14 +1983,14 @@
                                                     {{ $addendumContract->no_addendum }}
                                                 </a>
                                             </td>
-                                            <!--end::Name=-->
-                                            <!--begin::Name=-->
+                                            <!--end::Column-->
+                                            <!--begin::Column-->
                                             <td>
                                                 <a href="#" class="text-gray-600 text-hover-primary mb-1">
                                                     {{ $addendumContract->created_by }}
                                                 </a>
                                             </td>
-                                            <!--end::Name=-->
+                                            <!--end::Column-->
                                             <!--begin::Kode=-->
                                             <td>
                                                 <a href="#" class="text-gray-400 text-hover-primary mb-1">
@@ -2032,7 +2044,7 @@
                                 @if (isset($contract->project->ClaimManagements))
                                     @forelse ($contract->project->ClaimManagements as $claimManagement)
                                         <tr>
-                                            <!--begin::Name=-->
+                                            <!--begin::Column-->
                                             <td>
                                                 <a target="_blank"
                                                     href="/claim-management/view/{{ $claimManagement->id_claim }}"
@@ -2040,14 +2052,14 @@
                                                     {{ $claimManagement->id_claim }}
                                                 </a>
                                             </td>
-                                            <!--end::Name=-->
-                                            <!--begin::Name=-->
+                                            <!--end::Column-->
+                                            <!--begin::Column-->
                                             <td>
                                                 <a href="#" class="text-gray-600 text-hover-primary mb-1">
                                                     {{ $claimManagement->pic }}
                                                 </a>
                                             </td>
-                                            <!--end::Name=-->
+                                            <!--end::Column-->
                                             <!--begin::Kode=-->
                                             <td>
                                                 <a href="#" class="text-gray-400 text-hover-primary mb-1">
@@ -2104,7 +2116,7 @@
                                 @if (!empty($contract->MoMMeeting))
                                     @forelse ($contract->MoMMeeting as $mom_meeting)
                                         <tr>
-                                            <!--begin::Name=-->
+                                            <!--begin::Column-->
                                             <td>
                                                 <a target="_blank"
                                                     href="/document/view/{{ $mom_meeting->id_mom }}/{{ $mom_meeting->id_document }}"
@@ -2112,12 +2124,12 @@
                                                     {{ $mom_meeting->document_name }}
                                                 </a>
                                             </td>
-                                            <!--end::Name=-->
-                                            <!--begin::Name=-->
+                                            <!--end::Column-->
+                                            <!--begin::Column-->
                                             <td>
                                                 <p class="text-gray-600 mb-1">{{ $mom_meeting->User->name }}</p>
                                             </td>
-                                            <!--end::Name=-->
+                                            <!--end::Column-->
                                             <!--begin::Kode=-->
                                             <td>
                                                 <p class="text-gray-600 mb-1">
@@ -2150,14 +2162,14 @@
                         </table>
                         <!--End:Table: Claim Contract--> --}}
 
-                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                        <h3 class="fw-bolder m-0 mb-3" id="HeadDetail" style="font-size:14px;">
                             Input Resiko - Pelaksanaan
                             <a href="#" Id="Plus" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_input_resiko_pelaksanaan">+</a>
                         </h3>
 
                         <!--begin:Table: Review-->
-                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="input-risk">
                             <!--begin::Table head-->
                             <thead>
                                 <!--begin::Table row-->
@@ -2177,12 +2189,12 @@
                                 @forelse ($contract->inputRisks as $inputRisk)
                                     @if ($inputRisk->stage <= 2)
                                     <tr>
-                                        <!--begin::Name=-->
+                                        <!--begin::Column-->
                                         <td>
                                             <a href="#" Id="edit_resiko_perolehan" data-bs-toggle="modal"
                                                 data-bs-target="#kt_modal_edit_resiko_perolehan_{{ $inputRisk->id_risk }}"><p class="text-gray-600 mb-1 text-hover-primary">{{ $inputRisk->kategori }}</p></a>
                                         </td>
-                                        <!--end::Name=-->
+                                        <!--end::Column-->
                                         <!--begin::Kode=-->
                                         <td>
                                             <p class="text-gray-600 mb-1">{{ $inputRisk->kriteria }}</p>
@@ -2250,18 +2262,18 @@
                                 @if ($contract->RencanaKerjaManajemen->count() > 0)
                                     @forelse ($contract->RencanaKerjaManajemen as $key => $rencana_kerja)
                                         <tr>
-                                            <!--begin::Name=-->
+                                            <!--begin::Column-->
                                             <td>
                                                 <a target="_blank" href="{{ asset('words/'.$rencana_kerja->id_document) }}" class="text-hover-primary">
                                                     {{ $rencana_kerja->nama_document }}
                                                 </a>
                                             </td>
-                                            <!--end::Name=-->
-                                            <!--begin::Name=-->
+                                            <!--end::Column-->
+                                            <!--begin::Column-->
                                             <td>
                                                 <p class="text-gray-600 mb-1">{{ Carbon\Carbon::parse($rencana_kerja->created_at)->translatedFormat("d F Y") }}</p>
                                             </td>
-                                            <!--end::Name=-->
+                                            <!--end::Column-->
                                         </tr>
                                     @empty
                                         <tr>
@@ -2312,26 +2324,26 @@
                                             <td>
                                                 <p class="text-gray-600 mb-1">{{ $key + 1 }}</p>
                                             </td>
-                                            <!--begin::Name=-->
+                                            <!--begin::Column-->
                                             <td>
                                                 <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! $pk->item !!}</pre>
                                             </td>
-                                            <!--end::Name=-->
-                                            <!--begin::Name=-->
+                                            <!--end::Column-->
+                                            <!--begin::Column-->
                                             <td>
                                                 <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! $pk->pasal !!}</pre>
                                             </td>
-                                            <!--end::Name=-->
-                                            <!--begin::Name=-->
+                                            <!--end::Column-->
+                                            <!--begin::Column-->
                                             <td>
                                                 <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! Carbon\Carbon::create($pk->perpanjangan_waktu)->translatedFormat("d F Y") !!}</pre>
                                             </td>
-                                            <!--end::Name=-->
-                                            <!--begin::Name=-->
+                                            <!--end::Column-->
+                                            <!--begin::Column-->
                                             <td>
                                                 <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! number_format($pk->tambahan_biaya, 0, ".", ".") !!}</pre>
                                             </td>
-                                            <!--end::Name=-->
+                                            <!--end::Column-->
                                         </tr>
                                     @empty
                                         <tr>
@@ -2353,14 +2365,14 @@
                         </table>
                         <!--End:Table: Pasal Kontraktual-->
 
-                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                        <h3 class="fw-bolder m-0 mb-3 " id="HeadDetail" style="font-size:14px;">
                             Perubahan Kontrak
                             <a href="#" Id="Plus" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_input_perubahan_kontrak">+</a>
                         </h3>
 
                         <!--begin:Table: Perubahan Kontrak-->
-                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="perubahan-kontrak">
                             <!--begin::Table head-->
                             <thead>
                                 <!--begin::Table row-->
@@ -2385,17 +2397,17 @@
                                         <td>
                                             <a target="_blank" href="/contract-management/view/{{url_encode($contract->id_contract)}}/perubahan-kontrak/{{$pk->id_perubahan_kontrak}}" class="text-hover-primary">{{ $pk->jenis_perubahan }}</a>
                                         </td>
-                                        <!--begin::Name=-->
+                                        <!--begin::Column-->
                                         <td>
                                             <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! Carbon\Carbon::create($pk->tanggal_perubahan)->translatedFormat("d F Y") !!}</pre>
                                         </td>
-                                        <!--end::Name=-->
-                                        <!--begin::Name=-->
+                                        <!--end::Column-->
+                                        <!--begin::Column-->
                                         <td>
                                             <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! $pk->uraian_perubahan !!}</pre>
                                         </td>
-                                        <!--end::Name=-->
-                                        <!--begin::Name=-->
+                                        <!--end::Column-->
+                                        <!--begin::Column-->
                                         @if (!empty($pk->JenisDokumen->toArray()))
                                             @foreach ($pk->JenisDokumen as $jd)
                                                 <td>
@@ -2455,27 +2467,27 @@
                                                 <p class="mb-1 fw-normal badge badge-light-danger" style="font-family: 'Poppins';">Belum Ditentukan</p>
                                             </td>
                                         @endif
-                                        <!--end::Name=-->
-                                        <!--begin::Name=-->
+                                        <!--end::Column-->
+                                        <!--begin::Column-->
                                         <td>
                                             <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! $pk->proposal_klaim !!}</pre>
                                         </td>
-                                        <!--end::Name=-->
-                                        <!--begin::Name=-->
+                                        <!--end::Column-->
+                                        <!--begin::Column-->
                                         <td>
                                             <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! Carbon\Carbon::create($pk->tanggal_pengajuan)->translatedFormat("d F Y") !!}</pre>
                                         </td>
-                                        <!--end::Name=-->
-                                        <!--begin::Name=-->
+                                        <!--end::Column-->
+                                        <!--begin::Column-->
                                         <td>
                                             <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! number_format($pk->biaya_pengajuan, 0, ".", ".") !!}</pre>
                                         </td>
-                                        <!--end::Name=-->
-                                        <!--begin::Name=-->
+                                        <!--end::Column-->
+                                        <!--begin::Column-->
                                         <td>
                                             <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! Carbon\Carbon::create($pk->waktu_pengajuan)->translatedFormat("d F Y") !!}</pre>
                                         </td>
-                                        <!--end::Name=-->
+                                        <!--end::Column-->
                                     </tr>
                                 @empty
                                     <tr>
@@ -2490,6 +2502,8 @@
                         <!--End:Table: Perubahan Kontrak-->
 
                         <br>
+                        <br>
+
                         <!--Begin::Document Site Instruction-->
                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                             Dokumen Site Instruction
@@ -2862,7 +2876,7 @@
                                         <!--begin::Nomor Dokumen-->
                                         <td>
                                             <a target="_blank" href="{{ asset('words/'.$change_notice->id_document) }}" class="text-hover-primary">
-                                                {{ $field_change->id_document }}
+                                                {{ $change_notice->id_document }}
                                             </a>
                                         </td>
                                         <!--end::Nomor Dokumen-->
@@ -3275,12 +3289,12 @@
                                         @forelse ($contract->inputRisks as $inputRisk)
                                             @if ($inputRisk->stage <= 3)
                                             <tr>
-                                                <!--begin::Name=-->
+                                                <!--begin::Column-->
                                                 <td>
                                                     <a href="#" Id="edit_resiko_perolehan" data-bs-toggle="modal"
                                                         data-bs-target="#kt_modal_edit_resiko_perolehan_{{ $inputRisk->id_risk }}"><p class="text-gray-600 mb-1 text-hover-primary">{{ $inputRisk->kategori }}</p></a>
                                                 </td>
-                                                <!--end::Name=-->
+                                                <!--end::Column-->
                                                 <!--begin::Kode=-->
                                                 <td>
                                                     <p class="text-gray-600 mb-1">{{ $inputRisk->kriteria }}</p>
@@ -3356,13 +3370,13 @@
                             @if (count($list_document_ba_defect) > 0 && $list_document_ba_defect[0] != '')
                                 @forelse ($list_document_ba_defect as $key => $ba_defect)
                                     <tr>
-                                        <!--begin::Name=-->
+                                        <!--begin::Column-->
                                         <td>
                                             <a href="/document/view/{{ $contract->id_contract }}/{{ $ba_defect }}"
                                                 class="text-gray-600 text-hover-primary">Dokumen BA Defect
                                                 #{{ $key + 1 }}</a>
                                         </td>
-                                        <!--end::Name=-->
+                                        <!--end::Column-->
                                     </tr>
                                 @empty
                                     <tr>
@@ -3411,24 +3425,24 @@
                                         <td>
                                             <p class="text-gray-600">{{ $pending_issue->issue }}</p>
                                         </td>
-                                        <!--end::Name=-->
+                                        <!--end::Column-->
                                         
                                         <td>
                                             <p class="text-gray-600">{{ $pending_issue->penyebab }}</p>
                                         </td>
 
                                         @if ($pending_issue->status)
-                                            <!--begin::Name=-->
+                                            <!--begin::Column-->
                                             <td>
                                                 <p class="text-gray-600">Open</p>
                                             </td>
-                                            <!--end::Name=-->
+                                            <!--end::Column-->
                                         @else
-                                            <!--begin::Name=-->
+                                            <!--begin::Column-->
                                             <td>
                                                 <p class="text-gray-600">Closed</p>
                                             </td>
-                                            <!--end::Name=-->
+                                            <!--end::Column-->
                                         @endif
                                     </tr>
                                 @endforeach
@@ -3469,13 +3483,13 @@
                             @if (count($list_document_dokumen_pendukung) > 0 && $list_document_dokumen_pendukung[0] != '')
                                 @forelse ($list_document_dokumen_pendukung as $key => $dokumen_pendukung)
                                     <tr>
-                                        <!--begin::Name=-->
+                                        <!--begin::Column-->
                                         <td>
                                             <a href="/document/view/{{ $contract->id_contract }}/{{ $dokumen_pendukung }}"
                                                 class="text-gray-600 text-hover-primary">Dokumen Lainnya
                                                 #{{ $key + 1 }}</a>
                                         </td>
-                                        <!--end::Name=-->
+                                        <!--end::Column-->
                                     </tr>
                                 @empty
                                     <tr>
@@ -10337,6 +10351,66 @@ aria-hidden="true">
             });
         }
     }
+</script>
+
+
+<!--begin::Data Tables-->
+<script src="/datatables/jquery.dataTables.min.js"></script>
+<script src="/datatables/dataTables.buttons.min.js"></script>
+<script src="/datatables/buttons.html5.min.js"></script>
+<script src="/datatables/buttons.colVis.min.js"></script>
+<script src="/datatables/jszip.min.js"></script>
+<script src="/datatables/pdfmake.min.js"></script>
+<script src="/datatables/vfs_fonts.js"></script>
+<!--end::Data Tables-->
+
+<script>
+    $(document).ready(function() {
+        $('#perubahan-kontrak').DataTable( {
+            // dom: 'Bfrtip',
+            dom: 'Brti',
+            pageLength : 50,
+            buttons: [
+                    'copy', 'excel', 'pdf', 'print'
+                ]
+        } );
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        $('#data-aanwitjzing').DataTable( {
+            // dom: 'Bfrtip',
+            dom: 'Brti',
+            pageLength : 50,
+            buttons: [
+                    'copy', 'excel', 'pdf', 'print'
+                ]
+        } );
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        $('#input-risk').DataTable( {
+            // dom: 'Bfrtip',
+            dom: 'Brti',
+            pageLength : 50,
+            buttons: [
+                    'copy', 'excel', 'pdf', 'print'
+                ]
+        } );
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        $('#usulan-draft').DataTable( {
+            // dom: 'Bfrtip',
+            dom: 'Brti',
+            pageLength : 50,
+            buttons: [
+                    'copy', 'excel', 'pdf', 'print'
+                ]
+        } );
+    });
 </script>
 
 @endsection

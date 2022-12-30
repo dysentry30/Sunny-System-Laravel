@@ -365,13 +365,13 @@
 @section('js-script')
 
     <!--begin::Data Tables-->
-    <script src="datatables/jquery.dataTables.min.js"></script>
-    <script src="datatables/dataTables.buttons.min.js"></script>
-    <script src="datatables/buttons.html5.min.js"></script>
-    <script src="datatables/buttons.colVis.min.js"></script>
-    <script src="datatables/jszip.min.js"></script>
-    <script src="datatables/pdfmake.min.js"></script>
-    <script src="datatables/vfs_fonts.js"></script>
+    <script src="/datatables/jquery.dataTables.min.js"></script>
+    <script src="/datatables/dataTables.buttons.min.js"></script>
+    <script src="/datatables/buttons.html5.min.js"></script>
+    <script src="/datatables/buttons.colVis.min.js"></script>
+    <script src="/datatables/jszip.min.js"></script>
+    <script src="/datatables/pdfmake.min.js"></script>
+    <script src="/datatables/vfs_fonts.js"></script>
     
     <script>
         $(document).ready(function() {
