@@ -34,6 +34,9 @@
         border: none !important;
         border-radius: 5px !important;
     }
+    .animate.slide {
+        transition: .3s all linear;
+    }
 </style>
 
 @empty($contract)
@@ -776,6 +779,10 @@
                             Aanwitjzing
                             <a href="#" Id="Plus" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_question_proyek">+</a>
+                                @if (!empty($contract->questionsProjects->toArray()))
+                                    <a href="#" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_upload_aanwitjzing" class="btn btn-primary btn-sm p-2 mx-3 text-end">Upload</a>
+                                @endif
                         </h3>
 
                         <!--begin:Table: Review-->
@@ -822,24 +829,32 @@
                                             </tr>
                                         @endif
                                     @empty
-                                        {{-- <tr>
+                                        <tr>
                                             <td colspan="4" class="text-center">
                                                 <h6><b>There is no data</b></h6>
                                             </td>
-                                        </tr> --}}
+                                        </tr>
                                     @endforelse
                                 @else
-                                    {{-- <tr>
+                                    <tr>
                                         <td colspan="4" class="text-center">
                                             <h6><b>There is no data</b></h6>
                                         </td>
-                                    </tr> --}}
+                                    </tr>
                                 @endif
                             </tbody>
                             <!--end::Table body-->
 
                         </table>
+                        @php
+                            $uploadFileAanwitjzing = $contract->UploadFinal->where("category", "=", "aanwitjzing")->first();
+                        @endphp
                         <!--End:Table: Review-->
+                        @if (!empty($uploadFileAanwitjzing))
+                        <a target="_blank" href="{{ asset('words/'.$uploadFileAanwitjzing->id_document) }}" class="text-hover-primary">
+                            download file : {{ $uploadFileAanwitjzing->nama_document }}
+                        </a>
+                        @endif
 
                         <br><br>
 
@@ -1063,7 +1078,9 @@
 
                         
                         <h3 class="fw-bolder m-0 mb-3" id="HeadDetail" style="font-size:14px;">
-                            Input Resiko - Perolehan (<i>Upload File</i>)
+                            Input Resiko - Perolehan (<i class="text-hover-primary text-gray"><a 
+                                                            href="https://crm.wika.co.id/faqs/104625_RiskTender_Input-Kosong.rev.xlsx"> Download
+                                                            Template Risk Tender </a></i>)
                             <a href="#" Id="Plus" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_input_resiko_perolehan">+</a>
                         </h3>
@@ -1153,6 +1170,10 @@
                             Usulan Perubahan Draft Kontrak
                             <a href="#" Id="Plus" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_usulan_perubahan_draft_kontrak">+</a>
+                                @if (!empty($contract->UsulanPerubahanDraft->toArray()))
+                                    <a href="#" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_upload_perubahan_kontrak" class="btn btn-primary btn-sm p-2 mx-3 text-end">Upload</a>
+                                @endif
                         </h3>
 
                         <!--begin:Table: Review-->
@@ -1161,10 +1182,11 @@
                             <thead>
                                 <!--begin::Table row-->
                                 <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-125px">Isu</th>
-                                    <th class="min-w-125px">Deskripsi Klausul Awal</th>
-                                    <th class="min-w-125px">Usulan Perubahan</th>
-                                    <th class="min-w-125px">Keterangan</th>
+                                    <th class="min-w-auto">Isu</th>
+                                    <th class="min-w-auto">Kategori</th>
+                                    <th class="min-w-auto">Deskripsi Klausul Awal</th>
+                                    <th class="min-w-auto">Usulan Perubahan</th>
+                                    <th class="min-w-auto">Keterangan</th>
                                 </tr>
                                 <!--end::Table row-->
                             </thead>
@@ -1172,11 +1194,11 @@
                             <!--begin::Table body-->
                             <tbody class="fw-bold text-gray-600">
                                 @if ($contract->UsulanPerubahanDraft->contains('kategori', 1))
-                                    <tr>
+                                    {{-- <tr>
                                         <td colspan="5" class= "px-4 text-bg-dark">
                                             <b>Surat Perjanjian Kontrak</b>
                                         </td>
-                                    </tr>
+                                    </tr> --}}
                                     <tr>
                                         @foreach ($contract->UsulanPerubahanDraft as $perubahan_draft)
                                             @php
@@ -1184,6 +1206,7 @@
                                             @endphp
                                             @if ($perubahan_draft->kategori == 1)
                                                 <td>{{$perubahan_draft->isu}}</td>
+                                                <td>Surat Perjanjian Kontrak</td>
                                                 <td>{{$perubahan_draft->deskripsi_klausul_awal}}</td>
                                                 <td>{{$perubahan_draft->usulan_perubahan_klausul}}</td>
                                                 <td>{{$perubahan_draft->keterangan}}</td>
@@ -1193,11 +1216,11 @@
                                 @endif
 
                                 @if ($contract->UsulanPerubahanDraft->contains('kategori', 2))
-                                    <tr>
+                                    {{-- <tr>
                                         <td colspan="5" class= "px-4 text-bg-dark">
                                             <b>Syarat-syarat Umum Kontrak (SSUK)</b>
                                         </td>
-                                    </tr>
+                                    </tr> --}}
                                     <tr>
                                         @foreach ($contract->UsulanPerubahanDraft as $perubahan_draft)
                                             @php
@@ -1205,6 +1228,7 @@
                                             @endphp
                                             @if ($perubahan_draft->kategori == 2)
                                                 <td>{{$perubahan_draft->isu}}</td>
+                                                <td>Syarat-syarat Umum Kontrak (SSUK)</td>
                                                 <td>{{$perubahan_draft->deskripsi_klausul_awal}}</td>
                                                 <td>{{$perubahan_draft->usulan_perubahan_klausul}}</td>
                                                 <td>{{$perubahan_draft->keterangan}}</td>
@@ -1214,11 +1238,11 @@
                                 @endif
 
                                 @if ($contract->UsulanPerubahanDraft->contains('kategori', 3))
-                                    <tr>
+                                    {{-- <tr>
                                         <td colspan="5" class= "px-4 text-bg-dark">
                                             <b>Syarat-syarat Khusus Kontrak (SSKK)</b>
                                         </td>
-                                    </tr>
+                                    </tr> --}}
                                     <tr>
                                         @foreach ($contract->UsulanPerubahanDraft as $perubahan_draft)
                                             @php
@@ -1226,6 +1250,7 @@
                                             @endphp
                                             @if ($perubahan_draft->kategori == 3)
                                                 <td>{{$perubahan_draft->isu}}</td>
+                                                <td>Syarat-syarat Khusus Kontrak (SSKK)</td>
                                                 <td>{{$perubahan_draft->deskripsi_klausul_awal}}</td>
                                                 <td>{{$perubahan_draft->usulan_perubahan_klausul}}</td>
                                                 <td>{{$perubahan_draft->keterangan}}</td>
@@ -1238,6 +1263,15 @@
 
                         </table>
                         <!--End:Table: Review-->
+                        @php
+                        $uploadFilePerubahan = $contract->UploadFinal->where("category", "=", "usulan-perubahan")->first();
+                        @endphp
+                        <!--End:Table: Review-->
+                        @if (!empty($uploadFilePerubahan))
+                        <a target="_blank" href="{{ asset('words/'.$uploadFilePerubahan->id_document) }}" class="text-hover-primary">
+                            download file : {{ $uploadFilePerubahan->nama_document }}
+                        </a>
+                        @endif
 
                         &nbsp;<br>
                         &nbsp;<br>
@@ -2166,6 +2200,10 @@
                             Input Resiko - Pelaksanaan
                             <a href="#" Id="Plus" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_input_resiko_pelaksanaan">+</a>
+                                @if (!empty($contract->inputRisks->toArray()))
+                                    <a href="#" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_upload_resiko_pelaksanaan" class="btn btn-primary btn-sm p-2 mx-3 text-end">Upload</a>
+                                @endif
                         </h3>
 
                         <!--begin:Table: Review-->
@@ -2238,7 +2276,18 @@
 
                         </table>
                         <!--End:Table: Review-->
+                        
+                        @php
+                        $uploadFileResiko = $contract->UploadFinal->where("category", "=", "resiko-pelaksanaan")->first();
+                        @endphp
+                        <!--End:Table: Review-->
+                        @if (!empty($uploadFileResiko))
+                        <a target="_blank" href="{{ asset('words/'.$uploadFileResiko->id_document) }}" class="text-hover-primary">
+                            download file : {{ $uploadFileResiko->nama_document }}
+                        </a>
+                        @endif
                         <br><br>
+
                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                             Rencana Kerja Manajemen Kontrak
                             <a href="#" Id="Plus" data-bs-toggle="modal"
@@ -2500,6 +2549,138 @@
 
                         </table>
                         <!--End:Table: Perubahan Kontrak-->
+
+                        <br>
+                        <br>
+
+                        <h3 class="fw-bolder m-0 mb-3 " id="HeadDetail" style="font-size:14px;">
+                            Checklist Manajemen Kontrak
+                            <a href="#" Id="Plus" data-bs-toggle="modal"
+                                data-bs-target="#kt_modal_input_checklist_manajemen">+</a>
+                        </h3>
+
+                        <!--begin:Table: Checklist Manajemen Kontrak-->
+                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="perubahan-kontrak">
+                            <!--begin::Table head-->
+                            <thead>
+                                <!--begin::Table row-->
+                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                    <th class="min-w-auto">Kategori</th>
+                                    <th class="min-w-auto">Tanggal Pembuatan</th>
+                                </tr>
+                                <!--end::Table row-->
+                            </thead>
+                            <!--end::Table head-->
+                            <!--begin::Table body-->
+                            <tbody class="fw-bold text-gray-400">
+                                {{-- @forelse ($contract->PerubahanKontrak as $key => $pk)
+                                    <tr class="fw-bold">
+                                        <td>
+                                            <a target="_blank" href="/contract-management/view/{{url_encode($contract->id_contract)}}/perubahan-kontrak/{{$pk->id_perubahan_kontrak}}" class="text-hover-primary">{{ $pk->jenis_perubahan }}</a>
+                                        </td>
+                                        <!--begin::Column-->
+                                        <td>
+                                            <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! Carbon\Carbon::create($pk->tanggal_perubahan)->translatedFormat("d F Y") !!}</pre>
+                                        </td>
+                                        <!--end::Column-->
+                                        <!--begin::Column-->
+                                        <td>
+                                            <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! $pk->uraian_perubahan !!}</pre>
+                                        </td>
+                                        <!--end::Column-->
+                                        <!--begin::Column-->
+                                        @if (!empty($pk->JenisDokumen->toArray()))
+                                            @foreach ($pk->JenisDokumen as $jd)
+                                                <td>
+                                                    <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! $jd->jenis_dokumen !!}</pre>
+                                                </td>
+                                                @php
+                                                    $list_instruksi_owner = collect(explode(",", $jd->list_instruksi_owner));
+                                                @endphp
+                                                <td>
+                                                    @foreach ($list_instruksi_owner as $lio)
+                                                        @switch($jd->jenis_dokumen)
+                                                            @case("Site Instruction")
+                                                                    @php
+                                                                        $lio = App\Models\SiteInstruction::where("nomor_dokumen" , "=", $lio)->get()->first();
+                                                                    @endphp
+                                                                @break
+                                                            @case("Technical Form")
+                                                                    @php
+                                                                        $lio = App\Models\TechnicalForm::where("nomor_dokumen" , "=", $lio)->get()->first();
+                                                                    @endphp
+                                                                @break
+                                                            @case("Technical Query")
+                                                                    @php
+                                                                        $lio = App\Models\TechnicalQuery::where("nomor_dokumen" , "=", $lio)->get()->first();
+                                                                    @endphp
+                                                                @break
+                                                            @case("Field Design Change")
+                                                                    @php
+                                                                        $lio = App\Models\FieldDesignChange::where("nomor_dokumen" , "=", $lio)->get()->first();
+                                                                    @endphp
+                                                                @break
+                                                            @case("Contract Change Notice")
+                                                                    @php
+                                                                        $lio = App\Models\ContractChangeNotice::where("nomor_dokumen" , "=", $lio)->get()->first();
+                                                                    @endphp
+                                                                @break
+                                                            @case("Contract Change Proposal")
+                                                                    @php
+                                                                        $lio = App\Models\ContractChangeProposal::where("nomor_dokumen" , "=", $lio)->get()->first();
+                                                                    @endphp
+                                                                @break
+                                                            @case("Contract Change Order")
+                                                                    @php
+                                                                        $lio = App\Models\ContractChangeOrder::where("nomor_dokumen" , "=", $lio)->get()->first();
+                                                                    @endphp
+                                                                @break
+                                                        @endswitch
+                                                        - <a target="_blank" href="{{ asset("words/$lio->id_document.pdf"); }}">{{$lio->nomor_dokumen}}</a> <br>
+                                                    @endforeach
+                                                </td>
+                                            @endforeach
+                                        @else
+                                            <td>
+                                                <p class="mb-1 fw-normal badge badge-light-danger" style="font-family: 'Poppins';">Belum Ditentukan</p>
+                                            </td>
+                                            <td>
+                                                <p class="mb-1 fw-normal badge badge-light-danger" style="font-family: 'Poppins';">Belum Ditentukan</p>
+                                            </td>
+                                        @endif
+                                        <!--end::Column-->
+                                        <!--begin::Column-->
+                                        <td>
+                                            <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! $pk->proposal_klaim !!}</pre>
+                                        </td>
+                                        <!--end::Column-->
+                                        <!--begin::Column-->
+                                        <td>
+                                            <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! Carbon\Carbon::create($pk->tanggal_pengajuan)->translatedFormat("d F Y") !!}</pre>
+                                        </td>
+                                        <!--end::Column-->
+                                        <!--begin::Column-->
+                                        <td>
+                                            <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! number_format($pk->biaya_pengajuan, 0, ".", ".") !!}</pre>
+                                        </td>
+                                        <!--end::Column-->
+                                        <!--begin::Column-->
+                                        <td>
+                                            <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! Carbon\Carbon::create($pk->waktu_pengajuan)->translatedFormat("d F Y") !!}</pre>
+                                        </td>
+                                        <!--end::Column-->
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="9" class="fw-bolder text-center">There is no data</td>
+                                    </tr>
+                                @endforelse --}}
+                                
+                            </tbody>
+                            <!--end::Table body-->
+
+                        </table>
+                        <!--End:Table: Checklist Manajemen Kontrak-->
 
                         <br>
                         <br>
@@ -7195,7 +7376,7 @@
     <!--begin::Modal - Question Tender Menang-->
     <div class="modal fade" id="kt_modal_input_rencana_kerja_kontrak" tabindex="-1" aria-hidden="true">
         <!--begin::Modal dialog-->
-        <div class="modal-dialog modal-dialog-centered mw-900px">
+        <div class="modal-dialog modal-dialog-centered mw-500px">
             <!--begin::Modal content-->
             <div class="modal-content">
                 <!--begin::Modal header-->
@@ -7230,7 +7411,7 @@
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                 {{-- <input type="hidden" value="1" name="is-tender-menang">
-                    <input type="hidden" class="modal-name" name="modal-name">
+                                <input type="hidden" class="modal-name" name="modal-name">
                                  --}}
                                 {{-- <textarea name="ketentuan-rencana-kerja" id="ketentuan-rencana-kerja" rows="10"
                                     class="form-control form-control-solid"></textarea> --}}
@@ -7238,7 +7419,13 @@
 
                                 <!--end::Input-->
                             </div>
+                            {{-- 
 {{-- 
+                            {{-- 
+{{-- 
+                            {{-- 
+{{-- 
+                            {{-- 
                             <br><br>
 
                             <div class="col">
@@ -7250,7 +7437,7 @@
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                 {{-- <input type="hidden" value="1" name="is-tender-menang">
-                    <input type="hidden" class="modal-name" name="modal-name">
+                                <input type="hidden" class="modal-name" name="modal-name">
                                  --}}
                                 <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
                                     name="id-contract">
@@ -8135,7 +8322,590 @@
     <!--end::Modal dialog-->
     </div>
 <!--end::Modal - Pasal Kontraktual-->
+<!--begin::Modal - Pasal Kontraktual-->
+<div class="modal fade" id="kt_modal_input_checklist_manajemen" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog modal-dialog-centered mw-900px">
+        <!--begin::Modal content-->
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header">
+                <!--begin::Modal title-->
+                <h2>Add Checklist Manajemen Kontrak</h2>
+                <!--end::Modal title-->
+                <!--begin::Close-->
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                            viewBox="0 0 24 24" fill="none">
+                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2"
+                                rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
+                            <rect x="7.41422" y="6" width="16" height="2" rx="1"
+                                transform="rotate(45 7.41422 6)" fill="black" />
+                        </svg>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--end::Modal header-->
+            <!--begin::Modal body-->
+            <div class="modal-body py-lg-6 px-lg-6">
+    
+                <!--begin::Input group Website-->
+                <div class="fv-row mb-5">
+                    <form action="/checklist-manajemen-kontrak/upload" method="POST">
+                        @csrf
+                        <!--begin::Input-->
+                        <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            name="id-contract">
+                        <input type="hidden" class="modal-name" name="modal-name">
+                        
+                        <div id="slide-1" class="animate slide">
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Kategori</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <select id="kategori-checklist"
+                                name="kategori-checklist"
+                                class="form-select form-select-solid"
+                                data-control="select2" data-hide-search="true"
+                                data-placeholder="Pilih Kategori Checklist Manajemen Kontrak">
+                                <option value="" selected></option>
+                                <option value="Progress 0-20%">Progress 0-20%</option>
+                                <option value="Progress 20%-90%">Progress 20%-90%</option>
+                                <option value="Progress 90%-100%">Progress 90%-100%</option>
+                            </select>
+                            <!--end::Input-->
+                        </div>
 
+                        <div id="slide-2" class="animate slide" style="display: none; opacity: 0;">
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Apakah SPK telah diterima?</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <div class="input-group mb-3">
+                                <div class="input-group-text">
+                                  <input class="form-check-input mt-0 me-2" type="radio" name="spk_diterima" value="" aria-label="">
+                                  <span>Ya, Tanggal</span>
+                                </div>
+                                <input type="date" class="form-control" name="date_spk_diterima" aria-label="">
+                                <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
+                                    <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
+                                </a>
+                              </div>
+                            <br>
+                            <!--end::Input-->
+                            <!--begin::Input-->
+                            <div class="input-group mb-3">
+                                <div class="input-group-text">
+                                  <input class="form-check-input mt-0 me-2" type="radio" name="spk_diterima" value="" aria-label="">
+                                  <span>Belum, Sebab</span>
+                                </div>
+                                <input type="text" class="form-control" name="sebab_spk_diterima" aria-label="">
+                              </div>
+                            <br>
+                            <!--end::Input-->
+                        </div>
+                        
+                        <div id="slide-3" class="animate slide" style="display: none; opacity: 0;">
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Apakah sudah ada berita Acara serah terima lapangan?</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <div class="input-group mb-3">
+                                <div class="input-group-text">
+                                  <input class="form-check-input mt-0 me-2" type="radio" name="berita_acara" value="" aria-label="Iya">
+                                  <span>Ya, Tanggal</span>
+                                </div>
+                                <input type="date" class="form-control" name="date_berita_acara" aria-label="Text input with checkbox">
+                                <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
+                                    <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
+                                </a>
+                            </div>
+                            <br>
+                            <!--end::Input-->
+                            <!--begin::Input-->
+                            <div class="input-group mb-3">
+                                <div class="input-group-text">
+                                  <input class="form-check-input mt-0 me-2" type="radio" name="berita_acara" value="" aria-label="">
+                                  <span>Belum, Sebab</span>
+                                </div>
+                                <input type="text" class="form-control" name="sebab_berita_acara" aria-label="">
+                              </div>
+                            <br>
+                            <!--end::Input-->
+                        </div>
+                        
+                        <div id="slide-4" class="animate slide" style="display: none; opacity: 0;">
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Apakah Jadwal Pelaksanaan telah disetujui oleh Engineer?</span>
+                            </label>
+                            <!--end::Label-->
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" value="" name="pelaksanaan_disetujui_oleh" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Network Planning
+                                </label>
+                            </div>
+                            <br>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" value="" name="pelaksanaan_disetujui_oleh" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Sub-Network Planning
+                                </label>
+                            </div>
+                            <br>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" value="" name="pelaksanaan_disetujui_oleh" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Barchart
+                                </label>
+                            </div>
+                            <br>
+                            <br>
+                            <br>
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Apakah jadwal diatas mengutamakan ketergantungan kegiatan WIKA kepada Pemberi Kerja dan Mitranya?</span>
+                            </label>
+                            <!--end::Label-->
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" value="" name="is_jadwal_ketergantungan" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Ya
+                                </label>
+                            </div>
+                            <br>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" value="" name="is_jadwal_ketergantungan" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Tidak
+                                </label>
+                            </div>
+                        </div>
+
+                        <div id="slide-5" class="animate slide" style="display: none; opacity: 0;">
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Siapa yang membuat Construction Schedule?</span>
+                            </label>
+                            <!--end::Label-->
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" value="" name="construction_schedule_by" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Kontraktor
+                                </label>
+                            </div>
+                            <br>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" value="" name="construction_schedule_by" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Konsultan (Engineer)
+                                </label>
+                            </div>
+                            <br>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" value="" name="construction_schedule_by" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Pemberi Tugas (Employer)
+                                </label>
+                            </div>
+                            <br>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" value="" name="construction_schedule_by" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Bersama-sama
+                                </label>
+                            </div>
+                        </div>
+
+                        <div id="slide-6" class="animate slide" style="display: none; opacity: 0;">
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Apakah Proyek memiliki Buku Harian tentang?</span>
+                            </label>
+                            <!--end::Label-->
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" value="" name="construction_schedule_by" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Kegiatan Harian
+                                </label>
+                            </div>
+                            <br>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" value="" name="construction_schedule_by" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Keadaan Cuaca
+                                </label>
+                            </div>
+                            <br>
+                            <div class="input-group">
+                                <div class="input-group-text">
+                                    <input class="form-check-input mt-0 me-2" type="radio" name="construction_schedule_by" value="" aria-label="Iya">
+                                    <span>Lainnya...</span>
+                                  </div>
+                                  <input type="text" class="form-control" name="sebab_construction_schedule" aria-label="Text input with checkbox">
+                            </div>
+                            <br>
+                        </div>
+
+                        <div id="slide-7" class="animate slide" style="display: none; opacity: 0;">
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Penanggung Jawab Pelaksanaan Penghitungan / Pengukuran Nilai Pekerjaan Terlaksana?</span>
+                            </label><br><br>
+                            <!--end::Label-->
+                            <h5>Siapa</h5>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" value="" name="penanggung_jawab_pelaksanaan" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Kontraktor
+                                </label>
+                            </div>
+                            <br>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" value="" name="penanggung_jawab_pelaksanaan" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Konsultan
+                                </label>
+                            </div>
+                            <br><br>
+                            <h5>Kapan</h5>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" value="Bulanan" name="penanggung_jawab_pelaksanaan_kapan" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Bulanan
+                                </label>
+                            </div>
+                            <br>
+                            <div class="input-group">
+                                <div class="input-group-text">
+                                    <input class="form-check-input mt-0 me-2" type="radio" name="penanggung_jawab_pelaksanaan_kapan" value="" aria-label="Iya">
+                                    <span>Dilakukan pada tanggal...</span>
+                                </div>
+                                <input type="date" class="form-control" name="penanggung_jawab_pelaksanaan_kapan" aria-label="Text input with checkbox">
+                                <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
+                                    <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
+                                </a>
+                            </div>
+                            <br>
+                            <div class="input-group">
+                                <div class="input-group-text">
+                                    <input class="form-check-input mt-0 me-2" type="radio" name="penanggung_jawab_pelaksanaan_kapan" value="" aria-label="Iya">
+                                    <span>Cara lain?</span>
+                                </div>
+                                <input type="date" class="form-control" name="penanggung_jawab_pelaksanaan_kapan" aria-label="Text input with checkbox">
+                                <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
+                                    <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
+                                </a>
+                            </div>
+                            <br><br>
+                            <h5>Bagaimana cara melaksanakannya ?</h5>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" value="" name="penanggung_jawab_pelaksanaan" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Dilakukan Konsultan
+                                </label>
+                            </div>
+                            <br>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" value="" name="penanggung_jawab_pelaksanaan" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Kontraktor Menyetujui
+                                </label>
+                            </div>
+                            <br>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" value="" name="penanggung_jawab_pelaksanaan" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Dilakukan Kontraktor
+                                </label>
+                            </div>
+                            <br>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" value="" name="penanggung_jawab_pelaksanaan" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Konsultan Menyetujui
+                                </label>
+                            </div>
+                            <br>
+                            <div class="input-group">
+                                <div class="input-group-text">
+                                    <input class="form-check-input mt-0 me-2" type="radio" name="construction_schedule_by" value="" aria-label="Iya">
+                                    <span>Cara Lain...</span>
+                                  </div>
+                                  <input type="text" class="form-control" name="sebab_construction_schedule" aria-label="Text input with checkbox">
+                            </div>
+                        </div>
+
+                        <div id="slide-8" class="animate slide" style="display: none; opacity: 0;">
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Apakah Proyek memiliki Identifikasi Gambar ?</span>
+                            </label><br><br>
+                            <!--end::Label-->
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" value="" name="penanggung_jawab_pelaksanaan" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Issued for Construction (IFC)
+                                </label>
+                            </div>
+                            <br>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" value="" name="penanggung_jawab_pelaksanaan" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Issued for Approval (IFA)
+                                </label>
+                            </div>
+                            <br><br>
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Apakah Proyek memiliki Pengarsipan Surat-menyurat ?</span>
+                            </label><br><br>
+                            <!--end::Label-->
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" value="Bulanan" name="penanggung_jawab_pelaksanaan_kapan" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Arsip Kronologis
+                                </label>
+                            </div>
+                            <br>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" value="Bulanan" name="penanggung_jawab_pelaksanaan_kapan" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Arsip Menurut Subyek
+                                </label>
+                            </div>
+                            <br>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" value="Bulanan" name="penanggung_jawab_pelaksanaan_kapan" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Arsip Foto-foto Pekerjaan
+                                </label>
+                            </div>
+                            <br>
+                        </div>
+
+                        <div id="slide-9" class="animate slide" style="display: none; opacity: 0;">
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Apakah Proyek memiliki Sistem Pendistribusian Dokumen ?</span>
+                            </label><br><br>
+                            <!--end::Label-->
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" value="" name="is_jadwal_ketergantungan" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Ya
+                                </label>
+                            </div>
+                            <br>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" value="" name="is_jadwal_ketergantungan" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Tidak
+                                </label>
+                            </div><br><br>
+
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Apakah Proyek memiliki ketetapan tertulis tentang <b>Bench Mark</b> ?</span>
+                            </label><br><br>
+                            <!--end::Label-->
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" value="" name="is_jadwal_ketergantungan" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Ya
+                                </label>
+                            </div>
+                            <br>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" value="" name="is_jadwal_ketergantungan" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Tidak
+                                </label>
+                            </div>
+                        </div>
+
+                        <div id="slide-10" class="animate slide" style="display: none; opacity: 0;">
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Apakah Jaminan Penawaran telah ditarik Kembali ?</span>
+                            </label><br><br>
+                            <!--end::Label-->
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" value="" name="is_jadwal_ketergantungan" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Ya
+                                </label>
+                            </div>
+                            <br>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" value="" name="is_jadwal_ketergantungan" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Tidak
+                                </label>
+                            </div><br><br>
+
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Apakah Jaminan Pelaksanaan telah Diterbitkan ?</span>
+                            </label><br><br>
+                            <!--end::Label-->
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" value="" name="is_jadwal_ketergantungan" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Ya
+                                </label>
+                            </div>
+                            <br>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" value="" name="is_jadwal_ketergantungan" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Tidak
+                                </label>
+                            </div>
+                        </div>
+
+                        <div id="slide-11" class="animate slide" style="display: none; opacity: 0;">
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Apakah Jaminan Uang Muka telah Diterbitkan ?</span>
+                            </label><br><br>
+                            <!--end::Label-->
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" value="" name="is_jadwal_ketergantungan" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Ya
+                                </label>
+                            </div>
+                            <br>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" value="" name="is_jadwal_ketergantungan" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Tidak
+                                </label>
+                            </div><br><br>
+
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Apakah Program Asuransi telah disetujui oleh Pemberi Tugas (Employer) ?</span>
+                            </label><br><br>
+                            <!--end::Label-->
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" value="" name="is_jadwal_ketergantungan" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Asuransi Contractor;s All Risks
+                                </label>
+                            </div>
+                            <br>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" value="" name="is_jadwal_ketergantungan" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Asuransi Tenaga Kerja (Jamsostek atau Personal Accident)
+                                </label>
+                            </div>
+                        </div>
+
+                        <div id="slide-12" class="animate slide" style="display: none; opacity: 0;">
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Apakah Perubahan-perubahan yang terjadi telah dilaporkan kepada Asuransi (antisipasi atas perpanjangan waktu dan/atau No Risk Period) ?</span>
+                            </label><br><br>
+                            <!--end::Label-->
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" value="" name="is_jadwal_ketergantungan" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Ya
+                                </label>
+                            </div>
+                            <br>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" value="" name="is_jadwal_ketergantungan" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Tidak
+                                </label>
+                            </div><br><br>
+
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Apakah upaya penghindaran kecelakaan sudah dilaksanakan ?</span>
+                            </label><br><br>
+                            <!--end::Label-->
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" value="" name="is_jadwal_ketergantungan" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Tindakan Pengamanan
+                                </label>
+                            </div>
+                            <br>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" value="" name="is_jadwal_ketergantungan" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Prosedur Keselamatan Kerja
+                                </label>
+                            </div>
+                            <br><br>
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Apakah kerugian yang terjadi akibat kejadian yang diasuransikan telah dilaporkan kepada Perusahaan Asuransi? ?</span>
+                            </label><br><br>
+                            <!--end::Label-->
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" value="" name="is_jadwal_ketergantungan" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Ya
+                                </label>
+                            </div>
+                            <br>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" value="" name="is_jadwal_ketergantungan" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Tidak
+                                </label>
+                            </div>
+                        </div>
+
+                        <div id="slide-12" class="animate slide" style="display: none; opacity: 0;">
+                            <h5 class="h5 text-center">Silahkan submit data</h5>
+                        </div>
+
+                        <hr>
+                        <br>
+                        Progress <br>
+                        <div class="progress">
+                            <div class="progress-bar" id="progress-bar" role="progressbar" aria-label="Basic example" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+
+                        <br><br>
+                        <div class="modal-footer">
+                            <button type="button" onclick="animateSlideChecklist(this)" class="btn btn-sm btn-primary" data-current-slide="1" data-next-slide="2" data-previous-slide="0">Next</button>
+                            <button type="submit" id="submit-checklist" class="btn btn-sm btn-primary" style="display: none">Submit</button>
+                        </div>
+                    </form>
+                </div>
+                <!--end::Input group-->
+    
+            </div>
+            <!--end::Input group-->
+    
+    
+        </div>
+        <!--end::Modal body-->
+    </div>
+    <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+    </div>
+<!--end::Modal - Pasal Kontraktual-->
 @endif
 @endisset
 
@@ -9751,105 +10521,282 @@
 <!--end::Modal - Add Risk Project-->
 
 <!--begin::Modal - List Questions-->
-<div class="modal fade" id="kt_modal_question_proyek" tabindex="-1" aria-hidden="true">
-<!--begin::Modal dialog-->
-<div class="modal-dialog modal-dialog-centered mw-900px">
-    <!--begin::Modal content-->
-    <div class="modal-content">
-        <!--begin::Modal header-->
-        <div class="modal-header">
-            <!--begin::Modal title-->
-            <h2>Add Aanwitjzing</h2>
-            <!--end::Modal title-->
-            <!--begin::Close-->
-            <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                <span class="svg-icon svg-icon-1">
-                    <i class="bi bi-x-lg"></i>
-                </span>
-                <!--end::Svg Icon-->
-            </div>
-            <!--end::Close-->
+    <div class="modal fade" id="kt_modal_question_proyek" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-500px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                        <!--begin::Modal header-->
+                        <div class="modal-header">
+                            <!--begin::Modal title-->
+                            <h2>Add Aanwitjzing</h2>
+                            <!--end::Modal title-->
+                            <!--begin::Close-->
+                            <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                                <span class="svg-icon svg-icon-1">
+                                    <i class="bi bi-x-lg"></i>
+                                </span>
+                                <!--end::Svg Icon-->
+                            </div>
+                            <!--end::Close-->
+                        </div>
+                        <!--end::Modal header-->
+                        <!--begin::Modal body-->
+                        <div class="modal-body py-lg-6 px-lg-6">
+
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-5">
+                                <form action="/question/upload" enctype="multipart/form-data" method="POST">
+                                    @csrf
+                                    <!--begin::Input-->
+                                    <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                        name="id-contract">
+                                    <input type="hidden" class="modal-name" name="modal-name">
+
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Item</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <textarea class="form-control form-control-solid"
+                                        name="item" id="item" style="font-weight: normal"
+                                        value="" placeholder="Item" cols="2" ></textarea>
+                                    <!--end::Input-->
+
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Sub Pasal</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <textarea class="form-control form-control-solid" name="sub-pasal"
+                                        id="sub-pasal" style="font-weight: normal" cols="2" value=""
+                                        placeholder="Sub"></textarea>
+                                    <!--end::Input-->
+                                    <small id="file-error-msg-question" style="color: rgb(199, 42, 42); display:none"></small>
+                                    
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Pertanyaan</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <textarea class="form-control form-control-solid" name="note-question"
+                                        id="note-question" style="font-weight: normal" cols="2" value=""
+                                        placeholder="Pertanyaan"></textarea>
+                                    <!--end::Input-->
+                                    <small id="file-error-msg-question" style="color: rgb(199, 42, 42); display:none"></small>
+
+                                    {{-- begin::Froala Editor --}}
+                                    {{-- <div id="froala-editor-question">
+                                        <h1>Attach file with <b>.DOCX</b> format only</h1>
+                                    </div> --}}
+                                    {{-- end::Froala Editor --}}
+                                    {{-- begin::Read File --}}
+                                    {{-- <script>
+                                        document.getElementById("attach-file-question").addEventListener("change", async function() {
+                                            await readFile(this.files[0], "#froala-editor-question");
+                                        });
+                                    </script> --}}
+                                    {{-- end::Read File --}}
+                                    <br><br>
+                                    <button type="submit" id="save-question" class="btn btn-sm btn-primary"
+                                        data-bs-dismiss="modal">Save</button>
+                                </form>
+                            </div>
+                            <!--end::Input group-->
+
+                        </div>
+                        <!--end::Modal body-->
+                </div>
+                <!--end::Modal content-->
         </div>
-        <!--end::Modal header-->
-        <!--begin::Modal body-->
-        <div class="modal-body py-lg-6 px-lg-6">
+        <!--end::Modal dialog-->
+    </div>
+<!--end::Modal - List Questions-->
 
-            <!--begin::Input group Website-->
-            <div class="fv-row mb-5">
-                <form action="/question/upload" enctype="multipart/form-data" method="POST">
-                    @csrf
-                    <!--begin::Input-->
-                    <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
-                        name="id-contract">
-                    <input type="hidden" class="modal-name" name="modal-name">
-
-                    <!--begin::Label-->
-                    <label class="fs-6 fw-bold form-label mt-3">
-                        <span style="font-weight: normal">Item</span>
-                    </label>
-                    <!--end::Label-->
-                    <!--begin::Input-->
-                    <textarea class="form-control form-control-solid"
-                        name="item" id="item" style="font-weight: normal"
-                        value="" placeholder="Item" cols="2" ></textarea>
-                    <!--end::Input-->
-
-                    <!--begin::Label-->
-                    <label class="fs-6 fw-bold form-label mt-3">
-                        <span style="font-weight: normal">Sub Pasal</span>
-                    </label>
-                    <!--end::Label-->
-                    <!--begin::Input-->
-                    <textarea class="form-control form-control-solid" name="sub-pasal"
-                        id="sub-pasal" style="font-weight: normal" cols="2" value=""
-                        placeholder="Sub"></textarea>
-                    <!--end::Input-->
-                    <small id="file-error-msg-question" style="color: rgb(199, 42, 42); display:none"></small>
-                    
-                    <!--begin::Label-->
-                    <label class="fs-6 fw-bold form-label mt-3">
-                        <span style="font-weight: normal">Pertanyaan</span>
-                    </label>
-                    <!--end::Label-->
-                    <!--begin::Input-->
-                    <textarea class="form-control form-control-solid" name="note-question"
-                        id="note-question" style="font-weight: normal" cols="2" value=""
-                        placeholder="Pertanyaan"></textarea>
-                    <!--end::Input-->
-                    <small id="file-error-msg-question" style="color: rgb(199, 42, 42); display:none"></small>
-
-                    {{-- begin::Froala Editor --}}
-                    {{-- <div id="froala-editor-question">
-                        <h1>Attach file with <b>.DOCX</b> format only</h1>
-                    </div> --}}
-                    {{-- end::Froala Editor --}}
-                    {{-- begin::Read File --}}
-                    {{-- <script>
-                        document.getElementById("attach-file-question").addEventListener("change", async function() {
-                            await readFile(this.files[0], "#froala-editor-question");
-                        });
-                    </script> --}}
-                    {{-- end::Read File --}}
-                    <br><br>
-                    <button type="submit" id="save-question" class="btn btn-sm btn-primary"
-                        data-bs-dismiss="modal">Save</button>
+<!--begin::Modal - Upload Final Questions-->
+<div class="modal fade" id="kt_modal_upload_aanwitjzing" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog modal-dialog-centered mw-500px">
+        <!--begin::Modal content-->
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header">
+                <!--begin::Modal title-->
+                <h2>Upload Final | Aanwitjzing</h2>
+                <!--end::Modal title-->
+                <!--begin::Close-->
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                        <i class="bi bi-x-lg"></i>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--end::Modal header-->
+            <!--begin::Modal body-->
+            <div class="modal-body py-lg-6 px-lg-6">
+                <!--begin::Input group Website-->
+                <form action="/contract-management/final-dokumen/upload" method="POST"
+                    enctype="multipart/form-data">
+                    <div class="row">
+                        @csrf
+                        <div class="col mt-4">
+                            <!--begin::Label-->
+                            <label for="ketentuan-rencana-kerja" class="fs-6 fw-bold form-label">
+                                <span style="font-weight: normal">Upload Dokumen</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="hidden" name="kategori" value="aanwitjzing">
+                            <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
+                            <!--end::Input-->
+                        </div>
+                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                name="id-contract">
+                            <input type="hidden" class="modal-name" name="modal-name">
+                        </div>
+                    </div>
+                    <!--end::Input group-->
+                    <div class="modal-footer mt-4">
+                        <button type="submit" id="save-question-tender-menang"
+                            class="btn btn-sm btn-primary">Save</button>
+                    </div>
                 </form>
             </div>
-            <!--end::Input group-->
-
+            <!--end::Modal body-->
         </div>
-        <!--end::Input group-->
-
-
+        <!--end::Modal content-->
     </div>
-    <!--end::Modal body-->
+    <!--end::Modal dialog-->
 </div>
-<!--end::Modal content-->
+<!--end::Modal - Upload Final Questions-->
+
+<!--begin::Modal - Upload Final Usulan Perubahan-->
+<div class="modal fade" id="kt_modal_upload_perubahan_kontrak" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog modal-dialog-centered mw-500px">
+        <!--begin::Modal content-->
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header">
+                <!--begin::Modal title-->
+                <h2>Upload Final | Usulan Perubahan Kontrak</h2>
+                <!--end::Modal title-->
+                <!--begin::Close-->
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                        <i class="bi bi-x-lg"></i>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--end::Modal header-->
+            <!--begin::Modal body-->
+            <div class="modal-body py-lg-6 px-lg-6">
+                <!--begin::Input group Website-->
+                <form action="/contract-management/final-dokumen/upload" method="POST"
+                    enctype="multipart/form-data">
+                    <div class="row">
+                        @csrf
+                        <div class="col mt-4">
+                            <!--begin::Label-->
+                            <label for="ketentuan-rencana-kerja" class="fs-6 fw-bold form-label">
+                                <span style="font-weight: normal">Upload Dokumen</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="hidden" name="kategori" value="usulan-perubahan">
+                            <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
+                            <!--end::Input-->
+                        </div>
+                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                name="id-contract">
+                            <input type="hidden" class="modal-name" name="modal-name">
+                        </div>
+                    </div>
+                    <!--end::Input group-->
+                    <div class="modal-footer mt-4">
+                        <button type="submit" id="save-question-tender-menang"
+                            class="btn btn-sm btn-primary">Save</button>
+                    </div>
+                </form>
+            </div>
+            <!--end::Modal body-->
+        </div>
+        <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
 </div>
-<!--end::Modal dialog-->
+<!--end::Modal - Upload Final Usulan Perubahan-->
+
+<!--begin::Modal - Upload Final Resiko Pelaksanaan-->
+<div class="modal fade" id="kt_modal_upload_resiko_pelaksanaan" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog modal-dialog-centered mw-500px">
+        <!--begin::Modal content-->
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header">
+                <!--begin::Modal title-->
+                <h2>Upload Final | Input Resiko - Pelaksanaan</h2>
+                <!--end::Modal title-->
+                <!--begin::Close-->
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                        <i class="bi bi-x-lg"></i>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--end::Modal header-->
+            <!--begin::Modal body-->
+            <div class="modal-body py-lg-6 px-lg-6">
+                <!--begin::Input group Website-->
+                <form action="/contract-management/final-dokumen/upload" method="POST"
+                    enctype="multipart/form-data">
+                    <div class="row">
+                        @csrf
+                        <div class="col mt-4">
+                            <!--begin::Label-->
+                            <label for="ketentuan-rencana-kerja" class="fs-6 fw-bold form-label">
+                                <span style="font-weight: normal">Upload Dokumen</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="hidden" name="kategori" value="resiko-pelaksanaan">
+                            <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
+                            <!--end::Input-->
+                        </div>
+                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                name="id-contract">
+                            <input type="hidden" class="modal-name" name="modal-name">
+                        </div>
+                    </div>
+                    <!--end::Input group-->
+                    <div class="modal-footer mt-4">
+                        <button type="submit" id="save-question-tender-menang"
+                            class="btn btn-sm btn-primary">Save</button>
+                    </div>
+                </form>
+            </div>
+            <!--end::Modal body-->
+        </div>
+        <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
 </div>
-<!--end::Modal - List Questions-->
+<!--end::Modal - Upload Final Resiko Pelaksanaan-->
+
 <!--begin::Modal - Calendar Start -->
 <div class="modal fade" id="kt_modal_calendar-start" data-bs-backdrop="static" tabindex="-1"
 aria-hidden="true">
@@ -10352,6 +11299,62 @@ aria-hidden="true">
         }
     }
 </script>
+
+{{-- Begin :: Animating Slide Checklist Manajemen Kontrak --}}
+<script>
+    function animateSlideChecklist(e) {
+        const currentSlide = e.getAttribute("data-current-slide");
+        const nextSlide = e.getAttribute("data-next-slide");
+        const previousSlide = e.getAttribute("data-previous-slide");
+        const nextSlideElt = document.querySelector(`#slide-${nextSlide}`);
+        const currentSlideElt = document.querySelector(`#slide-${currentSlide}`);
+
+        // Animasi Slide Opacity
+        showSlide(currentSlideElt, nextSlideElt);
+
+        // Animasi Progress Bar
+        animateProgressBar(nextSlide);
+
+        // Nimpa data slide sesuai dengan data slide selanjutnya
+        e.setAttribute("data-current-slide", nextSlide);
+        e.setAttribute("data-next-slide", Number(nextSlide) + 1);
+        e.setAttribute("data-previous-slide", Number(previousSlide) + 1);
+
+        // Check Slide Terakhir
+        const checkNextSlideElt = document.querySelector(`#slide-${Number(nextSlide) + 1}`);
+        if(!checkNextSlideElt) {
+            console.log("Slide Terakhir");
+            const buttonSubmit = document.querySelector("#submit-checklist");
+            buttonSubmit.style.display = "";
+            e.style.display = "none";
+            
+        }
+    }
+
+    function animateProgressBar(nextSlide) {
+        const totalSlide = document.querySelectorAll(".animate.slide").length;
+        const persen = (nextSlide / totalSlide) * 100;
+        setTimeout(() => {
+            document.querySelector("#progress-bar").setAttribute("aria-valuenow",`${persen}%`);
+            document.querySelector("#progress-bar").style.width = `${persen}%`;
+        }, 100);
+        if (persen == 100) {
+            document.querySelector("#progress-bar").classList.add("bg-success");
+        }
+    }
+
+    function showSlide(slide1, slide2) {
+        slide1.style.opacity = "0";
+        setTimeout(() => {
+            slide1.style.display = "none";
+            slide2.style.display = "";
+        }, 450);
+        setTimeout(() => {
+            slide2.style.opacity = "1";
+        }, 450);
+    }
+</script>
+{{-- End :: Animating Slide Checklist Manajemen Kontrak --}}
 
 
 <!--begin::Data Tables-->
