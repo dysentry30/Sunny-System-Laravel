@@ -10371,7 +10371,11 @@ aria-hidden="true">
             dom: 'Brti',
             pageLength : 50,
             buttons: [
-                    'copy', 'excel', 'pdf', 'print'
+                {
+                    extend: 'excelHtml5',
+                    title: 'Data Perubahan Kontrak'
+                },
+                    'copy', 'pdf', 'print'
                 ]
         } );
     });
@@ -10383,7 +10387,11 @@ aria-hidden="true">
             dom: 'Brti',
             pageLength : 50,
             buttons: [
-                    'copy', 'excel', 'pdf', 'print'
+                {
+                    extend: 'excelHtml5',
+                    title: 'Data Aanwitjzing'
+                },
+                    'copy', 'pdf', 'print'
                 ]
         } );
     });
@@ -10395,7 +10403,11 @@ aria-hidden="true">
             dom: 'Brti',
             pageLength : 50,
             buttons: [
-                    'copy', 'excel', 'pdf', 'print'
+                {
+                    extend: 'excelHtml5',
+                    title: 'Data Input Risk'
+                },
+                    'copy', 'pdf', 'print'
                 ]
         } );
     });
@@ -10407,7 +10419,11 @@ aria-hidden="true">
             dom: 'Brti',
             pageLength : 50,
             buttons: [
-                    'copy', 'excel', 'pdf', 'print'
+                {
+                    extend: 'excelHtml5',
+                    title: 'Data Usulan Draft'
+                },
+                    'copy', 'pdf', 'print'
                 ]
         } );
     });
