@@ -150,6 +150,11 @@ class ContractManagements extends Model
         return $this->hasMany(PerubahanKontrak::class, "id_contract");
     }
 
+    public function UploadFinal()
+    {
+        return $this->hasMany(ContractUploadFinal::class, "id_contract");
+    }
+
     public function getAll()
     {
         $data = [];

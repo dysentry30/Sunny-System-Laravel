@@ -41,6 +41,7 @@ use Illuminate\Support\Facades\File;
 use App\Models\KontrakBertandatangan;
 use App\Models\AddendumContractDrafts;
 use App\Models\ContractChangeProposal;
+use App\Models\ContractUploadFinal;
 use App\Models\KlarifikasiNegosiasiCda;
 use App\Models\ReviewPembatalanKontrak;
 use Illuminate\Database\Eloquent\Model;
@@ -50,6 +51,7 @@ use Illuminate\Support\Facades\Redirect;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Validator;
 use App\Models\RencanKerjaManajemenKontrak;
+use App\Models\UploadFinalDocument;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Collection as SupportCollection;
 
@@ -2029,6 +2031,69 @@ class ContractManagementsController extends Controller
         Alert::error("Erorr", "Rencana Kerja Manajemen Kontrak gagal ditambahkan");
         return Redirect::back()->with("modal", $data["modal-name"]);
         // return redirect()->back();
+    }
+
+    public function uploadChecklistKontrak(Request $request) {
+        $data = $request->all();
+        dd($data);
+    }
+
+    public function uploadDokumenFinal(Request $request, ContractUploadFinal $uploadFinal)
+    {
+        $data = $request->all();
+        $file = $request->file("file-document");
+        $id_document = date("His_") . $file->getClientOriginalName();
+        $nama_file = $file->getClientOriginalName();
+
+        $messages = [
+            "required" => "Field di atas wajib diisi",
+            "file" => "This field must be file only",
+        ];
+        $rules = [
+            "id-contract" => "required",
+            "file-document" => "required|file",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            Alert::error('Error', "Rencana Kerja Manajemen Kontrak gagal ditambahkan");
+            return Redirect::back()->with("modal", $data["modal-name"]);
+            // dd($validation->errors());
+        }
+        $validation->validate();
+
+        $contract = ContractManagements::find($data["id-contract"]);
+        if (empty($contract)) {
+            Alert::error("Error", "Pastikan contract sudah dibuat terlebih dahulu");
+            return Redirect::back()->with("modal", $data["modal-name"]);
+            // return redirect()->back();
+        }
+
+        $kategori = ContractUploadFinal::where('category', '=', $data['kategori'])->first();
+        
+        if (!empty($kategori)){
+
+            $kategori->id_document = $id_document;
+            $kategori->nama_document = $nama_file;
+            $kategori->save();
+            moveFileTemp($file, explode(".", $id_document)[0]);
+            Alert::success("Success", "Dokumen Final berhasil ditambahkan");
+            return redirect()->back();
+        } else{
+            $uploadFinal->id_contract = $contract->id_contract;
+            $uploadFinal->id_document = $id_document;
+            $uploadFinal->nama_document = $nama_file;
+            $uploadFinal->category = $data["kategori"];
+ 
+            if ($uploadFinal->save()) {
+                moveFileTemp($file, explode(".", $id_document)[0]);
+                Alert::success("Success", "Dokumen Final berhasil ditambahkan");
+                return redirect()->back();
+            }
+                Alert::error("Erorr", "Dokumen Final gagal ditambahkan");
+                return Redirect::back()->with("modal", $data["modal-name"]);
+                // return redirect()->back();
+        }
+
     }
 
     public function uploadPasalKontraktual(Request $request) {
