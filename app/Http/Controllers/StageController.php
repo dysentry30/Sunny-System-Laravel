@@ -55,11 +55,20 @@ class StageController extends Controller
     public function stagePerubahanKontrakSave(Request $request) {
         $data = $request->all();
         $perubahan_kontrak = PerubahanKontrak::find($data["id_perubahan_kontrak"]);
-        $perubahan_kontrak->stage = $data["stage"];
-        if($perubahan_kontrak->save()) {
-            return response()->json([
-                "status" => "success",
-            ]);
+        if(isset($data["is-dispute"])) {
+            $perubahan_kontrak->is_dispute = true;
+            if($perubahan_kontrak->save()) {
+                toast("Perubahan Kontrak berhasil ter-dispute", "success", "top-right");
+                return redirect()->back();
+            }
+        } else {
+            $perubahan_kontrak->is_dispute = false;
+            $perubahan_kontrak->stage = $data["stage"];
+            if($perubahan_kontrak->save()) {
+                return response()->json([
+                    "status" => "success",
+                ]);
+            }
         }
     }
 }
