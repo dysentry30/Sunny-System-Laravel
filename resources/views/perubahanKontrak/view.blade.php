@@ -75,29 +75,68 @@
                                                     @if ($perubahan_kontrak->stage >= 1)
                                                         <a href="#" role="link" class="stage-button clicked-stage color-is-default stage-is-done" style="outline: 0px; cursor: pointer;"
                                                             stage="1">
-                                                            <div class="d-flex align-items-center text-white">Diajukan</div>
+                                                            <div class="d-flex align-items-center text-white">Draft</div>
                                                         </a>
                                                     @else
                                                         <a href="#" role="link" class="stage-button clicked-stage color-is-default stage-is-not-active" style="outline: 0px; cursor: pointer;"
                                                             stage="1">
-                                                            <div class="d-flex align-items-center text-white">Diajukan</div>
+                                                            <div class="d-flex align-items-center text-white">Draft</div>
                                                         </a>
                                                     @endif
 
                                                     @if ($perubahan_kontrak->stage >= 2)
                                                         <a href="#" role="link" class="stage-button clicked-stage color-is-default stage-is-done" style="outline: 0px; cursor: pointer;"
                                                             stage="2">
-                                                            <div class="d-flex align-items-center text-white">Negoisasi</div>
+                                                            <div class="d-flex align-items-center text-white">Diajukan</div>
                                                         </a>
                                                     @else
                                                         <a href="#" role="link" class="stage-button clicked-stage color-is-default stage-is-not-active" style="outline: 0px; cursor: pointer;"
                                                             stage="2">
-                                                            <div class="d-flex align-items-center text-white">Negoisasi</div>
+                                                            <div class="d-flex align-items-center text-white">Diajukan</div>
                                                         </a>
                                                     @endif
+
+                                                    @if ($perubahan_kontrak->stage >= 3)
+                                                        <a href="#" role="link" class="stage-button clicked-stage color-is-default stage-is-done" style="outline: 0px; cursor: pointer;"
+                                                            stage="3">
+                                                            <div class="d-flex align-items-center text-white">Revisi</div>
+                                                        </a>
+                                                    @else
+                                                        @if ($perubahan_kontrak->stage == 2)
+                                                            <a href="#" role="link" class="stage-button clicked-stage color-is-default stage-is-not-active" style="outline: 0px; cursor: pointer;"
+                                                                stage="3">
+                                                                <div class="d-flex align-items-center text-white">Revisi</div>
+                                                            </a>
+                                                        @else
+                                                            <a href="#" role="link" class="stage-button clicked-stage color-is-default stage-is-not-active" style="outline: 0px; pointer-events: none;"
+                                                                stage="3">
+                                                                <div class="d-flex align-items-center text-white">Revisi</div>
+                                                            </a>
+                                                        @endif
+                                                    @endif
+
+                                                    @if ($perubahan_kontrak->stage >= 4)
+                                                        <a href="#" role="link" class="stage-button clicked-stage color-is-default stage-is-done" style="outline: 0px; cursor: pointer;"
+                                                            stage="4">
+                                                            <div class="d-flex align-items-center text-white">Negoisasi</div>
+                                                        </a>
+                                                    @else
+                                                        @if ($perubahan_kontrak->stage == 3)
+                                                            <a href="#" role="link" class="stage-button clicked-stage color-is-default stage-is-not-active" style="outline: 0px; cursor: pointer;"
+                                                            stage="4">
+                                                                <div class="d-flex align-items-center text-white">Negoisasi</div>
+                                                            </a>
+                                                        @else
+                                                            <a href="#" role="link" class="stage-button clicked-stage color-is-default stage-is-not-active" style="outline: 0px; pointer-events: none;"
+                                                            stage="4">
+                                                                <div class="d-flex align-items-center text-white">Negoisasi</div>
+                                                            </a>
+                                                        @endif
+                                                        
+                                                    @endif
                                                     {{-- @dd($perubahan_kontrak->stage) --}}
-                                                    @if ($perubahan_kontrak->stage > 2)
-                                                        @if ($perubahan_kontrak->stage == 4)
+                                                    @if ($perubahan_kontrak->stage > 4)
+                                                        @if ($perubahan_kontrak->stage == 6 && !$perubahan_kontrak->is_dispute)
                                                             <a href="#" role="link" class="stage-button stage-dropdown color-is-danger stage-is-done" style="outline: 0px; cursor: pointer;"
                                                                 data-bs-toggle="dropdown" aria-expanded="false">
                                                                 <div class="d-flex justify-content-between align-items-center">
@@ -106,16 +145,30 @@
                                                                 </div>
                                                             </a>
                                                         @else
-                                                            <a href="#" role="link" class="stage-button stage-dropdown color-is-default stage-is-done" style="outline: 0px; cursor: pointer;"
-                                                                data-bs-toggle="dropdown" aria-expanded="false">
-                                                                <div class="d-flex justify-content-between align-items-center">
-                                                                    <span class="text-white me-3">Disetujui</span>
-                                                                    <i class="bi bi-caret-down-fill text-white"></i>
-                                                                </div>
-                                                            </a>
+                                                            @if ($perubahan_kontrak->is_dispute)
+                                                                <a href="#" role="link" class="stage-button stage-dropdown color-is-danger stage-is-done" style="outline: 0px; cursor: pointer;">
+                                                                    <div class="d-flex justify-content-between align-items-center">
+                                                                        <span class="text-white me-3">Ditolak</span>
+                                                                        {{-- <i class="bi bi-caret-down-fill text-white"></i> --}}
+                                                                    </div>
+                                                                </a>
+                                                                <a href="#" role="link" class="stage-button stage-dropdown color-is-danger stage-is-done" style="outline: 0px; cursor: pointer;">
+                                                                    <div class="d-flex justify-content-between align-items-center">
+                                                                        <span class="text-white me-3">Dispute</span>
+                                                                    </div>
+                                                                </a>
+                                                            @else
+                                                                <a href="#" role="link" class="stage-button stage-dropdown color-is-default stage-is-done" style="outline: 0px; cursor: pointer;"
+                                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                                    <div class="d-flex justify-content-between align-items-center">
+                                                                        <span class="text-white me-3">Disetujui</span>
+                                                                        <i class="bi bi-caret-down-fill text-white"></i>
+                                                                    </div>
+                                                                </a>
+                                                            @endif
                                                         @endif
                                                     @else 
-                                                        @if ($perubahan_kontrak->stage == 2)
+                                                        @if ($perubahan_kontrak->stage == 4)
                                                             <a href="#" role="link" class="stage-button stage-dropdown color-is-default stage-is-not-active" style="cursor: pointer;"
                                                                 data-bs-toggle="dropdown" aria-expanded="false">
                                                                 <div class="d-flex justify-content-between align-items-center">
@@ -134,7 +187,7 @@
                                                         @endif
                                                     @endif
 
-                                                    @if ($perubahan_kontrak->stage == 5)
+                                                    {{-- @if ($perubahan_kontrak->stage == 5)
                                                         <a href="#" role="link" class="stage-button clicked-stage color-is-default stage-is-done" style="outline: 0px; cursor: pointer;"
                                                             stage="5">
                                                             <div class="d-flex align-items-center text-white">Amandemen</div>
@@ -151,10 +204,20 @@
                                                                 <div class="d-flex align-items-center text-white">Amandemen</div>
                                                             </a>
                                                         @endif
-                                                    @endif
+                                                    @endif --}}
                                                     <ul class="dropdown-menu">
-                                                        <li><a href="#" class="dropdown-item clicked-stage" stage="3">Disetujui</a></li>
-                                                        <li><a href="#" class="dropdown-item clicked-stage" stage="4">Ditolak</a></li>
+                                                        @if ($perubahan_kontrak->stage == 6)
+                                                            <form action=""></form>
+                                                            <form action="/stage/perubahan-kontrak/save" method="POST">
+                                                                {{-- <li><a href="#" class="dropdown-item clicked-stage" stage="5">Dispute</a></li> --}}
+                                                                @csrf
+                                                                <input type="hidden" name="id_perubahan_kontrak" value="{{ $perubahan_kontrak->id_perubahan_kontrak }}">
+                                                                <input type="submit" class="btn btn-link text-dark fs-6 text-center w-100" name="is-dispute" value="Dispute">
+                                                            </form>
+                                                        @else
+                                                            <li><a href="#" class="dropdown-item clicked-stage" stage="5">Disetujui</a></li>
+                                                            <li><a href="#" class="dropdown-item clicked-stage" stage="6">Ditolak</a></li>
+                                                        @endif
                                                     </ul>
 
                                             </div>
@@ -261,7 +324,7 @@
                                                                             <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
                                                                         </a> --}}
                                                                     </label><br>
-                                                                    <b>{{Carbon\Carbon::create($perubahan_kontrak->tanggal_pengajuan)->format("Y-m-d")}}</b>
+                                                                    <b>{{Carbon\Carbon::create($perubahan_kontrak->tanggal_pengajuan)->translatedFormat("d F Y")}}</b>
                                                                     {{-- <input type="date" name="tanggal-pengajuan" value="{{Carbon\Carbon::create($perubahan_kontrak->tanggal_pengajuan)->format("Y-m-d")}}" class="form-control form-control-solid" /> --}}
                                                                 </div>
                                                                 <div class="col mt-3">
@@ -279,10 +342,21 @@
                                                                             <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
                                                                         </a> --}}
                                                                     </label><br>
-                                                                    <b>{{Carbon\Carbon::create($perubahan_kontrak->waktu_pengajuan)->format("Y-m-d")}}</b>
+                                                                    <b>{{Carbon\Carbon::create($perubahan_kontrak->waktu_pengajuan)->translatedFormat("d F Y")}}</b>
                                                                     {{-- <input type="date" name="waktu-pengajuan" value="{{Carbon\Carbon::create($perubahan_kontrak->waktu_pengajuan)->format("Y-m-d")}}" class="form-control form-control-solid" /> --}}
                                                                 </div>
                                                             </div>
+                                                            <br><br>
+                                                            {{-- <div class="row">
+                                                                <div class="col">
+                                                                    <div class="form-check">
+                                                                        <input class="form-check-input" name="dispute" type="checkbox" value="" id="dispute">
+                                                                        <label class="form-check-label" for="dispute">
+                                                                          Dispute?
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            </div> --}}
                                                             <!--end::Input group-->
                                                         </div>
 
@@ -385,81 +459,84 @@
                                             </table>
                                             <!--End:Table: Review-->
 
-                                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                                                Dokumen Pendukung Lain
-                                                <a href="#" Id="Plus" data-bs-toggle="modal"
-                                                    data-bs-target="#kt_modal_input_dokumen_pendukung">+</a>
-                                            </h3>
-                    
-                                            <!--begin:Table: Review-->
-                                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
-                                                <!--begin::Table head-->
-                                                <thead>
-                                                    <!--begin::Table row-->
-                                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                        {{-- <th class="min-w-125px">Nama Dokumen</th> --}}
-                                                        <th class="min-w-125px">Dibuat Oleh</th>
-                                                        <th class="min-w-125px">Dibuat Tanggal</th>
-                                                        <th class="min-w-125px">Catatan</th>
-                                                        <th class="min-w-125px">File</th>
-                                                    </tr>
-                                                    <!--end::Table row-->
-                                                </thead>
-                                                <!--end::Table head-->
-                                                <!--begin::Table body-->
-                                                <tbody class="fw-bold text-gray-400">
-                                                    @if (!empty($perubahan_kontrak->DokumenPendukungs))
-                                                        @forelse ($perubahan_kontrak->DokumenPendukungs as $dokumen_pendukung)
-                                                            <tr>
-                                                                <!--begin::Name-->
-                                                                {{-- <td>
-                                                                    <p class="text-gray-600 mb-1">{{ $dokumen_pendukung->document_name }}
-                                                                    </p>
-                                                                </td> --}}
-                                                                <!--end::Name-->
-                                                                <!--begin::Name-->
-                                                                <td>
-                                                                    <p class="text-gray-600 mb-1">{{ $dokumen_pendukung->User->name }}
-                                                                    </p>
-                                                                </td>
-                                                                <!--end::Name-->
-                                                                <!--begin::Kode-->
-                                                                <td>
-                                                                    <p class="text-gray-600 mb-1">
-                                                                        {{ date_format(new DateTime($dokumen_pendukung->created_at), 'd-m-Y') }}
-                                                                    </p>
-                                                                </td>
-                                                                <!--end::Kode-->
-                                                                <!--begin::Unit-->
-                                                                <td>
-                                                                    <p class="text-gray-600 mb-1">{{ $dokumen_pendukung->note }}</p>
-                                                                </td>
-                                                                <!--end::Unit-->
-                                                                <!--begin::Unit-->
-                                                                <td>
-                                                                    <a target="_blank" href="{{ asset("words/$dokumen_pendukung->id_document"); }}">{{$dokumen_pendukung->id_document}}</a>
-                                                                </td>
-                                                                <!--end::Unit-->
-                                                            </tr>
-                                                        @empty
+                                            @if ($perubahan_kontrak->stage == 4 || $perubahan_kontrak->stage == 5 || !$perubahan_kontrak->is_dispute)
+                                                
+                                                <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                                    Dokumen Pendukung Lain
+                                                    <a href="#" Id="Plus" data-bs-toggle="modal"
+                                                        data-bs-target="#kt_modal_input_dokumen_pendukung">+</a>
+                                                </h3>
+                        
+                                                <!--begin:Table: Review-->
+                                                <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                                    <!--begin::Table head-->
+                                                    <thead>
+                                                        <!--begin::Table row-->
+                                                        <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                            {{-- <th class="min-w-125px">Nama Dokumen</th> --}}
+                                                            <th class="min-w-125px">Dibuat Oleh</th>
+                                                            <th class="min-w-125px">Dibuat Tanggal</th>
+                                                            <th class="min-w-125px">Catatan</th>
+                                                            <th class="min-w-125px">File</th>
+                                                        </tr>
+                                                        <!--end::Table row-->
+                                                    </thead>
+                                                    <!--end::Table head-->
+                                                    <!--begin::Table body-->
+                                                    <tbody class="fw-bold text-gray-400">
+                                                        @if (!empty($perubahan_kontrak->DokumenPendukungs))
+                                                            @forelse ($perubahan_kontrak->DokumenPendukungs as $dokumen_pendukung)
+                                                                <tr>
+                                                                    <!--begin::Name-->
+                                                                    {{-- <td>
+                                                                        <p class="text-gray-600 mb-1">{{ $dokumen_pendukung->document_name }}
+                                                                        </p>
+                                                                    </td> --}}
+                                                                    <!--end::Name-->
+                                                                    <!--begin::Name-->
+                                                                    <td>
+                                                                        <p class="text-gray-600 mb-1">{{ $dokumen_pendukung->User->name }}
+                                                                        </p>
+                                                                    </td>
+                                                                    <!--end::Name-->
+                                                                    <!--begin::Kode-->
+                                                                    <td>
+                                                                        <p class="text-gray-600 mb-1">
+                                                                            {{ date_format(new DateTime($dokumen_pendukung->created_at), 'd-m-Y') }}
+                                                                        </p>
+                                                                    </td>
+                                                                    <!--end::Kode-->
+                                                                    <!--begin::Unit-->
+                                                                    <td>
+                                                                        <p class="text-gray-600 mb-1">{{ $dokumen_pendukung->note }}</p>
+                                                                    </td>
+                                                                    <!--end::Unit-->
+                                                                    <!--begin::Unit-->
+                                                                    <td>
+                                                                        <a target="_blank" href="{{ asset("words/$dokumen_pendukung->id_document"); }}">{{$dokumen_pendukung->id_document}}</a>
+                                                                    </td>
+                                                                    <!--end::Unit-->
+                                                                </tr>
+                                                            @empty
+                                                                <tr>
+                                                                    <td colspan="4" class="text-center">
+                                                                        <h6><b>There is no data</b></h6>
+                                                                    </td>
+                                                                </tr>
+                                                            @endforelse
+                                                        @else
                                                             <tr>
                                                                 <td colspan="4" class="text-center">
                                                                     <h6><b>There is no data</b></h6>
                                                                 </td>
                                                             </tr>
-                                                        @endforelse
-                                                    @else
-                                                        <tr>
-                                                            <td colspan="4" class="text-center">
-                                                                <h6><b>There is no data</b></h6>
-                                                            </td>
-                                                        </tr>
-                                                    @endif
-                                                </tbody>
-                                                <!--end::Table body-->
-                    
-                                            </table>
-                                            <!--End:Table: Review-->
+                                                        @endif
+                                                    </tbody>
+                                                    <!--end::Table body-->
+                        
+                                                </table>
+                                                <!--End:Table: Review-->
+                                            @endif
                                         </div>
                                     </div>
                                 </div>

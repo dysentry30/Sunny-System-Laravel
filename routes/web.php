@@ -155,6 +155,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     // begin :: contract management
     Route::get('/contract-management', [ContractManagementsController::class, 'index']);
 
+    Route::post('/contract-management/final-dokumen/upload', [ContractManagementsController::class, 'uploadDokumenFinal']);
+
     Route::get('/contract-management/view', [ContractManagementsController::class, 'new']);
 
     Route::post('/contract-management/save', [ContractManagementsController::class, 'save']);
@@ -1465,6 +1467,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     Route::post("/pasal-kontraktual/upload", [ContractManagementsController::class, "uploadPasalKontraktual"]);
 
+    Route::post("/checklist-manajemen-kontrak/upload", [ContractManagementsController::class, "uploadChecklistKontrak"]);
+
     Route::post("/dokumen-site-instruction/upload", [ContractManagementsController::class, "siteInstruction"]);
     
     Route::post("/dokumen-technical-form/upload", [ContractManagementsController::class, "technicalForm"]);
@@ -2008,7 +2012,7 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
             case "Milestone":
                 $sistem_bayar = "CP03";
                 break;
-            case "CPF (Turn key)":
+            case "CPF (Turn Key)":
                 $sistem_bayar = "CP02";
                 break;
             case "Monthly":
