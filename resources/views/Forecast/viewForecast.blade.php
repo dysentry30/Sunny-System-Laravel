@@ -3005,7 +3005,7 @@ fill="none">
                 confirmButtonText: 'Lanjut'
                 }).then(async (result) => {
                     if (result.isConfirmed) {
-                        let url = `/{{Request::segment(1)}}/${monthForecast}/${new Date().getFullYear()}`;
+                        let url = `/{{Request::segment(1)}}/${monthForecast}/${new Date().getFullYear()-1}`;
                         location.href = url;
                     }
                 })
