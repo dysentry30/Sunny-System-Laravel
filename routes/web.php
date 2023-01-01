@@ -718,9 +718,9 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         // }
         $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
         if ($unit_kerja_user instanceof \Illuminate\Support\Collection) {
-            $proyeks = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("periode_prognosa", "=", $data["periode_prognosa"])->get()->where("is_cancel", "!=", true)->whereIn("unit_kerja", $unit_kerja_user->toArray())->groupBy("kode_proyek");
+            $proyeks = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("periode_prognosa", "=", $data["periode_prognosa"])->get()->whereIn("unit_kerja", $unit_kerja_user->toArray())->groupBy("kode_proyek");
         } else {
-            $proyeks = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("proyeks.unit_kerja", $unit_kerja_user)->where("periode_prognosa", "=", $data["periode_prognosa"])->get()->where("is_cancel", "!=", true)->groupBy("kode_proyek");
+            $proyeks = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("proyeks.unit_kerja", $unit_kerja_user)->where("periode_prognosa", "=", $data["periode_prognosa"])->get()->groupBy("kode_proyek");
         }
         // $proyeks = Proyek::where("unit_kerja", $from_user->unit_kerja)->get()->sortBy("kode_proyek");
         foreach ($proyeks as $kode_proyek => $proyek) {
@@ -747,7 +747,11 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                     // $total_realisasi += (int) $forecast->realisasi_forecast;
                     // $total_rkap += (int) $forecast->rkap_forecast;
                     $history_forecast->kode_proyek = $kode_proyek;
-                    $history_forecast->nilai_forecast = $forecast->nilai_forecast ?? "0";
+                    if ($forecast->is_cancel == true) {
+                        $history_forecast->nilai_forecast = "0";
+                    } else {
+                        $history_forecast->nilai_forecast = $forecast->nilai_forecast ?? "0";
+                    }
                     $history_forecast->month_forecast = $forecast->month_forecast;
                     // $history_forecast->rkap_forecast = str_replace(".", "", (int) $current_proyek->nilai_rkap ?? 0) ?? 0;
                     if (!empty($forecast->rkap_forecast)) {
@@ -758,7 +762,11 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                     $history_forecast->month_rkap = (int) $forecast->month_rkap;
                     // $history_forecast->month_rkap = $forecast->month_rkap;
                     // $history_forecast->realisasi_forecast = $current_proyek->nilai_kontrak_keseluruhan == null ? 0 : str_replace(",", "", $current_proyek->nilai_kontrak_keseluruhan ?? 0);
-                    $history_forecast->realisasi_forecast = $forecast->realisasi_forecast ?? "0";
+                    if ($forecast->is_cancel == true) {
+                        $history_forecast->realisasi_forecast = "0";
+                    } else {
+                        $history_forecast->realisasi_forecast = $forecast->realisasi_forecast ?? "0";
+                    }
                     // $history_forecast->realisasi_forecast = $current_proyek->nilai_kontrak_keseluruhan;
                     $history_forecast->month_realisasi = $forecast->month_realisasi;
                     $history_forecast->periode_prognosa = $request->periode_prognosa;
@@ -775,8 +783,14 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                     if ($forecast->month_forecast > $farestMonth) {
                         $farestMonth = $forecast->month_forecast;
                     }
-                    $total_forecast += (int) $forecast->nilai_forecast ?? 0;
-                    $total_realisasi += (int) $forecast->realisasi_forecast;
+                    if ($forecast->is_cancel == true) {
+                        $total_forecast += (int) 0;
+                        $total_realisasi += (int) 0;
+                    } else {
+                        $total_realisasi += (int) $forecast->realisasi_forecast;
+                        $total_forecast += (int) $forecast->nilai_forecast ?? 0;
+                    }
+
                     $total_rkap += (int) $forecast->rkap_forecast ?? 0;
                 }
                 // RKAP, REALISASI
