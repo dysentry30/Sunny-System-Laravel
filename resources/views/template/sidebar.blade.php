@@ -100,7 +100,7 @@
 
                         @if (auth()->user()->check_administrator || auth()->user()->check_user_sales)
                             <div class="menu-item">
-                                <a class="menu-link " href="/forecast"
+                                <a class="menu-link " href="/forecast/1/2023"
                                     style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'forecast') ? 'background-color:#008CB4' : '' }}">
                                     <span class="menu-icon">
                                         <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
