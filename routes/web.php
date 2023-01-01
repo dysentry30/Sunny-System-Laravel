@@ -55,6 +55,7 @@ use App\Models\SiteInstruction;
 use App\Models\TechnicalForm;
 use App\Models\TechnicalQuery;
 use BeyondCode\LaravelWebSockets\Facades\WebSocketsRouter;
+use Carbon\Carbon;
 use Illuminate\Routing\RouteGroup;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -707,11 +708,19 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $total_forecast = 0;
         $total_realisasi = 0;
         $total_rkap = 0;
+        // check new year condition
+        $date = Carbon::now();
+        $year = $date->year;
+        $day = $date->day;
+        $month = $date->month;
+        if($month == 1 && $day < 15) {
+            $year -= 1;
+        }
         $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
         if ($unit_kerja_user instanceof \Illuminate\Support\Collection) {
-            $proyeks = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("periode_prognosa", "=", $data["periode_prognosa"])->get()->where("is_cancel", "!=", true)->whereIn("unit_kerja", $unit_kerja_user->toArray())->groupBy("kode_proyek");
+            $proyeks = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("periode_prognosa", "=", $data["periode_prognosa"])->whereYear("forecasts.created_at", "=", $year)->get()->where("is_cancel", "!=", true)->whereIn("unit_kerja", $unit_kerja_user->toArray())->groupBy("kode_proyek");
         } else {
-            $proyeks = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("proyeks.unit_kerja", $unit_kerja_user)->where("periode_prognosa", "=", $data["periode_prognosa"])->get()->where("is_cancel", "!=", true)->groupBy("kode_proyek");
+            $proyeks = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("proyeks.unit_kerja", $unit_kerja_user)->where("periode_prognosa", "=", $data["periode_prognosa"])->whereYear("forecasts.created_at", "=", $year)->get()->where("is_cancel", "!=", true)->groupBy("kode_proyek");
         }
         // $proyeks = Proyek::where("unit_kerja", $from_user->unit_kerja)->get()->sortBy("kode_proyek");
         foreach ($proyeks as $kode_proyek => $proyek) {
