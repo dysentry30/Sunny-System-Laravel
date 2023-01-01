@@ -100,7 +100,7 @@
                                                 class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold">
                                                 <!--begin:::Tab item Forecast Bulanan-->
                                                 <li class="nav-item">
-                                                    <a class="nav-link text-active-primary pb-4" href="/forecast"
+                                                    <a class="nav-link text-active-primary pb-4" href="/forecast/{{ (int) date("m") }}/{{ (int) date("Y") }}"
                                                         style="font-size:14px;">Forecast Eksternal
                                                         Bulanan</a>
                                                 </li>
@@ -108,7 +108,7 @@
 
                                                 <!--begin:::Tab item Forecast Internal-->
                                                 <li class="nav-item">
-                                                    <a class="nav-link text-active-primary pb-4" href="/forecast-internal"
+                                                    <a class="nav-link text-active-primary pb-4" href="/forecast-internal/{{ (int) date("m") }}/{{ (int) date("Y") }}"
                                                         style="font-size:14px;">Forecast Bulanan
                                                         Include Internal</a>
                                                 </li>
