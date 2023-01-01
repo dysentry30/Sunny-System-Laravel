@@ -678,7 +678,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                     if(preg_match("/$filter/i", $p->nama_proyek)) {
                                                                                                         // return $p->nilai_rkap;
                                                                                                         return $p->Forecasts->where("periode_prognosa", "=", $periode)->filter( function($y) use($year) {
-                                                                                                            return (Carbon/Carbon::create($f->created_at)->format("Y") == $year);
+                                                                                                            return (Carbon\Carbon::create($f->created_at)->format("Y") == $year);
                                                                                                         })->sum(function($f) use($periode) {
                                                                                                             if($periode == $f->periode_prognosa) {
                                                                                                                 return (int) $f->rkap_forecast;
@@ -767,7 +767,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                 return $unit_kerja->Proyeks->where("jenis_proyek", "!=", "I")->sum(function($p) use($per_sejuta, $i, $periode, $filter, $year) {
                                                                                                     // return $p->nilai_rkap;
                                                                                                     return $p->Forecasts->where("periode_prognosa", "=", $periode)->filter( function($y) use($year) {
-                                                                                                            return (Carbon/Carbon::create($f->created_at)->format("Y") == $year);
+                                                                                                            return (Carbon\Carbon::create($f->created_at)->format("Y") == $year);
                                                                                                         })->sum(function($f) use($periode) {
                                                                                                         if($periode == $f->periode_prognosa) {
                                                                                                             return (int) $f->rkap_forecast;
