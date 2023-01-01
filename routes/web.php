@@ -709,13 +709,13 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $total_realisasi = 0;
         $total_rkap = 0;
         // check new year condition
-        $date = Carbon::now();
-        $year = $date->year;
-        $day = $date->day;
-        $month = $date->month;
-        if($month == 1 && $day < 15) {
-            $year -= 1;
-        }
+        // $date = Carbon::now();
+        // $year = $date->year;
+        // $day = $date->day;
+        // $month = $date->month;
+        // if($month == 1 && $day < 15) {
+        //     $year -= 1;
+        // }
         $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
         if ($unit_kerja_user instanceof \Illuminate\Support\Collection) {
             $proyeks = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("periode_prognosa", "=", $data["periode_prognosa"])->get()->where("is_cancel", "!=", true)->whereIn("unit_kerja", $unit_kerja_user->toArray())->groupBy("kode_proyek");
