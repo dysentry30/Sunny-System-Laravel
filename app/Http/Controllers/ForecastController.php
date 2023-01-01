@@ -40,10 +40,10 @@ class ForecastController extends Controller
             $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
             if ($unit_kerja_user instanceof \Illuminate\Support\Collection) {
                 $nilaiHistoryForecast = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("proyeks.jenis_proyek", "!=", "I")->where("forecasts.periode_prognosa", "=", $periode)->whereYear("forecasts.created_at", "=", $year)->get()->whereIn("unit_kerja", $unit_kerja_user->toArray());
-                $nilaiRKAP = Proyek::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->get()->whereIn("unit_kerja", $unit_kerja_user->toArray())->where("jenis_proyek", "!=", "I")->whereYear("forecasts.created_at", "=", $year);
+                $nilaiRKAP = Proyek::join("forecasts", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->get()->whereIn("unit_kerja", $unit_kerja_user->toArray())->where("jenis_proyek", "!=", "I")->whereYear("forecasts.created_at", "=", $year);
             } else {
                 $nilaiHistoryForecast = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("proyeks.jenis_proyek", "!=", "I")->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->where("forecasts.periode_prognosa", "=", $periode)->whereYear("forecasts.created_at", "=", $year)->get();
-                $nilaiRKAP = Proyek::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->get()->whereIn("unit_kerja", Auth::user()->unit_kerja)->where("jenis_proyek", "!=", "I")->whereYear("forecasts.created_at", "=", $year);
+                $nilaiRKAP = Proyek::join("forecasts", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->get()->whereIn("unit_kerja", Auth::user()->unit_kerja)->where("jenis_proyek", "!=", "I")->whereYear("forecasts.created_at", "=", $year);
             }
         }
 
