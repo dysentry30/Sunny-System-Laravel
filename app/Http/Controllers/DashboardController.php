@@ -52,14 +52,14 @@ class DashboardController extends Controller
             $unit_kerja_get = $request->get("unit-kerja") ?? "";
             $dop_get = $request->get("dop") ?? "";
         } else {
-            $year = "";
+            $year = (int) date("Y");
             $month = (int) date("m");
             $unit_kerja_get = "";
             $dop_get = "";
             // $nilaiHistoryForecast = HistoryForecast::all();
         }
         // dd($unit_kerja_get);
-        $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
+        $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja);
         if (Auth::user()->check_administrator) {
             // $nilaiHistoryForecast = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("history_forecast.periode_prognosa", "=", $request->get("periode-prognosa") != "" ? (string) $request->get("periode-prognosa") : (int) date("m"))->whereYear("history_forecast.created_at", "=", (string) $request->get("tahun-history") != "" ? (string) $request->get("tahun-history") : date("Y"))->get();
             $nilaiHistoryForecast = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("jenis_proyek", "!=", "I")->where("forecasts.periode_prognosa", "=", $request->get("periode-prognosa") != "" ? (string) $request->get("periode-prognosa") : (int) date("m"))->get()->whereNotIn("unit_kerja", ["B", "C", "D", "8"]);
@@ -90,48 +90,48 @@ class DashboardController extends Controller
             }
             // dd($unitKerja, Auth::user());
         } else {
-            if ($unit_kerja_user instanceof \Illuminate\Support\Collection) {
-                $contracts = ContractManagements::join("proyeks", "proyeks.kode_proyek", "=", "contract_managements.project_id")->get();
-                $proyeks = Proyek::with(['Forecasts', 'UnitKerja', 'ContractManagements', "SumberDana"])->get();
-                $paretoProyeks = Proyek::with(['Forecasts', 'UnitKerja', 'ContractManagements'])->where("proyeks.jenis_proyek", "!=", "I")->get()->whereIn("unit_kerja", $unit_kerja_user->toArray());
-                $claims = ClaimManagements::join("proyeks", "proyeks.kode_proyek", "=", "claim_managements.kode_proyek")->get()->whereIn("unit_kerja", $unit_kerja_user->toArray());
-                $unitKerja = UnitKerja::get()->whereIn("divcode", $unit_kerja_user->toArray());
-                // $nilaiHistoryForecast = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("history_forecast.periode_prognosa", "=", $request->get("periode-prognosa") != "" ? (string) $request->get("periode-prognosa") : date("m"))->whereYear("history_forecast.created_at", "=", (string) $request->get("tahun-history") != "" ? (string) $request->get("tahun-history") : date("Y"))->get()->whereIn("unit_kerja", $unit_kerja_user->toArray());
-                $nilaiHistoryForecast = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("proyeks.jenis_proyek", "!=", "I")->where("forecasts.periode_prognosa", "=", $request->get("periode-prognosa") != "" ? (string) $request->get("periode-prognosa") : date("m"))->get()->whereIn("unit_kerja", $unit_kerja_user->toArray());
-                // dd($nilaiHistoryForecast, Auth::user());
-                if (!empty($request->get("unit-kerja"))) {
-                    // dd($request);
-                    // dd($nilaiHistoryForecast);
-                    $nilaiHistoryForecast = $nilaiHistoryForecast->where("unit_kerja", $request->get("unit-kerja"));
-                    $claims = $claims->where("unit_kerja", $request->get("unit-kerja"));
-                    $proyeks = $proyeks->where("unit_kerja", $request->get("unit-kerja"));
-                    $contracts = $contracts->where("unit_kerja", $request->get("unit-kerja"));
-                    $paretoProyeks = $paretoProyeks->where("unit_kerja", $request->get("unit-kerja"));
-                } else if (!empty($request->get("dop"))) {
-                    $nilaiHistoryForecast = $nilaiHistoryForecast->where("dop", $request->get("dop"));
-                    $claims = $claims->where("dop", $request->get("dop"));
-                    $proyeks = $proyeks->where("dop", $request->get("dop"));
-                    $contracts = $contracts->where("dop", $request->get("dop"));
-                    $paretoProyeks = $paretoProyeks->where("dop", $request->get("dop"));
-                    // dd($proyeks);
-                    // dd($nilaiHistoryForecast, $claims, $proyeks, $contracts);
-                } else {
-                    $nilaiHistoryForecast = $nilaiHistoryForecast->whereIn("unit_kerja", $unit_kerja_user->toArray());
-                    $claims = $claims->whereIn("unit_kerja", $unit_kerja_user->toArray());
-                    $proyeks = $proyeks->whereIn("unit_kerja", $unit_kerja_user->toArray());
-                    $contracts = $contracts->whereIn("unit_kerja", $unit_kerja_user->toArray());
-                    $paretoProyeks = $paretoProyeks->whereIn("unit_kerja", $unit_kerja_user->toArray());
-                }
+            // if ($unit_kerja_user instanceof \Illuminate\Support\Collection) {
+            $contracts = ContractManagements::join("proyeks", "proyeks.kode_proyek", "=", "contract_managements.project_id")->get();
+            $proyeks = Proyek::with(['Forecasts', 'UnitKerja', 'ContractManagements', "SumberDana"])->get();
+            $paretoProyeks = Proyek::with(['Forecasts', 'UnitKerja', 'ContractManagements'])->where("proyeks.jenis_proyek", "!=", "I")->get()->whereIn("unit_kerja", $unit_kerja_user->toArray());
+            $claims = ClaimManagements::join("proyeks", "proyeks.kode_proyek", "=", "claim_managements.kode_proyek")->get()->whereIn("unit_kerja", $unit_kerja_user->toArray());
+            $unitKerja = UnitKerja::get()->whereIn("divcode", $unit_kerja_user->toArray());
+            // $nilaiHistoryForecast = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("history_forecast.periode_prognosa", "=", $request->get("periode-prognosa") != "" ? (string) $request->get("periode-prognosa") : date("m"))->whereYear("history_forecast.created_at", "=", (string) $request->get("tahun-history") != "" ? (string) $request->get("tahun-history") : date("Y"))->get()->whereIn("unit_kerja", $unit_kerja_user->toArray());
+            $nilaiHistoryForecast = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("proyeks.jenis_proyek", "!=", "I")->where("forecasts.periode_prognosa", "=", $request->get("periode-prognosa") != "" ? (string) $request->get("periode-prognosa") : date("m"))->get()->whereIn("unit_kerja", $unit_kerja_user->toArray());
+            // dd($nilaiHistoryForecast, Auth::user());
+            if (!empty($request->get("unit-kerja"))) {
+                // dd($request);
+                // dd($nilaiHistoryForecast);
+                $nilaiHistoryForecast = $nilaiHistoryForecast->where("unit_kerja", $request->get("unit-kerja"));
+                $claims = $claims->where("unit_kerja", $request->get("unit-kerja"));
+                $proyeks = $proyeks->where("unit_kerja", $request->get("unit-kerja"));
+                $contracts = $contracts->where("unit_kerja", $request->get("unit-kerja"));
+                $paretoProyeks = $paretoProyeks->where("unit_kerja", $request->get("unit-kerja"));
+            } else if (!empty($request->get("dop"))) {
+                $nilaiHistoryForecast = $nilaiHistoryForecast->where("dop", $request->get("dop"));
+                $claims = $claims->where("dop", $request->get("dop"));
+                $proyeks = $proyeks->where("dop", $request->get("dop"));
+                $contracts = $contracts->where("dop", $request->get("dop"));
+                $paretoProyeks = $paretoProyeks->where("dop", $request->get("dop"));
+                // dd($proyeks);
+                // dd($nilaiHistoryForecast, $claims, $proyeks, $contracts);
             } else {
-                $contracts = ContractManagements::join("proyeks", "proyeks.kode_proyek", "=", "contract_managements.project_id")->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->get();
-                $proyeks = Proyek::with(['UnitKerja', 'ContractManagements'])->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->get();
-                $paretoProyeks = Proyek::with(['Forecasts', 'UnitKerja', 'ContractManagements'])->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->get();
-                $claims = ClaimManagements::join("proyeks", "proyeks.kode_proyek", "=", "claim_managements.kode_proyek")->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->get();
-                $unitKerja = UnitKerja::where("divcode", "=", Auth::user()->unit_kerja)->get();
-                // $nilaiHistoryForecast = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->where("history_forecast.periode_prognosa", "=", $request->get("periode-prognosa") != "" ? (string) $request->get("periode-prognosa") : date("m"))->whereYear("history_forecast.created_at", "=", (string) $request->get("tahun-history") != "" ? (string) $request->get("tahun-history") : date("Y"))->get();
-                $nilaiHistoryForecast = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("proyeks.jenis_proyek", "!=", "I")->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->where("forecasts.periode_prognosa", "=", $request->get("periode-prognosa") != "" ? (string) $request->get("periode-prognosa") : date("m"))->get();
-                // dd($nilaiHistoryForecast, Auth::user());
+                $nilaiHistoryForecast = $nilaiHistoryForecast->whereIn("unit_kerja", $unit_kerja_user->toArray());
+                $claims = $claims->whereIn("unit_kerja", $unit_kerja_user->toArray());
+                $proyeks = $proyeks->whereIn("unit_kerja", $unit_kerja_user->toArray());
+                $contracts = $contracts->whereIn("unit_kerja", $unit_kerja_user->toArray());
+                $paretoProyeks = $paretoProyeks->whereIn("unit_kerja", $unit_kerja_user->toArray());
             }
+            // } else {
+            //     $contracts = ContractManagements::join("proyeks", "proyeks.kode_proyek", "=", "contract_managements.project_id")->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->get();
+            //     $proyeks = Proyek::with(['UnitKerja', 'ContractManagements'])->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->get();
+            //     $paretoProyeks = Proyek::with(['Forecasts', 'UnitKerja', 'ContractManagements'])->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->get();
+            //     $claims = ClaimManagements::join("proyeks", "proyeks.kode_proyek", "=", "claim_managements.kode_proyek")->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->get();
+            //     $unitKerja = UnitKerja::where("divcode", "=", Auth::user()->unit_kerja)->get();
+            //     // $nilaiHistoryForecast = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->where("history_forecast.periode_prognosa", "=", $request->get("periode-prognosa") != "" ? (string) $request->get("periode-prognosa") : date("m"))->whereYear("history_forecast.created_at", "=", (string) $request->get("tahun-history") != "" ? (string) $request->get("tahun-history") : date("Y"))->get();
+            //     $nilaiHistoryForecast = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("proyeks.jenis_proyek", "!=", "I")->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->where("forecasts.periode_prognosa", "=", $request->get("periode-prognosa") != "" ? (string) $request->get("periode-prognosa") : date("m"))->get();
+            //     // dd($nilaiHistoryForecast, Auth::user());
+            // }
             $unit_kerjas = "";
             $dops = Dop::orderBy('dop')->get();
         }
