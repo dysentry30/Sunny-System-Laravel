@@ -116,14 +116,14 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                 <!--begin:::Tab item Forecast Bulanan-->
                                                 <li class="nav-item">
                                                     <a class="nav-link text-active-primary pb-4 {{isset($is_forecast) ? "active" : ""}}"
-                                                        href="/forecast"
+                                                        href="/forecast/{{ (int) date("m") }}/{{ (int) date("Y") }}"
                                                         style="font-size:14px;">Forecast Eksternal Bulanan</a>
                                                 </li>
                                                 <!--end:::Tab item Forecast Bulanan-->
 
                                                 <!--begin:::Tab item Forecast Internal-->
                                                 <li class="nav-item">
-                                                    <a class="nav-link text-active-primary pb-4 {{isset($is_forecast) ? "" : "active"}}" href="/forecast-internal"
+                                                    <a class="nav-link text-active-primary pb-4 {{isset($is_forecast) ? "" : "active"}}" href="/forecast-internal/{{ (int) date("m") }}/{{ (int) date("Y") }}"
                                                         style="font-size:14px;">Forecast Bulanan Include Internal</a>
                                                 </li>
                                                 <!--end:::Tab item Forecast Internal-->
