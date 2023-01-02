@@ -1982,11 +1982,11 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
         if ($periode[1] == 1) {
             $periodeOtor = 12;
             $yearOtor = (int) date("Y") - 1;
-            $is_forecast_exist = $p->HistoryForecasts->where("periode_prognosa", ((int) $periode[1] + 11))->whereYear("created_at", "=", $yearOtor)->count() > 0;
+            $is_forecast_exist = $p->HistoryForecasts->where("periode_prognosa", $periodeOtor)->where("tahun", "=", $yearOtor)->count() > 0;
         } else {
             $periodeOtor = $periode[1] - 1;
             $yearOtor = (int) date("Y");
-            $is_forecast_exist = $p->HistoryForecasts->where("periode_prognosa", ((int) $periode[1] - 1))->count() > 0;
+            $is_forecast_exist = $p->HistoryForecasts->where("periode_prognosa", $periodeOtor)->where("tahun", "=", $yearOtor)->count() > 0;
         }
         unset($p->HistoryForecasts);
         return $is_forecast_exist;
@@ -2325,7 +2325,7 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
         return $p;
     });
     $data = $proyeks->toArray();
-    $taken_date = Carbon\Carbon::now()->translatedFormat("d F Y H:i:s");
+    $taken_date = Carbon::now()->translatedFormat("d F Y H:i:s");
     // creating object of SimpleXMLElement
     $xml_data = new SimpleXMLElement('<?xml version="1.0" encoding="utf-8"?> <feed xml:base="https://crm.wika.co.id/detail-proyek-xml" xmlns="http://www.w3.org/2005/Atom" xmlns:d="http://schemas.microsoft.com/ado/2007/08/dataservices" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:georss="http://www.georss.org/georss" xmlns:gml="http://www.opengis.net/gml"> <title type="text">OpportunityCollection</title> <updated>' . $taken_date . '</updated> </feed>');
     // <id>https://crm.wika.co.id/api/detail-proyek-xml</id> 
