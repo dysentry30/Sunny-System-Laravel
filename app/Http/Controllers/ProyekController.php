@@ -493,6 +493,7 @@ class ProyekController extends Controller
                 $oldestForecast->rkap_forecast = $newProyek->nilai_rkap;
                 $oldestForecast->month_rkap = $newProyek->bulan_pelaksanaan;
                 $oldestForecast->periode_prognosa = $bulans - 1;
+                $oldestForecast->tahun = $years;
                 $oldestForecast->save();
             }
             $newForecast = new Forecast();
@@ -500,6 +501,7 @@ class ProyekController extends Controller
             $newForecast->rkap_forecast = $newProyek->nilai_rkap;
             $newForecast->month_rkap = $newProyek->bulan_pelaksanaan;
             $newForecast->periode_prognosa = $bulans;
+            $newForecast->tahun = $years;
             $newForecast->save();
             // if (isset($newProyek->bulan_ri_perolehan) && isset($newProyek->nilai_perolehan) && $newProyek->stage > 7 ) {
             //     $newForecast->month_realisasi = $newProyek->bulan_ri_perolehan;
@@ -635,10 +637,8 @@ class ProyekController extends Controller
                 $editForecast->nilai_forecast = (int) str_replace('.', '', $dataProyek["nilai-perolehan"]);
                 $editForecast->realisasi_forecast = (int) str_replace('.', '', $dataProyek["nilai-perolehan"]);
                 $editForecast->month_realisasi = (int) $newProyek->bulan_ri_perolehan;
+                // $editForecast->tahun = $years;
                 $editForecast->save();
-                // if (isset($newProyek->bulan_ri_perolehan) && isset($newProyek->nilai_perolehan) && $newProyek->stage == 8 ){
-                // } else {
-                // }
             } else {
                 $newForecast = new Forecast();
                 $newForecast->kode_proyek = $newProyek->kode_proyek;
@@ -649,6 +649,7 @@ class ProyekController extends Controller
                 $newForecast->month_realisasi = $dataProyek["bulan-ri-perolehan"];
                 $newForecast->realisasi_forecast = (int) str_replace('.', '', $dataProyek["nilai-perolehan"]);
                 $newForecast->periode_prognosa = $bulans;
+                $newForecast->tahun = (int) date("Y");
                 $newForecast->save();
             }
         }

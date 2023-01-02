@@ -428,6 +428,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
             // $prognosa = (int) date('m');
             $forecast->periode_prognosa = $periodePrognosa;
+            $forecast->tahun = (int) date("Y");
 
             // dd($tabPane);
 
@@ -450,6 +451,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
             // $prognosa = (int) date('m');
             $findForecast->periode_prognosa = $periodePrognosa;
+            // $findForecast->tahun = $year;
 
             $findForecast->save();
 
@@ -487,8 +489,9 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             $new_forecast->month_realisasi = (int) $proyek->bulan_ri_perolehan ?? null;
             $new_forecast->month_forecast = (int) $data["forecast_month"];
             $new_forecast->periode_prognosa = (int) $data["periode_prognosa"];
+            $new_forecast->tahun = (int) date("Y");
             $new_forecast->nilai_forecast = (string) $data["nilai_forecast"] * $per;
-
+            
             if ($new_forecast->save()) {
                 if (!empty($proyek->forecast)) {
                     $totalfc = 0;
@@ -517,6 +520,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             $forecast->rkap_forecast = str_replace(".", "", (int) $proyek->nilai_rkap);
             $forecast->realisasi_forecast = (string) $nilai_kontrak_keseluruhan;
             $forecast->periode_prognosa = (int) $data["periode_prognosa"];
+            $forecast->tahun = (int) date("Y");
             $forecast->kode_proyek = $data["kode_proyek"];
             if ($forecast->save()) {
                 if ($proyek->kode_proyek == $data["kode_proyek"]) {
@@ -698,6 +702,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post('/forecast/set-lock', function (Request $request) {
         $data = $request->all();
         $from_user = Auth::user();
+        $bulan = (int) date("m");
 
         // $history_forecast = HistoryForecast::where("periode_prognosa", "=", $request->periode_prognosa);
         // if (!empty($history_forecast->get()->all())) {
@@ -749,8 +754,10 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                     $history_forecast->kode_proyek = $kode_proyek;
                     if ($forecast->is_cancel == true) {
                         $history_forecast->nilai_forecast = "0";
+                        $history_forecast->realisasi_forecast = "0";
                     } else {
                         $history_forecast->nilai_forecast = $forecast->nilai_forecast ?? "0";
+                        $history_forecast->realisasi_forecast = $forecast->realisasi_forecast ?? "0";
                     }
                     $history_forecast->month_forecast = $forecast->month_forecast;
                     // $history_forecast->rkap_forecast = str_replace(".", "", (int) $current_proyek->nilai_rkap ?? 0) ?? 0;
@@ -762,14 +769,16 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                     $history_forecast->month_rkap = (int) $forecast->month_rkap;
                     // $history_forecast->month_rkap = $forecast->month_rkap;
                     // $history_forecast->realisasi_forecast = $current_proyek->nilai_kontrak_keseluruhan == null ? 0 : str_replace(",", "", $current_proyek->nilai_kontrak_keseluruhan ?? 0);
-                    if ($forecast->is_cancel == true) {
-                        $history_forecast->realisasi_forecast = "0";
-                    } else {
-                        $history_forecast->realisasi_forecast = $forecast->realisasi_forecast ?? "0";
-                    }
                     // $history_forecast->realisasi_forecast = $current_proyek->nilai_kontrak_keseluruhan;
                     $history_forecast->month_realisasi = $forecast->month_realisasi;
                     $history_forecast->periode_prognosa = $request->periode_prognosa;
+
+                    if ($request->periode_prognosa == 12 && $bulan == 1) {
+                        $history_forecast->tahun = (int) date("Y")-1;
+                    } else {
+                        $history_forecast->tahun = (int) date("Y");
+                    }
+                    
                     $history_forecast->save();
                 }
             } else {
@@ -808,6 +817,11 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                     $history_forecast->month_realisasi = $current_proyek->bulan_ri_perolehan ?? 0;
                 }
                 $history_forecast->periode_prognosa = $request->periode_prognosa;
+                if ($request->periode_prognosa == 12 && $bulan == 1 ) {
+                    $history_forecast->tahun = (int) date("Y") - 1;
+                } else {
+                    $history_forecast->tahun = (int) date("Y");
+                }
                 $history_forecast->save();
                 // if ($index == $forecasts->count() - 1) {
                 // }
