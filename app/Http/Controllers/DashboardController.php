@@ -97,7 +97,7 @@ class DashboardController extends Controller
             $claims = ClaimManagements::join("proyeks", "proyeks.kode_proyek", "=", "claim_managements.kode_proyek")->get()->whereIn("unit_kerja", $unit_kerja_user->toArray());
             $unitKerja = UnitKerja::get()->whereIn("divcode", $unit_kerja_user->toArray());
             // $nilaiHistoryForecast = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("history_forecast.periode_prognosa", "=", $request->get("periode-prognosa") != "" ? (string) $request->get("periode-prognosa") : date("m"))->whereYear("history_forecast.created_at", "=", (string) $request->get("tahun-history") != "" ? (string) $request->get("tahun-history") : date("Y"))->get()->whereIn("unit_kerja", $unit_kerja_user->toArray());
-            $nilaiHistoryForecast = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("proyeks.jenis_proyek", "!=", "I")->where("forecasts.periode_prognosa", "=", $request->get("periode-prognosa") != "" ? (string) $request->get("periode-prognosa") : date("m"))->whereYear("forecasts.created_at", "=", $year)->get()->whereIn("unit_kerja", $unit_kerja_user->toArray());
+            $nilaiHistoryForecast = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("proyeks.jenis_proyek", "!=", "I")->where("forecasts.periode_prognosa", "=", $request->get("periode-prognosa") != "" ? (string) $request->get("periode-prognosa") : date("m"))->where("forecasts.tahun", "=", $year)->get()->whereIn("unit_kerja", $unit_kerja_user->toArray());
             // dd($nilaiHistoryForecast, Auth::user());
             if (!empty($request->get("unit-kerja"))) {
                 // dd($request);
@@ -525,7 +525,7 @@ class DashboardController extends Controller
                 return (int) $p->nilai_rkap;
             } else {
                 return (int) $p->Forecasts->filter(function($f) use($month, $year) {
-                    return $f->periode_prognosa == $month && date_format(date_create($f->created_at), "Y") == $year;
+                    return $f->periode_prognosa == $month && $f->tahun == $year;
                 })->sum(function($f) {
                     return (int) $f->rkap_forecast;
                 });
@@ -559,7 +559,7 @@ class DashboardController extends Controller
             foreach ($proyeks_sumber_dana as $proyek) {
                 if($proyek->tipe_proyek == "R") {
                     $total_rkap += (int) $proyek->Forecasts->filter(function($f) use($month, $year) {
-                        return $f->periode_prognosa == $month && Carbon::createFromTimeString($f->created_at)->year == $year;
+                        return $f->periode_prognosa == $month && $f->tahun == $year;
                     })->sum(function($f) {
                         return (int) $f->rkap_forecast;
                     });
