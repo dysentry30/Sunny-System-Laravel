@@ -261,6 +261,122 @@ Route::middleware(["web"])->group(function () {
     })->middleware("userAuth");
     // End - Detail Proyek yang ada forecast
 
+    // Begin - Detail Proyek yang ada forecast
+    Route::post('/detail-nilai-proyek-sap', function (Request $request) {
+        $periode = getPeriode($request->periode);
+        $is_bpmcsrf_exist = $request->header("BPMCSRF");
+        if (isset($is_bpmcsrf_exist)) {
+
+            // $forecasts = Forecast::with(["Proyek"])->get(["*"])->unique("kode_proyek");
+            // $forecasts = Forecast::where("periode_prognosa", '=', (int) $prognosa)->whereYear("created_at", "=", $tahun)->get();
+            $proyeks = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("periode_prognosa", ((int) $periode[1]))->whereYear("history_forecast.created_at", "=", (int) $periode[0])->where("unit_kerja", "=", $request->unitkerjaid)->get(["nama_proyek", "stage", "proyeks.kode_proyek", "unit_kerja", "jenis_proyek", "tipe_proyek", "nilai_perolehan", "is_cancel", "month_forecast", "nilai_forecast", "realisasi_forecast", "periode_prognosa"])->where("stage", "!=", 7)->where("is_cancel", "!=", true);
+            // $proyeks = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("unit_kerja", "=", $request->unitkerjaid)->get()->where("stage", "!=", 7)->where("is_cancel", "!=", true);
+            $total_realisasi = $proyeks->sum(function($s) {
+                return (int) $s->realisasi_forecast;
+            });
+            $proyeks = $proyeks->unique('nama_proyek');
+            
+            $proyeks = $proyeks->map(function ($p) use ($periode, &$total_realisasi) {
+                if($p->tipe_proyek == "R") {
+                    if (str_contains($p->kode_proyek, "KD")) {
+                        $p->spk_code = Illuminate\Support\Facades\DB::table('proyek_code_crm')->where("kode_proyek", "=", $p->kode_proyek)->first()->kode_proyek_crm ?? $p->kode_proyek;
+                        // Illuminate\Support\Facades\DB::table('proyek_code_crm')->where("kode_proyek", "=", $p->kode_proyek)->dump();
+                    } else {
+                        $p->spk_code = $p->kode_proyek;
+                    }
+                    // $p->spk_code = $p->kode_proyek.'tes-pis';
+                    $p->proyek_name = $p->nama_proyek;
+                    switch ($p->jenis_proyek) {
+                        case "I":
+                            $p->type_code = "INTERN";
+                            break;
+                        case "N":
+                            $p->type_code = "EXTERN";
+                            break;
+                        case "J":
+                            $p->type_code = "JO";
+                            break;
+                    }
+                    $data_ok = collect();
+                    for ($i = 1; $i <= 12; $i++) {
+                        $f = HistoryForecast::where("periode_prognosa", '=', $periode[1])->where("kode_proyek", '=', $p->kode_proyek)->where("month_forecast", "=", $i)->first();
+                        if (!empty($f) && $i == $f->month_forecast) {
+                            $data_ok->push([
+                                "month" => $i,
+                                "total" => (int) $f->nilai_forecast
+                            ]);
+                        } else {
+                            $data_ok->push([
+                                "month" => $i,
+                                "total" => 0
+                            ]);
+                        }
+                    }
+                } else {
+                    if (str_contains($p->kode_proyek, "KD")) {
+                        $p->spk_code = Illuminate\Support\Facades\DB::table('proyek_code_crm')->where("kode_proyek", "=", $p->kode_proyek)->first()->kode_proyek_crm ?? $p->kode_proyek;
+                        // Illuminate\Support\Facades\DB::table('proyek_code_crm')->where("kode_proyek", "=", $p->kode_proyek)->dump();
+                    } else {
+                        $p->spk_code = $p->kode_proyek;
+                    }
+                    // $p->spk_code = $p->kode_proyek;
+                    $p->proyek_name = $p->nama_proyek;
+                    switch ($p->jenis_proyek) {
+                        case "I":
+                            $p->type_code = "INTERN";
+                            break;
+                        case "N":
+                            $p->type_code = "EXTERN";
+                            break;
+                        case "J":
+                            $p->type_code = "JO";
+                            break;
+                    }
+                    $data_ok = collect();
+                    for ($i = 1; $i <= 12; $i++) {
+                        // $f = HistoryForecast::where("periode_prognosa", '=', $periode[1])->where("kode_proyek", '=', $p->kode_proyek)->where("month_forecast", "=", $i)->first();
+                        if (!empty($p) && $i == $p->month_forecast) {
+                            $data_ok->push([
+                                "month" => $i,
+                                "total" => (int) $p->nilai_forecast
+                            ]);
+                        } else {
+                            $data_ok->push([
+                                "month" => $i,
+                                "total" => 0
+                            ]);
+                        }
+                    }
+                }
+                $p->component_id = 0;
+                $p->header_id = 0;
+                $p->data_ok = $data_ok;
+                unset($p->kode_proyek, $p->nama_proyek, $p->jenis_proyek, $p->unit_kerja, $p->nilai_perolehan, $p->is_cancel, $p->stage, $p->tipe_proyek);
+                unset($p->month_forecast, $p->nilai_forecast, $p->periode_prognosa, $p->realisasi_forecast);
+                // $p->nilai_forecast = $p->forecasts->sum("nilai_forecast");
+                // $p->rkap_forecast = $p->forecasts->sum("rkap_forecast");
+                // $p->realisasi_forecast = $p->forecasts->sum("realisasi_forecast");
+                return $p;
+            });
+            $data = [
+                "GetDetailNilaiProyekResult" => [
+                    "Success" => true,
+                    "Message" => null,
+                    "TotalData" => $proyeks->count(),
+                    "TotalRealisasi" => $total_realisasi,
+                    "Data" => $proyeks->flatten(),
+                ],
+
+            ];
+            return response()->json($data);
+        }
+        return response()->json([
+            "status" => 401,
+            "msg" => "Tidak Terautentikasi"
+        ]);
+    })->middleware("userAuth");
+    // End - Detail Proyek yang ada forecast
+
     // Begin - RKAP
     Route::post('/rkap/save', function (Request $request) {
         $is_bpmcsrf_exist = $request->header("BPMCSRF");
@@ -363,16 +479,26 @@ Route::middleware(["web"])->group(function () {
 
     // Begin - Industry Owner ke SAP
     Route::post('/get-industry-attract', function () {
-        $industry_attractivness = IndustryOwner::all();
-        $new_class = $industry_attractivness->map(function($ia) {
-            $new_ia = new stdClass();
-            $new_ia->periode = date("Ymd");
-            $new_ia->code_customer = "";
-            $new_ia->industry_code = $ia->code_owner;
-            $new_ia->attractivness_status = $ia->owner_attractiveness;
-            return $new_ia;
+        $customers_attractivness = Customer::with(["IndustryOwner"])->get();
+        $customers_attractivness = $customers_attractivness->map(function($ca) {
+            // dd($ca);
+            $new_ca = new stdClass();
+            $new_ca->periode = date("Ymd");
+            $new_ca->code_customer = $ca->kode_pelanggan ?? "";
+            $new_ca->industry_code = $ca->IndustryOwner->code_owner ?? "";
+            $new_ca->attractivness_status = $ca->IndustryOwner->owner_attractiveness ?? "";
+            return $new_ca;
         });
-        return response()->json($new_class);
+        // $industry_attractivness = IndustryOwner::all();
+        // $new_class = $industry_attractivness->map(function($ia) {
+        //     $new_ia = new stdClass();
+        //     $new_ia->periode = date("Ymd");
+        //     $new_ia->code_customer = "";
+        //     $new_ia->industry_code = $ia->code_owner;
+        //     $new_ia->attractivness_status = $ia->owner_attractiveness;
+        //     return $new_ia;
+        // });
+        return response()->json($customers_attractivness);
     });
     // End - Industry Owner ke SAP
 

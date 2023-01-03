@@ -2227,6 +2227,7 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
         }
 
         // $sign = ":";
+        $kode_proyek = DB::table("proyek_code_crm")->where("kode_proyek", '=', $p->kode_proyek)->first()->kode_proyek_crm ?? null;
         $p->content = [
             "m:properties" => [
                 "d:Id" => DB::table("proyek_code_crm")->where("kode_proyek", '=', $p->kode_proyek)->first()->uuid_crm ?? $p->id,
@@ -2248,7 +2249,7 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
                 "d:UsrTanggalKontrak" => $p->tanggal_terkontrak,
                 // "d:UsrNilaiKontrakKeseluruhan" => $p->HistoryForecasts->where("periode_prognosa", "=", $periodeOtor)->sum(function ($hf) { return (int) $hf->realisasi_forecast; }),
                 "d:UsrNilaiKontrakKeseluruhan" => $p->nilai_kontrak_keseluruhan,
-                "d:UsrKodeProyek" => DB::table("proyek_code_crm")->where("kode_proyek", '=', $p->kode_proyek)->first()->kode_proyek_crm ?? $p->kode_proyek,
+                "d:UsrKodeProyek" => (!empty($kode_proyek) || $kode_proyek != "") ? $kode_proyek : $p->kode_proyek,
                 "d:UsrLongitude" => $p->longitude,
                 "d:UsrLatitude" => $p->latitude,
                 "d:UsrKatsap" => $kode_sap,
