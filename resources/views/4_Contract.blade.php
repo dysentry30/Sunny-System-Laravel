@@ -33,8 +33,8 @@
                             <div class="d-flex align-items-center py-1">
 
                                 <!--begin::Button-->
-                                <a href="contract-management/view" class="btn btn-sm btn-primary w-80px" id="kt_toolbar_primary_button" style="background-color:#008CB4; padding: 6px">
-                                    New</a>
+                                {{-- <a href="contract-management/view" class="btn btn-sm btn-primary w-80px" id="kt_toolbar_primary_button" style="background-color:#008CB4; padding: 6px">
+                                    New</a> --}}
                                 <!--end::Button-->
 
                                 <!--begin::Wrapper-->
