@@ -8454,7 +8454,7 @@
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
                                         <span style="font-weight: normal">Apakah Jadwal Pelaksanaan telah disetujui oleh Engineer?</span>
-                                    </label>
+                                    </label><br><br>
                                     <!--end::Label-->
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" value="" name="pelaksanaan_disetujui_oleh" id="flexCheckDefault">
@@ -8478,11 +8478,10 @@
                                     </div>
                                     <br>
                                     <br>
-                                    <br>
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
                                         <span style="font-weight: normal">Apakah jadwal diatas mengutamakan ketergantungan kegiatan WIKA kepada Pemberi Kerja dan Mitranya?</span>
-                                    </label>
+                                    </label><br><br>
                                     <!--end::Label-->
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" value="" name="is_jadwal_ketergantungan" id="flexCheckDefault">
@@ -8503,7 +8502,7 @@
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
                                         <span style="font-weight: normal">Siapa yang membuat Construction Schedule?</span>
-                                    </label>
+                                    </label><br><br>
                                     <!--end::Label-->
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" value="" name="construction_schedule_by" id="flexCheckDefault">
@@ -8538,7 +8537,7 @@
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
                                         <span style="font-weight: normal">Apakah Proyek memiliki Buku Harian tentang?</span>
-                                    </label>
+                                    </label><br><br>
                                     <!--end::Label-->
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" value="" name="construction_schedule_by" id="flexCheckDefault">
@@ -8820,6 +8819,97 @@
                                         </label>
                                     </div>
                                 </div>
+                                
+                                <div id="slide-12" class="animate slide" style="display: none; opacity: 0;">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Material Damage</span>
+                                    </label><br><br>
+                                    <!--end::Label-->
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="material_damage" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Contract Works
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="material_damage" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Const. Plant & Eqpt
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="material_damage" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Const. Machinery
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="material_damage" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Clearence of Debris
+                                        </label>
+                                    </div>
+                                    
+                                    <br><br>
+    
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Third Party Liability</span>
+                                    </label><br><br>
+                                    <!--end::Label-->
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="third_party_liability" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Bodily Injury
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="third_party_liability" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Property Damage
+                                        </label>
+                                    </div>
+                                    
+                                    <br><br>
+    
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Polis tersebut dibuat atas nama</span>
+                                    </label><br><br>
+                                    <!--end::Label-->
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="polis_dibuat" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Employer
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="polis_dibuat" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Kontraktor
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="polis_dibuat" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Subcon
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="polis_dibuat" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Konsultan
+                                        </label>
+                                    </div>
+                                </div>
     
                                 <div id="slide-13" class="animate slide" style="display: none; opacity: 0;">
                                     <!--begin::Label-->
@@ -8970,7 +9060,7 @@
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
                                         <span style="font-weight: normal">Apakah ada kejadian yang dapat menyebabkan perubahan jadwal?</span>
-                                    </label>
+                                    </label><br><br>
                                     <!--end::Label-->
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" value="" name="perubahan_perubahan_kejadian" id="flexCheckDefault">
@@ -8990,7 +9080,7 @@
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
                                         <span style="font-weight: normal">Apakah ada kejadian yang dapat menyebabkan Perubahan Pekerjaan / Change Order / Variation Order?</span>
-                                    </label>
+                                    </label><br><br>
                                     <!--end::Label-->
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" value="" name="perubahan_perubahan_co_vo" id="flexCheckDefault">
@@ -9010,7 +9100,7 @@
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
                                         <span style="font-weight: normal">Apakah ada kejadian yang dapat menyebabkan Penghentian Pekerjaan (Suspension)?</span>
-                                    </label>
+                                    </label><br><br>
                                     <!--end::Label-->
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" value="" name="perubahan_perubahan_suspension" id="flexCheckDefault">
@@ -9030,7 +9120,7 @@
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
                                         <span style="font-weight: normal">Apakah ada kemungkinan kegiatan/kejadian yang mungkin menyebabkan Percepatan / Acceleration Pekerjaan?</span>
-                                    </label>
+                                    </label><br><br>
                                     <!--end::Label-->
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" value="" name="perubahan_perubahan_percepatan" id="flexCheckDefault">
@@ -9050,7 +9140,7 @@
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
                                         <span style="font-weight: normal">Apakah Perintah/Instruksi resmi Lapangan mengenai perubahan telah terbit?</span>
-                                    </label>
+                                    </label><br><br>
                                     <!--end::Label-->
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" value="" name="perubahan_perubahan_perintah" id="flexCheckDefault">
@@ -9070,7 +9160,7 @@
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
                                         <span style="font-weight: normal">Apakah perubahan yang terjadi telah dimintakan konfirmasi dari Engineer / Pengawas Ahli?</span>
-                                    </label>
+                                    </label><br><br>
                                     <!--end::Label-->
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" value="" name="perubahan_perubahan_konfirmasi" id="flexCheckDefault">
@@ -9093,7 +9183,7 @@
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
                                         <span style="font-weight: normal">Tahapan yang telah dicapai dalam pengajuan Kompensasi atas perubahan - perubahan yang terjadi :</span>
-                                    </label>
+                                    </label><br><br>
                                     <!--end::Label-->
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" value="" name="perubahan_perubahan_tahapan_kompensasi" id="flexCheckDefault">
@@ -9142,7 +9232,7 @@
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
                                         <span style="font-weight: normal">Klausul Kontrak yang mengatur tentang perubahan (waktu/biaya/mutu)</span>
-                                    </label>
+                                    </label><br><br>
                                     <!--end::Label-->
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" value="" name="perubahan_perubahan_klausul_kontrak" id="flexCheckDefault">
@@ -9178,7 +9268,7 @@
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
                                         <span style="font-weight: normal">Apakah Proyek akan membutuhkan Perpanjangan Waktu?</span>
-                                    </label>
+                                    </label><br><br>
                                     <!--end::Label-->
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" value="" name="perubahan_perubahan_perpanjangan_waktu" id="flexCheckDefault">
@@ -9198,7 +9288,7 @@
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
                                         <span style="font-weight: normal">Apakah keinginan ini telah disampaikan kepada Engineer secara formal?</span>
-                                    </label>
+                                    </label><br><br>
                                     <!--end::Label-->
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" value="" name="perubahan_perubahan_report" id="flexCheckDefault">
@@ -9219,7 +9309,7 @@
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
                                         <span style="font-weight: normal">Apa yang menjadi dasar kebutuhan akan Perpanjangan Waktu?</span>
-                                    </label>
+                                    </label><br><br>
                                     <!--end::Label-->
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" value="" name="perubahan_perubahan_tahapan_dasar_kebutuhan" id="flexCheckDefault">
@@ -9262,18 +9352,21 @@
                                             Berlarutnya proses persetujuan dari Engineer
                                         </label>
                                     </div>
+                                    <br>
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" value="" name="perubahan_perubahan_tahapan_dasar_kebutuhan" id="flexCheckDefault">
                                         <label class="form-check-label" for="flexCheckDefault">
                                             Ketidakjelasan Gambar- gambar / Spesifikasi
                                         </label>
                                     </div>
+                                    <br>
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" value="" name="perubahan_perubahan_tahapan_dasar_kebutuhan" id="flexCheckDefault">
                                         <label class="form-check-label" for="flexCheckDefault">
                                             Ketidakjelasan bahasa Kontrak (arti ganda), perintah yang saling kontradiksi
                                         </label>
                                     </div>
+                                    <br>
                                     <div class="input-group mb-3">
                                         <div class="input-group-text">
                                             <input class="form-check-input mt-0 me-2" type="radio" name="perubahan_perubahan_tahapan_dasar_kebutuhan" value="" aria-label="">
@@ -9283,8 +9376,8 @@
                                     </div>
                                 </div>
                                 
-                                <div id="slide-" class="animate slide" style="display: none; opacity: 0;">
-                                   <h1>Finish</h1>
+                                <div id="slide-9" class="animate slide" style="display: none; opacity: 0;">
+                                    <h5 class="h5 text-center">Silahkan submit data</h5>
                                 </div>
                             </div>
                             <!--End::Modal Progress 20% - 90%-->
@@ -9295,7 +9388,7 @@
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
                                         <span style="font-weight: normal">Apakah besarnya Jaminan Uang Muka telah disesuaikan dengan jumlah Uang Muka yang masih terhutang?</span>
-                                    </label>
+                                    </label><br>
                                     <!--end::Label-->
                                     <br>
                                     <div class="form-check">
@@ -9315,7 +9408,7 @@
                                      <!--begin::Label-->
                                      <label class="fs-6 fw-bold form-label mt-3">
                                         <span style="font-weight: normal">Apakah Jaminan Uang Muka telah ditarik kembali?</span>
-                                    </label>
+                                    </label><br>
                                     <!--end::Label-->
                                     <br>
                                     <div class="form-check">
@@ -9335,7 +9428,7 @@
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
                                         <span style="font-weight: normal">Apakah permohonan untuk melaksanakan Serah Terima Pertama telah diajukan kepada Engineer?</span>
-                                    </label>
+                                    </label><br>
                                     <!--end::Label-->
                                     <br>
                                     <div class="form-check">
@@ -9356,7 +9449,7 @@
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
                                         <span style="font-weight: normal">Tahapan yang telah dicapai dalam program Serah Terima Pertama :</span>
-                                    </label>
+                                    </label><br>
                                     <!--end::Label-->
                                     <br>
                                     <div class="form-check">
@@ -9398,7 +9491,7 @@
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
                                         <span style="font-weight: normal">Apakah Jaminan Pelaksanaan telah ditarik kembali?</span>
-                                    </label>
+                                    </label><br>
                                     <!--end::Label-->
                                     <br>
                                     <div class="form-check">
@@ -9418,7 +9511,7 @@
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
                                         <span style="font-weight: normal">Apakah Jaminan Pemeliharaan telah diganti dengan Bank Garansi?</span>
-                                    </label>
+                                    </label><br>
                                     <!--end::Label-->
                                     <br>
                                     <div class="form-check">
@@ -9436,14 +9529,14 @@
                                     </div>
                                     <br>
                                     <div class="garansi">
-                                        <!--begin::Label-->
-                                        <label class="fs-6 fw-bold form-label mt-3">
-                                            <span style="font-weight: normal">Bank Garansi seluruhnya akan ditarik kembali pada tanggal</span>
-                                            <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
-                                                <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
-                                            </a>
-                                        </label>
-                                        <!--end::Label-->
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Bank Garansi seluruhnya akan ditarik kembali pada tanggal</span>
+                                        <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
+                                            <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
+                                        </a>
+                                    </label><br>
+                                    <!--end::Label-->
                                         <input type="date" class="form-control" name="bank_garansi_ditarik" aria-label="Text input with checkbox">
                                     </div>
                                     <br>
@@ -9454,7 +9547,7 @@
                                             <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
                                                 <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
                                             </a>
-                                        </label>
+                                        </label><br>
                                         <!--end::Label-->
                                         <input type="date" class="form-control" name="masa_pemeliharaan_berakhir" aria-label="Text input with checkbox">
                                     </div>
@@ -9466,7 +9559,7 @@
                                             <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
                                                 <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
                                             </a>
-                                        </label>
+                                        </label><br>
                                         <!--end::Label-->
                                         <input type="date" class="form-control" name="permohonan_diajukan" aria-label="Text input with checkbox">
                                     </div>
@@ -9476,7 +9569,7 @@
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
                                         <span style="font-weight: normal">Nilai Kontrak Akhir :</span>
-                                    </label>
+                                    </label><br>
                                     <!--end::Label-->
                                     <br>
                                     <div class="form-check">
@@ -9500,22 +9593,22 @@
                                         <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
                                             <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
                                         </a>
-                                    </label>
+                                    </label><br>
                                     <!--end::Label-->
                                     <input type="date" class="form-control" name="tanggal_pembayaran_akhir" aria-label="Text input with checkbox">
                                     <br>
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
                                         <span style="font-weight: normal">Termin yang sudah diterima</span>
-                                    </label>
+                                    </label><br>
                                     <!--end::Label-->
-                                    <input type="text" class="form-control form-control-solid">
+                                    <input type="text" class="form-control">
                                 </div>
                                 <div id="slide-7" class="animate slide" style="display: none; opacity: 0;">
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
                                         <span style="font-weight: normal">Apakah ada kejadian yang dapat menyebabkan perubahan pekerjaan (Change Order) / Variation Order?</span>
-                                    </label>
+                                    </label><br><br>
                                     <!--end::Label-->
                                     <br>
                                     <div class="form-check">
@@ -9535,7 +9628,7 @@
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
                                         <span style="font-weight: normal">Apakah perintah/Instruksi resmi lapangan mengenai perubahan telah diterbitkan?</span>
-                                    </label>
+                                    </label><br><br>
                                     <!--end::Label-->
                                     <br>
                                     <div class="form-check">
@@ -9555,7 +9648,7 @@
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
                                         <span style="font-weight: normal">Apakah perubahan yang telah terjadi telah dikonfirmasikan kepada konsultan/pengawas?</span>
-                                    </label>
+                                    </label><br><br>
                                     <!--end::Label-->
                                     <br>
                                     <div class="form-check">
@@ -9572,9 +9665,12 @@
                                         </label>
                                     </div>
                                 </div>
+                                <div id="slide-8" class="animate slide" style="display: none; opacity: 0;">
+                                    <h5 class="h5 text-center">Silahkan submit data</h5>
+                                </div>
                             </div>
                             <!--End::Modal Progress 90% - 100%-->
-                           
+                            <br>
                             <hr>
                             <br>
                             Progress <br>
