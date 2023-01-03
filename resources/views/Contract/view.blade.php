@@ -847,12 +847,12 @@
 
                         </table>
                         @php
-                            $uploadFileAanwitjzing = $contract->UploadFinal->where("category", "=", "aanwitjzing")->first();
+                            $uploadFileAanwitjzing = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "aanwitjzing")->first();
                         @endphp
                         <!--End:Table: Review-->
                         @if (!empty($uploadFileAanwitjzing))
                         <a target="_blank" href="{{ asset('words/'.$uploadFileAanwitjzing->id_document) }}" class="text-hover-primary">
-                            download file : {{ $uploadFileAanwitjzing->nama_document }}
+                           <b>Download File :</b> {{ $uploadFileAanwitjzing->nama_document }}
                         </a>
                         @endif
 
@@ -1264,12 +1264,12 @@
                         </table>
                         <!--End:Table: Review-->
                         @php
-                        $uploadFilePerubahan = $contract->UploadFinal->where("category", "=", "usulan-perubahan")->first();
+                        $uploadFilePerubahan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "usulan-perubahan")->first();
                         @endphp
                         <!--End:Table: Review-->
                         @if (!empty($uploadFilePerubahan))
                         <a target="_blank" href="{{ asset('words/'.$uploadFilePerubahan->id_document) }}" class="text-hover-primary">
-                            download file : {{ $uploadFilePerubahan->nama_document }}
+                           <b>Download File :</b> {{ $uploadFilePerubahan->nama_document }}
                         </a>
                         @endif
 
@@ -2278,12 +2278,12 @@
                         <!--End:Table: Review-->
                         
                         @php
-                        $uploadFileResiko = $contract->UploadFinal->where("category", "=", "resiko-pelaksanaan")->first();
+                        $uploadFileResiko = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "resiko-pelaksanaan")->first();
                         @endphp
                         <!--End:Table: Review-->
                         @if (!empty($uploadFileResiko))
                         <a target="_blank" href="{{ asset('words/'.$uploadFileResiko->id_document) }}" class="text-hover-primary">
-                            download file : {{ $uploadFileResiko->nama_document }}
+                           <b>Download File :</b> {{ $uploadFileResiko->nama_document }}
                         </a>
                         @endif
                         <br><br>
@@ -8322,592 +8322,1287 @@
     <!--end::Modal dialog-->
     </div>
 <!--end::Modal - Pasal Kontraktual-->
-<!--begin::Modal - Pasal Kontraktual-->
-<div class="modal fade" id="kt_modal_input_checklist_manajemen" tabindex="-1" aria-hidden="true">
-    <!--begin::Modal dialog-->
-    <div class="modal-dialog modal-dialog-centered mw-900px">
-        <!--begin::Modal content-->
-        <div class="modal-content">
-            <!--begin::Modal header-->
-            <div class="modal-header">
-                <!--begin::Modal title-->
-                <h2>Add Checklist Manajemen Kontrak</h2>
-                <!--end::Modal title-->
-                <!--begin::Close-->
-                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                    <span class="svg-icon svg-icon-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                            viewBox="0 0 24 24" fill="none">
-                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2"
-                                rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
-                            <rect x="7.41422" y="6" width="16" height="2" rx="1"
-                                transform="rotate(45 7.41422 6)" fill="black" />
-                        </svg>
-                    </span>
-                    <!--end::Svg Icon-->
-                </div>
-                <!--end::Close-->
-            </div>
-            <!--end::Modal header-->
-            <!--begin::Modal body-->
-            <div class="modal-body py-lg-6 px-lg-6">
-    
-                <!--begin::Input group Website-->
-                <div class="fv-row mb-5">
-                    <form action="/checklist-manajemen-kontrak/upload" method="POST">
-                        @csrf
-                        <!--begin::Input-->
-                        <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
-                            name="id-contract">
-                        <input type="hidden" class="modal-name" name="modal-name">
-                        
-                        <div id="slide-1" class="animate slide">
-                            <!--begin::Label-->
-                            <label class="fs-6 fw-bold form-label mt-3">
-                                <span style="font-weight: normal">Kategori</span>
-                            </label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <select id="kategori-checklist"
-                                name="kategori-checklist"
-                                class="form-select form-select-solid"
-                                data-control="select2" data-hide-search="true"
-                                data-placeholder="Pilih Kategori Checklist Manajemen Kontrak">
-                                <option value="" selected></option>
-                                <option value="Progress 0-20%">Progress 0-20%</option>
-                                <option value="Progress 20%-90%">Progress 20%-90%</option>
-                                <option value="Progress 90%-100%">Progress 90%-100%</option>
-                            </select>
-                            <!--end::Input-->
-                        </div>
-
-                        <div id="slide-2" class="animate slide" style="display: none; opacity: 0;">
-                            <!--begin::Label-->
-                            <label class="fs-6 fw-bold form-label mt-3">
-                                <span style="font-weight: normal">Apakah SPK telah diterima?</span>
-                            </label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <div class="input-group mb-3">
-                                <div class="input-group-text">
-                                  <input class="form-check-input mt-0 me-2" type="radio" name="spk_diterima" value="" aria-label="">
-                                  <span>Ya, Tanggal</span>
-                                </div>
-                                <input type="date" class="form-control" name="date_spk_diterima" aria-label="">
-                                <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
-                                    <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
-                                </a>
-                              </div>
-                            <br>
-                            <!--end::Input-->
-                            <!--begin::Input-->
-                            <div class="input-group mb-3">
-                                <div class="input-group-text">
-                                  <input class="form-check-input mt-0 me-2" type="radio" name="spk_diterima" value="" aria-label="">
-                                  <span>Belum, Sebab</span>
-                                </div>
-                                <input type="text" class="form-control" name="sebab_spk_diterima" aria-label="">
-                              </div>
-                            <br>
-                            <!--end::Input-->
-                        </div>
-                        
-                        <div id="slide-3" class="animate slide" style="display: none; opacity: 0;">
-                            <!--begin::Label-->
-                            <label class="fs-6 fw-bold form-label mt-3">
-                                <span style="font-weight: normal">Apakah sudah ada berita Acara serah terima lapangan?</span>
-                            </label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <div class="input-group mb-3">
-                                <div class="input-group-text">
-                                  <input class="form-check-input mt-0 me-2" type="radio" name="berita_acara" value="" aria-label="Iya">
-                                  <span>Ya, Tanggal</span>
-                                </div>
-                                <input type="date" class="form-control" name="date_berita_acara" aria-label="Text input with checkbox">
-                                <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
-                                    <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
-                                </a>
-                            </div>
-                            <br>
-                            <!--end::Input-->
-                            <!--begin::Input-->
-                            <div class="input-group mb-3">
-                                <div class="input-group-text">
-                                  <input class="form-check-input mt-0 me-2" type="radio" name="berita_acara" value="" aria-label="">
-                                  <span>Belum, Sebab</span>
-                                </div>
-                                <input type="text" class="form-control" name="sebab_berita_acara" aria-label="">
-                              </div>
-                            <br>
-                            <!--end::Input-->
-                        </div>
-                        
-                        <div id="slide-4" class="animate slide" style="display: none; opacity: 0;">
-                            <!--begin::Label-->
-                            <label class="fs-6 fw-bold form-label mt-3">
-                                <span style="font-weight: normal">Apakah Jadwal Pelaksanaan telah disetujui oleh Engineer?</span>
-                            </label>
-                            <!--end::Label-->
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" value="" name="pelaksanaan_disetujui_oleh" id="flexCheckDefault">
-                                <label class="form-check-label" for="flexCheckDefault">
-                                    Network Planning
-                                </label>
-                            </div>
-                            <br>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" value="" name="pelaksanaan_disetujui_oleh" id="flexCheckDefault">
-                                <label class="form-check-label" for="flexCheckDefault">
-                                    Sub-Network Planning
-                                </label>
-                            </div>
-                            <br>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" value="" name="pelaksanaan_disetujui_oleh" id="flexCheckDefault">
-                                <label class="form-check-label" for="flexCheckDefault">
-                                    Barchart
-                                </label>
-                            </div>
-                            <br>
-                            <br>
-                            <br>
-                            <!--begin::Label-->
-                            <label class="fs-6 fw-bold form-label mt-3">
-                                <span style="font-weight: normal">Apakah jadwal diatas mengutamakan ketergantungan kegiatan WIKA kepada Pemberi Kerja dan Mitranya?</span>
-                            </label>
-                            <!--end::Label-->
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" value="" name="is_jadwal_ketergantungan" id="flexCheckDefault">
-                                <label class="form-check-label" for="flexCheckDefault">
-                                    Ya
-                                </label>
-                            </div>
-                            <br>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" value="" name="is_jadwal_ketergantungan" id="flexCheckDefault">
-                                <label class="form-check-label" for="flexCheckDefault">
-                                    Tidak
-                                </label>
-                            </div>
-                        </div>
-
-                        <div id="slide-5" class="animate slide" style="display: none; opacity: 0;">
-                            <!--begin::Label-->
-                            <label class="fs-6 fw-bold form-label mt-3">
-                                <span style="font-weight: normal">Siapa yang membuat Construction Schedule?</span>
-                            </label>
-                            <!--end::Label-->
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" value="" name="construction_schedule_by" id="flexCheckDefault">
-                                <label class="form-check-label" for="flexCheckDefault">
-                                    Kontraktor
-                                </label>
-                            </div>
-                            <br>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" value="" name="construction_schedule_by" id="flexCheckDefault">
-                                <label class="form-check-label" for="flexCheckDefault">
-                                    Konsultan (Engineer)
-                                </label>
-                            </div>
-                            <br>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" value="" name="construction_schedule_by" id="flexCheckDefault">
-                                <label class="form-check-label" for="flexCheckDefault">
-                                    Pemberi Tugas (Employer)
-                                </label>
-                            </div>
-                            <br>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" value="" name="construction_schedule_by" id="flexCheckDefault">
-                                <label class="form-check-label" for="flexCheckDefault">
-                                    Bersama-sama
-                                </label>
-                            </div>
-                        </div>
-
-                        <div id="slide-6" class="animate slide" style="display: none; opacity: 0;">
-                            <!--begin::Label-->
-                            <label class="fs-6 fw-bold form-label mt-3">
-                                <span style="font-weight: normal">Apakah Proyek memiliki Buku Harian tentang?</span>
-                            </label>
-                            <!--end::Label-->
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" value="" name="construction_schedule_by" id="flexCheckDefault">
-                                <label class="form-check-label" for="flexCheckDefault">
-                                    Kegiatan Harian
-                                </label>
-                            </div>
-                            <br>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" value="" name="construction_schedule_by" id="flexCheckDefault">
-                                <label class="form-check-label" for="flexCheckDefault">
-                                    Keadaan Cuaca
-                                </label>
-                            </div>
-                            <br>
-                            <div class="input-group">
-                                <div class="input-group-text">
-                                    <input class="form-check-input mt-0 me-2" type="radio" name="construction_schedule_by" value="" aria-label="Iya">
-                                    <span>Lainnya...</span>
-                                  </div>
-                                  <input type="text" class="form-control" name="sebab_construction_schedule" aria-label="Text input with checkbox">
-                            </div>
-                            <br>
-                        </div>
-
-                        <div id="slide-7" class="animate slide" style="display: none; opacity: 0;">
-                            <!--begin::Label-->
-                            <label class="fs-6 fw-bold form-label mt-3">
-                                <span style="font-weight: normal">Penanggung Jawab Pelaksanaan Penghitungan / Pengukuran Nilai Pekerjaan Terlaksana?</span>
-                            </label><br><br>
-                            <!--end::Label-->
-                            <h5>Siapa</h5>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" value="" name="penanggung_jawab_pelaksanaan" id="flexCheckDefault">
-                                <label class="form-check-label" for="flexCheckDefault">
-                                    Kontraktor
-                                </label>
-                            </div>
-                            <br>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" value="" name="penanggung_jawab_pelaksanaan" id="flexCheckDefault">
-                                <label class="form-check-label" for="flexCheckDefault">
-                                    Konsultan
-                                </label>
-                            </div>
-                            <br><br>
-                            <h5>Kapan</h5>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" value="Bulanan" name="penanggung_jawab_pelaksanaan_kapan" id="flexCheckDefault">
-                                <label class="form-check-label" for="flexCheckDefault">
-                                    Bulanan
-                                </label>
-                            </div>
-                            <br>
-                            <div class="input-group">
-                                <div class="input-group-text">
-                                    <input class="form-check-input mt-0 me-2" type="radio" name="penanggung_jawab_pelaksanaan_kapan" value="" aria-label="Iya">
-                                    <span>Dilakukan pada tanggal...</span>
-                                </div>
-                                <input type="date" class="form-control" name="penanggung_jawab_pelaksanaan_kapan" aria-label="Text input with checkbox">
-                                <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
-                                    <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
-                                </a>
-                            </div>
-                            <br>
-                            <div class="input-group">
-                                <div class="input-group-text">
-                                    <input class="form-check-input mt-0 me-2" type="radio" name="penanggung_jawab_pelaksanaan_kapan" value="" aria-label="Iya">
-                                    <span>Cara lain?</span>
-                                </div>
-                                <input type="date" class="form-control" name="penanggung_jawab_pelaksanaan_kapan" aria-label="Text input with checkbox">
-                                <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
-                                    <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
-                                </a>
-                            </div>
-                            <br><br>
-                            <h5>Bagaimana cara melaksanakannya ?</h5>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" value="" name="penanggung_jawab_pelaksanaan" id="flexCheckDefault">
-                                <label class="form-check-label" for="flexCheckDefault">
-                                    Dilakukan Konsultan
-                                </label>
-                            </div>
-                            <br>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" value="" name="penanggung_jawab_pelaksanaan" id="flexCheckDefault">
-                                <label class="form-check-label" for="flexCheckDefault">
-                                    Kontraktor Menyetujui
-                                </label>
-                            </div>
-                            <br>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" value="" name="penanggung_jawab_pelaksanaan" id="flexCheckDefault">
-                                <label class="form-check-label" for="flexCheckDefault">
-                                    Dilakukan Kontraktor
-                                </label>
-                            </div>
-                            <br>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" value="" name="penanggung_jawab_pelaksanaan" id="flexCheckDefault">
-                                <label class="form-check-label" for="flexCheckDefault">
-                                    Konsultan Menyetujui
-                                </label>
-                            </div>
-                            <br>
-                            <div class="input-group">
-                                <div class="input-group-text">
-                                    <input class="form-check-input mt-0 me-2" type="radio" name="construction_schedule_by" value="" aria-label="Iya">
-                                    <span>Cara Lain...</span>
-                                  </div>
-                                  <input type="text" class="form-control" name="sebab_construction_schedule" aria-label="Text input with checkbox">
-                            </div>
-                        </div>
-
-                        <div id="slide-8" class="animate slide" style="display: none; opacity: 0;">
-                            <!--begin::Label-->
-                            <label class="fs-6 fw-bold form-label mt-3">
-                                <span style="font-weight: normal">Apakah Proyek memiliki Identifikasi Gambar ?</span>
-                            </label><br><br>
-                            <!--end::Label-->
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" value="" name="penanggung_jawab_pelaksanaan" id="flexCheckDefault">
-                                <label class="form-check-label" for="flexCheckDefault">
-                                    Issued for Construction (IFC)
-                                </label>
-                            </div>
-                            <br>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" value="" name="penanggung_jawab_pelaksanaan" id="flexCheckDefault">
-                                <label class="form-check-label" for="flexCheckDefault">
-                                    Issued for Approval (IFA)
-                                </label>
-                            </div>
-                            <br><br>
-                            <!--begin::Label-->
-                            <label class="fs-6 fw-bold form-label mt-3">
-                                <span style="font-weight: normal">Apakah Proyek memiliki Pengarsipan Surat-menyurat ?</span>
-                            </label><br><br>
-                            <!--end::Label-->
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" value="Bulanan" name="penanggung_jawab_pelaksanaan_kapan" id="flexCheckDefault">
-                                <label class="form-check-label" for="flexCheckDefault">
-                                    Arsip Kronologis
-                                </label>
-                            </div>
-                            <br>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" value="Bulanan" name="penanggung_jawab_pelaksanaan_kapan" id="flexCheckDefault">
-                                <label class="form-check-label" for="flexCheckDefault">
-                                    Arsip Menurut Subyek
-                                </label>
-                            </div>
-                            <br>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" value="Bulanan" name="penanggung_jawab_pelaksanaan_kapan" id="flexCheckDefault">
-                                <label class="form-check-label" for="flexCheckDefault">
-                                    Arsip Foto-foto Pekerjaan
-                                </label>
-                            </div>
-                            <br>
-                        </div>
-
-                        <div id="slide-9" class="animate slide" style="display: none; opacity: 0;">
-                            <!--begin::Label-->
-                            <label class="fs-6 fw-bold form-label mt-3">
-                                <span style="font-weight: normal">Apakah Proyek memiliki Sistem Pendistribusian Dokumen ?</span>
-                            </label><br><br>
-                            <!--end::Label-->
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" value="" name="is_jadwal_ketergantungan" id="flexCheckDefault">
-                                <label class="form-check-label" for="flexCheckDefault">
-                                    Ya
-                                </label>
-                            </div>
-                            <br>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" value="" name="is_jadwal_ketergantungan" id="flexCheckDefault">
-                                <label class="form-check-label" for="flexCheckDefault">
-                                    Tidak
-                                </label>
-                            </div><br><br>
-
-                            <!--begin::Label-->
-                            <label class="fs-6 fw-bold form-label mt-3">
-                                <span style="font-weight: normal">Apakah Proyek memiliki ketetapan tertulis tentang <b>Bench Mark</b> ?</span>
-                            </label><br><br>
-                            <!--end::Label-->
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" value="" name="is_jadwal_ketergantungan" id="flexCheckDefault">
-                                <label class="form-check-label" for="flexCheckDefault">
-                                    Ya
-                                </label>
-                            </div>
-                            <br>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" value="" name="is_jadwal_ketergantungan" id="flexCheckDefault">
-                                <label class="form-check-label" for="flexCheckDefault">
-                                    Tidak
-                                </label>
-                            </div>
-                        </div>
-
-                        <div id="slide-10" class="animate slide" style="display: none; opacity: 0;">
-                            <!--begin::Label-->
-                            <label class="fs-6 fw-bold form-label mt-3">
-                                <span style="font-weight: normal">Apakah Jaminan Penawaran telah ditarik Kembali ?</span>
-                            </label><br><br>
-                            <!--end::Label-->
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" value="" name="is_jadwal_ketergantungan" id="flexCheckDefault">
-                                <label class="form-check-label" for="flexCheckDefault">
-                                    Ya
-                                </label>
-                            </div>
-                            <br>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" value="" name="is_jadwal_ketergantungan" id="flexCheckDefault">
-                                <label class="form-check-label" for="flexCheckDefault">
-                                    Tidak
-                                </label>
-                            </div><br><br>
-
-                            <!--begin::Label-->
-                            <label class="fs-6 fw-bold form-label mt-3">
-                                <span style="font-weight: normal">Apakah Jaminan Pelaksanaan telah Diterbitkan ?</span>
-                            </label><br><br>
-                            <!--end::Label-->
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" value="" name="is_jadwal_ketergantungan" id="flexCheckDefault">
-                                <label class="form-check-label" for="flexCheckDefault">
-                                    Ya
-                                </label>
-                            </div>
-                            <br>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" value="" name="is_jadwal_ketergantungan" id="flexCheckDefault">
-                                <label class="form-check-label" for="flexCheckDefault">
-                                    Tidak
-                                </label>
-                            </div>
-                        </div>
-
-                        <div id="slide-11" class="animate slide" style="display: none; opacity: 0;">
-                            <!--begin::Label-->
-                            <label class="fs-6 fw-bold form-label mt-3">
-                                <span style="font-weight: normal">Apakah Jaminan Uang Muka telah Diterbitkan ?</span>
-                            </label><br><br>
-                            <!--end::Label-->
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" value="" name="is_jadwal_ketergantungan" id="flexCheckDefault">
-                                <label class="form-check-label" for="flexCheckDefault">
-                                    Ya
-                                </label>
-                            </div>
-                            <br>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" value="" name="is_jadwal_ketergantungan" id="flexCheckDefault">
-                                <label class="form-check-label" for="flexCheckDefault">
-                                    Tidak
-                                </label>
-                            </div><br><br>
-
-                            <!--begin::Label-->
-                            <label class="fs-6 fw-bold form-label mt-3">
-                                <span style="font-weight: normal">Apakah Program Asuransi telah disetujui oleh Pemberi Tugas (Employer) ?</span>
-                            </label><br><br>
-                            <!--end::Label-->
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" value="" name="is_jadwal_ketergantungan" id="flexCheckDefault">
-                                <label class="form-check-label" for="flexCheckDefault">
-                                    Asuransi Contractor;s All Risks
-                                </label>
-                            </div>
-                            <br>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" value="" name="is_jadwal_ketergantungan" id="flexCheckDefault">
-                                <label class="form-check-label" for="flexCheckDefault">
-                                    Asuransi Tenaga Kerja (Jamsostek atau Personal Accident)
-                                </label>
-                            </div>
-                        </div>
-
-                        <div id="slide-12" class="animate slide" style="display: none; opacity: 0;">
-                            <!--begin::Label-->
-                            <label class="fs-6 fw-bold form-label mt-3">
-                                <span style="font-weight: normal">Apakah Perubahan-perubahan yang terjadi telah dilaporkan kepada Asuransi (antisipasi atas perpanjangan waktu dan/atau No Risk Period) ?</span>
-                            </label><br><br>
-                            <!--end::Label-->
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" value="" name="is_jadwal_ketergantungan" id="flexCheckDefault">
-                                <label class="form-check-label" for="flexCheckDefault">
-                                    Ya
-                                </label>
-                            </div>
-                            <br>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" value="" name="is_jadwal_ketergantungan" id="flexCheckDefault">
-                                <label class="form-check-label" for="flexCheckDefault">
-                                    Tidak
-                                </label>
-                            </div><br><br>
-
-                            <!--begin::Label-->
-                            <label class="fs-6 fw-bold form-label mt-3">
-                                <span style="font-weight: normal">Apakah upaya penghindaran kecelakaan sudah dilaksanakan ?</span>
-                            </label><br><br>
-                            <!--end::Label-->
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" value="" name="is_jadwal_ketergantungan" id="flexCheckDefault">
-                                <label class="form-check-label" for="flexCheckDefault">
-                                    Tindakan Pengamanan
-                                </label>
-                            </div>
-                            <br>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" value="" name="is_jadwal_ketergantungan" id="flexCheckDefault">
-                                <label class="form-check-label" for="flexCheckDefault">
-                                    Prosedur Keselamatan Kerja
-                                </label>
-                            </div>
-                            <br><br>
-                            <!--begin::Label-->
-                            <label class="fs-6 fw-bold form-label mt-3">
-                                <span style="font-weight: normal">Apakah kerugian yang terjadi akibat kejadian yang diasuransikan telah dilaporkan kepada Perusahaan Asuransi? ?</span>
-                            </label><br><br>
-                            <!--end::Label-->
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" value="" name="is_jadwal_ketergantungan" id="flexCheckDefault">
-                                <label class="form-check-label" for="flexCheckDefault">
-                                    Ya
-                                </label>
-                            </div>
-                            <br>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" value="" name="is_jadwal_ketergantungan" id="flexCheckDefault">
-                                <label class="form-check-label" for="flexCheckDefault">
-                                    Tidak
-                                </label>
-                            </div>
-                        </div>
-
-                        <div id="slide-12" class="animate slide" style="display: none; opacity: 0;">
-                            <h5 class="h5 text-center">Silahkan submit data</h5>
-                        </div>
-
-                        <hr>
-                        <br>
-                        Progress <br>
-                        <div class="progress">
-                            <div class="progress-bar" id="progress-bar" role="progressbar" aria-label="Basic example" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-
-                        <br><br>
-                        <div class="modal-footer">
-                            <button type="button" onclick="animateSlideChecklist(this)" class="btn btn-sm btn-primary" data-current-slide="1" data-next-slide="2" data-previous-slide="0">Next</button>
-                            <button type="submit" id="submit-checklist" class="btn btn-sm btn-primary" style="display: none">Submit</button>
-                        </div>
-                    </form>
-                </div>
-                <!--end::Input group-->
-    
-            </div>
-            <!--end::Input group-->
-    
-    
-        </div>
-        <!--end::Modal body-->
-    </div>
-    <!--end::Modal content-->
-    </div>
-    <!--end::Modal dialog-->
-    </div>
-<!--end::Modal - Pasal Kontraktual-->
 @endif
 @endisset
+
+<!--begin::Modal - Checklist Menejemen Kontrak-->
+<div class="modal fade" id="kt_modal_input_checklist_manajemen" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-900px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Add Checklist Manajemen Kontrak</h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none">
+                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2"
+                                    rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
+                                <rect x="7.41422" y="6" width="16" height="2" rx="1"
+                                    transform="rotate(45 7.41422 6)" fill="black" />
+                            </svg>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
+        
+                    <!--begin::Input group Website-->
+                    <div class="fv-row mb-5">
+                        <form action="/checklist-manajemen-kontrak/upload" method="POST">
+                            @csrf
+                            <!--begin::Input-->
+                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                name="id-contract">
+                            <input type="hidden" class="modal-name" name="modal-name">
+                            
+                            <div id="slide-1" class="animate slide">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Kategori</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <select id="kategori-checklist"
+                                    name="kategori-checklist"
+                                    onchange="updateChange(this)"
+                                    class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true"
+                                    data-placeholder="Pilih Kategori Checklist Manajemen Kontrak">
+                                    <option value="" selected></option>
+                                    <option value="Progress 0-20%" data-id="#progress_0-20">Progress 0-20%</option>
+                                    <option value="Progress 20%-90%" data-id="#progress_20-90">Progress 20%-90%</option>
+                                    <option value="Progress 90%-100%" data-id="#progress_90-100">Progress 90%-100%</option>
+                                </select>
+                                <!--end::Input-->
+                            </div>
+
+                            <!--Begin::Modal Progress 0% - 20%-->
+                            <div id="progress_0-20">
+                                <div id="slide-2" class="animate slide" style="display: none; opacity: 0;">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Apakah SPK telah diterima?</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-text">
+                                            <input class="form-check-input mt-0 me-2" type="radio" name="spk_diterima" value="" aria-label="">
+                                            <span>Ya, Tanggal</span>
+                                        </div>
+                                        <input type="date" class="form-control" name="date_spk_diterima" aria-label="">
+                                        <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
+                                            <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
+                                        </a>
+                                    </div>
+                                    <br>
+                                    <!--end::Input-->
+                                    <!--begin::Input-->
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-text">
+                                            <input class="form-check-input mt-0 me-2" type="radio" name="spk_diterima" value="" aria-label="">
+                                            <span>Belum, Sebab</span>
+                                        </div>
+                                        <input type="text" class="form-control" name="sebab_spk_diterima" aria-label="">
+                                    </div>
+                                    <br>
+                                    <!--end::Input-->
+                                </div>
+                                
+                                <div id="slide-3" class="animate slide" style="display: none; opacity: 0;">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Apakah sudah ada berita Acara serah terima lapangan?</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-text">
+                                        <input class="form-check-input mt-0 me-2" type="radio" name="berita_acara" value="" aria-label="Iya">
+                                        <span>Ya, Tanggal</span>
+                                        </div>
+                                        <input type="date" class="form-control" name="date_berita_acara" aria-label="Text input with checkbox">
+                                        <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
+                                            <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
+                                        </a>
+                                    </div>
+                                    <br>
+                                    <!--end::Input-->
+                                    <!--begin::Input-->
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-text">
+                                        <input class="form-check-input mt-0 me-2" type="radio" name="berita_acara" value="" aria-label="">
+                                        <span>Belum, Sebab</span>
+                                        </div>
+                                        <input type="text" class="form-control" name="sebab_berita_acara" aria-label="">
+                                    </div>
+                                    <br>
+                                    <!--end::Input-->
+                                </div>
+                                
+                                <div id="slide-4" class="animate slide" style="display: none; opacity: 0;">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Apakah Jadwal Pelaksanaan telah disetujui oleh Engineer?</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="pelaksanaan_disetujui_oleh" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Network Planning
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="pelaksanaan_disetujui_oleh" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Sub-Network Planning
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="pelaksanaan_disetujui_oleh" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Barchart
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Apakah jadwal diatas mengutamakan ketergantungan kegiatan WIKA kepada Pemberi Kerja dan Mitranya?</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="is_jadwal_ketergantungan" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Ya
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="is_jadwal_ketergantungan" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Tidak
+                                        </label>
+                                    </div>
+                                </div>
+    
+                                <div id="slide-5" class="animate slide" style="display: none; opacity: 0;">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Siapa yang membuat Construction Schedule?</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="construction_schedule_by" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Kontraktor
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="construction_schedule_by" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Konsultan (Engineer)
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="construction_schedule_by" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Pemberi Tugas (Employer)
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="construction_schedule_by" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Bersama-sama
+                                        </label>
+                                    </div>
+                                </div>
+    
+                                <div id="slide-6" class="animate slide" style="display: none; opacity: 0;">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Apakah Proyek memiliki Buku Harian tentang?</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="construction_schedule_by" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Kegiatan Harian
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="construction_schedule_by" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Keadaan Cuaca
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="input-group">
+                                        <div class="input-group-text">
+                                            <input class="form-check-input mt-0 me-2" type="radio" name="construction_schedule_by" value="" aria-label="Iya">
+                                            <span>Lainnya...</span>
+                                        </div>
+                                        <input type="text" class="form-control" name="sebab_construction_schedule" aria-label="Text input with checkbox">
+                                    </div>
+                                    <br>
+                                </div>
+    
+                                <div id="slide-7" class="animate slide" style="display: none; opacity: 0;">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Penanggung Jawab Pelaksanaan Penghitungan / Pengukuran Nilai Pekerjaan Terlaksana?</span>
+                                    </label><br><br>
+                                    <!--end::Label-->
+                                    <h5>Siapa</h5>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="penanggung_jawab_pelaksanaan" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Kontraktor
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="penanggung_jawab_pelaksanaan" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Konsultan
+                                        </label>
+                                    </div>
+                                    <br><br>
+                                    <h5>Kapan</h5>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="Bulanan" name="penanggung_jawab_pelaksanaan_kapan" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Bulanan
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="input-group">
+                                        <div class="input-group-text">
+                                            <input class="form-check-input mt-0 me-2" type="radio" name="penanggung_jawab_pelaksanaan_kapan" value="" aria-label="Iya">
+                                            <span>Dilakukan pada tanggal...</span>
+                                        </div>
+                                        <input type="date" class="form-control" name="penanggung_jawab_pelaksanaan_kapan" aria-label="Text input with checkbox">
+                                        <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
+                                            <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
+                                        </a>
+                                    </div>
+                                    <br>
+                                    <div class="input-group">
+                                        <div class="input-group-text">
+                                            <input class="form-check-input mt-0 me-2" type="radio" name="penanggung_jawab_pelaksanaan_kapan" value="" aria-label="Iya">
+                                            <span>Cara lain?</span>
+                                        </div>
+                                        <input type="date" class="form-control" name="penanggung_jawab_pelaksanaan_kapan" aria-label="Text input with checkbox">
+                                        <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
+                                            <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
+                                        </a>
+                                    </div>
+                                    <br><br>
+                                    <h5>Bagaimana cara melaksanakannya ?</h5>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="penanggung_jawab_pelaksanaan_bagaimana" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Dilakukan Konsultan
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="penanggung_jawab_pelaksanaan_bagaimana" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Kontraktor Menyetujui
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="penanggung_jawab_pelaksanaan_bagaimana" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Dilakukan Kontraktor
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="penanggung_jawab_pelaksanaan_bagaimana" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Konsultan Menyetujui
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="input-group">
+                                        <div class="input-group-text">
+                                            <input class="form-check-input mt-0 me-2" type="radio" name="penanggung_jawab_pelaksanaan_bagaimana" value="" aria-label="Iya">
+                                            <span>Cara Lain...</span>
+                                        </div>
+                                        <input type="text" class="form-control" name="note_penanggung_jawab_pelaksanaan_bagaimana" aria-label="Text input with checkbox">
+                                    </div>
+                                </div>
+    
+                                <div id="slide-8" class="animate slide" style="display: none; opacity: 0;">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Apakah Proyek memiliki Identifikasi Gambar ?</span>
+                                    </label><br><br>
+                                    <!--end::Label-->
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="sistem_pendokumentasian_identifikasi_gambar" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Issued for Construction (IFC)
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="sistem_pendokumentasian_identifikasi_gambar" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Issued for Approval (IFA)
+                                        </label>
+                                    </div>
+                                    <br><br>
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Apakah Proyek memiliki Pengarsipan Surat-menyurat ?</span>
+                                    </label><br><br>
+                                    <!--end::Label-->
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="Bulanan" name="sistem_pendokumentasian_arsip" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Arsip Kronologis
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="Bulanan" name="sistem_pendokumentasian_arsip" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Arsip Menurut Subyek
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="Bulanan" name="sistem_pendokumentasian_arsip" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Arsip Foto-foto Pekerjaan
+                                        </label>
+                                    </div>
+                                    <br>
+                                </div>
+    
+                                <div id="slide-9" class="animate slide" style="display: none; opacity: 0;">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Apakah Proyek memiliki Sistem Pendistribusian Dokumen ?</span>
+                                    </label><br><br>
+                                    <!--end::Label-->
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="sistem_pendokumentasian_distribusi_dokumen" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Ya
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="sistem_pendokumentasian_distribusi_dokumen" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Tidak
+                                        </label>
+                                    </div><br><br>
+    
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Apakah Proyek memiliki ketetapan tertulis tentang <b>Bench Mark</b> ?</span>
+                                    </label><br><br>
+                                    <!--end::Label-->
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="sistem_pendokumentasian_benchmark" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Ya
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="sistem_pendokumentasian_benchmark" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Tidak
+                                        </label>
+                                    </div>
+                                </div>
+    
+                                <div id="slide-10" class="animate slide" style="display: none; opacity: 0;">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Apakah Jaminan Penawaran telah ditarik Kembali ?</span>
+                                    </label><br><br>
+                                    <!--end::Label-->
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="jaminan_bank_tarik" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Ya
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="jaminan_bank_tarik" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Tidak
+                                        </label>
+                                    </div><br><br>
+    
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Apakah Jaminan Pelaksanaan telah Diterbitkan ?</span>
+                                    </label><br><br>
+                                    <!--end::Label-->
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="jaminan_bank_pelaksanaan" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Ya
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="jaminan_bank_pelaksanaan" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Tidak
+                                        </label>
+                                    </div>
+                                </div>
+    
+                                <div id="slide-11" class="animate slide" style="display: none; opacity: 0;">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Apakah Jaminan Uang Muka telah Diterbitkan ?</span>
+                                    </label><br><br>
+                                    <!--end::Label-->
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="jaminan_bank_uang_muka" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Ya
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="jaminan_bank_uang_muka" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Tidak
+                                        </label>
+                                    </div><br><br>
+    
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Apakah Program Asuransi telah disetujui oleh Pemberi Tugas (Employer) ?</span>
+                                    </label><br><br>
+                                    <!--end::Label-->
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="asuransi_setuju" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Asuransi Contractor;s All Risks
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="asuransi_setuju" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Asuransi Tenaga Kerja (Jamsostek atau Personal Accident)
+                                        </label>
+                                    </div>
+                                </div>
+    
+                                <div id="slide-13" class="animate slide" style="display: none; opacity: 0;">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Apakah Perubahan-perubahan yang terjadi telah dilaporkan kepada Asuransi (antisipasi atas perpanjangan waktu dan/atau No Risk Period) ?</span>
+                                    </label><br><br>
+                                    <!--end::Label-->
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="lapor_asuransi" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Ya
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="lapor_asuransi" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Tidak
+                                        </label>
+                                    </div><br><br>
+    
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Apakah upaya penghindaran kecelakaan sudah dilaksanakan ?</span>
+                                    </label><br><br>
+                                    <!--end::Label-->
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="penghindaran_kecelakaan" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Tindakan Pengamanan
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="penghindaran_kecelakaan" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Prosedur Keselamatan Kerja
+                                        </label>
+                                    </div>
+                                    <br><br>
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Apakah kerugian yang terjadi akibat kejadian yang diasuransikan telah dilaporkan kepada Perusahaan Asuransi? ?</span>
+                                    </label><br><br>
+                                    <!--end::Label-->
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="is_lapor_kerugian" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Ya
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="is_lapor_kerugian" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Tidak
+                                        </label>
+                                    </div>
+                                </div>
+    
+                                <div id="slide-14" class="animate slide" style="display: none; opacity: 0;">
+                                    <h5 class="h5 text-center">Silahkan submit data</h5>
+                                </div>
+                            </div>
+                            <!--End::Modal Progress 0% - 20%-->
+
+                            <!--Begin::Modal Progress 20% - 90%-->
+                            <div id="progress_20-90">
+                                <div id="slide-2" class="animate slide" style="display: none; opacity: 0;">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Apakah Proyek mengalami keterlambatan?</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-text">
+                                            <input class="form-check-input mt-0 me-2" type="radio" name="kemajuan_pekerjaan_keterlambatan" value="" aria-label="">
+                                            <span>Terlambat</span>
+                                        </div>
+                                        <input type="number" class="form-control" name="kemajuan_pekerjaan_keterlambatan" aria-label="" min="0" max="100">
+                                        <span><h3>%</h3></span>
+                                    </div>
+                                    <br>
+                                    <!--end::Input-->
+                                    <!--begin::Input-->
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-text">
+                                            <input class="form-check-input mt-0 me-2" type="radio" name="kemajuan_pekerjaan_keterlambatan" value="" aria-label="">
+                                            <span>Lebih Awal</span>
+                                        </div>
+                                            <input type="number" class="form-control" name="kemajuan_pekerjaan_keterlambatan" aria-label="" min="0" max="100">
+                                            <span><h3>%</h3></span>
+                                    </div>
+                                    <br>
+                                    <!--end::Input-->
+                                </div>
+
+                                <div id="slide-3" class="animate slide" style="display: none; opacity: 0;">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Apakah Proyek mengadakan Rapat rutin?</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-text">
+                                        <input class="form-check-input mt-0 me-2" type="radio" name="kemajuan_pekerjaan_rapat" value="" aria-label="">
+                                        <span>Mingguan</span>
+                                        </div>
+                                        <input type="number" class="form-control" name="kemajuan_pekerjaan_rapat" aria-label="" min="0" max="100" placeholder="Total Rapat s/d saat ini">
+                                    </div>
+                                    <br>
+                                    <!--end::Input-->
+                                    <!--begin::Input-->
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-text">
+                                            <input class="form-check-input mt-0 me-2" type="radio" name="kemajuan_pekerjaan_rapat" value="" aria-label="">
+                                            <span>Bulanan</span>
+                                        </div>
+                                            <input type="number" class="form-control" name="kemajuan_pekerjaan_rapat" aria-label="" min="0" max="100" placeholder="Total Rapat s/d saat ini">
+                                    </div>
+                                    <br>
+                                    <!--end::Input-->
+                                    <!--begin::Input-->
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-text">
+                                            <input class="form-check-input mt-0 me-2" type="radio" name="kemajuan_pekerjaan_rapat" value="" aria-label="">
+                                            <span>Per Kasus</span>
+                                        </div>
+                                            <input type="number" class="form-control" name="kemajuan_pekerjaan_rapat" aria-label="" min="0" max="100" placeholder="Total Rapat s/d saat ini">
+                                    </div>
+                                    <br>
+                                    <!--end::Input-->
+                                    <!--begin::Input-->
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-text">
+                                            <input class="form-check-input mt-0 me-2" type="radio" name="kemajuan_pekerjaan_rapat" value="" aria-label="">
+                                            <span>Lainnya</span>
+                                        </div>
+                                            <input type="number" class="form-control" name="kemajuan_pekerjaan_rapat" aria-label="" min="0" max="100" placeholder="Total Rapat s/d saat ini">
+                                    </div>
+                                    <br>
+                                    <!--end::Input-->
+                                </div>
+
+                                <div id="slide-4" class="animate slide" style="display: none; opacity: 0;">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Apakah ada kejadian yang dapat menyebabkan perubahan jadwal?</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="perubahan_perubahan_kejadian" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Ya
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="perubahan_perubahan_kejadian" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Tidak
+                                        </label>
+                                    </div>
+                                    <br>
+
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Apakah ada kejadian yang dapat menyebabkan Perubahan Pekerjaan / Change Order / Variation Order?</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="perubahan_perubahan_co_vo" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Ya
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="perubahan_perubahan_co_vo" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Tidak
+                                        </label>
+                                    </div>
+                                    <br>
+
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Apakah ada kejadian yang dapat menyebabkan Penghentian Pekerjaan (Suspension)?</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="perubahan_perubahan_suspension" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Ya
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="perubahan_perubahan_suspension" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Tidak
+                                        </label>
+                                    </div>
+                                    <br>
+
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Apakah ada kemungkinan kegiatan/kejadian yang mungkin menyebabkan Percepatan / Acceleration Pekerjaan?</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="perubahan_perubahan_percepatan" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Ya
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="perubahan_perubahan_percepatan" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Tidak
+                                        </label>
+                                    </div>
+                                    <br>
+
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Apakah Perintah/Instruksi resmi Lapangan mengenai perubahan telah terbit?</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="perubahan_perubahan_perintah" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Ya
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="perubahan_perubahan_perintah" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Tidak
+                                        </label>
+                                    </div>
+                                    <br>
+
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Apakah perubahan yang terjadi telah dimintakan konfirmasi dari Engineer / Pengawas Ahli?</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="perubahan_perubahan_konfirmasi" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Ya
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="perubahan_perubahan_konfirmasi" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Tidak
+                                        </label>
+                                    </div>
+                                    <br>
+
+                                </div>
+
+                                <div id="slide-5" class="animate slide" style="display: none; opacity: 0;">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Tahapan yang telah dicapai dalam pengajuan Kompensasi atas perubahan - perubahan yang terjadi :</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="perubahan_perubahan_tahapan_kompensasi" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Pemberitahuan kepada Engineer/Pengawas Ahli secara segera
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="perubahan_perubahan_tahapan_kompensasi" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Pembuatan Perincian Jumlah Kompensasi
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="perubahan_perubahan_tahapan_kompensasi" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Pengajuan Perincian Jumlah Kompensasi kepada Engineer
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="perubahan_perubahan_tahapan_kompensasi" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Negosiasi
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="perubahan_perubahan_tahapan_kompensasi" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Persetujuan nilai Kompensasi oleh Engineer
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="perubahan_perubahan_tahapan_kompensasi" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Persetujuan nilai Kompensasi oleh Employer
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div id="slide-6" class="animate slide" style="display: none; opacity: 0;">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Klausul Kontrak yang mengatur tentang perubahan (waktu/biaya/mutu)</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="perubahan_perubahan_klausul_kontrak" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Perjanjian Kontrak (Contract Agreement)
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="perubahan_perubahan_klausul_kontrak" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Persyaratan Umum Kontrak (General Condition of Contract)
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="perubahan_perubahan_klausul_kontrak" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Persyaratan Khusus Kontrak (Special Condition of Contract)
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-text">
+                                            <input class="form-check-input mt-0 me-2" type="radio" name="perubahan_perubahan_klausul_kontrak" value="" aria-label="">
+                                            <span>Addenda</span>
+                                        </div>
+                                        <input type="text" class="form-control" name="perubahan_perubahan_klausul_kontrak" aria-label="">
+                                    </div>
+                                </div>
+
+                                <div id="slide-7" class="animate slide" style="display: none; opacity: 0;">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Apakah Proyek akan membutuhkan Perpanjangan Waktu?</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="perubahan_perubahan_perpanjangan_waktu" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Ya
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="perubahan_perubahan_perpanjangan_waktu" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Tidak
+                                        </label>
+                                    </div>
+                                    <br>
+
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Apakah keinginan ini telah disampaikan kepada Engineer secara formal?</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="perubahan_perubahan_report" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Ya
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="perubahan_perubahan_report" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Tidak
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div id="slide-8" class="animate slide" style="display: none; opacity: 0;">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Apa yang menjadi dasar kebutuhan akan Perpanjangan Waktu?</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="perubahan_perubahan_tahapan_dasar_kebutuhan" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Pekerjaan Tambah
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="perubahan_perubahan_tahapan_dasar_kebutuhan" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Perubahan Desain
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="perubahan_perubahan_tahapan_dasar_kebutuhan" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Adanya hambatan Pekerjaan (Cuaca, Perintah Engineer, Dll)
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="perubahan_perubahan_tahapan_dasar_kebutuhan" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Perubahan Metoda Kerja
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="perubahan_perubahan_tahapan_dasar_kebutuhan" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Ketergantungan pada Pekerjaan NSC/Kontraktor ahli
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="perubahan_perubahan_tahapan_dasar_kebutuhan" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Berlarutnya proses persetujuan dari Engineer
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="perubahan_perubahan_tahapan_dasar_kebutuhan" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Ketidakjelasan Gambar- gambar / Spesifikasi
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="perubahan_perubahan_tahapan_dasar_kebutuhan" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Ketidakjelasan bahasa Kontrak (arti ganda), perintah yang saling kontradiksi
+                                        </label>
+                                    </div>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-text">
+                                            <input class="form-check-input mt-0 me-2" type="radio" name="perubahan_perubahan_tahapan_dasar_kebutuhan" value="" aria-label="">
+                                            <span>Lain-lain</span>
+                                        </div>
+                                        <input type="text" class="form-control" name="perubahan_perubahan_tahapan_dasar_kebutuhan" aria-label="">
+                                    </div>
+                                </div>
+                                
+                                <div id="slide-" class="animate slide" style="display: none; opacity: 0;">
+                                   <h1>Finish</h1>
+                                </div>
+                            </div>
+                            <!--End::Modal Progress 20% - 90%-->
+
+                            <!--Begin::Modal Progress 90% - 100%-->
+                            <div id="progress_90-100">
+                                <div id="slide-2" class="animate slide" style="display: none; opacity: 0;">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Apakah besarnya Jaminan Uang Muka telah disesuaikan dengan jumlah Uang Muka yang masih terhutang?</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="jaminan_dp_sesuai" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Ya
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="jaminan_dp_sesuai" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Tidak
+                                        </label>
+                                    </div>
+                                    <br>
+                                     <!--begin::Label-->
+                                     <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Apakah Jaminan Uang Muka telah ditarik kembali?</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="is_jaminan_dp_ditarik" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Ya
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="is_jaminan_dp_ditarik" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Tidak
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Apakah permohonan untuk melaksanakan Serah Terima Pertama telah diajukan kepada Engineer?</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="serah_terima_diajukan" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Ya
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="serah_terima_diajukan" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Tidak
+                                        </label>
+                                    </div>
+                                </div>
+                                <div id="slide-3" class="animate slide" style="display: none; opacity: 0;">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Tahapan yang telah dicapai dalam program Serah Terima Pertama :</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="tahapan_dicapai" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Permohonan kepada Engineer untuk mengadakan Serah Terima Pertama
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="tahapan_dicapai" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Mempersiapkan data-data yang menjadi prasyarat Serah Terima Pertama
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="tahapan_dicapai" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Panitia/Tim Serah Terima Pertama terbentuk
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="tahapan_dicapai" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Tinjauan Lapangan oleh Panitian / Tim
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="tahapan_dicapai" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Serah Terima Pertama telah dilaksanakan
+                                        </label>
+                                    </div>
+                                </div>
+                                <div id="slide-4" class="animate slide" style="display: none; opacity: 0;">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Apakah Jaminan Pelaksanaan telah ditarik kembali?</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="is_jaminan_ditarik" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Ya
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="is_jaminan_ditarik" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Tidak
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Apakah Jaminan Pemeliharaan telah diganti dengan Bank Garansi?</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="is_jaminan_diganti" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Ya
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="is_jaminan_diganti" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Tidak
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="garansi">
+                                        <!--begin::Label-->
+                                        <label class="fs-6 fw-bold form-label mt-3">
+                                            <span style="font-weight: normal">Bank Garansi seluruhnya akan ditarik kembali pada tanggal</span>
+                                            <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
+                                                <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
+                                            </a>
+                                        </label>
+                                        <!--end::Label-->
+                                        <input type="date" class="form-control" name="bank_garansi_ditarik" aria-label="Text input with checkbox">
+                                    </div>
+                                    <br>
+                                    <div class="masa-pemeliharaan">
+                                        <!--begin::Label-->
+                                        <label class="fs-6 fw-bold form-label mt-3">
+                                            <span style="font-weight: normal">Masa Pemeliharaan akan berakhir pada tanggal</span>
+                                            <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
+                                                <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
+                                            </a>
+                                        </label>
+                                        <!--end::Label-->
+                                        <input type="date" class="form-control" name="masa_pemeliharaan_berakhir" aria-label="Text input with checkbox">
+                                    </div>
+                                    <br>
+                                    <div class="serah-terima">
+                                        <!--begin::Label-->
+                                        <label class="fs-6 fw-bold form-label mt-3">
+                                            <span style="font-weight: normal">Permohonan Serah Terima Akhir akan diajukan pada tanggal</span>
+                                            <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
+                                                <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
+                                            </a>
+                                        </label>
+                                        <!--end::Label-->
+                                        <input type="date" class="form-control" name="permohonan_diajukan" aria-label="Text input with checkbox">
+                                    </div>
+                                    <br>
+                                </div>
+                                <div id="slide-5" class="animate slide" style="display: none; opacity: 0;">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Nilai Kontrak Akhir :</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="tahapan_dicapai" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Dalam proses penghitungan bersama
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="tahapan_dicapai" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Disetujui Pemberi Kerja
+                                        </label>
+                                    </div>
+                                </div>
+                                <div id="slide-6" class="animate slide" style="display: none; opacity: 0;">
+                                   <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Pembayaran Akhir (Final Payment) akan dilaksanakan pada tanggal</span>
+                                        <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
+                                            <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
+                                        </a>
+                                    </label>
+                                    <!--end::Label-->
+                                    <input type="date" class="form-control" name="tanggal_pembayaran_akhir" aria-label="Text input with checkbox">
+                                    <br>
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Termin yang sudah diterima</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <input type="text" class="form-control form-control-solid">
+                                </div>
+                                <div id="slide-7" class="animate slide" style="display: none; opacity: 0;">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Apakah ada kejadian yang dapat menyebabkan perubahan pekerjaan (Change Order) / Variation Order?</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="is_perubahan_co_vo" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Ya
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="is_perubahan_co_vo" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Tidak
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Apakah perintah/Instruksi resmi lapangan mengenai perubahan telah diterbitkan?</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="is_instruksi_diterbitkan" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Ya
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="is_instruksi_diterbitkan" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Tidak
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Apakah perubahan yang telah terjadi telah dikonfirmasikan kepada konsultan/pengawas?</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="is_perubahan_dikonfirmasi" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Ya
+                                        </label>
+                                    </div>
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="is_perubahan_dikonfirmasi" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Tidak
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--End::Modal Progress 90% - 100%-->
+                           
+                            <hr>
+                            <br>
+                            Progress <br>
+                            <div class="progress">
+                                <div class="progress-bar" id="progress-bar" role="progressbar" aria-label="Basic example" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+
+                            <br><br>
+                            <div class="modal-footer">
+                                <button type="button" onclick="animateSlideChecklist(this)" class="btn btn-sm btn-primary" data-current-slide="1" data-next-slide="2" data-previous-slide="0">Next</button>
+                                <button type="submit" id="submit-checklist" class="btn btn-sm btn-primary" style="display: none">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                    <!--end::Input group-->
+        
+                </div>
+                <!--end::Input group-->
+        
+        
+            </div>
+            <!--end::Modal body-->
+        </div>
+        <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+</div>
+<!--end::Modal - Checklist Menejemen Kontrak-->
 
 <!--Begin::Modal - Detail Proyek-->
 <div class="modal fade" id="detailProyek" tabindex="-1" aria-labelledby="detailProyekLabel" aria-hidden="true">
@@ -11302,18 +11997,29 @@ aria-hidden="true">
 
 {{-- Begin :: Animating Slide Checklist Manajemen Kontrak --}}
 <script>
+    let dataId = ""
+    function updateChange(e){
+        const data = e.options[e.selectedIndex];
+        dataId = data.getAttribute("data-id");
+    }
     function animateSlideChecklist(e) {
         const currentSlide = e.getAttribute("data-current-slide");
         const nextSlide = e.getAttribute("data-next-slide");
+        const progressId = dataId;
         const previousSlide = e.getAttribute("data-previous-slide");
-        const nextSlideElt = document.querySelector(`#slide-${nextSlide}`);
-        const currentSlideElt = document.querySelector(`#slide-${currentSlide}`);
+        const nextSlideElt = document.querySelector(`${progressId} #slide-${nextSlide}`);
+        let currentSlideElt = "";
+        if(currentSlide == 1){
+            currentSlideElt = document.querySelector(`#slide-${currentSlide}`);
+        }else{
+            currentSlideElt = document.querySelector(`${progressId} #slide-${currentSlide}`);
+        }
 
         // Animasi Slide Opacity
         showSlide(currentSlideElt, nextSlideElt);
 
         // Animasi Progress Bar
-        animateProgressBar(nextSlide);
+        animateProgressBar(currentSlide);
 
         // Nimpa data slide sesuai dengan data slide selanjutnya
         e.setAttribute("data-current-slide", nextSlide);
@@ -11321,7 +12027,7 @@ aria-hidden="true">
         e.setAttribute("data-previous-slide", Number(previousSlide) + 1);
 
         // Check Slide Terakhir
-        const checkNextSlideElt = document.querySelector(`#slide-${Number(nextSlide) + 1}`);
+        const checkNextSlideElt = document.querySelector(`${progressId} #slide-${Number(nextSlide) + 1}`);
         if(!checkNextSlideElt) {
             console.log("Slide Terakhir");
             const buttonSubmit = document.querySelector("#submit-checklist");
@@ -11331,9 +12037,14 @@ aria-hidden="true">
         }
     }
 
-    function animateProgressBar(nextSlide) {
-        const totalSlide = document.querySelectorAll(".animate.slide").length;
-        const persen = (nextSlide / totalSlide) * 100;
+    function animateProgressBar(currentSlide) {
+        const categorySelected = document.getElementById(dataId.slice(1));
+        const totalSlide = categorySelected.querySelectorAll('.animate.slide').length;
+        console.log({
+            "current-slide" : Number(currentSlide),
+            "total-slide" : totalSlide
+        })
+        const persen = (Number(currentSlide) / totalSlide) * 100;
         setTimeout(() => {
             document.querySelector("#progress-bar").setAttribute("aria-valuenow",`${persen}%`);
             document.querySelector("#progress-bar").style.width = `${persen}%`;

@@ -2068,10 +2068,11 @@ class ContractManagementsController extends Controller
             // return redirect()->back();
         }
 
-        $kategori = ContractUploadFinal::where('category', '=', $data['kategori'])->first();
+        $kategori = ContractUploadFinal::where([['id_contract', '=', $data['id-contract']],['category', '=', $data['kategori']]])->first();
         
         if (!empty($kategori)){
-
+            $old_file = $kategori->id_document;
+            File::delete(public_path("words/$old_file"));
             $kategori->id_document = $id_document;
             $kategori->nama_document = $nama_file;
             $kategori->save();
