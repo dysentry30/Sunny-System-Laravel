@@ -347,6 +347,18 @@
                         @endforeach
                         <!--end::Table Body-->
 
+                        <!--begin::Tabel Header-->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-warning">
+                                    <h2 class="m-0 text-center">% PERUBAHAN VS KONTRAK</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                        </div>
+                        <!--end::Tabel Header-->
+
                         <!--begin::Card Line col-12-->
                         {{-- <div class="card mx-8">
                             <div class="card-body">

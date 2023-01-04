@@ -4525,7 +4525,9 @@
                                                                 <div class="d-flex align-items-center position-relative">
                                                                     <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
                                                                     <span id="view-kontrak" class="svg-icon svg-icon-1 position-absolute ms-4">
-                                                                        <a target="_blank" href="/contract-management/view/{{ url_encode($proyek->nomor_terkontrak) }}" class="text-gray-800 text-hover-primary mb-1">{{ $proyek->nomor_terkontrak }}</a>
+                                                                        @if (!empty($proyek->ContractManagements))
+                                                                        <a target="_blank" href="/contract-management/view/{{ url_encode($proyek->ContractManagements->id_contract) }}" class="text-gray-800 text-hover-primary mb-1">{{ $proyek->nomor_terkontrak }}</a>
+                                                                        @endif
                                                                     </span>
                                                                     <input onclick="viewKontrak(this)" type="text" id="fake-terkontrak"
                                                                         class="form-control form-control-solid"

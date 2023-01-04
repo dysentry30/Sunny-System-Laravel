@@ -6,17 +6,18 @@ use stdClass;
 use Carbon\Carbon;
 use App\Models\Dop;
 use App\Models\Proyek;
+use GuzzleHttp\Client;
 use App\Models\Forecast;
 use App\Models\UnitKerja;
-use Illuminate\Http\Request;
-use App\Models\ClaimManagements;
-use App\Models\ContractManagements;
 use App\Models\SumberDana;
-use GuzzleHttp\Client;
+use Illuminate\Http\Request;
+use ParagonIE\Sodium\Compat;
+use App\Models\ClaimManagements;
+use App\Models\PerubahanKontrak;
+use App\Models\ContractManagements;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
-use ParagonIE\Sodium\Compat;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use SebastianBergmann\CodeCoverage\Util\Percentage;
@@ -718,7 +719,9 @@ class DashboardController extends Controller
     {
         $dops = Dop::whereNotIn("dop", ["EA", "PUSAT"])->get();
         $unit_kerjas = UnitKerja::whereNotIn("divcode", ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "N"])->get();
-        $proyeks = Proyek::whereNotIn("unit_kerja", ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "N"])->where("stage", "=", 8)->get();
+        $proyeks = Proyek::whereNotIn("unit_kerja", ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "N"])->where("stage", "=", 8)->get()->filter(function ($p) {
+            return !empty($p->ContractManagements) && $p->stage == 8;
+        });
         $dop_get = $request->query("dop") ?? "";
         $unit_kerja_get = $request->query("unit-kerja") ?? "";
         $proyek_get = $request->query("kode-proyek") ?? "";
@@ -734,33 +737,52 @@ class DashboardController extends Controller
                 return $p->UnitKerja->divcode == $unit_kerja_get;
             });
         } else if (!empty($proyek_get)) {
-            $proyeks = $proyeks->where("kode_proyek", "=", $proyek_get);
-
+            $proyek = $proyeks->where("kode_proyek", "=", $proyek_get)->first();
             $claims = ClaimManagements::where("kode_proyek", "=", $proyek_get)->get();
-
+            $kategori_kontrak = PerubahanKontrak::where("id_contract", "=", $proyek->ContractManagements->id_contract)->get();
+            
             // Begin :: Changes Overview
-            // $kategori_kontrak = $claims->groupBy("jenis_claim")->map(function ($c, $key) {
-            //         return [$key, $c->count()];
-            //     })->values();
-            $kategori_kontrak = [
-                        [
-                            "KLAIM", mt_rand(0, 9), mt_rand(1000000000, 2000000000), mt_rand(0, 6)
-                        ],[
-                            "ANTI-KLAIM", mt_rand(0, 9), mt_rand(1000000000, 2000000000), mt_rand(0, 6)
-                        ],[
-                            "ASURANSI", mt_rand(0, 9), mt_rand(1000000000, 2000000000), mt_rand(0, 6)
-                        ]
-                    ];
+            $kategori_kontrak = $kategori_kontrak->groupBy("jenis_perubahan")->map(function ($kategori, $key) use ($proyek) {
+                $pengajuan = $kategori->sum(function ($c) {
+                    return (int) $c->biaya_pengajuan; 
+                });
+                $persen = (float) $pengajuan * 100 / (float) $proyek->nilai_perolehan;
+                $potensial = 0;
+                $subs = 0;
+                $revisi = 0;
+                $nego = 0;
+                $setuju = 0;
+                $tidak = 0;
+                $dispute = 0;
+                foreach ($kategori as $k) {
+                    if ($k->stage == 1) {
+                        $potensial += 1;
+                    } else if ($k->stage == 2) {
+                        $subs += 1;
+                    } else if ($k->stage == 3) {
+                        $revisi += 1;
+                    } else if ($k->stage == 4) {
+                        $nego += 1;
+                    } else if ($k->stage == 5) {
+                        $setuju += 1;
+                    } else if ($k->stage == 6 && $k->is_dispute == false) {
+                        $tidak += 1;
+                    } else {
+                        $dispute += 1;
+                    }
+                }
+                return [$key, $kategori->count(), $pengajuan, number_format($persen, 2), $potensial, $subs, $revisi, $nego, $setuju, $tidak, $dispute];
+            })->values();
+            // dd($kategori_kontrak);
             // End :: Changes Overview
-            $kategori_kontrak = collect($kategori_kontrak);
-
+            
             $jumlahKontrak = 0;
             $totalKontrak = 0;
             $totalPersen = 0;
             foreach ($kategori_kontrak as $key => $k) {
                 $jumlahKontrak += (int) $k[1] ;
                 $totalKontrak += (int) $k[2] ;
-                $totalPersen += (int) $k[3] ;
+                $totalPersen += (float) $k[3] ;
             }
 
             $insurance = [
@@ -915,7 +937,9 @@ class DashboardController extends Controller
     {
         $dops = Dop::whereNotIn("dop", ["EA", "PUSAT"])->get();
         $unit_kerjas = UnitKerja::whereNotIn("divcode", ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "N"])->get();
-        $proyeks = Proyek::whereNotIn("unit_kerja", ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "N"])->where("stage", "=", 8)->get();
+        $proyeks = Proyek::whereNotIn("unit_kerja", ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "N"])->where("stage", "=", 8)->get()->filter(function ($p) {
+            return !empty($p->ContractManagements) && $p->stage == 8;
+        });
         $dop_get = $request->query("dop") ?? "";
         $unit_kerja_get = $request->query("unit-kerja") ?? "";
         $proyek_get = $request->query("kode-proyek") ?? "";
@@ -931,25 +955,44 @@ class DashboardController extends Controller
                 return $p->UnitKerja->divcode == $unit_kerja_get;
             });
         } else if (!empty($proyek_get)) {
-            $proyeks = $proyeks->where("kode_proyek", "=", $proyek_get);
-
+            $proyek = $proyeks->where("kode_proyek", "=", $proyek_get)->first();
             $claims = ClaimManagements::where("kode_proyek", "=", $proyek_get)->get();
+            $kategori_kontrak = PerubahanKontrak::where("id_contract", "=", $proyek->ContractManagements->id_contract)->get();
 
-            // Begin :: Changes Overview
-            // $kategori_kontrak = $claims->groupBy("jenis_claim")->map(function ($c, $key) {
-            //         return [$key, $c->count()];
-            //     })->values();
-            $kategori_kontrak = [
-                [
-                    "KLAIM", mt_rand(0, 9), mt_rand(1000000000, 2000000000), mt_rand(0, 6)
-                ], [
-                    "ANTI-KLAIM", mt_rand(0, 9), mt_rand(1000000000, 2000000000), mt_rand(0, 6)
-                ], [
-                    "ASURANSI", mt_rand(0, 9), mt_rand(1000000000, 2000000000), mt_rand(0, 6)
-                ]
-            ];
+             // Begin :: Changes Overview
+            $kategori_kontrak = $kategori_kontrak->groupBy("jenis_perubahan")->map(function ($kategori, $key) use ($proyek) {
+                $pengajuan = $kategori->sum(function ($c) {
+                    return (int) $c->biaya_pengajuan; 
+                });
+                $persen = (float) $pengajuan * 100 / (float) $proyek->nilai_perolehan;
+                $potensial = 0;
+                $subs = 0;
+                $revisi = 0;
+                $nego = 0;
+                $setuju = 0;
+                $tidak = 0;
+                $dispute = 0;
+                foreach ($kategori as $k) {
+                    if ($k->stage == 1) {
+                        $potensial += 1;
+                    } else if ($k->stage == 2) {
+                        $subs += 1;
+                    } else if ($k->stage == 3) {
+                        $revisi += 1;
+                    } else if ($k->stage == 4) {
+                        $nego += 1;
+                    } else if ($k->stage == 5) {
+                        $setuju += 1;
+                    } else if ($k->stage == 6 && $k->is_dispute == false) {
+                        $tidak += 1;
+                    } else {
+                        $dispute += 1;
+                    }
+                }
+                return [$key, $kategori->count(), $pengajuan, number_format($persen, 2), $potensial, $subs, $revisi, $nego, $setuju, $tidak, $dispute];
+            })->values();
+            // dd($kategori_kontrak);
             // End :: Changes Overview
-            $kategori_kontrak = collect($kategori_kontrak);
 
             $jumlahKontrak = 0;
             $totalKontrak = 0;
@@ -957,7 +1000,7 @@ class DashboardController extends Controller
             foreach ($kategori_kontrak as $key => $k) {
                 $jumlahKontrak += (int) $k[1];
                 $totalKontrak += (int) $k[2];
-                $totalPersen += (int) $k[3];
+                $totalPersen += (float) $k[3] ;
             }
 
             $insurance = [

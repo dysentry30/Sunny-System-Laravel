@@ -617,7 +617,7 @@
                                 </div>
                                 <!--end::Title body-->
                             </div>
-                            <div class="col-3">
+                            <div class="col-4">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="py-2 bg-success">
                                     <h4 class="m-0 text-center">SUBMISIONS STATUS</h4>
@@ -626,10 +626,13 @@
                                             <h6 class="m-0 text-center">REVISION</h6>
                                         </div>
                                         <div class="col">
-                                            <h6 class="m-0 text-center">REJECTED</h6>
+                                            <h6 class="m-0 text-center">NEGOITATION</h6>
                                         </div>
                                         <div class="col">
                                             <h6 class="m-0 text-center">APPROVED</h6>
+                                        </div>
+                                        <div class="col">
+                                            <h6 class="m-0 text-center">REJECTED</h6>
                                         </div>
                                     </div>
                                 </div>
@@ -659,49 +662,56 @@
                             <div class="col">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-secondary">
-                                    <h2 class="m-0 text-center">{{ $table[1] }}</h2>
+                                    <h2 class="m-0 text-center">{{ $table[4] ?? 0 }}</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
                             <div class="col">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-secondary">
-                                    <h2 class="m-0 text-center">{{ $table[1] }}</h2>
+                                    <h2 class="m-0 text-center">{{ $table[5] ?? 0 }}</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
                             <div class="col-1">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-secondary">
-                                    <h2 class="m-0 text-center">{{ mt_rand(0, 6) }}</h2>
+                                    <h2 class="m-0 text-center">{{ $table[6] ?? 0 }}</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
                             <div class="col-1">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-secondary">
-                                    <h2 class="m-0 text-center">{{ mt_rand(0, 6) }}</h2>
+                                    <h2 class="m-0 text-center">{{ $table[7] ?? 0 }}</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
                             <div class="col-1">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-secondary">
-                                    <h2 class="m-0 text-center">{{ mt_rand(0, 6) }}</h2>
+                                    <h2 class="m-0 text-center">{{ $table[8] ?? 0 }}</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col-1">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-secondary">
+                                    <h2 class="m-0 text-center">{{ $table[9] ?? 0 }}</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
                             <div class="col">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-secondary">
-                                    <h2 class="m-0 text-center">{{ mt_rand(0, 2) }}</h2>
+                                    <h2 class="m-0 text-center">{{ $table[10] ?? 0 }}</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
                         </div>
                         @endforeach
                         <!--end::Table Body-->
-
+                        
                         <br>
                         
                         <!--begin::Tabel Header-->
@@ -716,7 +726,7 @@
                             <div class="col-3">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-warning">
-                                    <h2 class="m-0 text-center">{{ $totalPersen }}, {{ mt_rand(1, 9) }} %</h2>
+                                    <h2 class="m-0 text-center">{{ $totalPersen }} %</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
@@ -751,13 +761,25 @@
                             <div class="col-3">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-secondary">
-                                    <h2 class="m-0 text-center">{{ $table[3] }}, {{ mt_rand(1, 9) }} %</h2>
+                                    <h2 class="m-0 text-center">{{ $table[3] }} %</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
                         </div>
                         @endforeach
                         <!--end::Table Body-->
+
+                        <!--begin::Tabel Header-->
+                        <div class="row mb-4 mx-3">
+                            <div class="col-12">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-warning">
+                                    <h2 class="m-0 text-center">% PERUBAHAN VS KONTRAK</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                        </div>
+                        <!--end::Tabel Header-->
 
                         <br>
 
