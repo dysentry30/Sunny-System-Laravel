@@ -46,7 +46,7 @@ Route::middleware(["web"])->group(function () {
     Route::post('/logout', [UserController::class, 'logout'])->middleware("userAuth");
     // End Login / Logout
 
-    // Begin Detail Proyek yang ada forecast
+    // Begin - Detail Proyek yang ada forecast
     Route::post('/detail-proyek', function (Request $request) {
         $periode = getPeriode($request->periode);
         $is_bpmcsrf_exist = $request->header("BPMCSRF");
@@ -56,7 +56,7 @@ Route::middleware(["web"])->group(function () {
             // $forecasts = Proyek::where("periode_prognosa", '=', (int) $prognosa)->whereYear("created_at", "=", $tahun)->get();
             if (isset($request->unitkerjaid)) {
                 // $proyeks = Proyek::where("unit_kerja", "=", $request->unitkerjaid)->where("tahun_perolehan", "=", $periode[0])->where("bulan_pelaksanaan", "=", $periode[1])->get(["nama_proyek", "kode_proyek", "unit_kerja", "jenis_proyek", "stage", "tanggal_mulai_terkontrak", "tanggal_akhir_terkontrak"]);
-                $proyeks = Proyek::where("unit_kerja", "=", $request->unitkerjaid)->where("tahun_perolehan", "=", $periode[0])->get(["nama_proyek", "kode_proyek", "unit_kerja", "jenis_proyek", "stage", "tanggal_mulai_terkontrak", "tanggal_akhir_terkontrak"])->filter(function ($p) use ($periode) {
+                $proyeks = Proyek::where("unit_kerja", "=", $request->unitkerjaid)->where("tahun_perolehan", "=", $periode[0])->get(["nama_proyek", "kode_proyek", "unit_kerja", "jenis_proyek", "stage", "tanggal_mulai_terkontrak", "tanggal_akhir_terkontrak", "tahun_perolehan", "bulan_pelaksanaan"])->filter(function ($p) use ($periode) {
                     $is_forecast_exist = $p->Forecasts->where("periode_prognosa", $periode[1])->count() > 0;
                     unset($p->Forecasts);
                     return $is_forecast_exist;
@@ -120,11 +120,7 @@ Route::middleware(["web"])->group(function () {
                 }
                 // dd($p->tanggal_mulai_terkontrak, $p->tanggal_akhir_terkontrak);
                 $p->pemberi_kerja = ProyekBerjalans::where("kode_proyek", "=", $p->kode_proyek)->first()->name_customer ?? "";
-                $p->rencana_perolehan = $p->Forecasts->filter(function($f) use($periode) {
-                    return $f->tahun == $periode[0] && $f->periode_prognosa == $periode[1];
-                })->sum(function($f) {
-                    return (int) $f->nilai_forecast;
-                });
+                $p->rencana_perolehan = $p->tahun_perolehan . "-" . str_pad($p->bulan_pelaksanaan, 2, 0, STR_PAD_LEFT) . "-" . "01";
                 $p->perkiraan_durasi = date_create($p->tanggal_mulai_terkontrak)->diff(date_create($p->tanggal_akhir_terkontrak))->days;
                 $p->periode = $request->periode;
                 unset($p->jenis_proyek, $p->unit_kerja, $p->kode_proyek, $p->stage, $p->tanggal_mulai_terkontrak, $p->tanggal_akhir_terkontrak, $p->Forecasts);
@@ -147,6 +143,7 @@ Route::middleware(["web"])->group(function () {
             "msg" => "Tidak Terautentikasi"
         ]);
     })->middleware("userAuth");
+    // End - Detail Proyek yang ada forecast
 
 
     // Begin - Detail Proyek yang ada forecast
@@ -437,6 +434,7 @@ Route::middleware(["web"])->group(function () {
             $p->dop = $p->UnitKerja->dop;
             $p->stage = 1;
             $p->porsi_jo = 100;
+            $p->is_cancel = false;
 
             $customer = Customer::where('name', "=", $proyek["UsrCustomer"])->get()->first();
             // dd($customerHistory);
@@ -475,8 +473,9 @@ Route::middleware(["web"])->group(function () {
                     $is_data_inserted = false;
                 }
             });
-
-            $p->save();
+            if($p->save()) {
+                $is_data_inserted = true;
+            }
         });
         if ($is_data_inserted) {
             return response()->json([

@@ -191,6 +191,7 @@ class ProyekController extends Controller
         $newProyek->dop = $unitKerja->dop;
         $newProyek->company = $unitKerja->company;
 
+        $newProyek->nilaiok_awal = (int) str_replace('.', '', $dataProyek["nilai-rkap"]);
         $newProyek->nilai_valas_review = (int) str_replace('.', '', $dataProyek["nilai-rkap"]);
         $newProyek->bulan_review = $dataProyek["bulan-pelaksanaan"];
         $newProyek->nilaiok_review = (int) str_replace('.', '', $dataProyek["nilai-rkap"]);
@@ -403,7 +404,7 @@ class ProyekController extends Controller
         }
         // $newProyek->pic = $dataProyek["pic"];
         $newProyek->bulan_pelaksanaan = $dataProyek["bulan-pelaksanaan"];
-        $newProyek->nilai_rkap = (int) str_replace('.', '', $dataProyek["nilai-rkap"]);
+        $newProyek->nilaiok_awal = (int) str_replace('.', '', $dataProyek["nilai-rkap"]);
         if (Auth::user()->check_administrator) {
             $newProyek->nilai_valas_review = (int) str_replace('.', '', $dataProyek["nilai-valas-review"]);
             $newProyek->mata_uang_review = $dataProyek["mata-uang-review"];
@@ -413,9 +414,9 @@ class ProyekController extends Controller
         }
         // $newProyek->nilai_valas_awal = $dataProyek["nilai-rkap"];
         $newProyek->mata_uang_awal = $dataProyek["mata-uang-awal"];
-        $newProyek->kurs_awal = $dataProyek["kurs-awal"];
+        $newProyek->kurs_awal = $dataProyek["kurs-awal"] ?? 1;
         $newProyek->bulan_awal = $dataProyek["bulan-pelaksanaan"];
-        $newProyek->nilaiok_awal = (int) str_replace('.', '', $dataProyek["nilaiok-awal"]);
+        // $newProyek->nilaiok_awal = (int) str_replace('.', '', $dataProyek["nilaiok-awal"]);
         $newProyek->status_pasdin  = $dataProyek["status-pasardini"];
         $newProyek->info_asal_proyek  = $dataProyek["info-proyek"];
         $newProyek->laporan_kualitatif_pasdin = $dataProyek["laporan-kualitatif-pasdin"];

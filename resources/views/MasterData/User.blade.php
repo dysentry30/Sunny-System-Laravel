@@ -184,11 +184,11 @@ a{{-- Begin::Extend Header --}}
                                     <tbody class="fw-bold text-gray-600">
                                         <tr>
 
-                                            <!--begin::No=-->
+                                            <!--begin::No-->
                                             <td class="px-4">
                                                 {{ $no++ }}
                                             </td>
-                                            <!--end::No=-->
+                                            <!--end::No-->
 
                                             <!--begin::NIP-->
                                             <td>
@@ -211,13 +211,13 @@ a{{-- Begin::Extend Header --}}
                                             </td>
                                             <!--end::Ketua tender-->
 
-                                            <!--begin::unit=-->
+                                            <!--begin::unit-->
                                             <td>
                                                 {{ $user->UnitKerja->unit_kerja ?? '-' }}
                                             </td>
-                                            <!--end::unit=-->
+                                            <!--end::unit-->
 
-                                            <!--begin::Role=-->
+                                            <!--begin::Role-->
                                             <td>
                                                 @if (!$user->check_administrator &&
                                                     !$user->check_admin_kontrak &&
@@ -238,15 +238,15 @@ a{{-- Begin::Extend Header --}}
                                                     - Team Proyek <br>
                                                 @endif
                                             </td>
-                                            <!--end::Role=-->
+                                            <!--end::Role-->
 
-                                            <!--begin::Created at=-->
+                                            <!--begin::Created at-->
                                             <td class="text-center">
                                                 <p class="fs-6 badge {{ $user->is_active == true ? 'badge-light-success' : 'badge-light-danger' }}">
                                                     {{ $user->is_active == true ? 'yes' : '* No' }}
                                                 </p>
                                             </td>
-                                            <!--end::Created at=-->
+                                            <!--end::Created at-->
 
                                             <!--begin::Email-->
                                             <td class="px-4">
@@ -255,7 +255,7 @@ a{{-- Begin::Extend Header --}}
                                             <!--end::Email-->
 
                                             @if (auth()->user()->check_administrator)
-                                                <!--begin::Action=-->
+                                                <!--begin::Action-->
                                                 <td class="text-center">
                                                     <!--begin::Button-->
                                                     <button data-bs-toggle="modal"
@@ -266,7 +266,7 @@ a{{-- Begin::Extend Header --}}
                                                     </form>
                                                     <!--end::Button-->
                                                 </td>
-                                                <!--end::Action=-->
+                                                <!--end::Action-->
                                             @endif
                                         </tr>
                                 @endforeach
