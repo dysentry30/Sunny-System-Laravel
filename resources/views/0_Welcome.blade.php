@@ -19,7 +19,11 @@
 <body>
     <div class="parent clearfix">
         <div class="bg-illustration">
-            <img style="margin-top: 100px; margin-left: 50px" src="/media/logos/logo-wika.png" alt="logo">
+            @if (str_contains(Request::Path(), 'ccm'))
+                <img style="margin-top: 100px; margin-left: 50px" src="/media/logos/logo-ccm.png" alt="logo">
+            @else
+                <img style="margin-top: 100px; margin-left: 50px" src="/media/logos/logo-wika.png" alt="logo">
+            @endif
             {{-- <hr class="text-white mt-10"> --}}
             {{-- <h1 class="text-white mt-5" style="margin-left: 50px; font-size : 75px">WIKA</h1> --}}
             <p class="text-white mt-5" style="margin-left: 55px">Powered by Sunny System</p>
@@ -32,7 +36,11 @@
     
         <div class="login ps-20 ">
             <div class="login-logo pb-lg-4 ms-10">
+                @if (str_contains(Request::Path(), 'ccm'))
+                <br><br><br><br>
+                @else
                 <img src="media/logos/logo-gray.png" alt="" style="height: 50px; margin-top:100px"/>
+                @endif
             </div>
             <br>
             <div class="login-form">
