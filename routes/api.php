@@ -67,7 +67,7 @@ Route::middleware(["web"])->group(function () {
                     "msg" => "Unit Kerja Not Found"
                 ], 400);
             }
-            $proyeks = $proyeks->map(function ($p) use ($request) {
+            $proyeks = $proyeks->map(function ($p) use ($request, $periode) {
                 if (str_contains($p->kode_proyek, "KD")) {
                     $p->kode_crm = Illuminate\Support\Facades\DB::table('proyek_code_crm')->where("kode_proyek", "=", $p->kode_proyek)->first()->kode_proyek_crm ?? $p->kode_proyek;
                 } else {
@@ -120,10 +120,14 @@ Route::middleware(["web"])->group(function () {
                 }
                 // dd($p->tanggal_mulai_terkontrak, $p->tanggal_akhir_terkontrak);
                 $p->pemberi_kerja = ProyekBerjalans::where("kode_proyek", "=", $p->kode_proyek)->first()->name_customer ?? "";
-                $p->rencana_perolehan = null;
+                $p->rencana_perolehan = $p->Forecasts->filter(function($f) use($periode) {
+                    return $f->tahun == $periode[0] && $f->periode_prognosa == $periode[1];
+                })->sum(function($f) {
+                    return (int) $f->nilai_forecast;
+                });
                 $p->perkiraan_durasi = date_create($p->tanggal_mulai_terkontrak)->diff(date_create($p->tanggal_akhir_terkontrak))->days;
                 $p->periode = $request->periode;
-                unset($p->jenis_proyek, $p->unit_kerja, $p->kode_proyek, $p->stage, $p->tanggal_mulai_terkontrak, $p->tanggal_akhir_terkontrak);
+                unset($p->jenis_proyek, $p->unit_kerja, $p->kode_proyek, $p->stage, $p->tanggal_mulai_terkontrak, $p->tanggal_akhir_terkontrak, $p->Forecasts);
 
                 return $p;
             });
