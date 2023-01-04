@@ -1384,16 +1384,15 @@
                                                             <div class="fv-row mb-7">
                                                                 <!--begin::Label-->
                                                                 <label class="fs-6 fw-bold form-label mt-3">
-                                                                    <span>Nilai OK (Excludde Ppn) <i
-                                                                            class="bi bi-lock"></i></span>
+                                                                    <span>Nilai OK (Excludde Ppn) </span>
                                                                 </label>
                                                                 <!--end::Label-->
                                                                 <!--begin::Input-->
                                                                 <input type="text"
                                                                     class="form-control reformat form-control-solid"
                                                                     id="nilai-rkap" name="nilai-rkap"
-                                                                    value="{{ number_format((int) str_replace('.', '', $proyek->nilai_rkap), 0, '.', '.') }}"
-                                                                    placeholder="Nilai OK (Excludde Ppn)" readonly />
+                                                                    value="{{ number_format((int) str_replace('.', '', $proyek->nilaiok_awal), 0, '.', '.') }}"
+                                                                    placeholder="Nilai OK (Excludde Ppn)" />
                                                                 <!--end::Input-->
                                                             </div>
                                                             <!--end::Input group-->
@@ -1704,8 +1703,7 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Nilai OK Awal (Valas) (Exclude Tax) <i
-                                                                                class="bi bi-lock"></i></span>
+                                                                        <span>Nilai RKAP Awal (Valas) (Exclude Tax) <i class="bi bi-lock"></i></span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
@@ -1772,16 +1770,15 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Kurs Awal</span>
+                                                                        <span>Kurs Awal <i class="bi bi-lock"></i></span>
                                                                     </label>
                                                                     <!--end::Label-->
 
                                                                     <!--begin::Input-->
                                                                     <input onkeyup="hitungAwal()" type="text"
                                                                         class="form-control form-control-solid reformat"
-                                                                        id="kurs-awal" name="kurs-awal"
-                                                                        value="{{ $proyek->kurs_awal }}"
-                                                                        placeholder="Kurs Awal" />
+                                                                        value="1"
+                                                                        placeholder="Kurs Awal" readonly />
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
@@ -1874,7 +1871,7 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Nilai OK (Exclude PPN) <i
+                                                                        <span>Nilai RKAP (Exclude PPN) <i
                                                                                 class="bi bi-lock"></i></span>
                                                                     </label>
                                                                     <!--end::Label-->
@@ -1883,7 +1880,7 @@
                                                                     <input type="text"
                                                                         class="form-control form-control-solid reformat"
                                                                         id="nilaiok-awal" name="nilaiok-awal"
-                                                                        value="{{ $proyek->nilaiok_awal == null ? number_format((int) str_replace('.', '', $proyek->nilai_rkap), 0, '.', '.') : number_format((int) str_replace('.', '', $proyek->nilaiok_awal), 0, '.', '.') }}"
+                                                                        value="{{ number_format((int) str_replace('.', '', $proyek->nilai_rkap), 0, '.', '.') }}"
                                                                         placeholder="Nilai OK (Exclude PPN)" readonly />
                                                                     <!--end::Input-->
                                                                 </div>
@@ -1891,14 +1888,14 @@
                                                             </div>
                                                             <!--End::Col-->
                                                         </div>
-                                                        <script>
+                                                        {{-- <script>
                                                             function hitungAwal() {
                                                                 let nilaiOkAwal = document.getElementById("nilai-valas-awal").value.replaceAll(".", "");
                                                                 let kursAwal = document.getElementById("kurs-awal").value.replaceAll(".", "");
                                                                 let hasilOkAwal = nilaiOkAwal * kursAwal;
                                                                 document.getElementById("nilaiok-awal").value = Intl.NumberFormat(["id"]).format(hasilOkAwal);
                                                             }
-                                                        </script>
+                                                        </script> --}}
                                                         <!--End::Row Kanan+Kiri-->
                                                     </div>
                                                     <!--divRkapAwal-->
