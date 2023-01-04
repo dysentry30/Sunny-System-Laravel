@@ -309,7 +309,7 @@
                                                     <!--begin::Card widget 20-->
                                                     <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90 mb-5 mb-xl-1" style="background-color: #063F5C;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
                                                         <!--begin::Header-->
-                                                        <div class="card-header pt-5">
+                                                        <div class="card-header">
                                                             <!--begin::Title-->
                                                             <div class="card-title w-100">
                                                                 <!--begin::Subtitle-->
@@ -340,7 +340,7 @@
                                                 <!--begin::Card widget 20-->
                                                 <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90 mb-5 mb-xl-1" style="background-color: #063F5C;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: 100%;">
                                                     <!--begin::Header-->
-                                                    <div class="card-header pt-5">
+                                                    <div class="card-header">
                                                         <!--begin::Title-->
                                                         <div class="card-title w-100">
                                                             <!--begin::Subtitle-->
@@ -395,14 +395,15 @@
                                     <div class="col-2">
                                         <!--begin::Card Status-->
                                         <div class="col ms-3 me-0">
+                                            <h2>CRM</h2>
                                             <!--begin::Card column-->
                                             <div class="row">
                                                 <!--begin::Card body-->
                                                 <div class="">
                                                     <!--begin::Card widget 20-->
-                                                    <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #017EB8;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                                    <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #F7AD1A;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
                                                         <!--begin::Header-->
-                                                        <div class="card-header pt-5">
+                                                        <div class="card-header py-3">
                                                             <!--begin::Title-->
                                                             <div class="card-title d-flex flex-column">
                                                                 <!--begin::Amount-->
@@ -427,7 +428,7 @@
                                                     <!--begin::Card widget 20-->
                                                     <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #28B3AC;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
                                                         <!--begin::Header-->
-                                                        <div class="card-header pt-5">
+                                                        <div class="card-header py-3">
                                                             <!--begin Items::Title-->
                                                             <div class="card-title d-flex flex-column">
                                                                 <!--begin::Amount-->
@@ -452,7 +453,7 @@
                                                     <!--begin::Card widget 20-->
                                                     <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #F7AD1A;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
                                                         <!--begin::Header-->
-                                                        <div class="card-header pt-5">
+                                                        <div class="card-header py-3">
                                                             <!--begin::Title-->
                                                             <div class="card-title d-flex flex-column">
                                                                 <!--begin::Amount-->
@@ -471,13 +472,14 @@
                                                 <!--end::Card body-->
                                             </div>
                                             <!--end::Card column-->
+                                            <h2>Mankon</h2>
                                             <div class="row">
                                                 <!--begin::Card body-->
                                                 <div class="mb-3 pt-0">
                                                     <!--begin::Card widget 20-->
-                                                    <div class="py-2 rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #c34424;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                                    <div class="py-5 rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #017EB8;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
                                                         <!--begin::Header-->
-                                                        <div class="card-header pt-6">
+                                                        <div class="card-header">
                                                             <!--begin::Title-->
                                                             <div class="card-title d-flex flex-column">
                                                                 <!--begin::Amount-->
@@ -491,9 +493,9 @@
                                                         </div>
                                                         <!--end::Header-->
                                                         <!--begin::Card body-->
-                                                        <div class="card-body d-flex align-items-end pt-0">
+                                                        {{-- <div class="card-body d-flex align-items-end pt-0">
                                                             
-                                                        </div>
+                                                        </div> --}}
                                                         <!--end::Card body-->
                                                     </div>
                                                     <!--end::Card widget 20-->
@@ -505,9 +507,9 @@
                                                 <!--begin::Card body-->
                                                 <div class="mb-6 pt-0">
                                                     <!--begin::Card widget 20-->
-                                                    <div class="py-2 rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #017EB8;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                                    <div class="py-5 rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #017EB8;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
                                                         <!--begin::Header-->
-                                                        <div class="card-header pt-5">
+                                                        <div class="card-header">
                                                             <!--begin::Title-->
                                                             <div class="card-title d-flex flex-column">
                                                                 <!--begin::Amount-->
@@ -521,9 +523,9 @@
                                                         </div>
                                                         <!--end::Header-->
                                                         <!--begin::Card body-->
-                                                        <div class="card-body d-flex align-items-end pt-0">
+                                                        {{-- <div class="card-body d-flex align-items-end pt-0">
                                                             
-                                                        </div>
+                                                        </div> --}}
                                                         <!--end::Card body-->
                                                     </div>
                                                     <!--end::Card widget 20-->
@@ -538,13 +540,13 @@
                                         <!--begin::Card Status-->
                                         <div class="col ms-6 ">
                                             <!--begin::Card column-->
-                                            <div class="row ">
+                                            <div class="row mt-5">
                                                 <!--begin::Card body-->
                                                 <div class="pt-0">
                                                     <!--begin::Card widget 20-->
-                                                    <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #017EB8;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                                    <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #F7AD1A;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
                                                         <!--begin::Header-->
-                                                        <div class="card-header pt-5">
+                                                        <div class="card-header">
                                                             <!--begin::Title-->
                                                             <div class="card-title d-flex flex-column">
                                                                 <!--begin::Amount-->
@@ -618,7 +620,7 @@
                                                 <!--begin::Card body-->
                                                 <div class="mb-6 pt-0">
                                                     <!--begin::Card widget 20-->
-                                                    <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #c34424;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                                    <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #28B3AC;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
                                                         <!--begin::Header-->
                                                         <div class="card-header">
                                                             <!--begin::Title-->
@@ -640,6 +642,7 @@
                                                 <!--end::Card body-->
                                             </div>
                                             <!--end-begin::Card column-->
+                                            <br>
                                             <div class="row">
                                                 <!--begin::Card body-->
                                                 <div class="pt-0">
@@ -739,7 +742,125 @@
 
                     </div>
                     <!--end::Body Dashboard-->
-                    <!--end::Content-->
+
+                    <div class="card mx-8 px-0">
+                    <!--begin::Card body-->
+                        <div class="card-body pt-0 px-2">
+                            <!--begin::Table-->
+                            <table class="table align-middle table-bordered fs-6 gy-2">
+                                <!--begin::Table head-->
+                                <thead style="border: white 1px solid; background-color: #F7AD1A">
+                                    <!--begin::Table row-->
+                                    <tr class="text-start text-dark fw-bolder fs-7 text-uppercase gs-0">
+                                        {{-- <th rowspan="2" class="min-w-auto px-4 align-middle text-center">NO</th> --}}
+                                        <th rowspan="2" class="min-w-auto align-middle text-center">PROJECT</th>
+                                        <th rowspan="2" class="max-w-100px w-15 align-middle text-center">OWNER</th>
+                                        <th rowspan="2" class="min-w-auto align-middle text-center">TYPE</th>
+                                        <th colspan="2" class="min-w-auto align-middle text-center">EST. CONTRACT</th>
+                                        <th colspan="8" class="min-w-auto align-middle text-center">REVIEW STATUS</th>
+                                        <th colspan="2" class="min-w-auto align-middle text-center">PIC</th>
+                                        <th rowspan="2" class="min-w-auto align-middle text-center">STATUS</th>
+                                    </tr>
+                                    <tr class="text-start text-dark fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-auto align-middle text-center">AWARD</th>
+                                        <th class="min-w-auto align-middle text-center">VALUE</th>
+                                        <th class="min-w-auto align-middle text-center">NDA</th>
+                                        <th class="min-w-auto align-middle text-center">MOU</th>
+                                        <th class="min-w-auto align-middle text-center">LOI</th>
+                                        <th class="min-w-auto align-middle text-center">CONTRACT REVIEW</th>
+                                        <th class="min-w-auto align-middle text-center">DEVIATION</th>
+                                        <th class="min-w-auto align-middle text-center">RISK</th>
+                                        <th class="min-w-auto align-middle text-center">ECA</th>
+                                        <th class="min-w-auto align-middle text-center">ICA</th>
+                                        <th class="min-w-auto align-middle text-center">MANKON</th>
+                                        <th class="min-w-auto align-middle text-center">BUSDEV</th>
+                                    </tr>
+                                    <!--end::Table row-->
+                                </thead>
+                                <!--end::Table head-->
+                                <!--begin::Table body-->
+                                @php
+                                    $no = 1;
+                                @endphp
+                                <tbody class="fw-bold text-gray-600">
+                                    @foreach ($proyeks as $proyek)
+                                        <tr>
+
+                                            <!--begin::No-->
+                                            {{-- <td class="px-4">
+                                                {{ $no++ }}
+                                            </td> --}}
+                                            <!--end::No-->
+
+                                            <!--begin::NIP-->
+                                            <td>
+                                                <small>
+                                                    <a target="_blank" href="/proyek/view/{{ $proyek->kode_proyek }}" id="click-name"
+                                                        class="text-gray-800 text-hover-primary">{{ $proyek->nama_proyek }}</a>
+                                                </small>
+                                            </td>
+                                            <!--end::NIP-->
+                                            
+                                            <!--begin::Ketua tender-->
+                                            <td>
+                                                <small>
+                                                    {{ $proyek->proyekBerjalan->name_customer ?? "-" }}
+                                                </small>
+                                            </td>
+                                            <!--end::Ketua tender-->
+                                            
+                                            <!--begin::Ketua tender-->
+                                            <td>
+                                                <small>
+                                                    {{ $proyek->tipe_proyek == "J" ? "JO" : "NON JO"}}
+                                                </small>
+                                            </td>
+                                            <!--end::Ketua tender-->
+                                            
+                                            <!--begin::unit-->
+                                            <td>
+                                                {{ $proyek->UnitKerja->unit_kerja ?? '-' }}
+                                            </td>
+                                            <!--end::unit-->
+                                            
+                                            <!--begin::Role-->
+                                            <td>
+                                                @php
+                                                    $total_forecast = $proyek->Forecasts->filter(function($f) {
+                                                        $date = date_create($f->created_at);
+                                                        return $f->periode_prognosa == (int) date("m") && date_format($date, "Y") == date("Y");
+                                                    })->sum(function($f) {
+                                                        return (int) $f->nilai_forecast;
+                                                    });
+                                                @endphp
+                                                {{ number_format((int) ( $total_forecast ?? $nilai_perolehan ?? $proyek->nilai_rkap ), 0, '.', '.') ?? '-' }}
+                                            </td>
+                                            <!--end::Role-->
+                                            
+                                            <!--begin::Created at-->
+                                            <td class="text-center">
+                                                <span class="text-danger">Belum ditentukan</span>
+                                                {{-- <p class="fs-6 badge {{ $proyek->is_active == true ? 'badge-light-success' : 'badge-light-danger' }}">
+                                                    {{ $proyek->is_active == true ? 'yes' : '* No' }}
+                                                </p> --}}
+                                            </td>
+                                            <!--end::Created at-->
+
+                                            <!--begin::Email-->
+                                            {{-- <td class="px-4">
+                                                {{ $proyek->no_hp ?? '-' }}
+                                            </td> --}}
+                                            <!--end::Email-->
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                                <!--end::Table body-->
+                            </table>
+                            <!--end::Table-->
+
+                        </div>
+                        <!--end::Card body-->
+                    </div>
 
                 </div>
                 <!--end::Content-->
