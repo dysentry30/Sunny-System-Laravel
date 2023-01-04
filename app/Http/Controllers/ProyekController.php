@@ -204,13 +204,7 @@ class ProyekController extends Controller
         $newProyek->is_cancel = false;
 
         //begin::Generate Kode Proyek
-        $generateProyek = Proyek::all()->sortBy("id");
-        if (str_contains($generateProyek->last()->kode_proyek, "KD")) {
-            $no_urut = (int) $generateProyek->last()->id + 1;
-        } else {
-            // $no_urut = count($generateProyek)+1;
-            $no_urut = (int) $generateProyek->last()->id + 1;
-        }
+        $generateProyek = Proyek::whereYear("created_at", "=", (int) date("Y"))->get()->sortBy("id");
 
         $unit_kerja = $dataProyek["unit-kerja"];
         $jenis_proyek = $dataProyek["jenis-proyek"];
@@ -223,15 +217,27 @@ class ProyekController extends Controller
         $tahun = $dataProyek["tahun-perolehan"];
 
         // Kondisi kalau tahun lebih besar dari 2021 maka O Selain itu A
-        $kode_tahun = $tahun == 2021 ? "A" : "O";
+        // $kode_tahun = $tahun == 2021 ? "A" : "O";
+        $kode_tahun = get_year_code($tahun);
+
+        // Menggabungkan semua kode beserta nomor urut
+        $kode_proyek = $unit_kerja . $jenis_proyek . $tipe_proyek . $kode_tahun;
+
+        $no_urut = $generateProyek->count(function($p) use($kode_proyek) {
+            return str_contains($p->kode_proyek, $kode_proyek);
+        }) + 1;
 
         // Untuk membuat 3 digit nomor urut terakhir
         $no_urut = str_pad(strval($no_urut), 3, 0, STR_PAD_LEFT);
+        // dd($no_urut, $kode_proyek);
+        // if (str_contains($generateProyek->last()->kode_proyek, "KD")) {
+        //     $no_urut = (int) $generateProyek->last()->id + 1;
+        // } else {
+        //     // $no_urut = count($generateProyek)+1;
+        //     $no_urut = (int) $generateProyek->last()->id + 1;
+        // }
 
-        // Menggabungkan semua kode beserta nomor urut
-        $kode_proyek = $unit_kerja . $jenis_proyek . $tipe_proyek . $kode_tahun . $no_urut;
-
-        $newProyek->kode_proyek = $kode_proyek;
+        $newProyek->kode_proyek = $kode_proyek . $no_urut;
         //end::Generate Kode Proyek
 
         // $newForecast = new Forecast;
@@ -282,7 +288,6 @@ class ProyekController extends Controller
         }
         // return redirect("/proyek")->with("failed", ($dataProyek["nama-proyek"].", Gagal Dibuat"));
     }
-
 
     public function edit($kode_proyek, $periodePrognosa = "")
     {
@@ -1803,6 +1808,7 @@ class ProyekController extends Controller
                     $contractManagements = ContractManagements::get()->where("project_id", "=", $proyekStage->kode_proyek)->first();
                     if (str_contains(URL::full() , 'crm.wika.co.id')) {
                         $nasabah_online_response = Http::post("http://nasabah.wika.co.id/index.php/mod_excel/post_json_crm", $data_nasabah_online)->json();
+                        // dd($nasabah_online_response);
                         if (!$nasabah_online_response["status"] && !str_contains($nasabah_online_response["msg"], "sudah ada dalam nasabah online")) {
                             Alert::error("Error", $nasabah_online_response["msg"]);
                             return redirect()->back();

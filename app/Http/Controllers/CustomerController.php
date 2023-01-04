@@ -458,7 +458,6 @@ class CustomerController extends Controller
     ) {
 
         $data = $request->all();
-        // dd($data);
         $messages = [
             "required" => "This field is required",
         ];
