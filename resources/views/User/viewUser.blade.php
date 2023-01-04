@@ -164,7 +164,7 @@
                                                     <!--end::Input group Phone-->
 
                                                     <!--begin::Input group is Active-->
-                                                    @if (str_contains(Auth::user()->name, '(PIC)'))
+                                                    @if (Auth::user()->check_administrator || str_contains(Auth::user()->name, '(PIC)'))
                                                         <div class="form-check me-12">
                                                             <!--begin::Input-->
                                                             <input class="form-check-input" type="checkbox" value=""

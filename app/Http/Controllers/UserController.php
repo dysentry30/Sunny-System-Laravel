@@ -113,8 +113,11 @@ class UserController extends Controller
                 "msg" => "Logged out",
             ]);
         }
-
-        return redirect('/');
+        if (auth()->user()->check_admin_kontrak) {
+            return redirect('/ccm');
+        } else {
+            return redirect('/');
+        }
     }
 
     public function save(Request $request, User $user)
