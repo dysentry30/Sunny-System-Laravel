@@ -269,14 +269,17 @@ Route::middleware(["web"])->group(function () {
 
             // $forecasts = Forecast::with(["Proyek"])->get(["*"])->unique("kode_proyek");
             // $forecasts = Forecast::where("periode_prognosa", '=', (int) $prognosa)->whereYear("created_at", "=", $tahun)->get();
-            $proyeks = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("periode_prognosa", ((int) $periode[1]))->whereYear("history_forecast.created_at", "=", (int) $periode[0])->where("unit_kerja", "=", $request->unitkerjaid)->get(["nama_proyek", "stage", "proyeks.kode_proyek", "unit_kerja", "jenis_proyek", "tipe_proyek", "nilai_perolehan", "is_cancel", "month_forecast", "nilai_forecast", "realisasi_forecast", "periode_prognosa"])->where("stage", "!=", 7)->where("is_cancel", "!=", true);
+            $proyeks = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("history_forecast.periode_prognosa", (int) $periode[1])->where("history_forecast.tahun", "=", (int) $periode[0])->where("unit_kerja", "=", $request->unitkerjaid)->get(["nama_proyek", "stage", "proyeks.kode_proyek", "unit_kerja", "jenis_proyek", "tipe_proyek", "nilai_perolehan", "is_cancel", "month_forecast", "nilai_forecast", "realisasi_forecast", "periode_prognosa"])->where("stage", "!=", 7)->where("is_cancel", "!=", true);
             // $proyeks = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("unit_kerja", "=", $request->unitkerjaid)->get()->where("stage", "!=", 7)->where("is_cancel", "!=", true);
             $total_realisasi = $proyeks->sum(function($s) {
                 return (int) $s->realisasi_forecast;
             });
+            // dd($proyeks);
             $proyeks = $proyeks->unique('nama_proyek');
             
             $proyeks = $proyeks->map(function ($p) use ($periode, &$total_realisasi) {
+                
+
                 if($p->tipe_proyek == "R") {
                     if (str_contains($p->kode_proyek, "KD")) {
                         $p->spk_code = Illuminate\Support\Facades\DB::table('proyek_code_crm')->where("kode_proyek", "=", $p->kode_proyek)->first()->kode_proyek_crm ?? $p->kode_proyek;
@@ -348,6 +351,13 @@ Route::middleware(["web"])->group(function () {
                         }
                     }
                 }
+                // Referensi dari WIKA - BW BPC PBI INTERFACE FROM NON SAP v1.4 GDRIVE
+                $p->ZIOCH0008    = "AB00100000"; // PROFIT CENTER DIVISI
+                $p->ZIOCH0002    = "A000"; // COMPANY CODE
+                $p->ZIOCH0094    = $p->type_code; // STATUS CONTRACT
+                $p->ZIOCH0089    = date("d.m.Y"); // WAKTU PEROLEHAN
+                $p->ZIOCH0091    = "CRM0001";
+
                 $p->component_id = 0;
                 $p->header_id = 0;
                 $p->data_ok = $data_ok;

@@ -4336,7 +4336,7 @@
                 table.style.display = "";
                 const chartLine = document.querySelector(chartElt);
                 chartLine.style.display = "none";
-            } else if(type.trim() == "Loan" || type.trim() == "Pemerintah" || type.trim() == "Swasta" || type.trim() == "BUMN") {
+            } else if(type.trim() == "Loan" || type.trim() == "Pemerintah" || type.trim() == "Swasta" || type.trim() == "Retail") {
                 let tbodyHTML = ``;
                 let totalNilaiLainnya = 0;
 

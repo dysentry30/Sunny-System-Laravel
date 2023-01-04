@@ -107,4 +107,14 @@ function moneyFormatToNumber(string $value)
 {
     return (int) str_replace(",", "", $value);
 }
+
+//Get Kode Tahun sesuai abjad 
+function get_year_code($year){
+    $a = [];
+    $n = 2021;
+    foreach (range('A', 'Z') as $k => $v) {
+        $a[$n + $k] = $v;
+    }
+    return $a[$year];
+}
 ?>

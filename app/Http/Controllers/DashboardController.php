@@ -520,17 +520,7 @@ class DashboardController extends Controller
 
         // Begin :: SUMBER DANA RKAP
         $totalRKAPSumberDana = collect();
-        $total_RKAP_keseluruhan = round($proyeks->sum(function($p) use($month, $year) {
-            if($p->tipe_proyek != "R") {
-                return (int) $p->nilai_rkap;
-            } else {
-                return (int) $p->Forecasts->filter(function($f) use($month, $year) {
-                    return $f->periode_prognosa == $month && $f->tahun == $year;
-                })->sum(function($f) {
-                    return (int) $f->rkap_forecast;
-                });
-            }
-        }) / $per);
+        $total_RKAP_keseluruhan = 0;
         $proyeksGroupBySumberDana = $proyeks->filter(function ($p) {
             return !empty($p->SumberDana->kategori) && $p->tipe_proyek != "R";
         })->groupBy(function ($p) {
@@ -541,15 +531,8 @@ class DashboardController extends Controller
         })->groupBy(function ($p) {
             return $p->tipe_proyek;
         });
-        // $testing_total_rkap_retail = (int) $proyeksGroupBySumberDanaRetail->sum(function($p) use($month, $year) {
-        //     return $p->Forecasts->filter(function($f) use($month, $year) {
-        //         return $f->periode_prognosa == $month && Carbon::createFromTimeString($f->created_at)->year == $year;
-        //     })->sum(function($f) {
-        //         return (int) $f->rkap_forecast;
-        //     });
-        // });
+
         $proyeksGroupBySumberDana = $proyeksGroupBySumberDana->mergeRecursive($proyeksGroupBySumberDanaRetail);
-        // $proyeksGroupBySumberDana = $proyeks->first();
         foreach ($proyeksGroupBySumberDana as $sumber_dana => $proyeks_sumber_dana) {
             $total_rkap = 0;
             if($sumber_dana == "R") {
@@ -558,16 +541,17 @@ class DashboardController extends Controller
             // $sumber_dana_model = SumberDana::
             foreach ($proyeks_sumber_dana as $proyek) {
                 if($proyek->tipe_proyek == "R") {
-                    $total_rkap += (int) $proyek->Forecasts->filter(function($f) use($month, $year) {
+                    $total_rkap += (int) round($proyek->Forecasts->filter(function($f) use($month, $year) {
                         return $f->periode_prognosa == $month && $f->tahun == $year;
                     })->sum(function($f) {
                         return (int) $f->rkap_forecast;
-                    });
+                    }) / $per);
                 } else {
-                    $total_rkap += (int) $proyek->nilai_rkap / $per;
+                    $total_rkap += (int) round($proyek->nilai_rkap / $per);
                 }
                 // $total_RKAP_keseluruhan += (int) $proyek->nilai_rkap / $per;
             }
+            $total_RKAP_keseluruhan += $total_rkap;
             $totalRKAPSumberDana->push([
                 "name" => $sumber_dana,
                 "y" => round($total_rkap),
@@ -1830,12 +1814,24 @@ class DashboardController extends Controller
         }
         if (!Auth::user()->check_administrator) {
             if ($filter != "") {
-                $proyeks = Proyek::with("UnitKerja")->where("unit_kerja", "=", $filter)->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "sumber_dana"]);
-            } else {
                 if ($unit_kerja_user instanceof \Illuminate\Support\Collection) {
                     $proyeks = Proyek::with("UnitKerja")->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "sumber_dana"])->whereIn("unit_kerja", $unit_kerja_user->toArray());
                 } else {
                     $proyeks = Proyek::with("UnitKerja")->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "sumber_dana"])->where("unit_kerja", $unit_kerja_user);
+                }
+            } else {
+                if($tipe == "Retail") {
+                    if ($unit_kerja_user instanceof \Illuminate\Support\Collection) {
+                        $proyeks = Proyek::with("UnitKerja")->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "sumber_dana"])->whereIn("unit_kerja", $unit_kerja_user->toArray());
+                    } else {
+                        $proyeks = Proyek::with("UnitKerja")->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "sumber_dana"])->where("unit_kerja", $unit_kerja_user);
+                    }
+                } else {
+                    if ($unit_kerja_user instanceof \Illuminate\Support\Collection) {
+                        $proyeks = Proyek::with("UnitKerja")->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "sumber_dana"])->whereIn("unit_kerja", $unit_kerja_user->toArray());
+                    } else {
+                        $proyeks = Proyek::with("UnitKerja")->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "sumber_dana"])->where("unit_kerja", $unit_kerja_user);
+                    }
                 }
             }
         } else {
@@ -1845,10 +1841,25 @@ class DashboardController extends Controller
                 $proyeks = Proyek::with("UnitKerja")->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "sumber_dana"]);
             }
         }
-        
-        $proyeks = $proyeks->filter(function($p) use($tipe_real) {
-            return !empty($p->SumberDana) && $p->SumberDana->kategori == $tipe_real;
-        })->sortBy("nilai_rkap", SORT_REGULAR, true)->values();
+        if($tipe != "Retail") {
+            $proyeks = $proyeks->filter(function($p) use($tipe_real) {
+                return !empty($p->SumberDana) && $p->SumberDana->kategori == $tipe_real;
+            })->sortBy("nilai_rkap", SORT_REGULAR, true)->values();
+        } else {
+            $proyeks = $proyeks->map(function($p) {
+                $new_p = new stdClass();
+                $new_p->nama_proyek = $p->nama_proyek;
+                $new_p->stage = $p->stage;
+                $new_p->unit_kerja = $p->unit_kerja;
+                $new_p->nilai_rkap = $p->Forecasts->filter(function($f) {
+                    return $f->tahun == (int) date("Y") && $f->periode_prognosa == (int) date("m");
+                })->sum(function($f) {
+                    return (int) $f->rkap_forecast;
+                });
+                return $new_p;
+            })->sortByDesc("nilai_rkap")->values();
+        }
+
 
         $row = 2;
         $proyeks->each(function ($p) use (&$row, $sheet) {
@@ -1887,12 +1898,26 @@ class DashboardController extends Controller
         }
         if (!Auth::user()->check_administrator) {
             if ($filter != "") {
-                $proyeks = Proyek::with("UnitKerja")->where("unit_kerja", "=", $filter)->where("tipe_proyek", "!=", "R")->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "nilai_perolehan", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "sumber_dana"]);
-            } else {
+                // $proyeks = Proyek::with("UnitKerja")->where("unit_kerja", "=", $filter)->where("tipe_proyek", "!=", "R")->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "nilai_perolehan", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "sumber_dana"]);
                 if ($unit_kerja_user instanceof \Illuminate\Support\Collection) {
-                    $proyeks = Proyek::with("UnitKerja")->where("tipe_proyek", "!=", "R")->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "nilai_perolehan", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "sumber_dana"])->whereIn("unit_kerja", $unit_kerja_user->toArray());
+                    $proyeks = Proyek::with("UnitKerja")->where("tipe_proyek", "=", "R")->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "nilai_perolehan", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "sumber_dana"])->whereIn("unit_kerja", $unit_kerja_user->toArray());
                 } else {
-                    $proyeks = Proyek::with("UnitKerja")->where("tipe_proyek", "!=", "R")->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "nilai_perolehan", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "sumber_dana"])->where("unit_kerja", $unit_kerja_user);
+                    $proyeks = Proyek::with("UnitKerja")->where("tipe_proyek", "=", "R")->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "nilai_perolehan", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "sumber_dana"])->where("unit_kerja", $unit_kerja_user);
+                }
+            } else {
+                if($tipe == "Retail") {
+                    // $proyeks = Proyek::with("UnitKerja")->where("tipe_proyek", "=", "R")->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "sumber_dana"]);
+                    if ($unit_kerja_user instanceof \Illuminate\Support\Collection) {
+                        $proyeks = Proyek::with("UnitKerja")->where("tipe_proyek", "=", "R")->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "nilai_perolehan", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "sumber_dana"])->whereIn("unit_kerja", $unit_kerja_user->toArray());
+                    } else {
+                        $proyeks = Proyek::with("UnitKerja")->where("tipe_proyek", "=", "R")->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "nilai_perolehan", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "sumber_dana"])->where("unit_kerja", $unit_kerja_user);
+                    }
+                } else {
+                    if ($unit_kerja_user instanceof \Illuminate\Support\Collection) {
+                        $proyeks = Proyek::with("UnitKerja")->where("tipe_proyek", "!=", "R")->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "nilai_perolehan", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "sumber_dana"])->whereIn("unit_kerja", $unit_kerja_user->toArray());
+                    } else {
+                        $proyeks = Proyek::with("UnitKerja")->where("tipe_proyek", "!=", "R")->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "nilai_perolehan", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "sumber_dana"])->where("unit_kerja", $unit_kerja_user);
+                    }
                 }
             }
         } else {
@@ -1903,9 +1928,24 @@ class DashboardController extends Controller
             }        
         }
 
-        $proyeks = $proyeks->filter(function($p) use($tipe_real) {
-            return !empty($p->SumberDana) && $p->SumberDana->kategori == $tipe_real;
-        })->sortBy("nilai_rkap", SORT_REGULAR, true)->values();
+        if($tipe != "Retail") {
+            $proyeks = $proyeks->filter(function($p) use($tipe_real) {
+                return !empty($p->SumberDana) && $p->SumberDana->kategori == $tipe_real;
+            })->sortByDesc("nilai_perolehan", SORT_REGULAR, true)->values();
+        } else {
+            $proyeks = $proyeks->map(function($p) {
+                $new_p = new stdClass();
+                $new_p->nama_proyek = $p->nama_proyek;
+                $new_p->stage = $p->stage;
+                $new_p->unit_kerja = $p->unit_kerja;
+                $new_p->nilai_perolehan = $p->Forecasts->filter(function($f) {
+                    return $f->tahun == (int) date("Y") && $f->periode_prognosa == (int) date("m");
+                })->sum(function($f) {
+                    return (int) $f->realisasi_forecast;
+                });
+                return $new_p;
+            })->sortByDesc("nilai_perolehan")->values();
+        }
         
         $row = 2;
         $proyeks->each(function ($p) use (&$row, $sheet) {
