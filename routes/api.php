@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
@@ -397,18 +398,38 @@ Route::middleware(["web"])->group(function () {
                 "msg" => "Tidak Terautentikasi"
             ]);
         }
-        $data = collect($request->UsrListProyek);
-        $unit_kerja = $request->UsrUnitKerja;
-        $tahun = $request->UsrTahunPelaksanaan;
+        setLogging("api", "INSERT GROUP RKAP => ", $request->toArray());
+        $data = $request->UsrApprovalGroup;
+        $list_proyek = collect($data["UsrListProyek"]);
+        $unit_kerja = UnitKerja::find($data["UsrUnitKerja"]);
+        $month = (int) date("m") == 1 ? 12 : (int) date("m");
+        $year = (int) date("m") == 1 ? (int) date("Y") - 1: (int) date("Y");
+
+        // CHECK JIKA UNIT KERJA SUDAH OTOR
+        $check_is_history_exist = HistoryForecast::all()->filter(function($hf) use($unit_kerja, $month, $year) {
+            return $hf->tahun == $year && $hf->periode_prognosa == $month && $hf->Proyek->unit_kerja == $unit_kerja->divcode;
+        })->count() > 0;
+
+        if($check_is_history_exist) {
+            return response()->json([
+                "InsertGroupRKAPResult" => [
+                    "Success"=> true,
+                    "StatusCode"=> 2,
+                    "Message"=> "Insert Data RKAP Unit Kerja $unit_kerja->unit_kerja sudah terkunci"
+                ]
+            ], 200);
+        }
+
+        $tahun = $data["UsrTahunPelaksanaan"];
         $bulan = (int) date('m');
         $is_data_inserted = false;
-        // $data = collect($request->list_proyek);
-        // $unit_kerja = $request->unit_kerja;
-        // $periode = collect(explode("-", $request->periode_prognosa));
+        // $list_proyek = collect($request["list_proyek"]);
+        // $unit_kerja = $request["unit_kerja"];
+        // $periode = collect(explode("-", $request["periode_prognosa"]));
         // $tahun = (int) $periode[0];
         // $bulan = (int) $periode[1];
         // $is_data_inserted = false;
-        $data->each(function ($proyek) use ($data, $bulan, $tahun, $unit_kerja, &$is_data_inserted) {
+        $list_proyek->each(function ($proyek) use ($data, $bulan, $tahun, $unit_kerja, &$is_data_inserted) {
             $p = new Proyek();
             $p->kode_proyek = $proyek["UsrCodeProyek"];
             $p->nama_proyek = $proyek["UsrName"];
@@ -429,7 +450,7 @@ Route::middleware(["web"])->group(function () {
             $p->nilaiok_review = $proyek["UsrNilaiOKReview"];
             $p->nilai_valas_review = $proyek["UsrNilaiOKReview"];
             $p->bulan_review = $proyek["UsrBulanPelaksanaan"];
-            $p->unit_kerja = $unit_kerja;
+            $p->unit_kerja = $unit_kerja->divcode;
             $p->tahun_perolehan = $tahun;
             $p->dop = $p->UnitKerja->dop;
             $p->stage = 1;
@@ -479,8 +500,11 @@ Route::middleware(["web"])->group(function () {
         });
         if ($is_data_inserted) {
             return response()->json([
-                "status" => 200,
-                "msg" => "Group RKAP berhasil ditambahkan",
+                "InsertGroupRKAPResult" => [
+                    "Success"=> true,
+                    "StatusCode"=> 1,
+                    "Message"=> "Insert Data RKAP Unit Kerja Divisi Infrastruktur 1 Success"
+                ]
             ], 200);
         }
         return response()->json([
@@ -491,15 +515,15 @@ Route::middleware(["web"])->group(function () {
     // End - RKAP
 
     // Begin - Industry Owner ke SAP
-    Route::post('/get-industry-attract', function () {
-        $customers_attractivness = Customer::with(["IndustryOwner"])->get();
+    Route::get('/get-industry-attract', function () {
+        // $customers_attractivness = Customer::with(["IndustryOwner"])->get();
+        $customers_attractivness = IndustryOwner::all();
         $customers_attractivness = $customers_attractivness->map(function($ca) {
             // dd($ca);
             $new_ca = new stdClass();
             $new_ca->periode = date("Ymd");
-            $new_ca->code_customer = $ca->kode_pelanggan ?? "";
-            $new_ca->industry_code = $ca->IndustryOwner->code_owner ?? "";
-            $new_ca->attractivness_status = $ca->IndustryOwner->owner_attractiveness ?? "";
+            $new_ca->industry_code = $ca->code_owner ?? "";
+            $new_ca->attractivness_status = $ca->owner_attractiveness ?? "";
             return $new_ca;
         });
         // $industry_attractivness = IndustryOwner::all();

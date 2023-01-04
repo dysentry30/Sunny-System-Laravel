@@ -829,18 +829,10 @@
                                             </tr>
                                         @endif
                                     @empty
-                                        <tr>
-                                            <td colspan="4" class="text-center">
-                                                <h6><b>There is no data</b></h6>
-                                            </td>
-                                        </tr>
+                                        
                                     @endforelse
                                 @else
-                                    <tr>
-                                        <td colspan="4" class="text-center">
-                                            <h6><b>There is no data</b></h6>
-                                        </td>
-                                    </tr>
+                                    
                                 @endif
                             </tbody>
                             <!--end::Table body-->
@@ -2265,11 +2257,6 @@
                                     </tr>
                                     @endif
                                 @empty
-                                    <tr>
-                                        <td colspan="5" class="text-center">
-                                            <h6><b>There is no data</b></h6>
-                                        </td>
-                                    </tr>
                                 @endforelse
                             </tbody>
                             <!--end::Table body-->
@@ -2539,9 +2526,6 @@
                                         <!--end::Column-->
                                     </tr>
                                 @empty
-                                    <tr>
-                                        <td colspan="9" class="fw-bolder text-center">There is no data</td>
-                                    </tr>
                                 @endforelse
                                 
                             </tbody>
@@ -2560,7 +2544,7 @@
                         </h3>
 
                         <!--begin:Table: Checklist Manajemen Kontrak-->
-                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="perubahan-kontrak">
+                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="checklist-manajemen-kontrak">
                             <!--begin::Table head-->
                             <thead>
                                 <!--begin::Table row-->
@@ -3253,137 +3237,122 @@
                             <input type="hidden" name="id-contract" value="{{ $contract->id_contract }}">
                             <div class="row">
                                 <div class="col">
+                                    
                                     <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                                        Dokumen Bast 1
+                                        Daftar BA Defect
                                         <a href="#" Id="Plus" data-bs-toggle="modal"
-                                            data-bs-target="#kt_modal_bast_1">+</a>
+                                            data-bs-target="#kt_modal_defect_ba">+</a>
                                     </h3>
-                                    {{-- <input type="file" name="dokumen-bast-1" accept=".docx"
-                                        class="form-control form-control-solid"> --}}
-                                    {{-- @if (!empty($contract->dokumen_bast_1))
-                                        <small>Lihat Dokumen Bast 1: 
-                                            <a target="_blank" href="{{ asset('words/' . $contract->dokumen_bast_2 . '.docx') }}" class="text-gray-400 text-hover-primary">Klik disini</a>
-                                        </small>
-                                        <a target="_blank" class="text-gray-400 text-hover-primary"
-                                            href="/document/view/{{ url_encode($contract->id_contract) }}/{{ $contract->dokumen_bast_1 }}">Klik disini</a></small>
-                                    @else
-                                        <small>Belum mendapatkan Dokumen Bast 1</small>
-                                    @endif --}}
-                                </div>
-                                <div class="col">
-                                    <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                                        Dokumen Bast 2
-                                        <a href="#" Id="Plus" data-bs-toggle="modal"
-                                            data-bs-target="#kt_modal_bast_2">+</a>
-                                    </h3>
-                                    {{-- @if (!empty($contract->dokumen_bast_1))
-                                        <small>Lihat Dokumen Bast 2: 
-                                            <a target="_blank" href="{{ asset('words/' . $contract->dokumen_bast_2 . '.docx') }}" class="text-gray-400 text-hover-primary">Klik disini</a>
-                                        </small>
-                                        <a target="_blank" class="text-gray-400 text-hover-primary"
-                                            href="/document/view/{{ url_encode($contract->id_contract) }}/{{ $contract->dokumen_bast_2 }}">Klik disini</a></small>
-                                    @else
-                                        <small>Belum mendapatkan Dokumen Bast 2</small>
-                                    @endif --}}
-                                </div>
-                            </div>
-                            <br>
-                            <div class="row">
-                                <div class="col-6">
-                                    <!--begin::Table-->
-                                    <table class="table align-middle table-row-dashed fs-6 gy-2"
-                                        id="kt_customers_table">
+
+                                    <!--begin:Table: List Defect BA-->
+                                    <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
                                         <!--begin::Table head-->
                                         <thead>
                                             <!--begin::Table row-->
                                             <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                <th class="w-50px text-center">No.</th>
-                                                <th class="w-auto">Jenis Dokumen</th>
-                                                <th class="w-auto">File</th>
-                                                {{-- <th class="w-auto text-center"></th> --}}
+                                                <th class="min-w-125px">Dokumen</th>
                                             </tr>
                                             <!--end::Table row-->
                                         </thead>
                                         <!--end::Table head-->
-                                        @php
-                                            $no = 1;
-                                        @endphp
                                         <!--begin::Table body-->
+                                        @php
+                                            $list_document_ba_defect = explode(',', $contract->list_dokumen_ba_defect);
+                                        @endphp
                                         <tbody class="fw-bold text-gray-400">
-                                            @foreach ($contract->ContractBast as $dokumen)
-                                                @if ($dokumen->bast == 1)
+                                            @if (count($list_document_ba_defect) > 0 && $list_document_ba_defect[0] != '')
+                                                @forelse ($list_document_ba_defect as $key => $ba_defect)
+                                                    <tr>
+                                                        <!--begin::Column-->
+                                                        <td>
+                                                            <a href="/document/view/{{ $contract->id_contract }}/{{ $ba_defect }}"
+                                                                class="text-gray-600 text-hover-primary">Dokumen BA Defect
+                                                                #{{ $key + 1 }}</a>
+                                                        </td>
+                                                        <!--end::Column-->
+                                                    </tr>
+                                                @empty
+                                                    <tr>
+                                                        <td colspan="2" class="text-center">
+                                                            <h6><b>There is no data</b></h6>
+                                                        </td>
+                                                    </tr>
+                                                @endforelse
+                                            @else
                                                 <tr>
-                                                    <!--begin::Nomor-->
-                                                    <td class="text-center">
-                                                        {{ $no++ }}
+                                                    <td colspan="2" class="text-center">
+                                                        <h6><b>There is no data</b></h6>
                                                     </td>
-                                                    <!--end::Nomor-->
-                                                    <!--begin::Column-->
-                                                    <td>
-                                                        {{ $dokumen->jenis_dokumen }}
-                                                    </td>
-                                                    <!--end::Column-->
-                                                    <!--begin::Name-->
-                                                    <td>
-                                                        @if (str_contains("$dokumen->nama_dokumen", '.pdf'))
-                                                            <a href="{{ asset('words/' . $dokumen->id_document . '.pdf') }}"
-                                                                class="text-hover-primary">{{ $dokumen->nama_dokumen }}</a>
-                                                        @else
-                                                            <a target="_blank" href="{{ asset('words/' . $dokumen->id_document . '.docx') }}"
-                                                                class="text-hover-primary">{{ $dokumen->nama_dokumen }}</a>
-                                                        @endif
-                                                    </td>
-                                                    <!--end::Name-->
-                                                    <!--begin::Action-->
-                                                    {{-- <td class="text-center">
-                                                        <small>
-                                                            <p data-bs-toggle="modal"
-                                                                data-bs-target="#kt_dokumen_rks_delete"
-                                                                id="modal-delete"
-                                                                class="btn btn-sm btn-light btn-active-primary">
-                                                                Delete
-                                                            </p>
-                                                        </small>
-                                                    </td> --}}
-                                                    <!--end::Action-->
                                                 </tr>
-                                                @endif
-                                            @endforeach
-                                            @if ($contract->ContractBast->count() == 0)
-                                            <tr>
-                                                <td colspan="3" class="text-center">
-                                                    <h6><b>There is no data</b></h6>
-                                                </td>
-                                            </tr>
                                             @endif
                                         </tbody>
                                         <!--end::Table body-->
+
                                     </table>
-                                    <!--end::Table-->
                                 </div>
-                                <div class="col-6">
-                                    <!--begin::Table-->
-                                    <table class="table align-middle table-row-dashed fs-6 gy-2"
-                                        id="kt_customers_table">
-                                        <!--begin::Table head-->
-                                        <thead>
-                                            <!--begin::Table row-->
-                                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                <th class="w-50px text-center">No.</th>
-                                                <th class="w-auto">Jenis Dokumen</th>
-                                                <th class="w-auto">File</th>
-                                                {{-- <th class="w-auto text-center"></th> --}}
-                                            </tr>
-                                            <!--end::Table row-->
-                                        </thead>
-                                        <!--end::Table head-->
-                                        @php
-                                            $no = 1;
-                                        @endphp
-                                        <!--begin::Table body-->
-                                        <tbody class="fw-bold text-gray-400">
+                            </div>
+
+                            @if (!empty($contract->list_dokumen_ba_defect))
+                                <div class="row">
+                                    <div class="col">
+                                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                            Dokumen Bast 1
+                                            <a href="#" Id="Plus" data-bs-toggle="modal"
+                                                data-bs-target="#kt_modal_bast_1">+</a>
+                                        </h3>
+                                        {{-- <input type="file" name="dokumen-bast-1" accept=".docx"
+                                            class="form-control form-control-solid"> --}}
+                                        {{-- @if (!empty($contract->dokumen_bast_1))
+                                            <small>Lihat Dokumen Bast 1: 
+                                                <a target="_blank" href="{{ asset('words/' . $contract->dokumen_bast_2 . '.docx') }}" class="text-gray-400 text-hover-primary">Klik disini</a>
+                                            </small>
+                                            <a target="_blank" class="text-gray-400 text-hover-primary"
+                                                href="/document/view/{{ url_encode($contract->id_contract) }}/{{ $contract->dokumen_bast_1 }}">Klik disini</a></small>
+                                        @else
+                                            <small>Belum mendapatkan Dokumen Bast 1</small>
+                                        @endif --}}
+                                    </div>
+                                    <div class="col">
+                                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                            Dokumen Bast 2
+                                            <a href="#" Id="Plus" data-bs-toggle="modal"
+                                                data-bs-target="#kt_modal_bast_2">+</a>
+                                        </h3>
+                                        {{-- @if (!empty($contract->dokumen_bast_1))
+                                            <small>Lihat Dokumen Bast 2: 
+                                                <a target="_blank" href="{{ asset('words/' . $contract->dokumen_bast_2 . '.docx') }}" class="text-gray-400 text-hover-primary">Klik disini</a>
+                                            </small>
+                                            <a target="_blank" class="text-gray-400 text-hover-primary"
+                                                href="/document/view/{{ url_encode($contract->id_contract) }}/{{ $contract->dokumen_bast_2 }}">Klik disini</a></small>
+                                        @else
+                                            <small>Belum mendapatkan Dokumen Bast 2</small>
+                                        @endif --}}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <!--begin::Table-->
+                                        <table class="table align-middle table-row-dashed fs-6 gy-2"
+                                            id="kt_customers_table">
+                                            <!--begin::Table head-->
+                                            <thead>
+                                                <!--begin::Table row-->
+                                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                    <th class="w-50px text-center">No.</th>
+                                                    <th class="w-auto">Jenis Dokumen</th>
+                                                    <th class="w-auto">File</th>
+                                                    {{-- <th class="w-auto text-center"></th> --}}
+                                                </tr>
+                                                <!--end::Table row-->
+                                            </thead>
+                                            <!--end::Table head-->
+                                            @php
+                                                $no = 1;
+                                            @endphp
+                                            <!--begin::Table body-->
+                                            <tbody class="fw-bold text-gray-400">
                                                 @foreach ($contract->ContractBast as $dokumen)
-                                                    @if ($dokumen->bast == 2)
+                                                    @if ($dokumen->bast == 1)
                                                     <tr>
                                                         <!--begin::Nomor-->
                                                         <td class="text-center">
@@ -3428,13 +3397,87 @@
                                                     </td>
                                                 </tr>
                                                 @endif
-                                        </tbody>
-                                        <!--end::Table body-->
-                                    </table>
-                                    <!--end::Table-->
+                                            </tbody>
+                                            <!--end::Table body-->
+                                        </table>
+                                        <!--end::Table-->
+                                    </div>
+                                    <div class="col-6">
+                                        <!--begin::Table-->
+                                        <table class="table align-middle table-row-dashed fs-6 gy-2"
+                                            id="kt_customers_table">
+                                            <!--begin::Table head-->
+                                            <thead>
+                                                <!--begin::Table row-->
+                                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                    <th class="w-50px text-center">No.</th>
+                                                    <th class="w-auto">Jenis Dokumen</th>
+                                                    <th class="w-auto">File</th>
+                                                    {{-- <th class="w-auto text-center"></th> --}}
+                                                </tr>
+                                                <!--end::Table row-->
+                                            </thead>
+                                            <!--end::Table head-->
+                                            @php
+                                                $no = 1;
+                                            @endphp
+                                            <!--begin::Table body-->
+                                            <tbody class="fw-bold text-gray-400">
+                                                    @foreach ($contract->ContractBast as $dokumen)
+                                                        @if ($dokumen->bast == 2)
+                                                        <tr>
+                                                            <!--begin::Nomor-->
+                                                            <td class="text-center">
+                                                                {{ $no++ }}
+                                                            </td>
+                                                            <!--end::Nomor-->
+                                                            <!--begin::Column-->
+                                                            <td>
+                                                                {{ $dokumen->jenis_dokumen }}
+                                                            </td>
+                                                            <!--end::Column-->
+                                                            <!--begin::Name-->
+                                                            <td>
+                                                                @if (str_contains("$dokumen->nama_dokumen", '.pdf'))
+                                                                    <a href="{{ asset('words/' . $dokumen->id_document . '.pdf') }}"
+                                                                        class="text-hover-primary">{{ $dokumen->nama_dokumen }}</a>
+                                                                @else
+                                                                    <a target="_blank" href="{{ asset('words/' . $dokumen->id_document . '.docx') }}"
+                                                                        class="text-hover-primary">{{ $dokumen->nama_dokumen }}</a>
+                                                                @endif
+                                                            </td>
+                                                            <!--end::Name-->
+                                                            <!--begin::Action-->
+                                                            {{-- <td class="text-center">
+                                                                <small>
+                                                                    <p data-bs-toggle="modal"
+                                                                        data-bs-target="#kt_dokumen_rks_delete"
+                                                                        id="modal-delete"
+                                                                        class="btn btn-sm btn-light btn-active-primary">
+                                                                        Delete
+                                                                    </p>
+                                                                </small>
+                                                            </td> --}}
+                                                            <!--end::Action-->
+                                                        </tr>
+                                                        @endif
+                                                    @endforeach
+                                                    @if ($contract->ContractBast->count() == 0)
+                                                    <tr>
+                                                        <td colspan="3" class="text-center">
+                                                            <h6><b>There is no data</b></h6>
+                                                        </td>
+                                                    </tr>
+                                                    @endif
+                                            </tbody>
+                                            <!--end::Table body-->
+                                        </table>
+                                        <!--end::Table-->
+                                    </div>
                                 </div>
-                            </div>
-                            <br>
+                                <br>
+                                <br>
+                            @endif
                             {{-- <button type="submit" class="btn btn-sm btn-active-primary text-white"
                                 style="background-color: #008cb4;">Save Dokumen Bast</button> --}}
                         {{-- </form> --}}
@@ -3525,67 +3568,19 @@
                     </div>
 
                     {{-- list_dokumen_ba_defect --}}
-
-                    <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                        Daftar BA Defect
-                        <a href="#" Id="Plus" data-bs-toggle="modal"
-                            data-bs-target="#kt_modal_defect_ba">+</a>
-                    </h3>
-
-                    <!--begin:Table: List Defect BA-->
-                    <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
-                        <!--begin::Table head-->
-                        <thead>
-                            <!--begin::Table row-->
-                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                <th class="min-w-125px">Dokumen</th>
-                            </tr>
-                            <!--end::Table row-->
-                        </thead>
-                        <!--end::Table head-->
-                        <!--begin::Table body-->
-                        @php
-                            $list_document_ba_defect = explode(',', $contract->list_dokumen_ba_defect);
-                        @endphp
-                        <tbody class="fw-bold text-gray-400">
-                            @if (count($list_document_ba_defect) > 0 && $list_document_ba_defect[0] != '')
-                                @forelse ($list_document_ba_defect as $key => $ba_defect)
-                                    <tr>
-                                        <!--begin::Column-->
-                                        <td>
-                                            <a href="/document/view/{{ $contract->id_contract }}/{{ $ba_defect }}"
-                                                class="text-gray-600 text-hover-primary">Dokumen BA Defect
-                                                #{{ $key + 1 }}</a>
-                                        </td>
-                                        <!--end::Column-->
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="2" class="text-center">
-                                            <h6><b>There is no data</b></h6>
-                                        </td>
-                                    </tr>
-                                @endforelse
-                            @else
-                                <tr>
-                                    <td colspan="2" class="text-center">
-                                        <h6><b>There is no data</b></h6>
-                                    </td>
-                                </tr>
-                            @endif
-                        </tbody>
-                        <!--end::Table body-->
-
-                    </table>
                     <br>
                     <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                         Pending Issue
                         <a href="#" Id="Plus" data-bs-toggle="modal"
                             data-bs-target="#kt_modal_pending_issue">+</a>
-                    </h3>
+                        @if (!empty($contract->PendingIssue->toArray()))
+                            <a href="#" data-bs-toggle="modal"
+                            data-bs-target="#kt_modal_upload_pending_issue" class="btn btn-primary btn-sm p-2 mx-3 text-end">Upload</a>
+                        @endif
+                    </h3><br>
 
                     <!--begin:Table: List Defect BA-->
-                    <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                    <table class="table align-middle table-row-dashed dataTable fs-6 gy-5" id="pending-issue">
                         <!--begin::Table head-->
                         <thead>
                             <!--begin::Table row-->
@@ -3628,17 +3623,21 @@
                                     </tr>
                                 @endforeach
                             @else
-                                <tr>
-                                    <td colspan="10" class="text-center">
-                                        <h6><b>There is no data</b></h6>
-                                    </td>
-                                </tr>
                             @endif
                         </tbody>
                         <!--end::Table body-->
 
                     </table>
-                    <br>
+                    @php
+                        $uploadFilePerubahan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Pending Issue")->first();
+                        @endphp
+                        <!--End:Table: Review-->
+                        @if (!empty($uploadFilePerubahan))
+                        <a target="_blank" href="{{ asset('words/'.$uploadFilePerubahan->id_document) }}" class="text-hover-primary">
+                           <b>Download File :</b> {{ $uploadFilePerubahan->nama_document }}
+                        </a>
+                    @endif
+                    <br><br>
                     <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                         Dokumen Lainnya
                         <a href="#" Id="Plus" data-bs-toggle="modal"
@@ -7262,7 +7261,7 @@
                         </div> --}}
 
                         <br> <br>
-                        <button type="submit" id="pending-issue" class="btn btn-sm btn-primary">Save</button>
+                        <button type="submit" id="pending-issue-btn" class="btn btn-sm btn-primary">Save</button>
 
                     </form>
                 </div>
@@ -11469,6 +11468,66 @@
 </div>
 <!--end::Modal - Upload Final Questions-->
 
+<!--begin::Modal - Upload Final Pending Issue-->
+<div class="modal fade" id="kt_modal_upload_pending_issue" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog modal-dialog-centered mw-500px">
+        <!--begin::Modal content-->
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header">
+                <!--begin::Modal title-->
+                <h2>Upload Final | Pending Issue</h2>
+                <!--end::Modal title-->
+                <!--begin::Close-->
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                        <i class="bi bi-x-lg"></i>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--end::Modal header-->
+            <!--begin::Modal body-->
+            <div class="modal-body py-lg-6 px-lg-6">
+                <!--begin::Input group Website-->
+                <form action="/contract-management/final-dokumen/upload" method="POST"
+                    enctype="multipart/form-data">
+                    <div class="row">
+                        @csrf
+                        <div class="col mt-4">
+                            <!--begin::Label-->
+                            <label for="ketentuan-rencana-kerja" class="fs-6 fw-bold form-label">
+                                <span style="font-weight: normal">Upload Dokumen</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="hidden" name="kategori" value="Pending Issue">
+                            <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
+                            <!--end::Input-->
+                        </div>
+                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                name="id-contract">
+                            <input type="hidden" class="modal-name" name="modal-name">
+                        </div>
+                    </div>
+                    <!--end::Input group-->
+                    <div class="modal-footer mt-4">
+                        <button type="submit" id="save-question-tender-menang"
+                            class="btn btn-sm btn-primary">Save</button>
+                    </div>
+                </form>
+            </div>
+            <!--end::Modal body-->
+        </div>
+        <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+</div>
+<!--end::Modal - Upload Final Pending Issue-->
+
 <!--begin::Modal - Upload Final Usulan Perubahan-->
 <div class="modal fade" id="kt_modal_upload_perubahan_kontrak" tabindex="-1" aria-hidden="true">
     <!--begin::Modal dialog-->
@@ -12233,6 +12292,23 @@ aria-hidden="true">
                 {
                     extend: 'excelHtml5',
                     title: 'Data Usulan Draft'
+                },
+                    'copy', 'pdf', 'print'
+                ]
+        } );
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+        $('#pending-issue').DataTable( {
+            // dom: 'Bfrtip',
+            dom: 'Brti',
+            pageLength : 50,
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    title: 'Data Pending Issue'
                 },
                     'copy', 'pdf', 'print'
                 ]

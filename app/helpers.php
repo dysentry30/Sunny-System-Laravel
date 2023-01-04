@@ -4,6 +4,7 @@
 // }
 
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Log;
 use PhpOffice\PhpWord\PhpWord;
 
 function url_encode($url) {
@@ -116,5 +117,13 @@ function get_year_code($year){
         $a[$n + $k] = $v;
     }
     return $a[$year];
+}
+
+// Log Message 
+function setLogging($file, $message, $data) {
+    Log::build([
+        'driver' => 'single',
+        'path' => storage_path("logs/$file.log"),
+    ])->info("$message", $data);
 }
 ?>
