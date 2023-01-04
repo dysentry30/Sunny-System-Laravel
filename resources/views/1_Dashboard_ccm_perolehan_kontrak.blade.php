@@ -472,7 +472,7 @@
                                                 <!--end::Card body-->
                                             </div>
                                             <!--end::Card column-->
-                                            <h2>Mankon</h2>
+                                            <h2>MANKON</h2>
                                             <div class="row">
                                                 <!--begin::Card body-->
                                                 <div class="mb-3 pt-0">
@@ -754,12 +754,12 @@
                                     <tr class="text-start text-dark fw-bolder fs-7 text-uppercase gs-0">
                                         {{-- <th rowspan="2" class="min-w-auto px-4 align-middle text-center">NO</th> --}}
                                         <th rowspan="2" class="min-w-auto align-middle text-center">PROJECT</th>
-                                        <th rowspan="2" class="max-w-100px w-15 align-middle text-center">OWNER</th>
+                                        <th rowspan="2" width="15%" class="align-middle text-center">OWNER</th>
                                         <th rowspan="2" class="min-w-auto align-middle text-center">TYPE</th>
                                         <th colspan="2" class="min-w-auto align-middle text-center">EST. CONTRACT</th>
                                         <th colspan="8" class="min-w-auto align-middle text-center">REVIEW STATUS</th>
                                         <th colspan="2" class="min-w-auto align-middle text-center">PIC</th>
-                                        <th rowspan="2" class="min-w-auto align-middle text-center">STATUS</th>
+                                        <th rowspan="2" class="min-w-auto align-middle text-center">STATUS &nbsp;&nbsp;</th>
                                     </tr>
                                     <tr class="text-start text-dark fw-bolder fs-7 text-uppercase gs-0">
                                         <th class="min-w-auto align-middle text-center">AWARD</th>
@@ -773,30 +773,23 @@
                                         <th class="min-w-auto align-middle text-center">ECA</th>
                                         <th class="min-w-auto align-middle text-center">ICA</th>
                                         <th class="min-w-auto align-middle text-center">MANKON</th>
-                                        <th class="min-w-auto align-middle text-center">BUSDEV</th>
+                                        <th class="min-w-auto align-middle text-center">BUSDEV&nbsp;&nbsp;</th>
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
-                                @php
-                                    $no = 1;
-                                @endphp
                                 <tbody class="fw-bold text-gray-600">
+                                    <tr>
+                                        <td colspan="16" class="ps-3" style="border: white 1px solid; background-color: #F7DFAE">Sasaran</td>
+                                    </tr>
                                     @foreach ($proyeks as $proyek)
-                                        <tr>
-
-                                            <!--begin::No-->
-                                            {{-- <td class="px-4">
-                                                {{ $no++ }}
-                                            </td> --}}
-                                            <!--end::No-->
-
+                                    <tr>
                                             <!--begin::NIP-->
                                             <td>
                                                 <small>
                                                     <a target="_blank" href="/proyek/view/{{ $proyek->kode_proyek }}" id="click-name"
-                                                        class="text-gray-800 text-hover-primary">{{ $proyek->nama_proyek }}</a>
+                                                        class="ps-3 text-gray-800 text-hover-primary">{{ $proyek->nama_proyek }}</a>
                                                 </small>
                                             </td>
                                             <!--end::NIP-->
@@ -819,12 +812,15 @@
                                             
                                             <!--begin::unit-->
                                             <td>
-                                                {{ $proyek->UnitKerja->unit_kerja ?? '-' }}
+                                                <small>
+                                                    {{ $proyek->bulan_pelaksanaan }} - 
+                                                    {{ $proyek->tahun_perolehan }} 
+                                                </small>
                                             </td>
                                             <!--end::unit-->
                                             
                                             <!--begin::Role-->
-                                            <td>
+                                            <td class="text-end">
                                                 @php
                                                     $total_forecast = $proyek->Forecasts->filter(function($f) {
                                                         $date = date_create($f->created_at);
@@ -833,24 +829,114 @@
                                                         return (int) $f->nilai_forecast;
                                                     });
                                                 @endphp
-                                                {{ number_format((int) ( $total_forecast ?? $nilai_perolehan ?? $proyek->nilai_rkap ), 0, '.', '.') ?? '-' }}
+                                                <small>
+                                                    {{ number_format((int) ( $total_forecast ?? $nilai_perolehan ?? $proyek->nilai_rkap ), 0, '.', '.') ?? '-' }}
+                                                </small>
                                             </td>
                                             <!--end::Role-->
                                             
-                                            <!--begin::Created at-->
+                                            <!--begin::NDA-->
                                             <td class="text-center">
-                                                <span class="text-danger">Belum ditentukan</span>
-                                                {{-- <p class="fs-6 badge {{ $proyek->is_active == true ? 'badge-light-success' : 'badge-light-danger' }}">
-                                                    {{ $proyek->is_active == true ? 'yes' : '* No' }}
-                                                </p> --}}
+                                                <small class="{{ $proyek->DokumenNda->first() ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
+                                                    @if ($proyek->DokumenNda->first())
+                                                    Yes
+                                                    @else
+                                                    No
+                                                    @endif
+                                                </small>
                                             </td>
-                                            <!--end::Created at-->
-
-                                            <!--begin::Email-->
-                                            {{-- <td class="px-4">
-                                                {{ $proyek->no_hp ?? '-' }}
-                                            </td> --}}
-                                            <!--end::Email-->
+                                            <!--end::NDA-->
+                                            <!--begin::MOU-->
+                                            <td class="text-center">
+                                                <small class="{{ $proyek->DokumenMou->first() ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
+                                                    @if ($proyek->DokumenMou->first())
+                                                    Yes
+                                                    @else
+                                                    No
+                                                    @endif
+                                                </small>
+                                            </td>
+                                            <!--end::MOU-->
+                                            <!--begin::LOI-->
+                                            <td class="text-center">
+                                                <small class="{{ $proyek->AttachmentMenang->first() ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
+                                                    @if ($proyek->AttachmentMenang->first())
+                                                    Yes
+                                                    @else
+                                                    No
+                                                    @endif
+                                                </small>
+                                            </td>
+                                            <!--end::LOI-->
+                                            <!--begin::REVIEW-->
+                                            <td class="text-center">
+                                                {{-- <small class="{{ $proyek->AttachmentMenang->first() ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
+                                                    @if ($proyek->AttachmentMenang->first())
+                                                    Yes
+                                                    @else
+                                                    No
+                                                    @endif
+                                                </small> --}}
+                                                -
+                                            </td>
+                                            <!--end::REVIEW-->
+                                            <!--begin::DEVIATION-->
+                                            <td class="text-center">
+                                                {{-- <small class="{{ $proyek->AttachmentMenang->first() ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
+                                                    @if ($proyek->AttachmentMenang->first())
+                                                    Yes
+                                                    @else
+                                                    No
+                                                    @endif
+                                                </small> --}}
+                                                -
+                                            </td>
+                                            <!--end::DEVIATION-->
+                                            <!--begin::RISK-->
+                                            <td class="text-center">
+                                                <small class="{{ $proyek->RiskTenderProyek->first() ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
+                                                    @if ($proyek->RiskTenderProyek->first())
+                                                    Yes
+                                                    @else
+                                                    No
+                                                    @endif
+                                                </small>
+                                            </td>
+                                            <!--end::RISK-->
+                                            <!--begin::ECA-->
+                                            <td class="text-center">
+                                                <small class="{{ $proyek->DokumenEca->first() ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
+                                                    @if ($proyek->DokumenEca->first())
+                                                    Yes
+                                                    @else
+                                                    No
+                                                    @endif
+                                                </small>
+                                            </td>
+                                            <!--end::ECA-->
+                                            <!--begin::ICA-->
+                                            <td class="text-center">
+                                                <small class="{{ $proyek->DokumenIca->first() ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
+                                                    @if ($proyek->DokumenIca->first())
+                                                    Yes
+                                                    @else
+                                                    No
+                                                    @endif
+                                                </small>
+                                            </td>
+                                            <!--end::ICA-->
+                                            
+                                            <!--begin::PIC-->
+                                            <td class="text-center">-</td>
+                                            <!--end::PIC-->
+                                            <!--begin::PIC-->
+                                            <td class="text-center">-</td>
+                                            <!--end::PIC-->
+                                            <!--begin::STATUS-->
+                                            <td class="text-center">
+                                                <P class="badge badge-light-primary">Open</P>
+                                            </td>
+                                            <!--end::STATUS-->
                                         </tr>
                                     @endforeach
                                 </tbody>
