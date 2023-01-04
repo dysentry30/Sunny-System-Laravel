@@ -8137,6 +8137,7 @@
                                     <option value="VO">Variation Order (VO)</option>
                                     <option value="Klaim">Klaim</option>
                                     <option value="Anti Klaim">Anti Klaim</option>
+                                    <option value="Klaim Asuransi">Klaim Asuransi</option>
                                 </select>
                             </div>
 

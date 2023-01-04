@@ -289,7 +289,7 @@
                                                                             <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
                                                                         </a> --}}
                                                                     </label><br>
-                                                                    <b>{{Carbon\Carbon::create($perubahan_kontrak->tanggal_perubahan)->format("Y-m-d")}}</b>
+                                                                    <b>{{Carbon\Carbon::create($perubahan_kontrak->tanggal_perubahan)->format("d F Y")}}</b>
                                                                     {{-- <input type="date" name="tanggal-perubahan" class="form-control form-control-solid" value="{{Carbon\Carbon::create($perubahan_kontrak->tanggal_perubahan)->format("Y-m-d")}}"> --}}
                                                                 </div>
                                                             </div>
@@ -458,6 +458,132 @@
                     
                                             </table>
                                             <!--End:Table: Review-->
+
+                                             <!--Begin::Klaim Jaminan-->
+                                             <h3 class="fw-bolder m-0 mb-3 " id="HeadDetail" style="font-size:14px;">
+                                                 Jaminan
+                                                 <a href="#" Id="Plus" data-bs-toggle="modal"
+                                                     data-bs-target="#kt_modal_jaminan">+</a>
+                                             </h3>
+
+                                             <!--Begin::Tabel-->
+                                             <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                                 <!--begin::Table head-->
+                                                 <thead>
+                                                     <!--begin::Table row-->
+                                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                         <th class="min-w-125px">Jaminan</th>
+                                                         <th class="min-w-125px">Tanggal Penerbitan</th>
+                                                         <th class="min-w-125px">Tanggal Berakhir</th>
+                                                         <th class="min-w-125px">Status</th>
+                                                     </tr>
+                                                     <!--end::Table row-->
+                                                 </thead>
+                                                 <!--end::Table head-->
+                                                 <!--begin::Table body-->
+                                                 <tbody class="fw-bold text-gray-400">
+                                                    <tbody class="fw-bold text-gray-400">
+                                                        @if (!empty($perubahan_kontrak->Jaminan))
+                                                        @forelse ($perubahan_kontrak->Jaminan as $jaminan )
+                                                        <tr>
+                                                            <td>
+                                                                <p class="text-gray-600 mb-1">{{ $jaminan->kategori_jaminan }}</p>
+                                                            </td>
+                                                            <td>
+                                                                <p class="text-gray-600 mb-1">{{Carbon\Carbon::create($jaminan->tanggal_penerbitan)->format("d F Y")}}</p>
+                                                            </td>
+                                                            <td>
+                                                                <p class="text-gray-600 mb-1">{{Carbon\Carbon::create($jaminan->tanggal_berakhir)->format("d F Y")}}</p>
+                                                            </td>
+                                                            <td>
+                                                                <p class="badge mb-1 {{ $jaminan->status == "Valid" ? "badge-light-success text-success" : "badge-light-danger text-danger" }}">{{ $jaminan->status }}</p>
+                                                            </td>
+                                                        </tr>   
+                                                        @empty
+                                                        <tr>
+                                                            <td colspan="4" class="text-center">
+                                                                <h6><b>There is no data</b></h6>
+                                                            </td>
+                                                        </tr>
+                                                        @endforelse
+                                                        @else
+                                                        <tr>
+                                                            <td colspan="4" class="text-center">
+                                                                <h6><b>There is no data</b></h6>
+                                                            </td>
+                                                        </tr>
+                                                        @endif
+                                                       
+                                                    </tbody>
+                                                 </tbody>
+                                                 <!--end::Table body-->
+                                             </table>
+                                             <!--End::Tabel-->
+
+                                            <!--End::Klaim Jaminan-->
+
+                                            <!--Begin::Klaim Asuransi-->
+                                            @if ($perubahan_kontrak->jenis_perubahan == "Klaim Asuransi")
+                                                <h3 class="fw-bolder m-0 mb-3 " id="HeadDetail" style="font-size:14px;">
+                                                    Asuransi
+                                                    <a href="#" Id="Plus" data-bs-toggle="modal"
+                                                        data-bs-target="#kt_modal_asuransi">+</a>
+                                                </h3>
+
+                                                <!--Begin::Tabel-->
+                                                <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                                    <!--begin::Table head-->
+                                                    <thead>
+                                                        <!--begin::Table row-->
+                                                        <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                            {{-- <th class="min-w-125px">Nama Dokumen</th> --}}
+                                                            <th class="min-w-125px">Asuransi</th>
+                                                            <th class="min-w-125px">Tanggal Penerbitan</th>
+                                                            <th class="min-w-125px">Tanggal Berakhir</th>
+                                                            <th class="min-w-125px">Status</th>
+                                                        </tr>
+                                                        <!--end::Table row-->
+                                                    </thead>
+                                                    <!--end::Table head-->
+                                                    <!--begin::Table body-->
+                                                    <tbody class="fw-bold text-gray-400">
+                                                        @if (!empty($perubahan_kontrak->Asuransi))
+                                                        @forelse ($perubahan_kontrak->Asuransi as $asuransi )
+                                                        <tr>
+                                                            <td>
+                                                                <p class="text-gray-600 mb-1">{{ $asuransi->kategori_asuransi }}</p>
+                                                            </td>
+                                                            <td>
+                                                                <p class="text-gray-600 mb-1">{{Carbon\Carbon::create($asuransi->tanggal_penerbitan)->format("d F Y")}}</p>
+                                                            </td>
+                                                            <td>
+                                                                <p class="text-gray-600 mb-1">{{Carbon\Carbon::create($asuransi->tanggal_berakhir)->format("d F Y")}}</p>
+                                                            </td>
+                                                            <td>
+                                                                <p class="badge mb-1 {{ $asuransi->status == "Valid" ? "badge-light-success text-success" : "badge-light-danger text-danger" }}">{{ $asuransi->status }}</p>
+                                                            </td>
+                                                        </tr> 
+                                                        @empty
+                                                        <tr>
+                                                            <td colspan="4" class="text-center">
+                                                                <h6><b>There is no data</b></h6>
+                                                            </td>
+                                                        </tr>
+                                                        @endforelse
+                                                        @else
+                                                        <tr>
+                                                            <td colspan="4" class="text-center">
+                                                                <h6><b>There is no data</b></h6>
+                                                            </td>
+                                                        </tr>
+                                                        @endif
+                                                       
+                                                    </tbody>
+                                                    <!--end::Table body-->
+                                                </table>
+                                                <!--End::Tabel-->
+                                            @endif
+                                            <!--End::Klaim Asuransi-->
 
                                             @if ($perubahan_kontrak->stage == 4 || $perubahan_kontrak->stage == 5 || !$perubahan_kontrak->is_dispute)
                                                 
@@ -632,6 +758,271 @@
                 <!--end::Modal dialog-->
             </div>
         <!--end::Modal - List Jenis Dokumen -->
+
+        <!--Begin::Modal - Asuransi-->
+        <div class="modal fade" id="kt_modal_asuransi" tabindex="-1" aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-600px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header">
+                        <!--begin::Modal title-->
+                        <h2>Add Asuransi</h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <i class="bi bi-x-lg"></i>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
+                    </div>
+                    <!--end::Modal header-->
+                    <!--begin::Modal body-->
+                    <div class="modal-body py-lg-6 px-lg-6">
+            
+                        <!--begin::Input group Website-->
+                        <div class="fv-row mb-5">
+                            <form action="/asuransi-pelaksanaan/upload" method="POST" enctype="multipart/form-data">
+                                @csrf
+                                <!--begin::Input-->
+                                <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                    name="id-contract">
+                                <input type="hidden" class="modal-name" name="modal-name">
+                                <input type="hidden" value="{{ $perubahan_kontrak->id_perubahan_kontrak ?? 0 }}" id="id-perubahan-kontrak" name="id-perubahan-kontrak">
+                                <!--end::Input-->
+            
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label">
+                                    <span style="font-weight: normal">Kategori</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <select name="kategori-asuransi" id="kategori-asuransi" class="form-select form-select-solid"
+                                data-control="select2" data-hide-search="true"
+                                data-placeholder="Pilih Kategori Asuransi">
+                                    <option value=""></option>
+                                    <option value="CAR/EAR">CAR/EAR</option>
+                                    <option value="Third Party Liability">Third Party Liability</option>
+                                    <option value="Professional Indemnity">Professional Indemnity</option>
+                                    <option value="Heavy Equipment">Heavy Equipment</option>
+                                </select>
+                                <!--end::Input-->
+                                
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">No. Polis</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" class="form-control form-control-solid" name="nomor-polis-asuransi"
+                                    id="nomor-polis" value="" style="font-weight: normal"
+                                    placeholder="Input No. Polis" />
+                                <!--end::Input-->
+                                
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Penerbit Polis</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" class="form-control form-control-solid" name="penerbit-polis-asuransi"
+                                    id="penerbit-polis" value="" style="font-weight: normal"
+                                    placeholder="Input Penerbit Polis" />
+                                <!--end::Input-->
+            
+                                <!--begin::Input-->
+                                <div class="tanggal-penerbitan">
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Tanggal Penerbitan</span>
+                                        <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="tanggal_dokumen">
+                                            <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
+                                        </a>
+                                    </label>
+                                    <input type="date" class="form-control form-control-solid mb-3" name="tanggal-penerbitan-asuransi"
+                                    id="tanggal_penerbitan" value="" placeholder="Tanggal Dokumen" style="font-weight: normal" />
+                                </div>
+                                <!--end::Input-->
+                                
+                                <!--begin::Input-->
+                                <div class="tanggal-berakhir">
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Tanggal Berakhir</span>
+                                        <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="tanggal_dokumen">
+                                            <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
+                                        </a>
+                                    </label>
+                                    <input type="date" class="form-control form-control-solid mb-3" name="tanggal-berakhir-asuransi"
+                                    id="tanggal_berakhir" value="" placeholder="Tanggal Dokumen" style="font-weight: normal" />
+                                </div>
+                                <!--end::Input-->
+
+                                <!--begin::Input-->
+                                <div class="status">
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Status</span>
+                                    </label>
+                                    <select name="status-asuransi" id="status-asuransi" class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true"
+                                    data-placeholder="Pilih Status">
+                                        <option value=""></option>
+                                        <option value="Valid">Valid</option>
+                                        <option value="Expired">Expired</option>
+                                    </select>
+                                </div>
+                                <!--end::Input-->
+
+                                <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
+                                
+                                <button type="submit" id="save-asuransi" class="btn btn-sm btn-primary mt-5"
+                                data-bs-dismiss="modal">Save</button>
+                            </form>
+                        </div>
+                        <!--end::Input group-->
+                    </div>
+                    <!--end::Modal body-->
+                </div>
+                <!--end::Modal content-->
+            </div>
+            <!--end::Modal dialog-->
+        </div>
+        <!--End::Modal - Asuransi-->
+
+        <!--Begin::Modal - Asuransi-->
+        <div class="modal fade" id="kt_modal_jaminan" tabindex="-1" aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-600px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header">
+                        <!--begin::Modal title-->
+                        <h2>Add Jaminan</h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <i class="bi bi-x-lg"></i>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
+                    </div>
+                    <!--end::Modal header-->
+                    <!--begin::Modal body-->
+                    <div class="modal-body py-lg-6 px-lg-6">
+            
+                        <!--begin::Input group Website-->
+                        <div class="fv-row mb-5">
+                            <form action="/jaminan-pelaksanaan/upload" method="POST" enctype="multipart/form-data">
+                                @csrf
+                                <!--begin::Input-->
+                                <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                    name="id-contract">
+                                <input type="hidden" class="modal-name" name="modal-name">
+                                <input type="hidden" value="{{ $perubahan_kontrak->id_perubahan_kontrak ?? 0 }}" id="id-perubahan-kontrak" name="id-perubahan-kontrak">
+                                <!--end::Input-->
+            
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label">
+                                    <span style="font-weight: normal">Kategori</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <select name="kategori-jaminan" id="kategori-jaminan" class="form-select form-select-solid"
+                                data-control="select2" data-hide-search="true"
+                                data-placeholder="Pilih Kategori Jaminan">
+                                    <option value=""></option>
+                                    <option value="Advance Payment">Advance Payment</option>
+                                    <option value="Performance">Performance</option>
+                                    <option value="Warranty">Warranty</option>
+                                    <option value="Partner">Partner</option>
+                                </select>
+                                <!--end::Input-->
+                                
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">No. Jaminan</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" class="form-control form-control-solid" name="nomor-jaminan"
+                                    id="nomor-jaminan" value="" style="font-weight: normal"
+                                    placeholder="Input No. Jaminan" />
+                                <!--end::Input-->
+                                
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Penerbit Jaminan</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" class="form-control form-control-solid" name="penerbit-jaminan"
+                                    id="penerbit-jaminan" value="" style="font-weight: normal"
+                                    placeholder="Input Penerbit Jaminan" />
+                                <!--end::Input-->
+            
+                                <!--begin::Input-->
+                                <div class="tanggal-penerbitan">
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Tanggal Penerbitan</span>
+                                        <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="tanggal_dokumen">
+                                            <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
+                                        </a>
+                                    </label>
+                                    <input type="date" class="form-control form-control-solid mb-3" name="tanggal-penerbitan-jaminan"
+                                    id="tanggal_penerbitan" value="" placeholder="Tanggal Penerbitan" style="font-weight: normal" />
+                                </div>
+                                <!--end::Input-->
+                                
+                                <!--begin::Input-->
+                                <div class="tanggal-berakhir">
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Tanggal Berakhir</span>
+                                        <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="tanggal_dokumen">
+                                            <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
+                                        </a>
+                                    </label>
+                                    <input type="date" class="form-control form-control-solid mb-3" name="tanggal-berakhir-jaminan"
+                                    id="tanggal_berakhir" value="" placeholder="Tanggal Berakhir" style="font-weight: normal" />
+                                </div>
+                                <!--end::Input-->
+
+                                <!--begin::Input-->
+                                <div class="status">
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Status</span>
+                                    </label>
+                                    <select name="status-jaminan" id="status-jaminan" class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true"
+                                    data-placeholder="Pilih Status">
+                                        <option value=""></option>
+                                        <option value="Valid">Valid</option>
+                                        <option value="Expired">Expired</option>
+                                    </select>                                    
+                                </div>
+                                <!--end::Input-->
+
+                                <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
+                                
+                                <button type="submit" id="save-dokumen-site-instruction" class="btn btn-sm btn-primary mt-5"
+                                data-bs-dismiss="modal">Save</button>
+                            </form>
+                        </div>
+                        <!--end::Input group-->
+
+                    </div>
+                    <!--end::Modal body-->
+                </div>
+                <!--end::Modal content-->
+            </div>
+            <!--end::Modal dialog-->
+        </div>
+        <!--End::Modal - Jaminan-->
 
         <!--begin::Modal - Dokumen Pendukung -->
     <div class="modal fade" id="kt_modal_input_dokumen_pendukung" tabindex="-1" aria-hidden="true">

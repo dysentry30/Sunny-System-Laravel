@@ -42,6 +42,8 @@ use App\Models\KontrakBertandatangan;
 use App\Models\AddendumContractDrafts;
 use App\Models\ContractChangeProposal;
 use App\Models\ContractUploadFinal;
+use App\Models\ContractAsuransi;
+use App\Models\ContractJaminan;
 use App\Models\KlarifikasiNegosiasiCda;
 use App\Models\ReviewPembatalanKontrak;
 use Illuminate\Database\Eloquent\Model;
@@ -2036,6 +2038,100 @@ class ContractManagementsController extends Controller
     public function uploadChecklistKontrak(Request $request) {
         $data = $request->all();
         dd($data);
+    }
+
+    public function uploadAsuransi(Request $request, ContractAsuransi $asuransi) {
+        $data = $request->all();
+        $messages = [
+            "required" => "Field di atas wajib diisi",
+            "string" => "This field must be string only",
+        ];
+        $rules = [
+            "kategori-asuransi" => "required",
+            "id-contract" => "required",
+            "nomor-polis-asuransi" => "required",
+            "penerbit-polis-asuransi" => "required",
+            "tanggal-penerbitan-asuransi" => "required",
+            "tanggal-berakhir-asuransi" => "required",
+            "status-asuransi" => "required",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            Alert::error('Error', "Rencana Kerja Manajemen Kontrak gagal ditambahkan");
+            return Redirect::back()->with("modal", $data["modal-name"]);
+            // dd($validation->errors());
+        }
+        $validation->validate();
+
+        $contract = ContractManagements::find($data["id-contract"]);
+        if (empty($contract)) {
+            Alert::error("Error", "Pastikan contract sudah dibuat terlebih dahulu");
+            return Redirect::back()->with("modal", $data["modal-name"]);
+            // return redirect()->back();
+        }
+
+        $asuransi->id_contract = $data["id-contract"];
+        $asuransi->id_perubahan_kontrak = $data["id-perubahan-kontrak"];
+        $asuransi->kategori_asuransi = $data["kategori-asuransi"];
+        $asuransi->nomor_polis = $data["nomor-polis-asuransi"];
+        $asuransi->penerbit_polis = $data["penerbit-polis-asuransi"];
+        $asuransi->tanggal_penerbitan = $data["tanggal-penerbitan-asuransi"];
+        $asuransi->tanggal_berakhir = $data["tanggal-berakhir-asuransi"];
+        $asuransi->status = $data["status-asuransi"];
+
+        if ($asuransi->save()) {
+            Alert::success("Success", "Data Asuransi berhasil ditambahkan");
+            return redirect()->back();
+        }
+            Alert::error("Erorr", "Data Asuransi gagal ditambahkan");
+            return Redirect::back()->with("modal", $data["modal-name"]);
+    }
+
+    public function uploadJaminan(Request $request, ContractJaminan $jaminan) {
+        $data = $request->all();
+        $messages = [
+            "required" => "Field di atas wajib diisi",
+            "string" => "This field must be string only",
+        ];
+        $rules = [
+            "kategori-jaminan" => "required",
+            "id-contract" => "required",
+            "nomor-jaminan" => "required",
+            "penerbit-jaminan" => "required",
+            "tanggal-penerbitan-jaminan" => "required",
+            "tanggal-berakhir-jaminan" => "required",
+            "status-jaminan" => "required",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            Alert::error('Error', "Rencana Kerja Manajemen Kontrak gagal ditambahkan");
+            return Redirect::back()->with("modal", $data["modal-name"]);
+            // dd($validation->errors());
+        }
+        $validation->validate();
+
+        $contract = ContractManagements::find($data["id-contract"]);
+        if (empty($contract)) {
+            Alert::error("Error", "Pastikan contract sudah dibuat terlebih dahulu");
+            return Redirect::back()->with("modal", $data["modal-name"]);
+            // return redirect()->back();
+        }
+
+        $jaminan->id_contract = $data["id-contract"];
+        $jaminan->id_perubahan_kontrak = $data["id-perubahan-kontrak"];
+        $jaminan->kategori_jaminan = $data["kategori-jaminan"];
+        $jaminan->nomor_jaminan = $data["nomor-jaminan"];
+        $jaminan->penerbit_jaminan = $data["penerbit-jaminan"];
+        $jaminan->tanggal_penerbitan = $data["tanggal-penerbitan-jaminan"];
+        $jaminan->tanggal_berakhir = $data["tanggal-berakhir-jaminan"];
+        $jaminan->status = $data["status-jaminan"];
+
+        if ($jaminan->save()) {
+            Alert::success("Success", "Data Jaminan berhasil ditambahkan");
+            return redirect()->back();
+        }
+            Alert::error("Erorr", "Data Jaminan gagal ditambahkan");
+            return Redirect::back()->with("modal", $data["modal-name"]);
     }
 
     public function uploadDokumenFinal(Request $request, ContractUploadFinal $uploadFinal)

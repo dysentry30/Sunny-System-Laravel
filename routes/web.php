@@ -1506,6 +1506,10 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post("/pasal-kontraktual/upload", [ContractManagementsController::class, "uploadPasalKontraktual"]);
 
     Route::post("/checklist-manajemen-kontrak/upload", [ContractManagementsController::class, "uploadChecklistKontrak"]);
+    
+    Route::post("/asuransi-pelaksanaan/upload", [ContractManagementsController::class, "uploadAsuransi"]);
+    
+    Route::post("/jaminan-pelaksanaan/upload", [ContractManagementsController::class, "uploadJaminan"]);
 
     Route::post("/dokumen-site-instruction/upload", [ContractManagementsController::class, "siteInstruction"]);
     
