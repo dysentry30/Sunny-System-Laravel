@@ -99,12 +99,11 @@ class UserController extends Controller
             "remember_token" => null,
         ])->save();
 
-        Auth::logout();
-
+        
         Request()->session()->invalidate();
-
+        
         Request()->session()->regenerateToken();
-
+        
 
         if (str_contains($request->url(), "api")) {
 
@@ -113,9 +112,12 @@ class UserController extends Controller
                 "msg" => "Logged out",
             ]);
         }
+
         if (auth()->user()->check_admin_kontrak) {
+            Auth::logout();
             return redirect('/ccm');
         } else {
+            Auth::logout();
             return redirect('/');
         }
     }
