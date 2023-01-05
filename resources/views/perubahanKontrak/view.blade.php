@@ -808,7 +808,6 @@
                                     <option value="CAR/EAR">CAR/EAR</option>
                                     <option value="Third Party Liability">Third Party Liability</option>
                                     <option value="Professional Indemnity">Professional Indemnity</option>
-                                    <option value="Heavy Equipment">Heavy Equipment</option>
                                 </select>
                                 <!--end::Input-->
                                 
