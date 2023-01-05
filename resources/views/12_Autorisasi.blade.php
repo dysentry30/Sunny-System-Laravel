@@ -273,7 +273,7 @@
                                             <td class="text-center">
                                                 {{number_format((int) $history->sum(function($f) {
                                                     if($f->stage == 8) {
-                                                        return (int) $f->realisasi_forecast;
+                                                        return (int) $f->nilai_perolehan;
                                                     }
                                                 }), 0, ".", ".")}}
                                             </td>
