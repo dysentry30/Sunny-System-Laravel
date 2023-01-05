@@ -73,9 +73,10 @@ class ClaimController extends Controller
     public function viewClaim($id_proyek, $jenis_claim)
     {
         $proyek = Proyek::find($id_proyek);
-        $claim = $proyek->ClaimManagements;
+        $claim = $proyek->ContractManagements->PerubahanKontrak;
+        // dd($claim);
         $jenis_claim = str_replace('-', ' ', $jenis_claim);
-        $proyekClaim = $claim->where("jenis_claim", "=", $jenis_claim);
+        $proyekClaim = $claim->where("jenis_perubahan", "=", $jenis_claim);
         // foreach ($claim as $claims) {
         //     if ($claims->jenis_claim == $jenis_claim) {
         //         array_push($proyekClaim, $claims);
