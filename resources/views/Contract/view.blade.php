@@ -844,8 +844,8 @@
                         <!--End:Table: Review-->
                         @if (!empty($uploadFileAanwitjzing))
                         <a target="_blank" href="{{ asset('words/'.$uploadFileAanwitjzing->id_document) }}" class="text-hover-primary">
-                           <b>Download File :</b> {{ $uploadFileAanwitjzing->nama_document }}
-                        </a>
+                          <small> <b>Download File :</b> {{ $uploadFileAanwitjzing->nama_document }}
+                          </small></a>
                         @endif
 
                         <br><br>
@@ -928,9 +928,9 @@
                         </table>
                         <!--End:Table: Draft Contract--> --}}
 
-
+                        <br>
                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                            Tinjauan Dokumen Kontrak (<i>Mengubah input Review Kontrak sesuai dengan file id_20</i>)
+                            Tinjauan Dokumen Kontrak
                             <a href="#" Id="Plus" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_create_review">+</a>
                         </h3>
@@ -1231,7 +1231,7 @@
                         <!--End:Table: Review-->
                         @if (!empty($uploadFilePerubahan))
                         <a target="_blank" href="{{ asset('words/'.$uploadFilePerubahan->id_document) }}" class="text-hover-primary">
-                           <b>Download File :</b> {{ $uploadFilePerubahan->nama_document }}
+                           <small><b>Download File :</b> {{ $uploadFilePerubahan->nama_document }}</small>
                         </a>
                         @endif
 
@@ -2174,64 +2174,36 @@
                             <thead>
                                 <!--begin::Table row-->
                                 <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-125px">Kategori</th>
-                                    <th class="min-w-125px">Kriteria</th>
-                                    <th class="min-w-125px">Penyebab</th>
-                                    <th class="min-w-125px">Risiko</th>
-                                    <th class="min-w-125px">Dampak</th>
-                                    <th class="min-w-125px">Status</th>
+                                    <th class="min-w-125px">Periode</th>
+                                    <th class="min-w-125px">File</th>
                                 </tr>
                                 <!--end::Table row-->
                             </thead>
                             <!--end::Table head-->
                             <!--begin::Table body-->
                             <tbody class="fw-bold text-gray-400">
-                                @forelse ($contract->inputRisks as $inputRisk)
-                                    @if ($inputRisk->stage <= 2)
+                                @php
+                                    $uploadResikoPelaksanaan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "resiko-pelaksanaan");
+                                @endphp
+                                @forelse ($uploadResikoPelaksanaan as $inputRisk)
                                     <tr>
                                         <!--begin::Column-->
                                         <td>
-                                            <a href="#" Id="edit_resiko_perolehan" data-bs-toggle="modal"
-                                                data-bs-target="#kt_modal_edit_resiko_perolehan_{{ $inputRisk->id_risk }}"><p class="text-gray-600 mb-1 text-hover-primary">{{ $inputRisk->kategori }}</p></a>
+                                            <p class="text-gray-600 mb-1">{{ Carbon\Carbon::createFromFormat("m-Y", $inputRisk->periode)->translatedFormat("F Y") }}</p>
                                         </td>
-                                        <!--end::Column-->
-                                        <!--begin::Kode=-->
                                         <td>
-                                            <p class="text-gray-600 mb-1">{{ $inputRisk->kriteria }}</p>
+                                            <!--End:Table: Review-->
+                                            <a target="_blank" href="{!! asset('words/'.$inputRisk->id_document) !!}" class="text-hover-primary">
+                                            <p>{{ $inputRisk->nama_document }}</p>
+                                            </a>
                                         </td>
-                                        <!--end::Kode=-->
-                                        <!--begin::Unit=-->
-                                        <td>
-                                            <p class="text-gray-600 mb-1">{{ $inputRisk->penyebab }}</p>
-                                        </td>
-                                        <!--end::Unit=-->
-                                        <!--begin::Unit=-->
-                                        <td>
-                                            <p class="text-gray-600 mb-1">{{ $inputRisk->resiko_peluang }}</p>
-                                        </td>
-                                        <!--end::Unit=-->
-                                        <!--begin::Unit=-->
-                                        <td>
-                                            <p class="text-gray-600 mb-1">{{ $inputRisk->dampak }}</p>
-                                        </td>
-                                        <!--end::Unit=-->
-                                        <!--begin::Unit=-->
-                                        <td>
-                                            @php
-                                                $status = $inputRisk->is_closed == 0 ? "Open" : "Closed";
-                                                $class = $inputRisk->is_closed == 0 ? "badge-light-success text-success" : "badge-light-danger text-danger";
-                                            @endphp
-                                            <p class="mb-1 badge {{$class}}">{{ $status }}</p>
-                                        </td>
-                                        <!--end::Unit=-->
                                     </tr>
-                                    @endif
                                 @empty
                                 @endforelse
                             </tbody>
                             <!--end::Table body-->
 
-                        </table>
+                        </table>
                         <!--End:Table: Review-->
                         
                         @php
@@ -2240,7 +2212,7 @@
                         <!--End:Table: Review-->
                         @if (!empty($uploadFileResiko))
                         <a target="_blank" href="{{ asset('words/'.$uploadFileResiko->id_document) }}" class="text-hover-primary">
-                           <b>Download File :</b> {{ $uploadFileResiko->nama_document }}
+                           <small><b>Download File :</b> {{ $uploadFileResiko->nama_document }}</small>
                         </a>
                         @endif
                         <br><br>
@@ -2375,7 +2347,12 @@
                             Perubahan Kontrak
                             <a href="#" Id="Plus" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_input_perubahan_kontrak">+</a>
-                        </h3>
+                            @if (!empty($contract->PerubahanKontrak->toArray()))
+                                <a href="#" data-bs-toggle="modal"
+                                data-bs-target="#kt_modal_upload_perubahan" class="btn btn-primary btn-sm p-2 mx-3 text-end">Upload</a>
+                            @endif
+                        </h3><br>
+
 
                         <!--begin:Table: Perubahan Kontrak-->
                         <table class="table align-middle table-row-dashed fs-6 gy-5" id="perubahan-kontrak">
@@ -2503,6 +2480,15 @@
 
                         </table>
                         <!--End:Table: Perubahan Kontrak-->
+                        @php
+                            $uploadFilePerubahan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Pending Issue")->first();
+                        @endphp
+                        <!--End:Table: Review-->
+                        @if (!empty($uploadFilePerubahan))
+                            <a target="_blank" href="{{ asset('words/'.$uploadFilePerubahan->id_document) }}" class="text-hover-primary">
+                            <small><b>Download File :</b> {{ $uploadFilePerubahan->nama_document }}</small>
+                            </a>
+                        @endif
 
                         <br>
                         <br>
@@ -2635,6 +2621,100 @@
 
                         </table>
                         <!--End:Table: Checklist Manajemen Kontrak-->
+
+                        <br>
+                        <br>
+
+                            <div class="row">
+                                <div class="col-6">
+                                    <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                        LAW
+                                    </h3>
+                                </div>
+                                <div class="col-6">
+                                    <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                        LD
+                                    </h3>
+                                </div>
+                            </div>
+                            <form action="/ld-law/upload" enctype="multipart/form-data" method="POST">
+                                @csrf
+                                <div class="row">
+                                    <div class="col-6 mr-3">
+                                         <!--begin::Input-->
+                                         <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                         name="id-contract">
+                                     <input type="hidden" class="modal-name" name="modal-name">
+     
+                                     <!--begin::Label-->
+                                     <label class="fs-6 fw-bold form-label mt-3">
+                                         <span style="font-weight: normal">Governing Law</span>
+                                     </label>
+                                     <!--end::Label-->
+                                     <!--begin::Input-->
+                                     <input type="text" id="governing-law" name="governing-law" class="form-control form-control-solid" 
+                                     value="{{ !empty($contract->law_governing) ? $contract->law_governing : "" }}">
+                                     <!--end::Input-->
+     
+                                     <br>
+                                     
+                                     <!--begin::Label-->
+                                     <label class="fs-6 fw-bold form-label mt-3">
+                                         <span style="font-weight: normal">Dispute Resolution</span>
+                                     </label>
+                                     <!--end::Label-->
+                                     <!--begin::Input-->
+                                     <input type="text" id="dispute-resolution" name="dispute-resolution" class="form-control form-control-solid"
+                                     value="{{ !empty($contract->law_dispute_resolution) ? $contract->law_dispute_resolution : "" }}">
+                                     <!--end::Input-->
+                                     
+                                     <br>
+     
+                                     <!--begin::Label-->
+                                     <label class="fs-6 fw-bold form-label mt-3">
+                                         <span style="font-weight: normal">Prevailing Language</span>
+                                     </label>
+                                     <!--end::Label-->
+                                     <!--begin::Input-->
+                                     <input type="text" id="prevailing-language" name="prevailing-language" class="form-control form-control-solid"
+                                     value="{{ !empty($contract->ld_performance) ? $contract->ld_performance : "" }}">
+                                     <!--end::Input-->
+                                    </div>
+                                    <div class="col-6">
+                                        <!--begin::Input-->
+                                        <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                            name="id-contract">
+                                        <input type="hidden" class="modal-name" name="modal-name">
+        
+                                        <!--begin::Label-->
+                                        <label class="fs-6 fw-bold form-label mt-3">
+                                            <span style="font-weight: normal">Delay</span>
+                                        </label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <input type="text" id="delay" name="delay" class="form-control form-control-solid"
+                                        value="{{ !empty($contract->ld_delay) ? $contract->ld_delay : "" }}">
+                                        <!--end::Input-->
+        
+                                        <br>
+                                        
+                                        <!--begin::Label-->
+                                        <label class="fs-6 fw-bold form-label mt-3">
+                                            <span style="font-weight: normal">Performance</span>
+                                        </label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <input type="text" id="performance" name="performance" class="form-control form-control-solid"
+                                        value="{{ !empty($contract->law_prevailing_language) ? $contract->ld_performance : "" }}">
+                                        <!--end::Input-->
+                                    </div>
+                                </div>
+
+                                <div class="d-flex justify-content-end">
+                                    <button type="submit" id="save-question" class="btn btn-sm btn-primary"
+                                        data-bs-dismiss="modal">Save</button>
+                                </div>
+                            </form>
 
                         <br>
                         <br>
@@ -3235,9 +3315,10 @@
                                                     <tr>
                                                         <!--begin::Column-->
                                                         <td>
-                                                            <a href="/document/view/{{ $contract->id_contract }}/{{ $ba_defect }}"
+                                                            {{-- <a href="/document/view/{{ $contract->id_contract }}/{{ $ba_defect }}"
                                                                 class="text-gray-600 text-hover-primary">Dokumen BA Defect
-                                                                #{{ $key + 1 }}</a>
+                                                                #{{ $key + 1 }}</a> --}}
+                                                            <a target="_blank" href="{{ asset('words/' . $ba_defect . '.pdf') }}" class="text-gray-400 text-hover-primary">Klik Dokumen BA Defect Disini</a>
                                                         </td>
                                                         <!--end::Column-->
                                                     </tr>
@@ -3263,6 +3344,8 @@
                             </div>
 
                             @if (!empty($contract->list_dokumen_ba_defect))
+                            
+                            <br>
                                 <div class="row">
                                     <div class="col">
                                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
@@ -3599,14 +3682,14 @@
 
                     </table>
                     @php
-                        $uploadFilePerubahan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Pending Issue")->first();
+                        $uploadFilePending = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Pending Issue")->first();
                         @endphp
                         <!--End:Table: Review-->
-                        @if (!empty($uploadFilePerubahan))
-                        <a target="_blank" href="{{ asset('words/'.$uploadFilePerubahan->id_document) }}" class="text-hover-primary">
-                           <b>Download File :</b> {{ $uploadFilePerubahan->nama_document }}
-                        </a>
-                    @endif
+                        @if (!empty($uploadFilePending))
+                            <a target="_blank" href="{{ asset('words/'.$uploadFilePending->id_document) }}" class="text-hover-primary">
+                            <small><b>Download File :</b> {{ $uploadFilePending->nama_document }}</small>
+                            </a>
+                        @endif
                     <br><br>
                     <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                         Dokumen Lainnya
@@ -5945,412 +6028,83 @@
                 <!--begin::Modal body-->
                 <div class="modal-body py-lg-6 px-lg-6">
 
-                    <form action="/input-risk/upload" method="POST" enctype="multipart/form-data">
+                    <form action="/contract-management/final-dokumen/upload" method="POST" enctype="multipart/form-data">
                         @csrf
-                        <input type="hidden" value="2" name="stage">
-                        <input type="hidden" value="0" name="is-closed">
                         <input type="hidden" class="modal-name" name="modal-name">
+                        <input type="hidden" value="resiko-pelaksanaan" name="kategori">
                         <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" name="id-contract">
         
+                        @php
+                            $month = (int) date("m") - 1 == 0 ? 12 : (int) date("m") - 1;
+                            $year = (int) date("m") - 1 == 0 ?  (int) date("Y") - 1 : (int) date("Y");
+
+                        @endphp
                         <div class="row">
                             <div class="col">
-                                <!--begin::Label-->
-                                <label class="fs-6 fw-bold form-label mt-3">
-                                    <span style="font-weight: normal">Verifikasi</span>
-                                </label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid" name="verifikasi" id="verifikasi"
-                                    style="font-weight: normal" value="{{ auth()->user()->UnitKerja->unit_kerja ?? auth()->user()->name }}" placeholder="Verifikasi" readonly/>
-                                <!--end::Input-->
+                                Bulan:
                             </div>
                             <div class="col">
-                                <!--begin::Label-->
-                                <label class="fs-6 fw-bold form-label mt-3 required">
-                                    <span style="font-weight: normal">Kategori</span>
-                                </label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <select name="kategori" class="form-select form-select-solid"
-                                    data-control="select2" data-hide-search="true" data-placeholder="Pilih kategori"
-                                    tabindex="-1" aria-hidden="true" required>
-                                    <option value=""></option>
-                                    <option value="Kategori 1">Kategori 1</option>
-                                    <option value="Kategori 2">Kategori 2</option>
+                                Tahun:
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <select id="periode-resiko" name="periode-resiko"
+                                    class="form-select form-select-solid select2-hidden-accessible w-auto"
+                                    style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
+                                    data-placeholder="Bulan" data-select2-id="select2-data-bulan" tabindex="-1"
+                                    aria-hidden="true">
+                                    <option {{ $month == '' ? 'selected' : '' }}></option>
+                                    <option value="1" {{ $month == 1 ? 'selected' : '' }}>Januari</option>
+                                    <option value="2" {{ $month == 2 ? 'selected' : '' }}>Februari</option>
+                                    <option value="3" {{ $month == 3 ? 'selected' : '' }}>Maret</option>
+                                    <option value="4" {{ $month == 4 ? 'selected' : '' }}>April</option>
+                                    <option value="5" {{ $month == 5 ? 'selected' : '' }}>Mei</option>
+                                    <option value="6" {{ $month == 6 ? 'selected' : '' }}>Juni</option>
+                                    <option value="7" {{ $month == 7 ? 'selected' : '' }}>Juli</option>
+                                    <option value="8" {{ $month == 8 ? 'selected' : '' }}>Agustus</option>
+                                    <option value="9" {{ $month == 9 ? 'selected' : '' }}>September</option>
+                                    <option value="10" {{ $month == 10 ? 'selected' : '' }}>Oktober</option>
+                                    <option value="11" {{ $month == 11 ? 'selected' : '' }}>November</option>
+                                    <option value="12" {{ $month == 12 ? 'selected' : '' }}>Desember</option>
                                 </select>
-                                <!--end::Input-->
                             </div>
-                        </div>
-        
-                        <div class="row">
                             <div class="col">
-                                <!--begin::Label-->
-                                <label class="fs-6 fw-bold form-label mt-3 required">
-                                    <span style="font-weight: normal">Kriteria</span>
-                                </label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <select name="kriteria" class="form-select form-select-solid"
-                                    data-control="select2" data-hide-search="true" data-placeholder="Pilih Kategori"
-                                    tabindex="-1" aria-hidden="true">
-                                    <option value=""></option>
-                                    <option value="Kriteria 1">Kriteria 1</option>
-                                    <option value="Kriteria 2">Kriteria 2</option>
+                                <select id="tahun-resiko" name="tahun-resiko"
+                                    class="form-select form-select-solid select2-hidden-accessible w-auto"
+                                    data-control="select2" data-hide-search="true" data-placeholder="Tahun"
+                                    data-select2-id="select2-data-tahun" tabindex="-1" aria-hidden="true">
+                                    @if ($year == null)
+                                        @for ($i = $years - 2; $i < $years + 10; $i++)
+                                            <option value="{{ $i }}" {{ $years == $i ? 'selected' : '' }}>
+                                                {{ $i }}</option>
+                                        @endfor
+                                    @else
+                                        @for ($i = $year - 2; $i < $year + 10; $i++)
+                                            <option value="{{ $i }}" {{ $year == $i ? 'selected' : '' }}>
+                                                {{ $i }}</option>
+                                        @endfor
+                                    @endif
                                 </select>
-                                <!--end::Input-->
                             </div>
                         </div>
-        
-                        <hr>
-                        <h5 class="h5 fw-bolder text-center">Sub Kriteria</h5>
-        
+                        <br>
                         <div class="row">
                             <div class="col">
-                                <!--begin::Label-->
-                                <label class="fs-6 fw-bold form-label mt-3">
-                                    <span style="font-weight: normal">Probis Level 1 - 2</span>
-                                </label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <select name="probis_1_2" class="form-select form-select-solid"
-                                    data-control="select2" data-hide-search="true" data-placeholder="Probis Level 1 - 2"
-                                    tabindex="-1" aria-hidden="true">
-                                    <option value=""></option>
-                                    <option value="Probis 1">Probis 1</option>
-                                    <option value="Probis 2">Probis 2</option>
-                                </select>
-                                <!--end::Input-->
-                            </div>
-                            <div class="col">
-                                <!--begin::Label-->
-                                <label class="fs-6 fw-bold form-label mt-3">
-                                    <span style="font-weight: normal">Probis Yang Terganggu</span>
-                                </label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <select name="probis_terganggu" class="form-select form-select-solid"
-                                    data-control="select2" data-hide-search="true" data-placeholder="Probis Yang Terganggu"
-                                    tabindex="-1" aria-hidden="true">
-                                    <option value=""></option>
-                                    <option value="Probis Terganggu 1">Probis Terganggu 1</option>
-                                    <option value="Probis Terganggu 2">Probis Terganggu 2</option>
-                                </select>
-                                <!--end::Input-->
+                                <label for="resiko-file">File</label>
+                                <input type="file" class="form-control form-control-solid" name="file-document">
                             </div>
                         </div>
-                        <hr>
-        
-                        <div class="row">
-                            <div class="col">
-                                <!--begin::Label-->
-                                <label class="fs-6 fw-bold form-label mt-3 required">
-                                    <span style="font-weight: normal">Penyebab</span>
-                                </label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <select name="penyebab" class="form-select form-select-solid"
-                                    data-control="select2" data-hide-search="true" data-placeholder="Penyebab"
-                                    tabindex="-1" aria-hidden="true">
-                                    <option value=""></option>
-                                    <option value="Penyebab 1">Penyebab 1</option>
-                                    <option value="Penyebab 2">Penyebab 2</option>
-                                </select>
-                                <!--end::Input-->
-                            </div>
-                            <div class="col">
-                                <!--begin::Label-->
-                                <label class="fs-6 fw-bold form-label mt-3 required">
-                                    <span style="font-weight: normal">Resiko / Peluang</span>
-                                </label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <textarea name="resiko_peluang" id="resiko_peluang" class="form-control form-control-solid mb-3" style="font-weight: normal" value=""></textarea>
-                                <!--end::Input-->
-                            </div>
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col">
-                                <!--begin::Label-->
-                                <label class="fs-6 fw-bold form-label mt-3 required">
-                                    <span style="font-weight: normal">Dampak</span>
-                                </label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <textarea name="dampak" id="dampak" class="form-control form-control-solid mb-3" style="font-weight: normal" value=""></textarea>
-                                <!--end::Input-->
-                            </div>
-                            <div class="col">
-                                <!--begin::Label-->
-                                <label class="fs-6 fw-bold form-label mt-3">
-                                    <span style="font-weight: normal">Nilai Resiko / Peluang (Ro)</span>
-                                </label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3 reformat" name="nilai_resiko_r0"
-                                    id="nilai_resiko_r0" value="" placeholder="Nilai Resiko / Peluang (Ro)" style="font-weight: normal" />
-                                <!--end::Input-->
-                            </div>
-                        </div>
-                        
-                        <hr>
-                        <h5 class="h5 fw-bolder text-center">Kontrol Eksisting</h5>
-                        <div class="row">
-                            <div class="col">
-                                <!--begin::Label-->
-                                <label class="fs-6 fw-bold form-label mt-3">
-                                    <span style="font-weight: normal">Item Kontrol</span>
-                                </label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3" name="item_kontrol"
-                                    id="item_kontrol" value="" placeholder="Item Kontrol" style="font-weight: normal" />
-                                <!--end::Input-->
-                            </div>
-                            <div class="col">
-                                <!--begin::Label-->
-                                <label class="fs-6 fw-bold form-label mt-3">
-                                    <span style="font-weight: normal">Probabilitas</span>
-                                </label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <select name="probabilitas" class="form-select form-select-solid"
-                                    data-control="select2" data-hide-search="true" data-placeholder="Probabilitas"
-                                    tabindex="-1" aria-hidden="true">
-                                    <option value=""></option>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                </select>
-                                <!--end::Input-->
-                            </div>
-                            {{-- <div class="col">
-                                <!--begin::Label-->
-                                <label class="fs-6 fw-bold form-label mt-3">
-                                    <span style="font-weight: normal">Dampak</span>
-                                </label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3" name="dampak"
-                                    id="dampak" value="" placeholder="Dampak" style="font-weight: normal" />
-                                <!--end::Input-->
-                            </div> --}}
-                            <div class="col">
-                                <!--begin::Label-->
-                                <label class="fs-6 fw-bold form-label mt-3">
-                                    <span style="font-weight: normal">Skor</span>
-                                </label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3" name="skor"
-                                    id="skor" value="100" placeholder="Skor" style="font-weight: normal" readonly />
-                                <!--end::Input-->
-                            </div>
-                        </div>
-        
-                        <div class="row">
-                            <div class="col">
-                                <!--begin::Label-->
-                                <label class="fs-6 fw-bold form-label mt-3">
-                                    <span style="font-weight: normal">Tingkat Efektifitas Kontrol</span>
-                                </label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <select name="tingkat_efektifitas_kontrol" class="form-select form-select-solid"
-                                    data-control="select2" data-hide-search="true" data-placeholder="Tingkat Efektifitas Kontrol"
-                                    tabindex="-1" aria-hidden="true">
-                                    <option value=""></option>
-                                    <option value="Tingkat Efektifitas Kontrol 1">Tingkat Efektifitas Kontrol 1</option>
-                                    <option value="Tingkat Efektifitas Kontrol 2">Tingkat Efektifitas Kontrol 2</option>
-                                </select>
-                                <!--end::Input-->
-                            </div>
-                            <div class="col">
-                                <!--begin::Label-->
-                                <label class="fs-6 fw-bold form-label mt-3">
-                                    <span style="font-weight: normal">Nilai Sisa Risiko / Peluang (R1)</span>
-                                </label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3 reformat" name="nilai_resiko_r1"
-                                    id="nilai_resiko_r1" value="" placeholder="Nilai Sisa Risiko / Peluang (R1)" style="font-weight: normal" />
-                                <!--end::Input-->
-                            </div>
-                        </div>
-                        <hr>
-                        <h5 class="h5 fw-bolder text-center">Rencana Tindak Lanjut Proaktif</h5>
-        
-                        <div class="row">
-                            <div class="col">
-                                <!--begin::Label-->
-                                <label class="fs-6 fw-bold form-label mt-3">
-                                    <span style="font-weight: normal">Rencana Tindak Lanjut (Mitigasi) Proaktif</span>
-                                </label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <textarea name="tindak_lanjut_mitigasi" id="tindak_lanjut_mitigasi" class="form-control form-control-solid mb-3"></textarea>
-                                <!--end::Input-->
-                            </div>
-                            <div class="col">
-                                <!--begin::Label-->
-                                <label class="fs-6 fw-bold form-label mt-3">
-                                    <span style="font-weight: normal">Tingkat Efektifitas Tindak Lanjut</span>
-                                </label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <select name="tingkat_efektifitas_tindak_lanjut" class="form-select form-select-solid"
-                                    data-control="select2" data-hide-search="true" data-placeholder="Tingkat Efektifitas Tindak lanjut"
-                                    tabindex="-1" aria-hidden="true">
-                                    <option value=""></option>
-                                    <option value="Tingkat Efektifitas Tindak lanjut 1">Tingkat Efektifitas Tindak lanjut 1</option>
-                                    <option value="Tingkat Efektifitas Tindak lanjut 2">Tingkat Efektifitas Tindak lanjut 2</option>
-                                </select>
-                                <!--end::Input-->
-                            </div>
-                        </div>
-        
-                        <div class="row">
-                            <div class="col">
-                                <!--begin::Label-->
-                                <label class="fs-6 fw-bold form-label mt-3">
-                                    <span style="font-weight: normal">Nilai Sisa Risiko / Peluang (R2)</span>
-                                </label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3" name="nilai_resiko_r2"
-                                    id="nilai_resiko_r2" value="" placeholder="Nilai Sisa Risiko / Peluang (R2)" style="font-weight: normal" />
-                                <!--end::Input-->
-                            </div>
-                            <div class="col">
-                                <!--begin::Label-->
-                                <label class="fs-6 fw-bold form-label mt-3">
-                                    <span style="font-weight: normal">Biaya</span>
-                                </label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3 reformat" name="biaya_proaktif"
-                                    id="biaya_proaktif" value="" placeholder="Biaya" style="font-weight: normal" />
-                                <!--end::Input-->
-                            </div>
-                        </div>
-        
-                        <div class="row">
-                            <div class="col">
-                                <!--begin::Label-->
-                                <label class="fs-6 fw-bold form-label mt-3">
-                                    <span style="font-weight: normal">Tanggal Mulai</span>
-                                    <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
-                                        <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
-                                    </a>
-                                </label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <input type="date" class="form-control form-control-solid mb-3" name="tanggal_mulai"
-                                    id="tanggal_mulai" value="" placeholder="Tanggal Mulai" style="font-weight: normal" />
-                                <!--end::Input-->
-                            </div>
-                            <div class="col">
-                                <!--begin::Label-->
-                                <label class="fs-6 fw-bold form-label mt-3">
-                                    <span style="font-weight: normal">Tanggal Selesai</span>
-                                    <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
-                                        <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
-                                    </a>
-                                </label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <input type="date" class="form-control form-control-solid mb-3" name="tanggal_selesai"
-                                    id="tanggal_selesai" value="" placeholder="Tanggal Selesai" style="font-weight: normal" />
-                                <!--end::Input-->
-                            </div>
-                        </div>
-        
-                        <hr>
-                        <h5 class="h5 fw-bolder text-center">Rencana Tindak Lanjut Reaktif</h5>
-        
-                        <div class="row">
-                            <div class="col">
-                                <!--begin::Label-->
-                                <label class="fs-6 fw-bold form-label mt-3">
-                                    <span style="font-weight: normal">Rencana Tindak Lanjut (Mitigasi) Reaktif</span>
-                                    {{-- <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
-                                        <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
-                                    </a> --}}
-                                </label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3" name="tindak_lanjut_reaktif"
-                                    id="tindak_lanjut_reaktif" value="" placeholder="Rencana Tindak Lanjut (Mitigasi) Reaktif" style="font-weight: normal" />
-                                <!--end::Input-->
-                            </div>
-                            <div class="col">
-                                <!--begin::Label-->
-                                <label class="fs-6 fw-bold form-label mt-3">
-                                    <span style="font-weight: normal">Biaya</span>
-                                </label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3 reformat" name="biaya_reaktif"
-                                    id="biaya_reaktif" value="" placeholder="Biaya" style="font-weight: normal" />
-                                <!--end::Input-->
-                            </div>
-                        </div>
-                        <hr>
-        
-                        <div class="row">
-                            <div class="col">
-                                <!--begin::Label-->
-                                <label class="fs-6 fw-bold form-label mt-3">
-                                    <span style="font-weight: normal">PIC RTL</span>
-                                </label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <select name="pic_rtl" class="form-select form-select-solid"
-                                    data-control="select2" data-hide-search="true" data-placeholder="PIC RTL"
-                                    tabindex="-1" aria-hidden="true">
-                                    <option value=""></option>
-                                    <option value="PIC RTL 1">PIC RTL 1</option>
-                                    <option value="PIC RTL 2">PIC RTL 2</option>
-                                </select>
-                                <!--end::Input-->
-                            </div>
-                        </div>
-        
-                        <hr>
-                        <h5 class="h5 fw-bolder text-center">Peluang</h5>
-        
-                        <div class="row">
-                            <div class="col">
-                                <!--begin::Label-->
-                                <label class="fs-6 fw-bold form-label mt-3">
-                                    <span style="font-weight: normal">Uraian</span>
-                                </label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <textarea name="uraian" id="uraian" class="form-control form-control-solid mb-3"></textarea>
-                                <!--end::Input-->
-                            </div>
-                            <div class="col">
-                                <!--begin::Label-->
-                                <label class="fs-6 fw-bold form-label mt-3">
-                                    <span style="font-weight: normal">Nilai</span>
-                                </label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid mb-3 reformat" name="nilai"
-                                    id="nilai" value="" placeholder="Nilai" style="font-weight: normal" />
-                                <!--end::Input-->
-                            </div>
-                        </div>
-                        <hr>
+
                         <br>
                         
                         <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
         
                         {{-- end::Read File --}}
-                        <button type="submit" id="save-risk" class="btn btn-sm btn-primary"
-                            data-bs-dismiss="modal">Save</button>
+                        <div class="modal-footer">
+                            <button type="submit" id="save-risk" class="btn btn-sm btn-primary"
+                                data-bs-dismiss="modal">Save</button>
+                        </div>
         
                     </form>
                 </div>
@@ -6843,7 +6597,7 @@
                             <span style="font-weight: normal">Masukan file dibawah ini</span>
                         </label>
                         <!--end::Label-->
-                        <input type="file" multiple accept=".docx" name="ba-defect[]"
+                        <input type="file" multiple accept=".pdf" name="ba-defect[]"
                             class="form-control form-control-solid">
                         {{-- end::Read File --}}
                         <small>* Support multi file upload</small>
@@ -7147,6 +6901,9 @@
                                 <!--begin::Label-->
                                 <label class="fs-6 fw-bold form-label mt-3">
                                     <span style="font-weight: normal">Resiko Waktu</span>
+                                    <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
+                                        <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
+                                    </a>
                                 </label>
                                 <!--end::Label-->
                                 <input type="date" name="resiko-waktu" class="form-control form-control-solid">
@@ -11498,6 +11255,157 @@
 </div>
 <!--end::Modal - Upload Final Questions-->
 
+<!--begin::Modal - LD-->
+<div class="modal fade" id="kt_modal_ld" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog modal-dialog-centered mw-500px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header">
+                        <!--begin::Modal title-->
+                        <h2>Add LD</h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <i class="bi bi-x-lg"></i>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
+                    </div>
+                    <!--end::Modal header-->
+                    <!--begin::Modal body-->
+                    <div class="modal-body py-lg-6 px-lg-6">
+
+                        <!--begin::Input group Website-->
+                        <div class="fv-row mb-5">
+                            <form action="/ld/upload" enctype="multipart/form-data" method="POST">
+                                @csrf
+                                <!--begin::Input-->
+                                <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                    name="id-contract">
+                                <input type="hidden" class="modal-name" name="modal-name">
+
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Delay</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" id="delay" name="delay" class="form-control form-control-solid">
+                                <!--end::Input-->
+
+                                <br>
+                                
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Performance</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" id="performance" name="performance" class="form-control form-control-solid">
+                                <!--end::Input-->
+
+                                <br><br>
+                                <button type="submit" id="save-question" class="btn btn-sm btn-primary"
+                                    data-bs-dismiss="modal">Save</button>
+                            </form>
+                        </div>
+                        <!--end::Input group-->
+
+                    </div>
+                    <!--end::Modal body-->
+            </div>
+            <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+</div>
+<!--end::Modal - LD-->
+
+<!--begin::Modal - LD-->
+<div class="modal fade" id="kt_modal_law" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog modal-dialog-centered mw-500px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header">
+                        <!--begin::Modal title-->
+                        <h2>Add LAW</h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <i class="bi bi-x-lg"></i>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
+                    </div>
+                    <!--end::Modal header-->
+                    <!--begin::Modal body-->
+                    <div class="modal-body py-lg-6 px-lg-6">
+
+                        <!--begin::Input group Website-->
+                        <div class="fv-row mb-5">
+                            <form action="/law/upload" enctype="multipart/form-data" method="POST">
+                                @csrf
+                                <!--begin::Input-->
+                                <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                    name="id-contract">
+                                <input type="hidden" class="modal-name" name="modal-name">
+
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Governing Law</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" id="governing-law" name="governing-law" class="form-control form-control-solid">
+                                <!--end::Input-->
+
+                                <br>
+                                
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Dispute Resolution</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" id="dispute-resolution" name="dispute-resolution" class="form-control form-control-solid">
+                                <!--end::Input-->
+                                
+                                <br>
+
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Prevailing Language</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" id="prevailing-language" name="prevailing-language" class="form-control form-control-solid">
+                                <!--end::Input-->
+
+                                <br><br>
+                                <button type="submit" id="save-question" class="btn btn-sm btn-primary"
+                                    data-bs-dismiss="modal">Save</button>
+                            </form>
+                        </div>
+                        <!--end::Input group-->
+
+                    </div>
+                    <!--end::Modal body-->
+            </div>
+            <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+</div>
+<!--end::Modal - LD-->
+
 <!--begin::Modal - Upload Final Pending Issue-->
 <div class="modal fade" id="kt_modal_upload_pending_issue" tabindex="-1" aria-hidden="true">
     <!--begin::Modal dialog-->
@@ -11534,7 +11442,7 @@
                             </label>
                             <!--end::Label-->
                             <!--begin::Input-->
-                            <input type="hidden" name="kategori" value="Pending Issue">
+                            <input type="hidden" name="kategori" value="pending-issue">
                             <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                             <!--end::Input-->
                         </div>
@@ -11617,6 +11525,66 @@
     <!--end::Modal dialog-->
 </div>
 <!--end::Modal - Upload Final Usulan Perubahan-->
+
+<!--begin::Modal - Upload Final Perubahan Kontrak-->
+<div class="modal fade" id="kt_modal_upload_perubahan" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog modal-dialog-centered mw-500px">
+        <!--begin::Modal content-->
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header">
+                <!--begin::Modal title-->
+                <h2>Upload Final | Perubahan Kontrak</h2>
+                <!--end::Modal title-->
+                <!--begin::Close-->
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                        <i class="bi bi-x-lg"></i>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--end::Modal header-->
+            <!--begin::Modal body-->
+            <div class="modal-body py-lg-6 px-lg-6">
+                <!--begin::Input group Website-->
+                <form action="/contract-management/final-dokumen/upload" method="POST"
+                    enctype="multipart/form-data">
+                    <div class="row">
+                        @csrf
+                        <div class="col mt-4">
+                            <!--begin::Label-->
+                            <label for="ketentuan-rencana-kerja" class="fs-6 fw-bold form-label">
+                                <span style="font-weight: normal">Upload Dokumen</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="hidden" name="kategori" value="perubahan-kontrak">
+                            <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
+                            <!--end::Input-->
+                        </div>
+                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                name="id-contract">
+                            <input type="hidden" class="modal-name" name="modal-name">
+                        </div>
+                    </div>
+                    <!--end::Input group-->
+                    <div class="modal-footer mt-4">
+                        <button type="submit" id="save-question-tender-menang"
+                            class="btn btn-sm btn-primary">Save</button>
+                    </div>
+                </form>
+            </div>
+            <!--end::Modal body-->
+        </div>
+        <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+</div>
+<!--end::Modal - Upload Final Pending Issue-->
 
 <!--begin::Modal - Upload Final Resiko Pelaksanaan-->
 <div class="modal fade" id="kt_modal_upload_resiko_pelaksanaan" tabindex="-1" aria-hidden="true">

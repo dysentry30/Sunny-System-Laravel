@@ -44,6 +44,8 @@ use App\Models\ContractChangeProposal;
 use App\Models\ContractUploadFinal;
 use App\Models\ContractAsuransi;
 use App\Models\ContractJaminan;
+use App\Models\ContractLaw;
+use App\Models\ContractLD;
 use App\Models\KlarifikasiNegosiasiCda;
 use App\Models\ReviewPembatalanKontrak;
 use Illuminate\Database\Eloquent\Model;
@@ -691,6 +693,60 @@ class ContractManagementsController extends Controller
         return Redirect::back()->with("modal", $data["modal-name"]);
         // return redirect($_SERVER["HTTP_REFERER"]);
     }
+
+    public function ld_law(Request $request, ContractManagements $contracts)
+    {
+        $data = $request->all();
+        // dd($data);
+
+        $messages = [
+            "required" => "Field di atas wajib diisi",
+            "string" => "This field must be alphabet only",
+        ];
+        $rules = [
+            "id-contract" => "required|string",
+            "delay" => "required|string",
+            "performance" => "required|string",
+            "governing-law" => "required|string",
+            "dispute-resolution" => "required|string",
+            "prevailing-language" => "required|string",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+
+        if ($validation->fails()) {
+            Alert::error('Error', "Input LD & LAW gagal ditambahkan");
+            return Redirect::back()->with("modal", $data["modal-name"]);
+            // return Redirect::back();
+            // dd($validation->errors());
+        }
+
+        // Check ID Contract exist
+        $contract = $contracts::find($data["id-contract"]);
+
+        if (empty($contract)) {
+            // Session::flash("failed", "Please fill 'Draft Contract' empty field");
+            Alert::error('Error', "Pastikan contract sudah dibuat terlebih dahulu");
+            return Redirect::back()->with("modal", $data["modal-name"]);
+            // return Redirect::back();
+        }
+        $validation->validate();
+
+        $contract->ld_delay = $data["delay"];
+        $contract->ld_performance = $data["performance"];
+        $contract->law_governing = $data["governing-law"];
+        $contract->law_dispute_resolution = $data["dispute-resolution"];
+        $contract->law_prevailing_language = $data["prevailing-language"];
+
+        if ($contract->save()) {
+            // moveFileTemp($file, $id_document);
+            Alert::success('Success', "Input LD & LAW berhasil ditambahkan");
+            return Redirect::back();
+        }
+        Alert::error('Error', "Input LD & LAW gagal ditambahkan");
+        return Redirect::back()->with("modal", $data["modal-name"]);
+        // return redirect($_SERVER["HTTP_REFERER"]);
+    }
+    
 
     // Upload Risk of Contract to server or database
     public function riskUpload(Request $request, InputRisks $risk)
