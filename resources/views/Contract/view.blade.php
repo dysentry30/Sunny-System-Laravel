@@ -1069,80 +1069,50 @@
                         <br>
 
                         
-                        <h3 class="fw-bolder m-0 mb-3" id="HeadDetail" style="font-size:14px;">
-                            Input Resiko - Perolehan (<i class="text-hover-primary text-gray"><a 
-                                                            href="https://crm.wika.co.id/faqs/104625_RiskTender_Input-Kosong.rev.xlsx"> Download
-                                                            Template Risk Tender </a></i>)
-                            <a href="#" Id="Plus" data-bs-toggle="modal"
-                                data-bs-target="#kt_modal_input_resiko_perolehan">+</a>
-                        </h3>
 
-                        <!--begin:Table: Review-->
-                        <table class="table align-middle table-row-dashed fs-6 gy-5">
-                            <!--begin::Table head-->
-                            <thead>
-                                <!--begin::Table row-->
-                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-125px">Kategori</th>
-                                    <th class="min-w-125px">Kriteria</th>
-                                    <th class="min-w-125px">Penyebab</th>
-                                    <th class="min-w-125px">Risiko</th>
-                                    <th class="min-w-125px">Dampak</th>
-                                    <th class="min-w-125px">Status</th>
-                                </tr>
-                                <!--end::Table row-->
-                            </thead>
-                            <!--end::Table head-->
-                            <!--begin::Table body-->
-                            <tbody class="fw-bold text-gray-400">
-                                @if ($contract->inputRisks->contains('stage', 1))
-                                    @forelse ($contract->inputRisks as $inputRisk)
-                                        @if ($inputRisk->stage == 1)
-                                            <tr>
-                                                <!--begin::Column-->
-                                                <td>
-                                                    <a href="#" Id="edit_resiko_perolehan" data-bs-toggle="modal"
-                                                        data-bs-target="#kt_modal_edit_resiko_perolehan_{{ $inputRisk->id_risk }}"><p class="text-gray-600 mb-1 text-hover-primary">{{ $inputRisk->kategori }}</p></a>
-                                                </td>
-                                                <!--end::Column-->
-                                                <!--begin::Kode=-->
-                                                <td>
-                                                    <p class="text-gray-600 mb-1">{{ $inputRisk->kriteria }}</p>
-                                                </td>
-                                                <!--end::Kode=-->
-                                                <!--begin::Unit=-->
-                                                <td>
-                                                    <p class="text-gray-600 mb-1">{{ $inputRisk->penyebab }}</p>
-                                                </td>
-                                                <!--end::Unit=-->
-                                                <!--begin::Unit=-->
-                                                <td>
-                                                    <p class="text-gray-600 mb-1">{{ $inputRisk->resiko_peluang }}</p>
-                                                </td>
-                                                <!--end::Unit=-->
-                                                <!--begin::Unit=-->
-                                                <td>
-                                                    <p class="text-gray-600 mb-1">{{ $inputRisk->dampak }}</p>
-                                                </td>
-                                                <!--end::Unit=-->
-                                                <!--begin::Unit=-->
-                                                <td>
-                                                    @php
-                                                        $status = $inputRisk->is_closed == 0 ? "Open" : "Closed";
-                                                        $class = $inputRisk->is_closed == 0 ? "badge-light-success text-success" : "badge-light-danger text-danger";
-                                                    @endphp
-                                                    <p class="mb-1 badge {{$class}}">{{ $status }}</p>
-                                                </td>
-                                                <!--end::Unit=-->
-                                            </tr>
-                                        @endif
-                                    @empty
-                                        <tr>
-                                            <td colspan="5" class="text-center">
-                                                <h6><b>There is no data</b></h6>
-                                            </td>
-                                        </tr>
-                                    @endforelse
+                    <h3 class="fw-bolder m-0 mb-3" id="HeadDetail" style="font-size:14px;">
+                        Input Resiko - Perolehan (<i class="text-hover-primary text-gray"><a 
+                                                        href="https://crm.wika.co.id/faqs/104625_RiskTender_Input-Kosong.rev.xlsx"> Download
+                                                        Template Risk Tender </a></i>)
+                        {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
+                            data-bs-target="#kt_modal_input_resiko_perolehan">+</a> --}}
+                        <a href="#" Id="Plus" data-bs-toggle="modal"
+                        data-bs-target="#kt_modal_upload_resiko_perolehan">+</a>
+                    </h3>
+
+                    <!--begin:Table: Review-->
+                    <table class="table align-middle table-row-dashed fs-6 gy-5">
+                        <!--begin::Table head-->
+                        <thead>
+                            <!--begin::Table row-->
+                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                <th class="min-w-125px">File</th>
+                                <th class="min-w-125px">Tanggal</th>
+                            </tr>
+                            <!--end::Table row-->
+                        </thead>
+                        <!--end::Table head-->
+                        <!--begin::Table body-->
+                        <tbody class="fw-bold text-gray-400">
+                            @php
+                                $uploadResikoPerolehan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "resiko-perolehan")->first();
+                            @endphp
+                                @if (!empty($uploadResikoPerolehan))
+                                    <tr>
+                                        <!--begin::Column-->
+                                        <td>
+                                            <!--End:Table: Review-->
+                                            <a target="_blank" href="{{ asset('words/'.$uploadResikoPerolehan->id_document) }}" class="text-hover-primary">
+                                            <p>{{ $uploadResikoPerolehan->nama_document }}</p>
+                                            </a>
+                                        </td>
+                                        <!--end::Column-->
+                                        <!--begin::tanggal=-->
+                                        <td>
+                                            <p class="text-gray-600 mb-1">{{ Carbon\Carbon::createFromTimeString($uploadResikoPerolehan->created_at)->translatedFormat("d F Y") }}</p>
+                                        </td>
+                                        <!--end::tanggal=-->
+                                    </tr>
                                 @else
                                     <tr>
                                         <td colspan="5" class="text-center">
@@ -1150,11 +1120,11 @@
                                         </td>
                                     </tr>
                                 @endif
-                            </tbody>
-                            <!--end::Table body-->
+                        </tbody>
+                        <!--end::Table body-->
 
-                        </table>
-                        <!--End:Table: Review-->
+                    </table>
+                    <!--End:Table: Review-->
 
                         <br><br>
 
@@ -5372,6 +5342,66 @@
         <!--end::Modal content-->
     </div>
     <!--end::Modal - Input Resiko Perolehan-->
+
+    <!--begin::Modal - Upload Final Resiko Perolehan-->
+    <div class="modal fade" id="kt_modal_upload_resiko_perolehan" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-500px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Upload File Resiko Perolehan</h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <i class="bi bi-x-lg"></i>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
+                    <!--begin::Input group Website-->
+                    <form action="/contract-management/final-dokumen/upload" method="POST"
+                        enctype="multipart/form-data">
+                        <div class="row">
+                            @csrf
+                            <div class="col mt-4">
+                                <!--begin::Label-->
+                                <label for="ketentuan-rencana-kerja" class="fs-6 fw-bold form-label">
+                                    <span style="font-weight: normal">Upload Dokumen</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="hidden" name="kategori" value="resiko-perolehan">
+                                <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".xlsx">
+                                <!--end::Input-->
+                            </div>
+                                <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                    name="id-contract">
+                                <input type="hidden" class="modal-name" name="modal-name">
+                            </div>
+                        </div>
+                        <!--end::Input group-->
+                        <div class="modal-footer mt-4">
+                            <button type="submit" id="save-question-tender-menang"
+                                class="btn btn-sm btn-primary">Save</button>
+                        </div>
+                    </form>
+                </div>
+                <!--end::Modal body-->
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+    </div>
+    <!--end::Modal - Upload Final Resiko Perolehan-->
 
     <!--begin::Modal - Input Resiko Perolehan-->
     @foreach ($contract->inputRisks as $inputRisk)
