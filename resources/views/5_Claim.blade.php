@@ -174,10 +174,12 @@
                                         <thead>
                                             <!--begin::Table row-->
                                             <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                <th class="min-w-auto">@sortablelink('kode_proyek','Kode Proyek')</th>
-                                                <th class="min-w-auto">Nama Proyek</th>
-                                                <th class="min-w-auto">Unit Kerja</th>
-                                                <th class="min-w-auto">@sortablelink('id_contract','ID Contract')</th>
+                                                <th class="min-w-auto">Uraian Perubahan</th>
+                                                <th class="min-w-auto">Tanggal Perubahan</th>
+                                                <th class="min-w-auto">No Proposal Klaim</th>
+                                                <th class="min-w-auto">Tanggal Pengajuan</th>
+                                                <th class="min-w-auto">Waktu Pengajuan</th>
+                                                <th class="min-w-auto">Status</th>
                                             </tr>
                                             <!--end::Table row-->
                                         </thead>
@@ -188,7 +190,7 @@
                                                     <tr>
                                                         <!--begin::Name-->
                                                         <td>
-                                                            <a href="/claim-management/proyek/{{ $proyekClaims->ContractManagement->project->kode_proyek }}/Claim" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekClaims->ContractManagement->project->kode_proyek }}</a>
+                                                            <a href="/claim-management/proyek/{{ $proyekClaims->ContractManagement->project->kode_proyek }}/Klaim" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekClaims->ContractManagement->project->kode_proyek }}</a>
                                                         </td>
                                                         <!--end::Name-->
                                                         <!--begin::Name Proyek-->
@@ -228,10 +230,12 @@
                                         <thead>
                                             <!--begin::Table row-->
                                             <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                <th class="min-w-auto">@sortablelink('kode_proyek','Kode Proyek')</th>
-                                                <th class="min-w-auto">Nama Proyek</th>
-                                                <th class="min-w-auto">Unit Kerja</th>
-                                                <th class="min-w-auto">@sortablelink('id_contract','ID Contract')</th>
+                                                <th class="min-w-auto">Uraian Perubahan</th>
+                                                <th class="min-w-auto">Tanggal Perubahan</th>
+                                                <th class="min-w-auto">No Proposal Klaim</th>
+                                                <th class="min-w-auto">Tanggal Pengajuan</th>
+                                                <th class="min-w-auto">Waktu Pengajuan</th>
+                                                <th class="min-w-auto">Status</th>
                                                 {{-- <th class="min-w-auto">Total</th> --}}
                                             </tr>
                                             <!--end::Table row-->
@@ -244,7 +248,7 @@
                                                 <tr>
                                                     <!--begin::Name-->
                                                     <td>
-                                                        <a href="/claim-management/proyek/{{ $proyekAntis->kode_proyek }}/Anti-Claim" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekAntis->kode_proyek }}</a>
+                                                        <a href="/claim-management/proyek/{{ $proyekAntis->ContractManagement->project->kode_proyek }}/Anti-Klaim" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekAntis->ContractManagement->project->kode_proyek }}</a>
                                                     </td>
                                                     <!--end::Name-->
                                                     <!--begin::Name Proyek-->
@@ -284,10 +288,12 @@
                                         <thead>
                                             <!--begin::Table row-->
                                             <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                <th class="min-w-auto">@sortablelink('kode_proyek','Kode Proyek')</th>
-                                                <th class="min-w-auto">Nama Proyek</th>
-                                                <th class="min-w-auto">Unit Kerja</th>
-                                                <th class="min-w-auto">@sortablelink('id_contract','ID Contract')</th>
+                                                <th class="min-w-auto">Uraian Perubahan</th>
+                                                <th class="min-w-auto">Tanggal Perubahan</th>
+                                                <th class="min-w-auto">No Proposal Klaim</th>
+                                                <th class="min-w-auto">Tanggal Pengajuan</th>
+                                                <th class="min-w-auto">Waktu Pengajuan</th>
+                                                <th class="min-w-auto">Status</th>
                                                 {{-- <th class="min-w-auto">Total</th> --}}
                                             </tr>
                                             <!--end::Table row-->
@@ -299,7 +305,7 @@
                                                     <tr>
                                                         <!--begin::Name-->
                                                         <td>
-                                                            <a href="/claim-management/proyek/{{ $proyekAsuransis->kode_proyek }}/Claim-Asuransi" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekAsuransis->kode_proyek }}</a>
+                                                            <a href="/claim-management/proyek/{{ $proyekAsuransis->ContractManagement->project->kode_proyek }}/Klaim-Asuransi" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekAsuransis->ContractManagement->project->kode_proyek }}</a>
                                                         </td>
                                                         <!--end::Name-->
                                                         <!--begin::Name Proyek-->
@@ -338,10 +344,12 @@
                                         <thead>
                                             <!--begin::Table row-->
                                             <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                <th class="min-w-auto">@sortablelink('kode_proyek','Kode Proyek')</th>
-                                                <th class="min-w-auto">Nama Proyek</th>
-                                                <th class="min-w-auto">Unit Kerja</th>
-                                                <th class="min-w-auto">@sortablelink('id_contract','ID Contract')</th>
+                                                <th class="min-w-auto">Uraian Perubahan</th>
+                                                <th class="min-w-auto">Tanggal Perubahan</th>
+                                                <th class="min-w-auto">No Proposal Klaim</th>
+                                                <th class="min-w-auto">Tanggal Pengajuan</th>
+                                                <th class="min-w-auto">Waktu Pengajuan</th>
+                                                <th class="min-w-auto">Status</th>
                                                 {{-- <th class="min-w-auto">Total</th> --}}
                                             </tr>
                                             <!--end::Table row-->
@@ -353,7 +361,7 @@
                                                     <tr>
                                                         <!--begin::Name-->
                                                         <td>
-                                                            <a href="/claim-management/proyek/{{ $proyekVo->kode_proyek }}/VO" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekVo->kode_proyek }}</a>
+                                                            <a href="/claim-management/proyek/{{ $proyekVo->ContractManagement->project->kode_proyek }}/VO" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekVo->ContractManagement->project->kode_proyek }}</a>
                                                         </td>
                                                         <!--end::Name-->
                                                         <!--begin::Name Proyek-->

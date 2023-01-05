@@ -162,7 +162,7 @@
                                                             <!--begin::Name=-->
                                                             <td>
                                                                 <a class="text-hover-primary text-gray-500"
-                                                                    href="/claim-management/view/{{ $claim->id_claim }}">{{ $claim->id_claim }}</a>
+                                                                    href="/contract-management/view/{{$claim->id_contract}}/perubahan-kontrak/{{ $claim->id_perubahan_kontrak }}">{{ $claim->proposal_klaim }}</a>
                                                             </td>
                                                             <!--end::Name=-->
                                                             <!--begin::Email=-->

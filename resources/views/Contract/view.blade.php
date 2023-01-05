@@ -2472,7 +2472,7 @@
                                                                 @break
                                                             @case("Field Design Change")
                                                                     @php
-                                                                        $lio = App\Models\FieldDesignChange::where("nomor_dokumen" , "=", $lio)->get()->first();
+                                                                        $lio = App\Models\FieldChange::where("nomor_dokumen" , "=", $lio)->get()->first();
                                                                     @endphp
                                                                 @break
                                                             @case("Contract Change Notice")
@@ -2601,7 +2601,7 @@
                                                                 @break
                                                             @case("Field Design Change")
                                                                     @php
-                                                                        $lio = App\Models\FieldDesignChange::where("nomor_dokumen" , "=", $lio)->get()->first();
+                                                                        $lio = App\Models\FieldChange::where("nomor_dokumen" , "=", $lio)->get()->first();
                                                                     @endphp
                                                                 @break
                                                             @case("Contract Change Notice")
