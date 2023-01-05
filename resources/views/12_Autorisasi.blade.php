@@ -250,7 +250,8 @@
                                                 @endswitch
                                             </td>
                                             <td class="text-center">
-                                                {{($history->first()->created_at)->translatedFormat("Y")}}
+                                                {{-- {{($history->first()->created_at)->translatedFormat("Y")}} --}}
+                                                2022
                                             </td>
                                             {{-- <td class="text-center">
                                                 {{ number_format((int) $history->sum(function($f) {
