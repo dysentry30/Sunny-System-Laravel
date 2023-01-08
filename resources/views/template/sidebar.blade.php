@@ -13,10 +13,17 @@
             <!--begin::Brand-->
             <div class="aside-logo flex-column-auto" id="kt_aside_logo" style="background-color:#0db0d9;">
                 <!--begin::Logo-->
-                <a style="background-color:#0db0d9;">
-                    <img alt="Logo" src="/media/logos/Logo2.png" class="h-60px logo"
-                        style="margin-top:30px;margin-left:-10px;" />
-                </a>
+                @if (auth()->user()->check_admin_kontrak)
+                    <a style="background-color:#0db0d9;">
+                        <img alt="Logo" src="/media/logos/logo-ccm.png" class="h-60px logo ms-6"
+                            style="margin-top:30px;margin-left:-10px;" />
+                    </a>
+                @else
+                    <a style="background-color:#0db0d9;">
+                        <img alt="Logo" src="/media/logos/Logo2.png" class="h-60px logo"
+                            style="margin-top:30px;margin-left:-10px;" />
+                    </a>
+                @endif
                 <!--end::Logo-->
                 <!--begin::Aside toggler-->
                 <div id="kt_aside_toggle" class="btn btn-icon w-auto px-0 btn-active-color-primary aside-toggle" data-kt-toggle="true" data-kt-toggle-state="active" data-kt-toggle-target="body" data-kt-toggle-name="aside-minimize">
