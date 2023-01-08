@@ -77,8 +77,8 @@
                 <!--end::Header-->
 
                 <!--begin::Form-->
-                <form action="#" method="post" enctype="multipart/form-data">
-                    @csrf
+                {{-- <form action="#" method="get" enctype="multipart/form-data"> --}}
+                    {{-- @csrf --}}
 
 
                     <!--begin::Content-->
@@ -518,7 +518,7 @@
                         <!--end::Post-->
                     </div>
                     <!--begin::Content-->
-                </form>
+                {{-- </form> --}}
                 <!--begin::Form-->
             </div>
             <!--begin::Wrapper-->
