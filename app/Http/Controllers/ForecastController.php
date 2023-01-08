@@ -727,12 +727,12 @@ class ForecastController extends Controller
 
     public function requestApprovalHistoryView(Request $request, $periode = "", $year = "")
     {
-        $periode = (int) $periode ?? (int) date("m");
+        $periode = $request->query("periode-prognosa");
         $year = (int) $year ?? (int) date("Y");
 
         $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja);
 
-        if (!empty($year)) {
+        if (!empty($periode)) {
             if (!Auth::user()->check_administrator) {
                 // if ($unit_kerja_user instanceof Collection) {
                     $historyForecast = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->select(["proyeks.nama_proyek", "unit_kerjas.divcode", "proyeks.dop", "unit_kerjas.unit_kerja", "history_forecast.*", "proyeks.stage", "proyeks.is_cancel"])->where("periode_prognosa", "=", $periode)->where("history_forecast.tahun", "=", $year)->get()->whereIn("divcode", $unit_kerja_user->toArray())->groupBy(["dop", "unit_kerja", "periode_prognosa"]);
@@ -746,7 +746,7 @@ class ForecastController extends Controller
             if (!Auth::user()->check_administrator) {
                 if ($unit_kerja_user instanceof Collection) {
                     $historyForecast = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->select(["proyeks.nama_proyek", "unit_kerjas.divcode", "proyeks.dop", "unit_kerjas.unit_kerja", "history_forecast.*", "history_forecast.created_at", "proyeks.stage", "proyeks.is_cancel"])->get()->whereIn("divcode", $unit_kerja_user->toArray())->groupBy(["dop", "unit_kerja", "periode_prognosa"]);
-                    dd($historyForecast);
+                    // dd($historyForecast);
                 } else {
                     $historyForecast = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->select(["proyeks.nama_proyek", "unit_kerjas.divcode", "proyeks.dop", "unit_kerjas.unit_kerja", "history_forecast.*", "history_forecast.created_at", "proyeks.stage", "proyeks.is_cancel"])->get()->where("divcode", "=", $unit_kerja_user)->groupBy(["dop", "unit_kerja", "periode_prognosa"]);
                 }
@@ -808,7 +808,7 @@ class ForecastController extends Controller
             });
         });
         // dd($historyForecast);
-        return view("Forecast/viewRequestApproval", compact(["historyForecast", "is_user_unit_kerja"]));
+        return view("Forecast/viewRequestApproval", compact(["historyForecast", "is_user_unit_kerja", "periode"]));
     }
 
     private function stdClassToModel($data, $instance)

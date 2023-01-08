@@ -76,6 +76,61 @@
                 @include('template.header')
                 <!--end::Header-->
 
+                <br>
+                
+                <!--begin::Card "style edited"-->
+                @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)"))
+                <div class="card mt-4 mb-0">
+                    <!--begin::Card body-->
+                    <div class="card-body pt-6 pb-3 mb-0">
+                        <!--Begin :: Filter-->
+                        <div class="card">
+                            <div class="card-title">
+                                <div class="row">
+                                    <div class="col-2">
+                                    <p class="mt-3 text-end">Periode Otorisasi : </p>
+                                    </div>
+                                    <div class="col-3">
+                                            <form action="/request-approval-history/2022" method="get">
+                                            <!--begin::Select Options-->
+                                            <select onchange="this.form.submit()" id="periode-prognosa" name="periode-prognosa"
+                                                class="form-select form-select-solid w-100 ms-2 "
+                                                style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
+                                                data-placeholder="Bulan" data-select2-id="select2-data-bulan" tabindex="-1"
+                                                aria-hidden="true">
+                                                <option {{ $periode == '' ? 'selected' : '' }}></option>
+                                                <option value="1" {{ $periode == 1 ? 'selected' : '' }}>Januari</option>
+                                                <option value="2" {{ $periode == 2 ? 'selected' : '' }}>Februari</option>
+                                                <option value="3" {{ $periode == 3 ? 'selected' : '' }}>Maret</option>
+                                                <option value="4" {{ $periode == 4 ? 'selected' : '' }}>April</option>
+                                                <option value="5" {{ $periode == 5 ? 'selected' : '' }}>Mei</option>
+                                                <option value="6" {{ $periode == 6 ? 'selected' : '' }}>Juni</option>
+                                                <option value="7" {{ $periode == 7 ? 'selected' : '' }}>Juli</option>
+                                                <option value="8" {{ $periode == 8 ? 'selected' : '' }}>Agustus</option>
+                                                <option value="9" {{ $periode == 9 ? 'selected' : '' }}>September</option>
+                                                <option value="10" {{ $periode == 10 ? 'selected' : '' }}>Oktober</option>
+                                                <option value="11" {{ $periode == 11 ? 'selected' : '' }}>November</option>
+                                                <option value="12" {{ $periode == 12 ? 'selected' : '' }}>Desember</option>
+                                            </select>
+                                            <!--end::Select Options-->
+                                        </form>
+                                    </div>
+                                        
+                                    <div class="col">
+                                        <form action="" method="GET">
+                                            <button type="submit" class="btn btn-light">Reset</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--End :: Filter-->
+                    </div>
+                    <!--end::Card body-->
+                </div>
+                @endif
+                <!--end::Card "style edited"-->
+
                 <!--begin::Form-->
                 <form action="#" method="post" enctype="multipart/form-data">
                     @csrf
