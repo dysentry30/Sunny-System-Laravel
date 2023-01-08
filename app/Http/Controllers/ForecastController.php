@@ -725,7 +725,7 @@ class ForecastController extends Controller
         ]);
     }
 
-    public function requestApprovalHistoryView(Request $request, $periode = "", $year = "")
+    public function requestApprovalHistoryView(Request $request, $year = "")
     {
         $periode = $request->query("periode-prognosa");
         $year = (int) $year ?? (int) date("Y");
