@@ -657,7 +657,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post('/forecast', [ForecastController::class, 'getAllData']);
     Route::post('/forecast/unit-kerja', [ForecastController::class, 'getAllDataUnitKerjas']);
     Route::get('/request-approval-history', [ForecastController::class, 'requestApprovalHistoryView']);
-    Route::get('/request-approval-history/{year}', [ForecastController::class, 'requestApprovalHistoryView']);
+    Route::get('/request-approval-history/{periode}/{year}', [ForecastController::class, 'requestApprovalHistoryView']);
     // to NEW page 
     // Route::get('/proyek/new', [ProyekController::class, 'new']);
 
