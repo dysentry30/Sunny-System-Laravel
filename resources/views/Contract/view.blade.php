@@ -930,9 +930,8 @@
 
                         <br>
                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                            Tinjauan Dokumen Kontrak
-                            <a href="#" Id="Plus" data-bs-toggle="modal"
-                                data-bs-target="#kt_modal_create_review">+</a>
+                            Tinjauan Dokumen Kontrak - Perolehan
+                            <a href="/contract-management/view/review-contract/{{ $contract->id_contract }}/stage/1" target="_blank" Id="Plus">+</a>
                         </h3>
 
                         <!--begin:Table: Review-->
@@ -941,38 +940,22 @@
                             <thead>
                                 <!--begin::Table row-->
                                 <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-125px">Draft Contract Review</th>
-                                    <th class="min-w-125px">Ketentuan</th>
+                                    <th class="min-w-125px">Data</th>
+                                    <th class="min-w-125px">Keterangan</th>
                                 </tr>
                                 <!--end::Table row-->
                             </thead>
                             <!--end::Table head-->
                             <!--begin::Table body-->
                             <tbody class="fw-bold text-gray-400">
-                                @if (isset($contract))
-                                    @forelse ($contract->reviewProjects as $reviewProject)
-                                        @if ($reviewProject->stage == 1)
-                                            <tr>
-                                                <!--begin::Column-->
-                                                <td>
-                                                    <a href="/contract-management/view/{{ $contract->id_contract }}/draft-contract/{{ $reviewProject->id_draft_contract }}"
-                                                        target="_blank">
-                                                        <p>{{ $reviewProject->draftContract->title_draft }}</p>
-                                                    </a>
-                                                </td>
-                                                <!--end::Column-->
-                                                <!--begin::Column-->
-                                                <td>
-                                                    <p>{{ $reviewProject->ketentuan }}</p>
-                                                </td>
-                                                <!--end::Column-->
-                                            </tr>
-                                        @endif
-
-                                    @empty
-                                    @endforelse
-                                @else
-                                @endif
+                               <tr>
+                                <td>
+                                    <a href="#" data-bs-target="#kt_modal_tabel_review_kontrak" class="text-hover-primary"><p>Review Kontrak Perolehan</p></a>
+                                </td>
+                                <td>
+                                    <p>Terisi</p>
+                                </td>
+                               </tr>
                             </tbody>
                             <!--end::Table body-->
 
@@ -2193,7 +2176,7 @@
                             </tbody>
                             <!--end::Table body-->
 
-                        </table>
+                        </table>
                         <!--End:Table: Review-->
                         
                         @php
@@ -2262,6 +2245,35 @@
 
                         </table>
                         <!--End:Table: Review-->
+
+                        <br><br>
+                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                            Tinjauan Dokumen Kontrak -Pelaksanaan
+                            <a href="/contract-management/view/review-contract/{{ $contract->id_contract }}/stage/2" target="_blank" Id="Plus">+</a>
+                        </h3>
+
+                        <!--begin:Table: Review-->
+                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="tinjauan-kontrak">
+                            <!--begin::Table head-->
+                            <thead>
+                                <!--begin::Table row-->
+                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                    <th class="min-w-125px">Draft Contract Review</th>
+                                    <th class="min-w-125px">Ketentuan</th>
+                                </tr>
+                                <!--end::Table row-->
+                            </thead>
+                            <!--end::Table head-->
+                            <!--begin::Table body-->
+                            <tbody class="fw-bold text-gray-400">
+                               
+                            </tbody>
+                            <!--end::Table body-->
+
+                        </table>
+                        <!--End:Table: Review-->
+
+
                         <br><br>
                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                             Pasal Kontraktual
@@ -2503,109 +2515,13 @@
                             <!--end::Table head-->
                             <!--begin::Table body-->
                             <tbody class="fw-bold text-gray-400">
-                                {{-- @forelse ($contract->PerubahanKontrak as $key => $pk)
-                                    <tr class="fw-bold">
-                                        <td>
-                                            <a target="_blank" href="/contract-management/view/{{url_encode($contract->id_contract)}}/perubahan-kontrak/{{$pk->id_perubahan_kontrak}}" class="text-hover-primary">{{ $pk->jenis_perubahan }}</a>
-                                        </td>
-                                        <!--begin::Column-->
-                                        <td>
-                                            <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! Carbon\Carbon::create($pk->tanggal_perubahan)->translatedFormat("d F Y") !!}</pre>
-                                        </td>
-                                        <!--end::Column-->
-                                        <!--begin::Column-->
-                                        <td>
-                                            <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! $pk->uraian_perubahan !!}</pre>
-                                        </td>
-                                        <!--end::Column-->
-                                        <!--begin::Column-->
-                                        @if (!empty($pk->JenisDokumen->toArray()))
-                                            @foreach ($pk->JenisDokumen as $jd)
-                                                <td>
-                                                    <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! $jd->jenis_dokumen !!}</pre>
-                                                </td>
-                                                @php
-                                                    $list_instruksi_owner = collect(explode(",", $jd->list_instruksi_owner));
-                                                @endphp
-                                                <td>
-                                                    @foreach ($list_instruksi_owner as $lio)
-                                                        @switch($jd->jenis_dokumen)
-                                                            @case("Site Instruction")
-                                                                    @php
-                                                                        $lio = App\Models\SiteInstruction::where("nomor_dokumen" , "=", $lio)->get()->first();
-                                                                    @endphp
-                                                                @break
-                                                            @case("Technical Form")
-                                                                    @php
-                                                                        $lio = App\Models\TechnicalForm::where("nomor_dokumen" , "=", $lio)->get()->first();
-                                                                    @endphp
-                                                                @break
-                                                            @case("Technical Query")
-                                                                    @php
-                                                                        $lio = App\Models\TechnicalQuery::where("nomor_dokumen" , "=", $lio)->get()->first();
-                                                                    @endphp
-                                                                @break
-                                                            @case("Field Design Change")
-                                                                    @php
-                                                                        $lio = App\Models\FieldChange::where("nomor_dokumen" , "=", $lio)->get()->first();
-                                                                    @endphp
-                                                                @break
-                                                            @case("Contract Change Notice")
-                                                                    @php
-                                                                        $lio = App\Models\ContractChangeNotice::where("nomor_dokumen" , "=", $lio)->get()->first();
-                                                                    @endphp
-                                                                @break
-                                                            @case("Contract Change Proposal")
-                                                                    @php
-                                                                        $lio = App\Models\ContractChangeProposal::where("nomor_dokumen" , "=", $lio)->get()->first();
-                                                                    @endphp
-                                                                @break
-                                                            @case("Contract Change Order")
-                                                                    @php
-                                                                        $lio = App\Models\ContractChangeOrder::where("nomor_dokumen" , "=", $lio)->get()->first();
-                                                                    @endphp
-                                                                @break
-                                                        @endswitch
-                                                        - <a target="_blank" href="{{ asset("words/$lio->id_document.pdf"); }}">{{$lio->nomor_dokumen}}</a> <br>
-                                                    @endforeach
-                                                </td>
-                                            @endforeach
-                                        @else
-                                            <td>
-                                                <p class="mb-1 fw-normal badge badge-light-danger" style="font-family: 'Poppins';">Belum Ditentukan</p>
-                                            </td>
-                                            <td>
-                                                <p class="mb-1 fw-normal badge badge-light-danger" style="font-family: 'Poppins';">Belum Ditentukan</p>
-                                            </td>
-                                        @endif
-                                        <!--end::Column-->
-                                        <!--begin::Column-->
-                                        <td>
-                                            <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! $pk->proposal_klaim !!}</pre>
-                                        </td>
-                                        <!--end::Column-->
-                                        <!--begin::Column-->
-                                        <td>
-                                            <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! Carbon\Carbon::create($pk->tanggal_pengajuan)->translatedFormat("d F Y") !!}</pre>
-                                        </td>
-                                        <!--end::Column-->
-                                        <!--begin::Column-->
-                                        <td>
-                                            <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! number_format($pk->biaya_pengajuan, 0, ".", ".") !!}</pre>
-                                        </td>
-                                        <!--end::Column-->
-                                        <!--begin::Column-->
-                                        <td>
-                                            <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! Carbon\Carbon::create($pk->waktu_pengajuan)->translatedFormat("d F Y") !!}</pre>
-                                        </td>
-                                        <!--end::Column-->
+                                @forelse ($contract->ChecklistManajemen as $key => $cm)
+                                    <tr>
+                                        <td><a onclick="getChecklistManajemen(this)" style="cursor: pointer;" data-url="/contract-management/view/{{ $contract->id_contract}}/get-manajemen-kontrak/{{ $cm->id }}" class="text-hover-primary">{{ $cm->kategori }}</a></td>
+                                        <td>{{ Carbon\Carbon::create($cm->created_at)->translatedFormat("d F Y") }}</td>
                                     </tr>
                                 @empty
-                                    <tr>
-                                        <td colspan="9" class="fw-bolder text-center">There is no data</td>
-                                    </tr>
-                                @endforelse --}}
-                                
+                                @endforelse                                
                             </tbody>
                             <!--end::Table body-->
 
@@ -4114,181 +4030,7 @@
     <!--end::Modal - Draft Contract Tender Menang-->
 
     <!--begin::Modal - Review Tender Menang-->
-    <div class="modal fade" id="kt_modal_review_menang" tabindex="-1" aria-hidden="true">
-        <!--begin::Modal dialog-->
-        <div class="modal-dialog modal-dialog-centered mw-900px">
-            <!--begin::Modal content-->
-            <div class="modal-content">
-                <div class="modal-content">
-                    <!--begin::Modal header-->
-                    <div class="modal-header">
-                        <!--begin::Modal title-->
-                        <h2>Add Review</h2>
-                        <!--end::Modal title-->
-                        <!--begin::Close-->
-                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                            <span class="svg-icon svg-icon-1">
-                                <i class="bi bi-x-lg"></i>
-                            </span>
-                            <!--end::Svg Icon-->
-                        </div>
-                        <!--end::Close-->
-                    </div>
-                    <!--end::Modal header-->
-                    <!--begin::Modal body-->
-                    <div class="modal-body py-lg-6 px-lg-6">
-                        <form action="/review-contract/upload" method="POST" enctype="multipart/form-data">
-                            @csrf
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" name="id-contract">
-                            <input type="hidden" class="modal-name" name="modal-name">
-                            <input type="hidden" value="2" name="stage">
-                            <div class="row">
-                                <div class="col-6">
-                                    <div class="row">
-                                        <div class="col">
-                                            <label for="id-draft-contract"
-                                                class="fs-6 fw-bold form-label mt-3">Pilih Draft Kontrak</label>
-                                            <select name="id-draft-contract"
-                                                onchange="pilihDraftKontrak(this, '#input-pasal-2')"
-                                                id="id-draft-contract-2" class="form-select form-select-solid"
-                                                data-control="select2" data-hide-search="true"
-                                                data-placeholder="Pilih Draft Kontrak" tabindex="-1"
-                                                aria-hidden="true">
-                                                <option value=""></option>
-                                                @php
-                                                    $draftContracts = $draftContracts->filter(function ($d) {
-                                                        return $d->tender_menang == 1; // harusnya stage
-                                                    });
-                                                @endphp
-                                                @foreach ($draftContracts as $draft)
-                                                    <option value="{{ $draft->id_draft }}">
-                                                        {{ $draft->title_draft }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <br>
-                                    <div class="row mb-5">
-                                        <div class="col">
-                                            <label for="ketentuan-review"
-                                                class="fs-6 fw-bold form-label mt-3">Ketentuan</label>
-                                            <input type="text" name="ketentuan-review" id="ketentuan-review-2"
-                                                placeholder="Ketik di sini..."
-                                                class="form-control form-control-solid">
-                                        </div>
-                                        {{-- <div class="col-6 border-end">
-                                    <div class="row ">
-                                    </div>
-                                    <br> --}}
-                                        {{-- <div class="row">
-                                        <div class="col">
-                                            <label for="sub-pasal-review" class="fs-6 fw-bold form-label mt-3">Sub Pasal</label>
-                                            <input type="text" name="sub-pasal-review" id="sub-pasal-review" class="form-control form-control-solid">
-                                        </div>
-                                    </div>
-                                    <br>
-                                    <div class="row">
-                                        <div class="col">
-                                            <label for="uraian-penjelasan-review" class="fs-6 fw-bold form-label mt-3">Uraian Penjelasan</label>
-                                            <input type="text" name="uraian-penjelasan-review" id="uraian-penjelasan-review" class="form-control form-control-solid">
-                                        </div>
-                                    </div>
-                                    <br>
-                                    <div class="row">
-                                        <div class="col">
-                                            <label for="pic-cross-review" class="fs-6 fw-bold form-label mt-3">PIC <i class="text-dark">Cross Function</i></label>
-                                            <input type="text" name="pic-cross-review" id="pic-cross-review" class="form-control form-control-solid">
-                                        </div>
-                                    </div>
-                                    <br>
-                                    <div class="row">
-                                        <div class="col">
-                                            <label for="catatan-review" class="fs-6 fw-bold form-label mt-3">Catatan</label>
-                                            <input type="text" name="catatan-review" id="catatan-review" class="form-control form-control-solid">
-                                        </div>
-                                    </div>
-                                </div>
-        
-                                <div class="col-6 d-flex flex-column justify-content-center">
-                                    <label for="upload-review" class="fs-6 fw-bold form-label mt-3">Upload Excel di bawah ini</label>
-                                    <input type="file" accept=".xlsx" class="form-control form-control-solid" name="upload-review">
-                                </div> --}}
-                                    </div>
-                                </div>
-                                <div class="col-1 d-flex w-20px">
-                                    <div class="vr"></div>
-                                </div>
-                                <div class="col">
-                                    <b>Buat perubahan pasal di bawah ini:</b>
-                                    <textarea cols="5" rows="8" name="input-pasal" class="form-control form-textarea-solid"
-                                        id="input-pasal-2"></textarea>
-                                </div>
-                            </div>
-
-                            <div class="modal-footer">
-                                <button type="submit" class="btn btn-sm btn-active-primary text-white"
-                                    style="background-color: #008CB4">Save</button>
-                            </div>
-
-                        </form>
-
-
-                        <!--begin::Input group Website-->
-                        {{-- <div class="fv-row mb-5">
-                        @csrf
-                        <!--begin::Label-->
-                        <label class="fs-6 fw-bold form-label mt-3">
-                            <span style="font-weight: normal">Attachment</span>
-                        </label>
-                        <!--end::Label-->
-                        <!--begin::Input-->
-                        <input type="hidden" value="{{ $contract->id_contract ?? 0 }}"
-                            name="id-contract">
-                        <input type="file" class="form-control form-control-solid"
-                            name="attach-file-review" id="attach-file-review" value=""
-                            style="font-weight: normal" accept=".docx" placeholder="Name Proyek" />
-                        <!--end::Input-->
-
-                        <!--begin::Label-->
-                        <label class="fs-6 fw-bold form-label mt-3">
-                            <span style="font-weight: normal">Nama Dokumen</span>
-                        </label>
-                        <!--end::Label-->
-                        <!--begin::Input-->
-                        <input type="text" class="form-control form-control-solid"
-                            name="document-name-review" id="document-name-review" style="font-weight: normal"
-                            value="" placeholder="Nama Document" />
-                        <!--end::Input-->
-
-                        <!--begin::Label-->
-                        <label class="fs-6 fw-bold form-label mt-3">
-                            <span style="font-weight: normal">Catatan</span>
-                        </label>
-                        <!--end::Label-->
-                        <!--begin::Input-->
-                        <input type="text" class="form-control form-control-solid" name="note-review"
-                            id="note-review" value="" style="font-weight: normal"
-                            placeholder="Catatan" />
-                        <!--end::Input-->
-                </div> --}}
-                        <!--end::Input group-->
-
-                        {{-- <button type="submit" id="save-review" class="btn btn-sm btn-primary"
-                    data-bs-dismiss="modal">Save</button>
-
-                </form> --}}
-
-                    </div>
-                    <!--end::Modal body-->
-                </div>
-                <!--end::Modal content-->
-                <!--end::Modal body-->
-            </div>
-            <!--end::Modal content-->
-        </div>
-        <!--end::Modal dialog-->
-    </div>
+    {{--  --}}
     <!--end::Modal - Review Tender Menang-->
 
     <!--begin::Modal - Hasil Klarifikasi dan Negosiasi CDA-->
@@ -10515,179 +10257,6 @@
 </div>
 <!--end::Modal - Laporan Bulanan-->
 
-<!--begin::Modal - Review-->
-<div class="modal fade" id="kt_modal_create_review" tabindex="-1" aria-hidden="true">
-<!--begin::Modal dialog-->
-<div class="modal-dialog modal-dialog-centered mw-900px">
-    <!--begin::Modal content-->
-    <div class="modal-content">
-        <div class="modal-content">
-            <!--begin::Modal header-->
-            <div class="modal-header">
-                <!--begin::Modal title-->
-                <h2>Add Tinjauan Dokumen Kontrak</h2>
-                <!--end::Modal title-->
-                <!--begin::Close-->
-                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                    <span class="svg-icon svg-icon-1">
-                        <i class="bi bi-x-lg"></i>
-                    </span>
-                    <!--end::Svg Icon-->
-                </div>
-                <!--end::Close-->
-            </div>
-            <!--end::Modal header-->
-            <!--begin::Modal body-->
-            <div class="modal-body py-lg-6 px-lg-6">
-                <form action="/review-contract/upload" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" name="id-contract">
-                    <input type="hidden" class="modal-name" name="modal-name">
-                    <input type="hidden" value="1" name="stage">
-                    <div class="row">
-                        <div class="col-6">
-                            <div class="row">
-                                <div class="col">
-                                    <label for="id-draft-contract" class="fs-6 fw-bold form-label mt-3">Pilih
-                                        Draft Kontrak</label>
-                                    <select name="id-draft-contract"
-                                        onchange="pilihDraftKontrak(this, '#input-pasal')"
-                                        id="id-draft-contract" class="form-select form-select-solid"
-                                        data-control="select2" data-hide-search="true"
-                                        data-placeholder="Pilih Draft Kontrak" tabindex="-1"
-                                        aria-hidden="true">
-                                        <option value=""></option>
-                                        @foreach ($draftContracts as $draft)
-                                            <option value="{{ $draft->id_draft }}">{{ $draft->title_draft }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <br>
-                            <div class="row mb-5">
-                                <div class="col">
-                                    <label for="ketentuan-review"
-                                        class="fs-6 fw-bold form-label mt-3">Ketentuan</label>
-                                    <input type="text" name="ketentuan-review" id="ketentuan-review"
-                                        class="form-control form-control-solid">
-                                </div>
-                                {{-- <div class="col-6 border-end">
-                                    <div class="row ">
-                                    </div>
-                                    <br> --}}
-                                {{-- <div class="row">
-                                        <div class="col">
-                                            <label for="sub-pasal-review" class="fs-6 fw-bold form-label mt-3">Sub Pasal</label>
-                                            <input type="text" name="sub-pasal-review" id="sub-pasal-review" class="form-control form-control-solid">
-                                        </div>
-                                    </div>
-                                    <br>
-                                    <div class="row">
-                                        <div class="col">
-                                            <label for="uraian-penjelasan-review" class="fs-6 fw-bold form-label mt-3">Uraian Penjelasan</label>
-                                            <input type="text" name="uraian-penjelasan-review" id="uraian-penjelasan-review" class="form-control form-control-solid">
-                                        </div>
-                                    </div>
-                                    <br>
-                                    <div class="row">
-                                        <div class="col">
-                                            <label for="pic-cross-review" class="fs-6 fw-bold form-label mt-3">PIC <i class="text-dark">Cross Function</i></label>
-                                            <input type="text" name="pic-cross-review" id="pic-cross-review" class="form-control form-control-solid">
-                                        </div>
-                                    </div>
-                                    <br>
-                                    <div class="row">
-                                        <div class="col">
-                                            <label for="catatan-review" class="fs-6 fw-bold form-label mt-3">Catatan</label>
-                                            <input type="text" name="catatan-review" id="catatan-review" class="form-control form-control-solid">
-                                        </div>
-                                    </div>
-                                </div>
-        
-                                <div class="col-6 d-flex flex-column justify-content-center">
-                                    <label for="upload-review" class="fs-6 fw-bold form-label mt-3">Upload Excel di bawah ini</label>
-                                    <input type="file" accept=".xlsx" class="form-control form-control-solid" name="upload-review">
-                                </div> --}}
-                            </div>
-                        </div>
-                        <div class="col-1 d-flex w-20px">
-                            <div class="vr"></div>
-                        </div>
-                        <div class="col">
-                            <b>Buat perubahan pasal di bawah ini:</b>
-                            <textarea cols="5" rows="8" name="input-pasal" class="form-control form-textarea-solid"
-                                id="input-pasal"></textarea>
-                        </div>
-                    </div>
-
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-sm btn-active-primary text-white"
-                            style="background-color: #008CB4">Save</button>
-                    </div>
-
-                </form>
-
-
-
-
-                <!--begin::Input group Website-->
-                {{-- <div class="fv-row mb-5">
-                        @csrf
-                        <!--begin::Label-->
-                        <label class="fs-6 fw-bold form-label mt-3">
-                            <span style="font-weight: normal">Attachment</span>
-                        </label>
-                        <!--end::Label-->
-                        <!--begin::Input-->
-                        <input type="hidden" value="{{ $contract->id_contract ?? 0 }}"
-                            name="id-contract">
-                        <input type="file" class="form-control form-control-solid"
-                            name="attach-file-review" id="attach-file-review" value=""
-                            style="font-weight: normal" accept=".docx" placeholder="Name Proyek" />
-                        <!--end::Input-->
-
-                        <!--begin::Label-->
-                        <label class="fs-6 fw-bold form-label mt-3">
-                            <span style="font-weight: normal">Nama Dokumen</span>
-                        </label>
-                        <!--end::Label-->
-                        <!--begin::Input-->
-                        <input type="text" class="form-control form-control-solid"
-                            name="document-name-review" id="document-name-review" style="font-weight: normal"
-                            value="" placeholder="Nama Document" />
-                        <!--end::Input-->
-
-                        <!--begin::Label-->
-                        <label class="fs-6 fw-bold form-label mt-3">
-                            <span style="font-weight: normal">Catatan</span>
-                        </label>
-                        <!--end::Label-->
-                        <!--begin::Input-->
-                        <input type="text" class="form-control form-control-solid" name="note-review"
-                            id="note-review" value="" style="font-weight: normal"
-                            placeholder="Catatan" />
-                        <!--end::Input-->
-                </div> --}}
-                <!--end::Input group-->
-
-                {{-- <button type="submit" id="save-review" class="btn btn-sm btn-primary"
-                    data-bs-dismiss="modal">Save</button>
-
-                </form> --}}
-
-            </div>
-            <!--end::Modal body-->
-        </div>
-        <!--end::Modal content-->
-        <!--end::Modal body-->
-    </div>
-    <!--end::Modal content-->
-</div>
-<!--end::Modal dialog-->
-</div>
-<!--end::Modal - Review-->
 
 <!--begin::Modal - Risk Project-->
 {{-- <div class="modal fade" id="kt_modal_risk_proyek" tabindex="-1" aria-hidden="true">
@@ -11636,6 +11205,39 @@
 </div>
 <!--end::Modal - Upload Final Resiko Pelaksanaan-->
 
+<!--begin::Modal - Upload Final Resiko Pelaksanaan-->
+<div class="modal fade" id="kt_modal_detail_checklist" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog modal-dialog-centered mw-500px">
+        <!--begin::Modal content-->
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header">
+                <!--begin::Modal title-->
+                <h2>Detail Checklist</h2>
+                <!--end::Modal title-->
+                <!--begin::Close-->
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                        <i class="bi bi-x-lg"></i>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--end::Modal header-->
+            <!--begin::Modal body-->
+            <div class="modal-body py-lg-6 px-lg-6">
+            </div>
+            <!--end::Modal body-->
+        </div>
+        <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+</div>
+<!--end::Modal - Upload Final Resiko Pelaksanaan-->
+
 <!--begin::Modal - Calendar Start -->
 <div class="modal fade" id="kt_modal_calendar-start" data-bs-backdrop="static" tabindex="-1"
 aria-hidden="true">
@@ -12210,6 +11812,21 @@ aria-hidden="true">
     }
 </script>
 {{-- End :: Animating Slide Checklist Manajemen Kontrak --}}
+
+{{-- Begin :: Get Checklist Manajemen Kontrak Data --}}
+<script>
+    async function getChecklistManajemen(e) {
+        const element = document.querySelector("#kt_modal_detail_checklist");
+        const body = element.querySelector(".modal-body");
+        const elementBoots = new bootstrap.Modal(element, {});
+        const url = e.getAttribute("data-url");
+        const getChecklistManajemenRes = await fetch(url).then(res => res.text());
+        body.innerHTML = getChecklistManajemenRes;
+        elementBoots.show();
+        return;
+    }
+</script>
+{{-- End :: Get Checklist Manajemen Kontrak Data --}}
 
 
 <!--begin::Data Tables-->
