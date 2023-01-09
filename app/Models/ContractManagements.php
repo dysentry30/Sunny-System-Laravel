@@ -155,6 +155,11 @@ class ContractManagements extends Model
         return $this->hasMany(ContractUploadFinal::class, "id_contract");
     }
 
+    public function ChecklistManajemen()
+    {
+        return $this->hasMany(ContractChecklist::class, "id_contract");
+    }
+
     public function getAll()
     {
         $data = [];

@@ -174,12 +174,10 @@
                                         <thead>
                                             <!--begin::Table row-->
                                             <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                <th class="min-w-auto">Uraian Perubahan</th>
-                                                <th class="min-w-auto">Tanggal Perubahan</th>
-                                                <th class="min-w-auto">No Proposal Klaim</th>
-                                                <th class="min-w-auto">Tanggal Pengajuan</th>
-                                                <th class="min-w-auto">Waktu Pengajuan</th>
-                                                <th class="min-w-auto">Status</th>
+                                                <th class="min-w-auto">@sortablelink('kode_proyek','Kode Proyek')</th>
+                                                <th class="min-w-auto">Nama Proyek</th>
+                                                <th class="min-w-auto">Unit Kerja</th>
+                                                <th class="min-w-auto">@sortablelink('id_contract','ID Contract')</th>
                                             </tr>
                                             <!--end::Table row-->
                                         </thead>
@@ -230,12 +228,10 @@
                                         <thead>
                                             <!--begin::Table row-->
                                             <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                <th class="min-w-auto">Uraian Perubahan</th>
-                                                <th class="min-w-auto">Tanggal Perubahan</th>
-                                                <th class="min-w-auto">No Proposal Klaim</th>
-                                                <th class="min-w-auto">Tanggal Pengajuan</th>
-                                                <th class="min-w-auto">Waktu Pengajuan</th>
-                                                <th class="min-w-auto">Status</th>
+                                                <th class="min-w-auto">@sortablelink('kode_proyek','Kode Proyek')</th>
+                                                <th class="min-w-auto">Nama Proyek</th>
+                                                <th class="min-w-auto">Unit Kerja</th>
+                                                <th class="min-w-auto">@sortablelink('id_contract','ID Contract')</th>
                                                 {{-- <th class="min-w-auto">Total</th> --}}
                                             </tr>
                                             <!--end::Table row-->
@@ -263,7 +259,7 @@
                                                     <!--end::Unit Kerja-->
                                                     <!--begin::Action-->
                                                     <td>
-                                                        <a href="/contract-management/view/{{ $proyekAntis->id_contract }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekAntis->id_contract }}</a>
+                                                        <a href="/contract-management/view/{{ $proyekAntis->ContractManagement->id_contract }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekAntis->ContractManagement->no_contract }}</a>
                                                     </td>
                                                     <!--end::Action-->
                                                 </tr>
@@ -288,12 +284,10 @@
                                         <thead>
                                             <!--begin::Table row-->
                                             <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                <th class="min-w-auto">Uraian Perubahan</th>
-                                                <th class="min-w-auto">Tanggal Perubahan</th>
-                                                <th class="min-w-auto">No Proposal Klaim</th>
-                                                <th class="min-w-auto">Tanggal Pengajuan</th>
-                                                <th class="min-w-auto">Waktu Pengajuan</th>
-                                                <th class="min-w-auto">Status</th>
+                                                <th class="min-w-auto">@sortablelink('kode_proyek','Kode Proyek')</th>
+                                                <th class="min-w-auto">Nama Proyek</th>
+                                                <th class="min-w-auto">Unit Kerja</th>
+                                                <th class="min-w-auto">@sortablelink('id_contract','ID Contract')</th>
                                                 {{-- <th class="min-w-auto">Total</th> --}}
                                             </tr>
                                             <!--end::Table row-->
@@ -320,7 +314,7 @@
                                                         <!--end::Unit Kerja-->
                                                         <!--begin::Action-->
                                                         <td>
-                                                            <a href="/contract-management/view/{{ $proyekAsuransis->id_contract }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekAsuransis->id_contract }}</a>
+                                                            <a href="/contract-management/view/{{ $proyekAsuransis->ContractManagement->no_contract }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekAsuransis->ContractManagement->no_contract }}</a>
                                                         </td>
                                                         <!--end::Action-->
                                                     </tr>
@@ -344,12 +338,10 @@
                                         <thead>
                                             <!--begin::Table row-->
                                             <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                <th class="min-w-auto">Uraian Perubahan</th>
-                                                <th class="min-w-auto">Tanggal Perubahan</th>
-                                                <th class="min-w-auto">No Proposal Klaim</th>
-                                                <th class="min-w-auto">Tanggal Pengajuan</th>
-                                                <th class="min-w-auto">Waktu Pengajuan</th>
-                                                <th class="min-w-auto">Status</th>
+                                                <th class="min-w-auto">@sortablelink('kode_proyek','Kode Proyek')</th>
+                                                <th class="min-w-auto">Nama Proyek</th>
+                                                <th class="min-w-auto">Unit Kerja</th>
+                                                <th class="min-w-auto">@sortablelink('id_contract','ID Contract')</th>
                                                 {{-- <th class="min-w-auto">Total</th> --}}
                                             </tr>
                                             <!--end::Table row-->
@@ -376,7 +368,7 @@
                                                         <!--end::Unit Kerja-->
                                                         <!--begin::Action-->
                                                         <td>
-                                                            <a href="/contract-management/view/{{ $proyekVo->id_contract }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekVo->id_contract }}</a>
+                                                            <a href="/contract-management/view/{{ $proyekVo->ContractManagement->id_contract }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekVo->ContractManagement->no_contract }}</a>
                                                         </td>
                                                         <!--end::Action-->
                                                     </tr>

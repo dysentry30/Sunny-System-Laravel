@@ -139,14 +139,11 @@
                                                 <thead>
                                                     <!--begin::Table row-->
                                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                        <th class="min-w-auto">Nomor {{ $title }}</th>
-                                                        <th class="min-w-auto">Kode Proyek</th>
-                                                        <th class="min-w-auto">Nama Proyek</th>
-                                                        <th class="min-w-auto">Unit Kerja</th>
-                                                        <th class="min-w-auto">Uraian {{ $title }}</th>
-                                                        <th class="min-w-auto">Tanggal Diajukan</th>
-                                                        <th class="min-w-auto">Tanggal Ditolak</th>
-                                                        <th class="min-w-auto">Nilai {{ $title }}</th>
+                                                        <th class="min-w-auto">Uraian Perubahan</th>
+                                                        <th class="min-w-auto">Tanggal Perubahan</th>
+                                                        <th class="min-w-auto">No Proposal Klaim</th>
+                                                        <th class="min-w-auto">Tanggal Pengajuan</th>
+                                                        <th class="min-w-auto">Waktu Pengajuan</th>
                                                         <th class="min-w-auto">Status</th>
                                                         <th class="min-w-auto">Action</th>
                                                         {{-- <th class=""><center>Action</center></th> --}}
@@ -157,102 +154,73 @@
                                                 <!--begin::Table body-->
                                                 <tbody class="fw-bold text-gray-600">
                                                     @foreach ($proyekClaims as $claim)
-                                                        <tr class="align-middle">
-
-                                                            <!--begin::Name=-->
+                                                        <tr>
+                                                            <!--begin::Name-->
                                                             <td>
-                                                                <a class="text-hover-primary text-gray-500"
-                                                                    href="/contract-management/view/{{$claim->id_contract}}/perubahan-kontrak/{{ $claim->id_perubahan_kontrak }}">{{ $claim->proposal_klaim }}</a>
+                                                                <a href="/contract-management/view/{{$claim->id_contract}}/perubahan-kontrak/{{$claim->id_perubahan_kontrak}}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $claim->uraian_perubahan }}</a>
                                                             </td>
-                                                            <!--end::Name=-->
-                                                            <!--begin::Email=-->
+                                                            <!--end::Name-->
+                                                            <!--begin::Name Proyek-->
                                                             <td>
-                                                                {{ $proyek->kode_proyek }}
+                                                                {{ $claim->tanggal_perubahan }}
                                                             </td>
-                                                            <!--end::Email=-->
-                                                            <!--begin::Company=-->
+                                                            <!--end::Name Proyek-->
+                                                            <!--begin::Unit Kerja-->
                                                             <td>
-                                                                {{ $proyek->nama_proyek }}
-                                                                {{-- {{ $proyek->kode_proyek }} --}}
+                                                                {{ $claim->proposal_klaim }}
                                                             </td>
-                                                            <!--end::Company=-->
-
-                                                            <!--begin::Company=-->
+                                                            <!--end::Unit Kerja-->
+                                                            <!--begin::Unit Kerja-->
                                                             <td>
-                                                                {{ $proyek->UnitKerja->unit_kerja }}
-                                                                {{-- {{ $proyek->kode_proyek }} --}}
+                                                                {{ $claim->tanggal_pengajuan }}
                                                             </td>
-                                                            <!--end::Company=-->
-
-                                                            <!--begin::Company=-->
+                                                            <!--end::Unit Kerja-->
+                                                            <!--begin::Unit Kerja-->
                                                             <td>
-                                                                {{ $proyek->UnitKerja->unit_kerja }}
-                                                                {{-- {{ $proyek->kode_proyek }} --}}
+                                                                {{ $claim->waktu_pengajuan }}
                                                             </td>
-                                                            <!--end::Company=-->
-
-                                                            @if (!empty($claim->claimContractDrafts[0]))
-                                                                <!--begin::Action=-->
-                                                                <td>
-                                                                    {{ $claim->claimContractDrafts[0]->uraian_perubahan }}
-                                                                </td>
-                                                                <!--end::Action=-->
-                                                            @else
-                                                                <td class="text-break text-start text-danger text-truncate" style="max-width: 120px">
-                                                                    <small class="badge badge-light-danger">
-                                                                        Kosong
-                                                                    </small>
-                                                                </td>
-                                                            @endif
-                                                            <!--begin::Approval-->
-
-                                                            <!--end::Approval-->
-                                                            <!--begin::PIC=-->
-                                                            @if (!empty($claim->claimContractDiajukan[0]))
-                                                                <!--begin::Action=-->
-                                                                <td>
-                                                                    {{ $claim->claimContractDiajukan[0]->tanggal_diajukan }}
-                                                                </td>
-                                                                <!--end::Action=-->
-                                                            @else
-                                                                <td class="text-break text-start text-danger" style="max-width: 120px">
-                                                                    <small class="badge badge-light-danger">
-                                                                        Kosong
-                                                                    </small>
-                                                                </td>
-                                                            @endif
-
-                                                            <!--begin::PIC=-->
+                                                            <!--end::Unit Kerja-->
+                                                            <!--begin::Unit Kerja-->
+                                                            @php
+                                                                $stage = "";
+                                                                $class_name = "";
+                                                                if ($claim->is_dispute) {
+                                                                    $stage = "Dispute";
+                                                                    $class_name = "badge fs-8 badge-light-danger";
+                                                                } else {
+                                                                    switch ($claim->stage) {
+                                                                        case 1:
+                                                                            $stage = "Draft";
+                                                                            $class_name = "badge fs-8 badge-light-primary";
+                                                                            break;
+                                                                        case 2:
+                                                                            $stage = "Diajukan";
+                                                                            $class_name = "badge fs-8 badge-light-primary";
+                                                                            break;
+                                                                        case 3:
+                                                                            $stage = "Revisi";
+                                                                            $class_name = "badge fs-8 badge-light-primary";
+                                                                            break;
+                                                                        case 4:
+                                                                            $stage = "Negoisasi";
+                                                                            $class_name = "badge fs-8 badge-light-primary";
+                                                                            break;
+                                                                        case 5:
+                                                                            $stage = "Diterima";
+                                                                            $class_name = "badge fs-8 badge-light-success";
+                                                                            break;
+                                                                        case 6:
+                                                                            $stage = "Ditolak";
+                                                                            $class_name = "badge fs-8 badge-light-danger";
+                                                                            break;
+                                                                    }
+                                                                }
+                                                            @endphp
                                                             <td>
-                                                                {{ number_format($claim->nilai_claim, 0, '.', '.') }}
-                                                            </td>
-                                                            <!--end::PIC=-->
-
-                                                            <!--begin::PIC=-->
-                                                            <td class="text-break text-start {{$claim->stage > 3 ? "text-success" : "text-primary"}}">
-                                                                <small class="badge {{$claim->stage > 3 ? "badge-light-success" : "badge-light-primary"}}">
-                                                                    @switch($claim->stages)
-                                                                        @case(1)
-                                                                            Draft
-                                                                        @break
-    
-                                                                        @case(2)
-                                                                            Diajukan
-                                                                        @break
-    
-                                                                        @case(3)
-                                                                            Negosiasi
-                                                                        @break
-    
-                                                                        @case(4)
-                                                                            Disetujui
-                                                                        @break
-    
-                                                                        @default
-                                                                    @endswitch
+                                                                <small class="{{$class_name}}">
+                                                                    {{ $stage }}
                                                                 </small>
                                                             </td>
-
                                                             <!--begin::Action=-->
                                                             <td>
                                                                 <form action="/claim-management/delete"

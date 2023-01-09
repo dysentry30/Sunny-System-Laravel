@@ -221,14 +221,11 @@ class CustomerController extends Controller
         // $data = Http::get("http://maps.googleapis.com/maps/api/geocode/xml?address=". "Boston, USA" . "&sensor=false");
 
         $data_provinsi = json_decode(Storage::get("/public/data/provinsi.json"));
-        $data_kabupaten = collect(json_decode(Storage::get("/public/data/11.json")));
         if (!empty($customer->provinsi) && str_contains($customer->provinsi, "-")) {
             $kode_provinsi = explode("-", $customer->provinsi)[1];
             $get_kota = collect($data_provinsi)->where("province_id", "=", $kode_provinsi)->first();
             if (!empty($get_kota)) {
                 $data_kabupaten = collect(json_decode(Storage::get("/public/data/$get_kota->id.json")));
-            } else {
-                $data_kabupaten = collect(json_decode(Storage::get("/public/data/11.json")));
             }
         }
 
@@ -252,7 +249,8 @@ class CustomerController extends Controller
         // dd($data_kabupaten);
         // dd($customer->negara, $data_negara, $customer->negara);
         
-        $pic = CustomerPic::where("id_customer", "=", $id_customer)->get();
+        // $pic = CustomerPic::where("id_customer", "=", $id_customer)->get();
+        // dd($pic);
         // $struktur = StrukturCustomer::where("id_customer", "=", $id_customer)->get();
         $proyeks = ProyekBerjalans::where("id_customer", "=", $id_customer)->get();
         $area_proyeks = collect();
@@ -312,29 +310,31 @@ class CustomerController extends Controller
                         $totalNilaiOKPerUnit += $proyekBerjalan->proyek->nilai_rkap ?? 0;
                         
                         $proyek = $proyekBerjalan->proyek;
-                        if ($proyek->stage <= 3) {
-                            $totalProyekOpportunity++;
-                            $totalAmountProyekOpportunity += $proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->sum(function($f) {
-                                return (int) $f->nilai_forecast;
-                            }) / $per;
-                        }
-                        if ($proyek->stage <= 5) {
-                            $totalProyekOngoing++;
-                            $totalAmountProyekOngoing += $proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->sum(function($f) {
-                                return (int) $f->nilai_forecast;
-                            }) / $per;
-                        }
-                        if ($proyek->stage == 6 || $proyek->stage > 7) {
-                            $totalProyekClosed++;
-                            $totalAmountProyekClosed += $proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->sum(function($f) {
-                                return (int) $f->nilai_forecast;
-                            }) / $per;
-                        }
-                        if($proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->count() > 0) {
-                            $totalProyekForecast++;
-                            $totalAmountProyekForecast += $proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->sum(function($f) {
-                                return (int) $f->nilai_forecast;
-                            }) / $per;
+                        if(!empty($proyek)) {
+                            if ($proyek->stage <= 3) {
+                                $totalProyekOpportunity++;
+                                $totalAmountProyekOpportunity += $proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->sum(function($f) {
+                                    return (int) $f->nilai_forecast;
+                                }) / $per;
+                            }
+                            if ($proyek->stage <= 5) {
+                                $totalProyekOngoing++;
+                                $totalAmountProyekOngoing += $proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->sum(function($f) {
+                                    return (int) $f->nilai_forecast;
+                                }) / $per;
+                            }
+                            if ($proyek->stage == 6 || $proyek->stage > 7) {
+                                $totalProyekClosed++;
+                                $totalAmountProyekClosed += $proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->sum(function($f) {
+                                    return (int) $f->nilai_forecast;
+                                }) / $per;
+                            }
+                            if($proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->count() > 0) {
+                                $totalProyekForecast++;
+                                $totalAmountProyekForecast += $proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->sum(function($f) {
+                                    return (int) $f->nilai_forecast;
+                                }) / $per;
+                            }
                         }
                     }
                     $unitKerja = UnitKerja::where("divcode", "=", $kode_unit_kerja)->first();
@@ -380,9 +380,11 @@ class CustomerController extends Controller
         $nilaiTotalPiutang = 0;
         foreach ($kategoriProyek as $kode_unit_kerja => $proyekBerjalans) {
             foreach ($proyekBerjalans as $proyekBerjalan) {
-                $nilaiTotalLaba += $proyekBerjalan->proyek->laba / $per ?? 0;
-                $nilaiTotalRugi += $proyekBerjalan->proyek->rugi / $per ?? 0;
-                $nilaiTotalPiutang += $proyekBerjalan->proyek->piutang / $per ?? 0;
+                if(!empty($proyekBerjalan->proyek)) {
+                    $nilaiTotalLaba += $proyekBerjalan->proyek->laba / $per ?? 0;
+                    $nilaiTotalRugi += $proyekBerjalan->proyek->rugi / $per ?? 0;
+                    $nilaiTotalPiutang += $proyekBerjalan->proyek->piutang / $per ?? 0;
+                }
             }
             $unitKerja = UnitKerja::where("divcode", "=", $kode_unit_kerja)->first();
             if (!empty($unitKerja) && !in_array($unitKerja->unit_kerja, $namaUnit)) {
@@ -426,10 +428,10 @@ class CustomerController extends Controller
             // "proyekberjalan0" => $customer->proyekBerjalans->where('stage', ">", 0),
             // "proyekberjalan6" => $customer->proyekBerjalans->where('stage', ">", 6),
             "proyeks" => $proyeks,
-            "pics" => $pic,
+            // "pics" => $pic,
             // "strukturs" => $struktur,
             "data_provinsi" => $data_provinsi,
-            "data_kabupaten" => $data_kabupaten,
+            "data_kabupaten" => $data_kabupaten ?? null,
             "data_negara" => $data_negara,
             "kategoriProyek" => $kategoriProyek,
             "nilaiOK" => $nilaiOK,
@@ -737,6 +739,7 @@ class CustomerController extends Controller
         $newPIC->email_pic = $data["email-pic"];
         $newPIC->phone_pic = $data["phone-number-pic"];
         $newPIC->ultah_pic = $data["ultah-pic"];
+        $newPIC->layer_segmentasi = $data["layer_segmentasi"];
 
         Alert::success("Success", $data["kode-pic"] . ": " . $data["name-pic"] . ", PIC Berhasil Ditambah");
 
@@ -770,6 +773,7 @@ class CustomerController extends Controller
         $editPIC->email_pic = $data["email-pic"];
         $editPIC->phone_pic = $data["phone-number-pic"];
         $editPIC->ultah_pic = $data["ultah-pic"];
+        $editPIC->layer_segmentasi = $data["layer_segmentasi"];
 
         Alert::success("Success", $data["kode-pic"] . ": " . $data["name-pic"] . ", PIC Berhasil Diubah");
 

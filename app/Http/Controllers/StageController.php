@@ -55,6 +55,12 @@ class StageController extends Controller
     public function stagePerubahanKontrakSave(Request $request) {
         $data = $request->all();
         $perubahan_kontrak = PerubahanKontrak::find($data["id_perubahan_kontrak"]);
+        if($perubahan_kontrak->stage == 4 && $perubahan_kontrak->DokumenPendukungs->isEmpty()) {
+            return response()->json([
+                "status" => "error",
+                "msg" => "Silahkan isi Dokumen Pendukung sebelum melanjutkan stage!"
+            ]);
+        }
         if(isset($data["is-dispute"])) {
             $perubahan_kontrak->is_dispute = true;
             if($perubahan_kontrak->save()) {

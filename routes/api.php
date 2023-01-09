@@ -402,8 +402,10 @@ Route::middleware(["web"])->group(function () {
         $data = $request->UsrApprovalGroup;
         $list_proyek = collect($data["UsrListProyek"]);
         $unit_kerja = UnitKerja::find($data["UsrUnitKerja"]);
-        $month = (int) date("m") == 1 ? 12 : (int) date("m");
-        $year = (int) date("m") == 1 ? (int) date("Y") - 1: (int) date("Y");
+        // $month = (int) date("m") == 1 ? 12 : (int) date("m");
+        // $year = (int) date("m") == 1 ? (int) date("Y") - 1: (int) date("Y");
+        $month = (int) date("m");
+        $year = (int) date("Y");
 
         // CHECK JIKA UNIT KERJA SUDAH OTOR
         $check_is_history_exist = HistoryForecast::all()->filter(function($hf) use($unit_kerja, $month, $year) {
