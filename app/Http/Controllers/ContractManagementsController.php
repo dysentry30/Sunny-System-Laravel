@@ -43,6 +43,7 @@ use App\Models\AddendumContractDrafts;
 use App\Models\ContractChangeProposal;
 use App\Models\ContractUploadFinal;
 use App\Models\ContractAsuransi;
+use App\Models\ContractChecklist;
 use App\Models\ContractJaminan;
 use App\Models\ContractLaw;
 use App\Models\ContractLD;
@@ -56,8 +57,10 @@ use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Validator;
 use App\Models\RencanKerjaManajemenKontrak;
 use App\Models\UploadFinalDocument;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Collection as SupportCollection;
+use stdClass;
 
 class ContractManagementsController extends Controller
 {
@@ -2093,7 +2096,134 @@ class ContractManagementsController extends Controller
 
     public function uploadChecklistKontrak(Request $request) {
         $data = $request->all();
-        dd($data);
+        // dd($data);
+
+        $messages = [
+            "required" => "Field di atas wajib diisi",
+            "string" => "This field must be string only"
+        ];
+        $rules = [
+            "id-contract" => "required",
+            "jawaban-1" => "required",
+            "jawaban-2" => "required",
+            "jawaban-3" => "required",
+            "jawaban-4" => "required",
+            "jawaban-5" => "required",
+            "jawaban-6" => "required",
+            "jawaban-7" => "required",
+            "jawaban-8" => "required",
+            "jawaban-9" => "required",
+            "jawaban-10" => "required",
+            "jawaban-11" => "required",
+            "jawaban-12" => "required",
+            "jawaban-13" => "required",
+            "jawaban-14" => "required",
+            "jawaban-15" => "required",
+            "jawaban-16" => "required",
+            "jawaban-17" => "required",
+            "jawaban-18" => "required",
+            "jawaban-19" => "required",
+            "jawaban-20" => "required",
+            "jawaban-21" => "required",
+            "jawaban-22" => "required",
+            "jawaban-23" => "required",
+            "jawaban-24" => "required",
+            "jawaban-25" => "required",
+        ];
+        // $validation = Validator::make($data, $rules, $messages);
+        // if ($validation->fails()) {
+        //     Alert::error('Error', "Rencana Kerja Manajemen Kontrak gagal ditambahkan");
+        //     return Redirect::back()->with("modal", $data["modal-name"]);
+        //     // dd($validation->errors());
+        // }
+        // if($validation->validate()){
+        //     echo("success!");
+        // }
+        // function progressAwal($data){
+        //     return $data->filter(function($s1, $key) use($data) {
+        //          return !empty($data[0]) || !empty($data[1]);
+        //      });
+        //  }
+        // $sub_1 = progressAwal(collect($data["sub-jawaban-1"]));
+
+        // Check kalo index 0 dan 1 di sub jawab 1 ada
+        // $is_sub_0_1_exist = $sub_1->count() > 0;
+        // $subJawaban_1 = $sub_1->first();
+        // $kategori = "";
+        // if($is_sub_0_1_exist) {
+        //     $kategori = "Progress 0-20";
+        // } else {
+        //     $kategori = "Progress 20-90";
+        // }
+
+        // $kategori_2 = "";
+        // $sub_2 = progressAwal(collect($data["sub-jawaban-2"]));
+        // // Check kalo index 0 dan 1 di sub jawab 2 ada
+        // $is_sub_exist = $sub_2->count() > 0;
+        // $subJawaban_2 = $sub_2->first();
+        // if($is_sub_exist) {
+        //     $kategori_2 = "Progress 0-20";
+        // } else {
+        //     $kategori_2 = "Progress 20-90";
+        // }
+        // $data["sub-jawaban-1"] = $subJawaban_1;
+        // $data["sub-jawaban-2"] = $subJawaban_2;
+        // dd($subJawaban_1, $subJawaban);
+
+        $test_keys = collect($data)->keys();
+        $new_data = collect();
+        $test_keys->each(function($tk) use($data, &$new_data) {
+            // $checklist_model = new ContractChecklist();
+            if($tk != "modal-name" && $tk != "_token") {
+                $key_column_formatted = str_replace('-', "_", $tk);
+                $new_data[$key_column_formatted] = $data[$tk];
+            }
+        });
+        $new_data = $new_data->map(function($nd) {
+            if(is_array($nd)) {
+                $nd_collect = collect($nd)->filter(function($ndc, $key) use($nd) {
+                    return !empty($nd[$key]);
+                })->first();
+                return $nd_collect;
+            }
+            return $nd;
+        });
+        // dd($new_data);
+        
+        // $new_data->each(function($data, $key) {
+            
+        // });
+        $checklist_model = new ContractChecklist();
+        $fillable_attributes = $checklist_model->getFillable();
+        $checklist_model->fillable($new_data->keys()->toArray());
+        $checklist_model->fill($new_data->toArray());
+        $checklist_model->exists = true;
+        $checklist_model->fillable($fillable_attributes);
+        // $checklist_model->timestamps = true;
+        $checklist_model->created_at = Carbon::now();
+        $checklist_model->updated_at = null;
+        $checklist_model->syncOriginal();
+        // dd($checklist_model);
+        
+
+        $contract = ContractManagements::find($data["id-contract"]);
+        if (empty($contract)) {
+            Alert::error("Error", "Pastikan contract sudah dibuat terlebih dahulu");
+            return Redirect::back()->with("modal", $data["modal-name"]);
+            // return redirect()->back();
+        }
+        try {
+            if(ContractChecklist::insert($new_data->toArray())){
+                Alert::success("Success", "Checklist Manajemen Kontrak Berhasil Dibuat");
+                return Redirect::back();
+            }
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+        Alert::error("Error", "Checklist Manajemen Kontrak Berhasil Dibuat");
+        return Redirect::back()->with("modal", $data["modal-name"]);
+        // return redirect()->back();
+        
     }
 
     public function uploadAsuransi(Request $request, ContractAsuransi $asuransi) {
@@ -2221,8 +2351,12 @@ class ContractManagementsController extends Controller
         }
 
         $kategori = ContractUploadFinal::where([['id_contract', '=', $data['id-contract']],['category', '=', $data['kategori']]])->first();
-        
+
         if (!empty($kategori)){
+            if(!empty($data["kategori"]) && $data["kategori"] == "resiko-pelaksanaan") {
+                $periode = $data["periode-resiko"] . "-" . $data["tahun-resiko"];
+                $kategori->periode = $periode;
+            }
             $old_file = $kategori->id_document;
             File::delete(public_path("words/$old_file"));
             $kategori->id_document = $id_document;
@@ -2232,6 +2366,10 @@ class ContractManagementsController extends Controller
             Alert::success("Success", "Dokumen Final berhasil ditambahkan");
             return redirect()->back();
         } else{
+            if(!empty($data["kategori"]) && $data["kategori"] == "resiko-pelaksanaan") {
+                $periode = $data["periode-resiko"] . "-" . $data["tahun-resiko"];
+                $uploadFinal->periode = $periode;
+            }
             $uploadFinal->id_contract = $contract->id_contract;
             $uploadFinal->id_document = $id_document;
             $uploadFinal->nama_document = $nama_file;

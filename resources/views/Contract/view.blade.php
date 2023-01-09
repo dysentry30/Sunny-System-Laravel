@@ -936,7 +936,7 @@
                         </h3>
 
                         <!--begin:Table: Review-->
-                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="tinjauan-kontrak">
                             <!--begin::Table head-->
                             <thead>
                                 <!--begin::Table row-->
@@ -970,18 +970,8 @@
                                         @endif
 
                                     @empty
-                                        <tr>
-                                            <td colspan="5" class="text-center">
-                                                <h6><b>There is no data</b></h6>
-                                            </td>
-                                        </tr>
                                     @endforelse
                                 @else
-                                    <tr>
-                                        <td colspan="5" class="text-center">
-                                            <h6><b>There is no data</b></h6>
-                                        </td>
-                                    </tr>
                                 @endif
                             </tbody>
                             <!--end::Table body-->
@@ -8160,7 +8150,7 @@
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                 <select id="kategori-checklist"
-                                    name="kategori-checklist"
+                                    name="kategori"
                                     onchange="updateChange(this)"
                                     class="form-select form-select-solid"
                                     data-control="select2" data-hide-search="true"
@@ -8184,10 +8174,10 @@
                                     <!--begin::Input-->
                                     <div class="input-group mb-3">
                                         <div class="input-group-text">
-                                            <input class="form-check-input mt-0 me-2" type="radio" aria-label="">
+                                            <input class="form-check-input mt-0 me-2" type="radio" aria-label="" name="jawaban-1" value="Ya">
                                             <span>Ya, Tanggal</span>
                                         </div>
-                                        <input type="date" class="form-control" name="jawaban-1" aria-label="">
+                                        <input type="date" class="form-control" name="sub-jawaban-1[]" aria-label="">
                                         <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
                                             <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
                                         </a>
@@ -8197,10 +8187,10 @@
                                     <!--begin::Input-->
                                     <div class="input-group mb-3">
                                         <div class="input-group-text">
-                                            <input class="form-check-input mt-0 me-2" type="radio" aria-label="">
+                                            <input class="form-check-input mt-0 me-2" type="radio" aria-label="" name="jawaban-1" value="Belum">
                                             <span>Belum, Sebab</span>
                                         </div>
-                                        <input type="text" class="form-control" name="jawaban-1" aria-label="">
+                                        <input type="text" class="form-control" name="sub-jawaban-1[]" aria-label="">
                                     </div>
                                     <br>
                                     <!--end::Input-->
@@ -8215,10 +8205,10 @@
                                     <!--begin::Input-->
                                     <div class="input-group mb-3">
                                         <div class="input-group-text">
-                                        <input class="form-check-input mt-0 me-2" type="radio" aria-label="Iya">
+                                        <input class="form-check-input mt-0 me-2" type="radio" aria-label="" name="jawaban-2" value="Ya">
                                         <span>Ya, Tanggal</span>
                                         </div>
-                                        <input type="date" class="form-control" name="jawaban-2" aria-label="Text input with checkbox">
+                                        <input type="date" class="form-control" name="sub-jawaban-2[]" aria-label="Text input with checkbox">
                                         <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
                                             <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
                                         </a>
@@ -8228,10 +8218,10 @@
                                     <!--begin::Input-->
                                     <div class="input-group mb-3">
                                         <div class="input-group-text">
-                                        <input class="form-check-input mt-0 me-2" type="radio" aria-label="">
+                                        <input class="form-check-input mt-0 me-2" type="radio" aria-label="" name="jawaban-2" value="Belum">
                                         <span>Belum, Sebab</span>
                                         </div>
-                                        <input type="text" class="form-control" name="jawaban-2" aria-label="">
+                                        <input type="text" class="form-control" name="sub-jawaban-2[]" aria-label="">
                                     </div>
                                     <br>
                                     <!--end::Input-->
@@ -8342,10 +8332,10 @@
                                     <br>
                                     <div class="input-group">
                                         <div class="input-group-text">
-                                            <input class="form-check-input mt-0 me-2" type="radio" aria-label="Iya">
+                                            <input class="form-check-input mt-0 me-2" type="radio" aria-label="" name="jawaban-6" value="Lainnya">
                                             <span>Lainnya...</span>
                                         </div>
-                                        <input type="text" class="form-control" name="jawaban-6" aria-label="Text input with checkbox">
+                                        <input type="text" class="form-control" name="sub-jawaban-6" aria-label="Text input with checkbox">
                                     </div>
                                     <br>
                                 </div>
@@ -8358,14 +8348,14 @@
                                     <!--end::Label-->
                                     <h5>Siapa</h5>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" value="Kontraktor" name="jawaban-7" id="flexCheckDefault">
+                                        <input class="form-check-input" type="radio" value="Kontraktor" name="jawaban-7[]" id="flexCheckDefault">
                                         <label class="form-check-label" for="flexCheckDefault">
                                             Kontraktor
                                         </label>
                                     </div>
                                     <br>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" value="Konsultan" name="jawaban-7" id="flexCheckDefault">
+                                        <input class="form-check-input" type="radio" value="Konsultan" name="jawaban-7[]" id="flexCheckDefault">
                                         <label class="form-check-label" for="flexCheckDefault">
                                             Konsultan
                                         </label>
@@ -8373,7 +8363,7 @@
                                     <br><br>
                                     <h5>Kapan</h5>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" value="Bulanan" name="jawaban-8" id="flexCheckDefault">
+                                        <input class="form-check-input" type="radio" value="Bulanan" name="jawaban-8[]" id="flexCheckDefault">
                                         <label class="form-check-label" for="flexCheckDefault">
                                             Bulanan
                                         </label>
@@ -8381,10 +8371,10 @@
                                     <br>
                                     <div class="input-group">
                                         <div class="input-group-text">
-                                            <input class="form-check-input mt-0 me-2" type="radio" aria-label="Iya">
+                                            <input class="form-check-input mt-0 me-2" type="radio" aria-label="" name="jawaban-8[]" value="Setiap Tanggal">
                                             <span>Dilakukan pada tanggal...</span>
                                         </div>
-                                        <input type="date" class="form-control" name="jawaban-8" aria-label="Text input with checkbox">
+                                        <input type="date" class="form-control" name="sub-jawaban-8[]" aria-label="Text input with checkbox">
                                         <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
                                             <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
                                         </a>
@@ -8392,10 +8382,10 @@
                                     <br>
                                     <div class="input-group">
                                         <div class="input-group-text">
-                                            <input class="form-check-input mt-0 me-2" type="radio" aria-label="Iya">
+                                            <input class="form-check-input mt-0 me-2" type="radio" aria-label="" name="jawaban-9[]" value="Cara Lain">
                                             <span>Cara lain?</span>
                                         </div>
-                                        <input type="date" class="form-control" name="jawaban-8" aria-label="Text input with checkbox">
+                                        <input type="date" class="form-control" name="sub-jawaban-8[]" aria-label="Text input with checkbox">
                                         <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
                                             <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
                                         </a>
@@ -8403,28 +8393,28 @@
                                     <br><br>
                                     <h5>Bagaimana cara melaksanakannya ?</h5>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" value="Dilakukan Konsultan" name="jawaban-9" id="flexCheckDefault">
+                                        <input class="form-check-input" type="radio" value="Dilakukan Konsultan" name="jawaban-9[]" id="flexCheckDefault">
                                         <label class="form-check-label" for="flexCheckDefault">
                                             Dilakukan Konsultan
                                         </label>
                                     </div>
                                     <br>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" value="Kontraktor Menyetujui" name="jawaban-9" id="flexCheckDefault">
+                                        <input class="form-check-input" type="radio" value="Kontraktor Menyetujui" name="jawaban-9[]" id="flexCheckDefault">
                                         <label class="form-check-label" for="flexCheckDefault">
                                             Kontraktor Menyetujui
                                         </label>
                                     </div>
                                     <br>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" value="Dilakukan Kontraktor" name="jawaban-9" id="flexCheckDefault">
+                                        <input class="form-check-input" type="radio" value="Dilakukan Kontraktor" name="jawaban-9[]" id="flexCheckDefault">
                                         <label class="form-check-label" for="flexCheckDefault">
                                             Dilakukan Kontraktor
                                         </label>
                                     </div>
                                     <br>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" value="Konsultan Menyetujui" name="jawaban-9" id="flexCheckDefault">
+                                        <input class="form-check-input" type="radio" value="Konsultan Menyetujui" name="jawaban-9[]" id="flexCheckDefault">
                                         <label class="form-check-label" for="flexCheckDefault">
                                             Konsultan Menyetujui
                                         </label>
@@ -8432,10 +8422,10 @@
                                     <br>
                                     <div class="input-group">
                                         <div class="input-group-text">
-                                            <input class="form-check-input mt-0 me-2" type="radio" aria-label="Iya">
+                                            <input class="form-check-input mt-0 me-2" type="radio" aria-label="" name="Cara Lain" value="Cara Lain">
                                             <span>Cara Lain...</span>
                                         </div>
-                                        <input type="text" class="form-control" name="jawaban-9" aria-label="Text input with checkbox">
+                                        <input type="text" class="form-control" name="sub-jawaban-9[]" aria-label="Text input with checkbox">
                                     </div>
                                 </div>
     
@@ -8465,21 +8455,21 @@
                                     </label><br><br>
                                     <!--end::Label-->
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" value="Arsip Kronologis" name="jawaban-11" id="flexCheckDefault">
+                                        <input class="form-check-input" type="radio" value="Arsip Kronologis" name="jawaban-11[]" id="flexCheckDefault">
                                         <label class="form-check-label" for="flexCheckDefault">
                                             Arsip Kronologis
                                         </label>
                                     </div>
                                     <br>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" value="Arsip Menurut Subyek" name="jawaban-11" id="flexCheckDefault">
+                                        <input class="form-check-input" type="radio" value="Arsip Menurut Subyek" name="jawaban-11[]" id="flexCheckDefault">
                                         <label class="form-check-label" for="flexCheckDefault">
                                             Arsip Menurut Subyek
                                         </label>
                                     </div>
                                     <br>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" value="Arsip Foto-foto Pekerjaan" name="jawaban-11" id="flexCheckDefault">
+                                        <input class="form-check-input" type="radio" value="Arsip Foto-foto Pekerjaan" name="jawaban-11[]" id="flexCheckDefault">
                                         <label class="form-check-label" for="flexCheckDefault">
                                             Arsip Foto-foto Pekerjaan
                                         </label>
@@ -8494,14 +8484,14 @@
                                     </label><br><br>
                                     <!--end::Label-->
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" value="Ya" name="jawaban-12" id="flexCheckDefault">
+                                        <input class="form-check-input" type="radio" value="Ya" name="jawaban-12[]" id="flexCheckDefault">
                                         <label class="form-check-label" for="flexCheckDefault">
                                             Ya
                                         </label>
                                     </div>
                                     <br>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" value="Tidak" name="jawaban-12" id="flexCheckDefault">
+                                        <input class="form-check-input" type="radio" value="Tidak" name="jawaban-12[]" id="flexCheckDefault">
                                         <label class="form-check-label" for="flexCheckDefault">
                                             Tidak
                                         </label>
@@ -8635,7 +8625,7 @@
                                     </div>
                                     <br>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" value="Clearence of Debris" name="material_damage" id="flexCheckDefault">
+                                        <input class="form-check-input" type="radio" value="Clearence of Debris" name="jawaban-18" id="flexCheckDefault">
                                         <label class="form-check-label" for="flexCheckDefault">
                                             Clearence of Debris
                                         </label>
@@ -8774,10 +8764,10 @@
                                     <!--begin::Input-->
                                     <div class="input-group mb-3">
                                         <div class="input-group-text">
-                                            <input class="form-check-input mt-0 me-2" type="radio" aria-label="">
+                                            <input class="form-check-input mt-0 me-2" type="radio" aria-label="" name="jawaban-1" value="Terlambat">
                                             <span>Terlambat</span>
                                         </div>
-                                        <input type="number" class="form-control" name="jawaban-1" aria-label="" min="0" max="100">
+                                        <input type="number" class="form-control" name="sub-jawaban-1[]" aria-label="" min="0" max="100">
                                         <span><h3>%</h3></span>
                                     </div>
                                     <br>
@@ -8785,10 +8775,10 @@
                                     <!--begin::Input-->
                                     <div class="input-group mb-3">
                                         <div class="input-group-text">
-                                            <input class="form-check-input mt-0 me-2" type="radio"aria-label="">
-                                            <span>Lebih Awal</span>
+                                            <input class="form-check-input mt-0 me-2" type="radio"aria-label="" name="jawaban-1" value="Lebih Awal">
+                                            <span>Lebih Awal</span> 
                                         </div>
-                                            <input type="number" class="form-control" name="jawaban-1" aria-label="" min="0" max="100">
+                                            <input type="number" class="form-control" name="sub-jawaban-1[]" aria-label="" min="0" max="100">
                                             <span><h3>%</h3></span>
                                     </div>
                                     <br>
@@ -8804,40 +8794,40 @@
                                     <!--begin::Input-->
                                     <div class="input-group mb-3">
                                         <div class="input-group-text">
-                                        <input class="form-check-input mt-0 me-2" type="radio" aria-label="">
+                                        <input class="form-check-input mt-0 me-2" type="radio" aria-label="" name="jawaban-2" value="Mingguan">
                                         <span>Mingguan</span>
                                         </div>
-                                        <input type="number" class="form-control" name="jawaban-2" aria-label="" min="0" max="100" placeholder="Total Rapat s/d saat ini">
+                                        <input type="number" class="form-control" name="sub-jawaban-2[]" aria-label="" placeholder="Total Rapat s/d saat ini">
                                     </div>
                                     <br>
                                     <!--end::Input-->
                                     <!--begin::Input-->
                                     <div class="input-group mb-3">
                                         <div class="input-group-text">
-                                            <input class="form-check-input mt-0 me-2" type="radio" aria-label="">
+                                            <input class="form-check-input mt-0 me-2" type="radio" aria-label="" name="jawaban-2" value="Bulanan">
                                             <span>Bulanan</span>
                                         </div>
-                                            <input type="number" class="form-control" name="jawaban-2" aria-label="" min="0" max="100" placeholder="Total Rapat s/d saat ini">
+                                            <input type="number" class="form-control" name="sub-jawaban-2[]" aria-label="" placeholder="Total Rapat s/d saat ini">
                                     </div>
                                     <br>
                                     <!--end::Input-->
                                     <!--begin::Input-->
                                     <div class="input-group mb-3">
                                         <div class="input-group-text">
-                                            <input class="form-check-input mt-0 me-2" type="radio" aria-label="">
+                                            <input class="form-check-input mt-0 me-2" type="radio" aria-label="" name="jawaban-2" value="Per Kasus">
                                             <span>Per Kasus</span>
                                         </div>
-                                            <input type="number" class="form-control" name="jawaban-2" aria-label="" min="0" max="100" placeholder="Total Rapat s/d saat ini">
+                                            <input type="number" class="form-control" name="sub-jawaban-2[]" aria-label="" placeholder="Total Rapat s/d saat ini">
                                     </div>
                                     <br>
                                     <!--end::Input-->
                                     <!--begin::Input-->
                                     <div class="input-group mb-3">
                                         <div class="input-group-text">
-                                            <input class="form-check-input mt-0 me-2" type="radio" aria-label="">
+                                            <input class="form-check-input mt-0 me-2" type="radio" aria-label="" name="jawaban-2" value="Lainnya">
                                             <span>Lainnya</span>
                                         </div>
-                                            <input type="number" class="form-control" name="jawaban-2" aria-label="" min="0" max="100" placeholder="Total Rapat s/d saat ini">
+                                            <input type="number" class="form-control" name="sub-jawaban-2[]" aria-label="" placeholder="Total Rapat s/d saat ini">
                                     </div>
                                     <br>
                                     <!--end::Input-->
@@ -8930,14 +8920,14 @@
                                     </label><br><br>
                                     <!--end::Label-->
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" value="Ya" name="jawaban-7" id="flexCheckDefault">
+                                        <input class="form-check-input" type="radio" value="Ya" name="jawaban-7[]" id="flexCheckDefault">
                                         <label class="form-check-label" for="flexCheckDefault">
                                             Ya
                                         </label>
                                     </div>
                                     <br>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" value="Tidak" name="jawaban-7" id="flexCheckDefault">
+                                        <input class="form-check-input" type="radio" value="Tidak" name="jawaban-7[]" id="flexCheckDefault">
                                         <label class="form-check-label" for="flexCheckDefault">
                                             Tidak
                                         </label>
@@ -8950,14 +8940,14 @@
                                     </label><br><br>
                                     <!--end::Label-->
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" value="Ya" name="jawaban-8" id="flexCheckDefault">
+                                        <input class="form-check-input" type="radio" value="Ya" name="jawaban-8[]" id="flexCheckDefault">
                                         <label class="form-check-label" for="flexCheckDefault">
                                             Ya
                                         </label>
                                     </div>
                                     <br>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" value="Tidak" name="jawaban-8" id="flexCheckDefault">
+                                        <input class="form-check-input" type="radio" value="Tidak" name="jawaban-8[]" id="flexCheckDefault">
                                         <label class="form-check-label" for="flexCheckDefault">
                                             Tidak
                                         </label>
@@ -8973,42 +8963,42 @@
                                     </label><br><br>
                                     <!--end::Label-->
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" value="Pemberitahuan kepada Engineer/Pengawas Ahli secara segera" name="jawaban-9" id="flexCheckDefault">
+                                        <input class="form-check-input" type="radio" value="Pemberitahuan kepada Engineer/Pengawas Ahli secara segera" name="jawaban-9[]" id="flexCheckDefault">
                                         <label class="form-check-label" for="flexCheckDefault">
                                             Pemberitahuan kepada Engineer/Pengawas Ahli secara segera
                                         </label>
                                     </div>
                                     <br>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" value="Pembuatan Perincian Jumlah Kompensasi" name="jawaban-9" id="flexCheckDefault">
+                                        <input class="form-check-input" type="radio" value="Pembuatan Perincian Jumlah Kompensasi" name="jawaban-9[]" id="flexCheckDefault">
                                         <label class="form-check-label" for="flexCheckDefault">
                                             Pembuatan Perincian Jumlah Kompensasi
                                         </label>
                                     </div>
                                     <br>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" value="Pengajuan Perincian Jumlah Kompensasi kepada Engineer" name="jawaban-9" id="flexCheckDefault">
+                                        <input class="form-check-input" type="radio" value="Pengajuan Perincian Jumlah Kompensasi kepada Engineer" name="jawaban-9[]" id="flexCheckDefault">
                                         <label class="form-check-label" for="flexCheckDefault">
                                             Pengajuan Perincian Jumlah Kompensasi kepada Engineer
                                         </label>
                                     </div>
                                     <br>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" value="Negosiasi" name="jawaban-9" id="flexCheckDefault">
+                                        <input class="form-check-input" type="radio" value="Negosiasi" name="jawaban-9[]" id="flexCheckDefault">
                                         <label class="form-check-label" for="flexCheckDefault">
                                             Negosiasi
                                         </label>
                                     </div>
                                     <br>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" value="Persetujuan nilai Kompensasi oleh Engineer" name="jawaban-9" id="flexCheckDefault">
+                                        <input class="form-check-input" type="radio" value="Persetujuan nilai Kompensasi oleh Engineer" name="jawaban-9[]" id="flexCheckDefault">
                                         <label class="form-check-label" for="flexCheckDefault">
                                             Persetujuan nilai Kompensasi oleh Engineer
                                         </label>
                                     </div>
                                     <br>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" value="Persetujuan nilai Kompensasi oleh Employer" name="jawaban-9" id="flexCheckDefault">
+                                        <input class="form-check-input" type="radio" value="Persetujuan nilai Kompensasi oleh Employer" name="jawaban-9[]" id="flexCheckDefault">
                                         <label class="form-check-label" for="flexCheckDefault">
                                             Persetujuan nilai Kompensasi oleh Employer
                                         </label>
@@ -9044,10 +9034,10 @@
                                     <br>
                                     <div class="input-group mb-3">
                                         <div class="input-group-text">
-                                            <input class="form-check-input mt-0 me-2" type="radio" aria-label="">
+                                            <input class="form-check-input mt-0 me-2" type="radio" aria-label="" name="jawaban-10" value="Addenda">
                                             <span>Addenda</span>
                                         </div>
-                                        <input type="text" class="form-control" name="jawaban-10" aria-label="">
+                                        <input type="text" class="form-control" name="sub-jawaban-10" aria-label="">
                                     </div>
                                 </div>
 
@@ -9058,14 +9048,14 @@
                                     </label><br><br>
                                     <!--end::Label-->
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" value="Ya" name="jawaban-11" id="flexCheckDefault">
+                                        <input class="form-check-input" type="radio" value="Ya" name="jawaban-11[]" id="flexCheckDefault">
                                         <label class="form-check-label" for="flexCheckDefault">
                                             Ya
                                         </label>
                                     </div>
                                     <br>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" value="Tidak" name="jawaban-11" id="flexCheckDefault">
+                                        <input class="form-check-input" type="radio" value="Tidak" name="jawaban-11[]" id="flexCheckDefault">
                                         <label class="form-check-label" for="flexCheckDefault">
                                             Tidak
                                         </label>
@@ -9078,14 +9068,14 @@
                                     </label><br><br>
                                     <!--end::Label-->
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" value="Ya" name="jawaban-12" id="flexCheckDefault">
+                                        <input class="form-check-input" type="radio" value="Ya" name="jawaban-12[]" id="flexCheckDefault">
                                         <label class="form-check-label" for="flexCheckDefault">
                                             Ya
                                         </label>
                                     </div>
                                     <br>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" value="Tidak" name="jawaban-12" id="flexCheckDefault">
+                                        <input class="form-check-input" type="radio" value="Tidak" name="jawaban-12[]" id="flexCheckDefault">
                                         <label class="form-check-label" for="flexCheckDefault">
                                             Tidak
                                         </label>
@@ -9156,10 +9146,10 @@
                                     <br>
                                     <div class="input-group mb-3">
                                         <div class="input-group-text">
-                                            <input class="form-check-input mt-0 me-2" type="radio" aria-label="">
+                                            <input class="form-check-input mt-0 me-2" type="radio" name="jawaban-13" value="Lain-lain" aria-label="">
                                             <span>Lain-lain</span>
                                         </div>
-                                        <input type="text" class="form-control" name="jawaban-13" aria-label="">
+                                        <input type="text" class="form-control" name="sub-jawaban-13" aria-label="">
                                     </div>
                                 </div>
                                 
@@ -9324,7 +9314,7 @@
                                         </a>
                                     </label><br>
                                     <!--end::Label-->
-                                        <input type="date" class="form-control" name="jawaban-7" aria-label="Text input with checkbox">
+                                        <input type="date" class="form-control" name="jawaban-7[]" aria-label="Text input with checkbox">
                                     </div>
                                     <br>
                                     <div class="masa-pemeliharaan">
@@ -9336,7 +9326,7 @@
                                             </a>
                                         </label><br>
                                         <!--end::Label-->
-                                        <input type="date" class="form-control" name="jawaban-8" aria-label="Text input with checkbox">
+                                        <input type="date" class="form-control" name="jawaban-8[]" aria-label="Text input with checkbox">
                                     </div>
                                     <br>
                                     <div class="serah-terima">
@@ -9348,7 +9338,7 @@
                                             </a>
                                         </label><br>
                                         <!--end::Label-->
-                                        <input type="date" class="form-control" name="jawaban-9" aria-label="Text input with checkbox">
+                                        <input type="date" class="form-control" name="jawaban-9[]" aria-label="Text input with checkbox">
                                     </div>
                                     <br>
                                 </div>
@@ -9382,14 +9372,14 @@
                                         </a>
                                     </label><br>
                                     <!--end::Label-->
-                                    <input type="date" class="form-control" name="jawaban-11" aria-label="Text input with checkbox">
+                                    <input type="date" class="form-control" name="jawaban-11[]" aria-label="Text input with checkbox">
                                     <br>
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
                                         <span style="font-weight: normal">Termin yang sudah diterima</span>
                                     </label><br>
                                     <!--end::Label-->
-                                    <input type="text" class="form-control" name="jawaban-12">
+                                    <input type="text" class="form-control" name="jawaban-12[]">
                                 </div>
                                 <div id="slide-7" class="animate slide" style="display: none; opacity: 0;">
                                     <!--begin::Label-->
@@ -12307,6 +12297,23 @@ aria-hidden="true">
                 {
                     extend: 'excelHtml5',
                     title: 'Data Pending Issue'
+                },
+                    'copy', 'pdf', 'print'
+                ]
+        } );
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+        $('#tinjauan-kontrak').DataTable( {
+            // dom: 'Bfrtip',
+            dom: 'Brti',
+            pageLength : 50,
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    title: 'Data Tinjauan Dokumen Kontrak'
                 },
                     'copy', 'pdf', 'print'
                 ]
