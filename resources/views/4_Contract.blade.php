@@ -204,7 +204,7 @@
                                 {{-- Begin :: Tab Content Tender Awal --}}
                                 <div class="tab-pane fade show active" id="kt_user_view_tender_awal" role="tabpanel">
                                     <!--begin::Table Claim-->
-                                    <table class="table align-middle table-row-dashed fs-6" id="kt_proyek_table">
+                                    <table class="table align-middle table-row-dashed fs-6" id="ccm-perolehan">
                                         <!--begin::Table head-->
                                         <thead>
                                             <!--begin::Table row-->
@@ -350,11 +350,6 @@
                                                     </tr>
                                                 @endif
                                             @empty
-                                                <tr>
-                                                    <td colspan="7">
-                                                        <p class="text-center bg-gray-200">Data proyek tidak ditemukan</p>
-                                                    </td>
-                                                </tr>
                                             @endforelse
                                         </tbody>
                                     </table>
@@ -365,7 +360,7 @@
                                 {{-- Begin :: Tab Content Pelaksanaan --}}
                                 <div class="tab-pane fade" id="kt_user_view_overview_pelaksanaan" role="tabpanel">
                                     <!--begin::Table Claim-->
-                                    <table class="table table-row-dashed" id="kt_proyek_table">
+                                    <table class="table table-row-dashed" id="ccm-pelaksanaan">
                                         <!--begin::Table head-->
                                         <thead>
                                             <!--begin::Table row-->
@@ -448,11 +443,6 @@
                                                     <!--end::Email-->
                                                 </tr>
                                             @empty
-                                                <tr>
-                                                    <td colspan="7">
-                                                        <p class="text-center bg-gray-200">Data proyek tidak ditemukan</p>
-                                                    </td>
-                                                </tr>
                                             @endforelse
                                         </tbody>
                                     </table>
@@ -463,7 +453,7 @@
                                 {{-- Begin :: Tab Content Closing Proyek --}}
                                 <div class="tab-pane fade" id="kt_user_view_overview_closing_proyek" role="tabpanel">
                                     <!--begin::Table Claim-->
-                                    <table class="table table-row-dashed" id="kt_proyek_table">
+                                    <table class="table table-row-dashed" id="ccm-pemeliharaan">
                                         <!--begin::Table head-->
                                         <thead>
                                             <!--begin::Table row-->
@@ -543,11 +533,6 @@
                                                     <!--end::Tanggal Selesai=-->
                                                 </tr>
                                             @empty
-                                                <tr>
-                                                    <td colspan="7">
-                                                        <p class="text-center bg-gray-200">Data proyek tidak ditemukan</p>
-                                                    </td>
-                                                </tr>
                                             @endforelse
                                         </tbody>
                                     </table>
@@ -575,6 +560,35 @@
     <!--end::Root-->
 
     <!--end::Modals-->
+@endsection
+
+@section('js-script')
+    <!--begin::Data Tables-->
+    <script src="/datatables/jquery.dataTables.min.js"></script>
+    <script src="/datatables/dataTables.buttons.min.js"></script>
+    <script src="/datatables/buttons.html5.min.js"></script>
+    <script src="/datatables/buttons.colVis.min.js"></script>
+    <script src="/datatables/jszip.min.js"></script>
+    <script src="/datatables/pdfmake.min.js"></script>
+    <script src="/datatables/vfs_fonts.js"></script>
+    <!--end::Data Tables-->
+
+    <script>
+        $(document).ready(function() {
+            $('#ccm-perolehan, #ccm-pelaksanaan, #ccm-pemeliharaan').DataTable( {
+                // dom: 'Bfrtip',
+                // dom: 'Brti',
+                pageLength : 10,
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        title: 'Data Tinjauan Dokumen Kontrak'
+                    },
+                        'copy', 'pdf', 'print'
+                    ]
+            } );
+        });
+    </script>
 @endsection
 
 <!--begin::modal DELETE-->

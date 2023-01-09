@@ -455,15 +455,15 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="">Pilih Kode Unik</span>
+                                                                        <span class="">Tipe Kode Unik</span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
                                                                     <input type="text" class="form-control form-control-solid" id="select-kode-unik" name="input-kode-unik"
-                                                                        value="unique_code" placeholder="Pilih Kode Unik" style="display: none" />
+                                                                        value="unique_code" placeholder="Tipe Kode Unik" style="display: none" />
                                                                     <div id="div-provinsi">
                                                                         <select name="unique_code" id="kode unik" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
-                                                                            data-placeholder="Pilih Kode Unik">
+                                                                            data-placeholder="Tipe Kode Unik">
                                                                             <option value=""></option>                                                                                                                                          
                                                                             <option value="Kode Bagian Anggaran" {{ $customer -> unique_code == "Kode Bagian Anggaran" ? "selected" : "" }}>Kode Bagian Anggaran</option>
                                                                             <option value="Kode Anggaran Provinsi" {{ $customer -> unique_code == "Kode Anggaran Provinsi" ? "selected" : "" }}>Kode Anggaran Provinsi</option>
@@ -565,7 +565,7 @@
                                                                             <select name="kabupaten" id="kabupaten" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
                                                                                 onchange="selectKabupaten(this)" data-placeholder="Pilih Customer Kabupaten">
                                                                                 <option value=""></option>
-                                                                                @if (isset($data_kabupaten))
+                                                                                @if (!empty($data_kabupaten))
                                                                                     @foreach ($data_kabupaten as $kabupaten)
                                                                                         @if ($kabupaten->name == $customer->kota_kabupaten)
                                                                                             <option value="{{ $kabupaten->name }}" selected>
@@ -875,7 +875,7 @@
                                                                     <th class="min-w-auto">Email</th>
                                                                     <th class="min-w-auto">Jabatan</th>
                                                                     <th class="min-w-auto">Kontak Nomor</th>
-                                                                    <th class="min-w-auto">Ultah PIC</th>
+                                                                    <th class="min-w-auto">Tanggah Lahir PIC</th>
                                                                     <th class="min-w-auto"></th>
                                                                 </tr>
                                                                 <!--end::Table row-->
@@ -886,7 +886,7 @@
                                                                 $no = 1;
                                                             @endphp
                                                             <tbody class="fw-bold text-gray-600">
-                                                                @foreach ($pics as $pic)
+                                                                @foreach ($customer->pic as $pic)
                                                                     <tr>
                                                                         <!--begin::Name-->
                                                                         <td class="text-center">
@@ -1008,7 +1008,7 @@
                                                             </div>
 
                                                             <!--Begin::Row-->
-                                                            <div class="row fv-row">
+                                                            {{-- <div class="row fv-row">
                                                                 <div class="col">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
@@ -1032,7 +1032,7 @@
                                                                     </select>
                                                                     <!--end::Input-->
                                                                 </div>
-                                                            </div>
+                                                            </div> --}}
                                                             <!--End::Row-->
                                                         </div>
                                                         <!--end::Data PIC MANRISK-->
@@ -1901,7 +1901,7 @@
                                                                     <th class="min-w-auto">Email</th>
                                                                     <th class="min-w-auto">Jabatan</th>
                                                                     <th class="min-w-auto">Kontak Nomor</th>
-                                                                    <th class="min-w-auto">Tgl Ulang Tahun</th>
+                                                                    <th class="min-w-auto">Tanggal Lahir</th>
                                                                     <th class="min-w-auto">Proyek Terkait</th>
                                                                     <th class="min-w-auto">Role</th>
                                                                     <th class="min-w-auto"></th>
@@ -3874,7 +3874,7 @@
                                 <div class="fv-row mb-7">
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
-                                        <span>Tanggal Ulang Tahun</span>
+                                        <span>Tanggal Lahir</span>
                                     </label>
                                     <!--end::Label-->
                                     <a href="#" class="btn" style="background: transparent;" id="start-date-modal" onclick="showCalendarModal(this)">
@@ -3882,12 +3882,39 @@
                                     </a>
                                     <!--end::Label-->
                                     <!--begin::Input-->
-                                    <input type="date" class="form-control form-control-solid" name="ultah-pic" value="" placeholder="Tanggal Ulang Tahun" />
+                                    <input type="date" class="form-control form-control-solid" name="ultah-pic" value="" placeholder="Tanggal Lahir" />
                                     <!--end::Input-->
                                 </div>
                                 <!--end::Input group-->
                             </div>
                             <!--End::Col-->
+
+                            <!--Begin::Col-->
+                            <div class="col">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="">Layer Segmentasi</span>
+                                    <i class="bi-info-circle-fill" class="btn btn-secondary mx-4"
+                                    data-bs-toggle="tooltip" data-bs-placement="top"
+                                    data-bs-custom-class="custom-tooltip"
+                                    data-bs-title="On Development"
+                                    data-bs-html="true"></i>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <select name="layer_segmentasi" id="layer_segmentasi" class="form-select form-select-solid pe-5" data-control="select2" data-hide-search="false"
+                                    data-placeholder="Pilih Layer Segmentasi">
+                                    <option value="" selected></option>
+                                    <option value="Decision Maker"{{ $customer -> layer_segmentasi == "Decision Maker" ? "selected" : "" }}>Decision Maker</option>
+                                    <option value="Influencer"{{ $customer -> layer_segmentasi == "Influencer" ? "selected" : "" }}>Influencer</option>
+                                    <option value="Buyer"{{ $customer -> layer_segmentasi == "Buyer" ? "selected" : "" }}>Buyer</option>
+                                    <option value="User"{{ $customer -> layer_segmentasi == "User" ? "selected" : "" }}>User</option>
+                                    <option value="Gate Keeper"{{ $customer -> layer_segmentasi == "Gate Keeper" ? "selected" : "" }}>Gate Keeper</option>
+                                </select>
+                                <!--end::Input-->
+                            </div>
+                            <!--End::Col-->
+
                         </div>
                         <!--End begin::Row-->
 
@@ -3908,7 +3935,7 @@
     <!--end::modal PIC-->
 
     <!--begin::modal Edit PIC-->
-    @foreach ($pics as $pic)
+    @foreach ($customer->pic as $pic)
         <form action="/customer/pic/{{ $pic->id }}/edit" method="post" enctype="multipart/form-data">
             @csrf
 
@@ -4020,20 +4047,47 @@
                                     <div class="fv-row mb-7">
                                         <!--begin::Label-->
                                         <label class="fs-6 fw-bold form-label mt-3">
-                                            <span>Tanggal Ulang Tahun</span>
+                                            <span>Tanggal Lahir</span>
                                         </label>
+                                        @php
+                                            $tanggal_lahir_pic = Carbon\Carbon::create($pic->ultah_pic)->format("Y-m-d");
+                                        @endphp
                                         <!--end::Label-->
                                         <a href="#" class="btn" style="background: transparent;" id="start-date-modal" onclick="showCalendarModal(this)">
                                             <i class="bi bi-calendar2-plus-fill" style="color: #008CB4"></i>
                                         </a>
                                         <!--end::Label-->
                                         <!--begin::Input-->
-                                        <input type="date" class="form-control form-control-solid" name="ultah-pic" value="" placeholder="Tanggal Ulang Tahun" />
+                                        <input type="date" class="form-control form-control-solid" name="ultah-pic" value="{{ $tanggal_lahir_pic }}" placeholder="Tanggal Lahir" />
                                         <!--end::Input-->
                                     </div>
                                     <!--end::Input group-->
                                 </div>
                                 <!--End::Col-->
+
+                                <!--Begin::Col-->
+                            <div class="col">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="">Layer Segmentasi</span>
+                                    <i class="bi-info-circle-fill" class="btn btn-secondary mx-4"
+                                    data-bs-toggle="tooltip" data-bs-placement="top"
+                                    data-bs-custom-class="custom-tooltip"
+                                    data-bs-title="On Development"
+                                    data-bs-html="true"></i>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <select name="layer_segmentasi" id="layer_segmentasi_{{$pic->id}}" class="form-select form-select-solid pe-5" data-control="select2" data-hide-search="false"
+                                    data-placeholder="Pilih Layer Segmentasi">
+                                    <option value="" selected></option>
+                                    <option value="Decision Maker"{{ $pic -> layer_segmentasi == "Decision Maker" ? "selected" : "" }}>Decision Maker</option>
+                                    <option value="Influencer"{{ $pic -> layer_segmentasi == "Influencer" ? "selected" : "" }}>Influencer</option>
+                                    <option value="Buyer"{{ $pic -> layer_segmentasi == "Buyer" ? "selected" : "" }}>Buyer</option>
+                                    <option value="User"{{ $pic -> layer_segmentasi == "User" ? "selected" : "" }}>User</option>
+                                    <option value="Gate Keeper"{{ $pic -> layer_segmentasi == "Gate Keeper" ? "selected" : "" }}>Gate Keeper</option>
+                                </select>
+                                <!--end::Input-->
                             </div>
                             <!--End begin::Row-->
                             
@@ -4055,7 +4109,7 @@
     <!--end::modal Edit PIC-->
 
     <!--begin::DELETE PIC-->
-    @foreach ($pics as $pic)
+    @foreach ($customer->pic as $pic)
         <form action="/customer/pic/{{ $pic->id }}/delete" method="post" enctype="multipart/form-data">
             @method('delete')
             @csrf
@@ -4215,7 +4269,7 @@
                                 <div class="fv-row mb-7">
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
-                                        <span>Tanggal Ulang Tahun</span>
+                                        <span>Tanggal Lahir</span>
                                     </label>
                                     <!--end::Label-->
                                     <a href="#" class="btn" style="background: transparent;" id="start-date-modal" onclick="showCalendarModal(this)">
@@ -4223,7 +4277,7 @@
                                     </a>
                                     <!--end::Label-->
                                     <!--begin::Input-->
-                                    <input type="date" class="form-control form-control-solid" name="ultah-struktur" value="" placeholder="Tanggal Ulang Tahun" />
+                                    <input type="date" class="form-control form-control-solid" name="ultah-struktur" value="" placeholder="Tanggal Lahir" />
                                     <!--end::Input-->
                                 </div>
                                 <!--end::Input group-->
@@ -4416,7 +4470,7 @@
                                     <div class="fv-row mb-7">
                                         <!--begin::Label-->
                                         <label class="fs-6 fw-bold form-label mt-3">
-                                            <span>Tanggal Ulang Tahun</span>
+                                            <span>Tanggal Lahir</span>
                                         </label>
                                         <!--end::Label-->
                                         <a href="#" class="btn" style="background: transparent;" id="start-date-modal" onclick="showCalendarModal(this)">
@@ -4425,7 +4479,7 @@
                                         <!--end::Label-->
                                         <!--begin::Input-->
                                         <input type="date" class="form-control form-control-solid" name="ultah-struktur" value="{{ $struktur->ultah_struktur }}"
-                                            placeholder="Tanggal Ulang Tahun" />
+                                            placeholder="Tanggal Lahir" />
                                         <!--end::Input-->
                                     </div>
                                     <!--end::Input group-->

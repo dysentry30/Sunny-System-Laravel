@@ -1339,13 +1339,21 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                         @php
                                                                                             
                                                                                             if($proyek->tipe_proyek == "R") {
-                                                                                                $total_ok_new = $forecasts->sum(function($f) {
-                                                                                                    return (int) $f->rkap_forecast;
-                                                                                                });
-                                                                                                $total_ok_formatted = number_format($total_ok_new, 0, ',', '.');
+                                                                                                // $total_ok_new = $forecasts->sum(function($f) {
+                                                                                                //     // dump($f);
+                                                                                                //     return (int) $f->rkap_forecast;
+                                                                                                // });
+                                                                                                $total_ok_new = 0;
+                                                                                                foreach ($forecasts as $f) {
+                                                                                                    $string_ok = (string) $f->rkap_forecast;
+                                                                                                    $total_ok_new += (int) str_replace(".", "", $string_ok);
+                                                                                                }
+                                                                                                $total_ok_formatted = number_format(round($total_ok_new / $per_sejuta), 0, ',', '.');
+                                                                                                
                                                                                             } else {
                                                                                                 $total_ok_formatted = number_format($total_ok, 0, ',', '.');
                                                                                             }
+                                                                                            // dump($total_ok, $total_ok_new ?? 0);
                                                                                             $total_forecast_formatted = number_format($total_forecast, 0, ',', '.');
                                                                                             if(!empty($proyek->bulan_ri_perolehan)) {
                                                                                                 $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_perolehan) / $per_sejuta;
@@ -1681,13 +1689,19 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                         <!--begin::Total Side Coloumn-->
                                                                                         @php
                                                                                             if($proyek->tipe_proyek == "R") {
-                                                                                                $total_ok_new = $forecasts->sum(function($f) {
-                                                                                                    return (int) $f->rkap_forecast;
-                                                                                                });
-                                                                                                $total_ok_formatted = number_format($total_ok_new, 0, ',', '.');
+                                                                                                // $total_ok_new = $forecasts->sum(function($f) {
+                                                                                                //     return (int) $f->rkap_forecast;
+                                                                                                // });
+                                                                                                $total_ok_new = 0;
+                                                                                                foreach ($forecasts as $f) {
+                                                                                                    $string_ok = (string) $f->rkap_forecast;
+                                                                                                    $total_ok_new += (int) str_replace(".", "", $string_ok);
+                                                                                                }
+                                                                                                $total_ok_formatted = number_format(round($total_ok_new / $per_sejuta), 0, ',', '.');
                                                                                             } else {
                                                                                                 $total_ok_formatted = number_format($total_ok, 0, ',', '.');
                                                                                             }
+                                                                                            // dump($total_ok, $total_ok_new ?? 0);
                                                                                             $total_forecast_formatted = number_format($total_forecast, 0, ',', '.');
                                                                                             if(!empty($proyek->bulan_ri_perolehan)) {
                                                                                                 $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_perolehan) / $per_sejuta;

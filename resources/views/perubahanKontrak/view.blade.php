@@ -1151,10 +1151,9 @@
                         window.location.reload();
                     }, 3000);
                 } else {
-                    toaster.classList.add("text-bg-danger");
                     Toast.fire({
                         icon: "error",
-                        html: "Update Stage gagal diperbarui, pastikan anda membuat addendum terlebih dahulu!",
+                        html: setStage.msg,
                     });
                     // document.querySelector(".toast-body").innerText = setStage.msg;
                     // toasterBoots.show()
