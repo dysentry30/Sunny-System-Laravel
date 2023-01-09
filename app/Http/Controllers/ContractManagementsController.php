@@ -90,7 +90,7 @@ class ContractManagementsController extends Controller
             // $proyeks_pelaksanaan_closing_proyek = DB::table("proyeks as p")->select(["p.*", "c.stages"])->join("contract_managements as c", "c.project_id", "=", "p.kode_proyek")->where("c.stages", 5)->get()->map(function ($data) {
             //     return self::stdClassToModel($data, Proyek::class);
             // });
-            $unitkerjas = UnitKerja::get()->whereNotIn("unit_kerja", ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "8"]);
+            $unitkerjas = UnitKerja::get()->whereNotIn("divcode", ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "8"]);
             if (!empty($filterUnit)) {
                 $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("unit_kerja", "=", $filterUnit)->get()->whereNotIn("unit_kerja", ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "8"]);
             } else if (!empty($filterJenis)) {
@@ -377,10 +377,16 @@ class ContractManagementsController extends Controller
             Session::forget("pasals");
         }
 
-        $draftContracts = DraftContracts::join("contract_managements as c", "draft_contracts.id_contract", "=", "c.id_contract")->select("draft_contracts.*")->get();
-        $review_contracts = ReviewContracts::join("draft_contracts as d", "review_contracts.id_draft_contract", "=", "d.id_draft")->select("review_contracts.*")->get();
+        // $draftContracts = DraftContracts::join("contract_managements as c", "draft_contracts.id_contract", "=", "c.id_contract")->select("draft_contracts.*")->get();
+        // $review_contracts = ReviewContracts::join("draft_contracts as d", "review_contracts.id_draft_contract", "=", "d.id_draft")->select("review_contracts.*")->get();
         $projects = Proyek::all();
-        return view('Contract/view', ["contract" => ContractManagements::find(urldecode(urldecode($id_contract))), "draftContracts" => $draftContracts, "review_contracts" => $review_contracts, "projects" => $projects]);
+        $ccm = ContractManagements::find(urldecode(urldecode($id_contract)));
+        $ccm = $ccm->reviewProjects->groupBy(function($rp) {
+            return $rp;
+        });
+        // dd($ccm);
+
+        return view('Contract/view', ["contract" => ContractManagements::find(urldecode(urldecode($id_contract))), "projects" => $projects, "review" => ReviewContracts::where('stage', 1)->get()]);
     }
 
 
@@ -471,63 +477,118 @@ class ContractManagementsController extends Controller
     }
 
     // Upload Review of Contract to Server or Database
-    public function reviewContractUpload(Request $request, ReviewContracts $reviewContracts)
-    {
-        // $faker = new Uuid();
-        // $id_document = (string) $faker->uuid3();
-        // $file = $request->file("attach-file-review");
+    // public function reviewContractUpload(Request $request, ReviewContracts $reviewContracts)
+    // {
+    //     // $faker = new Uuid();
+    //     // $id_document = (string) $faker->uuid3();
+    //     // $file = $request->file("attach-file-review");
+    //     $data = $request->all();
+    //     // dd($data);
+    //     // $messages = [
+    //     //     "required" => "Field di atas wajib diisi",
+    //     //     "numeric" => "Field di atas harus numeric",
+    //     //     "file" => "This field must be file only",
+    //     //     "string" => "This field must be alphabet only",
+    //     // ];
+
+    //     // $is_input_has_set = $data["ketentuan-review"] != null ||
+    //     //     $data["id-draft-contract"] != null ||
+    //     //     $data["id-contract"] != null;
+    //     // $data["pic-cross-review"] != null ||
+    //     // $data["catatan-review"] != null;
+
+    //     // if(isset($data["upload-review"]) && !$is_input_has_set) {
+    //     //     $rules = [
+    //     //         "upload-review" => "required|file",
+    //     //     ];
+    //     // } else if(!isset($data["upload-review"]) && $is_input_has_set) {
+    //     //     $rules = [
+    //     //         "ketentuan-review" => "required|string",
+    //     //         "sub-pasal-review" => "required|string",
+    //     //         "uraian-penjelasan-review" => "required|string",
+    //     //         "catatan-review" => "required|string",
+    //     //         "pic-cross-review" => "required|numeric",
+    //     //         "id-contract" => "required|string",
+    //     //     ];
+    //     // } else {
+    //     //     Alert::error("Error", "Pilih salah satu untuk dijadikan masukan");
+    //     //     return redirect()->back();
+    //     // }
+
+    //     // $is_tender_menang = !empty($data["is-tender-menang"]) ? 1 : 0;
+    //     $rules = [
+    //         "ketentuan-review" => "required|string",
+    //         // "sub-pasal-review" => "required|string",
+    //         // "uraian-penjelasan-review" => "required|string",
+    //         // "catatan-review" => "required|string",
+    //         // "pic-cross-review" => "required|numeric",
+    //         "id-contract" => "required|string",
+    //         "id-draft-contract" => "required|numeric",
+    //         "input-pasal" => "required|string",
+    //     ];
+    //     $validation = Validator::make($data, $rules, $messages);
+    //     if ($validation->fails()) {
+    //         // dd($validation->errors());
+    //         Alert::error('Error', "Review Contract gagal diperbarui");
+    //         return Redirect::back()->with("modal", $data["modal-name"]);
+    //         // return Redirect::back();
+    //     }
+
+
+    //     // Check ID Contract exist
+    //     $is_id_contract_exist = ContractManagements::find($data["id-contract"]);
+
+    //     if (empty($is_id_contract_exist)) {
+    //         // Session::flash("failed", "Please fill 'Draft Contract' empty field");
+    //         Alert::error('Error', "Pastikan contract sudah dibuat terlebih dahulu");
+    //         return Redirect::back();
+    //     }
+    //     $validation->validate();
+
+    //     if (isset($data["upload-review"]) && !$is_input_has_set) {
+    //         // $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReader("Xlsx");
+    //         // $spreadsheet = $reader->load($data["upload-review"]);
+    //         $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($data["upload-review"]);
+    //         $spreadsheet = $spreadsheet->getActiveSheet()->toArray();
+    //         array_shift($spreadsheet);
+    //         foreach ($spreadsheet as $data_excel) {
+    //             $reviewContractsExcel = new ReviewContracts();
+    //             $reviewContractsExcel->ketentuan = $data_excel[0];
+    //             $reviewContractsExcel->stage = $data["stage"];
+    //             $reviewContractsExcel->sub_pasal = $data_excel[1];
+    //             $reviewContractsExcel->uraian = $data_excel[2];
+    //             $reviewContractsExcel->pic_cross = $data_excel[3];
+    //             $reviewContractsExcel->catatan = $data_excel[4];
+    //             $reviewContractsExcel->id_contract = $is_id_contract_exist->id_contract;
+    //             $reviewContractsExcel->save();
+    //         }
+    //         Alert::success("Success", "Data berhasil di import ");
+    //         return redirect()->back();
+    //         // moveFileTemp($file, $id_document);
+    //     } else {
+    //         $reviewContracts->stage = $data["stage"];
+    //         $reviewContracts->ketentuan = $data["ketentuan-review"];
+    //         $reviewContracts->id_draft_contract = $data["id-draft-contract"];
+    //         $reviewContracts->id_contract = $data["id-contract"];
+    //         $reviewContracts->pasal_perubahan = $data["input-pasal"];
+    //         // $reviewContracts->sub_pasal = $data["sub-pasal-review"];
+    //         // $reviewContracts->uraian = $data["uraian-penjelasan-review"];
+    //         // $reviewContracts->pic_cross = $data["pic-cross-review"];
+    //         // $reviewContracts->catatan = $data["catatan-review"];
+    //     }
+
+    //     if ($reviewContracts->save()) {
+    //         Alert::success('Success', "Review Contract berhasil dibuat");
+    //         return redirect($_SERVER["HTTP_REFERER"]);
+    //     }
+    //     Alert::error('Error', "Review Contract gagal dibuat");
+    //     return Redirect::back()->with("modal", $data["modal-name"]);
+    //     // return redirect($_SERVER["HTTP_REFERER"]);
+    // }
+
+    public function reviewContractUpload(Request $request){
         $data = $request->all();
         // dd($data);
-        $messages = [
-            "required" => "Field di atas wajib diisi",
-            "numeric" => "Field di atas harus numeric",
-            "file" => "This field must be file only",
-            "string" => "This field must be alphabet only",
-        ];
-
-        $is_input_has_set = $data["ketentuan-review"] != null ||
-            $data["id-draft-contract"] != null ||
-            $data["id-contract"] != null;
-        // $data["pic-cross-review"] != null ||
-        // $data["catatan-review"] != null;
-
-        // if(isset($data["upload-review"]) && !$is_input_has_set) {
-        //     $rules = [
-        //         "upload-review" => "required|file",
-        //     ];
-        // } else if(!isset($data["upload-review"]) && $is_input_has_set) {
-        //     $rules = [
-        //         "ketentuan-review" => "required|string",
-        //         "sub-pasal-review" => "required|string",
-        //         "uraian-penjelasan-review" => "required|string",
-        //         "catatan-review" => "required|string",
-        //         "pic-cross-review" => "required|numeric",
-        //         "id-contract" => "required|string",
-        //     ];
-        // } else {
-        //     Alert::error("Error", "Pilih salah satu untuk dijadikan masukan");
-        //     return redirect()->back();
-        // }
-
-        // $is_tender_menang = !empty($data["is-tender-menang"]) ? 1 : 0;
-        $rules = [
-            "ketentuan-review" => "required|string",
-            // "sub-pasal-review" => "required|string",
-            // "uraian-penjelasan-review" => "required|string",
-            // "catatan-review" => "required|string",
-            // "pic-cross-review" => "required|numeric",
-            "id-contract" => "required|string",
-            "id-draft-contract" => "required|numeric",
-            "input-pasal" => "required|string",
-        ];
-        $validation = Validator::make($data, $rules, $messages);
-        if ($validation->fails()) {
-            // dd($validation->errors());
-            Alert::error('Error', "Review Contract gagal diperbarui");
-            return Redirect::back()->with("modal", $data["modal-name"]);
-            // return Redirect::back();
-        }
-
 
         // Check ID Contract exist
         $is_id_contract_exist = ContractManagements::find($data["id-contract"]);
@@ -535,49 +596,34 @@ class ContractManagementsController extends Controller
         if (empty($is_id_contract_exist)) {
             // Session::flash("failed", "Please fill 'Draft Contract' empty field");
             Alert::error('Error', "Pastikan contract sudah dibuat terlebih dahulu");
-            return Redirect::back();
-        }
-        $validation->validate();
-
-        if (isset($data["upload-review"]) && !$is_input_has_set) {
-            // $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReader("Xlsx");
-            // $spreadsheet = $reader->load($data["upload-review"]);
-            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($data["upload-review"]);
-            $spreadsheet = $spreadsheet->getActiveSheet()->toArray();
-            array_shift($spreadsheet);
-            foreach ($spreadsheet as $data_excel) {
-                $reviewContractsExcel = new ReviewContracts();
-                $reviewContractsExcel->ketentuan = $data_excel[0];
-                $reviewContractsExcel->stage = $data["stage"];
-                $reviewContractsExcel->sub_pasal = $data_excel[1];
-                $reviewContractsExcel->uraian = $data_excel[2];
-                $reviewContractsExcel->pic_cross = $data_excel[3];
-                $reviewContractsExcel->catatan = $data_excel[4];
-                $reviewContractsExcel->id_contract = $is_id_contract_exist->id_contract;
-                $reviewContractsExcel->save();
-            }
-            Alert::success("Success", "Data berhasil di import ");
-            return redirect()->back();
-            // moveFileTemp($file, $id_document);
-        } else {
-            $reviewContracts->stage = $data["stage"];
-            $reviewContracts->ketentuan = $data["ketentuan-review"];
-            $reviewContracts->id_draft_contract = $data["id-draft-contract"];
-            $reviewContracts->id_contract = $data["id-contract"];
-            $reviewContracts->pasal_perubahan = $data["input-pasal"];
-            // $reviewContracts->sub_pasal = $data["sub-pasal-review"];
-            // $reviewContracts->uraian = $data["uraian-penjelasan-review"];
-            // $reviewContracts->pic_cross = $data["pic-cross-review"];
-            // $reviewContracts->catatan = $data["catatan-review"];
+            return Redirect::back()->with("modal", $data["modal-name"]);
+            // return Redirect::back();
         }
 
-        if ($reviewContracts->save()) {
-            Alert::success('Success', "Review Contract berhasil dibuat");
-            return redirect($_SERVER["HTTP_REFERER"]);
-        }
-        Alert::error('Error', "Review Contract gagal dibuat");
-        return Redirect::back()->with("modal", $data["modal-name"]);
-        // return redirect($_SERVER["HTTP_REFERER"]);
+        // $kategori = $data["kategori"];
+        $kategori = collect($data["kategori"]);
+        $sub_pasal = collect($data["sub-pasal"]);
+        $uraian = collect($data["uraian"]);
+        $pic = collect($data["pic"]);
+        $catatan = collect($data["catatan"]);
+        // dd($kategori, $sub_pasal, $uraian, $pic, $catatan);
+
+        $kategori->each(function($item, $key) use($sub_pasal, $uraian, $pic, $catatan, $data){
+            $review_kontrak = new ReviewContracts();
+            $review_kontrak->id_contract = $data["id-contract"];
+            $review_kontrak->stage = $data["stage"];
+            $review_kontrak->kategori = $item;
+            $review_kontrak->sub_pasal = $sub_pasal[$key];
+            $review_kontrak->uraian = $uraian[$key];
+            $review_kontrak->pic = $pic[$key];
+            $review_kontrak->catatan = $catatan[$key];
+            // dd($review_kontrak);
+            $review_kontrak->save();
+        });
+        Alert::success('Success', "Review Kontrak berhasil ditambahkan");
+        return Redirect::back();
+        // $data["kategori"]->each(function($item, $key){
+        // });
     }
 
     // Upload Issue Project of Contract to server or database
@@ -2453,6 +2499,464 @@ class ContractManagementsController extends Controller
         return view("perubahanKontrak/view", compact(["contract", "perubahan_kontrak"]));
     }
 
+    public function getChecklistManajemenKontrak(ContractManagements $id_contract, ContractChecklist $id) {
+        // dd($id_contract, $id);
+        // dd($id);
+        $html = '';
+        if($id->kategori == 'Progress 0-20%') {
+            $html = "<div id='progress_0-20'>
+                <div id='slide-2' >
+                    <!--begin::Label-->
+                    <label class='fs-6 fw-bold form-label mt-3'>
+                        <span style='font-weight: normal'>Kategori</span>
+                    </label>
+                    <!--end::Label-->
+                    <h6>$id->kategori</h6>
+                    <!--begin::Label-->
+                    <label class='fs-6 fw-bold form-label mt-3'>
+                        <span style='font-weight: normal'>Apakah SPK telah diterima?</span>
+                    </label>
+                    <!--end::Label-->
+                    <!--begin::Input-->
+                    <br>
+                    <!--end::Input-->
+                    <h6>$id->jawaban_1, " . Carbon::create($id->sub_jawaban_1)->translatedFormat('d F Y') . "</h6>
+                    <!--end::Input-->
+                </div>
+                
+                <div id='slide-3' >
+                    <!--begin::Label-->
+                    <label class='fs-6 fw-bold form-label mt-3'>
+                        <span style='font-weight: normal'>Apakah sudah ada berita Acara serah terima lapangan?</span>
+                    </label>
+                    <!--end::Label-->
+                    <h6>$id->jawaban_2, " . ($id->jawaban_2 == "Ya" ? Carbon::parse($id->sub_jawaban_2)->translatedFormat('d F Y') : $id->sub_jawaban_2) . "</h6>
+                </div>
+                
+                <div id='slide-4' >
+                    <!--begin::Label-->
+                    <label class='fs-6 fw-bold form-label mt-3'>
+                        <span style='font-weight: normal'>Apakah Jadwal Pelaksanaan telah disetujui oleh Engineer?</span>
+                    </label>
+                    <!--end::Label-->
+                    <h6>$id->jawaban_3</h6>
+
+                    <!--begin::Label-->
+                    <label class='fs-6 fw-bold form-label mt-3'>
+                        <span style='font-weight: normal'>Apakah jadwal diatas mengutamakan ketergantungan kegiatan WIKA kepada Pemberi Kerja dan Mitranya?</span>
+                    </label>
+                    <!--end::Label-->
+                    <h6>$id->jawaban_4</h6>
+                    
+                </div>
+
+                <div id='slide-5' >
+                    <!--begin::Label-->
+                    <label class='fs-6 fw-bold form-label mt-3'>
+                        <span style='font-weight: normal'>Siapa yang membuat Construction Schedule?</span>
+                    </label>
+                    <!--end::Label-->
+                    <h6>$id->jawaban_5</h6>
+                    
+                </div>
+
+                <div id='slide-6' >
+                    <!--begin::Label-->
+                    <label class='fs-6 fw-bold form-label mt-3'>
+                        <span style='font-weight: normal'>Apakah Proyek memiliki Buku Harian tentang?</span>
+                    </label>
+                    <!--end::Label-->
+                    <h6>$id->jawaban_6" . ($id->jawaban_6 == "Lainnya" ? ", $id->sub_jawaban_6" : "") . "</h6>
+                </div>
+
+                <div id='slide-7' >
+                    <!--begin::Label-->
+                    <label class='fs-6 fw-bold form-label mt-3'>
+                        <span style='font-weight: normal'>Penanggung Jawab Pelaksanaan Penghitungan / Pengukuran Nilai Pekerjaan Terlaksana?</span>
+                    </label>
+                    <!--end::Label-->
+                    <h6 class='fw-normal'>Siapa?</h6>
+                    <h6>$id->jawaban_7</h6><br>
+                    <h5 class='fw-normal'>Kapan</h5>
+                    <h6>$id->jawaban_8, ". Carbon::parse($id->sub_jawaban_8)->translatedFormat('d F Y') . "</h6><br>
+                    <h5 class='fw-normal'>Bagaimana cara melaksanakannya ?</h5>
+                    <h6>$id->jawaban_9, ". ($id->jawaban_9 == "Cara Lain" ? $id->sub_jawaban_9 : "") ."</h6>
+                    <br>
+                </div>
+
+                <div id='slide-8' >
+                    <!--begin::Label-->
+                    <label class='fs-6 fw-bold form-label mt-3'>
+                        <span style='font-weight: normal'>Apakah Proyek memiliki Identifikasi Gambar ?</span>
+                    </label>
+                    <h6>$id->jawaban_10</h6>
+                    <br>
+                    <!--begin::Label-->
+                    <label class='fs-6 fw-bold form-label mt-3'>
+                        <span style='font-weight: normal'>Apakah Proyek memiliki Pengarsipan Surat-menyurat ?</span>
+                    </label>
+                    <h6>$id->jawaban_11</h6>
+                    <br>
+                </div>
+
+                <div id='slide-9' >
+                    <!--begin::Label-->
+                    <label class='fs-6 fw-bold form-label mt-3'>
+                        <span style='font-weight: normal'>Apakah Proyek memiliki Sistem Pendistribusian Dokumen ?</span>
+                    </label>
+                    <h6>$id->jawaban_12</h6>
+
+
+                    <!--begin::Label-->
+                    <label class='fs-6 fw-bold form-label mt-3'>
+                        <span style='font-weight: normal'>Apakah Proyek memiliki ketetapan tertulis tentang <b>Bench Mark</b> ?</span>
+                    </label>
+                    <h6>$id->jawaban_13</h6>
+                    
+                </div>
+
+                <div id='slide-10' >
+                    <!--begin::Label-->
+                    <label class='fs-6 fw-bold form-label mt-3'>
+                        <span style='font-weight: normal'>Apakah Jaminan Penawaran telah ditarik Kembali ?</span>
+                    </label>
+                    <!--end::Label-->
+                    <h6>$id->jawaban_14</h6>
+                    
+
+                    <!--begin::Label-->
+                    <label class='fs-6 fw-bold form-label mt-3'>
+                        <span style='font-weight: normal'>Apakah Jaminan Pelaksanaan telah Diterbitkan ?</span>
+                    </label>
+                    <!--end::Label-->
+                    <h6>$id->jawaban_15</h6>
+                    
+                </div>
+
+                <div id='slide-11' >
+                    <!--begin::Label-->
+                    <label class='fs-6 fw-bold form-label mt-3'>
+                        <span style='font-weight: normal'>Apakah Jaminan Uang Muka telah Diterbitkan ?</span>
+                    </label>
+                    <!--end::Label-->
+                    <h6>$id->jawaban_16</h6>
+                    
+
+                    <!--begin::Label-->
+                    <label class='fs-6 fw-bold form-label mt-3'>
+                        <span style='font-weight: normal'>Apakah Program Asuransi telah disetujui oleh Pemberi Tugas (Employer) ?</span>
+                    </label>
+                    <!--end::Label-->
+                    <h6>$id->jawaban_17</h6>
+
+                </div>
+                
+                <div id='slide-12' >
+                    <!--begin::Label-->
+                    <label class='fs-6 fw-bold form-label mt-3'>
+                        <span style='font-weight: normal'>Material Damage</span>
+                    </label>
+                    <!--end::Label-->
+                    <h6>$id->jawaban_18</h6>
+                    
+                    <br>
+
+                    <!--begin::Label-->
+                    <label class='fs-6 fw-bold form-label mt-3'>
+                        <span style='font-weight: normal'>Third Party Liability</span>
+                    </label>
+                    <!--end::Label-->
+                    <h6>$id->jawaban_19</h6>
+                    
+                    <br>
+
+                    <!--begin::Label-->
+                    <label class='fs-6 fw-bold form-label mt-3'>
+                        <span style='font-weight: normal'>Polis tersebut dibuat atas nama</span>
+                    </label>
+                    <!--end::Label-->
+                    <h6>$id->jawaban_20</h6>
+                </div>
+
+                <div id='slide-13' >
+                    <!--begin::Label-->
+                    <label class='fs-6 fw-bold form-label mt-3'>
+                        <span style='font-weight: normal'>Apakah Perubahan-perubahan yang terjadi telah dilaporkan kepada Asuransi (antisipasi atas perpanjangan waktu dan/atau No Risk Period) ?</span>
+                    </label>
+                    <h6>$id->jawaban_21</h6>
+
+
+                    <!--begin::Label-->
+                    <label class='fs-6 fw-bold form-label mt-3'>
+                        <span style='font-weight: normal'>Apakah upaya penghindaran kecelakaan sudah dilaksanakan ?</span>
+                    </label>
+                    <!--end::Label-->
+                    <h6>$id->jawaban_22</h6>
+                    
+                    <!--begin::Label-->
+                    <label class='fs-6 fw-bold form-label mt-3'>
+                        <span style='font-weight: normal'>Apakah kerugian yang terjadi akibat kejadian yang diasuransikan telah dilaporkan kepada Perusahaan Asuransi? ?</span>
+                    </label>
+                    <!--end::Label-->
+                    <h6>$id->jawaban_23</h6>
+                </div>
+            </div>";
+        } else if($id->kategori == 'Progress 20%-90%') {
+            $html = "
+            <div id='progress_20-90'>
+                <div id='slide-2' >
+                    <!--begin::Label-->
+                    <label class='fs-6 fw-bold form-label mt-3'>
+                        <span style='font-weight: normal'>Apakah Proyek mengalami keterlambatan?</span>
+                    </label>
+                    <!--end::Label-->
+                    <h6>$id->jawaban_1, $id->sub_jawaban_1%</h6>
+                    <!--end::Input-->
+                </div><br>
+
+                <div id='slide-3' >
+                    <!--begin::Label-->
+                    <label class='fs-6 fw-bold form-label mt-3'>
+                        <span style='font-weight: normal'>Apakah Proyek mengadakan Rapat rutin?</span>
+                    </label>
+                    <h6>$id->jawaban_2, $id->sub_jawaban_2</h6>
+                    <!--end::Label-->
+                </div><br>
+
+                <div id='slide-4' >
+                    <!--begin::Label-->
+                    <label class='fs-6 fw-bold form-label mt-3'>
+                        <span style='font-weight: normal'>Apakah ada kejadian yang dapat menyebabkan perubahan jadwal?</span>
+                    </label>
+                    <!--end::Label-->
+                    <h6>$id->jawaban_3</h6>
+
+                    <br>
+
+                    <!--begin::Label-->
+                    <label class='fs-6 fw-bold form-label mt-3'>
+                        <span style='font-weight: normal'>Apakah ada kejadian yang dapat menyebabkan Perubahan Pekerjaan / Change Order / Variation Order?</span>
+                    </label>
+                    <!--end::Label-->
+                    <h6>$id->jawaban_4</h6>
+                    <br>
+
+                    <!--begin::Label-->
+                    <label class='fs-6 fw-bold form-label mt-3'>
+                        <span style='font-weight: normal'>Apakah ada kejadian yang dapat menyebabkan Penghentian Pekerjaan (Suspension)?</span>
+                    </label>
+                    <h6>$id->jawaban_5</h6>
+                    <!--end::Label-->
+                    <br>
+
+                    <!--begin::Label-->
+                    <label class='fs-6 fw-bold form-label mt-3'>
+                        <span style='font-weight: normal'>Apakah ada kemungkinan kegiatan/kejadian yang mungkin menyebabkan Percepatan / Acceleration Pekerjaan?</span>
+                    </label>
+                    <h6>$id->jawaban_6</h6>
+                    <!--end::Label-->
+                    <br>
+
+                    <!--begin::Label-->
+                    <label class='fs-6 fw-bold form-label mt-3'>
+                        <span style='font-weight: normal'>Apakah Perintah/Instruksi resmi Lapangan mengenai perubahan telah terbit?</span>
+                    </label>
+                    <h6>$id->jawaban_7</h6>
+                    <!--end::Label-->
+                    
+                    <br>
+
+                    <!--begin::Label-->
+                    <label class='fs-6 fw-bold form-label mt-3'>
+                        <span style='font-weight: normal'>Apakah perubahan yang terjadi telah dimintakan konfirmasi dari Engineer / Pengawas Ahli?</span>
+                    </label>
+                    <h6>$id->jawaban_8</h6>
+                    <!--end::Label-->
+                    
+                    <br>
+
+                </div>
+
+                <div id='slide-5' >
+                    <!--begin::Label-->
+                    <label class='fs-6 fw-bold form-label mt-3'>
+                        <span style='font-weight: normal'>Tahapan yang telah dicapai dalam pengajuan Kompensasi atas perubahan - perubahan yang terjadi :</span>
+                    </label>
+                    <h6>$id->jawaban_9</h6>
+                    <!--end::Label-->
+                    <br>
+                </div>
+
+                <div id='slide-6' >
+                    <!--begin::Label-->
+                    <label class='fs-6 fw-bold form-label mt-3'>
+                        <span style='font-weight: normal'>Klausul Kontrak yang mengatur tentang perubahan (waktu/biaya/mutu)</span>
+                    </label>
+                    <h6>$id->jawaban_10, " . ($id->jawaban_10 == "Addenda" ? $id->sub_jawaban_10 : "") ." </h6>
+                    <!--end::Label-->
+                    <br>
+                </div>
+
+                <div id='slide-7' >
+                    <!--begin::Label-->
+                    <label class='fs-6 fw-bold form-label mt-3'>
+                        <span style='font-weight: normal'>Apakah Proyek akan membutuhkan Perpanjangan Waktu?</span>
+                    </label>
+                    <h6>$id->jawaban_11</h6>
+                    <!--end::Label-->
+                    <br>
+
+                    <!--begin::Label-->
+                    <label class='fs-6 fw-bold form-label mt-3'>
+                        <span style='font-weight: normal'>Apakah keinginan ini telah disampaikan kepada Engineer secara formal?</span>
+                    </label>
+                    <h6>$id->jawaban_12</h6>
+                    <!--end::Label-->
+                    <br>
+                </div>
+
+                <div id='slide-8' >
+                    <!--begin::Label-->
+                    <label class='fs-6 fw-bold form-label mt-3'>
+                        <span style='font-weight: normal'>Apa yang menjadi dasar kebutuhan akan Perpanjangan Waktu?</span>
+                    </label>
+                    <h6>$id->jawaban_13, " . ($id->jawaban_13 == "Lain-lain" ? $id->sub_jawaban_13 : "") . " </h6>
+                </div>
+            </div>
+            ";
+        } else if($id->kategori == 'Progress 90%-100%') {
+            $html = "
+            <div id='progress_90-100'>
+                <div id='slide-2'>
+                    <!--begin::Label-->
+                    <label class='fs-6 fw-bold form-label mt-3'>
+                        <span style='font-weight: normal'>Apakah besarnya Jaminan Uang Muka telah disesuaikan dengan jumlah Uang Muka yang masih terhutang?</span>
+                    </label>
+                    <!--end::Label-->
+                    <h6>$id->jawaban_1</h6>
+                    <br>
+                    <!--begin::Label-->
+                    <label class='fs-6 fw-bold form-label mt-3'>
+                        <span style='font-weight: normal'>Apakah Jaminan Uang Muka telah ditarik kembali?</span>
+                    </label>
+                    <!--end::Label-->
+                    <h6>$id->jawaban_2</h6>
+                    <br>
+
+                    <!--begin::Label-->
+                    <label class='fs-6 fw-bold form-label mt-3'>
+                        <span style='font-weight: normal'>Apakah permohonan untuk melaksanakan Serah Terima Pertama telah diajukan kepada Engineer?</span>
+                    </label>
+                    <!--end::Label-->
+                    <h6>$id->jawaban_3</h6>
+                </div>
+                <div id='slide-3'>
+                    <!--begin::Label-->
+                    <label class='fs-6 fw-bold form-label mt-3'>
+                        <span style='font-weight: normal'>Tahapan yang telah dicapai dalam program Serah Terima Pertama :</span>
+                    </label>
+                    <h6>$id->jawaban_4</h6>
+                    <!--end::Label-->
+                    <br>
+                </div>
+                <div id='slide-4'>
+                    <!--begin::Label-->
+                    <label class='fs-6 fw-bold form-label mt-3'>
+                        <span style='font-weight: normal'>Apakah Jaminan Pelaksanaan telah ditarik kembali?</span>
+                    </label>
+                    <h6>$id->jawaban_5</h6>
+                    <!--end::Label-->
+                    <br>
+                    <!--begin::Label-->
+                    <label class='fs-6 fw-bold form-label mt-3'>
+                        <span style='font-weight: normal'>Apakah Jaminan Pemeliharaan telah diganti dengan Bank Garansi?</span>
+                    </label>
+                    <h6>$id->jawaban_6</h6>
+                    <!--end::Label-->
+                    <br>
+                    <div class='garansi'>
+                    <!--begin::Label-->
+                    <label class='fs-6 fw-bold form-label mt-3'>
+                        <span style='font-weight: normal'>Bank Garansi seluruhnya akan ditarik kembali pada tanggal</span>
+                    </label>
+                    <h6>". Carbon::create($id->sub_jawaban_7)->translatedFormat("d F Y") ."</h6>
+                    <!--end::Label-->
+                    </div>
+                    <br>
+                    <div class='masa-pemeliharaan'>
+                        <!--begin::Label-->
+                        <label class='fs-6 fw-bold form-label mt-3'>
+                            <span style='font-weight: normal'>Masa Pemeliharaan akan berakhir pada tanggal</span>
+                        </label>
+                        <h6>". Carbon::create($id->sub_jawaban_8)->translatedFormat("d F Y") ."</h6>
+                        <!--end::Label-->
+                    </div>
+                    <br>
+                    <div class='serah-terima'>
+                        <!--begin::Label-->
+                        <label class='fs-6 fw-bold form-label mt-3'>
+                            <span style='font-weight: normal'>Permohonan Serah Terima Akhir akan diajukan pada tanggal</span>
+                        </label>
+                        <h6>". Carbon::create($id->sub_jawaban_9)->translatedFormat("d F Y") ."</h6>
+                        <!--end::Label-->
+                    </div>
+                    <br>
+                </div>
+                <div id='slide-5'>
+                    <!--begin::Label-->
+                    <label class='fs-6 fw-bold form-label mt-3'>
+                        <span style='font-weight: normal'>Nilai Kontrak Akhir :</span>
+                    </label>
+                    <h6>$id->jawaban_10</h6>
+                    <!--end::Label-->
+                    <br>
+                </div>
+                <div id='slide-6'>
+                <!--begin::Label-->
+                    <label class='fs-6 fw-bold form-label mt-3'>
+                        <span style='font-weight: normal'>Pembayaran Akhir (Final Payment) akan dilaksanakan pada tanggal</span>
+                    </label>
+                    <h6>". Carbon::create($id->sub_jawaban_11)->translatedFormat("d F Y") ." </h6>
+                    <!--end::Label-->
+                    <br>
+                    <!--begin::Label-->
+                    <label class='fs-6 fw-bold form-label mt-3'>
+                        <span style='font-weight: normal'>Termin yang sudah diterima</span>
+                    </label>
+                    <h6>Rp. " . number_format((int) $id->jawaban_12, 0, ".", ".") . "</h6>
+                    <br>
+                    <!--end::Label-->
+                </div>
+                <div id='slide-7'>
+                    <!--begin::Label-->
+                    <label class='fs-6 fw-bold form-label mt-3'>
+                        <span style='font-weight: normal'>Apakah ada kejadian yang dapat menyebabkan perubahan pekerjaan (Change Order) / Variation Order?</span>
+                    </label>
+                    <h6>$id->jawaban_13</h6>
+                    <!--end::Label-->
+                    <br>
+                    <!--begin::Label-->
+                    <label class='fs-6 fw-bold form-label mt-3'>
+                        <span style='font-weight: normal'>Apakah perintah/Instruksi resmi lapangan mengenai perubahan telah diterbitkan?</span>
+                    </label>
+                    <h6>$id->jawaban_14</h6>
+                    <!--end::Label-->
+                    <br>
+                    <!--begin::Label-->
+                    <label class='fs-6 fw-bold form-label mt-3'>
+                        <span style='font-weight: normal'>Apakah perubahan yang telah terjadi telah dikonfirmasikan kepada konsultan/pengawas?</span>
+                    </label>
+                    <h6>$id->jawaban_15</h6><br>
+                    <!--end::Label-->
+                    <br>
+                </div>
+            </div>
+            ";
+        }
+
+        return response($html);
+    }
+
     static function input_name_to_label(SupportCollection $keys) : string {
         return $keys->map(function($val) {
             if(str_contains($val, "_")) {
@@ -2467,5 +2971,14 @@ class ContractManagementsController extends Controller
             $val[0] = strtoupper($val[0]);
             return $val;
         })->join(", ", " dan ");
+    }
+
+    public function reviewKontrakView($id_contract, $stage){
+        if (Session::has("pasals")) {
+            Session::forget("pasals");
+        }
+        
+        $projects = Proyek::all();
+        return view("Contract/viewReview", compact(["stage"]), ["contract" => ContractManagements::find(urldecode(urldecode($id_contract))), "projects" => $projects]);
     }
 }

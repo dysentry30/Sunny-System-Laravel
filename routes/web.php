@@ -197,8 +197,12 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     Route::get('/contract-management/view/{id_contract}/perubahan-kontrak/{perubahan_kontrak}', [ContractManagementsController::class, 'perubahanKontrakView']);
 
+    Route::get('/contract-management/view/review-contract/{id_contract}/stage/{stage}', [ContractManagementsController::class, 'reviewKontrakView']);
+
     // Route::get('/contract-management/view/{id_contract}/draft-contract/{is_tender_menang}', [ContractManagementsController::class, 'draftContractView']);
     Route::get('/contract-management/view/{id_contract}/draft-contract/tender-menang/1', [ContractManagementsController::class, 'tenderMenang']);
+
+    Route::get('/contract-management/view/{id_contract}/get-manajemen-kontrak/{id}', [ContractManagementsController::class, 'getChecklistManajemenKontrak']);
 
     Route::post("/draft-contract/upload", [DraftContractController::class, "save"]);
 
