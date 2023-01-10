@@ -1859,7 +1859,11 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                     {{-- Begin :: TOTAL TAHUNAN  --}}
                                                                     @php
                                                                         $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja);
-                                                                        $nilaiTotalRealisasiTahun = App\Models\Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("proyeks.jenis_proyek", "!=", "I")->where("forecasts.periode_prognosa", "=", $periode)->where("forecasts.tahun", "=", $year)->get()->whereIn("unit_kerja", $unit_kerja_user->toArray())->whereNotIn("unit_kerja", ["B", "C", "D", "8"]);
+                                                                        if (str_contains(Request::path(), "internal")) {
+                                                                            $nilaiTotalRealisasiTahun = App\Models\Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("forecasts.periode_prognosa", "=", $periode)->where("forecasts.tahun", "=", $year)->get()->whereIn("unit_kerja", $unit_kerja_user->toArray())->whereNotIn("unit_kerja", ["B", "C", "D", "8"]);
+                                                                        } else {
+                                                                            $nilaiTotalRealisasiTahun = App\Models\Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("proyeks.jenis_proyek", "!=", "I")->where("forecasts.periode_prognosa", "=", $periode)->where("forecasts.tahun", "=", $year)->get()->whereIn("unit_kerja", $unit_kerja_user->toArray())->whereNotIn("unit_kerja", ["B", "C", "D", "8"]);
+                                                                        }
                                                                         $total_ok_tahunan = $nilaiTotalRealisasiTahun->where("month_rkap", "!=", 0)->sum(function($h) {
                                                                             return (int) $h->rkap_forecast;
                                                                         });
