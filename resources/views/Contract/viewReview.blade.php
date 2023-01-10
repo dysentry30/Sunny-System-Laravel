@@ -3,10 +3,23 @@
 {{-- End::Extend Header --}}
 
 {{-- Begin::Title --}}
-@section('title', 'Review Contract')
+@section('title', 'Tinjauan Dokumen Kontrak')
 {{-- End::Title --}}
 
 <style>
+    .buttons-html5 {
+        border-radius: 5px !important;
+        border: none !important;
+        padding: 10 20 10 20 !important;
+        font-weight: normal !important;
+    }
+    .buttons-colvis {
+        border: none !important;
+        border-radius: 5px !important;
+    }
+    .animate.slide {
+        transition: .3s all linear;
+    }
     .form-control.form-control-solid {
         border-left: 0px !important;
         border-top: 0px !important;
@@ -48,7 +61,7 @@
 
                 <!--begin::Content-->
                 <div class="container mx-3 mt-0">
-                    <h1>Add Review Contract - {{ $contract->stages == 1 ? "Perolehan" : "Pelaksanaan" }}</h1>
+                    <h1>Add Tinjauan Dokumen Kontrak - {{ $contract->stages == 1 ? "Perolehan" : "Pelaksanaan" }}</h1>
                 </div>
                 
 
@@ -236,12 +249,12 @@
                     <!--begin:::Tab Forecast Retail-->
                     <!--begin::Table-->
                     <div class="d-flex flex-column bg-white px-15 py-8 mx-7">
-                        <form action="/review-contract/upload" method="POST" class="d-flex flex-column align-items-end card card-flush">
+                        <form action="/review-contract/upload" method="POST" class="card card-flush">
                             @csrf
                             <input type="hidden" class="form-control form-control-solid" name="id-contract" value="{{ $contract->id_contract }}">
                             <input type="hidden" class="form-control form-control-solid" name="stage" value="{{ $stage }}">
                             
-                            <table class="table align-middle table-row-dashed fs-6 gy-2 card-body" id="kt_customers_table">
+                            <table class="table align-middle table-row-dashed fs-6 gy-2 card-body" id="tinjauan-kontrak">
                                 <!--begin::Table head-->
                                 <thead>
                                     <!--begin::Table row-->
@@ -257,6 +270,37 @@
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
                                 <tbody class="fw-bold text-gray-600">
+                                    <!--begin::Row Nama Proyek-->
+                                    {{-- @dd($review[0]) --}}
+                                    {{-- @dd($review->isEmpty()) --}}
+                                    @if ($review->isNotEmpty())
+                                        @foreach ($review as $item)
+                                            {{-- @dd($item) --}}
+                                            <tr class="text-grey">
+                                                <td>
+                                                    <label><b>{{ $item->kategori }}</b></label>
+                                                    <input type="hidden" class="form-control form-control-solid" name="kategori[]" value="{{ $item->kategori }}">
+                                                </td>
+                                                <td>
+                                                    <p hidden>{{ $item->sub_pasal }}</p>
+                                                    <input name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal" value="{{ $item->sub_pasal }}">
+                                                </td>
+                                                <td>
+                                                    <p hidden>{{ $item->uraian }}</p>
+                                                    <input name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan" value="{{ $item->uraian }}">
+                                                </td>
+                                                <td>
+                                                    <p hidden>{{ $item->pic }}</p>
+                                                    <input name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function" value="{{ $item->pic }}">
+                                                </td>
+                                                <td>
+                                                    <p hidden>{{ $item->catatan }}</p>
+                                                    <input name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan" value="{{ $item->catatan }}">
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @else
+                                        <!--end::Row Nama Proyek-->
                                         <!--begin::Row Nama Proyek-->
                                         <tr class="text-grey">
                                             <td>
@@ -276,8 +320,8 @@
                                                 <input name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
                                             </td>
                                         </tr>
-                                        <!--end::Row Nama Proyek-->
-        
+                                        <!--end::Row Lokasi Proyek-->
+
                                         <!--begin::Row Lokasi Proyek-->
                                         <tr class="text-grey">
                                             <td>
@@ -1119,6 +1163,7 @@
                                             </td>
                                         </tr>
                                         <!--end::Row Force Majeure/Keadaan Kahar-->
+                                    @endif
 
                                     </tbody>
                                     <!--end::Table body-->
@@ -1143,6 +1188,32 @@
 @endsection
 
 @section('js-script')
-    <!--begin:: Dokumen File Upload Max Size-->
+<!--begin::Data Tables-->
 
+<script src="{{ asset('/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset("/datatables/dataTables.buttons.min.js") }}"></script>
+<script src="{{ asset("/datatables/buttons.html5.min.js") }}"></script>
+<script src="{{ asset("/datatables/buttons.colVis.min.js") }}"></script>
+<script src="{{ asset("/datatables/jszip.min.js") }}"></script>
+<script src="{{ asset("/datatables/pdfmake.min.js") }}"></script>
+<script src="{{ asset("/datatables/vfs_fonts.js") }}"></script>
+<!--end::Data Tables-->
+    <!--begin:: Dokumen File Upload Max Size-->
+    <script>
+        $(document).ready(function() {
+            $('#tinjauan-kontrak').DataTable( {
+                // dom: 'Bfrtip',
+                dom: 'Brti',
+                pageLength : 45,
+                ordering: false,
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        title: 'Data Tinjauan Dokumen Kontrak'
+                    },
+                        'copy', 'pdf', 'print'
+                    ]
+            } );
+        });
+    </script>
 @endsection
