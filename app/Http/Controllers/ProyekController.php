@@ -493,7 +493,7 @@ class ProyekController extends Controller
         $newForecast = Forecast::where("kode_proyek", "=", $newProyek->kode_proyek)->where("periode_prognosa", "=", $bulans)->whereYear("created_at", "=", $years)->first();
         if (empty($newForecast)) {
             $oldestForecast = Forecast::where("kode_proyek", "=", $newProyek->kode_proyek)->where("periode_prognosa", "=", ($bulans - 1))->whereYear("created_at", "=", $years)->first();
-            if (empty($oldestForecast)) {
+            if (empty($oldestForecast) && $bulans != 1) {
                 $oldestForecast = new Forecast();
                 $oldestForecast->kode_proyek = $newProyek->kode_proyek;
                 $oldestForecast->rkap_forecast = $newProyek->nilai_rkap;

@@ -950,7 +950,7 @@
                                                                 <!--begin::Col-->
                                                                     <div class="col">
                                                                         <div class="form-check">
-                                                                            <input class="form-check-input" type="checkbox" value="key-client" id="key-client">
+                                                                            <input class="form-check-input" type="checkbox" value="1" name="key-client" id="key-client" {{ $customer->key_client == true ? "checked" : "" }}>
                                                                             <label class="form-check-label" for="key-client">
                                                                             Key Client
                                                                             </label>
@@ -2386,67 +2386,13 @@
                                                         <div class="card-title m-0">
                                                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                                                 Masalah Hukum   
-                                                                <i onclick="hideColumn(this, '#divMasalahHukum')" id="hide-button" style="display: none" class="bi bi-arrows-collapse"></i>
-                                                                <i onclick="showColumn(this, '#divMasalahHukum')" id="show-button" class="bi bi-arrows-expand"></i>                                         
+                                                                <a href="#" Id="Plus" data-bs-toggle="modal" data-bs-target="#kt_modal_input_masalah_hukum">+</a>
+                                                                {{-- <i onclick="hideColumn(this, '#divMasalahHukum')" id="hide-button" style="display: none" class="bi bi-arrows-collapse"></i>
+                                                                <i onclick="showColumn(this, '#divMasalahHukum')" id="show-button" class="bi bi-arrows-expand"></i>                                          --}}
                                                             </h3>
 
-                                                            <br>
-
                                                             <!--Begin::Row-->
-                                                            <div id="divMasalahHukum" style="display: none">
-                                                                <!--Begin:Nama Proyek-->
-                                                                <div class="row fv-row">
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="">Nama Proyek</span>
-                                                                    </label>
-                                                                    <!--Begin::Select-->
-                                                                    <div id="div-namaProyek">
-                                                                        <select name="kode-proyek-hukum" id="namaProyekHukum" class="form-select form-select-solid" data-control="select2" data-hide-search="true"
-                                                                            data-placeholder="Pilih Nama Proyek">
-                                                                            <option value=""></option>
-                                                                            @foreach ($proyekberjalan as $pb)
-                                                                            @if (!empty($pb->id_customer))
-                                                                            <option value="{{ $pb->kode_proyek }}">{{ $pb->nama_proyek }}</option>
-                                                                            @else
-                                                                            <option value="{{ $pb->kode_proyek }}">{{ $pb->nama_proyek }}</option>
-                                                                            @endif                                                                          
-                                                                            @endforeach                                                                           
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-                                                                <!--End:Nama Proyek-->
-
-                                                                <!--Begin:Jenis Masalah Hukum-->
-                                                                <div class="row fv-row my-3">
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="">Bentuk Masalah Hukum</span>
-                                                                    </label>
-                                                                    <!--Begin::Select-->
-                                                                    <div class="">
-                                                                        <input type="text" name="bentuk_masalah_hukum" class="form-control form-control-solid"
-                                                                            placeholder="Bentuk Masalah Hukum" />                                                                        
-                                                                    </div>
-                                                                    <!--End::Text-->
-                                                                </div>
-                                                                <!--End:Jenis Masalah Hukum-->
-
-                                                                <!--Begin:Status-->
-                                                                <div class="row fv-row my-3">
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="">Status</span>
-                                                                    </label>
-                                                                    <!--Begin::Select-->
-                                                                    <div id="div-status">
-                                                                        <select name="status_hukum" id="status" class="form-select form-select-solid" data-control="select2" data-hide-search="true"
-                                                                            data-placeholder="Pilih status">
-                                                                            <option value=""></option>                                                                            
-                                                                            <option value="WIKA Menang">WIKA Menang</option>                                                                          
-                                                                            <option value="WIKA Kalah">WIKA Kalah</option>                                                                          
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-                                                                <!--Begin:Status-->
-
+                                                            <div id="divMasalahHukum">
                                                                 <br>
                                                                 <div id="table">
                                                                     <!--begin::Table-->
@@ -3945,216 +3891,312 @@
             <div class="modal fade" id="kt_modal_edit_pic_{{ $pic->id }}" tabindex="-1" aria-hidden="true">
                 <!--begin::Modal dialog-->
                 <div class="modal-dialog modal-dialog-centered mw-800px">
-                    <!--begin::Modal content-->
-                    <div class="modal-content">
-                        <!--begin::Modal header-->
-                        <div class="modal-header">
-                            <!--begin::Modal title-->
-                            <h2>Edit Contact / PIC : </h2>
-                            <!--end::Modal title-->
-                            <!--begin::Close-->
-                            <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                                <span class="svg-icon svg-icon-1">
-                                    <i class="bi bi-x-lg"></i>
-                                </span>
-                                <!--end::Svg Icon-->
+                        <!--begin::Modal content-->
+                        <div class="modal-content">
+                            <!--begin::Modal header-->
+                            <div class="modal-header">
+                                <!--begin::Modal title-->
+                                <h2>Edit Contact / PIC : </h2>
+                                <!--end::Modal title-->
+                                <!--begin::Close-->
+                                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                                    <span class="svg-icon svg-icon-1">
+                                        <i class="bi bi-x-lg"></i>
+                                    </span>
+                                    <!--end::Svg Icon-->
+                                </div>
+                                <!--end::Close-->
                             </div>
-                            <!--end::Close-->
+                            <!--end::Modal header-->
+
+                            <!--begin::Modal body-->
+                            <div class="modal-body py-lg-6 px-lg-6">
+
+                                <!--begin::Row-->
+                                <div class="row fv-row">
+                                    <!--begin::Col-->
+                                    <div class="col-6">
+                                        <!--begin::Input group Website-->
+                                        <div class="fv-row mb-7">
+                                            <!--begin::Label-->
+                                            <label class="fs-6 fw-bold form-label mt-3">
+                                                <span class="required">Nama</span>
+                                            </label>
+                                            <!--end::Label-->
+                                            <!--begin::Input-->
+                                            <input type="text" class="form-control form-control-solid" name="name-pic" value="{{ $pic->nama_pic }}" placeholder="Nama" />
+                                            <!--end::Input-->
+                                        </div>
+                                        <!--end::Input group-->
+                                    </div>
+                                    <!--End begin::Col-->
+                                    <div class="col-6">
+                                        <!--begin::Input group Website-->
+                                        <div class="fv-row mb-7">
+                                            <!--begin::Label-->
+                                            <label class="fs-6 fw-bold form-label mt-3">
+                                                <span>Jabatan</span>
+                                            </label>
+                                            <!--end::Label-->
+                                            <!--begin::Input-->
+                                            <input type="text" class="form-control form-control-solid" name="kode-pic" value="{{ $pic->jabatan_pic }}" placeholder="Jabatan" />
+                                            <!--end::Input-->
+                                        </div>
+                                        <!--end::Input group-->
+                                    </div>
+                                    <!--End begin::Col-->
+                                </div>
+                                <!--End begin::Row-->
+
+                                <!--begin::Row-->
+                                <div class="row fv-row">
+                                    <!--begin::Col-->
+                                    <div class="col-6">
+                                        <!--begin::Input group Website-->
+                                        <div class="fv-row mb-7">
+                                            <!--begin::Label-->
+                                            <label class="fs-6 fw-bold form-label mt-3">
+                                                <span>Email</span>
+                                            </label>
+                                            <!--end::Label-->
+                                            <!--begin::Input-->
+                                            <input type="text" class="form-control form-control-solid" name="email-pic" value="{{ $pic->email_pic }}" placeholder="Email" />
+                                            <!--end::Input-->
+                                        </div>
+                                        <!--end::Input group-->
+                                    </div>
+                                    <!--End begin::Col-->
+                                    <div class="col-6">
+                                        <!--begin::Input group Website-->
+                                        <div class="fv-row mb-7">
+                                            <!--begin::Label-->
+                                            <label class="fs-6 fw-bold form-label mt-3">
+                                                <span>Kontak Nomor</span>
+                                            </label>
+                                            <!--end::Label-->
+                                            <!--begin::Input-->
+                                            <input type="text" class="form-control form-control-solid" name="phone-number-pic" value="{{ $pic->phone_pic }}" placeholder="Kontak Nomor" />
+                                            <!--end::Input-->
+                                        </div>
+                                        <!--end::Input group-->
+                                    </div>
+                                    <!--End begin::Col-->
+                                </div>
+                                <!--End begin::Row-->
+
+                                <!--begin::Row-->
+                                <div class="row fv-row">
+                                    <!--begin::Col-->
+                                    <div class="col-6">
+                                        <!--begin::Input group Website-->
+                                        <div class="fv-row mb-7">
+                                            <!--begin::Label-->
+                                            <label class="fs-6 fw-bold form-label mt-3">
+                                                <span>Tanggal Lahir</span>
+                                            </label>
+                                            @php
+                                                $tanggal_lahir_pic = Carbon\Carbon::create($pic->ultah_pic)->format("Y-m-d");
+                                            @endphp
+                                            <!--end::Label-->
+                                            <a href="#" class="btn" style="background: transparent;" id="start-date-modal" onclick="showCalendarModal(this)">
+                                                <i class="bi bi-calendar2-plus-fill" style="color: #008CB4"></i>
+                                            </a>
+                                            <!--end::Label-->
+                                            <!--begin::Input-->
+                                            <input type="date" class="form-control form-control-solid" name="ultah-pic" value="{{ $tanggal_lahir_pic }}" placeholder="Tanggal Lahir" />
+                                            <!--end::Input-->
+                                        </div>
+                                        <!--end::Input group-->
+                                    </div>
+                                    <!--End::Col-->
+
+                                    <!--Begin::Col-->
+                                <div class="col">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span class="">Layer Segmentasi</span>
+                                        <i class="bi-info-circle-fill" class="btn btn-secondary mx-4"
+                                        data-bs-toggle="tooltip" data-bs-placement="top"
+                                        data-bs-custom-class="custom-tooltip"
+                                        data-bs-title="On Development"
+                                        data-bs-html="true"></i>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <select name="layer_segmentasi" id="layer_segmentasi_{{$pic->id}}" class="form-select form-select-solid pe-5" data-control="select2" data-hide-search="false"
+                                        data-placeholder="Pilih Layer Segmentasi">
+                                        <option value="" selected></option>
+                                        <option value="Decision Maker"{{ $pic -> layer_segmentasi == "Decision Maker" ? "selected" : "" }}>Decision Maker</option>
+                                        <option value="Influencer"{{ $pic -> layer_segmentasi == "Influencer" ? "selected" : "" }}>Influencer</option>
+                                        <option value="Buyer"{{ $pic -> layer_segmentasi == "Buyer" ? "selected" : "" }}>Buyer</option>
+                                        <option value="User"{{ $pic -> layer_segmentasi == "User" ? "selected" : "" }}>User</option>
+                                        <option value="Gate Keeper"{{ $pic -> layer_segmentasi == "Gate Keeper" ? "selected" : "" }}>Gate Keeper</option>
+                                    </select>
+                                    <!--end::Input-->
+                                </div>
+                                <!--End begin::Row-->
+                                
+                            </div>
+                            <div class="modal-footer">
+
+                                <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white" id="new_save" style="background-color:#008CB4">Save</button>
+
+                            </div>
+                            <!--end::Modal body-->
                         </div>
-                        <!--end::Modal header-->
-
-                        <!--begin::Modal body-->
-                        <div class="modal-body py-lg-6 px-lg-6">
-
-                            <!--begin::Row-->
-                            <div class="row fv-row">
-                                <!--begin::Col-->
-                                <div class="col-6">
-                                    <!--begin::Input group Website-->
-                                    <div class="fv-row mb-7">
-                                        <!--begin::Label-->
-                                        <label class="fs-6 fw-bold form-label mt-3">
-                                            <span class="required">Nama</span>
-                                        </label>
-                                        <!--end::Label-->
-                                        <!--begin::Input-->
-                                        <input type="text" class="form-control form-control-solid" name="name-pic" value="{{ $pic->nama_pic }}" placeholder="Nama" />
-                                        <!--end::Input-->
-                                    </div>
-                                    <!--end::Input group-->
-                                </div>
-                                <!--End begin::Col-->
-                                <div class="col-6">
-                                    <!--begin::Input group Website-->
-                                    <div class="fv-row mb-7">
-                                        <!--begin::Label-->
-                                        <label class="fs-6 fw-bold form-label mt-3">
-                                            <span>Jabatan</span>
-                                        </label>
-                                        <!--end::Label-->
-                                        <!--begin::Input-->
-                                        <input type="text" class="form-control form-control-solid" name="kode-pic" value="{{ $pic->jabatan_pic }}" placeholder="Jabatan" />
-                                        <!--end::Input-->
-                                    </div>
-                                    <!--end::Input group-->
-                                </div>
-                                <!--End begin::Col-->
-                            </div>
-                            <!--End begin::Row-->
-
-                            <!--begin::Row-->
-                            <div class="row fv-row">
-                                <!--begin::Col-->
-                                <div class="col-6">
-                                    <!--begin::Input group Website-->
-                                    <div class="fv-row mb-7">
-                                        <!--begin::Label-->
-                                        <label class="fs-6 fw-bold form-label mt-3">
-                                            <span>Email</span>
-                                        </label>
-                                        <!--end::Label-->
-                                        <!--begin::Input-->
-                                        <input type="text" class="form-control form-control-solid" name="email-pic" value="{{ $pic->email_pic }}" placeholder="Email" />
-                                        <!--end::Input-->
-                                    </div>
-                                    <!--end::Input group-->
-                                </div>
-                                <!--End begin::Col-->
-                                <div class="col-6">
-                                    <!--begin::Input group Website-->
-                                    <div class="fv-row mb-7">
-                                        <!--begin::Label-->
-                                        <label class="fs-6 fw-bold form-label mt-3">
-                                            <span>Kontak Nomor</span>
-                                        </label>
-                                        <!--end::Label-->
-                                        <!--begin::Input-->
-                                        <input type="text" class="form-control form-control-solid" name="phone-number-pic" value="{{ $pic->phone_pic }}" placeholder="Kontak Nomor" />
-                                        <!--end::Input-->
-                                    </div>
-                                    <!--end::Input group-->
-                                </div>
-                                <!--End begin::Col-->
-                            </div>
-                            <!--End begin::Row-->
-
-                            <!--begin::Row-->
-                            <div class="row fv-row">
-                                <!--begin::Col-->
-                                <div class="col-6">
-                                    <!--begin::Input group Website-->
-                                    <div class="fv-row mb-7">
-                                        <!--begin::Label-->
-                                        <label class="fs-6 fw-bold form-label mt-3">
-                                            <span>Tanggal Lahir</span>
-                                        </label>
-                                        @php
-                                            $tanggal_lahir_pic = Carbon\Carbon::create($pic->ultah_pic)->format("Y-m-d");
-                                        @endphp
-                                        <!--end::Label-->
-                                        <a href="#" class="btn" style="background: transparent;" id="start-date-modal" onclick="showCalendarModal(this)">
-                                            <i class="bi bi-calendar2-plus-fill" style="color: #008CB4"></i>
-                                        </a>
-                                        <!--end::Label-->
-                                        <!--begin::Input-->
-                                        <input type="date" class="form-control form-control-solid" name="ultah-pic" value="{{ $tanggal_lahir_pic }}" placeholder="Tanggal Lahir" />
-                                        <!--end::Input-->
-                                    </div>
-                                    <!--end::Input group-->
-                                </div>
-                                <!--End::Col-->
-
-                                <!--Begin::Col-->
-                            <div class="col">
-                                <!--begin::Label-->
-                                <label class="fs-6 fw-bold form-label mt-3">
-                                    <span class="">Layer Segmentasi</span>
-                                    <i class="bi-info-circle-fill" class="btn btn-secondary mx-4"
-                                    data-bs-toggle="tooltip" data-bs-placement="top"
-                                    data-bs-custom-class="custom-tooltip"
-                                    data-bs-title="On Development"
-                                    data-bs-html="true"></i>
-                                </label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <select name="layer_segmentasi" id="layer_segmentasi_{{$pic->id}}" class="form-select form-select-solid pe-5" data-control="select2" data-hide-search="false"
-                                    data-placeholder="Pilih Layer Segmentasi">
-                                    <option value="" selected></option>
-                                    <option value="Decision Maker"{{ $pic -> layer_segmentasi == "Decision Maker" ? "selected" : "" }}>Decision Maker</option>
-                                    <option value="Influencer"{{ $pic -> layer_segmentasi == "Influencer" ? "selected" : "" }}>Influencer</option>
-                                    <option value="Buyer"{{ $pic -> layer_segmentasi == "Buyer" ? "selected" : "" }}>Buyer</option>
-                                    <option value="User"{{ $pic -> layer_segmentasi == "User" ? "selected" : "" }}>User</option>
-                                    <option value="Gate Keeper"{{ $pic -> layer_segmentasi == "Gate Keeper" ? "selected" : "" }}>Gate Keeper</option>
-                                </select>
-                                <!--end::Input-->
-                            </div>
-                            <!--End begin::Row-->
-                            
-                        </div>
-                        <div class="modal-footer">
-
-                            <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white" id="new_save" style="background-color:#008CB4">Save</button>
-
-                        </div>
-                        <!--end::Modal body-->
+                        <!--end::Modal content-->
                     </div>
-                    <!--end::Modal content-->
+                    <!--end::Modal dialog-->
                 </div>
-                <!--end::Modal dialog-->
             </div>
             <!--end::Modal - Create App-->
         </form>
     @endforeach
     <!--end::modal Edit PIC-->
 
-    <!--begin::DELETE PIC-->
-    @foreach ($customer->pic as $pic)
-        <form action="/customer/pic/{{ $pic->id }}/delete" method="post" enctype="multipart/form-data">
-            @method('delete')
-            @csrf
-            <div class="modal fade" id="kt_pic_delete_{{ $pic->id }}" tabindex="-1" aria-hidden="true">
-                <!--begin::Modal dialog-->
-                <div class="modal-dialog modal-dialog-centered mw-800px">
-                    <!--begin::Modal content-->
-                    <div class="modal-content">
-                        <!--begin::Modal header-->
-                        <div class="modal-header">
-                            <!--begin::Modal title-->
-                            <h2>Hapus : {{ $pic->nama_pic }}
-                            </h2>
-                            <!--end::Modal title-->
-                            <!--begin::Close-->
-                            <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                                <span class="svg-icon svg-icon-1">
-                                    <i class="bi bi-x-lg"></i>
-                                </span>
-                                <!--end::Svg Icon-->
-                            </div>
-                            <!--end::Close-->
+<!--begin::DELETE PIC-->
+@foreach ($customer->pic as $pic)
+    <form action="/customer/pic/{{ $pic->id }}/delete" method="post" enctype="multipart/form-data">
+        @method('delete')
+        @csrf
+        <div class="modal fade" id="kt_pic_delete_{{ $pic->id }}" tabindex="-1" aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-800px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header">
+                        <!--begin::Modal title-->
+                        <h2>Hapus : {{ $pic->nama_pic }}
+                        </h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <i class="bi bi-x-lg"></i>
+                            </span>
+                            <!--end::Svg Icon-->
                         </div>
-                        <!--end::Modal header-->
-                        <!--begin::Modal body-->
-                        <div class="modal-body py-lg-6 px-lg-6">
-                            Data yang dihapus tidak dapat dipulihkan, anda yakin ?
-                            <br>
-                        </div>
-                        <div class="modal-footer">
-                            <button class="btn btn-sm btn-light btn-active-primary">Delete</button>
-                        </div>
-                        <!--end::Input group-->
-
+                        <!--end::Close-->
                     </div>
-                    <!--end::Modal body-->
+                    <!--end::Modal header-->
+                    <!--begin::Modal body-->
+                    <div class="modal-body py-lg-6 px-lg-6">
+                        Data yang dihapus tidak dapat dipulihkan, anda yakin ?
+                        <br>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-sm btn-light btn-active-primary">Delete</button>
+                    </div>
+                    <!--end::Input group-->
+
                 </div>
-                <!--end::Modal content-->
+                <!--end::Modal body-->
             </div>
-            <!--end::Modal dialog-->
-            </div>
-        </form>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+        </div>
+    </form>
     @endforeach
-    <!--end::DELETE PIC-->
+<!--end::DELETE PIC-->
+
+<!--Begin::Input Modal Masalah Hukum-->
+<form action="/customer/masalah-hukum/save" method="post" enctype="multipart/form-data">
+    @csrf
+    <input type="hidden" name="id-customer" value="{{ $customer->id_customer }}">
+    <div class="modal fade" id="kt_modal_input_masalah_hukum" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-800px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Tambah Masalah Hukum
+                    </h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <i class="bi bi-x-lg"></i>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6" style="overflow:hidden;">
+                    <!--Begin:Nama Proyek-->
+                    <div class="row fv-row">
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span class="">Nama Proyek</span>
+                        </label>
+                        <!--Begin::Select-->
+                        <div id="div-namaProyek">
+                            <select name="kode-proyek-hukum" id="new-proyek" class="form-select form-select-solid" data-hide-search="false" data-control="select2"
+                                data-placeholder="Pilih Nama Proyek">
+                                <option value=""></option>
+                                @foreach ($proyekberjalan as $pb)
+                                @if (!empty($pb->id_customer))
+                                <option value="{{ $pb->kode_proyek }}">{{ $pb->nama_proyek }}</option>
+                                @else
+                                <option value="{{ $pb->kode_proyek }}">{{ $pb->nama_proyek }}</option>
+                                @endif                                                                          
+                                @endforeach                                                                           
+                            </select>
+                        </div>
+                    </div>
+                    <!--End:Nama Proyek-->
+
+                    <!--Begin:Jenis Masalah Hukum-->
+                    <div class="row fv-row my-3">
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span class="">Bentuk Masalah Hukum</span>
+                        </label>
+                        <!--Begin::Select-->
+                        <div class="">
+                            <input type="text" name="bentuk_masalah_hukum" class="form-control form-control-solid"
+                                placeholder="Bentuk Masalah Hukum" />                                                                        
+                        </div>
+                        <!--End::Text-->
+                    </div>
+                    <!--End:Jenis Masalah Hukum-->
+
+                    <!--Begin:Status-->
+                    <div class="row fv-row my-3">
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span class="">Status</span>
+                        </label>
+                        <!--Begin::Select-->
+                        <div id="div-status">
+                            <select name="status_hukum" id="status" class="form-select form-select-solid" data-control="select2" data-hide-search="true"
+                                data-placeholder="Pilih status">
+                                <option value=""></option>                                                                            
+                                <option value="WIKA Menang">WIKA Menang</option>                                                                          
+                                <option value="WIKA Kalah">WIKA Kalah</option>                                                                          
+                            </select>
+                        </div>
+                    </div>
+                    <!--Begin:Status-->
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-sm btn-primary">Save</button>
+                </div>
+                <!--end::Input group-->
+
+            </div>
+            <!--end::Modal body-->
+        </div>
+        <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+    </div>
+</form>
 
     <!--begin::modal Struktur Organisasi-->
     <form action="/customer/struktur" method="post" enctype="multipart/form-data">
@@ -6703,4 +6745,14 @@
     // end select kabupaten
 </script>
     <!--end::MAP Leaflet-->
+
+<!--begin::Enable Search Bar Select2-->
+<script>
+    $('#kt_modal_input_masalah_hukum').on('show.bs.modal', function() {
+        $("#new-proyek").select2({
+            dropdownParent: $("#kt_modal_input_masalah_hukum")
+        });
+    });
+</script>
+<!--end::Enable Search Bar Select2-->
 @endsection
