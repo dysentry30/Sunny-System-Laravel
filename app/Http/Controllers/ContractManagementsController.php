@@ -380,13 +380,8 @@ class ContractManagementsController extends Controller
         // $draftContracts = DraftContracts::join("contract_managements as c", "draft_contracts.id_contract", "=", "c.id_contract")->select("draft_contracts.*")->get();
         // $review_contracts = ReviewContracts::join("draft_contracts as d", "review_contracts.id_draft_contract", "=", "d.id_draft")->select("review_contracts.*")->get();
         $projects = Proyek::all();
-        $ccm = ContractManagements::find(urldecode(urldecode($id_contract)));
-        $ccm = $ccm->reviewProjects->groupBy(function($rp) {
-            return $rp;
-        });
-        // dd($ccm);
 
-        return view('Contract/view', ["contract" => ContractManagements::find(urldecode(urldecode($id_contract))), "projects" => $projects, "review" => ReviewContracts::where('stage', 1)->get()]);
+        return view('Contract/view', ["contract" => ContractManagements::find(urldecode(urldecode($id_contract))), "projects" => $projects]);
     }
 
 
@@ -606,22 +601,53 @@ class ContractManagementsController extends Controller
         $uraian = collect($data["uraian"]);
         $pic = collect($data["pic"]);
         $catatan = collect($data["catatan"]);
+        // dd($kategori);
+        $data_update = $kategori->map(function($d, $key) use($sub_pasal, $uraian, $pic, $catatan, $data) {
+            $new_class = new stdClass();
+            $new_class->id_contract = $data["id-contract"];
+            $new_class->stage = $data["stage"];
+            $new_class->kategori = $d;
+            $new_class->sub_pasal = $sub_pasal[$key];
+            $new_class->uraian = $uraian[$key];
+            $new_class->pic = $pic[$key];
+            $new_class->catatan = $catatan[$key];
+            return $new_class;
+        });
+        // dd($data_update);
         // dd($kategori, $sub_pasal, $uraian, $pic, $catatan);
 
-        $kategori->each(function($item, $key) use($sub_pasal, $uraian, $pic, $catatan, $data){
-            $review_kontrak = new ReviewContracts();
-            $review_kontrak->id_contract = $data["id-contract"];
-            $review_kontrak->stage = $data["stage"];
-            $review_kontrak->kategori = $item;
-            $review_kontrak->sub_pasal = $sub_pasal[$key];
-            $review_kontrak->uraian = $uraian[$key];
-            $review_kontrak->pic = $pic[$key];
-            $review_kontrak->catatan = $catatan[$key];
-            // dd($review_kontrak);
-            $review_kontrak->save();
-        });
-        Alert::success('Success', "Review Kontrak berhasil ditambahkan");
-        return Redirect::back();
+        $is_data_exist = ReviewContracts::where("stage", $data["stage"])->get();
+        // $is_data_exist = ContractManagements::all()->first();
+        // dd($is_data_exist);
+        if($is_data_exist->isEmpty()){
+            $kategori->each(function($item, $key) use($sub_pasal, $uraian, $pic, $catatan, $data){
+                $review_kontrak = new ReviewContracts();
+                $review_kontrak->id_contract = $data["id-contract"];
+                $review_kontrak->stage = $data["stage"];
+                $review_kontrak->kategori = $item;
+                $review_kontrak->sub_pasal = $sub_pasal[$key];
+                $review_kontrak->uraian = $uraian[$key];
+                $review_kontrak->pic = $pic[$key];
+                $review_kontrak->catatan = $catatan[$key];
+                $review_kontrak->save();
+
+                Alert::success('Success', "Tinjauan Kontrak berhasil ditambahkan");
+                return redirect()->back();
+            });
+        }else{
+            $is_data_exist->each(function($item, $key) use($data_update, $data){
+                $item->id_contract = $data["id-contract"];
+                $item->stage = $data["stage"];
+                $item->kategori = $data_update[$key]->kategori;
+                $item->sub_pasal = $data_update[$key]->sub_pasal;
+                $item->uraian = $data_update[$key]->uraian;
+                $item->pic = $data_update[$key]->pic;
+                $item->catatan = $data_update[$key]->catatan;
+                $item->save();
+                Alert::success('Success', "Tinjauan Kontrak berhasil ditambahkan");
+                return redirect()->back();
+            });
+        }
         // $data["kategori"]->each(function($item, $key){
         // });
     }
@@ -2979,6 +3005,13 @@ class ContractManagementsController extends Controller
         }
         
         $projects = Proyek::all();
-        return view("Contract/viewReview", compact(["stage"]), ["contract" => ContractManagements::find(urldecode(urldecode($id_contract))), "projects" => $projects]);
+        
+        $ccm = ContractManagements::find(urldecode(urldecode($id_contract)));
+        // $ccmNew = $ccm->reviewProjects->groupBy('stage');
+        $ccmNew = $ccm->reviewProjects->where('stage', "=", $stage);
+        // dd($ccmNew);
+        // dd($ccmNew);
+        
+        return view("Contract/viewReview", compact(["stage"]), ["contract" => ContractManagements::find(urldecode(urldecode($id_contract))), "projects" => $projects, "review" => $ccmNew]);
     }
 }

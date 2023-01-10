@@ -928,14 +928,19 @@
                         </table>
                         <!--End:Table: Draft Contract--> --}}
 
-                        <br>
+                        <br><br>
                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                             Tinjauan Dokumen Kontrak - Perolehan
-                            <a href="/contract-management/view/review-contract/{{ $contract->id_contract }}/stage/1" target="_blank" Id="Plus">+</a>
+                            @if ($contract->reviewProjects->where('stage', '=', 1)->isEmpty())
+                                <a href="/review-contract/view/{{ $contract->id_contract }}/stage/1" target="_blank" Id="Plus">+</a>    
+                                @else
+                                <a href="/review-contract/view/{{ $contract->id_contract }}/stage/1" target="_blank" class="btn btn-primary btn-sm p-2 px-3 mx-3">view</a>    
+                            @endif
                         </h3>
 
+                        <br><br>
                         <!--begin:Table: Review-->
-                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="tinjauan-kontrak">
+                        {{-- <table class="table align-middle table-row-dashed fs-6 gy-5" id="tinjauan-kontrak">
                             <!--begin::Table head-->
                             <thead>
                                 <!--begin::Table row-->
@@ -946,20 +951,27 @@
                                 <!--end::Table row-->
                             </thead>
                             <!--end::Table head-->
-                            <!--begin::Table body-->
                             <tbody class="fw-bold text-gray-400">
-                               <tr>
-                                <td>
-                                    <a href="#" data-bs-target="#kt_modal_tabel_review_kontrak" class="text-hover-primary"><p>Review Kontrak Perolehan</p></a>
-                                </td>
-                                <td>
-                                    <p>Terisi</p>
-                                </td>
-                               </tr>
+                                @if (!empty($review[1]))
+                                    <!--begin::Table body-->   
+                                    <tr>
+                                    <td>
+                                        <a href="#" data-bs-target="#kt_modal_tabel_review_kontrak" class="text-hover-primary"><p>Lihat Review Kontrak Perolehan</p></a>
+                                    </td>
+                                    <td>
+                                        <p>Terisi</p>
+                                    </td>
+                                    </tr>
+                                    @else
+                                    <tr>
+                                        <td>
+                                            <p><b>There is no data.</b></p>
+                                        </td>
+                                    </tr>
+                                    <!--end::Table body-->
+                                @endif
                             </tbody>
-                            <!--end::Table body-->
-
-                        </table>
+                        </table> --}}
                         <!--End:Table: Review-->
 
 
@@ -1099,7 +1111,7 @@
                     </table>
                     <!--End:Table: Review-->
 
-                        <br><br>
+                        <br>
 
                         <h3 class="fw-bolder m-0 mb-3" id="HeadDetail" style="font-size:14px;">
                             Usulan Perubahan Draft Kontrak
@@ -1210,6 +1222,7 @@
 
                         &nbsp;<br>
                         &nbsp;<br>
+                        <br>
                         
                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                             Dokumen NDA
@@ -2246,33 +2259,15 @@
                         </table>
                         <!--End:Table: Review-->
 
-                        <br><br>
+                        <br>
                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                            Tinjauan Dokumen Kontrak -Pelaksanaan
-                            <a href="/contract-management/view/review-contract/{{ $contract->id_contract }}/stage/2" target="_blank" Id="Plus">+</a>
+                            Tinjauan Dokumen Kontrak - Pelaksanaan
+                            @if ($contract->reviewProjects->where('stage', '=', 2)->isEmpty())
+                                <a href="/review-contract/view/{{ $contract->id_contract }}/stage/2" target="_blank" Id="Plus">+</a>    
+                                @else
+                                <a href="/review-contract/view/{{ $contract->id_contract }}/stage/2" target="_blank" class="btn btn-primary btn-sm p-2 px-3 mx-3">view</a>    
+                            @endif
                         </h3>
-
-                        <!--begin:Table: Review-->
-                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="tinjauan-kontrak">
-                            <!--begin::Table head-->
-                            <thead>
-                                <!--begin::Table row-->
-                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-125px">Draft Contract Review</th>
-                                    <th class="min-w-125px">Ketentuan</th>
-                                </tr>
-                                <!--end::Table row-->
-                            </thead>
-                            <!--end::Table head-->
-                            <!--begin::Table body-->
-                            <tbody class="fw-bold text-gray-400">
-                               
-                            </tbody>
-                            <!--end::Table body-->
-
-                        </table>
-                        <!--End:Table: Review-->
-
 
                         <br><br>
                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
@@ -10814,6 +10809,26 @@
 </div>
 <!--end::Modal - Upload Final Questions-->
 
+<div class="modal fade" id="kt_modal_tabel_review_kontrak" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Tinjauan Kontrak - Perolehan</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <table class="table table-hover">
+            <thead>
+                <th>Ketentuan</th>
+                <th>Ketentuan</th>
+                <th>Ketentuan</th>
+            </thead>
+          </table>
+        </div>
+      </div>
+    </div>
+</div>
+
 <!--begin::Modal - LD-->
 <div class="modal fade" id="kt_modal_ld" tabindex="-1" aria-hidden="true">
     <!--begin::Modal dialog-->
@@ -11914,23 +11929,6 @@ aria-hidden="true">
                 {
                     extend: 'excelHtml5',
                     title: 'Data Pending Issue'
-                },
-                    'copy', 'pdf', 'print'
-                ]
-        } );
-    });
-</script>
-
-<script>
-    $(document).ready(function() {
-        $('#tinjauan-kontrak').DataTable( {
-            // dom: 'Bfrtip',
-            dom: 'Brti',
-            pageLength : 50,
-            buttons: [
-                {
-                    extend: 'excelHtml5',
-                    title: 'Data Tinjauan Dokumen Kontrak'
                 },
                     'copy', 'pdf', 'print'
                 ]
