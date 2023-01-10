@@ -124,7 +124,7 @@ Route::middleware(["web"])->group(function () {
                 $p->rencana_perolehan = $p->tahun_perolehan . "-" . str_pad($p->bulan_pelaksanaan, 2, 0, STR_PAD_LEFT) . "-" . "01";
                 $p->perkiraan_durasi = date_create($p->tanggal_mulai_terkontrak)->diff(date_create($p->tanggal_akhir_terkontrak))->days;
                 $p->periode = $request->periode;
-                unset($p->jenis_proyek, $p->unit_kerja, $p->kode_proyek, $p->stage, $p->tanggal_mulai_terkontrak, $p->tanggal_akhir_terkontrak, $p->Forecasts);
+                unset($p->jenis_proyek, $p->unit_kerja, $p->kode_proyek, $p->stage, $p->tanggal_mulai_terkontrak, $p->tanggal_akhir_terkontrak, $p->Forecasts,  $p->tahun_perolehan, $p->bulan_pelaksanaan);
 
                 return $p;
             });
@@ -155,7 +155,7 @@ Route::middleware(["web"])->group(function () {
 
             // $forecasts = Forecast::with(["Proyek"])->get(["*"])->unique("kode_proyek");
             // $forecasts = Forecast::where("periode_prognosa", '=', (int) $prognosa)->whereYear("created_at", "=", $tahun)->get();
-            $proyeks = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("periode_prognosa", ((int) $periode[1]))->whereYear("history_forecast.created_at", "=", (int) $periode[0])->where("unit_kerja", "=", $request->unitkerjaid)->get(["nama_proyek", "stage", "proyeks.kode_proyek", "unit_kerja", "jenis_proyek", "tipe_proyek", "nilai_perolehan", "is_cancel", "month_forecast", "nilai_forecast", "realisasi_forecast", "periode_prognosa"])->where("stage", "!=", 7)->where("is_cancel", "!=", true);
+            $proyeks = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("periode_prognosa", ((int) $periode[1]))->where("tahun", "=", (int) $periode[0])->where("unit_kerja", "=", $request->unitkerjaid)->get(["nama_proyek", "stage", "proyeks.kode_proyek", "unit_kerja", "jenis_proyek", "tipe_proyek", "nilai_perolehan", "is_cancel", "month_forecast", "nilai_forecast", "realisasi_forecast", "periode_prognosa"])->where("stage", "!=", 7)->where("is_cancel", "!=", true);
             // $proyeks = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("unit_kerja", "=", $request->unitkerjaid)->get()->where("stage", "!=", 7)->where("is_cancel", "!=", true);
             $total_realisasi = $proyeks->sum(function($s) {
                 return (int) $s->realisasi_forecast;
@@ -446,11 +446,12 @@ Route::middleware(["web"])->group(function () {
             $p->jenis_proyek = $jenis_proyek;
             $tipe_proyek = ($proyek["UsrRetail"] == true ? 'R' : 'P');
             $p->tipe_proyek = $tipe_proyek;
-            $p->nilaiok_awal = $proyek["UsrNilaiOKAwal"];
+            $p->nilaiok_awal = round((int) $proyek["UsrNilaiOKAwal"]);
+            $p->nilai_rkap = round((int) $proyek["UsrNilaiOKAwal"]);
             $p->bulan_pelaksanaan = $proyek["UsrBulanRealisasiAwal"];
             $p->bulan_awal = $proyek["UsrBulanRealisasiAwal"];
-            $p->nilaiok_review = $proyek["UsrNilaiOKReview"];
-            $p->nilai_valas_review = $proyek["UsrNilaiOKReview"];
+            $p->nilaiok_review = round((int) $proyek["UsrNilaiOKReview"]);
+            $p->nilai_valas_review = round((int) $proyek["UsrNilaiOKReview"]);
             $p->bulan_review = $proyek["UsrBulanPelaksanaan"];
             $p->unit_kerja = $unit_kerja->divcode;
             $p->tahun_perolehan = $tahun;

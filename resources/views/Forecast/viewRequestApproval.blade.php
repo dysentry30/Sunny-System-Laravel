@@ -410,6 +410,7 @@
                                                                                                         <form action="/history/unlock" onsubmit="requestUnlock()" class="mt-4" method="POST">
                                                                                                             @csrf
                                                                                                             <input type="hidden" name="unit_kerja" value="{{$unit_kerja}}">
+                                                                                                            <input type="hidden" name="periode-prognosa" value="{{$history->periode_prognosa}}">
                                                                                                             <button type="submit"
                                                                                                                 class="btn btn-sm btn-active-primary text-white"
                                                                                                                 style="background-color:#008CB4;">Unlock Forecast</button>
@@ -426,11 +427,11 @@
                                                                                                 <div
                                                                                                     class="d-flex flex-row justify-content-evenly align-items-center w-100">
                                                                                                     <button type="button"
-                                                                                                        onclick="confirmAction(this, '{{ $unit_kerja }}', true)"
+                                                                                                        onclick="confirmAction(this, '{{ $unit_kerja }}', true, '{{$history->periode_prognosa}}')"
                                                                                                         class="btn btn-sm btn-active-primary text-white"
                                                                                                         style="background-color:#008CB4;">Approve</button>
                                                                                                     <button type="button"
-                                                                                                        onclick="confirmAction(this, '{{ $unit_kerja }}', false)"
+                                                                                                        onclick="confirmAction(this, '{{ $unit_kerja }}', false, '{{$history->periode_prognosa}}')"
                                                                                                         class="btn btn-sm btn-light btn-active-danger">Cancel</button>
                                                                                                 </div>
                                                                                             @endif
@@ -450,6 +451,7 @@
                                                                                                         <form action="/forecast/set-unlock" onsubmit="requestUnlock()" class="mt-4" method="POST">
                                                                                                             @csrf
                                                                                                             <input type="hidden" name="unit_kerja" value="{{$unit_kerja}}">
+                                                                                                            <input type="hidden" name="periode-prognosa" value="{{$history->periode_prognosa}}">
                                                                                                             <button type="submit"
                                                                                                             onclick="confirmDeleteHistory(this); return false"
                                                                                                             class="btn btn-sm btn-danger text-white"
@@ -459,6 +461,7 @@
                                                                                                         <form action="/history/request-unlock" onsubmit="requestUnlock()" class="mt-4" method="POST">
                                                                                                             @csrf
                                                                                                             <input type="hidden" name="unit_kerja" value="{{$unit_kerja}}">
+                                                                                                            <input type="hidden" name="periode-prognosa" value="{{$history->periode_prognosa}}">
                                                                                                             <button type="submit"
                                                                                                                 class="btn btn-sm btn-active-primary text-white"
                                                                                                                 style="background-color:#008CB4;">Request Unlock</button>
@@ -474,6 +477,7 @@
                                                                                                     <form action="/forecast/set-unlock"class="mt-4" method="POST">
                                                                                                         @csrf
                                                                                                         <input type="hidden" name="unit_kerja" value="{{$unit_kerja}}">
+                                                                                                        <input type="hidden" name="periode-prognosa" value="{{$history->periode_prognosa}}">
                                                                                                         <button type="submit"
                                                                                                         class="btn btn-sm btn-active-primary text-white"
                                                                                                         style="background-color:#008CB4;">Hapus History</button>
@@ -549,7 +553,7 @@
             }
         };
 
-        function confirmAction(e, unitKerja, isApproved) {
+        function confirmAction(e, unitKerja, isApproved, periode) {
             Swal.fire({
                 title: 'Apakah anda yakin?',
                 html: "Aksi ini tidak bisa <b>dikembalikan</b>!",
@@ -562,6 +566,7 @@
                 const formData = new FormData();
                 formData.append("is_approved", Number(isApproved));
                 formData.append("unit_kerja", unitKerja);
+                formData.append("periode_prognosa", periode);
                 formData.append("_token", "{{ csrf_token() }}");
                 if (result.isConfirmed) {
                     const setLockRes = await fetch("/forecast/set-lock/unit-kerja", {

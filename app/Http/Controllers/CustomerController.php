@@ -512,11 +512,12 @@ class CustomerController extends Controller
         $editCustomer->industry_sector = $data["industry-sector"];
         $editCustomer->forbes_rank = $data["forbes_rank"];
         $editCustomer->lq_rank = $data["lq_rank"];
-        $editCustomer->layer_segmentasi = $data["layer_segmentasi"];
+        // $editCustomer->layer_segmentasi = $data["layer_segmentasi"];
         $editCustomer->jenis_perusahaan = $data["jenis_perusahaan"];
         $editCustomer->tax = $data["tax"];
         $editCustomer->syarat_pembayaran = $data["syarat_pembayaran"];
         $editCustomer->unique_code = $data["unique_code"];
+        $editCustomer->key_client = isset($data["key-client"]);
 
         // $editCustomer->journey_company = $data["journey-company"];
         // $editCustomer->segmentation_company = $data["segmentation-company"];
@@ -619,17 +620,6 @@ class CustomerController extends Controller
 
         $editCustomer->note_attachment = $data["note-attachment"];
         $customerAttachments->id_customer = $data["id-customer"];
-
-        //Save to Masalah Hukum Table
-        $editMasalahHukum = MasalahHukum::where("id_customer", "=", $data["id-customer"])->first();
-        $editMasalahHukum = new MasalahHukum();
-        $editMasalahHukum->id_customer = $data["id-customer"];
-        $editMasalahHukum->kode_proyek = $data["kode-proyek-hukum"];
-        $editMasalahHukum->bentuk_masalah = $data["bentuk_masalah_hukum"];
-        $editMasalahHukum->status = $data["status_hukum"];
-        if ($data["kode-proyek-hukum"] && $data["bentuk_masalah_hukum"] && $data["status_hukum"] !== null) {
-            $editMasalahHukum->save();
-        }
 
         //Save to CSI Table
         $editCSI = Csi::where("id_customer", "=", $data["id-customer"])->first();
@@ -1047,6 +1037,34 @@ class CustomerController extends Controller
         $dokumen->id_customer = $id_customer;
         // dd($dokumen);
         $dokumen->save();
+    }
+
+    public function saveMasalahHukum(Request $request)
+    {
+        $data = $request->all();
+        $editMasalahHukum = MasalahHukum::where("id_customer", "=", $data["id-customer"])->first();
+        if(!empty($editMasalahHukum)) {
+            $editMasalahHukum->id_customer = $data["id-customer"];
+            $editMasalahHukum->kode_proyek = $data["kode-proyek-hukum"];
+            $editMasalahHukum->bentuk_masalah = $data["bentuk_masalah_hukum"];
+            $editMasalahHukum->status = $data["status_hukum"];
+        } else {
+            $editMasalahHukum = new MasalahHukum();
+            $editMasalahHukum->id_customer = $data["id-customer"];
+            $editMasalahHukum->kode_proyek = $data["kode-proyek-hukum"];
+            $editMasalahHukum->bentuk_masalah = $data["bentuk_masalah_hukum"];
+            $editMasalahHukum->status = $data["status_hukum"];
+        }
+        if ($data["kode-proyek-hukum"] && $data["bentuk_masalah_hukum"] && $data["status_hukum"] !== null) {
+            if($editMasalahHukum->save()) {
+                Alert::success("Success", "Masalah Hukum Berhasil Ditambahkan");
+                return redirect()->back();
+            }
+            Alert::error("Error", "Masalah Hukum Gagal Ditambahkan!");
+            return redirect()->back();
+        }
+        Alert::error("Error", "Pastikan field-field Masalah Hukum terisi!");
+        return redirect()->back();
     }
 
     public function getKodeNasabah(Request $request) {
