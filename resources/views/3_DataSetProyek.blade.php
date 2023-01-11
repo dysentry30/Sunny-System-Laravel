@@ -1,4 +1,56 @@
-<!DOCTYPE html>
+<!--begin::Nilai OK-->
+                                            <td class="text-end">
+                                                @php
+                                                if ($proyek->tipe_proyek == 'R') {
+                                                    $total_rkap = $proyek->Forecasts->filter(function($f) {
+                                                        return $f->periode_prognosa == (int) date("m") && $f->tahun == (int) date("Y") ;
+                                                    })->sum(function($f) {
+                                                        return (int) $f->rkap_forecast;
+                                                    });
+                                                } else {
+                                                    $total_rkap = $proyek->nilai_rkap ?? $proyek->nilaiok_awal;
+                                                }
+                                                @endphp
+                                                <small>
+                                                    {{ number_format((int)$total_rkap, 0, '.', '.') ?? '-' }}
+                                                </small>
+                                            </td>
+                                            <!--end::Nilai OK-->
+
+                                            <!--begin::Forecast-->
+                                            <td class="text-end">
+                                                @php
+                                                    $total_forecast = $proyek->Forecasts->filter(function($f) {
+                                                        $date = date_create($f->created_at);
+                                                        return $f->periode_prognosa == (int) date("m") && date_format($date, "Y") == date("Y");
+                                                    })->sum(function($f) {
+                                                        return (int) $f->nilai_forecast;
+                                                    });
+                                                @endphp
+                                                <small>
+                                                    {{ number_format((int)$total_forecast, 0, '.', '.') ?? '-' }}
+                                                </small>
+                                            </td>
+                                            <!--end::Forecast-->
+                                            
+                                            <!--begin::Realisasi-->
+                                            <td class="text-end">
+                                                @php
+                                                if ($proyek->tipe_proyek == 'R' && $proyek->stage == 8) {
+                                                    $total_realisasi = $proyek->Forecasts->filter(function($f) {
+                                                        return $f->periode_prognosa == (int) date("m") && $f->tahun == (int) date("Y") ;
+                                                    })->sum(function($f) {
+                                                        return (int) $f->realisasi_forecast;
+                                                    });
+                                                } else {
+                                                    $total_realisasi = $proyek->nilai_perolehan;
+                                                }
+                                                @endphp
+                                                <small>
+                                                    {{ number_format((int)$total_realisasi, 0, '.', '.') ?? '-' }}
+                                                </small>
+                                            </td>
+                                            <!--end::Realisasi--><!DOCTYPE html>
 <html lang="en">
 <head>
     <base href="">
@@ -670,11 +722,19 @@
 
                                             <!--begin::Nilai OK-->
                                             <td class="text-end">
+                                                @php
+                                                if ($proyek->tipe_proyek == 'R') {
+                                                    $total_rkap = $proyek->Forecasts->filter(function($f) {
+                                                        return $f->periode_prognosa == (int) date("m") && $f->tahun == (int) date("Y") ;
+                                                    })->sum(function($f) {
+                                                        return (int) $f->rkap_forecast;
+                                                    });
+                                                } else {
+                                                    $total_rkap = $proyek->nilai_rkap ?? $proyek->nilaiok_awal;
+                                                }
+                                                @endphp
                                                 <small>
-                                                    @php
-                                                        $proyek->nilai_rkap = str_replace(".", "", $proyek->nilai_rkap);
-                                                    @endphp
-                                                    {{ number_format((int)$proyek->nilai_rkap, 0, '.', '.') ?? '-' }}
+                                                    {{ number_format((int)$total_rkap, 0, '.', '.') ?? '-' }}
                                                 </small>
                                             </td>
                                             <!--end::Nilai OK-->
@@ -690,7 +750,6 @@
                                                     });
                                                 @endphp
                                                 <small>
-                                                    {{-- {{ $proyek->forecast }} --}}
                                                     {{ number_format((int)$total_forecast, 0, '.', '.') ?? '-' }}
                                                 </small>
                                             </td>
@@ -698,9 +757,19 @@
                                             
                                             <!--begin::Realisasi-->
                                             <td class="text-end">
+                                                @php
+                                                if ($proyek->tipe_proyek == 'R' && $proyek->stage == 8) {
+                                                    $total_realisasi = $proyek->Forecasts->filter(function($f) {
+                                                        return $f->periode_prognosa == (int) date("m") && $f->tahun == (int) date("Y") ;
+                                                    })->sum(function($f) {
+                                                        return (int) $f->realisasi_forecast;
+                                                    });
+                                                } else {
+                                                    $total_realisasi = $proyek->nilai_perolehan;
+                                                }
+                                                @endphp
                                                 <small>
-                                                    {{-- {{ $proyek->nilai_perolehan }} --}}
-                                                    {{ number_format((int)$proyek->nilai_perolehan, 0, '.', '.') ?? '-' }}
+                                                    {{ number_format((int)$total_realisasi, 0, '.', '.') ?? '-' }}
                                                 </small>
                                             </td>
                                             <!--end::Realisasi-->
