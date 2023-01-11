@@ -1011,16 +1011,16 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $data = $request->all();
         if (isset($data["unit_kerja"])) {
             $unit_kerja = UnitKerja::where("unit_kerja", "=", $data["unit_kerja"])->first();
-            $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("periode_prognosa", "=", $data["periode-prognosa"])->where("is_request_unlock", "=", "t")->where("proyeks.unit_kerja", $unit_kerja->divcode)->select("history_forecast.*")->get();
+            $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("periode_prognosa", "=", $data["periode-prognosa"])->where("proyeks.unit_kerja", $unit_kerja->divcode)->select("history_forecast.*")->get();
         } else {
             $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(
                 ",",
                 Auth::user()->unit_kerja
             )) : Auth::user()->unit_kerja;
             if ($unit_kerja_user instanceof \Illuminate\Support\Collection) {
-                $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("periode_prognosa", "=", $data["periode-prognosa"])->where("is_request_unlock", "=", "t")->whereIn("unit_kerja", $unit_kerja_user->toArray());
+                $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("periode_prognosa", "=", $data["periode-prognosa"])->whereIn("unit_kerja", $unit_kerja_user->toArray());
             } else {
-                $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("periode_prognosa", "=", $data["periode-prognosa"])->where("is_request_unlock", "=", "t")->where("proyeks.unit_kerja", $unit_kerja_user);
+                $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("periode_prognosa", "=", $data["periode-prognosa"])->where("proyeks.unit_kerja", $unit_kerja_user);
             }
         }
         // if (Auth::user()->check_administrator) {
@@ -1029,6 +1029,12 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         // } else {
         //     $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("periode_prognosa", "=", $request->periode_prognosa)->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->get();
         // }
+        $history_forecasts = $history_forecasts->filter(function ($h) {
+            return $h->is_approved_1 == "f" || $h->is_request_unlock == "t";
+        });
+        $check_value = $history_forecasts->every(function ($h) {
+            return $h->is_request_unlock == "f";
+        });
         foreach ($history_forecasts as $history_forecast) {
             $history_forecast->delete();
         }

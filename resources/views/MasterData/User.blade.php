@@ -56,7 +56,7 @@ a{{-- Begin::Extend Header --}}
                             </div>
                             <!--end::Page title-->
 
-                            @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)"))
+                            @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "Rahmad"))
                                 <!--begin::Actions-->
                                 <div class="d-flex align-items-center py-1">
 
@@ -213,7 +213,14 @@ a{{-- Begin::Extend Header --}}
 
                                             <!--begin::unit-->
                                             <td>
-                                                {{ $user->UnitKerja->unit_kerja ?? '-' }}
+                                                @php
+                                                    $unit_kerja_user = str_contains($user->unit_kerja, ",") ? collect(explode(",", $user->unit_kerja)) : collect($user->unit_kerja);
+                                                @endphp
+                                                {{-- {{ $user->unit_kerja ?? '-' }} --}}
+                                                @foreach ($unit_kerja_user as $item)
+                                                    {{ $item }}
+                                                @endforeach
+                                                {{-- {{ $unit_kerja_user ?? '-' }} --}}
                                             </td>
                                             <!--end::unit-->
 
