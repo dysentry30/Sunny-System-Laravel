@@ -1233,6 +1233,7 @@
                 dom: 'lBfrtip',
                 stateSave : true,
                 scrollX : true,
+                pageLength : 25,
                 // iDisplayLength : 25,
                 // pageLength : 500,
                 // lengthMenu: [[5, 10, 20, -1], [5, 10, 20, 'Todos']],
