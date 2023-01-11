@@ -411,15 +411,15 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     // Reset Porsi JO 
     Route::get('/proyek/reset-jo/{kode_proyek}', [ProyekController::class, 'resetJo']);
 
-    Route::post('/proyek/forecast/{i}/{periodePrognosa}/retail', function (Request $request, $i, $periodePrognosa) {
+    Route::post('/proyek/forecast/{i}/{periodePrognosa}/{year}/retail', function (Request $request, $i, $periodePrognosa, $year) {
         $data = $request->all();
         // dd($data, $i, $periodePrognosa);
 
-        $findForecast = Forecast::where("kode_proyek", "=", $data["kode-proyek"])->where("month_forecast", "=", (int) $i)->where("periode_prognosa", "=", $periodePrognosa)->get()->first();
+        $findForecast = Forecast::where("kode_proyek", "=", $data["kode-proyek"])->where("month_forecast", "=", (int) $i)->where("periode_prognosa", "=", $periodePrognosa)->where("tahun", "=", $year)->get()->first();
         // $tabPane = "kt_user_view_overview_forecast";
 
         if (empty($findForecast)) {
-            $nullForecast = Forecast::where("kode_proyek", "=", $data["kode-proyek"])->where("month_forecast", "=", null)->where("periode_prognosa", "=", $periodePrognosa)->get()->first();
+            $nullForecast = Forecast::where("kode_proyek", "=", $data["kode-proyek"])->where("month_forecast", "=", null)->where("periode_prognosa", "=", $periodePrognosa)->where("tahun", "=", $year)->get()->first();
             if (!empty($nullForecast)) {
                 $nullForecast->delete();
             }
@@ -437,7 +437,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
             // $prognosa = (int) date('m');
             $forecast->periode_prognosa = $periodePrognosa;
-            $forecast->tahun = (int) date("Y");
+            $forecast->tahun = $year;
 
             // dd($tabPane);
 
