@@ -629,11 +629,11 @@ class ContractManagementsController extends Controller
                 $review_kontrak->uraian = $uraian[$key];
                 $review_kontrak->pic = $pic[$key];
                 $review_kontrak->catatan = $catatan[$key];
-                $review_kontrak->save();
-
-                Alert::success('Success', "Tinjauan Kontrak berhasil ditambahkan");
-                return redirect()->back();
+                $review_kontrak->save();  
+                
             });
+            Alert::success('Success', "Tinjauan Kontrak berhasil ditambahkan");
+            return redirect()->back();
         }else{
             $is_data_exist->each(function($item, $key) use($data_update, $data){
                 $item->id_contract = $data["id-contract"];
@@ -644,9 +644,9 @@ class ContractManagementsController extends Controller
                 $item->pic = $data_update[$key]->pic;
                 $item->catatan = $data_update[$key]->catatan;
                 $item->save();
-                Alert::success('Success', "Tinjauan Kontrak berhasil ditambahkan");
-                return redirect()->back();
             });
+            Alert::success('Success', "Tinjauan Kontrak berhasil ditambahkan");
+            return redirect()->back();
         }
         // $data["kategori"]->each(function($item, $key){
         // });
@@ -2256,11 +2256,15 @@ class ContractManagementsController extends Controller
                 $nd_collect = collect($nd)->filter(function($ndc, $key) use($nd) {
                     return !empty($nd[$key]);
                 })->first();
+                if(str_contains($nd_collect, ".")){
+                    $nd_collect = str_replace(".", "", $nd_collect);
+                }
                 return $nd_collect;
             }
+            
+            
             return $nd;
         });
-        // dd($new_data);
         
         // $new_data->each(function($data, $key) {
             
