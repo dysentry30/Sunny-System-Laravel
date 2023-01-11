@@ -1622,15 +1622,15 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     // begin RKAP
     Route::get('/rkap', function () {
-        if (Auth::user()->check_administrator) {
-            $unitkerjas = Proyek::sortable()->get()->groupBy("unit_kerja");
-        } else {
-            $unitkerjas = Proyek::sortable()->where("unit_kerja", "=", Auth::user()->unit_kerja)->get()->groupBy("unit_kerja");
-        }
+        // if (Auth::user()->check_administrator) {
+        $unitkerjas = Proyek::sortable()->where("is_rkap", "=", true)->get()->groupBy("unit_kerja");
+        // } else {
+        //     $unitkerjas = Proyek::sortable()->where("is_rkap", "=", true)->where("unit_kerja", "=", Auth::user()->unit_kerja)->get()->groupBy("unit_kerja");
+        // }
 
         $proyeks = [];
         foreach ($unitkerjas as $key => $unitkerja) {
-            $proyek = Proyek::sortable()->where("unit_kerja", "=", $key)->get()->groupBy("tahun_perolehan");
+            $proyek = Proyek::sortable()->where("unit_kerja", "=", $key)->where("is_rkap", "=", true)->get()->groupBy("tahun_perolehan");
             array_push($proyeks, $proyek);
             //    dump($proyeks);
         }
@@ -1640,7 +1640,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     });
 
     Route::get('/rkap/{divcode}/{tahun_pelaksanaan}', function ($divcode, $tahun_pelaksanaan, Request $request) {
-        $proyeks = Proyek::where("tahun_perolehan", "=", $tahun_pelaksanaan)->where("unit_kerja", "=", $divcode)->get();
+        $proyeks = Proyek::where("tahun_perolehan", "=", $tahun_pelaksanaan)->where("is_rkap", "=", true)->where("unit_kerja", "=", $divcode)->get();
         $rkaps = UnitKerja::where("divcode", "=", $divcode)->first();
         // dd($rkaps);
 
@@ -1683,14 +1683,6 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         // dd();
 
         return view("/11_Rkap", compact(["unitkerjas", "proyeks"]));
-    });
-
-    Route::get('/rkap/{divcode}/{tahun_pelaksanaan}', function ($divcode, $tahun_pelaksanaan, Request $request) {
-        $proyeks = Proyek::where("tahun_perolehan", "=", $tahun_pelaksanaan)->where("unit_kerja", "=", $divcode)->get();
-        $rkaps = UnitKerja::where("divcode", "=", $divcode)->first();
-        // dd($rkaps);
-
-        return view("/Rkap/viewRkap", compact(["proyeks", "tahun_pelaksanaan", "rkaps"]));
     });
     // end RKAP AWAL dan REVIEW
 

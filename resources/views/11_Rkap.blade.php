@@ -163,7 +163,7 @@
                                         <tr>
                                             <!--begin::Name-->
                                             <td class="">
-                                                <a href="/rkap/{{ $proyek->first()->UnitKerja->divcode }}/{{ $proyek->first()->tahun_perolehan }}" id="click-name"
+                                                <a target="_blank" href="/rkap/{{ $proyek->first()->UnitKerja->divcode }}/{{ $proyek->first()->tahun_perolehan }}" id="click-name"
                                                     class="text-gray-600 text-hover-primary mb-1">{{ $proyek->first()->UnitKerja->unit_kerja }}</a>
                                             </td>
                                             <!--end::Name-->
