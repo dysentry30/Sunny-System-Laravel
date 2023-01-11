@@ -730,7 +730,12 @@
                                                         return (int) $f->rkap_forecast;
                                                     });
                                                 } else {
-                                                    $total_rkap = $proyek->nilai_rkap ?? $proyek->nilaiok_awal;
+                                                    if (!empty($proyek->nilai_rkap)) {
+                                                        $total_rkap = $proyek->nilai_rkap;
+                                                    } else {
+                                                        $total_rkap = $proyek->nilaiok_awal;
+                                                    }
+                                                    
                                                 }
                                                 @endphp
                                                 <small>

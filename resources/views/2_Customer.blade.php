@@ -640,6 +640,7 @@
             dom: '<"float-start"f><"#example"t>rtip',
             // dom: 'frtip',
             pageLength : 50,
+            ordering : false,
             // buttons: [
             //     'copy', 'csv', 'excel', 'pdf', 'print'
             // ]

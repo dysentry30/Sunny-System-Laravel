@@ -501,7 +501,12 @@
                                                         return (int) $f->rkap_forecast;
                                                     });
                                                 } else {
-                                                    $total_rkap = $proyek->nilai_rkap ?? $proyek->nilaiok_awal;
+                                                    if (!empty($proyek->nilai_rkap)) {
+                                                        $total_rkap = $proyek->nilai_rkap;
+                                                    } else {
+                                                        $total_rkap = $proyek->nilaiok_awal;
+                                                    }
+                                                    
                                                 }
                                                 @endphp
                                                 <small>
@@ -1029,6 +1034,7 @@
                 dom: '<"float-start"f><"#example"t>rtip',
                 // dom: 'frtip',
                 pageLength : 50,
+                ordering : false,
                 // buttons: [
                 //     'copy', 'csv', 'excel', 'pdf', 'print'
                 // ]
