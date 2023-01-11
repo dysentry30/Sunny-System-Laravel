@@ -154,8 +154,8 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                             $unit_kerja = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
                                         @endphp
 
-                                        <div class="row">
-                                            <div class="d-flex {{$periode != (int) date("m") ? "col-6" : "col-6"}}">
+                                        <div class="">
+                                            <div class="d-flex align-items-center w-100 mb-5">
                                                 <script>
                                                     const historyForecast = JSON.parse('{!! $historyForecast->toJson() !!}');
                                                 </script>
@@ -169,44 +169,73 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                     @endphp
                                                 @endif
                                                 @if (!str_contains(Auth::user()->name, "(PIC)"))
-                                                    @if ($historyForecast->count() == $unit_kerja_count)
-                                                        <div class="" data-bs-toggle="tooltip" data-bs-html="true" data-bs-title="Untuk Request Unlock, silahkan buka tab <b>Request Approval History</b>." data-bs-placement="top">
+                                                    <div class="col-2" style="width: 11% !important">
+                                                        @if ($historyForecast->count() == $unit_kerja_count)
+                                                            <div class="" data-bs-toggle="tooltip" data-bs-html="true" data-bs-title="Untuk Request Unlock, silahkan buka tab <b>Request Approval History</b>." data-bs-placement="top">
+                                                                <button type="button" style="background-color: #008CB4;" id="lock-forecast"
+                                                                    onclick="lockMonthForecastBulanan(this)"
+                                                                    class="btn btn-sm btn-active-primary mt-4 me-6 disabled">
+                                                                        <span class="text-white mx-2 fs-6">Unlock</span>
+                                                                        <i class="bi bi-lock-fill text-white"></i>
+                                                                </button>
+                                                        </div>
+                                                            @else
                                                             <button type="button" style="background-color: #008CB4;" id="lock-forecast"
                                                                 onclick="lockMonthForecastBulanan(this)"
-                                                                class="btn btn-sm btn-active-primary mt-4 me-6 disabled">
-                                                                    <span class="text-white mx-2 fs-6">Unlock Forecast</span>
-                                                                    <i class="bi bi-lock-fill text-white"></i>
+                                                                class="btn btn-sm btn-active-primary mt-4 me-6">
+                                                                    <span class="text-white mx-2 fs-6">Lock</span>
+                                                                    <i class="bi bi-unlock-fill text-white"></i>
                                                             </button>
-                                                      </div>
-                                                        @else
-                                                        <button type="button" style="background-color: #008CB4;" id="lock-forecast"
-                                                            onclick="lockMonthForecastBulanan(this)"
-                                                            class="btn btn-sm btn-active-primary mt-4 me-6">
-                                                                <span class="text-white mx-2 fs-6">Lock Forecast</span>
-                                                                <i class="bi bi-unlock-fill text-white"></i>
-                                                        </button>
-                                                    @endif
+                                                        @endif
+                                                    </div>
                                                 @endif
                                                 
-                                                <button type="button" id="unlock-previous-forecast"
-                                                onclick="unlockPreviousForecast()"
-                                                class="btn btn-sm btn-light btn-active-primary mt-4 ms-0">
-                                                        <span class="fs-6">Pilih Bulan Forecast</span>
-                                                </button>
+                                                <div class="col-2" style="width: 10% !important">
+                                                    <button type="button" id="unlock-previous-forecast"
+                                                    onclick="unlockPreviousForecast()"
+                                                    class="btn btn-sm btn-light btn-active-primary mt-4 ms-0">
+                                                            <span class="fs-6">Pilih Bulan</span>
+                                                    </button>
+                                                </div>
 
                                                 
                                                 @if ($periode != (int) date("m") && isset($periode))
-                                                    <div class="d-flex flex-row col-5 align-items-center justify-content-center">
-                                                        <button type="button" onClick="window.location.href='/forecast';" id="unlock-previous-forecast"
+                                                    <div class="col-2">
+                                                        <div class="d-flex flex-row align-items-center justify-content-center">
+                                                            <button type="button" onClick="window.location.href='/forecast/{{$periode}}/{{$year}}';" id="unlock-previous-forecast"
                                                             class="btn btn-sm btn-light btn-active-danger mt-4 me-3">
-                                                                <span class="mx-2 fs-6">Pindah Forecast ke {{Carbon\Carbon::parse(new DateTime("now"))->translatedFormat("F")}}</span>
-                                                        </button>
-                                                        <i class="bi bi-info-circle-fill text-hover-primary mt-4" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="right"
-                                                        data-bs-custom-class="custom-tooltip"
-                                                        data-bs-title="Jika Tombol <b>Pindah Forecast Bulan Ini</b> di klik, maka halaman Forecast ini akan pindah ke halaman Forecast bulan sekarang"></i>
+                                                            <span class="mx-2 fs-6">Pindah ke {{Carbon\Carbon::parse(new DateTime("now"))->translatedFormat("F")}}</span>
+                                                            </button>
+                                                            <i class="bi bi-info-circle-fill text-hover-primary mt-4" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="right"
+                                                            data-bs-custom-class="custom-tooltip"
+                                                            data-bs-title="Jika Tombol <b>Pindah ke {{Carbon\Carbon::parse(new DateTime("now"))->translatedFormat("F")}}</b> di klik, maka halaman Forecast ini akan pindah ke halaman Forecast bulan sekarang"></i>
+                                                        </div>
                                                     </div>
                                                 @endif
+
+                                                <div class="col-2 mt-4 ms-2">
+                                                    <!--begin::Select Options-->
+                                                    <select onchange="return document.location.href = `/forecast/{{$periode}}/${this.value}`" id="tahun-history" name="tahun-history"
+                                                        class="form-select form-select-solid select2-hidden-accessible"
+                                                        data-control="select2" data-hide-search="true" data-placeholder="Tahun"
+                                                        data-select2-id="select2-data-tahun" tabindex="-1" aria-hidden="true">
+                                                        @if ($year == null)
+                                                            @for ($i = $years - 2; $i < $years + 10; $i++)
+                                                                <option value="{{ $i }}" {{ $years == $i ? 'selected' : '' }}>
+                                                                    {{ $i }}</option>
+                                                            @endfor
+                                                        @else
+                                                            @for ($i = $year - 2; $i < $year + 10; $i++)
+                                                                <option value="{{ $i }}" {{ $year == $i ? 'selected' : '' }}>
+                                                                    {{ $i }}</option>
+                                                            @endfor
+                                                        @endif
+                                                    </select>
+                                                    <!--end::Select Options-->
+                                                </div>
                                             </div>
+                                        </div>
+                                        <div class="row">
                                             <div class="pt-2">
                                                 <div class="col">
                                                     <form action=""></form>
@@ -257,7 +286,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
 
 
                         <!--begin::Post-->
-                        <div class="post d-flex flex-column-fluid mt-15" id="kt_post">
+                        <div class="post d-flex flex-column-fluid mt-20" id="kt_post">
                             <!--begin::Container-->
                             <div id="kt_content_container"
                                 class="w-100"
