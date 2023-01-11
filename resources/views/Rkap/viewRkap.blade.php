@@ -61,6 +61,9 @@
 
                         {{-- Begin :: Card Header --}}
                         <div class="card-header py-10 ">
+                            @php
+                                $rkap_istrue = $rkaps->proyeks->where("is_rkap", "=", true);
+                            @endphp
 
 
                             <div class="d-flex w-100 align-items-center">
@@ -81,7 +84,7 @@
                                 </div>
 
                                 @php
-                                    $total_ok_review = $rkaps->proyeks->where('tahun_perolehan', '=', $rkaps->proyeks->first()->tahun_perolehan)->map(function ($data) {
+                                    $total_ok_review = $rkap_istrue->where('tahun_perolehan', '=', $rkap_istrue->first()->tahun_perolehan)->map(function ($data) {
                                         return (int) str_replace(',', '', $data->nilaiok_review);
                                     });
                                     $total_ok_review = $total_ok_review->sum();
@@ -117,14 +120,14 @@
                                                 <span class="">Tahun Pelaksanaan: </span>
                                             </div>
                                             <div class="text-dark text-start">
-                                                <b>{{ $rkaps->proyeks->first()->tahun_perolehan }}</b>
+                                                <b>{{ $rkap_istrue->last()->tahun_perolehan }}</b>
                                             </div>
                                         </div>
                                         <!--end::Input group Name-->
                                     </div>
 
                                     @php
-                                        $total_ok_awal = $rkaps->proyeks->where('tahun_perolehan', '=', $rkaps->proyeks->first()->tahun_perolehan)->map(function ($data) {
+                                        $total_ok_awal = $rkap_istrue->where('tahun_perolehan', '=', $rkap_istrue->first()->tahun_perolehan)->map(function ($data) {
                                             return (int) str_replace(',', '', $data->nilaiok_awal);
                                         });
                                         $total_ok_awal = $total_ok_awal->sum();
@@ -151,12 +154,12 @@
                                 <div class="d-flex align-items-center">
 
                                     @php
-                                        $total_forecast = $rkaps->proyeks->where('tahun_perolehan', '=', $rkaps->proyeks->first()->tahun_perolehan)->map(function ($data) {
+                                        $total_forecast = $rkap_istrue->where('tahun_perolehan', '=', $rkap_istrue->first()->tahun_perolehan)->map(function ($data) {
                                             return $data->forecast;
                                         });
                                         $total_forecast = $total_forecast->sum();
                                         
-                                        $total_realisasi = $rkaps->proyeks->where('tahun_perolehan', '=', $rkaps->proyeks->first()->tahun_perolehan)->map(function ($data) {
+                                        $total_realisasi = $rkap_istrue->where('tahun_perolehan', '=', $rkap_istrue->first()->tahun_perolehan)->map(function ($data) {
                                             return (int) str_replace(',', '', $data->nilai_kontrak_keseluruhan);
                                         });
                                         $total_realisasi = $total_realisasi->sum();
@@ -207,10 +210,9 @@
 
                                     <!--begin::Card body-->
                                     <div class="card-body" style="padding: 1rem;">
-                                        @if (auth()->user()->check_administrator)
+                                        {{-- @if (auth()->user()->check_administrator) --}}
                                             <!--begin::Table-->
-                                            <table class="table align-middle table-row-dashed fs-6 gy-2"
-                                                id="kt_customers_table">
+                                            <table class="table align-middle table-row-dashed fs-6 gy-2" id="example">
                                                 <!--begin::Table head-->
                                                 <thead>
                                                     <!--begin::Table row-->
@@ -292,12 +294,12 @@
 
                                                                 <!--begin::Coloumn-->
                                                                 <td class="text-end">
-                                                                    {{ $proyek->nilaiok_awal ?? 0 }}
+                                                                    {{ number_format((int)$proyek->nilaiok_awal, 0, '.', '.') ?? '-' }}
                                                                 </td>
                                                                 <!--end::Coloumn-->
                                                                 <!--begin::Coloumn-->
                                                                 <td class="text-end">
-                                                                    {{ $proyek->nilaiok_review ?? 0 }}
+                                                                    {{ number_format((int)$proyek->nilaiok_review, 0, '.', '.') ?? '-' }}
                                                                 </td>
                                                                 <!--end::Coloumn-->
                                                                 <!--begin::Coloumn-->
@@ -319,7 +321,7 @@
                                                 <!--end::Table body-->
                                             </table>
                                             <!--end::Table-->
-                                        @endif
+                                        {{-- @endif --}}
                                     </div>
                                     <!--end::Card body-->
                                 </div>
@@ -345,3 +347,23 @@
         </div>
         <!--end::Root-->
     @endsection
+    @section('js-script')
+    <!--begin::Data Tables-->
+    <script src="/datatables/jquery.dataTables.min.js"></script>
+    
+    <script>
+        $(document).ready(function() {
+            $('#example').DataTable( {
+                dom: 'rtip',
+                // dom: 'frtip',
+                pageLength : 50,
+                // ordering : false,
+                // buttons: [
+                //     'copy', 'csv', 'excel', 'pdf', 'print'
+                // ]
+            } );
+        } );
+    </script>
+    <!--end::Data Tables-->
+    @endsection
+
