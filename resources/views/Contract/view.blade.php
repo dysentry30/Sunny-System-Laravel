@@ -2201,7 +2201,7 @@
                            <small><b>Download File :</b> {{ $uploadFileResiko->nama_document }}</small>
                         </a>
                         @endif
-                        <br><br>
+                        <br><br><br>
 
                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                             Rencana Kerja Manajemen Kontrak
@@ -2526,7 +2526,7 @@
                         <br>
                         <br>
 
-                            <div class="row">
+                            <div class="row mb-5">
                                 <div class="col-6">
                                     <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                         LAW
@@ -9116,7 +9116,7 @@
                                         <span style="font-weight: normal">Termin yang sudah diterima</span>
                                     </label><br>
                                     <!--end::Label-->
-                                    <input type="text" class="form-control" name="jawaban-12[]">
+                                    <input type="text" class="form-control reformat" name="jawaban-12[]">
                                 </div>
                                 <div id="slide-7" class="animate slide" style="display: none; opacity: 0;">
                                     <!--begin::Label-->
