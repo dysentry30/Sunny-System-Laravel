@@ -456,7 +456,11 @@ Route::middleware(["web"])->group(function () {
             $p->unit_kerja = $unit_kerja->divcode;
             $p->tahun_perolehan = $tahun;
             $p->dop = $p->UnitKerja->dop;
-            $p->stage = 1;
+            if ($p->tipe_proyek == 'R') {
+                $p->stage = 8;
+            } else {
+                $p->stage = 1;
+            }
             $p->porsi_jo = 100;
             $p->is_cancel = false;
 
