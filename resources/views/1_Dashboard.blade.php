@@ -250,7 +250,7 @@
                                         <!-- End :: Select Options Unit Kerja -->
 
                                     <!--begin::Select Options-->
-                                    <select onchange="this.form.submit()" id="periode-prognosa" name="periode-prognosa"
+                                    <select id="periode-prognosa" name="periode-prognosa"
                                         class="form-select form-select-solid select2-hidden-accessible w-auto ms-2"
                                         style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
                                         data-placeholder="Bulan" data-select2-id="select2-data-bulan" tabindex="-1"
