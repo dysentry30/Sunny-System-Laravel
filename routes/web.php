@@ -1622,11 +1622,12 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     // begin RKAP
     Route::get('/rkap', function () {
-        // if (Auth::user()->check_administrator) {
+        $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja);
+        if (Auth::user()->check_administrator) {
         $unitkerjas = Proyek::sortable()->where("is_rkap", "=", true)->get()->groupBy("unit_kerja");
-        // } else {
-        //     $unitkerjas = Proyek::sortable()->where("is_rkap", "=", true)->where("unit_kerja", "=", Auth::user()->unit_kerja)->get()->groupBy("unit_kerja");
-        // }
+        } else {
+            $unitkerjas = Proyek::sortable()->where("is_rkap", "=", true)->get()->whereIn("unit_kerja", $unit_kerja_user->toArray())->groupBy("unit_kerja");
+        }
 
         $proyeks = [];
         foreach ($unitkerjas as $key => $unitkerja) {
