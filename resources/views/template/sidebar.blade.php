@@ -444,7 +444,7 @@
                             <!--end::Master Data Expand-->
                         @endif
 
-                        @if (auth()->user()->check_administrator)
+                        @if (auth()->user()->check_administrator || auth()->user()->check_user_sales)
                             <div class="menu-item">
                                 <a class="menu-link " href="/rkap"
                                     style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'rkap') ? 'background-color:#008CB4' : '' }}">

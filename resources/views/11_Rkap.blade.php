@@ -137,7 +137,7 @@
 
                         <!--begin::Card body-->
                         <div class="card-body py-10">
-                            @if (auth()->user()->check_administrator)
+                            @if (auth()->user()->check_administrator || auth()->user()->check_user_sales)
                                 <!--begin::Table-->
                             <table class="table align-middle table-row-dashed fs-6 gy-2" id="kt_customers_table">
                                 <!--begin::Table head-->

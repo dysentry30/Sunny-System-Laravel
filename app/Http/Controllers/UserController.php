@@ -265,15 +265,15 @@ class UserController extends Controller
         $user->email = $data["email"];
         $user->no_hp = $data["phone-number"];
         $user->is_active = $request->has("is-active");
-        if (!Auth::user()->check_administrator) {
-            $user->unit_kerja = count($data["unit-kerja"]) > 1 ? join(",", $data["unit-kerja"]) : $data["unit-kerja"][0];
-        }
-        // $user->alamat = $data["alamat"];
+        // if (!Auth::user()->check_administrator) {
+        $user->unit_kerja = count($data["unit-kerja"]) > 1 ? join(",", $data["unit-kerja"]) : $data["unit-kerja"][0];
+        // }
         $user->check_administrator = $is_administrator;
         $user->check_admin_kontrak = $is_admin_kontrak;
         $user->check_user_sales = $is_user_sales;
         $user->check_team_proyek = $is_team_proyek;
-
+        // $user->alamat = $data["alamat"];
+        
         if ($user->save()) {
             Alert::success("Success", "User berhasil diperbarui.")->autoClose(3000);
             return redirect()->back();

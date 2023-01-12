@@ -6,17 +6,6 @@ a{{-- Begin::Extend Header --}}
 @section('title', 'Users')
 {{-- End::Title --}}
 
-<style>
-    .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
-        /* background-color: red !important; */
-        --bs-table-accent-bg: #8ecae650 !important;
-    }
-
-    /* .table>:not(caption)>*>* {
-        padding: 0.25rem 0.25rem !important;
-    } */
-</style>
-
 <!--begin::Main-->
 @section('content')
 
@@ -127,7 +116,7 @@ a{{-- Begin::Extend Header --}}
 
 
                         <!--begin::Card header-->
-                        <div class="card-header border-0 pt-">
+                        {{-- <div class="card-header border-0 pt-">
                             <!--begin::Card title-->
                             <div class="card-title">
                                 <!--begin::Search-->
@@ -144,22 +133,21 @@ a{{-- Begin::Extend Header --}}
                             </div>
                             <!--begin::Card title-->
 
-                        </div>
+                        </div> --}}
                         <!--end::Card header-->
 
 
                         <!--begin::Card body-->
-                        <div class="card-body pt-0 ">
-
+                        <div class="card-body pt-3 ">
 
                             <!--begin::Table-->
-                            <table class="table table-hover align-middle table-row-dashed fs-6 gy-2" id="kt_customers_table">
+                            <table class="table table-hover align-middle table-row-dashed fs-6 gy-2" id="user_table">
                                 <!--begin::Table head-->
                                 <thead>
                                     <!--begin::Table row-->
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                         <th class="min-w-auto px-4">No.</th>
-                                        <th class="min-w-auto">Nip</th>
+                                        {{-- <th class="min-w-auto">Nip</th> --}}
                                         <th class="min-w-auto">Name</th>
                                         <th class="min-w-auto">Username</th>
                                         <th class="min-w-auto">Unit Kerja</th>
@@ -180,8 +168,8 @@ a{{-- Begin::Extend Header --}}
                                     // $companies = $companies->reverse();
                                     $no = 1;
                                 @endphp
-                                @foreach ($users as $user)
-                                    <tbody class="fw-bold text-gray-600">
+                                <tbody class="fw-bold text-gray-600">
+                                    @foreach ($users as $user)
                                         <tr>
 
                                             <!--begin::No-->
@@ -191,10 +179,10 @@ a{{-- Begin::Extend Header --}}
                                             <!--end::No-->
 
                                             <!--begin::NIP-->
-                                            <td>
+                                            {{-- <td>
                                                 <a href="/user/view/{{ $user->id }}"
                                                     class="text-hover-primary text-gray-600">{{ $user->nip }}</a>
-                                            </td>
+                                            </td> --}}
                                             <!--end::NIP-->
 
                                             <!--begin::Ketua tender-->
@@ -276,7 +264,7 @@ a{{-- Begin::Extend Header --}}
                                                 <!--end::Action-->
                                             @endif
                                         </tr>
-                                @endforeach
+                                    @endforeach
                                 </tbody>
                                 <!--end::Table body-->
                             </table>
@@ -571,6 +559,24 @@ a{{-- Begin::Extend Header --}}
 @endsection
 
 @section('js-script')
+    <!--begin::Data Tables-->
+    <script src="/datatables/jquery.dataTables.min.js"></script>
+    
+    <script>
+        $(document).ready(function() {
+            $('#user_table').DataTable( {
+                dom: '<"float-start"f><"#user_table"t>rtip',
+                // dom: 'frtip',
+                pageLength : 50,
+                // ordering : false,
+                // buttons: [
+                //     'copy', 'csv', 'excel', 'pdf', 'print'
+                // ]
+            } );
+        } );
+    </script>
+    <!--end::Data Tables-->
+    
     <script>
         function copyPassword(elt) {
             const pwGenerated = document.querySelector("#pw-generated");
