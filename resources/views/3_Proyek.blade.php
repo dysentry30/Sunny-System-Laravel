@@ -29,8 +29,12 @@
         padding: 0 !important;
         margin-left: 5px !important;
         color: #B5B5C3;
+
     }
+    
+    
 </style>
+
 
 <!--begin::Main-->
 @section('content')
@@ -296,7 +300,9 @@
                         </div>
                         <!--end::Card header-->
 
-
+                        @php
+                            $proyeks = $proyeks->reverse();
+                        @endphp
                         <!--begin::Card body-->
                         <div class="card-body px-3 pt-0">
                             <!--begin::Table Proyek-->
@@ -312,6 +318,7 @@
                                         <th class="min-w-auto"><small>Tahun RA Perolehan</small></th>
                                         <th class="min-w-auto"><small>Bulan RA Perolehan</small></th>
                                         <th class="min-w-auto"><small>Nilai RKAP</small></th>
+                                        <th class="min-w-auto"><small>Nilai Diluar RKAP</small></th>
                                         <th class="min-w-auto"><small>Nilai Forecast</small></th>
                                         <th class="min-w-auto"><small>Nilai Realisasi</small></th>
                                         <th class="min-w-auto"><small>Pelanggan</small></th>
@@ -325,9 +332,6 @@
                                 </thead>
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
-                                @php
-                                    $proyeks = $proyeks->reverse();
-                                @endphp
                                 <tbody class="fw-bold text-gray-800">
                                     @foreach ($proyeks as $proyek)
                                         <tr>
@@ -501,16 +505,18 @@
                                                         return (int) $f->rkap_forecast;
                                                     });
                                                 } else {
-                                                    if (!empty($proyek->nilai_rkap)) {
-                                                        $total_rkap = $proyek->nilai_rkap;
-                                                    } else {
-                                                        $total_rkap = $proyek->nilaiok_awal;
-                                                    }
-                                                    
+                                                    $total_rkap = $proyek->nilai_rkap;
                                                 }
                                                 @endphp
                                                 <small>
-                                                    {{ number_format((int)$total_rkap, 0, '.', '.') ?? '-' }}
+                                                    {{ number_format((int)$total_rkap, 0, '.', '.') ?? '0' }}
+                                                </small>
+                                            </td>
+                                            <!--end::Nilai OK-->
+                                            <!--begin::Nilai OK-->
+                                            <td class="text-end">
+                                                <small>
+                                                    {{ number_format((int)$proyek->nilaiok_awal, 0, '.', '.') ?? '0' }}
                                                 </small>
                                             </td>
                                             <!--end::Nilai OK-->
@@ -526,7 +532,7 @@
                                                     });
                                                 @endphp
                                                 <small>
-                                                    {{ number_format((int)$total_forecast, 0, '.', '.') ?? '-' }}
+                                                    {{ number_format((int)$total_forecast, 0, '.', '.') ?? '0' }}
                                                 </small>
                                             </td>
                                             <!--end::Forecast-->
@@ -545,7 +551,7 @@
                                                 }
                                                 @endphp
                                                 <small>
-                                                    {{ number_format((int)$total_realisasi, 0, '.', '.') ?? '-' }}
+                                                    {{ number_format((int)$total_realisasi, 0, '.', '.') ?? '0' }}
                                                 </small>
                                             </td>
                                             <!--end::Realisasi-->
@@ -1021,8 +1027,8 @@
 @section('js-script')
     <!--begin::Data Tables-->
     <script src="/datatables/jquery.dataTables.min.js"></script>
+    {{-- <script src="https://cdn.datatables.net/fixedcolumns/4.2.1/js/dataTables.fixedColumns.min.js"></script> --}}
     {{-- <script src="/datatables/dataTables.buttons.min.js"></script>
-    <script src="/datatables/buttons.html5.min.js"></script>
     <script src="/datatables/buttons.colVis.min.js"></script>
     <script src="/datatables/jszip.min.js"></script>
     <script src="/datatables/pdfmake.min.js"></script>
@@ -1032,9 +1038,15 @@
         $(document).ready(function() {
             $('#example').DataTable( {
                 dom: '<"float-start"f><"#example"t>rtip',
-                // dom: 'frtip',
                 pageLength : 50,
-                // ordering : false,
+                // scrollY : "1000px",
+                // scrollX : true,
+                // scrollCollapse: true,
+                // paging : false,
+                // fixedColumns:   {
+                //     left: 2,
+                //     right: 0
+                // },
                 // buttons: [
                 //     'copy', 'csv', 'excel', 'pdf', 'print'
                 // ]
