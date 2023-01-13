@@ -576,9 +576,9 @@
     <script>
         $(document).ready(function() {
             $('#ccm-perolehan, #ccm-pelaksanaan, #ccm-pemeliharaan').DataTable( {
-                // dom: 'Bfrtip',
+                dom: '<"float-start"f><"#example"t>rtip',
                 // dom: 'Brti',
-                pageLength : 10,
+                pageLength : 50,
                 buttons: [
                     {
                         extend: 'excelHtml5',
