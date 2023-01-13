@@ -9,4 +9,5 @@ class JenisDokumen extends Model
 {
     use HasFactory;
     protected $table = "jenis_dokumen";
+    protected $primaryKey = "id_jenis_dokumen";
 }
