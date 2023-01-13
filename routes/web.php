@@ -354,6 +354,14 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     // Save Masalah Hukum 
     Route::post('/customer/masalah-hukum/save', [CustomerController::class, 'saveMasalahHukum']);
 
+    Route::post('/customer/csi/save', [CustomerController::class, 'saveCSI']);
+
+    Route::post('/customer/cli/save', [CustomerController::class, 'saveCLI']);
+
+    Route::post('/customer/nps/save', [CustomerController::class, 'saveNPS']);
+
+    Route::post('/customer/karya-inovasi/save', [CustomerController::class, 'saveInovasi']);
+
 
     // Begin :: get Kabupaten
     Route::get('/get-kabupaten/{id}',function ($id) {
@@ -1432,6 +1440,21 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         }
         // $industrySector = IndustrySector::all();
         // return view("/MasterData/IndustrySectors", compact(["industrySector"]));
+    });
+
+    Route::get('/kriteria-green-line', function () {
+        $instansi = SumberDana::all()->map(function($sd) {
+            $new_class = new stdClass();
+            $new_class->instansi = $sd->nama_sumber;
+            return $new_class;
+        });
+        $sumber_danas = SumberDana::all()->map(function($sd) {
+            $new_class = new stdClass();
+            $new_class->kode = $sd->sumber_dana_id;
+            return $new_class;
+        })->unique("kode");
+        // dd($instansi);
+        return view("/MasterData/KriteriaGreenLine", compact(["instansi", "sumber_danas"]));
     });
     //End :: Master Data
 
