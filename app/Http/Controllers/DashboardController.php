@@ -68,7 +68,7 @@ class DashboardController extends Controller
             $claims = ClaimManagements::join("proyeks", "proyeks.kode_proyek", "=", "claim_managements.kode_proyek")->get();
             $unitKerja = UnitKerja::orderBy('unit_kerja')->get()->whereNotIn("divcode", ["B", "C", "D", "8"]);
             // dd($unitKerja);
-            $proyeks = Proyek::with(['Forecasts', 'UnitKerja', 'ContractManagements', "SumberDana"])->get();
+            $proyeks = Proyek::with(['Forecasts', 'UnitKerja', 'ContractManagements', "SumberDana"])->where("tahun_perolehan", "=", $year)->get();
             $paretoProyeks = Proyek::with(['Forecasts', 'UnitKerja', 'ContractManagements'])->where("proyeks.jenis_proyek", "!=", "I")->get();
             $contracts = ContractManagements::join("proyeks", "proyeks.kode_proyek", "=", "contract_managements.project_id")->get();
             $dops = Dop::orderBy('dop')->get();
@@ -93,7 +93,7 @@ class DashboardController extends Controller
         } else {
             // if ($unit_kerja_user instanceof \Illuminate\Support\Collection) {
             $contracts = ContractManagements::join("proyeks", "proyeks.kode_proyek", "=", "contract_managements.project_id")->get();
-            $proyeks = Proyek::with(['Forecasts', 'UnitKerja', 'ContractManagements', "SumberDana"])->get();
+            $proyeks = Proyek::with(['Forecasts', 'UnitKerja', 'ContractManagements', "SumberDana"])->where("tahun_perolehan", "=", $year)->get();
             $paretoProyeks = Proyek::with(['Forecasts', 'UnitKerja', 'ContractManagements'])->where("proyeks.jenis_proyek", "!=", "I")->get()->whereIn("unit_kerja", $unit_kerja_user->toArray());
             $claims = ClaimManagements::join("proyeks", "proyeks.kode_proyek", "=", "claim_managements.kode_proyek")->get()->whereIn("unit_kerja", $unit_kerja_user->toArray());
             $unitKerja = UnitKerja::get()->whereIn("divcode", $unit_kerja_user->toArray());

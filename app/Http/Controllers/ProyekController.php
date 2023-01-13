@@ -74,6 +74,8 @@ class ProyekController extends Controller
         $jenisProyek = JenisProyek::all();
         $tipeProyek = TipeProyek::all();
 
+        $year = (int) $request->get("tahun-history") ?? (int) date("Y");
+
         if (Auth::user()->check_administrator) {
             $unitkerjas = UnitKerja::all();
             // dd($unitkerjas);
@@ -83,16 +85,14 @@ class ProyekController extends Controller
             $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
             if ($unit_kerja_user instanceof \Illuminate\Support\Collection) {
                 $unitkerjas = UnitKerja::all()->whereIn("divcode", $unit_kerja_user->toArray());
-            } else {
-                $unitkerjas = UnitKerja::where("divcode", "=", Auth::user()->unit_kerja)->get();
-            }
-
-            if ($unit_kerja_user instanceof \Illuminate\Support\Collection) {
                 $proyeks = Proyek::with(['UnitKerja', 'Forecasts', 'proyekBerjalan'])->sortable()->whereIn("unit_kerja", $unit_kerja_user->toArray());
             } else {
+                $unitkerjas = UnitKerja::where("divcode", "=", Auth::user()->unit_kerja)->get();
                 $proyeks = Proyek::with(['UnitKerja', 'Forecasts', 'proyekBerjalan'])->sortable()->where("unit_kerja", "=", $unit_kerja_user);
             }
         }
+        
+        $proyeks = $proyeks->where("tahun_perolehan", "=", $year);
 
         // Begin::FILTER
         // if (!empty($column)) {

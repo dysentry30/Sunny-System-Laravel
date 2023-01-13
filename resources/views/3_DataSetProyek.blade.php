@@ -444,6 +444,7 @@
                                         <th class="min-w-auto"><small>Tahun RA Perolehan</small></th>
                                         <th class="min-w-auto"><small>Bulan RA Perolehan</small></th>
                                         <th class="min-w-auto"><small>Nilai RKAP</small></th>
+                                        <th class="min-w-auto"><small>Nilai Diluar RKAP</small></th>
                                         <th class="min-w-auto"><small>Nilai Forecast</small></th>
                                         <th class="min-w-auto"><small>Nilai Realisasi</small></th>
                                         <th class="min-w-auto"><small>Pelanggan</small></th>
@@ -677,16 +678,19 @@
                                                         return (int) $f->rkap_forecast;
                                                     });
                                                 } else {
-                                                    if (!empty($proyek->nilai_rkap)) {
-                                                        $total_rkap = $proyek->nilai_rkap;
-                                                    } else {
-                                                        $total_rkap = $proyek->nilaiok_awal;
-                                                    }
-                                                    
+                                                    $total_rkap = $proyek->nilai_rkap;
                                                 }
                                                 @endphp
                                                 <small>
-                                                    {{ number_format((int)$total_rkap, 0, '.', '.') ?? '-' }}
+                                                    {{ number_format((int)$total_rkap, 0, '.', '.') ?? '0' }}
+                                                </small>
+                                            </td>
+                                            <!--end::Nilai OK-->
+
+                                            <!--begin::Nilai OK-->
+                                            <td class="text-end">
+                                                <small>
+                                                    {{ number_format((int)$proyek->nilaiok_awal, 0, '.', '.') ?? '0' }}
                                                 </small>
                                             </td>
                                             <!--end::Nilai OK-->
@@ -1230,12 +1234,12 @@
                     //     btn.classList.add("btn-active-primary");
                     // });
                 },
-                dom: 'lBfrtip',
+                // dom: 'lBfrtip',
+                dom: 'Bfrtip',
                 stateSave : true,
                 scrollX : true,
                 pageLength : 25,
                 // iDisplayLength : 25,
-                // pageLength : 500,
                 // lengthMenu: [[5, 10, 20, -1], [5, 10, 20, 'Todos']],
                 buttons: [
                     {
