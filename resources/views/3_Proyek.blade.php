@@ -515,9 +515,15 @@
                                             <!--end::Nilai OK-->
                                             <!--begin::Nilai OK-->
                                             <td class="text-end">
-                                                <small>
-                                                    {{ number_format((int)$proyek->nilaiok_awal, 0, '.', '.') ?? '0' }}
-                                                </small>
+                                                @if ($proyek->is_rkap == true)
+                                                    <small>
+                                                        0
+                                                    </small>
+                                                @else
+                                                    <small>
+                                                        {{ number_format((int)$proyek->nilaiok_awal, 0, '.', '.') ?? '0' }}
+                                                    </small>
+                                                @endif
                                             </td>
                                             <!--end::Nilai OK-->
 
