@@ -4664,9 +4664,6 @@
 <!--Begin::Modal-->
 <!--Begin:: Modal Insert CSI-->
 <div class="pop-up csi">
-    <form action="/customer/csi/save" method="POST" enctype="multipart/form-data">
-        @csrf
-        <input type="hidden" name="id-customer" value="{{ $customer->id_customer }}">
         <div class="modal fade" id="kt_modal_input_csi" tabindex="-1" aria-hidden="true">
             <!--begin::Modal dialog-->
             <div class="modal-dialog modal-dialog-centered mw-500px">
@@ -4691,60 +4688,61 @@
                     <!--begin::Modal body-->
                     <div class="modal-body py-lg-6 px-lg-6" style="overflow:hidden;">
                         <!--Begin:Nama Proyek-->
-                        <div class="row fv-row">
-                            <div class="input_csi">
-                                <label class="fs-6 fw-bold form-label mt-3">
-                                    <span class="">Nama Proyek</span>
-                                </label>
-                                <!--Begin::Select-->
-                                @php
-                                    $csi_not_proyek = $csi->mergeRecursive($proyekberjalan)->unique("kode_proyek")->filter(function($item){
-                                        return $item instanceof App\Models\ProyekBerjalans;
-                                    });
-                                 @endphp
-                                    {{-- @dd($csi_not_proyek) --}}
-                                <div id="div-namaProyek">
-                                    <select name="kode-proyek-csi" id="namaProyekCSI" class="form-select form-select-solid" data-hide-search="false" data-control="select2"
-                                        data-placeholder="Pilih Nama Proyek" tabindex="-1" aria-hidden="true">
-                                        <option value=""></option>
-                                        @foreach ($csi_not_proyek as $pb)
-                                        <option value="{{ $pb->kode_proyek }}">{{ $pb->nama_proyek }}</option>          
-                                        @endforeach                                                                           
-                                    </select>
-                                </div>
-                                
-                                {{-- @dd($csi); --}}
+                        <form action="/customer/csi/save" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <input type="hidden" name="id-customer" value="{{ $customer->id_customer }}">
+                            <div class="row fv-row">
+                                <div class="input_csi">
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span class="">Nama Proyek</span>
+                                    </label>
+                                    <!--Begin::Select-->
+                                    @php
+                                        $csi_not_proyek = $csi->mergeRecursive($proyekberjalan)->unique("kode_proyek")->filter(function($item){
+                                            return $item instanceof App\Models\ProyekBerjalans;
+                                        });
+                                    @endphp
+                                        {{-- @dd($csi_not_proyek) --}}
+                                    <div id="div-namaProyek">
+                                        <select name="kode-proyek-csi" id="namaProyekCSI" class="form-select form-select-solid" data-hide-search="false" data-control="select2"
+                                            data-placeholder="Pilih Nama Proyek" tabindex="-1" aria-hidden="true">
+                                            <option value=""></option>
+                                            @foreach ($csi_not_proyek as $pb)
+                                            <option value="{{ $pb->kode_proyek }}">{{ $pb->nama_proyek }}</option>          
+                                            @endforeach                                                                           
+                                        </select>
+                                    </div>
+                                    
+                                    {{-- @dd($csi); --}}
 
-                                <label class="fs-6 fw-b                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     old form-label mt-3">
-                                    <span class="">Tanggal</span>
-                                    <a href="#" class="btn" style="background: transparent;" id="date_csi" onclick="showCalendarModal(this)">
-                                        <i class="bi bi-calendar2-plus-fill" style="color: #008CB4"></i>
-                                    </a>
-                                </label>
-                                <!--Begin::Select-->
-                                <input type="date" name="csi_date" class="form-control form-control-solid" placeholder="Tanggal" />
-                                
-                                <label class="fs-6 fw-bold form-label mt-3">
-                                    <span class="">Score</span>
-                                </label>
-                                <!--Begin::Select-->
-                                <input type="number" name="score_csi" id="score-csi" placeholder="Range 1 - 100" class="form-control form-control-solid" min="0" max="100">
+                                    <label class="fs-6 fw-b                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     old form-label mt-3">
+                                        <span class="">Tanggal</span>
+                                        <a href="#" class="btn" style="background: transparent;" id="date_csi" onclick="showCalendarModal(this)">
+                                            <i class="bi bi-calendar2-plus-fill" style="color: #008CB4"></i>
+                                        </a>
+                                    </label>
+                                    <!--Begin::Select-->
+                                    <input type="date" name="csi_date" class="form-control form-control-solid" placeholder="Tanggal" />
+                                    
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span class="">Score</span>
+                                    </label>
+                                    <!--Begin::Select-->
+                                    <input type="number" name="score_csi" id="score-csi" placeholder="Range 1 - 100" class="form-control form-control-solid" min="0" max="100">
+                                </div>
                             </div>
-                        </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-sm btn-primary">Save</button>
+                            </div>
+                            <!--end::Input group-->
+                        </form>
                     </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-sm btn-primary">Save</button>
-                    </div>
-                    <!--end::Input group-->
-    
                 </div>
                 <!--end::Modal body-->
             </div>
             <!--end::Modal content-->
         </div>
         <!--end::Modal dialog-->
-        </div>
-    </form>
 </div>
 
 <!--Begin::Update Modal CSI-->
@@ -7174,28 +7172,28 @@
 </script>
 <script>
     $('#kt_modal_input_csi').on('show.bs.modal', function() {
-        $("#new-proyek").select2({
+        $("#namaProyekCSI").select2({
             dropdownParent: $("#kt_modal_input_csi")
         });
     });
 </script>
 <script>
     $('#kt_modal_input_cli').on('show.bs.modal', function() {
-        $("#new-proyek").select2({
+        $("#namaProyekCLI").select2({
             dropdownParent: $("#kt_modal_input_cli")
         });
     });
 </script>
 <script>
     $('#kt_modal_input_nps').on('show.bs.modal', function() {
-        $("#new-proyek").select2({
+        $("#namaProyekNPS").select2({
             dropdownParent: $("#kt_modal_input_nps")
         });
     });
 </script>
 <script>
     $('#kt_modal_input_karya_inovasi').on('show.bs.modal', function() {
-        $("#new-proyek").select2({
+        $("#namaProyekKaryaInovasi").select2({
             dropdownParent: $("#kt_modal_input_karya_inovasi")
         });
     });
