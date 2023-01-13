@@ -9,6 +9,23 @@
     #map {
         height: 350px;
     }
+    .form-control.form-control-solid {
+        border-left: 0px !important;
+        border-top: 0px !important;
+        border-right: 0px !important;
+        border-bottom: 0px dashed #b5b5c3 !important;
+        border-radius: 5px !important;
+        background-color: #eff2f5 !important;
+    }
+
+    .form-select.form-select-solid {
+        border-left: 0px !important;
+        border-top: 0px !important;
+        border-right: 0px !important;
+        border-bottom: 0px dashed #b5b5c3 !important;
+        border-radius: 5px !important;
+        background-color: #eff2f5 !important;
+    }
 </style>
 <!--begin::Main-->
 @section('content')
@@ -2056,12 +2073,12 @@
                                                                                         <!--end::Nilai OK-->
                                                                                         <!--begin::Start-->
                                                                                         <td>
-                                                                                            {{ $proyekberjalan0->proyek->tanggal_mulai_terkontrak }}
+                                                                                            {{ Carbon\Carbon::create($proyekberjalan0->proyek->tanggal_mulai_terkontrak)->translatedFormat("d F Y") }}
                                                                                         </td>
                                                                                         <!--end::End-->
                                                                                         <!--begin::Start-->
                                                                                         <td>
-                                                                                            {{ $proyekberjalan0->proyek->tanggal_akhir_terkontrak }}
+                                                                                            {{ Carbon\Carbon::create($proyekberjalan0->proyek->tanggal_akhir_terkontrak)->translatedFormat("d F Y") }}
                                                                                         </td>
                                                                                         <!--end::End-->
                                                                                         <!--begin::Durasi-->
@@ -2543,480 +2560,256 @@
 
                                                     <!--begin:::Tab pane Excellence-->
                                                     <div class="tab-pane fade" id="kt_user_view_excellence" role="tabpanel">
-                                                        <!--begin::CSI-->
                                                         <div class="card-title m-0">
-                                                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                                                                CSI   
-                                                                <i onclick="hideColumn(this, '#divInputCSI')" id="hide-button" style="display: none" class="bi bi-arrows-collapse"></i>
-                                                                <i onclick="showColumn(this, '#divInputCSI')" id="show-button" class="bi bi-arrows-expand"></i>                                         
+                                                            
+                                                            <!--begin::CSI-->
+                                                            <h3 class="fw-bolder m-0 mb-3" id="HeadDetail" style="font-size:14px;">
+                                                                CSI
+                                                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                                                    data-bs-target="#kt_modal_input_csi">+</a>
                                                             </h3>
 
-                                                            <br>
+                                                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                                                <!--begin::Table head-->
+                                                                <thead>
+                                                                    <!--begin::Table row-->
+                                                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                        <th class="min-w-auto">Nama Proyek</th>
+                                                                        <th class="min-w-auto">Tanggal</th>
+                                                                        <th class="min-w-auto">Score</th>
+                                                                        <th class="min-w-auto">Action</th>
+                                                                    </tr>
+                                                                    <!--end::Table row-->
+                                                                </thead>
+                                                                <!--end::Table head-->
+                                                                <!--begin::Table body-->
+                                                                <tbody class="fw-bold text-gray-600">                                                                            
+                                                                    <!--begin::Nama Proyek-->
+                                                                    @if (!empty($csi))
+                                                                    @foreach ($customer->Csi as $item)
+                                                                    <tr>                                                                                    
+                                                                        <td>
+                                                                            <a target="_blank" href="/proyek/view/{{ $item->kode_proyek }}" class="text-gray-800 text-hover-primary mb-1">
+                                                                                {{ $item->Proyek->nama_proyek }}                                                                                                
+                                                                            </a>
+                                                                        </td>
+                                                                        <!--end::Name-->
+                                                                    <!--begin::Tanggal CSI-->
+                                                                    <td>
+                                                                        {{  Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') }}
+                                                                    </td>
+                                                                    <!--end::Tanggal CSI-->
+                                                                    <!--begin::Score CSI-->
+                                                                    <td>
+                                                                        {{ $item->score }}
+                                                                    </td>
+                                                                    <!--end::Score CSI-->  
+                                                                    <td>
+                                                                        <a href="#" data-bs-target="#kt_modal_input_csi_{{ $item->kode_proyek }}" data-bs-toggle="modal" class="btn btn-sm btn-primary p-2 text-white">Edit</a>    
+                                                                    </td> 
+                                                                    @endforeach
+                                                                    </tr>
+                                                                    @else
+                                                                    <tr>
+                                                                        <td>
+                                                                            <p class="text-center">Belum ada data</p>
+                                                                        </td>
+                                                                    </tr>
+                                                                    @endif                                                                                    
+                                                                </tbody>
+                                                                <!--end::Table body-->
+                                                            </table>
+                                                            <!--end::CSI-->
 
-                                                            <!--Begin::Row-->
-                                                            <div id="divInputCSI" style="display: none">
-                                                                <!--Begin:Nama Proyek-->
-                                                                <div class="row fv-row">
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="">Nama Proyek</span>
-                                                                    </label>
-                                                                    <!--Begin::Select-->
-                                                                    <div id="div-namaProyekCSI">
-                                                                        <select name="kode_proyek_csi" id="namaProyekCSI" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
-                                                                            data-placeholder="Pilih Nama Proyek">
-                                                                            <option value=""></option>
-                                                                            @foreach ($proyekberjalan as $pb)
-                                                                            @if (!empty($pb->id_customer))
-                                                                            <option value="{{ $pb->kode_proyek }}">{{ $pb->nama_proyek }}</option>
-                                                                            @else
-                                                                            <option value="{{ $pb->kode_proyek }}">{{ $pb->nama_proyek }}</option>
-                                                                            @endif                                                                          
-                                                                            @endforeach                                                                           
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-                                                                <!--End:Nama Proyek-->
+                                                            <br><br>
 
-                                                                <!--Begin:Tanggal CSI-->
-                                                                <div class="row fv-row my-3">
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Tanggal</span>
-                                                                        <a href="#" class="btn" style="background: transparent;" id="date_csi" onclick="showCalendarModal(this)">
-                                                                            <i class="bi bi-calendar2-plus-fill" style="color: #008CB4"></i>
-                                                                        </a>
-                                                                    </label>
-                                                                    <!--Begin::Input-->
-                                                                    <div id="csi_date">                                                                        
-                                                                        <input type="date" name="csi_date" class="form-control form-control-solid" placeholder="Tanggal" />
-                                                                    </div>
-                                                                    <!--End::Input-->
-                                                                </div>
-                                                                <!--End:Tanggal CSI-->
+                                                            <!--begin::CLI-->
+                                                            <h3 class="fw-bolder m-0 mb-3" id="HeadDetail" style="font-size:14px;">
+                                                                CLI
+                                                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                                                data-bs-target="#kt_modal_input_cli">+</a>
+                                                            </h3>
+                                                            
+                                                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                                                <!--begin::Table head-->
+                                                                <thead>
+                                                                    <!--begin::Table row-->
+                                                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                        <th class="min-w-auto">Nama Proyek</th>
+                                                                        <th class="min-w-auto">Tanggal</th>
+                                                                        <th class="min-w-auto">Score</th>
+                                                                        <th class="min-w-auto">Action</th>
+                                                                    </tr>
+                                                                    <!--end::Table row-->
+                                                                </thead>
+                                                                <!--end::Table head-->
+                                                                <!--begin::Table body-->
+                                                                <tbody class="fw-bold text-gray-600">                                                                            
+                                                                    <!--begin::Nama Proyek-->
+                                                                    @if (!empty($cli))
+                                                                    @foreach ($customer->Cli as $item)
+                                                                    <tr>                                                                                    
+                                                                        <td>
+                                                                            <a target="_blank" href="/proyek/view/{{ $item->kode_proyek }}" class="text-gray-800 text-hover-primary mb-1">
+                                                                                {{ $item->Proyek->nama_proyek }}                                                                                                
+                                                                            </a>
+                                                                        </td>
+                                                                        <!--end::Name-->
+                                                                    <!--begin::Tanggal CLI-->
+                                                                    <td>
+                                                                        {{  Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') }}
+                                                                    </td>
+                                                                    <!--end::Tanggal CLI-->
+                                                                    <!--begin::Score CLI-->
+                                                                    <td>
+                                                                        {{ $item->score }}
+                                                                    </td>
+                                                                    <!--end::Score CLI-->  
+                                                                    <td>
+                                                                        <a href="#" data-bs-target="#kt_modal_input_cli_{{ $item->kode_proyek }}" data-bs-toggle="modal" class="btn btn-sm btn-primary p-2 text-white">Edit</a>       
+                                                                    </td>  
+                                                                    @endforeach
+                                                                    </tr>
+                                                                    @else
+                                                                    <tr>
+                                                                        <td>
+                                                                            <p class="text-center">Belum ada data</p>
+                                                                        </td>
+                                                                    </tr>
+                                                                    @endif                                                                                    
+                                                                </tbody>
+                                                                <!--end::Table body-->
+                                                            </table>
+                                                            <!--end::CLI-->
 
-                                                                <!--Begin:Status-->
-                                                                <div class="row fv-row my-3">
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="">Score</span>
-                                                                    </label>
-                                                                    <!--Begin::Select-->
-                                                                    <div id="div-scoreInputCSI">
-                                                                        <input type="number" name="score_csi" id="score-csi" placeholder="Range 1 - 100" class="form-control form-control-solid" min="0" max="100">
-                                                                    </div>
-                                                                </div>
-                                                                <!--Begin:Status-->
+                                                            <br><br>
 
-                                                                <br>
-                                                                <div id="table">
-                                                                    <!--begin::Table-->
-                                                                    <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
-                                                                        <!--begin::Table head-->
-                                                                        <thead>
-                                                                            <!--begin::Table row-->
-                                                                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                                <th class="min-w-auto">Nama Proyek</th>
-                                                                                <th class="min-w-auto">Tanggal</th>
-                                                                                <th class="min-w-auto">Score</th>
-                                                                            </tr>
-                                                                            <!--end::Table row-->
-                                                                        </thead>
-                                                                        <!--end::Table head-->
-                                                                        <!--begin::Table body-->
-                                                                        <tbody class="fw-bold text-gray-600">                                                                            
-                                                                            <!--begin::Nama Proyek-->
-                                                                            @if (!empty($csi))
-                                                                            @foreach ($customer->Csi as $item)
-                                                                            <tr>                                                                                    
-                                                                                <td>
-                                                                                    <a target="_blank" href="/proyek/view/{{ $item->kode_proyek }}" class="text-gray-800 text-hover-primary mb-1">
-                                                                                        {{ $item->Proyek->nama_proyek }}                                                                                                
-                                                                                    </a>
-                                                                                </td>
-                                                                                <!--end::Name-->
-                                                                            <!--begin::Tanggal CSI-->
-                                                                            <td>
-                                                                                {{ $item->tanggal }}
-                                                                            </td>
-                                                                            <!--end::Tanggal CSI-->
-                                                                            <!--begin::Score CSI-->
-                                                                            <td>
-                                                                                {{ $item->score }}
-                                                                            </td>
-                                                                            <!--end::Score CSI-->   
-                                                                            @endforeach
-                                                                            </tr>
-                                                                            @else
-                                                                            <tr>
-                                                                                <td>
-                                                                                    <p class="text-center">Belum ada data</p>
-                                                                                </td>
-                                                                            </tr>
-                                                                            @endif                                                                                    
-                                                                        </tbody>
-                                                                        <!--end::Table body-->
-                                                                    </table>
-                                                                <!--end::Table-->
-                                                                </div>
-                                                            </div>
-                                                            <!--End::Row-->                                                            
-                                                        </div>
-                                                        <!--end::CSI-->
-
-                                                        <br>
-                                                        <!--begin::CLI-->
-                                                        <div class="card-title m-0">
-                                                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                                                                CLI   
-                                                                <i onclick="hideColumn(this, '#divInputCLI')" id="hide-button" style="display: none" class="bi bi-arrows-collapse"></i>
-                                                                <i onclick="showColumn(this, '#divInputCLI')" id="show-button" class="bi bi-arrows-expand"></i>                                         
+                                                            <!--begin::NPS-->
+                                                            <h3 class="fw-bolder m-0 mb-3" id="HeadDetail" style="font-size:14px;">
+                                                                NPS
+                                                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                                                    data-bs-target="#kt_modal_input_nps">+</a>
                                                             </h3>
 
-                                                            <br>
+                                                            <!--begin::Table-->
+                                                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                                                <!--begin::Table head-->
+                                                                <thead>
+                                                                    <!--begin::Table row-->
+                                                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                        <th class="min-w-auto">Nama Proyek</th>
+                                                                        <th class="min-w-auto">Tanggal</th>
+                                                                        <th class="min-w-auto">Score</th>
+                                                                        <th class="min-w-auto">Action</th>
+                                                                    </tr>
+                                                                    <!--end::Table row-->
+                                                                </thead>
+                                                                <!--end::Table head-->
+                                                                <!--begin::Table body-->
+                                                                <tbody class="fw-bold text-gray-600">                                                                            
+                                                                    <!--begin::Nama Proyek-->
+                                                                    @if (!empty($nps))
+                                                                    @foreach ($customer->Nps as $item)
+                                                                    <tr>                                                                                    
+                                                                        <td>
+                                                                            <a target="_blank" href="/proyek/view/{{ $item->kode_proyek }}" class="text-gray-800 text-hover-primary mb-1">
+                                                                                {{ $item->Proyek->nama_proyek }}                                                                                                
+                                                                            </a>
+                                                                        </td>
+                                                                        <!--end::Name-->
+                                                                    <!--begin::Tanggal NPS-->
+                                                                    <td>
+                                                                        {{  Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') }}
+                                                                    </td>
+                                                                    <!--end::Tanggal NPS-->
+                                                                    <!--begin::Score NPS-->
+                                                                    <td>
+                                                                        {{ $item->score }}
+                                                                    </td>
+                                                                    <!--end::Score NPS-->  
+                                                                    <td>
+                                                                        <a href="#" data-bs-target="#kt_modal_input_nps_{{ $item->kode_proyek }}" data-bs-toggle="modal" class="btn btn-sm btn-primary p-2 text-white">Edit</a>       
+                                                                    </td>  
+                                                                    @endforeach
+                                                                    </tr>
+                                                                    @else
+                                                                    <tr>
+                                                                        <td>
+                                                                            <p class="text-center">Belum ada data</p>
+                                                                        </td>
+                                                                    </tr>
+                                                                    @endif                                                                                    
+                                                                </tbody>
+                                                                <!--end::Table body-->
+                                                            </table>
+                                                            <!--end::Table-->
 
-                                                            <!--Begin::Row-->
-                                                            <div id="divInputCLI" style="display: none">
-                                                                <!--Begin:Nama Proyek-->
-                                                                <div class="row fv-row">
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="">Nama Proyek</span>
-                                                                    </label>
-                                                                    <!--Begin::Select-->
-                                                                    <div id="div-namaProyekCLI">
-                                                                        <select name="kode_proyek_cli" id="namaProyekCLI" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
-                                                                            data-placeholder="Pilih Nama Proyek">
-                                                                            <option value=""></option>
-                                                                            @foreach ($proyekberjalan as $pb)
-                                                                            @if (!empty($pb->id_customer))
-                                                                            <option value="{{ $pb->kode_proyek }}">{{ $pb->nama_proyek }}</option>
-                                                                            @else
-                                                                            <option value="{{ $pb->kode_proyek }}">{{ $pb->nama_proyek }}</option>
-                                                                            @endif                                                                          
-                                                                            @endforeach                                                                           
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-                                                                <!--End:Nama Proyek-->
+                                                            <br><br>
 
-                                                                <!--Begin:Tanggal CLI-->
-                                                                <div class="row fv-row my-3">
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Tanggal</span>
-                                                                        <a href="#" class="btn" style="background: transparent;" id="date_cli" onclick="showCalendarModal(this)">
-                                                                            <i class="bi bi-calendar2-plus-fill" style="color: #008CB4"></i>
-                                                                        </a>
-                                                                    </label>
-                                                                    <!--Begin::Input-->
-                                                                    <div id="cli_date">                                                                        
-                                                                        <input type="date" name="cli_date" class="form-control form-control-solid" placeholder="Tanggal" />
-                                                                    </div>
-                                                                    <!--End::Input-->
-                                                                </div>
-                                                                <!--End:Tanggal CLI-->
-
-                                                                <!--Begin:Status-->
-                                                                <div class="row fv-row my-3">
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="">Score</span>
-                                                                    </label>
-                                                                    <!--Begin::Select-->
-                                                                    <div id="div-scoreInputCLI">
-                                                                        <input type="number" name="score_cli" id="score-cli" placeholder="Range 1 - 100" class="form-control form-control-solid" min="0" max="100">
-                                                                    </div>
-                                                                </div>
-                                                                <!--Begin:Status-->
-
-                                                                <br>
-                                                                <div id="table">
-                                                                    <!--begin::Table-->
-                                                                    <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
-                                                                        <!--begin::Table head-->
-                                                                        <thead>
-                                                                            <!--begin::Table row-->
-                                                                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                                <th class="min-w-auto">Nama Proyek</th>
-                                                                                <th class="min-w-auto">Tanggal</th>
-                                                                                <th class="min-w-auto">Score</th>
-                                                                            </tr>
-                                                                            <!--end::Table row-->
-                                                                        </thead>
-                                                                        <!--end::Table head-->
-                                                                        <!--begin::Table body-->
-                                                                        <tbody class="fw-bold text-gray-600">                                                                            
-                                                                            <!--begin::Nama Proyek-->
-                                                                            @if (!empty($cli))
-                                                                            @foreach ($customer->Cli as $item)
-                                                                            <tr>                                                                                    
-                                                                                <td>
-                                                                                    <a target="_blank" href="/proyek/view/{{ $item->kode_proyek }}" class="text-gray-800 text-hover-primary mb-1">
-                                                                                        {{ $item->Proyek->nama_proyek }}                                                                                                
-                                                                                    </a>
-                                                                                </td>
-                                                                                <!--end::Name-->
-                                                                            <!--begin::Tanggal CLI-->
-                                                                            <td>
-                                                                                {{ $item->tanggal }}
-                                                                            </td>
-                                                                            <!--end::Tanggal CLI-->
-                                                                            <!--begin::Score CLI-->
-                                                                            <td>
-                                                                                {{ $item->score }}
-                                                                            </td>
-                                                                            <!--end::Score CLI-->   
-                                                                            @endforeach
-                                                                            </tr>
-                                                                            @else
-                                                                            <tr>
-                                                                                <td>
-                                                                                    <p class="text-center">Belum ada data</p>
-                                                                                </td>
-                                                                            </tr>
-                                                                            @endif                                                                                    
-                                                                        </tbody>
-                                                                        <!--end::Table body-->
-                                                                    </table>
-                                                                <!--end::Table-->
-                                                                </div>
-                                                            </div>
-                                                            <!--End::Row-->                                                            
-                                                        </div>
-                                                        <!--end::CLI-->
-
-                                                        <br>
-                                                        <!--begin::NPS-->
-                                                        <div class="card-title m-0">
-                                                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                                                                NPS   
-                                                                <i onclick="hideColumn(this, '#divInputNPS')" id="hide-button" style="display: none" class="bi bi-arrows-collapse"></i>
-                                                                <i onclick="showColumn(this, '#divInputNPS')" id="show-button" class="bi bi-arrows-expand"></i>                                         
-                                                            </h3>
-
-                                                            <br>
-
-                                                            <!--Begin::Row-->
-                                                            <div id="divInputNPS" style="display: none">
-                                                                <!--Begin:Nama Proyek-->
-                                                                <div class="row fv-row">
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="">Nama Proyek</span>
-                                                                    </label>
-                                                                    <!--Begin::Select-->
-                                                                    <div id="div-namaProyekNPS">
-                                                                        <select name="kode_proyek_nps" id="namaProyekNPS" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
-                                                                            data-placeholder="Pilih Nama Proyek">
-                                                                            <option value=""></option>
-                                                                            @foreach ($proyekberjalan as $pb)
-                                                                            @if (!empty($pb->id_customer))
-                                                                            <option value="{{ $pb->kode_proyek }}">{{ $pb->nama_proyek }}</option>
-                                                                            @else
-                                                                            <option value="{{ $pb->kode_proyek }}">{{ $pb->nama_proyek }}</option>
-                                                                            @endif                                                                          
-                                                                            @endforeach                                                                           
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-                                                                <!--End:Nama Proyek-->
-
-                                                                <!--Begin:Tanggal CSI-->
-                                                                <div class="row fv-row my-3">
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Tanggal</span>
-                                                                        <a href="#" class="btn" style="background: transparent;" id="date_csi" onclick="showCalendarModal(this)">
-                                                                            <i class="bi bi-calendar2-plus-fill" style="color: #008CB4"></i>
-                                                                        </a>
-                                                                    </label>
-                                                                    <!--Begin::Input-->
-                                                                    <div id="nps_date">                                                                        
-                                                                        <input type="date" name="nps_date" class="form-control form-control-solid" placeholder="Tanggal" />
-                                                                    </div>
-                                                                    <!--End::Input-->
-                                                                </div>
-                                                                <!--End:Tanggal CSI-->
-
-                                                                <!--Begin:Status-->
-                                                                <div class="row fv-row my-3">
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="">Score</span>
-                                                                    </label>
-                                                                    <!--Begin::Select-->
-                                                                    <div id="div-scoreInputNPS">
-                                                                        <input type="number" name="score_nps" id="score-csi" placeholder="Range 1 - 100" class="form-control form-control-solid" min="0" max="100">
-                                                                    </div>
-                                                                </div>
-                                                                <!--Begin:Status-->
-
-                                                                <br>
-                                                                <div id="table">
-                                                                    <!--begin::Table-->
-                                                                    <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
-                                                                        <!--begin::Table head-->
-                                                                        <thead>
-                                                                            <!--begin::Table row-->
-                                                                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                                <th class="min-w-auto">Nama Proyek</th>
-                                                                                <th class="min-w-auto">Tanggal</th>
-                                                                                <th class="min-w-auto">Score</th>
-                                                                            </tr>
-                                                                            <!--end::Table row-->
-                                                                        </thead>
-                                                                        <!--end::Table head-->
-                                                                        <!--begin::Table body-->
-                                                                        <tbody class="fw-bold text-gray-600">                                                                            
-                                                                            <!--begin::Nama Proyek-->
-                                                                            @if (!empty($nps))
-                                                                            @foreach ($customer->Nps as $item)
-                                                                            <tr>                                                                                    
-                                                                                <td>
-                                                                                    <a target="_blank" href="/proyek/view/{{ $item->kode_proyek }}" class="text-gray-800 text-hover-primary mb-1">
-                                                                                        {{ $item->Proyek->nama_proyek }}                                                                                                
-                                                                                    </a>
-                                                                                </td>
-                                                                                <!--end::Name-->
-                                                                            <!--begin::Tanggal NPS-->
-                                                                            <td>
-                                                                                {{ $item->tanggal }}
-                                                                            </td>
-                                                                            <!--end::Tanggal NPS-->
-                                                                            <!--begin::Score NPS-->
-                                                                            <td>
-                                                                                {{ $item->score }}
-                                                                            </td>
-                                                                            <!--end::Score NPS-->   
-                                                                            @endforeach
-                                                                            </tr>
-                                                                            @else
-                                                                            <tr>
-                                                                                <td>
-                                                                                    <p class="text-center">Belum ada data</p>
-                                                                                </td>
-                                                                            </tr>
-                                                                            @endif                                                                                    
-                                                                        </tbody>
-                                                                        <!--end::Table body-->
-                                                                    </table>
-                                                                <!--end::Table-->
-                                                                </div>
-                                                            </div>
-                                                            <!--End::Row-->                                                            
-                                                        </div>
-                                                        <!--end::NPS-->
-
-                                                        <br>
-                                                        <!--begin::Karya Inovasi-->
-                                                        <div class="card-title m-0">
-                                                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                                            <!--begin::Karya Inovasi-->
+                                                            <h3 class="fw-bolder m-0 mb-3" id="HeadDetail" style="font-size:14px;">
                                                                 Karya Inovasi
-                                                                <i onclick="hideColumn(this, '#divInputInovasi')" id="hide-button" style="display: none" class="bi bi-arrows-collapse"></i>
-                                                                <i onclick="showColumn(this, '#divInputInovasi')" id="show-button" class="bi bi-arrows-expand"></i>                                         
+                                                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                                                data-bs-target="#kt_modal_input_karya_inovasi">+</a>
                                                             </h3>
 
-                                                            <br>
+                                                            <!--begin::Table-->
+                                                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                                                <!--begin::Table head-->
+                                                                <thead>
+                                                                    <!--begin::Table row-->
+                                                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                        <th class="min-w-auto">Nama Proyek</th>
+                                                                        <th class="min-w-auto">Tanggal</th>
+                                                                        <th class="min-w-auto">Nama Karya Inovasi</th>
+                                                                        <th class="min-w-auto">Action</th>
+                                                                    </tr>
+                                                                    <!--end::Table row-->
+                                                                </thead>
+                                                                <!--end::Table head-->
+                                                                <!--begin::Table body-->
+                                                                <tbody class="fw-bold text-gray-600">                                                                            
+                                                                    <!--begin::Nama Proyek-->
+                                                                    @if (!empty($inovasi))
+                                                                    @foreach ($customer->KaryaInovasi as $item)
+                                                                    <tr>                                                                                    
+                                                                        <td>
+                                                                            <a target="_blank" href="/proyek/view/{{ $item->kode_proyek }}" class="text-gray-800 text-hover-primary mb-1">
+                                                                                {{ $item->Proyek->nama_proyek }}                                                                                                
+                                                                            </a>
+                                                                        </td>
+                                                                        <!--end::Name-->
+                                                                        <!--begin::Tanggal Karya Inovasi-->
+                                                                        <td>
+                                                                            {{  Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') }}
+                                                                        </td>
+                                                                        <!--end::Tanggal Karya Inovasi-->
+                                                                        <!--begin::Score Karya Inovasi-->
+                                                                        <td>
+                                                                            {{ $item->nama_inovasi }}
+                                                                        </td>
+                                                                        <!--end::Score Karya Inovasi-->
+                                                                        <td>
+                                                                            <a href="#" data-bs-target="#kt_modal_input_karya_inovasi_{{ $item->kode_proyek }}" data-bs-toggle="modal" class="btn btn-sm btn-primary p-2 text-white">Edit</a>        
+                                                                        </td> 
+                                                                    @endforeach
+                                                                    </tr>
+                                                                    @else
+                                                                    <tr>
+                                                                        <td>
+                                                                            <p class="text-center">Belum ada data</p>
+                                                                        </td>
+                                                                    </tr>
+                                                                    @endif                                                                                    
+                                                                </tbody>
+                                                                <!--end::Table body-->
+                                                            </table>
+                                                            <!--end::Table-->
+                                                            <!--end::Karya Inovasi-->
 
-                                                            <!--Begin::Row-->
-                                                            <div id="divInputInovasi" style="display: none">
-                                                                <!--Begin:Nama Proyek-->
-                                                                <div class="row fv-row">
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="">Nama Proyek</span>
-                                                                    </label>
-                                                                    <!--Begin::Select-->
-                                                                    <div id="div-namaProyekCLI">
-                                                                        <select name="kode_proyek_inovasi" id="namaProyekInovasi" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
-                                                                            data-placeholder="Pilih Nama Proyek">
-                                                                            <option value=""></option>
-                                                                            @foreach ($proyekberjalan as $pb)
-                                                                            @if (!empty($pb->id_customer))
-                                                                            <option value="{{ $pb->kode_proyek }}">{{ $pb->nama_proyek }}</option>
-                                                                            @else
-                                                                            <option value="{{ $pb->kode_proyek }}">{{ $pb->nama_proyek }}</option>
-                                                                            @endif                                                                          
-                                                                            @endforeach                                                                           
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-                                                                <!--End:Nama Proyek-->
-
-                                                                <!--Begin:Tanggal CLI-->
-                                                                <div class="row fv-row my-3">
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Tanggal</span>
-                                                                        <a href="#" class="btn" style="background: transparent;" id="date_inovasi" onclick="showCalendarModal(this)">
-                                                                            <i class="bi bi-calendar2-plus-fill" style="color: #008CB4"></i>
-                                                                        </a>
-                                                                    </label>
-                                                                    <!--Begin::Input-->
-                                                                    <div id="inovasi_date">                                                                        
-                                                                        <input type="date" name="inovasi_date" class="form-control form-control-solid" placeholder="Tanggal" />
-                                                                    </div>
-                                                                    <!--End::Input-->
-                                                                </div>
-                                                                <!--End:Tanggal CLI-->
-
-                                                                <!--Begin:Status-->
-                                                                <div class="row fv-row my-3">
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="">Nama Karya Inovasi</span>
-                                                                    </label>
-                                                                    <!--Begin::Select-->
-                                                                    <div id="div-scoreInputInovasi">
-                                                                        <input type="text" name="nama_inovasi" id="score-inovasi" placeholder="Nama Karya Inovasi" class="form-control form-control-solid">
-                                                                    </div>
-                                                                </div>
-                                                                <!--Begin:Status-->
-
-                                                                <br>
-                                                                <div id="table">
-                                                                    <!--begin::Table-->
-                                                                    <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
-                                                                        <!--begin::Table head-->
-                                                                        <thead>
-                                                                            <!--begin::Table row-->
-                                                                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                                <th class="min-w-auto">Nama Proyek</th>
-                                                                                <th class="min-w-auto">Tanggal</th>
-                                                                                <th class="min-w-auto">Nama Karya Inovasi</th>
-                                                                            </tr>
-                                                                            <!--end::Table row-->
-                                                                        </thead>
-                                                                        <!--end::Table head-->
-                                                                        <!--begin::Table body-->
-                                                                        <tbody class="fw-bold text-gray-600">                                                                            
-                                                                            <!--begin::Nama Proyek-->
-                                                                            @if (!empty($inovasi))
-                                                                            @foreach ($customer->KaryaInovasi as $item)
-                                                                            <tr>                                                                                    
-                                                                                <td>
-                                                                                    <a target="_blank" href="/proyek/view/{{ $item->kode_proyek }}" class="text-gray-800 text-hover-primary mb-1">
-                                                                                        {{ $item->Proyek->nama_proyek }}                                                                                                
-                                                                                    </a>
-                                                                                </td>
-                                                                                <!--end::Name-->
-                                                                                <!--begin::Tanggal CLI-->
-                                                                                <td>
-                                                                                    {{ $item->tanggal }}
-                                                                                </td>
-                                                                                <!--end::Tanggal CLI-->
-                                                                                <!--begin::Score CLI-->
-                                                                                <td>
-                                                                                    {{ $item->nama_inovasi }}
-                                                                                </td>
-                                                                                <!--end::Score CLI-->   
-                                                                            @endforeach
-                                                                            </tr>
-                                                                            @else
-                                                                            <tr>
-                                                                                <td>
-                                                                                    <p class="text-center">Belum ada data</p>
-                                                                                </td>
-                                                                            </tr>
-                                                                            @endif                                                                                    
-                                                                        </tbody>
-                                                                        <!--end::Table body-->
-                                                                    </table>
-                                                                <!--end::Table-->
-                                                                </div>
-                                                            </div>
-                                                            <!--End::Row-->                                                            
                                                         </div>
                                                         <!--end::Karya Inovasi-->
+                                                        <br>
                                                     </div>
                                                     <!--end:::Tab pane Excellence-->
 
@@ -4897,6 +4690,659 @@
     <!--end::modal Detail Proyek-->
 
     <!--end::Modals-->
+
+<!--Begin::Modal-->
+<!--Begin:: Modal Insert CSI-->
+<div class="pop-up csi">
+    <form action="/customer/csi/save" method="POST" enctype="multipart/form-data">
+        @csrf
+        <input type="hidden" name="id-customer" value="{{ $customer->id_customer }}">
+        <div class="modal fade" id="kt_modal_input_csi" tabindex="-1" aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-500px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header">
+                        <!--begin::Modal title-->
+                        <h2>Add CSI</h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <i class="bi bi-x-lg"></i>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
+                    </div>
+                    <!--end::Modal header-->
+                    <!--begin::Modal body-->
+                    <div class="modal-body py-lg-6 px-lg-6" style="overflow:hidden;">
+                        <!--Begin:Nama Proyek-->
+                        <div class="row fv-row">
+                            <div class="input_csi">
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="">Nama Proyek</span>
+                                </label>
+                                <!--Begin::Select-->
+                                <div id="div-namaProyek">
+                                    <select name="kode-proyek-csi" id="namaProyekCSI" class="form-select form-select-solid" data-hide-search="false" data-control="select2"
+                                        data-placeholder="Pilih Nama Proyek">
+                                        <option value=""></option>
+                                        @foreach ($proyekberjalan as $pb)
+                                        @if (!empty($pb->id_customer))
+                                        <option value="{{ $pb->kode_proyek }}">{{ $pb->nama_proyek }}</option>
+                                        @else
+                                        <option value="{{ $pb->kode_proyek }}">{{ $pb->nama_proyek }}</option>
+                                        @endif                                                                          
+                                        @endforeach                                                                           
+                                    </select>
+                                </div>
+                                
+                                {{-- @dd($csi); --}}
+
+                                <label class="fs-6 fw-b                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     old form-label mt-3">
+                                    <span class="">Tanggal</span>
+                                    <a href="#" class="btn" style="background: transparent;" id="date_csi" onclick="showCalendarModal(this)">
+                                        <i class="bi bi-calendar2-plus-fill" style="color: #008CB4"></i>
+                                    </a>
+                                </label>
+                                <!--Begin::Select-->
+                                <input type="date" name="csi_date" class="form-control form-control-solid" placeholder="Tanggal" />
+                                
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="">Score</span>
+                                </label>
+                                <!--Begin::Select-->
+                                <input type="number" name="score_csi" id="score-csi" placeholder="Range 1 - 100" class="form-control form-control-solid" min="0" max="100">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-sm btn-primary">Save</button>
+                    </div>
+                    <!--end::Input group-->
+    
+                </div>
+                <!--end::Modal body-->
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+        </div>
+    </form>
+</div>
+
+<!--Begin::Update Modal CSI-->
+<div class="pop-up csi-update">
+    {{-- @dd($item) --}}
+    @foreach ($csi as $item)
+    <form action="/customer/csi/save" method="POST" enctype="multipart/form-data">
+        @csrf
+        <input type="hidden" name="id-customer" value="{{ $customer->id_customer }}">
+        <div class="modal fade" id="kt_modal_input_csi_{{ $item->kode_proyek }}" tabindex="-1" aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-500px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header">
+                        <!--begin::Modal title-->
+                        <h2>Edit CSI</h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <i class="bi bi-x-lg"></i>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
+                    </div>
+                    <!--end::Modal header-->
+                    <!--begin::Modal body-->
+                    <div class="modal-body py-lg-6 px-lg-6" style="overflow:hidden;">
+                        <!--Begin:Nama Proyek-->
+                        <div class="row fv-row">
+                            <div class="input_csi">
+                                @php
+                                    $nama_proyek = collect($proyekberjalan)->where("kode_proyek", "=", $item->kode_proyek)->first();
+                                @endphp
+
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="">Nama Proyek</span>
+                                </label>
+                                <!--Begin::Select-->
+                                <div id="div-namaProyek">
+                                    <label class="">{{ $nama_proyek->nama_proyek }}</label>
+                                    <input type="hidden" class="form-control form-control-solid" name="kode-proyek-csi" value="{{ $item->kode_proyek }}" readonly>
+                                </div>
+
+                                <label class="fs-6 fw-b                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     old form-label mt-3">
+                                    <span class="">Tanggal</span>
+                                    <a href="#" class="btn" style="background: transparent;" id="date_csi" onclick="showCalendarModal(this)">
+                                        <i class="bi bi-calendar2-plus-fill" style="color: #008CB4"></i>
+                                    </a>
+                                </label>
+                                <!--Begin::Select-->
+                                <input type="date" name="csi_date" class="form-control form-control-solid" placeholder="Tanggal" value="{{ $item->tanggal }}"/>
+                                
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="">Score</span>
+                                </label>
+                                <!--Begin::Select-->
+                                <input type="number" name="score_csi" id="score-csi" placeholder="Range 1 - 100" class="form-control form-control-solid" min="0" max="100" value="{{ $item->score }}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-sm btn-primary">Save</button>
+                    </div>
+                    <!--end::Input group-->
+    
+                </div>
+                <!--end::Modal body-->
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+        </div>
+    </form>
+    @endforeach
+</div>
+<!--End::Update Modal CSI-->
+
+<!--Begin:: Modal CLI-->
+<div class="pop-up cli">
+    <form action="/customer/cli/save" method="POST" enctype="multipart/form-data">
+        @csrf
+        <input type="hidden" name="id-customer" value="{{ $customer->id_customer }}">
+        <div class="modal fade" id="kt_modal_input_cli" tabindex="-1" aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-500px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header">
+                        <!--begin::Modal title-->
+                        <h2>Add CLI</h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <i class="bi bi-x-lg"></i>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
+                    </div>
+                    <!--end::Modal header-->
+                    <!--begin::Modal body-->
+                    <div class="modal-body py-lg-6 px-lg-6" style="overflow:hidden;">
+                        <!--Begin:Nama Proyek-->
+                        <div class="row fv-row">
+                            <div class="input_cli">
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="">Nama Proyek</span>
+                                </label>
+                                <!--Begin::Select-->
+                                <div id="div-namaProyek">
+                                    <select name="kode-proyek-cli" id="namaProyekCLI" class="form-select form-select-solid" data-hide-search="false" data-control="select2"
+                                        data-placeholder="Pilih Nama Proyek">
+                                        <option value=""></option>
+                                        @foreach ($proyekberjalan as $pb)
+                                        @if (!empty($pb->id_customer))
+                                        <option value="{{ $pb->kode_proyek }}">{{ $pb->nama_proyek }}</option>
+                                        @else
+                                        <option value="{{ $pb->kode_proyek }}">{{ $pb->nama_proyek }}</option>
+                                        @endif                                                                          
+                                        @endforeach                                                                           
+                                    </select>
+                                </div>
+    
+                                <label class="fs-6 fw-b                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     old form-label mt-3">
+                                    <span class="">Tanggal</span>
+                                    <a href="#" class="btn" style="background: transparent;" id="date_csi" onclick="showCalendarModal(this)">
+                                        <i class="bi bi-calendar2-plus-fill" style="color: #008CB4"></i>
+                                    </a>
+                                </label>
+                                <!--Begin::Select-->
+                                <input type="date" name="cli_date" class="form-control form-control-solid" placeholder="Tanggal" />
+                                
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="">Score</span>
+                                </label>
+                                <!--Begin::Select-->
+                                <input type="number" name="score_cli" id="score-cli" placeholder="Range 1 - 100" class="form-control form-control-solid" min="0" max="100">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-sm btn-primary">Save</button>
+                    </div>
+                    <!--end::Input group-->
+    
+                </div>
+                <!--end::Modal body-->
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+        </div>
+    </form>
+</div>
+<!--End:: Modal CLI-->
+
+<!--Begin::Update Modal CSI-->
+<div class="pop-up cli-update">
+    {{-- @dd($item) --}}
+    @foreach ($cli as $item)
+    <form action="/customer/cli/save" method="POST" enctype="multipart/form-data">
+        @csrf
+        <input type="hidden" name="id-customer" value="{{ $customer->id_customer }}">
+        <div class="modal fade" id="kt_modal_input_cli_{{ $item->kode_proyek }}" tabindex="-1" aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-500px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header">
+                        <!--begin::Modal title-->
+                        <h2>Edit CLI</h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <i class="bi bi-x-lg"></i>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
+                    </div>
+                    <!--end::Modal header-->
+                    <!--begin::Modal body-->
+                    <div class="modal-body py-lg-6 px-lg-6" style="overflow:hidden;">
+                        <!--Begin:Nama Proyek-->
+                        <div class="row fv-row">
+                            <div class="input_cli">
+                                @php
+                                    $nama_proyek = collect($proyekberjalan)->where("kode_proyek", "=", $item->kode_proyek)->first();
+                                @endphp
+
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="">Nama Proyek</span>
+                                </label>
+                                <!--Begin::Select-->
+                                <div id="div-namaProyek">
+                                    <label class="">{{ $nama_proyek->nama_proyek }}</label>
+                                    <input type="hidden" class="form-control form-control-solid" name="kode-proyek-cli" value="{{ $item->kode_proyek }}" readonly>
+                                </div>
+
+                                <label class="fs-6 fw-b                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     old form-label mt-3">
+                                    <span class="">Tanggal</span>
+                                    <a href="#" class="btn" style="background: transparent;" id="date_cli" onclick="showCalendarModal(this)">
+                                        <i class="bi bi-calendar2-plus-fill" style="color: #008CB4"></i>
+                                    </a>
+                                </label>
+                                <!--Begin::Select-->
+                                <input type="date" name="cli_date" class="form-control form-control-solid" placeholder="Tanggal" value="{{ $item->tanggal }}"/>
+                                
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="">Score</span>
+                                </label>
+                                <!--Begin::Select-->
+                                <input type="number" name="score_cli" id="score-cli" placeholder="Range 1 - 100" class="form-control form-control-solid" min="0" max="100" value="{{ $item->score }}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-sm btn-primary">Save</button>
+                    </div>
+                    <!--end::Input group-->
+    
+                </div>
+                <!--end::Modal body-->
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+        </div>
+    </form>
+    @endforeach
+</div>
+<!--End::Update Modal CLI-->
+
+<!--Begin:: Modal NPS-->
+<div class="pop-up nps">
+    <form action="/customer/nps/save" method="POST" enctype="multipart/form-data">
+        @csrf
+        <input type="hidden" name="id-customer" value="{{ $customer->id_customer }}">
+        <div class="modal fade" id="kt_modal_input_nps" tabindex="-1" aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-500px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header">
+                        <!--begin::Modal title-->
+                        <h2>Add CLI</h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <i class="bi bi-x-lg"></i>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
+                    </div>
+                    <!--end::Modal header-->
+                    <!--begin::Modal body-->
+                    <div class="modal-body py-lg-6 px-lg-6" style="overflow:hidden;">
+                        <!--Begin:Nama Proyek-->
+                        <div class="row fv-row">
+                            <div class="input_nps">
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="">Nama Proyek</span>
+                                </label>
+                                <!--Begin::Select-->
+                                <div id="div-namaProyek">
+                                    <select name="kode-proyek-nps" id="namaProyekNPS" class="form-select form-select-solid" data-hide-search="false" data-control="select2"
+                                        data-placeholder="Pilih Nama Proyek">
+                                        <option value=""></option>
+                                        @foreach ($proyekberjalan as $pb)
+                                        @if (!empty($pb->id_customer))
+                                        <option value="{{ $pb->kode_proyek }}">{{ $pb->nama_proyek }}</option>
+                                        @else
+                                        <option value="{{ $pb->kode_proyek }}">{{ $pb->nama_proyek }}</option>
+                                        @endif                                                                          
+                                        @endforeach                                                                           
+                                    </select>
+                                </div>
+    
+                                <label class="fs-6 fw-b                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     old form-label mt-3">
+                                    <span class="">Tanggal</span>
+                                    <a href="#" class="btn" style="background: transparent;" id="date_nps" onclick="showCalendarModal(this)">
+                                        <i class="bi bi-calendar2-plus-fill" style="color: #008CB4"></i>
+                                    </a>
+                                </label>
+                                <!--Begin::Select-->
+                                <input type="date" name="nps_date" class="form-control form-control-solid" placeholder="Tanggal" />
+                                
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="">Score</span>
+                                </label>
+                                <!--Begin::Select-->
+                                <input type="number" name="score_nps" id="score_nps" placeholder="Range 1 - 100" class="form-control form-control-solid" min="0" max="100">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-sm btn-primary">Save</button>
+                    </div>
+                    <!--end::Input group-->
+    
+                </div>
+                <!--end::Modal body-->
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+        </div>
+    </form>
+</div>
+<!--End:: Modal CLI-->
+<!--Begin:: Modal NPS-->
+
+<!--Begin::Update Modal NPS-->
+<div class="pop-up nps-update">
+    {{-- @dd($item) --}}
+    @foreach ($nps as $item)
+    <form action="/customer/nps/save" method="POST" enctype="multipart/form-data">
+        @csrf
+        <input type="hidden" name="id-customer" value="{{ $customer->id_customer }}">
+        <div class="modal fade" id="kt_modal_input_nps_{{ $item->kode_proyek }}" tabindex="-1" aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-500px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header">
+                        <!--begin::Modal title-->
+                        <h2>Edit NPS</h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <i class="bi bi-x-lg"></i>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
+                    </div>
+                    <!--end::Modal header-->
+                    <!--begin::Modal body-->
+                    <div class="modal-body py-lg-6 px-lg-6" style="overflow:hidden;">
+                        <!--Begin:Nama Proyek-->
+                        <div class="row fv-row">
+                            <div class="input_nps">
+                                @php
+                                    $nama_proyek = collect($proyekberjalan)->where("kode_proyek", "=", $item->kode_proyek)->first();
+                                @endphp
+
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="">Nama Proyek</span>
+                                </label>
+                                <!--Begin::Select-->
+                                <div id="div-namaProyek">
+                                    <label class="">{{ $nama_proyek->nama_proyek }}</label>
+                                    <input type="hidden" class="form-control form-control-solid" name="kode-proyek-nps" value="{{ $item->kode_proyek }}" readonly>
+                                </div>
+
+                                <label class="fs-6 fw-b                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     old form-label mt-3">
+                                    <span class="">Tanggal</span>
+                                    <a href="#" class="btn" style="background: transparent;" id="date_nps" onclick="showCalendarModal(this)">
+                                        <i class="bi bi-calendar2-plus-fill" style="color: #008CB4"></i>
+                                    </a>
+                                </label>
+                                <!--Begin::Select-->
+                                <input type="date" name="nps_date" class="form-control form-control-solid" placeholder="Tanggal" value="{{ $item->tanggal }}"/>
+                                
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="">Score</span>
+                                </label>
+                                <!--Begin::Select-->
+                                <input type="number" name="score_nps" id="score-nps" placeholder="Range 1 - 100" class="form-control form-control-solid" min="0" max="100" value="{{ $item->score }}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-sm btn-primary">Save</button>
+                    </div>
+                    <!--end::Input group-->
+    
+                </div>
+                <!--end::Modal body-->
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+        </div>
+    </form>
+    @endforeach
+</div>
+<!--End::Update Modal NPS-->
+
+<!--End:: Modal Karya Inovasi-->
+<div class="pop-up karya-inovasi">
+    <form action="/customer/karya-inovasi/save" method="POST" enctype="multipart/form-data">
+        @csrf
+        <input type="hidden" name="id-customer" value="{{ $customer->id_customer }}">
+        <div class="modal fade" id="kt_modal_input_karya_inovasi" tabindex="-1" aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-500px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header">
+                        <!--begin::Modal title-->
+                        <h2>Add Karya Inovasi</h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <i class="bi bi-x-lg"></i>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
+                    </div>
+                    <!--end::Modal header-->
+                    <!--begin::Modal body-->
+                    <div class="modal-body py-lg-6 px-lg-6" style="overflow:hidden;">
+                        <!--Begin:Nama Proyek-->
+                        <div class="row fv-row">
+                            <div class="input_karya_inovasi">
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="">Nama Proyek</span>
+                                </label>
+                                <!--Begin::Select-->
+                                <div id="div-namaProyek">
+                                    <select name="kode-proyek-inovasi" id="namaProyekKaryaInovasi" class="form-select form-select-solid" data-hide-search="false" data-control="select2"
+                                        data-placeholder="Pilih Nama Proyek">
+                                        <option value=""></option>
+                                        @foreach ($proyekberjalan as $pb)
+                                        @if (!empty($pb->id_customer))
+                                        <option value="{{ $pb->kode_proyek }}">{{ $pb->nama_proyek }}</option>
+                                        @else
+                                        <option value="{{ $pb->kode_proyek }}">{{ $pb->nama_proyek }}</option>
+                                        @endif                                                                          
+                                        @endforeach                                                                           
+                                    </select>
+                                </div>
+    
+                                <label class="fs-6 fw-b                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     old form-label mt-3">
+                                    <span class="">Tanggal</span>
+                                    <a href="#" class="btn" style="background: transparent;" id="date_karya_inovasi" onclick="showCalendarModal(this)">
+                                        <i class="bi bi-calendar2-plus-fill" style="color: #008CB4"></i>
+                                    </a>
+                                </label>
+                                <!--Begin::Select-->
+                                <input type="date" name="inovasi_date" class="form-control form-control-solid" placeholder="Tanggal" />
+                                
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="">Nama Karya Inovasi</span>
+                                </label>
+                                <!--Begin::Select-->
+                                <input type="text" name="nama_inovasi" id="score-inovasi" placeholder="Nama Karya Inovasi" class="form-control form-control-solid">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-sm btn-primary">Save</button>
+                    </div>
+                    <!--end::Input group-->
+    
+                </div>
+                <!--end::Modal body-->
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+        </div>
+    </form>
+</div>
+<!--End:: Modal Karya Inovasi-->
+
+
+<!--End:: Modal Update Karya Inovasi-->
+<div class="pop-up karya-inovasi">
+    @foreach ($inovasi as $item)
+        
+    @endforeach
+    <form action="/customer/karya-inovasi/save" method="POST" enctype="multipart/form-data">
+        @csrf
+        <input type="hidden" name="id-customer" value="{{ $customer->id_customer }}">
+        <div class="modal fade" id="kt_modal_input_karya_inovasi_{{ $item->kode_proyek }}" tabindex="-1" aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-500px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header">
+                        <!--begin::Modal title-->
+                        <h2>Edit Karya Inovasi</h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <i class="bi bi-x-lg"></i>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
+                    </div>
+                    <!--end::Modal header-->
+                    <!--begin::Modal body-->
+                    <div class="modal-body py-lg-6 px-lg-6" style="overflow:hidden;">
+                        <!--Begin:Nama Proyek-->
+                        <div class="row fv-row">
+                            <div class="input_karya_inovasi">
+                                @php
+                                $nama_proyek = collect($proyekberjalan)->where("kode_proyek", "=", $item->kode_proyek)->first();
+                            @endphp
+
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span class="">Nama Proyek</span>
+                            </label>
+                            <!--Begin::Select-->
+                            <div id="div-namaProyek">
+                                <label class="">{{ $nama_proyek->nama_proyek }}</label>
+                                <input type="hidden" class="form-control form-control-solid" name="kode-proyek-inovasi" value="{{ $item->kode_proyek }}" readonly>
+                            </div>
+    
+                                <label class="fs-6 fw-b                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     old form-label mt-3">
+                                    <span class="">Tanggal</span>
+                                    <a href="#" class="btn" style="background: transparent;" id="date_karya_inovasi" onclick="showCalendarModal(this)">
+                                        <i class="bi bi-calendar2-plus-fill" style="color: #008CB4"></i>
+                                    </a>
+                                </label>
+                                <!--Begin::Select-->
+                                <input type="date" name="inovasi_date" class="form-control form-control-solid" placeholder="Tanggal" value="{{ $item->tanggal }}"/>
+                                
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="">Nama Karya Inovasi</span>
+                                </label>
+                                <!--Begin::Select-->
+                                <input type="text" name="nama_inovasi" id="score-inovasi" placeholder="Nama Karya Inovasi" class="form-control form-control-solid" value="{{ $item->nama_inovasi }}"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-sm btn-primary">Save</button>
+                    </div>
+                    <!--end::Input group-->
+    
+                </div>
+                <!--end::Modal body-->
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+        </div>
+    </form>
+</div>
+<!--End:: Modal Karya Inovasi-->
+<!--End::Modal-->
 
 
 

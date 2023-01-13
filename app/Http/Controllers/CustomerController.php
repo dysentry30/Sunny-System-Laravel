@@ -621,49 +621,49 @@ class CustomerController extends Controller
         $editCustomer->note_attachment = $data["note-attachment"];
         $customerAttachments->id_customer = $data["id-customer"];
 
-        //Save to CSI Table
-        $editCSI = Csi::where("id_customer", "=", $data["id-customer"])->first();
-        $editCSI = new Csi();
-        $editCSI->id_customer = $data["id-customer"];
-        $editCSI->kode_proyek = $data["kode_proyek_csi"];
-        $editCSI->tanggal = $data["csi_date"];
-        $editCSI->score = $data["score_csi"];
-        if ($data["kode_proyek_csi"] && $data["csi_date"] && $data["score_csi"] != +null) {
-            $editCSI->save();
-        }
+        // //Save to CSI Table
+        // $editCSI = Csi::where("id_customer", "=", $data["id-customer"])->first();
+        // $editCSI = new Csi();
+        // $editCSI->id_customer = $data["id-customer"];
+        // $editCSI->kode_proyek = $data["kode-proyek-csi"];
+        // $editCSI->tanggal = $data["csi_date"];
+        // $editCSI->score = $data["score_csi"];
+        // if ($data["kode_proyek_csi"] && $data["csi_date"] && $data["score_csi"] != +null) {
+        //     $editCSI->save();
+        // }
 
-        //Save to CLI Table
-        $editCLI = Cli::where("id_customer", "=", $data["id-customer"])->first();
-        $editCLI = new Cli();
-        $editCLI->id_customer = $data["id-customer"];
-        $editCLI->kode_proyek = $data["kode_proyek_cli"];
-        $editCLI->tanggal = $data["cli_date"];
-        $editCLI->score = $data["score_cli"];
-        if ($data["kode_proyek_cli"] && $data["cli_date"] && $data["score_cli"] !== null) {
-            $editCLI->save();
-        }
+        // //Save to CLI Table
+        // $editCLI = Cli::where("id_customer", "=", $data["id-customer"])->first();
+        // $editCLI = new Cli();
+        // $editCLI->id_customer = $data["id-customer"];
+        // $editCLI->kode_proyek = $data["kode_proyek_cli"];
+        // $editCLI->tanggal = $data["cli_date"];
+        // $editCLI->score = $data["score_cli"];
+        // if ($data["kode_proyek_cli"] && $data["cli_date"] && $data["score_cli"] !== null) {
+        //     $editCLI->save();
+        // }
 
-        //Save to NPS Table
-        $editNPS = Nps::where("id_customer", "=", $data["id-customer"])->first();
-        $editNPS = new Nps();
-        $editNPS->id_customer = $data["id-customer"];
-        $editNPS->kode_proyek = $data["kode_proyek_nps"];
-        $editNPS->tanggal = $data["nps_date"];
-        $editNPS->score = $data["score_nps"];
-        if ($data["kode_proyek_nps"] && $data["nps_date"] && $data["score_nps"] !== null) {
-            $editNPS->save();
-        }
+        // //Save to NPS Table
+        // $editNPS = Nps::where("id_customer", "=", $data["id-customer"])->first();
+        // $editNPS = new Nps();
+        // $editNPS->id_customer = $data["id-customer"];
+        // $editNPS->kode_proyek = $data["kode_proyek_nps"];
+        // $editNPS->tanggal = $data["nps_date"];
+        // $editNPS->score = $data["score_nps"];
+        // if ($data["kode_proyek_nps"] && $data["nps_date"] && $data["score_nps"] !== null) {
+        //     $editNPS->save();
+        // }
 
-        //Save to Karya Inovasi Table
-        $editInovasi = KaryaInovasi::where("id_customer", "=", $data["id-customer"])->first();
-        $editInovasi = new KaryaInovasi();
-        $editInovasi->id_customer = $data["id-customer"];
-        $editInovasi->kode_proyek = $data["kode_proyek_inovasi"];
-        $editInovasi->tanggal = $data["inovasi_date"];
-        $editInovasi->nama_inovasi = $data["nama_inovasi"];
-        if ($data["kode_proyek_inovasi"] && $data["inovasi_date"] && $data["nama_inovasi"] !== null) {
-            $editInovasi->save();
-        }
+        // //Save to Karya Inovasi Table
+        // $editInovasi = KaryaInovasi::where("id_customer", "=", $data["id-customer"])->first();
+        // $editInovasi = new KaryaInovasi();
+        // $editInovasi->id_customer = $data["id-customer"];
+        // $editInovasi->kode_proyek = $data["kode_proyek_inovasi"];
+        // $editInovasi->tanggal = $data["inovasi_date"];
+        // $editInovasi->nama_inovasi = $data["nama_inovasi"];
+        // if ($data["kode_proyek_inovasi"] && $data["inovasi_date"] && $data["nama_inovasi"] !== null) {
+        //     $editInovasi->save();
+        // }
         // $customerAttachments->name_customer=$data["name-customer"];
 
         $id_customer = $data["id-customer"];
@@ -1065,6 +1065,164 @@ class CustomerController extends Controller
         }
         Alert::error("Error", "Pastikan field-field Masalah Hukum terisi!");
         return redirect()->back();
+    }
+    
+    public function saveCSI(Request $request)
+    {
+        $data = $request->all();
+        $editCSI = Csi::where("id_customer", "=", $data["id-customer"])->where("kode_proyek", "=", $data["kode-proyek-csi"])->first();
+        // dd($editCSI);
+        // $is_exist_code_proyek = Csi::where("kode_proyek", "=", $data["kode-proyek-csi"])->first();
+        // dd($is_exist_code_proyek);
+        if(!empty($editCSI)) {
+            $editCSI->id_customer = $data["id-customer"];
+            $editCSI->kode_proyek = $data["kode-proyek-csi"];
+            $editCSI->tanggal = $data["csi_date"];
+            $editCSI->score = $data["score_csi"];
+            if ($data["kode-proyek-csi"] && $data["csi_date"] && $data["score_csi"] !== null) {
+                if($editCSI->save()) {
+                    Alert::success("Success", "CSI Berhasil Diperbaharui");
+                    return redirect()->back();
+                }
+                Alert::error("Error", "CSI Gagal Diperbaharui!");
+                return redirect()->back();
+            }
+            Alert::error("Error", "Pastikan field-field CSI terisi!");
+            return redirect()->back();
+        } else {
+            $newCSI = new Csi();
+            $newCSI->id_customer = $data["id-customer"];
+            $newCSI->kode_proyek = $data["kode-proyek-csi"];
+            $newCSI->tanggal = $data["csi_date"];
+            $newCSI->score = $data["score_csi"];
+            if ($data["kode-proyek-csi"] && $data["csi_date"] && $data["score_csi"] !== null) {
+                if($newCSI->save()) {
+                    Alert::success("Success", "CSI Berhasil Ditambahkan");
+                    return redirect()->back();
+                }
+                Alert::error("Error", "CSI Gagal Ditambahkan!");
+                return redirect()->back();
+            }
+            Alert::error("Error", "Pastikan field-field CSI terisi!");
+            return redirect()->back();
+        }
+    }
+
+    public function saveCLI(Request $request)
+    {
+        $data = $request->all();
+        $editCLI = Cli::where("id_customer", "=", $data["id-customer"])->where("kode_proyek", "=", $data["kode-proyek-cli"])->first();
+        // $is_exist_code_proyek = Cli::where("kode_proyek", "=", $data["kode-proyek-cli"])->first();
+        if(!empty($editCLI)) {
+            $editCLI->id_customer = $data["id-customer"];
+            $editCLI->kode_proyek = $data["kode-proyek-cli"];
+            $editCLI->tanggal = $data["cli_date"];
+            $editCLI->score = $data["score_cli"];
+            if ($data["kode-proyek-cli"] && $data["cli_date"] && $data["score_cli"] !== null) {
+                if($editCLI->save()) {
+                    Alert::success("Success", "CLI Berhasil Diperbaharui");
+                    return redirect()->back();
+                }
+                Alert::error("Error", "CLI Gagal Diperbaharui!");
+                return redirect()->back();
+            }
+            Alert::error("Error", "Pastikan field-field CLI terisi!");
+            return redirect()->back();
+        } else {
+            $newCLI = new Cli();
+            $newCLI->id_customer = $data["id-customer"];
+            $newCLI->kode_proyek = $data["kode-proyek-cli"];
+            $newCLI->tanggal = $data["cli_date"];
+            $newCLI->score = $data["score_cli"];
+            if ($data["kode-proyek-cli"] && $data["cli_date"] && $data["score_cli"] !== null) {
+                if($newCLI->save()) {
+                    Alert::success("Success", "CLI Berhasil Ditambahkan");
+                    return redirect()->back();
+                }
+                Alert::error("Error", "CLI Gagal Ditambahkan!");
+                return redirect()->back();
+            }
+            Alert::error("Error", "Pastikan field-field CLI terisi!");
+            return redirect()->back();
+        }
+    }
+
+    public function saveNPS(Request $request)
+    {
+        $data = $request->all();
+        $editNPS = Nps::where("id_customer", "=", $data["id-customer"])->where("kode_proyek", "=", $data["kode-proyek-nps"])->first();
+        // $is_exist_code_proyek = Nps::where("kode_proyek", "=", $data["kode-proyek-nps"])->first();
+        if(!empty($editNPS)) {
+            $editNPS->id_customer = $data["id-customer"];
+            $editNPS->kode_proyek = $data["kode-proyek-nps"];
+            $editNPS->tanggal = $data["nps_date"];
+            $editNPS->score = $data["score_nps"];
+            if ($data["kode-proyek-nps"] && $data["nps_date"] && $data["score_nps"] !== null) {
+                if($editNPS->save()) {
+                    Alert::success("Success", "NPS Berhasil Diperbaharui");
+                    return redirect()->back();
+                }
+                Alert::error("Error", "NPS Gagal Diperbaharui!");
+                return redirect()->back();
+            }
+            Alert::error("Error", "Pastikan field-field Masalah Hukum terisi!");
+            return redirect()->back();
+        } else {
+            $newNPS = new Nps();
+            $newNPS->id_customer = $data["id-customer"];
+            $newNPS->kode_proyek = $data["kode-proyek-nps"];
+            $newNPS->tanggal = $data["nps_date"];
+            $newNPS->score = $data["score_nps"];
+            if ($data["kode-proyek-nps"] && $data["nps_date"] && $data["score_nps"] !== null) {
+                if($newNPS->save()) {
+                    Alert::success("Success", "NPS Berhasil Ditambahkan");
+                    return redirect()->back();
+                }
+                Alert::error("Error", "NPS Gagal Ditambahkan!");
+                return redirect()->back();
+            }
+            Alert::error("Error", "Pastikan field-field Masalah Hukum terisi!");
+            return redirect()->back();
+        }
+    }
+
+    public function saveInovasi(Request $request)
+    {
+        $data = $request->all();
+        $editInovasi = KaryaInovasi::where("id_customer", "=", $data["id-customer"])->where("kode_proyek", "=", $data["kode-proyek-inovasi"])->first();
+        // $is_exist_code_proyek = KaryaInovasi::where("kode_proyek", "=", $data["kode-proyek-inovasi"])->first();
+        if(!empty($editInovasi)) {
+            $editInovasi->id_customer = $data["id-customer"];
+            $editInovasi->kode_proyek = $data["kode-proyek-inovasi"];
+            $editInovasi->tanggal = $data["inovasi_date"];
+            $editInovasi->nama_inovasi = $data["nama_inovasi"];
+            if ($data["kode-proyek-inovasi"] && $data["inovasi_date"] && $data["nama_inovasi"] !== null) {
+                if($editInovasi->save()) {
+                    Alert::success("Success", "Karya Inovasi Berhasil Diperbaharui");
+                    return redirect()->back();
+                }
+                Alert::error("Error", "Karya Inovasi Gagal Diperbaharui!");
+                return redirect()->back();
+            }
+            Alert::error("Error", "Pastikan field-field Karya Inovasi terisi!");
+            return redirect()->back();
+        } else {
+            $newInovasi = new KaryaInovasi();
+            $newInovasi->id_customer = $data["id-customer"];
+            $newInovasi->kode_proyek = $data["kode-proyek-inovasi"];
+            $newInovasi->tanggal = $data["inovasi_date"];
+            $newInovasi->nama_inovasi = $data["nama_inovasi"];
+            if ($data["kode-proyek-inovasi"] && $data["inovasi_date"] && $data["nama_inovasi"] !== null) {
+                if($newInovasi->save()) {
+                    Alert::success("Success", "Karya Inovasi Berhasil Ditambahkan");
+                    return redirect()->back();
+                }
+                Alert::error("Error", "Karya Inovasi Gagal Ditambahkan!");
+                return redirect()->back();
+            }
+            Alert::error("Error", "Pastikan field-field Karya Inovasi terisi!");
+            return redirect()->back();
+        }
     }
 
     public function getKodeNasabah(Request $request) {
