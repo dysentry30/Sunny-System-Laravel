@@ -1206,6 +1206,31 @@
                                                             </div>
                                                             <!--end::Input group-->
                                                         </div>
+                                                        <!--Begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>RA Klasifikasi Proyek</span>
+                                                                </label>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                <select id="ra-klasifikasi-proyek" name="ra-klasifikasi-proyek"
+                                                                    class="form-select form-select-solid"
+                                                                    data-control="select2" data-hide-search="true"
+                                                                    data-placeholder="RA Klasifikasi Proyek">
+                                                                    <option value="" selected></option>
+                                                                    <option value="Proyek Kecil">Proyek Kecil</option>
+                                                                    <option value="Proyek Menengah">Proyek Menengah</option>
+                                                                    <option value="Proyek Besar">Proyek Besar</option>
+                                                                    <option value="Proyek Mega">Proyek Mega</option>
+                                                                </select>
+                                                                <!--end::Input-->
+                                                            </div>
+                                                            <!--end::Input group-->
+                                                        </div>
+                                                        <!--End::Col-->
                                                         <div class="col-6">
                                                             @if ($proyek->jenis_proyek == 'J')
                                                             @endif

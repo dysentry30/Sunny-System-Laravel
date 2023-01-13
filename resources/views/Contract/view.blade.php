@@ -2578,7 +2578,7 @@
                                      <!--end::Label-->
                                      <!--begin::Input-->
                                      <input type="text" id="prevailing-language" name="prevailing-language" class="form-control form-control-solid"
-                                     value="{{ !empty($contract->ld_performance) ? $contract->ld_performance : "" }}">
+                                     value="{{ !empty($contract->law_prevailing_language) ? $contract->law_prevailing_language : "" }}">
                                      <!--end::Input-->
                                     </div>
                                     <div class="col-6">
@@ -2606,7 +2606,7 @@
                                         <!--end::Label-->
                                         <!--begin::Input-->
                                         <input type="text" id="performance" name="performance" class="form-control form-control-solid"
-                                        value="{{ !empty($contract->law_prevailing_language) ? $contract->ld_performance : "" }}">
+                                        value="{{ !empty($contract->ld_performance) ? $contract->ld_performance : "" }}">
                                         <!--end::Input-->
                                     </div>
                                 </div>
