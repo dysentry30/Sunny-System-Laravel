@@ -7172,5 +7172,33 @@
         });
     });
 </script>
+<script>
+    $('#kt_modal_input_csi').on('show.bs.modal', function() {
+        $("#new-proyek").select2({
+            dropdownParent: $("#kt_modal_input_csi")
+        });
+    });
+</script>
+<script>
+    $('#kt_modal_input_cli').on('show.bs.modal', function() {
+        $("#new-proyek").select2({
+            dropdownParent: $("#kt_modal_input_cli")
+        });
+    });
+</script>
+<script>
+    $('#kt_modal_input_nps').on('show.bs.modal', function() {
+        $("#new-proyek").select2({
+            dropdownParent: $("#kt_modal_input_nps")
+        });
+    });
+</script>
+<script>
+    $('#kt_modal_input_karya_inovasi').on('show.bs.modal', function() {
+        $("#new-proyek").select2({
+            dropdownParent: $("#kt_modal_input_karya_inovasi")
+        });
+    });
+</script>
 <!--end::Enable Search Bar Select2-->
 @endsection
