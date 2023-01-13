@@ -74,7 +74,7 @@ class ProyekController extends Controller
         $jenisProyek = JenisProyek::all();
         $tipeProyek = TipeProyek::all();
 
-        $year = (int) $request->get("tahun-history") ?? (int) date("Y");
+        $year = (int) date("Y");
 
         if (Auth::user()->check_administrator) {
             $unitkerjas = UnitKerja::all();
