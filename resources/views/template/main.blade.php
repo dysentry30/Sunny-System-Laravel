@@ -10,7 +10,7 @@
 
     {{-- <link rel="shortcut icon" href="{{ asset('/media/logos/Icon-CCM.png') }}" /> --}}
     {{-- <link rel="icon" type="image/x-icon" href="public/media/logos/Icon-Sunny.png"> --}}
-    <link rel="icon" type="image/x-icon" href="/assets/media/logos/icon-sunny.png">
+    <link rel="icon" type="image/x-icon" href="/assets/media/logos/icon-sunny.png?v=2" />
     <!--begin::Fonts-->
 
     {{-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" /> --}}
