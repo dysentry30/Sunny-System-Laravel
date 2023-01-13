@@ -423,7 +423,7 @@ class CustomerController extends Controller
             "customer" => $customer,
             "attachment" => $customer->customerAttachments->all(),
             "strukturAtttachment" => $customer->strukturAttachments->all(),
-            "proyekberjalan" => $customer->proyekBerjalans->all(),
+            "proyekberjalan" => $customer->proyekBerjalans,
             'sumberdanas' => SumberDana::all(),
             // "proyekberjalan0" => $customer->proyekBerjalans->where('stage', ">", 0),
             // "proyekberjalan6" => $customer->proyekBerjalans->where('stage', ">", 6),

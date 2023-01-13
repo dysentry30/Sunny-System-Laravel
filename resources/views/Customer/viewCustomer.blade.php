@@ -4697,25 +4697,18 @@
                                     <span class="">Nama Proyek</span>
                                 </label>
                                 <!--Begin::Select-->
-                                {{-- @php
-                                    $csi_not_proyek = $proyekberjalan->filter(function($proyek) use($csi){
-                                        // dd($proyek);
-                                        foreach ($csi as $c) {
-                                           return $proyek->kode_proyek != $c->kode_proyek;
-                                        };
+                                @php
+                                    $csi_not_proyek = $csi->mergeRecursive($proyekberjalan)->unique("kode_proyek")->filter(function($item){
+                                        return $item instanceof App\Models\ProyekBerjalans;
                                     });
-                                @endphp --}}
+                                 @endphp
                                     {{-- @dd($csi_not_proyek) --}}
                                 <div id="div-namaProyek">
                                     <select name="kode-proyek-csi" id="namaProyekCSI" class="form-select form-select-solid" data-hide-search="false" data-control="select2"
-                                        data-placeholder="Pilih Nama Proyek">
+                                        data-placeholder="Pilih Nama Proyek" tabindex="-1" aria-hidden="true">
                                         <option value=""></option>
-                                        @foreach ($proyekberjalan as $pb)
-                                        @if (!empty($pb->id_customer))
-                                        <option value="{{ $pb->kode_proyek }}">{{ $pb->nama_proyek }}</option>
-                                        @else
-                                        <option value="">Data has been input all</option>
-                                        @endif                                                                          
+                                        @foreach ($csi_not_proyek as $pb)
+                                        <option value="{{ $pb->kode_proyek }}">{{ $pb->nama_proyek }}</option>          
                                         @endforeach                                                                           
                                     </select>
                                 </div>
@@ -4796,7 +4789,7 @@
                                 </label>
                                 <!--Begin::Select-->
                                 <div id="div-namaProyek">
-                                    <label class="">{{ $nama_proyek->nama_proyek }}</label>
+                                    <label class="fw-bold fs-6">{{ $nama_proyek->nama_proyek }}</label>
                                     <input type="hidden" class="form-control form-control-solid" name="kode-proyek-csi" value="{{ $item->kode_proyek }}" readonly>
                                 </div>
 
@@ -4868,21 +4861,20 @@
                                 <label class="fs-6 fw-bold form-label mt-3">
                                     <span class="">Nama Proyek</span>
                                 </label>
-                                <!--Begin::Select-->
+                                @php
+                                    $cli_not_proyek = $cli->mergeRecursive($proyekberjalan)->unique("kode_proyek")->filter(function($item){
+                                        return $item instanceof App\Models\ProyekBerjalans;
+                                    });
+                                 @endphp
+                                    {{-- @dd($csi_not_proyek) --}}
                                 <div id="div-namaProyek">
                                     <select name="kode-proyek-cli" id="namaProyekCLI" class="form-select form-select-solid" data-hide-search="false" data-control="select2"
-                                        data-placeholder="Pilih Nama Proyek">
+                                        data-placeholder="Pilih Nama Proyek" tabindex="-1" aria-hidden="true">
                                         <option value=""></option>
-                                        @foreach ($proyekberjalan as $pb)
-                                        @if (!empty($pb->id_customer))
-                                        <option value="{{ $pb->kode_proyek }}">{{ $pb->nama_proyek }}</option>
-                                        @else
-                                        <option value="{{ $pb->kode_proyek }}">{{ $pb->nama_proyek }}</option>
-                                        @endif                                                                          
+                                        @foreach ($cli_not_proyek as $pb)
+                                        <option value="{{ $pb->kode_proyek }}">{{ $pb->nama_proyek }}</option>          
                                         @endforeach                                                                           
-                                    </select>
-                                </div>
-    
+                                    </select>    
                                 <label class="fs-6 fw-b                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     old form-label mt-3">
                                     <span class="">Tanggal</span>
                                     <a href="#" class="btn" style="background: transparent;" id="date_csi" onclick="showCalendarModal(this)">
@@ -4958,7 +4950,7 @@
                                 </label>
                                 <!--Begin::Select-->
                                 <div id="div-namaProyek">
-                                    <label class="">{{ $nama_proyek->nama_proyek }}</label>
+                                    <label class="fw-bold fs-6">{{ $nama_proyek->nama_proyek }}</label>
                                     <input type="hidden" class="form-control form-control-solid" name="kode-proyek-cli" value="{{ $item->kode_proyek }}" readonly>
                                 </div>
 
@@ -5031,19 +5023,20 @@
                                     <span class="">Nama Proyek</span>
                                 </label>
                                 <!--Begin::Select-->
+                                @php
+                                    $nps_not_proyek = $nps->mergeRecursive($proyekberjalan)->unique("kode_proyek")->filter(function($item){
+                                        return $item instanceof App\Models\ProyekBerjalans;
+                                    });
+                                 @endphp
+                                    {{-- @dd($nps_not_proyek) --}}
                                 <div id="div-namaProyek">
                                     <select name="kode-proyek-nps" id="namaProyekNPS" class="form-select form-select-solid" data-hide-search="false" data-control="select2"
-                                        data-placeholder="Pilih Nama Proyek">
+                                        data-placeholder="Pilih Nama Proyek" tabindex="-1" aria-hidden="true">
                                         <option value=""></option>
-                                        @foreach ($proyekberjalan as $pb)
-                                        @if (!empty($pb->id_customer))
-                                        <option value="{{ $pb->kode_proyek }}">{{ $pb->nama_proyek }}</option>
-                                        @else
-                                        <option value="{{ $pb->kode_proyek }}">{{ $pb->nama_proyek }}</option>
-                                        @endif                                                                          
+                                        @foreach ($nps_not_proyek as $pb)
+                                        <option value="{{ $pb->kode_proyek }}">{{ $pb->nama_proyek }}</option>          
                                         @endforeach                                                                           
                                     </select>
-                                </div>
     
                                 <label class="fs-6 fw-b                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     old form-label mt-3">
                                     <span class="">Tanggal</span>
@@ -5121,7 +5114,7 @@
                                 </label>
                                 <!--Begin::Select-->
                                 <div id="div-namaProyek">
-                                    <label class="">{{ $nama_proyek->nama_proyek }}</label>
+                                    <label class="fw-bold fs-6">{{ $nama_proyek->nama_proyek }}</label>
                                     <input type="hidden" class="form-control form-control-solid" name="kode-proyek-nps" value="{{ $item->kode_proyek }}" readonly>
                                 </div>
 
@@ -5194,19 +5187,20 @@
                                     <span class="">Nama Proyek</span>
                                 </label>
                                 <!--Begin::Select-->
+                                @php
+                                    $inovasi_not_proyek = $inovasi->mergeRecursive($proyekberjalan)->unique("kode_proyek")->filter(function($item){
+                                        return $item instanceof App\Models\ProyekBerjalans;
+                                    });
+                                 @endphp
+                                    {{-- @dd($inovasi_not_proyek) --}}
                                 <div id="div-namaProyek">
                                     <select name="kode-proyek-inovasi" id="namaProyekKaryaInovasi" class="form-select form-select-solid" data-hide-search="false" data-control="select2"
-                                        data-placeholder="Pilih Nama Proyek">
+                                        data-placeholder="Pilih Nama Proyek" tabindex="-1" aria-hidden="true">
                                         <option value=""></option>
-                                        @foreach ($proyekberjalan as $pb)
-                                        @if (!empty($pb->id_customer))
-                                        <option value="{{ $pb->kode_proyek }}">{{ $pb->nama_proyek }}</option>
-                                        @else
-                                        <option value="{{ $pb->kode_proyek }}">{{ $pb->nama_proyek }}</option>
-                                        @endif                                                                          
+                                        @foreach ($inovasi_not_proyek as $pb)
+                                        <option value="{{ $pb->kode_proyek }}">{{ $pb->nama_proyek }}</option>          
                                         @endforeach                                                                           
                                     </select>
-                                </div>
     
                                 <label class="fs-6 fw-b                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     old form-label mt-3">
                                     <span class="">Tanggal</span>
@@ -5276,14 +5270,14 @@
                             <div class="input_karya_inovasi">
                                 @php
                                 $nama_proyek = collect($proyekberjalan)->where("kode_proyek", "=", $item->kode_proyek)->first();
-                            @endphp
+                                @endphp
 
                             <label class="fs-6 fw-bold form-label mt-3">
                                 <span class="">Nama Proyek</span>
                             </label>
                             <!--Begin::Select-->
                             <div id="div-namaProyek">
-                                <label class="">{{ $nama_proyek->nama_proyek }}</label>
+                                <label class="fw-bold fs-6">{{ $nama_proyek->nama_proyek }}</label>
                                 <input type="hidden" class="form-control form-control-solid" name="kode-proyek-inovasi" value="{{ $item->kode_proyek }}" readonly>
                             </div>
     
@@ -6103,7 +6097,7 @@
     </script>
     <!--end::Score Net Promoter Score-->
 
-    <!--begin::Score CSI-->
+    <!--begin::Score nps-->
     <script>
         let nilaiCsi = Number("{{ $customer->customer_satisfaction_index == 0 || $customer->customer_satisfaction_index == null ? 1 : $customer->customer_satisfaction_index }}");
         let bgColorCsi = "";
