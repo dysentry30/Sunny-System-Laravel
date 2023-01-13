@@ -664,11 +664,6 @@
                                                                     <!--begin::label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
                                                                         <span class="required">Jenis Perusahaan</span>
-                                                                        <i class="bi-info-circle-fill" class="btn btn-secondary mx-4"
-                                                                            data-bs-toggle="tooltip" data-bs-placement="top"
-                                                                            data-bs-custom-class="custom-tooltip"
-                                                                            data-bs-title="On Development"
-                                                                            data-bs-html="true"></i>
                                                                     </label>
                                                                     <!--end::label-->
                                                                     <!--begin::Input-->
@@ -701,11 +696,6 @@
                                                                     <!--begin::label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
                                                                         <span class="required">Term of Payment</span>
-                                                                        <i class="bi-info-circle-fill" class="btn btn-secondary mx-4"
-                                                                            data-bs-toggle="tooltip" data-bs-placement="top"
-                                                                            data-bs-custom-class="custom-tooltip"
-                                                                            data-bs-title="On Development"
-                                                                            data-bs-html="true"></i>
                                                                     </label>
                                                                     <!--end::label-->
                                                                     <!--begin::Input-->
@@ -737,11 +727,6 @@
                                                                 <!--begin::label-->
                                                                 <label class="fs-6 fw-bold form-label mt-3">
                                                                     <span class="required">Tax</span>
-                                                                    <i class="bi-info-circle-fill" class="btn btn-secondary mx-4"
-                                                                            data-bs-toggle="tooltip" data-bs-placement="top"
-                                                                            data-bs-custom-class="custom-tooltip"
-                                                                            data-bs-title="On Development"
-                                                                            data-bs-html="true"></i>
                                                                 </label>
                                                                 <!--end::label-->
                                                                 <!--begin::Input-->
@@ -971,11 +956,6 @@
                                                                             <label class="form-check-label" for="key-client">
                                                                             Key Client
                                                                             </label>
-                                                                            <i class="bi-info-circle-fill" class="btn btn-secondary mx-4"
-                                                                            data-bs-toggle="tooltip" data-bs-placement="top"
-                                                                            data-bs-custom-class="custom-tooltip"
-                                                                            data-bs-title="On Development"
-                                                                            data-bs-html="true"></i>
                                                                         </div>
                                                                     </div>
                                                                 <!--end::Col-->
@@ -3633,11 +3613,6 @@
                                 <!--begin::Label-->
                                 <label class="fs-6 fw-bold form-label mt-3">
                                     <span class="">Layer Segmentasi</span>
-                                    <i class="bi-info-circle-fill" class="btn btn-secondary mx-4"
-                                    data-bs-toggle="tooltip" data-bs-placement="top"
-                                    data-bs-custom-class="custom-tooltip"
-                                    data-bs-title="On Development"
-                                    data-bs-html="true"></i>
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
@@ -3809,11 +3784,6 @@
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
                                         <span class="">Layer Segmentasi</span>
-                                        <i class="bi-info-circle-fill" class="btn btn-secondary mx-4"
-                                        data-bs-toggle="tooltip" data-bs-placement="top"
-                                        data-bs-custom-class="custom-tooltip"
-                                        data-bs-title="On Development"
-                                        data-bs-html="true"></i>
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
@@ -4727,6 +4697,15 @@
                                     <span class="">Nama Proyek</span>
                                 </label>
                                 <!--Begin::Select-->
+                                {{-- @php
+                                    $csi_not_proyek = $proyekberjalan->filter(function($proyek) use($csi){
+                                        // dd($proyek);
+                                        foreach ($csi as $c) {
+                                           return $proyek->kode_proyek != $c->kode_proyek;
+                                        };
+                                    });
+                                @endphp --}}
+                                    {{-- @dd($csi_not_proyek) --}}
                                 <div id="div-namaProyek">
                                     <select name="kode-proyek-csi" id="namaProyekCSI" class="form-select form-select-solid" data-hide-search="false" data-control="select2"
                                         data-placeholder="Pilih Nama Proyek">
@@ -4735,7 +4714,7 @@
                                         @if (!empty($pb->id_customer))
                                         <option value="{{ $pb->kode_proyek }}">{{ $pb->nama_proyek }}</option>
                                         @else
-                                        <option value="{{ $pb->kode_proyek }}">{{ $pb->nama_proyek }}</option>
+                                        <option value="">Data has been input all</option>
                                         @endif                                                                          
                                         @endforeach                                                                           
                                     </select>
@@ -5266,8 +5245,6 @@
 <!--End:: Modal Update Karya Inovasi-->
 <div class="pop-up karya-inovasi">
     @foreach ($inovasi as $item)
-        
-    @endforeach
     <form action="/customer/karya-inovasi/save" method="POST" enctype="multipart/form-data">
         @csrf
         <input type="hidden" name="id-customer" value="{{ $customer->id_customer }}">
@@ -5340,6 +5317,7 @@
         <!--end::Modal dialog-->
         </div>
     </form>
+    @endforeach
 </div>
 <!--End:: Modal Karya Inovasi-->
 <!--End::Modal-->
