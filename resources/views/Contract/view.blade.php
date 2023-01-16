@@ -823,7 +823,7 @@
                                                 <!--begin::Kode=-->
                                                 <td>
                                                     <a href="#" class="text-gray-400 text-hover-primary mb-1">
-                                                        {{ date_format(new DateTime($questionProject->created_at), 'd M, Y') }}</a>
+                                                        {{ Carbon\Carbon::createFromTimeString($questionProject->created_at)->translatedFormat("d F Y") }}</a>
                                                 </td>
                                                 <!--end::Kode=-->
                                             </tr>
@@ -936,7 +936,21 @@
                                 @else
                                 <a href="/review-contract/view/{{ $contract->id_contract }}/stage/1" target="_blank" class="btn btn-primary btn-sm p-2 px-3 mx-3">view</a>    
                             @endif
+                            @if (!empty($contract->reviewProjects->toArray()))
+                                    <a href="#" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_upload_tinjauan_perolehan" class="btn btn-primary btn-sm p-2 text-end">Upload</a>
+                            @endif
                         </h3>
+
+                        @php
+                            $uploadFilePerubahan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "tinjauan-perolehan")->first();
+                        @endphp
+                        <!--End:Table: Review-->
+                        @if (!empty($uploadFilePerubahan))
+                            <a target="_blank" href="{{ asset('words/'.$uploadFilePerubahan->id_document) }}" class="text-hover-primary">
+                            <small><b>Download File :</b> {{ $uploadFilePerubahan->nama_document }}</small>
+                            </a>
+                        @endif
 
                         <br><br>
                         <!--begin:Table: Review-->
@@ -2144,14 +2158,108 @@
                         </table>
                         <!--End:Table: Claim Contract--> --}}
 
+                        <div class="row mb-5">
+                            <div class="col-6">
+                                <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                    LAW
+                                </h3>
+                            </div>
+                            <div class="col-6">
+                                <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                    LD
+                                </h3>
+                            </div>
+                        </div>
+                        <form action="/ld-law/upload" enctype="multipart/form-data" method="POST">
+                            @csrf
+                            <div class="row">
+                                <div class="col-6 mr-3">
+                                     <!--begin::Input-->
+                                     <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                     name="id-contract">
+                                 <input type="hidden" class="modal-name" name="modal-name">
+ 
+                                 <!--begin::Label-->
+                                 <label class="fs-6 fw-bold form-label mt-3">
+                                     <span style="font-weight: normal">Governing Law</span>
+                                 </label>
+                                 <!--end::Label-->
+                                 <!--begin::Input-->
+                                 <input type="text" id="governing-law" name="governing-law" class="form-control form-control-solid" 
+                                 value="{{ !empty($contract->law_governing) ? $contract->law_governing : "" }}">
+                                 <!--end::Input-->
+ 
+                                 <br>
+                                 
+                                 <!--begin::Label-->
+                                 <label class="fs-6 fw-bold form-label mt-3">
+                                     <span style="font-weight: normal">Dispute Resolution</span>
+                                 </label>
+                                 <!--end::Label-->
+                                 <!--begin::Input-->
+                                 <input type="text" id="dispute-resolution" name="dispute-resolution" class="form-control form-control-solid"
+                                 value="{{ !empty($contract->law_dispute_resolution) ? $contract->law_dispute_resolution : "" }}">
+                                 <!--end::Input-->
+                                 
+                                 <br>
+ 
+                                 <!--begin::Label-->
+                                 <label class="fs-6 fw-bold form-label mt-3">
+                                     <span style="font-weight: normal">Prevailing Language</span>
+                                 </label>
+                                 <!--end::Label-->
+                                 <!--begin::Input-->
+                                 <input type="text" id="prevailing-language" name="prevailing-language" class="form-control form-control-solid"
+                                 value="{{ !empty($contract->law_prevailing_language) ? $contract->law_prevailing_language : "" }}">
+                                 <!--end::Input-->
+                                </div>
+                                <div class="col-6">
+                                    <!--begin::Input-->
+                                    <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                        name="id-contract">
+                                    <input type="hidden" class="modal-name" name="modal-name">
+    
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Delay</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text" id="delay" name="delay" class="form-control form-control-solid"
+                                    value="{{ !empty($contract->ld_delay) ? $contract->ld_delay : "" }}">
+                                    <!--end::Input-->
+    
+                                    <br>
+                                    
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Performance</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text" id="performance" name="performance" class="form-control form-control-solid"
+                                    value="{{ !empty($contract->ld_performance) ? $contract->ld_performance : "" }}">
+                                    <!--end::Input-->
+                                </div>
+                            </div>
+
+                            <div class="d-flex justify-content-end">
+                                <button type="submit" id="save-question" class="btn btn-sm btn-primary"
+                                    data-bs-dismiss="modal">Save</button>
+                            </div>
+                        </form>
+
+                    <hr>
+                    <br>
+                    <br>
+
+
                         <h3 class="fw-bolder m-0 mb-3" id="HeadDetail" style="font-size:14px;">
-                            Input Resiko - Pelaksanaan
+                            Input Resiko - Pelaksanaan (<i class="text-hover-primary text-gray"><a 
+                                href="https://crm.wika.co.id/faqs/104625_RiskTender_Input-Kosong.rev.xlsx"> Download
+                                Template Risk Tender </a></i>)
                             <a href="#" Id="Plus" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_input_resiko_pelaksanaan">+</a>
-                                @if (!empty($contract->inputRisks->toArray()))
-                                    <a href="#" data-bs-toggle="modal"
-                                    data-bs-target="#kt_modal_upload_resiko_pelaksanaan" class="btn btn-primary btn-sm p-2 mx-3 text-end">Upload</a>
-                                @endif
                         </h3>
 
                         <!--begin:Table: Review-->
@@ -2339,6 +2447,7 @@
 
                         </table>
                         <!--End:Table: Pasal Kontraktual-->
+                        <br><br>
 
                         <h3 class="fw-bolder m-0 mb-3 " id="HeadDetail" style="font-size:14px;">
                             Perubahan Kontrak
@@ -2352,7 +2461,7 @@
 
 
                         <!--begin:Table: Perubahan Kontrak-->
-                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="perubahan-kontrak">
+                        <table class="table align-middle table-row-dashed fs-6 gy-5 w-100 p-3" id="perubahan-kontrak">
                             <!--begin::Table head-->
                             <thead>
                                 <!--begin::Table row-->
@@ -2366,6 +2475,7 @@
                                     <th class="min-w-auto">Tanggal Pengajuan</th>
                                     <th class="min-w-auto">Biaya Pengajuan</th>
                                     <th class="min-w-auto">Waktu Pengajuan</th>
+                                    <th class="min-w-auto">Status</th>
                                 </tr>
                                 <!--end::Table row-->
                             </thead>
@@ -2375,97 +2485,137 @@
                                 @forelse ($contract->PerubahanKontrak as $key => $pk)
                                     <tr class="fw-bold">
                                         <td>
-                                            <a target="_blank" href="/contract-management/view/{{url_encode($contract->id_contract)}}/perubahan-kontrak/{{$pk->id_perubahan_kontrak}}" class="text-hover-primary">{{ $pk->jenis_perubahan }}</a>
+                                            <small>
+                                                <a target="_blank" href="/contract-management/view/{{url_encode($contract->id_contract)}}/perubahan-kontrak/{{$pk->id_perubahan_kontrak}}" class="text-hover-primary">{{ $pk->jenis_perubahan }}</a>
+                                            </small>
                                         </td>
                                         <!--begin::Column-->
                                         <td>
-                                            <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! Carbon\Carbon::create($pk->tanggal_perubahan)->translatedFormat("d F Y") !!}</pre>
+                                            <small>
+                                                <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! Carbon\Carbon::create($pk->tanggal_perubahan)->translatedFormat("d F Y") !!}</pre>
+                                            </small>
                                         </td>
                                         <!--end::Column-->
                                         <!--begin::Column-->
                                         <td>
-                                            <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! $pk->uraian_perubahan !!}</pre>
+                                            <small>
+                                                <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! $pk->uraian_perubahan !!}</pre>
+                                            </small>
                                         </td>
                                         <!--end::Column-->
                                         <!--begin::Column-->
                                         @if (!empty($pk->JenisDokumen->toArray()))
                                             @foreach ($pk->JenisDokumen as $jd)
                                                 <td>
-                                                    <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! $jd->jenis_dokumen !!}</pre>
+                                                    <small>
+                                                        <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! $jd->jenis_dokumen !!}</pre>
+                                                    </small>
                                                 </td>
                                                 @php
                                                     $list_instruksi_owner = collect(explode(",", $jd->list_instruksi_owner));
                                                 @endphp
                                                 <td>
-                                                    @foreach ($list_instruksi_owner as $lio)
-                                                        @switch($jd->jenis_dokumen)
-                                                            @case("Site Instruction")
-                                                                    @php
-                                                                        $lio = App\Models\SiteInstruction::where("nomor_dokumen" , "=", $lio)->get()->first();
-                                                                    @endphp
-                                                                @break
-                                                            @case("Technical Form")
-                                                                    @php
-                                                                        $lio = App\Models\TechnicalForm::where("nomor_dokumen" , "=", $lio)->get()->first();
-                                                                    @endphp
-                                                                @break
-                                                            @case("Technical Query")
-                                                                    @php
-                                                                        $lio = App\Models\TechnicalQuery::where("nomor_dokumen" , "=", $lio)->get()->first();
-                                                                    @endphp
-                                                                @break
-                                                            @case("Field Design Change")
-                                                                    @php
-                                                                        $lio = App\Models\FieldChange::where("nomor_dokumen" , "=", $lio)->get()->first();
-                                                                    @endphp
-                                                                @break
-                                                            @case("Contract Change Notice")
-                                                                    @php
-                                                                        $lio = App\Models\ContractChangeNotice::where("nomor_dokumen" , "=", $lio)->get()->first();
-                                                                    @endphp
-                                                                @break
-                                                            @case("Contract Change Proposal")
-                                                                    @php
-                                                                        $lio = App\Models\ContractChangeProposal::where("nomor_dokumen" , "=", $lio)->get()->first();
-                                                                    @endphp
-                                                                @break
-                                                            @case("Contract Change Order")
-                                                                    @php
-                                                                        $lio = App\Models\ContractChangeOrder::where("nomor_dokumen" , "=", $lio)->get()->first();
-                                                                    @endphp
-                                                                @break
-                                                        @endswitch
-                                                        - <a target="_blank" href="{{ asset("words/$lio->id_document.pdf"); }}">{{$lio->nomor_dokumen}}</a> <br>
-                                                    @endforeach
+                                                    <small>
+                                                        @foreach ($list_instruksi_owner as $lio)
+                                                            @switch($jd->jenis_dokumen)
+                                                                @case("Site Instruction")
+                                                                        @php
+                                                                            $lio = App\Models\SiteInstruction::where("nomor_dokumen" , "=", $lio)->get()->first();
+                                                                        @endphp
+                                                                    @break
+                                                                @case("Technical Form")
+                                                                        @php
+                                                                            $lio = App\Models\TechnicalForm::where("nomor_dokumen" , "=", $lio)->get()->first();
+                                                                        @endphp
+                                                                    @break
+                                                                @case("Technical Query")
+                                                                        @php
+                                                                            $lio = App\Models\TechnicalQuery::where("nomor_dokumen" , "=", $lio)->get()->first();
+                                                                        @endphp
+                                                                    @break
+                                                                @case("Field Design Change")
+                                                                        @php
+                                                                            $lio = App\Models\FieldChange::where("nomor_dokumen" , "=", $lio)->get()->first();
+                                                                        @endphp
+                                                                    @break
+                                                                @case("Contract Change Notice")
+                                                                        @php
+                                                                            $lio = App\Models\ContractChangeNotice::where("nomor_dokumen" , "=", $lio)->get()->first();
+                                                                        @endphp
+                                                                    @break
+                                                                @case("Contract Change Proposal")
+                                                                        @php
+                                                                            $lio = App\Models\ContractChangeProposal::where("nomor_dokumen" , "=", $lio)->get()->first();
+                                                                        @endphp
+                                                                    @break
+                                                                @case("Contract Change Order")
+                                                                        @php
+                                                                            $lio = App\Models\ContractChangeOrder::where("nomor_dokumen" , "=", $lio)->get()->first();
+                                                                        @endphp
+                                                                    @break
+                                                            @endswitch
+                                                            - <a target="_blank" href="{{ asset("words/$lio->id_document.pdf"); }}">{{$lio->nomor_dokumen}}</a> <br>
+                                                        @endforeach
+                                                    </small>
                                                 </td>
                                             @endforeach
                                         @else
                                             <td>
-                                                <p class="mb-1 fw-normal badge badge-light-danger" style="font-family: 'Poppins';">Belum Ditentukan</p>
+                                                <small>
+                                                    <p class="mb-1 fw-normal badge badge-light-danger" style="font-family: 'Poppins';">Belum Ditentukan</p>
+                                                </small>
                                             </td>
                                             <td>
-                                                <p class="mb-1 fw-normal badge badge-light-danger" style="font-family: 'Poppins';">Belum Ditentukan</p>
+                                                <small>
+                                                    <p class="mb-1 fw-normal badge badge-light-danger" style="font-family: 'Poppins';">Belum Ditentukan</p>
+                                                </small>
                                             </td>
                                         @endif
                                         <!--end::Column-->
                                         <!--begin::Column-->
                                         <td>
-                                            <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! $pk->proposal_klaim !!}</pre>
+                                            <small>
+                                                <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! $pk->proposal_klaim !!}</pre>
+                                            </small>
                                         </td>
                                         <!--end::Column-->
                                         <!--begin::Column-->
                                         <td>
-                                            <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! Carbon\Carbon::create($pk->tanggal_pengajuan)->translatedFormat("d F Y") !!}</pre>
+                                            <small>
+                                                <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! Carbon\Carbon::create($pk->tanggal_pengajuan)->translatedFormat("d F Y") !!}</pre>
+                                            </small>
                                         </td>
                                         <!--end::Column-->
                                         <!--begin::Column-->
                                         <td>
-                                            <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! number_format($pk->biaya_pengajuan, 0, ".", ".") !!}</pre>
+                                            <small>
+                                                <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! number_format($pk->biaya_pengajuan, 0, ".", ".") !!}</pre>
+                                            </small>
                                         </td>
                                         <!--end::Column-->
                                         <!--begin::Column-->
                                         <td>
-                                            <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! Carbon\Carbon::create($pk->waktu_pengajuan)->translatedFormat("d F Y") !!}</pre>
+                                            <small>
+                                                <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! Carbon\Carbon::create($pk->waktu_pengajuan)->translatedFormat("d F Y") !!}</pre>
+                                            </small>
+                                        </td>
+                                        <!--end::Column-->
+                                        <!--begin::Column-->
+                                        <td>
+                                            @php
+                                                $class_name = "";
+                                                $status = "";
+                                                if($pk->status) {
+                                                    $class_name = "badge badge-light-danger";
+                                                    $status = "Open";
+                                                } else {
+                                                    $class_name = "badge badge-light-success";
+                                                    $status = "Closed";
+                                                }
+                                            @endphp
+                                            <small>
+                                                <p class="{{$class_name}}">{{$status}}</p>
+                                            </small>
                                         </td>
                                         <!--end::Column-->
                                     </tr>
@@ -2494,6 +2644,10 @@
                             Checklist Manajemen Kontrak
                             <a href="#" Id="Plus" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_input_checklist_manajemen">+</a>
+                            @if (!empty($contract->ChecklistManajemen->toArray()))
+                            <a href="#" data-bs-toggle="modal"
+                            data-bs-target="#kt_modal_upload_checklist_manajemen" class="btn btn-primary btn-sm p-2 text-end">Upload</a>
+                            @endif
                         </h3>
 
                         <!--begin:Table: Checklist Manajemen Kontrak-->
@@ -2522,100 +2676,15 @@
 
                         </table>
                         <!--End:Table: Checklist Manajemen Kontrak-->
-
-                        <br>
-                        <br>
-
-                            <div class="row mb-5">
-                                <div class="col-6">
-                                    <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                                        LAW
-                                    </h3>
-                                </div>
-                                <div class="col-6">
-                                    <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                                        LD
-                                    </h3>
-                                </div>
-                            </div>
-                            <form action="/ld-law/upload" enctype="multipart/form-data" method="POST">
-                                @csrf
-                                <div class="row">
-                                    <div class="col-6 mr-3">
-                                         <!--begin::Input-->
-                                         <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
-                                         name="id-contract">
-                                     <input type="hidden" class="modal-name" name="modal-name">
-     
-                                     <!--begin::Label-->
-                                     <label class="fs-6 fw-bold form-label mt-3">
-                                         <span style="font-weight: normal">Governing Law</span>
-                                     </label>
-                                     <!--end::Label-->
-                                     <!--begin::Input-->
-                                     <input type="text" id="governing-law" name="governing-law" class="form-control form-control-solid" 
-                                     value="{{ !empty($contract->law_governing) ? $contract->law_governing : "" }}">
-                                     <!--end::Input-->
-     
-                                     <br>
-                                     
-                                     <!--begin::Label-->
-                                     <label class="fs-6 fw-bold form-label mt-3">
-                                         <span style="font-weight: normal">Dispute Resolution</span>
-                                     </label>
-                                     <!--end::Label-->
-                                     <!--begin::Input-->
-                                     <input type="text" id="dispute-resolution" name="dispute-resolution" class="form-control form-control-solid"
-                                     value="{{ !empty($contract->law_dispute_resolution) ? $contract->law_dispute_resolution : "" }}">
-                                     <!--end::Input-->
-                                     
-                                     <br>
-     
-                                     <!--begin::Label-->
-                                     <label class="fs-6 fw-bold form-label mt-3">
-                                         <span style="font-weight: normal">Prevailing Language</span>
-                                     </label>
-                                     <!--end::Label-->
-                                     <!--begin::Input-->
-                                     <input type="text" id="prevailing-language" name="prevailing-language" class="form-control form-control-solid"
-                                     value="{{ !empty($contract->law_prevailing_language) ? $contract->law_prevailing_language : "" }}">
-                                     <!--end::Input-->
-                                    </div>
-                                    <div class="col-6">
-                                        <!--begin::Input-->
-                                        <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
-                                            name="id-contract">
-                                        <input type="hidden" class="modal-name" name="modal-name">
-        
-                                        <!--begin::Label-->
-                                        <label class="fs-6 fw-bold form-label mt-3">
-                                            <span style="font-weight: normal">Delay</span>
-                                        </label>
-                                        <!--end::Label-->
-                                        <!--begin::Input-->
-                                        <input type="text" id="delay" name="delay" class="form-control form-control-solid"
-                                        value="{{ !empty($contract->ld_delay) ? $contract->ld_delay : "" }}">
-                                        <!--end::Input-->
-        
-                                        <br>
-                                        
-                                        <!--begin::Label-->
-                                        <label class="fs-6 fw-bold form-label mt-3">
-                                            <span style="font-weight: normal">Performance</span>
-                                        </label>
-                                        <!--end::Label-->
-                                        <!--begin::Input-->
-                                        <input type="text" id="performance" name="performance" class="form-control form-control-solid"
-                                        value="{{ !empty($contract->ld_performance) ? $contract->ld_performance : "" }}">
-                                        <!--end::Input-->
-                                    </div>
-                                </div>
-
-                                <div class="d-flex justify-content-end">
-                                    <button type="submit" id="save-question" class="btn btn-sm btn-primary"
-                                        data-bs-dismiss="modal">Save</button>
-                                </div>
-                            </form>
+                        @php
+                            $uploadFilePerubahan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "checklist-manajemen")->first();
+                        @endphp
+                        <!--End:Table: Review-->
+                        @if (!empty($uploadFilePerubahan))
+                            <a target="_blank" href="{{ asset('words/'.$uploadFilePerubahan->id_document) }}" class="text-hover-primary">
+                            <small><b>Download File :</b> {{ $uploadFilePerubahan->nama_document }}</small>
+                            </a>
+                        @endif
 
                         <br>
                         <br>
@@ -10809,6 +10878,126 @@
 </div>
 <!--end::Modal - Upload Final Questions-->
 
+<!--begin::Modal - Upload Final Tinjauan Perolehan-->
+<div class="modal fade" id="kt_modal_upload_tinjauan_perolehan" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog modal-dialog-centered mw-500px">
+        <!--begin::Modal content-->
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header">
+                <!--begin::Modal title-->
+                <h2>Upload Final | Tinjauan Dokumen Perolehan</h2>
+                <!--end::Modal title-->
+                <!--begin::Close-->
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                        <i class="bi bi-x-lg"></i>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--end::Modal header-->
+            <!--begin::Modal body-->
+            <div class="modal-body py-lg-6 px-lg-6">
+                <!--begin::Input group Website-->
+                <form action="/contract-management/final-dokumen/upload" method="POST"
+                    enctype="multipart/form-data">
+                    <div class="row">
+                        @csrf
+                        <div class="col mt-4">
+                            <!--begin::Label-->
+                            <label for="ketentuan-rencana-kerja" class="fs-6 fw-bold form-label">
+                                <span style="font-weight: normal">Upload Dokumen</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="hidden" name="kategori" value="tinjauan-perolehan">
+                            <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
+                            <!--end::Input-->
+                        </div>
+                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                name="id-contract">
+                            <input type="hidden" class="modal-name" name="modal-name">
+                        </div>
+                    </div>
+                    <!--end::Input group-->
+                    <div class="modal-footer mt-4">
+                        <button type="submit" id="save-question-tender-menang"
+                            class="btn btn-sm btn-primary">Save</button>
+                    </div>
+                </form>
+            </div>
+            <!--end::Modal body-->
+        </div>
+        <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+</div>
+<!--end::Modal - Upload Final Tinjauan Perolehan-->
+
+<!--begin::Modal - Upload Final Tinjauan Perolehan-->
+<div class="modal fade" id="kt_modal_upload_checklist_manajemen" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog modal-dialog-centered mw-500px">
+        <!--begin::Modal content-->
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header">
+                <!--begin::Modal title-->
+                <h2>Upload Final | Checklist Manajemen Kontrak</h2>
+                <!--end::Modal title-->
+                <!--begin::Close-->
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                        <i class="bi bi-x-lg"></i>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--end::Modal header-->
+            <!--begin::Modal body-->
+            <div class="modal-body py-lg-6 px-lg-6">
+                <!--begin::Input group Website-->
+                <form action="/contract-management/final-dokumen/upload" method="POST"
+                    enctype="multipart/form-data">
+                    <div class="row">
+                        @csrf
+                        <div class="col mt-4">
+                            <!--begin::Label-->
+                            <label for="ketentuan-rencana-kerja" class="fs-6 fw-bold form-label">
+                                <span style="font-weight: normal">Upload Dokumen</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="hidden" name="kategori" value="checklist-pelaksanaan">
+                            <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
+                            <!--end::Input-->
+                        </div>
+                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                name="id-contract">
+                            <input type="hidden" class="modal-name" name="modal-name">
+                        </div>
+                    </div>
+                    <!--end::Input group-->
+                    <div class="modal-footer mt-4">
+                        <button type="submit" id="save-question-tender-menang"
+                            class="btn btn-sm btn-primary">Save</button>
+                    </div>
+                </form>
+            </div>
+            <!--end::Modal body-->
+        </div>
+        <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+</div>
+<!--end::Modal - Upload Final Tinjauan Perolehan-->
+
 <div class="modal fade" id="kt_modal_tabel_review_kontrak" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -11240,6 +11429,9 @@
                     <!--end::Svg Icon-->
                 </div>
                 <!--end::Close-->
+            </div>
+            <div>
+                <a href="#" class="btn btn-md btn-secondary m-5">Excell</a>
             </div>
             <!--end::Modal header-->
             <!--begin::Modal body-->
