@@ -485,22 +485,37 @@ Route::middleware(["web"])->group(function () {
             }
 
             $req_forecasts = collect($proyek["UsrNilaiOKRetail"]);
-            $req_forecasts->each(function ($f) use ($proyek, $bulan, &$is_data_inserted) {
+            if($req_forecasts->isEmpty()) {
                 $forecast = new Forecast();
                 $forecast->kode_proyek = $proyek["UsrCodeProyek"];
                 $forecast->nilai_forecast = 0;
-                $forecast->month_forecast = $f["UsrBulanRaPerolehan"];
-                $forecast->rkap_forecast = $f["UsrNilaiOKAwal"];
-                $forecast->month_rkap = $f["UsrBulanRaPerolehan"];
+                $forecast->month_forecast = null;
+                $forecast->rkap_forecast = $proyek["UsrNilaiOKAwal"];
+                $forecast->month_rkap = $proyek["UsrBulanPelaksanaan"];
                 $forecast->realisasi_forecast = 0;
-                $forecast->month_realisasi = $f["UsrBulanRaPerolehan"];
+                $forecast->month_realisasi = null;
                 $forecast->periode_prognosa = $bulan;
-                if ($forecast->save()) {
-                    $is_data_inserted = true;
-                } else {
-                    $is_data_inserted = false;
-                }
-            });
+                $forecast->tahun = $tahun;
+                $forecast->save();
+            } else {
+                $req_forecasts->each(function ($f) use ($proyek, $bulan, $tahun, &$is_data_inserted) {
+                    $forecast = new Forecast();
+                    $forecast->kode_proyek = $proyek["UsrCodeProyek"];
+                    $forecast->nilai_forecast = 0;
+                    $forecast->month_forecast = $f["UsrBulanRaPerolehan"];
+                    $forecast->rkap_forecast = $f["UsrNilaiOKAwal"];
+                    $forecast->month_rkap = $f["UsrBulanRaPerolehan"];
+                    $forecast->realisasi_forecast = 0;
+                    $forecast->month_realisasi = $f["UsrBulanRaPerolehan"];
+                    $forecast->periode_prognosa = $bulan;
+                    $forecast->tahun = $tahun;
+                    if ($forecast->save()) {
+                        $is_data_inserted = true;
+                    } else {
+                        $is_data_inserted = false;
+                    }
+                });
+            }
             if($p->save()) {
                 $is_data_inserted = true;
             }
