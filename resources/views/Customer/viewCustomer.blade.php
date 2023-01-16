@@ -2009,7 +2009,7 @@
                                                                             <th class="min-w-auto">Unit kerja</th>
                                                                             <th class="min-w-auto">Nilai OK</th>
                                                                             <th class="min-w-auto">Tanggal Mulai</th>
-                                                                            <th class="min-w-auto">Tanggal Akhir</th>
+                                                                            <th class="min-w-auto">Tanggal Selesai</th>
                                                                             <th class="min-w-auto">Durasi</th>
                                                                         </tr>
                                                                         <!--end::Table row-->
@@ -2106,7 +2106,7 @@
                                                                             <th class="min-w-auto">Unit kerja</th>
                                                                             <th class="min-w-auto">Nilai OK</th>
                                                                             <th class="min-w-auto">Tanggal Mulai</th>
-                                                                            <th class="min-w-auto">Tanggal Akhir</th>
+                                                                            <th class="min-w-auto">Tanggal Selesai</th>
                                                                             <th class="min-w-auto">Durasi</th>
                                                                         </tr>
                                                                         <!--end::Table row-->
@@ -2213,7 +2213,6 @@
                                                                             <th class="min-w-auto">Stage</th>
                                                                             <th class="min-w-auto text-center">Nilai ok</th>
                                                                             <th class="min-w-auto text-center">Bulan Forecast</th>
-                                                                            <th class="min-w-auto">Layer Segmentasi</th>
                                                                         </tr>
                                                                         <!--end::Table row-->
                                                                     </thead>
@@ -2359,11 +2358,6 @@
                                                                                         @endisset
                                                                                     </td>
                                                                                     <!--end::Bulan Forecast-->
-                                                                                    <!--begin::Layer-->
-                                                                                    <td>
-                                                                                        *Layer
-                                                                                    </td>
-                                                                                    <!--end::Layer-->
                                                                                 </tr>
                                                                                 @endif
                                                                             @endforeach
@@ -2399,7 +2393,7 @@
                                                                             <!--begin::Table row-->
                                                                             <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                                                                 <th class="min-w-auto">Nama Proyek</th>
-                                                                                <th class="min-w-auto">Jenis Masalah Hukum</th>
+                                                                                <th class="min-w-auto">Bentuk Masalah Hukum</th>
                                                                                 <th class="min-w-auto">Status</th>
                                                                             </tr>
                                                                             <!--end::Table row-->
