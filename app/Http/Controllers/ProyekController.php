@@ -92,7 +92,7 @@ class ProyekController extends Controller
             }
         }
         
-        $proyeks = $proyeks->where("tahun_perolehan", "=", $year);
+        // $proyeks = $proyeks->where("tahun_perolehan", "=", $year);
 
         // Begin::FILTER
         // if (!empty($column)) {

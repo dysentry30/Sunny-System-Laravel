@@ -210,7 +210,7 @@ class CustomerController extends Controller
         Alert::success('Success', $data["name-customer"] . ", Berhasil Ditambahkan");
 
         if ($newCustomer->save()) {
-            return redirect("/customer/view/$newCustomer->id_customer")->with("success", true);
+            return redirect("/customer/view/$newCustomer->id_customer/$newCustomer->name")->with("success", true);
         }
     }
 
