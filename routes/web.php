@@ -95,46 +95,66 @@ Route::get('/logout', [UserController::class, 'logout'])->middleware("userAuth")
 
 Route::get('/generate-kode-proyek/{kode_proyek}', function ($kode_proyek) {
     
-    $list_kode_proyek = explode("-",$kode_proyek);
-    dd($list_kode_proyek);
-    $newProyek = Proyek::find($kode_proyek);
-    if($newProyek->tahun_perolehan != 2023 && $newProyek->is_rkap != true) return;
+    $list_kode_proyek = collect(explode("-",$kode_proyek));
+    $list_new_kode_proyek = collect();
+    foreach($list_kode_proyek as $key => $p) {
+
+        $newProyek = Proyek::find($p);
+        // if(empty($newProyek->tahun_perolehan) && $newProyek->tahun_perolehan != 2023 && $newProyek->is_rkap != true) dd($newProyek);
+        if(empty($newProyek->tahun_perolehan) && empty($newProyek->is_rkap)) continue;
+        
+        //begin::Generate Kode Proyek
+        
+        $generateProyek = Proyek::whereYear("created_at", "=", (int) date("Y"))->get()->sortBy("id");
+        $unit_kerja = $newProyek->unit_kerja;
+        $jenis_proyek = $newProyek->jenis_proyek;
+        $tipe_proyek = $newProyek->tipe_proyek;
+        if ($tipe_proyek == "R") {
+            $newProyek->stage = 8;
+        } else {
+            $newProyek->stage = 1;
+        }
+        $tahun = $newProyek->tahun_perolehan;
     
-    //begin::Generate Kode Proyek
+        // Kondisi kalau tahun lebih besar dari 2021 maka O Selain itu A
+        // $kode_tahun = $tahun == 2021 ? "A" : "O";
+        $kode_tahun = get_year_code($tahun);
     
-    $generateProyek = Proyek::whereYear("created_at", "=", (int) date("Y"))->get()->sortBy("id");
-    $unit_kerja = $newProyek->unit_kerja;
-    $jenis_proyek = $newProyek->jenis_proyek;
-    $tipe_proyek = $newProyek->tipe_proyek;
-    if ($tipe_proyek == "R") {
-        $newProyek->stage = 8;
-    } else {
-        $newProyek->stage = 1;
+        // Menggabungkan semua kode beserta nomor urut
+        $kode_proyek = $unit_kerja . $jenis_proyek . $tipe_proyek . $kode_tahun;
+    
+        // $no_urut = $generateProyek->count(function($p) use($kode_proyek) {
+        //     return str_contains($p->kode_proyek, $kode_proyek);
+        // }) + $key;
+        $no_urut = random_int(100,999);
+    
+        // Untuk membuat 3 digit nomor urut terakhir
+        $no_urut = str_pad(strval($no_urut), 3, 0, STR_PAD_LEFT);
+        // dd($no_urut, $kode_proyek);
+        // if (str_contains($generateProyek->last()->kode_proyek, "KD")) {
+        //     $no_urut = (int) $generateProyek->last()->id + 1;
+        // } else {
+        //     // $no_urut = count($generateProyek)+1;
+        //     $no_urut = (int) $generateProyek->last()->id + 1;
+        // }
+        $kode_proyek = $kode_proyek . $no_urut;
+        $is_kode_proyek_exist = Proyek::find($kode_proyek);
+        if(!empty($is_kode_proyek_exist)) {
+            $kode_proyek = generate_new_kode($kode_proyek);
+        }
+        $list_new_kode_proyek->push($kode_proyek);
     }
-    $tahun = $newProyek->tahun_perolehan;
-
-    // Kondisi kalau tahun lebih besar dari 2021 maka O Selain itu A
-    // $kode_tahun = $tahun == 2021 ? "A" : "O";
-    $kode_tahun = get_year_code($tahun);
-
-    // Menggabungkan semua kode beserta nomor urut
-    $kode_proyek = $unit_kerja . $jenis_proyek . $tipe_proyek . $kode_tahun;
-
-    $no_urut = $generateProyek->count(function($p) use($kode_proyek) {
-        return str_contains($p->kode_proyek, $kode_proyek);
-    }) + 1;
-
-    // Untuk membuat 3 digit nomor urut terakhir
-    $no_urut = str_pad(strval($no_urut), 3, 0, STR_PAD_LEFT);
-    // dd($no_urut, $kode_proyek);
-    // if (str_contains($generateProyek->last()->kode_proyek, "KD")) {
-    //     $no_urut = (int) $generateProyek->last()->id + 1;
-    // } else {
-    //     // $no_urut = count($generateProyek)+1;
-    //     $no_urut = (int) $generateProyek->last()->id + 1;
-    // }
-
-    $newProyek->kode_proyek = $kode_proyek . $no_urut;
+    function generate_new_kode($val) {
+        $no_urut = random_int(100,999);
+        $no_urut = str_pad(strval($no_urut), 3, 0, STR_PAD_LEFT);
+        $kode_proyek = $val;
+        $is_kode_proyek_exist = Proyek::find($kode_proyek);
+        if(!empty($is_kode_proyek_exist)) {
+            $kode_proyek = generate_new_kode($kode_proyek);
+        }
+        return $kode_proyek;
+    }
+    dd($list_new_kode_proyek);
     //end::Generate Kode Proyek
 });
 

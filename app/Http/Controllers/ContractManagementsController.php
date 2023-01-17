@@ -2535,7 +2535,7 @@ class ContractManagementsController extends Controller
         $html = '';
         if($id->kategori == 'Progress 0-20%') {
             $html = "<div id='progress_0-20'>
-                <div id='slide-2' >
+                <div id='slide-2' class='data'>
                     <!--begin::Label-->
                     <label class='fs-6 fw-bold form-label'>
                         <span style='font-weight: normal'>Kategori</span>
@@ -2549,14 +2549,13 @@ class ContractManagementsController extends Controller
                     </label>
                     <!--end::Label-->
                     <!--begin::Input-->
-                    <br>
                     <!--end::Input-->
                     <h6>$id->jawaban_1, " . Carbon::create($id->sub_jawaban_1)->translatedFormat('d F Y') . "</h6>
                     <br>
                     <!--end::Input-->
                 </div>
                 
-                <div id='slide-3' >
+                <div id='slide-3' class='data'>
                     <!--begin::Label-->
                     <label class='fs-6 fw-bold form-label mt-3'>
                         <span style='font-weight: normal'>Apakah sudah ada berita Acara serah terima lapangan?</span>
@@ -2566,7 +2565,7 @@ class ContractManagementsController extends Controller
                     <br>
                 </div>
                 
-                <div id='slide-4' >
+                <div id='slide-4' class='data'>
                     <!--begin::Label-->
                     <label class='fs-6 fw-bold form-label mt-3'>
                         <span style='font-weight: normal'>Apakah Jadwal Pelaksanaan telah disetujui oleh Engineer?</span>
@@ -2583,7 +2582,7 @@ class ContractManagementsController extends Controller
                     <br>
                 </div>
 
-                <div id='slide-5' >
+                <div id='slide-5' class='data'>
                     <!--begin::Label-->
                     <label class='fs-6 fw-bold form-label mt-3'>
                         <span style='font-weight: normal'>Siapa yang membuat Construction Schedule?</span>
@@ -2593,7 +2592,7 @@ class ContractManagementsController extends Controller
                     <br>
                 </div>
 
-                <div id='slide-6' >
+                <div id='slide-6' class='data'>
                     <!--begin::Label-->
                     <label class='fs-6 fw-bold form-label mt-3'>
                         <span style='font-weight: normal'>Apakah Proyek memiliki Buku Harian tentang?</span>
@@ -2603,12 +2602,17 @@ class ContractManagementsController extends Controller
                     <br>
                 </div>
 
-                <div id='slide-7' >
+                <div id='slide-6' class='data'>
                     <!--begin::Label-->
                     <label class='fs-6 fw-bold form-label mt-3'>
                         <span style='font-weight: normal'>Penanggung Jawab Pelaksanaan Penghitungan / Pengukuran Nilai Pekerjaan Terlaksana?</span>
                     </label>
                     <!--end::Label-->
+                    <h6> - </h6>
+                    <br>
+                </div>
+
+                <div id='slide-7' class='data'>
                     <h6 class='fw-normal'>Siapa?</h6>
                     <h6>$id->jawaban_7</h6><br>
                     <h5 class='fw-normal'>Kapan</h5>
@@ -2618,7 +2622,7 @@ class ContractManagementsController extends Controller
                     <br>
                 </div>
 
-                <div id='slide-8' >
+                <div id='slide-8' class='data'>
                     <!--begin::Label-->
                     <label class='fs-6 fw-bold form-label mt-3'>
                         <span style='font-weight: normal'>Apakah Proyek memiliki Identifikasi Gambar ?</span>
@@ -2633,7 +2637,7 @@ class ContractManagementsController extends Controller
                     <br>
                 </div>
 
-                <div id='slide-9' >
+                <div id='slide-9' class='data'>
                     <!--begin::Label-->
                     <label class='fs-6 fw-bold form-label mt-3'>
                         <span style='font-weight: normal'>Apakah Proyek memiliki Sistem Pendistribusian Dokumen ?</span>
@@ -2648,7 +2652,7 @@ class ContractManagementsController extends Controller
                     <br>
                 </div>
 
-                <div id='slide-10' >
+                <div id='slide-10' class='data'>
                     <!--begin::Label-->
                     <label class='fs-6 fw-bold form-label mt-3'>
                         <span style='font-weight: normal'>Apakah Jaminan Penawaran telah ditarik Kembali ?</span>
@@ -2665,7 +2669,7 @@ class ContractManagementsController extends Controller
                     <br>
                 </div>
 
-                <div id='slide-11' >
+                <div id='slide-11' class='data'>
                     <!--begin::Label-->
                     <label class='fs-6 fw-bold form-label mt-3'>
                         <span style='font-weight: normal'>Apakah Jaminan Uang Muka telah Diterbitkan ?</span>
@@ -2682,7 +2686,7 @@ class ContractManagementsController extends Controller
                     <br>
                 </div>
                 
-                <div id='slide-12' >
+                <div id='slide-12' class='data'>
                     <!--begin::Label-->
                     <label class='fs-6 fw-bold form-label mt-3'>
                         <span style='font-weight: normal'>Material Damage</span>
@@ -2710,7 +2714,7 @@ class ContractManagementsController extends Controller
                     <br>
                 </div>
 
-                <div id='slide-13' >
+                <div id='slide-13' class='data'>
                     <!--begin::Label-->
                     <label class='fs-6 fw-bold form-label mt-3'>
                         <span style='font-weight: normal'>Apakah Perubahan-perubahan yang terjadi telah dilaporkan kepada Asuransi (antisipasi atas perpanjangan waktu dan/atau No Risk Period) ?</span>
@@ -2736,7 +2740,7 @@ class ContractManagementsController extends Controller
         } else if($id->kategori == 'Progress 20%-90%') {
             $html = "
             <div id='progress_20-90'>
-                <div id='slide-2' >
+                <div id='slide-2' class='data'>
                     <!--begin::Label-->
                     <label class='fs-6 fw-bold form-label'>
                         <span style='font-weight: normal'>Kategori</span>
@@ -2754,7 +2758,7 @@ class ContractManagementsController extends Controller
                     <!--end::Input-->
                 </div><br>
 
-                <div id='slide-3' >
+                <div id='slide-3' class='data'>
                     <!--begin::Label-->
                     <label class='fs-6 fw-bold form-label mt-3'>
                         <span style='font-weight: normal'>Apakah Proyek mengadakan Rapat rutin?</span>
@@ -2763,7 +2767,7 @@ class ContractManagementsController extends Controller
                     <!--end::Label-->
                 </div><br>
 
-                <div id='slide-4' >
+                <div id='slide-4' class='data'>
                     <!--begin::Label-->
                     <label class='fs-6 fw-bold form-label mt-3'>
                         <span style='font-weight: normal'>Apakah ada kejadian yang dapat menyebabkan perubahan jadwal?</span>
@@ -2817,7 +2821,7 @@ class ContractManagementsController extends Controller
 
                 </div>
 
-                <div id='slide-5' >
+                <div id='slide-5' class='data'>
                     <!--begin::Label-->
                     <label class='fs-6 fw-bold form-label mt-3'>
                         <span style='font-weight: normal'>Tahapan yang telah dicapai dalam pengajuan Kompensasi atas perubahan - perubahan yang terjadi :</span>
@@ -2827,7 +2831,7 @@ class ContractManagementsController extends Controller
                     <br>
                 </div>
 
-                <div id='slide-6' >
+                <div id='slide-6' class='data'>
                     <!--begin::Label-->
                     <label class='fs-6 fw-bold form-label mt-3'>
                         <span style='font-weight: normal'>Klausul Kontrak yang mengatur tentang perubahan (waktu/biaya/mutu)</span>
@@ -2837,7 +2841,7 @@ class ContractManagementsController extends Controller
                     <br>
                 </div>
 
-                <div id='slide-7' >
+                <div id='slide-7' class='data'>
                     <!--begin::Label-->
                     <label class='fs-6 fw-bold form-label mt-3'>
                         <span style='font-weight: normal'>Apakah Proyek akan membutuhkan Perpanjangan Waktu?</span>
@@ -2855,7 +2859,7 @@ class ContractManagementsController extends Controller
                     <br>
                 </div>
 
-                <div id='slide-8' >
+                <div id='slide-8' class='data'>
                     <!--begin::Label-->
                     <label class='fs-6 fw-bold form-label mt-3'>
                         <span style='font-weight: normal'>Apa yang menjadi dasar kebutuhan akan Perpanjangan Waktu?</span>
@@ -2867,8 +2871,7 @@ class ContractManagementsController extends Controller
         } else if($id->kategori == 'Progress 90%-100%') {
             $html = "
             <div id='progress_90-100'>
-                <div id='slide-2'>
-                    <!--begin::Label-->
+                <div id='slide-2' class='data'>
                     <label class='fs-6 fw-bold form-label'>
                         <span style='font-weight: normal'>Kategori</span>
                     </label>
@@ -2898,8 +2901,7 @@ class ContractManagementsController extends Controller
                     <h6>$id->jawaban_3</h6>
                     <br>
                 </div>
-                <div id='slide-3'>
-                    <!--begin::Label-->
+                <div id='slide-3' class='data'>
                     <label class='fs-6 fw-bold form-label mt-3'>
                         <span style='font-weight: normal'>Tahapan yang telah dicapai dalam program Serah Terima Pertama :</span>
                     </label>
@@ -2908,8 +2910,7 @@ class ContractManagementsController extends Controller
                     <!--end::Label-->
                     <br>
                 </div>
-                <div id='slide-4'>
-                    <!--begin::Label-->
+                <div id='slide-4' class='data'>
                     <label class='fs-6 fw-bold form-label mt-3'>
                         <span style='font-weight: normal'>Apakah Jaminan Pelaksanaan telah ditarik kembali?</span>
                     </label>
@@ -2923,36 +2924,29 @@ class ContractManagementsController extends Controller
                     <h6>$id->jawaban_6</h6>
                     <!--end::Label-->
                     <br>
-                    <div class='garansi'>
                     <!--begin::Label-->
                     <label class='fs-6 fw-bold form-label mt-3'>
                         <span style='font-weight: normal'>Bank Garansi seluruhnya akan ditarik kembali pada tanggal</span>
                     </label>
                     <h6>". Carbon::create($id->sub_jawaban_7)->translatedFormat("d F Y") ."</h6>
                     <!--end::Label-->
-                    </div>
                     <br>
-                    <div class='masa-pemeliharaan'>
-                        <!--begin::Label-->
-                        <label class='fs-6 fw-bold form-label mt-3'>
-                            <span style='font-weight: normal'>Masa Pemeliharaan akan berakhir pada tanggal</span>
-                        </label>
-                        <h6>". Carbon::create($id->sub_jawaban_8)->translatedFormat("d F Y") ."</h6>
-                        <!--end::Label-->
-                    </div>
+                    <!--begin::Label-->
+                    <label class='fs-6 fw-bold form-label mt-3'>
+                        <span style='font-weight: normal'>Masa Pemeliharaan akan berakhir pada tanggal</span>
+                    </label>
+                    <h6>". Carbon::create($id->sub_jawaban_8)->translatedFormat("d F Y") ."</h6>
+                    <!--end::Label-->
                     <br>
-                    <div class='serah-terima'>
-                        <!--begin::Label-->
-                        <label class='fs-6 fw-bold form-label mt-3'>
-                            <span style='font-weight: normal'>Permohonan Serah Terima Akhir akan diajukan pada tanggal</span>
-                        </label>
-                        <h6>". Carbon::create($id->sub_jawaban_9)->translatedFormat("d F Y") ."</h6>
-                        <!--end::Label-->
-                    </div>
+                    <!--begin::Label-->
+                    <label class='fs-6 fw-bold form-label mt-3'>
+                        <span style='font-weight: normal'>Permohonan Serah Terima Akhir akan diajukan pada tanggal</span>
+                    </label>
+                    <h6>". Carbon::create($id->sub_jawaban_9)->translatedFormat("d F Y") ."</h6>
+                    <!--end::Label-->
                     <br>
                 </div>
-                <div id='slide-5'>
-                    <!--begin::Label-->
+                <div id='slide-5' class='data'>
                     <label class='fs-6 fw-bold form-label mt-3'>
                         <span style='font-weight: normal'>Nilai Kontrak Akhir :</span>
                     </label>
@@ -2960,8 +2954,7 @@ class ContractManagementsController extends Controller
                     <!--end::Label-->
                     <br>
                 </div>
-                <div id='slide-6'>
-                <!--begin::Label-->
+                <div id='slide-6' class='data'>
                     <label class='fs-6 fw-bold form-label mt-3'>
                         <span style='font-weight: normal'>Pembayaran Akhir (Final Payment) akan dilaksanakan pada tanggal</span>
                     </label>
@@ -2976,8 +2969,7 @@ class ContractManagementsController extends Controller
                     <br>
                     <!--end::Label-->
                 </div>
-                <div id='slide-7'>
-                    <!--begin::Label-->
+                <div id='slide-7' class='data'>
                     <label class='fs-6 fw-bold form-label mt-3'>
                         <span style='font-weight: normal'>Apakah ada kejadian yang dapat menyebabkan perubahan pekerjaan (Change Order) / Variation Order?</span>
                     </label>

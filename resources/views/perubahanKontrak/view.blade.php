@@ -346,17 +346,27 @@
                                                                     {{-- <input type="date" name="waktu-pengajuan" value="{{Carbon\Carbon::create($perubahan_kontrak->waktu_pengajuan)->format("Y-m-d")}}" class="form-control form-control-solid" /> --}}
                                                                 </div>
                                                             </div>
-                                                            <br><br>
-                                                            {{-- <div class="row">
+                                                            <br>
+                                                            <div class="row">
                                                                 <div class="col">
-                                                                    <div class="form-check">
-                                                                        <input class="form-check-input" name="dispute" type="checkbox" value="" id="dispute">
-                                                                        <label class="form-check-label" for="dispute">
-                                                                          Dispute?
-                                                                        </label>
-                                                                    </div>
+                                                                    <label class="fs-6 fw-bold form-label">
+                                                                        <span style="font-weight: normal">Status</span>
+                                                                        {{-- <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)"
+                                                                            id="start-date-modal">
+                                                                            <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
+                                                                        </a> --}}
+                                                                    </label><br>
+                                                                    <!--begin::Input-->
+                                                                    <select name="status-perubahan-kontrak" id="status-perubahan-kontrak" class="form-select form-select-solid"
+                                                                    data-control="select2" data-hide-search="true"
+                                                                    data-placeholder="Pilih Status Perubahan Kontrak">
+                                                                        <option value=""></option>
+                                                                        <option {{$perubahan_kontrak->status == 0 ? "selected" : ""}} value="0">Open</option>
+                                                                        <option {{$perubahan_kontrak->status == 1 ? "selected" : ""}} value="1">Closed</option>
+                                                                    </select>
+                                                                    <!--end::Input-->
                                                                 </div>
-                                                            </div> --}}
+                                                            </div>
                                                             <!--end::Input group-->
                                                         </div>
 
