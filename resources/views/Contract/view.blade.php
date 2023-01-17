@@ -11431,8 +11431,20 @@
                 <!--end::Close-->
             </div>
             <div>
-                <a href="#" class="btn btn-md btn-secondary m-5">Excell</a>
+                <a href="#" class="btn btn-md btn-secondary m-5" onclick="generateChecklistToExcel(this)">Export to Excel</a>
+                <div class="table-datatable" hidden>
+                    <table id="table-checklist">
+                        <thead>
+                            <th>Ketentuan</th>
+                            <th>Jawaban</th>
+                        </thead>
+                        <tbody>
+    
+                        </tbody>
+                    </table>
+                </div>
             </div>
+            <hr>
             <!--end::Modal header-->
             <!--begin::Modal body-->
             <div class="modal-body py-lg-6 px-lg-6">
@@ -12020,22 +12032,6 @@ aria-hidden="true">
 </script>
 {{-- End :: Animating Slide Checklist Manajemen Kontrak --}}
 
-{{-- Begin :: Get Checklist Manajemen Kontrak Data --}}
-<script>
-    async function getChecklistManajemen(e) {
-        const element = document.querySelector("#kt_modal_detail_checklist");
-        const body = element.querySelector(".modal-body");
-        const elementBoots = new bootstrap.Modal(element, {});
-        const url = e.getAttribute("data-url");
-        const getChecklistManajemenRes = await fetch(url).then(res => res.text());
-        body.innerHTML = getChecklistManajemenRes;
-        elementBoots.show();
-        return;
-    }
-</script>
-{{-- End :: Get Checklist Manajemen Kontrak Data --}}
-
-
 <!--begin::Data Tables-->
 <script src="/datatables/jquery.dataTables.min.js"></script>
 <script src="/datatables/dataTables.buttons.min.js"></script>
@@ -12045,6 +12041,67 @@ aria-hidden="true">
 <script src="/datatables/pdfmake.min.js"></script>
 <script src="/datatables/vfs_fonts.js"></script>
 <!--end::Data Tables-->
+
+{{-- Begin :: Get Checklist Manajemen Kontrak Data --}}
+<script>
+    async function getChecklistManajemen(e) {
+        const element = document.querySelector("#kt_modal_detail_checklist");
+        const body = element.querySelector(".modal-body");
+        const elementBoots = new bootstrap.Modal(element, {});
+        const url = e.getAttribute("data-url");
+        const getChecklistManajemenRes = await fetch(url).then(res => res.text());
+        body.innerHTML = getChecklistManajemenRes;
+        DOMtoTable(body, element);
+        elementBoots.show();
+        return;
+    }
+    let kategoriChecklist = "";
+    function DOMtoTable(dom, elementBoots) {
+        const content = dom.querySelectorAll(".data");
+        let html = '';
+        content.forEach(item => {
+            const children = item.children;
+            children.forEach(child => {
+                if(child.tagName == "LABEL") {
+                    html += '<tr>';
+                }
+                if(child.tagName == "BR") {
+                    html += '</tr>';
+                }
+                if(child.innerText.trim() != "") {
+                    html += `<td>${child.innerText.trim()}</td>`;
+                }
+                if(child.innerText.trim().includes("Progress")) {
+                    kategoriChecklist = child.innerText.trim();
+                }
+            });
+        });    
+        document.querySelector("#table-checklist tbody").innerHTML = html;
+        const datatable = $('#table-checklist').DataTable( {
+            // dom: 'Bfrtip',
+            dom: 'Brti',
+            pageLength : 50,
+            sorting: false,
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    title: `Data Checklist Manajemen Kontrak - ${kategoriChecklist}`
+                },
+                ]
+        });
+        elementBoots.addEventListener('hidden.bs.modal', event => {
+            if(datatable) {
+                datatable.destroy();
+            }
+        })
+    }
+
+    function generateChecklistToExcel(e) {
+        e.parentElement.querySelector(".buttons-excel").click();
+    }
+</script>
+{{-- End :: Get Checklist Manajemen Kontrak Data --}}
+
 
 <script>
     $(document).ready(function() {
