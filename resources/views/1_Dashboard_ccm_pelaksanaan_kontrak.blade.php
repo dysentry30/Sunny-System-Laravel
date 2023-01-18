@@ -293,14 +293,14 @@
                             <div class="col-9">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-warning">
-                                    <h2 class="m-0 text-center">TOTAL NILAI PERUBAHAN : Rp {{ number_format($totalKontrak, 0, ".", ".") }}</h2>
+                                    <h2 class="m-0 text-center">TOTAL NILAI PERUBAHAN : Rp {{ number_format($perubahan_total, 0, ".", ".") }}</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
                             <div class="col-3">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-warning">
-                                    <h2 class="m-0 text-center">{{ $totalPersen }}, {{ mt_rand(1, 9) }} %</h2>
+                                    <h2 class="m-0 text-center">{{ number_format($persentasePerubahan, 2) }} %</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
@@ -309,7 +309,7 @@
 
                         <!--begin::Table Body-->
                         {{-- @foreach ($nilai_perubahan_table as $table) --}}
-                        @foreach ($kategori_kontrak as $table)
+                        @foreach ($kategori_perubahan as $table)
                         <div class="row mb-4">
                             <div class="col-3">
                                 <!--begin::Title body-->
@@ -339,7 +339,7 @@
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-secondary">
                                     {{-- <h2 class="m-0 text-center">{{ $table->total_persen }}</h2> --}}
-                                    <h2 class="m-0 text-center">{{ $table[3] }}, {{ mt_rand(1, 9) }} %</h2>
+                                    <h2 class="m-0 text-center">{{ $table[3] }} %</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
@@ -518,7 +518,7 @@
 
     <!--begin::Highchart Donut Changes Overview-->
     <script>
-        const changesOverview = JSON.parse('{!! $kategori_kontrak->toJson() !!}');
+        const changesOverview = JSON.parse('{!! $kategori_perubahan->toJson() !!}');
         Highcharts.chart('contract-divisi', {
             chart: {
                 // height: 250,
