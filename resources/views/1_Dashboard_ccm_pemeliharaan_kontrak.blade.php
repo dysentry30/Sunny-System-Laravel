@@ -319,14 +319,14 @@
                             <div class="col-9">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-warning">
-                                    <h2 class="m-0 text-center">TOTAL NILAI PERUBAHAN : Rp {{ number_format($totalKontrak, 0, ".", ".") }}</h2>
+                                    <h2 class="m-0 text-center">TOTAL NILAI PERUBAHAN : Rp {{ number_format($perubahan_total, 0, ".", ".") }}</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
                             <div class="col-3">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-warning">
-                                    <h2 class="m-0 text-center">{{ $totalPersen }}, {{ mt_rand(1, 9) }} %</h2>
+                                    <h2 class="m-0 text-center">{{ number_format($persentasePerubahan, 2) }} %</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
@@ -365,7 +365,7 @@
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-secondary">
                                     {{-- <h2 class="m-0 text-center">{{ $table->total_persen }}</h2> --}}
-                                    <h2 class="m-0 text-center">{{ $table[3] }}, {{ mt_rand(1, 9) }} %</h2>
+                                    <h2 class="m-0 text-center">{{ $table[3] }} %</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
@@ -742,6 +742,7 @@
     <!--begin::Highchart Block Nilai Tender -->
     <script>
         const nilaiTender = JSON.parse('{!! $nilai_tender_proyeks->toJson() !!}');
+        const sumTender = nilaiTender.reduce((a, b) => a + Number(b.y), 0);
         Highcharts.chart('chart-line', {
             chart: {
                 type: 'column',
@@ -751,7 +752,7 @@
                 }
             },
             title: {
-                text: 'TOTAL NILAI KONTRAK : Rp 15.890.000.000',
+                text: 'TOTAL NILAI KONTRAK : Rp '+ Intl.NumberFormat(["id"]).format(Math.round(sumTender)),
                 style: {
                     fontWeight: 'bold',
                     fontSize: '20px'
