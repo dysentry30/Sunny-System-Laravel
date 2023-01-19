@@ -725,6 +725,9 @@ class DashboardController extends Controller
         $dop_get = $request->query("dop") ?? "";
         $unit_kerja_get = $request->query("unit-kerja") ?? "";
         $proyek_get = $request->query("kode-proyek") ?? "";
+        $contracts_pelaksanaan = $proyeks->map(function($item){
+            return $item->ContractManagements;
+        })->where("stages", "=", 2)->values();
         // $claims = ClaimManagements::all();
         // dd($claims);
         
@@ -839,26 +842,8 @@ class DashboardController extends Controller
         // $proyek = $proyeks->map(function($item){
         //     return PerubahanKontrak::where("id_contract", "=", $item->ContractManagements->id_contract)->get();
         // });
-        // dd($proyek);
-        $perubahan = PerubahanKontrak::all();
-        $perubahan_total = $perubahan->sum('biaya_pengajuan');
-        $kategori_perubahan = $perubahan->groupBy("jenis_perubahan")->map(function($item, $key) use ($perubahan_total){
-            $biaya_total = (int) $item->sum('biaya_pengajuan');
-            $persentase_kategori = (float) $biaya_total * 100 / (float) $perubahan_total;
-            return[$key, $item->count(), $biaya_total, number_format($persentase_kategori, 2)];
-        })->values();
-        // dd($kategori_perubahan);
-        // $kategori_kontrak = [
-        //     [
-        //         "VO", mt_rand(0, 15), mt_rand(1000000000, 20000000000), mt_rand(0, 10)
-        //     ], [
-        //         "KLAIM", mt_rand(0, 15), mt_rand(1000000000, 20000000000), mt_rand(0, 10)
-        //     ], [
-        //         "ANTI-KLAIM", mt_rand(0, 15), mt_rand(1000000000, 20000000000), mt_rand(0, 10)
-        //     ], [
-        //         "ASURANSI", mt_rand(0, 15), mt_rand(1000000000, 20000000000), mt_rand(0, 10)
-        // ]
-        // ];
+        // dd($proyek
+        // dd($kategori_kontrak);
 
         $jumlahKontrak = 0;
         $totalKontrak = 0;
@@ -944,11 +929,39 @@ class DashboardController extends Controller
             return $p->ContractManagements;
         })->sum("value");
 
+        if(!empty($contracts_pelaksanaan)){
+            $perubahan = $contracts_pelaksanaan->map(function($cp){
+                return $cp->PerubahanKontrak->where("id_contract", "=", $cp->id_contract);
+            })->flatten();
+            // dd($perubahan);
+            $perubahan_total = $perubahan->sum('biaya_pengajuan');
+            $kategori_kontrak = $perubahan->groupBy("jenis_perubahan")->map(function($item, $key) use ($totalKontrakFull){
+                $biaya_total = (int) $item->sum('biaya_pengajuan');
+                $persentase_kategori = (float) $biaya_total * 100 / (float) $totalKontrakFull;
+                return[$key, $item->count(), $biaya_total, number_format($persentase_kategori, 2)];
+            })->values();
+            // dd($kategori_kontrak);
+        }else{
+            $perubahan_total = 0;
+            $kategori_kontrak = [
+                    [
+                        "VO", 0, 0, 0
+                    ], [
+                        "Klaim", 0, 0, 0
+                    ], [
+                        "Anti Klaim", 0, 0, 0
+                    ], [
+                        "Klaim Asuransi", 0, 0, 0
+                ]
+            ];
+        };
         $persentasePerubahan = (float) $perubahan_total * 100 / (float) $totalKontrakFull;
+        
+
         // dd($persentasePerubahan);
 
         return view("1_Dashboard_ccm_pelaksanaan_kontrak", 
-        compact(["jumlahKontrak", "totalKontrak", "totalKontrakFull", "totalPersen", "persentasePerubahan", "totalPerubahan", "jumlahKontrak", "dops", "unit_kerjas", "proyeks", "pemilik_pekerjaan", "jenis_kontrak", "dop_get", "unit_kerja_get", "proyek_get", "nilai_tender_proyeks", "total_nilai_perubahan", "nilai_perubahan_table", "perubahan_total", "kategori_perubahan"]));
+        compact(["jumlahKontrak", "totalKontrak", "totalKontrakFull", "totalPersen", "persentasePerubahan", "totalPerubahan", "jumlahKontrak", "dops", "unit_kerjas", "proyeks", "pemilik_pekerjaan", "jenis_kontrak", "dop_get", "unit_kerja_get", "proyek_get", "nilai_tender_proyeks", "total_nilai_perubahan", "nilai_perubahan_table", "perubahan_total", "kategori_kontrak"]));
     }
 
     public function dashboard_pemeliharaan_kontrak(Request $request)
@@ -961,9 +974,9 @@ class DashboardController extends Controller
         $dop_get = $request->query("dop") ?? "";
         $unit_kerja_get = $request->query("unit-kerja") ?? "";
         $proyek_get = $request->query("kode-proyek") ?? "";
-        $contracts_pemeliharaan = ContractManagements::where("stages", "=", 3)->get();
-        // $claims = ClaimManagements::all();
-        // dd($claims);
+        $contracts_pemeliharaan = $proyeks->map(function($item){
+            return $item->ContractManagements;
+        })->where("stages", "=", 3)->values();
 
         if ($dop_get != "") {
             $proyeks = $proyeks->filter(function ($p) use ($dop_get) {
@@ -1071,43 +1084,7 @@ class DashboardController extends Controller
         // End :: Pemilik Pekerjaan
 
         // Begin :: Changes Overview
-        // $kategori_kontrak = $claims->groupBy("jenis_claim")->map(function ($c, $key) {
-        //     return [$key, $c->count()];
-        // })->values();
-        // $kategori_kontrak = [
-        //     [
-        //         "VO", mt_rand(0, 15), mt_rand(1000000000, 20000000000), mt_rand(0, 10)
-        //     ], [
-        //         "KLAIM", mt_rand(0, 15), mt_rand(1000000000, 20000000000), mt_rand(0, 10)
-        //     ], [
-        //         "ANTI-KLAIM", mt_rand(0, 15), mt_rand(1000000000, 20000000000), mt_rand(0, 10)
-        //     ], [
-        //         "ASURANSI", mt_rand(0, 15), mt_rand(1000000000, 20000000000), mt_rand(0, 10)
-        // ]
-        // ];
-        // $kategori_kontrak = collect($kategori_kontrak);
-        if(!empty($contracts_pemeliharaan)){
-            $perubahan = PerubahanKontrak::all();
-            $perubahan_total = $perubahan->sum('biaya_pengajuan');
-            $kategori_kontrak = $perubahan->groupBy("jenis_perubahan")->map(function($item, $key) use ($perubahan_total){
-                $biaya_total = (int) $item->sum('biaya_pengajuan');
-                $persentase_kategori = (float) $biaya_total * 100 / (float) $perubahan_total;
-                return[$key, $item->count(), $biaya_total, number_format($persentase_kategori, 2)];
-            })->values();
-        }else{
-            $perubahan_total = 0;
-            $kategori_kontrak = [
-                    [
-                        "VO", 0, 0, 0
-                    ], [
-                        "Klaim", 0, 0, 0
-                    ], [
-                        "Anti Klaim", 0, 0, 0
-                    ], [
-                        "Klaim Asuransi", 0, 0, 0
-                ]
-            ];
-        }
+        // $perubahan_kontrak = PerubahanKontrak::all();
 
         $jumlahKontrak = 0;
         $totalKontrak = 0;
@@ -1184,6 +1161,32 @@ class DashboardController extends Controller
         $totalKontrakFull = $proyeks->map(function($p){
             return $p->ContractManagements;
         })->sum("value");
+
+        if(!empty($contracts_pemeliharaan)){
+            $perubahan = $contracts_pemeliharaan->map(function($cp){
+                return $cp->PerubahanKontrak->where("id_contract", "=", $cp->id_contract);
+            })->flatten();
+            // dd($perubahan);
+            $perubahan_total = $perubahan->sum('biaya_pengajuan');
+            $kategori_kontrak = $perubahan->groupBy("jenis_perubahan")->map(function($item, $key) use ($totalKontrakFull){
+                $biaya_total = (int) $item->sum('biaya_pengajuan');
+                $persentase_kategori = (float) $biaya_total * 100 / (float) $totalKontrakFull;
+                return[$key, $item->count(), $biaya_total, number_format($persentase_kategori, 2)];
+            })->values();
+        }else{
+            $perubahan_total = 0;
+            $kategori_kontrak = [
+                    [
+                        "VO", 0, 0, 0
+                    ], [
+                        "Klaim", 0, 0, 0
+                    ], [
+                        "Anti Klaim", 0, 0, 0
+                    ], [
+                        "Klaim Asuransi", 0, 0, 0
+                ]
+            ];
+        }
 
         $persentasePerubahan = (float) $perubahan_total * 100 / (float) $totalKontrakFull;
 

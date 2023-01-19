@@ -309,7 +309,7 @@
 
                         <!--begin::Table Body-->
                         {{-- @foreach ($nilai_perubahan_table as $table) --}}
-                        @foreach ($kategori_perubahan as $table)
+                        @foreach ($kategori_kontrak as $table)
                         <div class="row mb-4">
                             <div class="col-3">
                                 <!--begin::Title body-->
@@ -518,7 +518,7 @@
 
     <!--begin::Highchart Donut Changes Overview-->
     <script>
-        const changesOverview = JSON.parse('{!! $kategori_perubahan->toJson() !!}');
+        const changesOverview = JSON.parse('{!! $kategori_kontrak->toJson() !!}');
         Highcharts.chart('contract-divisi', {
             chart: {
                 // height: 250,
