@@ -1281,7 +1281,6 @@ class DashboardController extends Controller
         $sheet->setCellValue('F1', 'Bulan');
         $sheet->setCellValue('G1', "Nilai $type");
 
-
         // dd($request->all());   
         // dd($type, $prognosa, $month, $unit_`kerja);   
         if ($type == "Forecast") {
@@ -1344,7 +1343,7 @@ class DashboardController extends Controller
             }
             $data = collect($data)->sortBy("month_forecast", SORT_NUMERIC);
             // dd($data);
-        } elseif ($type == "NilaiOK") {
+        } elseif ($type == "NilaiOKRKAP") {
             $month = array_search($month, $arrNamaBulan);
             if (Auth::user()->check_administrator) {
                 // $history_rkap = Proyek::select("*")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->join("history_forecast", "history_forecast.kode_proyek", "=", "proyeks.kode_proyek")->where("periode_prognosa", "=" , $prognosa)->get()->sortBy("month_rkap");
