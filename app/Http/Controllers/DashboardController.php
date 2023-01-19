@@ -145,7 +145,11 @@ class DashboardController extends Controller
 
         $nilaiRkapForecast = 0;
         $nilaiRkapArray = [];
-        $historyRkap = $nilaiHistoryForecast->sortBy("month_rkap");
+        if($year == 2022) {
+            $historyRkap = $nilaiHistoryForecast->sortBy("month_rkap");
+        } else {
+            $historyRkap = $nilaiHistoryForecast->where("is_rkap", "=", true)->sortBy("month_rkap");
+        }
         // dd($historyRkap);
 
         $nilaiRealisasiForecast = 0;
@@ -931,9 +935,9 @@ class DashboardController extends Controller
 
         if(!empty($contracts_pelaksanaan)){
             $perubahan = $contracts_pelaksanaan->map(function($cp){
-                return $cp->PerubahanKontrak->where("id_contract", "=", $cp->id_contract);
+                return $cp->PerubahanKontrak;
             })->flatten();
-            // dd($perubahan);
+            dd($perubahan);
             $perubahan_total = $perubahan->sum('biaya_pengajuan');
             $kategori_kontrak = $perubahan->groupBy("jenis_perubahan")->map(function($item, $key) use ($totalKontrakFull){
                 $biaya_total = (int) $item->sum('biaya_pengajuan');
@@ -1381,12 +1385,12 @@ class DashboardController extends Controller
                     }
                 }
                 $tipe_proyek = "";
-                if ($data[$kode_proyek]->tipe_proyek == "R") {
-                    $tipe_proyek = "Retail";
-                } else {
-                    $tipe_proyek = "Non-Retail";
-                }
                 if (isset($data[$kode_proyek])) {
+                    if ($data[$kode_proyek]->tipe_proyek == "R") {
+                        $tipe_proyek = "Retail";
+                    } else {
+                        $tipe_proyek = "Non-Retail";
+                    }
                     $sheet->setCellValue("A" . $counter, $data[$kode_proyek]->nama_proyek);
                     $sheet->setCellValue("B" . $counter, $data[$kode_proyek]->status_pasdin);
                     $stage = $this->getProyekStage($data[$kode_proyek]->stage);
