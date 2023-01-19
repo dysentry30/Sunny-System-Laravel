@@ -192,11 +192,11 @@ class ProyekController extends Controller
         $newProyek->company = $unitKerja->company;
 
         $newProyek->nilaiok_awal = (int) str_replace('.', '', $dataProyek["nilai-rkap"]);
-        $newProyek->nilai_valas_review = (int) str_replace('.', '', $dataProyek["nilai-rkap"]);
-        $newProyek->bulan_review = $dataProyek["bulan-pelaksanaan"];
-        $newProyek->nilaiok_review = (int) str_replace('.', '', $dataProyek["nilai-rkap"]);
-        $newProyek->kurs_review = 1;
-        $newProyek->mata_uang_review = "IDR";
+        // $newProyek->nilai_valas_review = (int) str_replace('.', '', $dataProyek["nilai-rkap"]);
+        // $newProyek->bulan_review = $dataProyek["bulan-pelaksanaan"];
+        // $newProyek->nilaiok_review = (int) str_replace('.', '', $dataProyek["nilai-rkap"]);
+        // $newProyek->kurs_review = 1;
+        // $newProyek->mata_uang_review = "IDR";
 
         $newProyek->kurs_awal = 1;
         $newProyek->mata_uang_awal = "IDR";
@@ -281,7 +281,7 @@ class ProyekController extends Controller
                 $customerHistory->pic_proyek = $newProyek->ketua_tender;
                 $customerHistory->unit_kerja = $newProyek->unit_kerja;
                 $customerHistory->jenis_proyek = $newProyek->jenis_proyek;
-                $customerHistory->nilaiok_proyek = $newProyek->nilai_rkap;
+                $customerHistory->nilaiok_proyek = $newProyek->nilaiok_awal;
                 $customerHistory->stage = $newProyek->stage;
                 $customerHistory->save();
             }
@@ -492,27 +492,27 @@ class ProyekController extends Controller
         // dd($dataProyek);
 
         $newForecast = Forecast::where("kode_proyek", "=", $newProyek->kode_proyek)->where("periode_prognosa", "=", $bulans)->where("tahun", "=", $years)->first();
-        if (empty($newForecast)) {
-            $newForecast = new Forecast();
-            $newForecast->kode_proyek = $newProyek->kode_proyek;
-            $newForecast->rkap_forecast = $newProyek->nilai_rkap;
-            $newForecast->month_rkap = $newProyek->bulan_pelaksanaan;
-            $newForecast->periode_prognosa = $bulans;
-            $newForecast->tahun = $years;
-            $newForecast->save();
-            // if (isset($newProyek->bulan_ri_perolehan) && isset($newProyek->nilai_perolehan) && $newProyek->stage > 7 ) {
-            //     $newForecast->month_realisasi = $newProyek->bulan_ri_perolehan;
-            //     // dump($newForecast, "bulan ri");
-            //     // dd($newProyek);
-            //     $newForecast->save();
-            // };
-            // if (isset($newProyek->bulan_pelaksanaan) && isset($newProyek->nilai_rkap) ) {
-            //     $newForecast->rkap_forecast = $newProyek->nilai_rkap;
-            //     $newForecast->month_rkap = $newProyek->bulan_pelaksanaan;
-            //     // dd($newForecast, "bulan rkap");
-            //     $newForecast->save();
-            // };
-        }
+        // if (empty($newForecast)) {
+        //     $newForecast = new Forecast();
+        //     $newForecast->kode_proyek = $newProyek->kode_proyek;
+        //     $newForecast->rkap_forecast = $newProyek->nilai_rkap;
+        //     $newForecast->month_rkap = $newProyek->bulan_pelaksanaan;
+        //     $newForecast->periode_prognosa = $bulans;
+        //     $newForecast->tahun = $years;
+        //     $newForecast->save();
+        //     // if (isset($newProyek->bulan_ri_perolehan) && isset($newProyek->nilai_perolehan) && $newProyek->stage > 7 ) {
+        //     //     $newForecast->month_realisasi = $newProyek->bulan_ri_perolehan;
+        //     //     // dump($newForecast, "bulan ri");
+        //     //     // dd($newProyek);
+        //     //     $newForecast->save();
+        //     // };
+        //     // if (isset($newProyek->bulan_pelaksanaan) && isset($newProyek->nilai_rkap) ) {
+        //     //     $newForecast->rkap_forecast = $newProyek->nilai_rkap;
+        //     //     $newForecast->month_rkap = $newProyek->bulan_pelaksanaan;
+        //     //     // dd($newForecast, "bulan rkap");
+        //     //     $newForecast->save();
+        //     // };
+        // }
         // $newProyek->kursreview_terkontrak = $dataProyek["kurs-review-terkontrak"];
         $newProyek->nomor_terkontrak = $dataProyek["nomor-terkontrak"];
         // $newProyek->nomor_terkontrak = urlencode(urlencode($dataProyek["nomor-terkontrak"]));

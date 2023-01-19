@@ -237,7 +237,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
 
                                                 <div class="col-2 mt-4 ms-2">
                                                     <!--begin::Select Options-->
-                                                    <select onchange="return document.location.href = `/forecast/{{$periode}}/${this.value}`" id="tahun-history" name="tahun-history"
+                                                    {{-- <select onchange="return document.location.href = `/forecast/{{$periode}}/${this.value}`" id="tahun-history" name="tahun-history"
                                                         class="form-select form-select-solid select2-hidden-accessible"
                                                         data-control="select2" data-hide-search="true" data-placeholder="Tahun"
                                                         data-select2-id="select2-data-tahun" tabindex="-1" aria-hidden="true">
@@ -252,7 +252,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                     {{ $i }}</option>
                                                             @endfor
                                                         @endif
-                                                    </select>
+                                                    </select> --}}
                                                     <!--end::Select Options-->
                                                 </div>
                                             </div>

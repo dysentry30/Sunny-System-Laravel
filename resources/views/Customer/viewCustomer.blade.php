@@ -828,8 +828,11 @@
                                                                         </label>
                                                                         <!--end::Label-->
                                                                         <!--begin::Input-->
-                                                                        <input type="text" class="form-control form-control-solid" name="npwp-company" value="{{ $customer->npwp_company }}"
+                                                                        <input type="text" class="form-control form-control-solid char-counter" data-max-char="15" name="npwp-company" value="{{ $customer->npwp_company }}"
                                                                             placeholder="NPWP" />
+                                                                        <div class="d-flex flex-row justify-content-end">
+                                                                            <small class="">0/40</small>
+                                                                        </div>
                                                                         <!--end::Input-->
                                                                     </div>
                                                                     <!--end::Input group-->
