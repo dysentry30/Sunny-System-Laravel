@@ -388,6 +388,7 @@ class ProyekController extends Controller
 
         $bulans = (int) date('m');
         $years = (int) date('Y');
+        // dd($bulans);
 
         // form PASAR DINI
         $newProyek->nama_proyek = $dataProyek["nama-proyek"];
@@ -490,18 +491,8 @@ class ProyekController extends Controller
         $newProyek->bulan_ri_perolehan = $dataProyek["bulan-ri-perolehan"];
         // dd($dataProyek);
 
-        $newForecast = Forecast::where("kode_proyek", "=", $newProyek->kode_proyek)->where("periode_prognosa", "=", $bulans)->whereYear("created_at", "=", $years)->first();
+        $newForecast = Forecast::where("kode_proyek", "=", $newProyek->kode_proyek)->where("periode_prognosa", "=", $bulans)->where("tahun", "=", $years)->first();
         if (empty($newForecast)) {
-            $oldestForecast = Forecast::where("kode_proyek", "=", $newProyek->kode_proyek)->where("periode_prognosa", "=", ($bulans - 1))->whereYear("created_at", "=", $years)->first();
-            if (empty($oldestForecast) && $bulans != 1) {
-                $oldestForecast = new Forecast();
-                $oldestForecast->kode_proyek = $newProyek->kode_proyek;
-                $oldestForecast->rkap_forecast = $newProyek->nilai_rkap;
-                $oldestForecast->month_rkap = $newProyek->bulan_pelaksanaan;
-                $oldestForecast->periode_prognosa = $bulans - 1;
-                $oldestForecast->tahun = $years;
-                $oldestForecast->save();
-            }
             $newForecast = new Forecast();
             $newForecast->kode_proyek = $newProyek->kode_proyek;
             $newForecast->rkap_forecast = $newProyek->nilai_rkap;
@@ -637,8 +628,19 @@ class ProyekController extends Controller
         // dd($dataProyek);
         // if ($dataProyek["nilai-perolehan"] != null && $newProyek->stage == 8 && $dataProyek["bulan-ri-perolehan"] != null){
         if (!empty($newProyek->bulan_ri_perolehan) && !empty($newProyek->nilai_perolehan) && $newProyek->stage == 8) {
-            $editForecast = Forecast::where("kode_proyek", "=", $newProyek->kode_proyek)->where("periode_prognosa", "=", $bulans)->whereYear("created_at", "=", $years)->first();
+            $editForecast = Forecast::where("kode_proyek", "=", $newProyek->kode_proyek)->where("periode_prognosa", "=", $bulans)->where("tahun", "=", $years)->first();
             if (!empty($editForecast)) {
+                $oldestForecast = Forecast::where("kode_proyek", "=", $newProyek->kode_proyek)->where("periode_prognosa", "=", ($bulans - 1))->where("tahun", "=", $years)->first();
+                if (!empty($oldestForecast) && (int) date("d") <= 15) {
+                    // $oldestForecast = new Forecast();
+                    $oldestForecast->kode_proyek = $newProyek->kode_proyek;
+                    $oldestForecast->periode_prognosa = $bulans - 1;
+                    $oldestForecast->tahun = $years;
+                    $oldestForecast->nilai_forecast = (int) str_replace('.', '', $dataProyek["nilai-perolehan"]);
+                    $oldestForecast->realisasi_forecast = (int) str_replace('.', '', $dataProyek["nilai-perolehan"]);
+                    $oldestForecast->month_realisasi = (int) $newProyek->bulan_ri_perolehan;
+                    $oldestForecast->save();
+                }
                 // $editForecast->month_forecast = $dataProyek["month-forecast"];
                 $editForecast->nilai_forecast = (int) str_replace('.', '', $dataProyek["nilai-perolehan"]);
                 $editForecast->realisasi_forecast = (int) str_replace('.', '', $dataProyek["nilai-perolehan"]);

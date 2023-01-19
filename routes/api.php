@@ -543,9 +543,9 @@ Route::middleware(["web"])->group(function () {
         $customers_attractivness = $customers_attractivness->map(function($ca) {
             // dd($ca);
             $new_ca = new stdClass();
-            $new_ca->periode = date("Ymd");
-            $new_ca->industry_code = $ca->code_owner ?? "";
-            $new_ca->attractivness_status = $ca->owner_attractiveness ?? "";
+            $new_ca->PERIODE = date("Ymd");
+            $new_ca->INDUSTRY_CODE = $ca->code_owner ?? "";
+            $new_ca->ATTRACTIVNESS_STATUS = $ca->owner_attractiveness ?? "";
             return $new_ca;
         });
         // $industry_attractivness = IndustryOwner::all();

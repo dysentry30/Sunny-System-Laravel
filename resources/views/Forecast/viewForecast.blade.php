@@ -190,19 +190,41 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                     </div>
                                                 @endif
                                                 
-                                                <div class="col-2" style="width: 10% !important">
-                                                    <button type="button" id="unlock-previous-forecast"
+                                                <div class="col-2 mt-4 me-8" style="width: 10% !important">
+                                                    {{-- <button type="button" id="unlock-previous-forecast"
                                                     onclick="unlockPreviousForecast()"
                                                     class="btn btn-sm btn-light btn-active-primary mt-4 ms-0">
                                                             <span class="fs-6">Pilih Bulan</span>
-                                                    </button>
+                                                    </button> --}}
+
+                                                    <!--begin::Select Options-->
+                                                    <select id="periode-prognosa" onchange="return document.location.href = `/forecast/${this.value}/{{$year}}`" name="periode-prognosa"
+                                                        class="form-select form-select-solid select2-hidden-accessible w-auto ms-2"
+                                                        style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
+                                                        data-placeholder="Bulan" data-select2-id="select2-data-bulan" tabindex="-1"
+                                                        aria-hidden="true">
+                                                            <option {{ $periode == '' ? 'selected' : '' }}></option>
+                                                            <option value="1" {{ $periode == 1 ? 'selected' : '' }}>Januari</option>
+                                                            <option value="2" {{ $periode == 2 ? 'selected' : '' }}>Februari</option>
+                                                            <option value="3" {{ $periode == 3 ? 'selected' : '' }}>Maret</option>
+                                                            <option value="4" {{ $periode == 4 ? 'selected' : '' }}>April</option>
+                                                            <option value="5" {{ $periode == 5 ? 'selected' : '' }}>Mei</option>
+                                                            <option value="6" {{ $periode == 6 ? 'selected' : '' }}>Juni</option>
+                                                            <option value="7" {{ $periode == 7 ? 'selected' : '' }}>Juli</option>
+                                                            <option value="8" {{ $periode == 8 ? 'selected' : '' }}>Agustus</option>
+                                                            <option value="9" {{ $periode == 9 ? 'selected' : '' }}>September</option>
+                                                            <option value="10" {{ $periode == 10 ? 'selected' : '' }}>Oktober</option>
+                                                            <option value="11" {{ $periode == 11 ? 'selected' : '' }}>November</option>
+                                                            <option value="12" {{ $periode == 12 ? 'selected' : '' }}>Desember</option>
+                                                    </select>
+                                                    <!--end::Select Options-->
                                                 </div>
 
                                                 
-                                                @if ($periode != (int) date("m") && isset($periode))
+                                                @if (($periode != (int) date("m") || $year != (int) date("Y")) && isset($periode))
                                                     <div class="col-2">
                                                         <div class="d-flex flex-row align-items-center justify-content-center">
-                                                            <button type="button" onClick="window.location.href='/forecast/{{$periode}}/{{$year}}';" id="unlock-previous-forecast"
+                                                            <button type="button" onClick="window.location.href='/forecast/{{ (int) date("m") }}/{{(int) date("Y")}}';" id="unlock-previous-forecast"
                                                             class="btn btn-sm btn-light btn-active-danger mt-4 me-3">
                                                             <span class="mx-2 fs-6">Pindah ke {{Carbon\Carbon::parse(new DateTime("now"))->translatedFormat("F")}}</span>
                                                             </button>
@@ -2262,6 +2284,7 @@ fill="none">
                 formData.append("nilai_forecast", nilaiForecast);
                 formData.append("forecast_month", dataMonth);
                 formData.append("kode_proyek", kodeProyek);
+                formData.append("tahun", "{{$year}}");
                 formData.append("periode_prognosa", "{{$periode}}");
                 const saveNilaiForecastRes = await fetch("/proyek/forecast/save", {
                     method: "POST",

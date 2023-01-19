@@ -1033,7 +1033,7 @@
 @section('js-script')
     <!--begin::Data Tables-->
     <script src="/datatables/jquery.dataTables.min.js"></script>
-    {{-- <script src="https://cdn.datatables.net/fixedcolumns/4.2.1/js/dataTables.fixedColumns.min.js"></script> --}}
+    <script src="https://cdn.datatables.net/fixedcolumns/4.2.1/js/dataTables.fixedColumns.min.js"></script>
     {{-- <script src="/datatables/dataTables.buttons.min.js"></script>
     <script src="/datatables/buttons.colVis.min.js"></script>
     <script src="/datatables/jszip.min.js"></script>
@@ -1043,16 +1043,17 @@
     <script>
         $(document).ready(function() {
             $('#example').DataTable( {
-                dom: '<"float-start"f><"#example"t>rtip',
+                dom: 'frtip',
+                // dom: '<"float-start"f><"#example"t>rtip',
                 pageLength : 50,
-                // scrollY : "1000px",
-                // scrollX : true,
-                // scrollCollapse: true,
-                // paging : false,
-                // fixedColumns:   {
-                //     left: 2,
-                //     right: 0
-                // },
+                scrollY : "1000px",
+                scrollX : true,
+                scrollCollapse: true,
+                paging : false,
+                fixedColumns:   {
+                    left: 2,
+                    right: 0
+                },
                 // buttons: [
                 //     'copy', 'csv', 'excel', 'pdf', 'print'
                 // ]

@@ -2009,7 +2009,7 @@
                                                                             <th class="min-w-auto">Unit kerja</th>
                                                                             <th class="min-w-auto">Nilai OK</th>
                                                                             <th class="min-w-auto">Tanggal Mulai</th>
-                                                                            <th class="min-w-auto">Tanggal Selesai</th>
+                                                                            <th class="min-w-auto">Tanggal Akhir</th>
                                                                             <th class="min-w-auto">Durasi</th>
                                                                         </tr>
                                                                         <!--end::Table row-->
@@ -2106,7 +2106,7 @@
                                                                             <th class="min-w-auto">Unit kerja</th>
                                                                             <th class="min-w-auto">Nilai OK</th>
                                                                             <th class="min-w-auto">Tanggal Mulai</th>
-                                                                            <th class="min-w-auto">Tanggal Selesai</th>
+                                                                            <th class="min-w-auto">Tanggal Akhir</th>
                                                                             <th class="min-w-auto">Durasi</th>
                                                                         </tr>
                                                                         <!--end::Table row-->
@@ -2213,6 +2213,7 @@
                                                                             <th class="min-w-auto">Stage</th>
                                                                             <th class="min-w-auto text-center">Nilai ok</th>
                                                                             <th class="min-w-auto text-center">Bulan Forecast</th>
+                                                                            <th class="min-w-auto">Layer Segmentasi</th>
                                                                         </tr>
                                                                         <!--end::Table row-->
                                                                     </thead>
@@ -2358,6 +2359,11 @@
                                                                                         @endisset
                                                                                     </td>
                                                                                     <!--end::Bulan Forecast-->
+                                                                                    <!--begin::Layer-->
+                                                                                    <td>
+                                                                                        *Layer
+                                                                                    </td>
+                                                                                    <!--end::Layer-->
                                                                                 </tr>
                                                                                 @endif
                                                                             @endforeach
@@ -2393,7 +2399,7 @@
                                                                             <!--begin::Table row-->
                                                                             <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                                                                 <th class="min-w-auto">Nama Proyek</th>
-                                                                                <th class="min-w-auto">Bentuk Masalah Hukum</th>
+                                                                                <th class="min-w-auto">Jenis Masalah Hukum</th>
                                                                                 <th class="min-w-auto">Status</th>
                                                                             </tr>
                                                                             <!--end::Table row-->
@@ -7020,6 +7026,7 @@
                                     return !empty($item);
                                 })->toJson() !!}`)[0];
         console.log(pic);
+        const now = new Date();
         // BEGIN :: GET KODE NASABAH
         async function getKodeNasabah(e) {
             const npwp = "{{$customer->npwp_company}}";
@@ -7030,11 +7037,48 @@
                 });
                 return;
             }
+                let grouping = "";
+                let kdgrp = "";
+                let ktgrd = "";
+                let cust_akont = "";
+                let witht = "";
+                if("{{$customer->jenis_instansi}}" == "Kementrian / Pemerintah Pusat" || "{{$customer->jenis_instansi}}" == "Pemerintah Provinsi" || "{{$customer->jenis_instansi}}" == "Pemerintah Kota / Kabupaten") {
+                    kdgrp = "03";
+                    grouping = "ZN01";
+                    ktgrd = "Z1";
+                    cust_akont = "1104111000";
+                    witht = "J7";
+                } else if("{{$customer->jenis_instansi}}" == "BUMN") {
+                    kdgrp = "04";
+                    grouping = "ZN01";
+                    ktgrd = "Z1";
+                    cust_akont = "1104111000";
+                    witht = "J7";
+                } else if("{{$customer->jenis_instansi}}" == "BUMD" || "{{$customer->jenis_instansi}}" == "Swasta Nasional") {
+                    kdgrp = "05";
+                    grouping = "ZN02";
+                    ktgrd = "Z2";
+                    cust_akont = "1104211000";
+                    witht = "J7";
+                } else if("{{$customer->jenis_instansi}}" == "Pemerintah Asing" || "{{$customer->jenis_instansi}}" == "Swasta Asing") {
+                    kdgrp = "06";
+                    grouping = "ZN02";
+                    ktgrd = "Z2";
+                    cust_akont = "1104211000";
+                    witht = "J7";
+                } else if("{{$customer->jenis_instansi}}" == "Perusahaan JO") {
+                    kdgrp = "08";
+                    grouping = "ZN05";
+                    ktgrd = "Z4";
+                    cust_akont = "";
+                    witht = "";
+                }
             const data = {
                 nmnasabah: "{{$customer->name}}",
                 alamat: `{{$customer->address_1}}`,
                 kota: "{{$customer->kota_kabupaten ?? 'Jakarta'}}",
                 email: "{{$customer->email}}",
+                kode_pos: "{{$customer->kode_pos}}",
                 ext: "-",
                 telepon: "{{$customer->phone_number}}",
                 fax: `{{$customer->fax}}`,
@@ -7047,7 +7091,100 @@
                 handphone: pic.phone_pic,
                 tipe_perusahaan: "-",
                 tipe_lain_perusahaan: "-",
-                cotid: "11"
+                cotid: "11",
+                "dtsap": [
+                            {
+                                "devid": "YMMI002",
+                                "packageid": "",
+                                "cocode": "A000",
+                                "prctr": "",
+                                "timestamp": now.getYear() + now.getMonth() + now.getDate() + "10000",
+                                "data": [
+                                    {
+                                        "BPARTNER": "{{$customer->kode_nasabah}}",
+                                        "GROUPING": grouping,
+                                        "LVORM": "",
+                                        "TITLE": "Z001",
+                                        "NAME": "",
+                                        "TITLELETTER": "{{$customer->name ?? ""}}",
+                                        "SEARCHTERM1": "",
+                                        "SEARCHTERM2": "",
+                                        "STREET": "{{$customer->sap->street}}",
+                                        "HOUSE_NO": "",
+                                        "POSTL_COD1": "{{$customer->kode_pos}}",
+                                        "CITY": "",
+                                        "ADDR_COUNTRY": "ID",
+                                        "REGION": "",
+                                        "PO_BOX": "",
+                                        "POSTL_COD3": "",
+                                        "LANGU": "E",
+                                        "TELEPHONE": "{{$customer->phone_number}}",
+                                        "PHONE_EXTENSION": "",
+                                        "MOBPHONE": "{{$customer->handphone}}",
+                                        "FAX": "{{$customer->fax}}",
+                                        "FAX_EXTENSION": "",
+                                        "E_MAIL": "{{$customer->email}}",
+                                        "VALIDFROMDATE":  now.getYear()+ "-" + now.getMonth() + "-" + now.getDate() ,
+                                        "VALIDTODATE": now.getYear()+ "-" + (now.getMonth() + 1) + "-" + now.getDate(),
+                                        "IDENTIFICATION": [
+                                        {
+                                            "TAXTYPE": "",
+                                            "TAXNUMBER": "{{$customer->npwp_company}}"
+                                        }],
+                                        "BANK": [
+                                        {
+                                            "BANK_DET_ID": "",
+                                            "BANK_CTRY": "",
+                                            "BANK_KEY": "",
+                                            "BANK_ACCT": "",
+                                            "BK_CTRL_KEY": "",
+                                            "BANK_REF": "",
+                                            "EXTERNALBANKID": "",
+                                            "ACCOUNTHOLDER": "",
+                                            "BANKACCOUNTNAME": ""
+                                        }],
+                                        "CUST_BUKRS": "",
+                                        "KUNNR": "",
+                                        "CUST_AKONT": cust_akont,
+                                        "CUST_C_ZTERM": "{{$customer->syarat_pembayaran}}",
+                                        "CUST_WTAX": [
+                                        {
+                                            "WITHT": witht,
+                                            "WT_AGENT": "",
+                                            "WT_AGTDF": "",
+                                            "WT_AGTDT": ""
+                                        }],
+                                        "VKORG": "",
+                                        "VTWEG": "",
+                                        "SPART": "",
+                                        "KDGRP": "kdgrp",
+                                        "CUST_WAERS": "IDR",
+                                        "KALKS": "",
+                                        "VERSG": "",
+                                        "VSBED": "",
+                                        "INCO1": "",
+                                        "INCO2_L": "",
+                                        "CUST_S_ZTERM": "{{$customer->syarat_pembayaran}}",
+                                        "KTGRD": ktgrd,
+                                        "TAXKD": "{{$customer->tax}}",
+                                        "VEND_BUKRS": "",
+                                        "LIFNR": "",
+                                        "VEND_AKONT": "",
+                                        "VEND_C_ZTERM": "",
+                                        "REPRF": "X",
+                                        "VEND_WTAX": [
+                                            []
+                                        ],
+                                        "EKORG": "",
+                                        "VEND_P_ZTERM": "",
+                                        "WEBRE": "",
+                                        "VEND_WAERS": "",
+                                        "LEBRE": "",
+                                        "BRAN2": "{{$customer->IndustrySector->id_industry_sector}}"
+                                    }
+                                ]
+                            }
+                        ]
             };
             
             // switch(data.jenisperusahaan) {
