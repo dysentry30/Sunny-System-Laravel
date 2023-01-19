@@ -177,9 +177,11 @@
                                                 $total_ok_awal = 0;
                                                 $total_ok_review = 0;
                                                 foreach ($proyek as $proyekTotal) {
-                                                        $total_ok_awal += (int) str_replace(",", "", $proyekTotal->nilaiok_awal);
-                                                        $total_ok_review += (int) str_replace(",", "", $proyekTotal->nilaiok_review);
-                                                    }
+                                                    $total_ok_awal += $proyekTotal->Forecasts->where("tahun", "=", (int) date("Y"))->where("periode_prognosa", "=", (int) date("m"))->sum(function($f) {
+                                                        return (int) $f->rkap_forecast;
+                                                    });
+                                                    $total_ok_review += (int) str_replace(",", "", $proyekTotal->nilaiok_review);
+                                                }
                                                 // dump($total_ok_awal, $total_ok_review);
                                                 // dd();
                                                 $total_ok_awal = number_format($total_ok_awal, 0, ",");

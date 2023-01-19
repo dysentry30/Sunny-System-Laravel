@@ -558,7 +558,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $data = $request->all();
         $per = 1000000;
         $proyek = Proyek::find($data["kode_proyek"]);
-        $forecast = Forecast::where("kode_proyek", "=", $data["kode_proyek"])->where("periode_prognosa", "=", $data["periode_prognosa"] ?? (int) date("m"))->orderByDesc("created_at");
+        $forecast = Forecast::where("kode_proyek", "=", $data["kode_proyek"])->where("periode_prognosa", "=", $data["periode_prognosa"] ?? (int) date("m"))->where("tahun", "=", $data["tahun"])->orderByDesc("created_at");
         // $forecast = DB::select("SELECT * FROM forecasts WHERE kode_proyek='" . $data["kode_proyek"] . "' AND (" . "YEAR(created_at)=" . date("Y") . " OR YEAR(updated_at)=" . date("Y"). ");");
         if (!empty($forecast)) {
             $forecast->each(function ($f) {
@@ -572,10 +572,21 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             $new_forecast->month_realisasi = (int) $proyek->bulan_ri_perolehan ?? null;
             $new_forecast->month_forecast = (int) $data["forecast_month"];
             $new_forecast->periode_prognosa = (int) $data["periode_prognosa"];
-            $new_forecast->tahun = (int) date("Y");
+            $new_forecast->tahun = (int) $data["tahun"];
             $new_forecast->nilai_forecast = (string) $data["nilai_forecast"] * $per;
             
             if ($new_forecast->save()) {
+                // edit nilai bulan sebelumnya
+                if((int) $data["periode_prognosa"] != 1) {
+                    $get_previous_periode_forecast = Forecast::where("kode_proyek", "=", $proyek->kode_proyek)->where("periode_prognosa", "=", (int) $data["periode_prognosa"] - 1)->where("tahun", "=", $data["tahun"])->get()->first();
+                    if(!empty($get_previous_periode_forecast)) {
+                        $get_previous_periode_forecast->nilai_forecast = (string) $data["nilai_forecast"] * $per;
+                        $get_previous_periode_forecast->realisasi_forecast = (string) $proyek->nilai_perolehan ?? 0;
+                        $get_previous_periode_forecast->month_forecast = (int) $data["forecast_month"];
+                        $get_previous_periode_forecast->month_realisasi = (int) $proyek->bulan_ri_perolehan ?? null;
+                        $get_previous_periode_forecast->save();
+                    }
+                }
                 if (!empty($proyek->forecast)) {
                     $totalfc = 0;
                     foreach ($proyek->Forecasts as $proyekfc) {
@@ -2456,10 +2467,49 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
 
 // Begin Send Data Industry Attractivness ke SAP
 Route::get('/send-data-industry-attractivness', function (Request $request) {
-    // $get_data_industry_attractivness = Http::post($request->getHttpHost() . "/api/get-industry-attract");
-    // $get_data_industry_attractivness = Http::withoutVerifying()->post("localhost:8000/api/get-industry-attract");
-    $get_data_industry_attractivness = getApi("localhost:8000/api/get-industry-attract", [], [], true);
-    dd($get_data_industry_attractivness);
+    // $customers_attractivness = Customer::with(["IndustryOwner"])->get();
+    $customers_attractivness = IndustryOwner::all();
+    $customers_attractivness = $customers_attractivness->map(function($ca) {
+        // dd($ca);
+        $new_ca = new stdClass();
+        $new_ca->PERIODE = date("Ymd");
+        $new_ca->INDUSTRY_CODE = $ca->code_owner ?? "";
+        $new_ca->ATTRACTIVENESS_STATUS = $ca->owner_attractiveness ?? "";
+        return $new_ca;
+    });
+
+    // FIRST STEP SEND DATA TO BW
+    $csrf_token = "";
+    $content_location = "";
+    // $response = getAPI("https://wtappbw-dev.wika.co.id:44340/sap/bw4/v1/push/dataStores/yodaltes4/requests", [], [], false);
+    // $http = Http::withBasicAuth("WIKA_API", "WikaWika2022");
+    $get_token = Http::withBasicAuth("WIKA_API", "WikaWika2022")->withHeaders(["x-csrf-token" => "Fetch"])->get("https://wtappbw-dev.wika.co.id:44340/sap/bw4/v1/push/dataStores/zosbi001/requests");
+    $csrf_token = $get_token->header("x-csrf-token");
+    $cookie = "";
+    collect($get_token->cookies()->toArray())->each(function($c) use(&$cookie) {
+        $cookie .= $c["Name"] . "=" . $c["Value"] . ";"; 
+    });
+
+    // SECOND STEP SEND DATA TO BW
+    $get_content_location = Http::withBasicAuth("WIKA_API", "WikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie])->post("https://wtappbw-dev.wika.co.id:44340/sap/bw4/v1/push/dataStores/zosbi001/requests");
+    $content_location = $get_content_location->header("content-location");
+    // $industry_attractivness = IndustryOwner::all();
+    // $new_class = $industry_attractivness->map(function($ia) {
+    //     $new_ia = new stdClass();
+    //     $new_ia->PERIODE = date("Ymd");
+    //     $new_ia->INDUSTRY_CODE = $ia->code_owner ?? "";
+    //     $new_ia->ATTRACTIVENESS_STATUS = $ia->owner_attractiveness ?? "";
+    //     return $new_ia;
+    // });
+
+    // THIRD STEP SEND DATA TO BW
+    // dd($new_class->toJson());
+    $fill_data = Http::withBasicAuth("WIKA_API", "WikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie, "content-type" => "application/json"])->post("https://wtappbw-dev.wika.co.id:44340/sap/bw4/v1/push/dataStores/zosbi001/dataSend?request=$content_location&datapid=1", $customers_attractivness->toArray());
+    
+    // FOURTH STEP SEND DATA TO BW
+    $closed_request = Http::withBasicAuth("WIKA_API", "WikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie])->post("https://wtappbw-dev.wika.co.id:44340/sap/bw4/v1/push/dataStores/zosbi001/requests/$content_location/close");
+    dd($closed_request);
+    return response()->json($customers_attractivness);
 });
 // End Send Data Industry Attractivness ke SAP
 

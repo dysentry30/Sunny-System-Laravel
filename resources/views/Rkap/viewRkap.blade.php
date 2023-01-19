@@ -294,7 +294,19 @@
 
                                                                 <!--begin::Coloumn-->
                                                                 <td class="text-end">
-                                                                    {{ number_format((int)$proyek->nilaiok_awal, 0, '.', '.') ?? '-' }}
+                                                                    @php
+                                                                        $total_ok_awal = 0;
+                                                                        $total_ok_awal += $proyek->Forecasts->where("tahun", "=", (int) date("Y"))->where("periode_prognosa", "=", (int) date("m"))->sum(function($f) {
+                                                                            return (int) $f->rkap_forecast;
+                                                                        });
+                                                                        // foreach ($proyek as $proyekTotal) {
+                                                                        //         return (int) $f->rkap_forecast;
+                                                                        //     });
+                                                                        //     // $total_ok_review += (int) str_replace(",", "", $proyekTotal->nilaiok_review);
+                                                                        // }
+                                                                    @endphp
+                                                                    {{-- {{ number_format((int)$proyek->nilaiok_awal, 0, '.', '.') ?? '-' }} --}}
+                                                                    {{ number_format((int)$total_ok_awal, 0, '.', '.') ?? '-' }}
                                                                 </td>
                                                                 <!--end::Coloumn-->
                                                                 <!--begin::Coloumn-->

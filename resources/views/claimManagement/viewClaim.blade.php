@@ -162,7 +162,7 @@
                                                             <!--end::Name-->
                                                             <!--begin::Name Proyek-->
                                                             <td>
-                                                                {{ $claim->tanggal_perubahan }}
+                                                                {{ Carbon\Carbon::create($claim->tanggal_perubahan)->translatedFormat("d F Y") }}
                                                             </td>
                                                             <!--end::Name Proyek-->
                                                             <!--begin::Unit Kerja-->
@@ -172,12 +172,12 @@
                                                             <!--end::Unit Kerja-->
                                                             <!--begin::Unit Kerja-->
                                                             <td>
-                                                                {{ $claim->tanggal_pengajuan }}
+                                                                {{ Carbon\Carbon::create($claim->tanggal_pengajuan)->translatedFormat("d F Y") }}
                                                             </td>
                                                             <!--end::Unit Kerja-->
                                                             <!--begin::Unit Kerja-->
                                                             <td>
-                                                                {{ $claim->waktu_pengajuan }}
+                                                                {{ Carbon\Carbon::create($claim->waktu_pengajuan)->translatedFormat("d F Y") }}
                                                             </td>
                                                             <!--end::Unit Kerja-->
                                                             <!--begin::Unit Kerja-->
