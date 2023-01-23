@@ -180,7 +180,7 @@
                                                     $total_ok_awal += $proyekTotal->Forecasts->where("tahun", "=", (int) date("Y"))->where("periode_prognosa", "=", (int) date("m"))->sum(function($f) {
                                                         return (int) $f->rkap_forecast;
                                                     });
-                                                    $total_ok_review += (int) str_replace(",", "", $proyekTotal->nilaiok_review);
+                                                    // $total_ok_review += (int) str_replace(",", "", $proyekTotal->nilaiok_review);
                                                 }
                                                 // dump($total_ok_awal, $total_ok_review);
                                                 // dd();

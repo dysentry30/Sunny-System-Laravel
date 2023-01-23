@@ -169,21 +169,21 @@
                                                 data-control="select2" data-hide-search="true" data-placeholder="Pilih Stage"
                                                 tabindex="-1" aria-hidden="true">
                                                 <option></option>
-                                                <option value="1" {{ $filter == '1' ? 'selected' : '' }}>Pasar Dini
+                                                <option value="1" {{ $filterStage == '1' ? 'selected' : '' }}>Pasar Dini
                                                 </option>
-                                                <option value="2" {{ $filter == '2' ? 'selected' : '' }}>Pasar Potensial
+                                                <option value="2" {{ $filterStage == '2' ? 'selected' : '' }}>Pasar Potensial
                                                 </option>
-                                                <option value="3" {{ $filter == '3' ? 'selected' : '' }}>Prakualifikasi
+                                                <option value="3" {{ $filterStage == '3' ? 'selected' : '' }}>Prakualifikasi
                                                 </option>
-                                                <option value="4" {{ $filter == '4' ? 'selected' : '' }}>Tender Diikuti
+                                                <option value="4" {{ $filterStage == '4' ? 'selected' : '' }}>Tender Diikuti
                                                 </option>
-                                                <option value="5" {{ $filter == '5' ? 'selected' : '' }}>Perolehan</option>
-                                                <option value="6" {{ $filter == '6' ? 'selected' : '' }}>Menang</option>
-                                                <option value="7" {{ $filter == '7' ? 'selected' : '' }}>Kalah</option>
-                                                <option value="8" {{ $filter == '8' ? 'selected' : '' }}>Terkontrak
+                                                <option value="5" {{ $filterStage == '5' ? 'selected' : '' }}>Perolehan</option>
+                                                <option value="6" {{ $filterStage == '6' ? 'selected' : '' }}>Menang</option>
+                                                <option value="7" {{ $filterStage == '7' ? 'selected' : '' }}>Kalah</option>
+                                                <option value="8" {{ $filterStage == '8' ? 'selected' : '' }}>Terkontrak
                                                 </option>
-                                                <option value="9" {{ $filter == '9' ? 'selected' : '' }}>Terendah</option>
-                                                <option value="10" {{ $filter == '10' ? 'selected' : '' }}>Selesai</option>
+                                                <option value="9" {{ $filterStage == '9' ? 'selected' : '' }}>Terendah</option>
+                                                <option value="10" {{ $filterStage == '10' ? 'selected' : '' }}>Selesai</option>
                                             </select>
                                         </div>
 
@@ -221,6 +221,18 @@
                                                 @endforeach
                                             </select>
                                         </div>
+
+                                        <!--begin::Select Options-->
+                                        <select id="tahun-proyek" name="tahun-proyek"
+                                            class="form-select form-select-solid select2-hidden-accessible mx-3"
+                                            data-control="select2" data-hide-search="true" data-placeholder="Tahun"
+                                            tabindex="-1" aria-hidden="true">
+                                                <option value="" selected></option>
+                                                @foreach ($tahun_proyeks as $tahun)
+                                                    <option value="{{$tahun}}" {{$selected_year == $tahun ? "selected" : ""}}>{{$tahun}}</option>
+                                                @endforeach
+                                        </select>
+                                        <!--end::Select Options-->
 
                                         {{-- <div id="filter" class="d-flex align-items-center position-relative">
                                             <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
