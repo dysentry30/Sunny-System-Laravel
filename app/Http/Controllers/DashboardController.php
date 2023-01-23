@@ -69,7 +69,7 @@ class DashboardController extends Controller
             $unitKerja = UnitKerja::orderBy('unit_kerja')->get()->whereNotIn("divcode", ["B", "C", "D", "8"]);
             // dd($unitKerja);
             $proyeks = Proyek::with(['Forecasts', 'UnitKerja', 'ContractManagements', "SumberDana"])->where("tahun_perolehan", "=", $year)->get();
-            $paretoProyeks = Proyek::with(['Forecasts', 'UnitKerja', 'ContractManagements'])->where("proyeks.jenis_proyek", "!=", "I")->get();
+            $paretoProyeks = Proyek::with(['Forecasts', 'UnitKerja', 'ContractManagements'])->where("proyeks.jenis_proyek", "!=", "I")->where("proyeks.tahun_perolehan", "=", $year)->get();
             $contracts = ContractManagements::join("proyeks", "proyeks.kode_proyek", "=", "contract_managements.project_id")->get();
             $dops = Dop::orderBy('dop')->get();
             // $dopJoin = Dop::join("proyeks", "dops.dop", "=", "proyeks.dop")->get();
@@ -94,7 +94,7 @@ class DashboardController extends Controller
             // if ($unit_kerja_user instanceof \Illuminate\Support\Collection) {
             $contracts = ContractManagements::join("proyeks", "proyeks.kode_proyek", "=", "contract_managements.project_id")->get();
             $proyeks = Proyek::with(['Forecasts', 'UnitKerja', 'ContractManagements', "SumberDana"])->where("tahun_perolehan", "=", $year)->get();
-            $paretoProyeks = Proyek::with(['Forecasts', 'UnitKerja', 'ContractManagements'])->where("proyeks.jenis_proyek", "!=", "I")->get()->whereIn("unit_kerja", $unit_kerja_user->toArray());
+            $paretoProyeks = Proyek::with(['Forecasts', 'UnitKerja', 'ContractManagements'])->where("proyeks.jenis_proyek", "!=", "I")->where("proyeks.tahun_perolehan", "=", $year)->get()->whereIn("unit_kerja", $unit_kerja_user->toArray());
             $claims = ClaimManagements::join("proyeks", "proyeks.kode_proyek", "=", "claim_managements.kode_proyek")->get()->whereIn("unit_kerja", $unit_kerja_user->toArray());
             $unitKerja = UnitKerja::get()->whereIn("divcode", $unit_kerja_user->toArray());
             // $nilaiHistoryForecast = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("history_forecast.periode_prognosa", "=", $request->get("periode-prognosa") != "" ? (string) $request->get("periode-prognosa") : date("m"))->whereYear("history_forecast.created_at", "=", (string) $request->get("tahun-history") != "" ? (string) $request->get("tahun-history") : date("Y"))->get()->whereIn("unit_kerja", $unit_kerja_user->toArray());
@@ -934,16 +934,44 @@ class DashboardController extends Controller
         })->sum("value");
 
         if(!empty($contracts_pelaksanaan)){
-            $perubahan = $contracts_pelaksanaan->map(function($cp){
-                return $cp->PerubahanKontrak;
-            })->flatten();
-            dd($perubahan);
-            $perubahan_total = $perubahan->sum('biaya_pengajuan');
-            $kategori_kontrak = $perubahan->groupBy("jenis_perubahan")->map(function($item, $key) use ($totalKontrakFull){
-                $biaya_total = (int) $item->sum('biaya_pengajuan');
-                $persentase_kategori = (float) $biaya_total * 100 / (float) $totalKontrakFull;
-                return[$key, $item->count(), $biaya_total, number_format($persentase_kategori, 2)];
+            $kategori = collect(["VO", "Klaim", "Anti Klaim", "Klaim Asuransi"]);
+            $perubahan = $kategori->map(function($item) use($contracts_pelaksanaan) {
+                $result = collect();
+                foreach($contracts_pelaksanaan as $cp) {
+                    $counter = 0;
+                    $nilai = 0;
+                    // $qualified_kontrak = collect();
+                    
+                    foreach($cp->PerubahanKontrak as $pk) {
+                        if($pk->jenis_perubahan == $item) {
+                            $result[$item] = ["jenis_perubahan" => $item, "total_item" => ++$counter, "total_nilai" => $nilai += $pk->biaya_pengajuan];
+                        } else {
+                            if(!empty($result[$item])) {
+                                $data = $result[$item];
+                                $data["jenis_perubahan"] = $data["jenis_perubahan"];
+                                $data["total_item"] = $data["total_item"];
+                                $data["total_nilai"] = $data["total_nilai"];
+                            } else {
+                                $result[$item] = ["jenis_perubahan" => $item, "total_item" => 0, "total_nilai" => 0];
+                            }
+                        }
+                    }
+                }
+                return $result;
+            });
+            // dd($perubahan);
+            $kategori_kontrak = $perubahan->map(function($p, $key) use($perubahan, $totalKontrakFull) {
+                $data = $perubahan[$key]->first();
+                // $data["persen"] = ($data["total_nilai"] / $totalKontrakFull) * 100;
+                $data["persen"] = Percentage::fromFractionAndTotal($data["total_nilai"], $totalKontrakFull)->asString();
+                return $data;
             })->values();
+            $perubahan_total = $kategori_kontrak->sum('total_nilai');
+            // $kategori_kontrak = $perubahan->groupBy("jenis_perubahan")->map(function($item, $key) use ($totalKontrakFull){
+            //     $biaya_total = (int) $item->sum('biaya_pengajuan');
+            //     $persentase_kategori = (float) $biaya_total * 100 / (float) $totalKontrakFull;
+            //     return[$key, $item->count(), $biaya_total, number_format($persentase_kategori, 2)];
+            // })->values();
             // dd($kategori_kontrak);
         }else{
             $perubahan_total = 0;

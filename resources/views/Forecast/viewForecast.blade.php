@@ -922,7 +922,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                         
                                                                         @foreach ($dop->UnitKerjas as $unitKerja)
                                                                             @php
-                                                                                $unitKerja->Proyeks = $unitKerja->Proyeks;
+                                                                                $unitKerja->Proyeks = $unitKerja->Proyeks->where("tahun_perolehan", "=", $year);
                                                                             @endphp
                                                                             @php
                                                                                 $unit_kerja_name = preg_replace("/[^\w]/", "-", $unitKerja->unit_kerja);                                                                                

@@ -66,6 +66,7 @@ class ProyekController extends Controller
         $filterJenis = $request->query("filter-jenis");
         $filterTipe = $request->query("filter-tipe");
         $filterUnit = $request->query("filter-unit");
+        $selected_year = $request->query("tahun-proyek");
         // dd($column);
         // $proyekBerjalan = ProyekBerjalans::all();
         // dd($proyekBerjalan);
@@ -91,8 +92,10 @@ class ProyekController extends Controller
                 $proyeks = Proyek::with(['UnitKerja', 'Forecasts', 'proyekBerjalan'])->sortable()->where("unit_kerja", "=", $unit_kerja_user);
             }
         }
-        
-        // $proyeks = $proyeks->where("tahun_perolehan", "=", $year);
+        $tahun_proyeks = $proyeks->get()->groupBy("tahun_perolehan")->keys();
+        if(!empty($selected_year)) {
+            $proyeks = $proyeks->where("tahun_perolehan", "=", $selected_year);
+        }
 
         // Begin::FILTER
         // if (!empty($column)) {
@@ -128,9 +131,9 @@ class ProyekController extends Controller
         // dd($filter);
 
         if (empty($datatables)) {
-            return view('3_Proyek', compact(["proyeks", "cari", "column", "filter", "customers", "sumberdanas", "unitkerjas", "jenisProyek", "tipeProyek"]));
+            return view('3_Proyek', compact(["tahun_proyeks", "filterStage", "selected_year", "proyeks", "cari", "column", "filter", "customers", "sumberdanas", "unitkerjas", "jenisProyek", "tipeProyek"]));
         }
-        return view('3_DataSetProyek', compact(["proyeks", "cari", "column", "filter", "customers", "sumberdanas", "unitkerjas", "jenisProyek", "tipeProyek"]));
+        return view('3_DataSetProyek', compact(["tahun_proyeks", "filterStage", "selected_year" ,"proyeks", "cari", "column", "filter", "customers", "sumberdanas", "unitkerjas", "jenisProyek", "tipeProyek"]));
     }
 
     public function save(Request $request, Proyek $newProyek)

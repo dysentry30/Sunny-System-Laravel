@@ -92,16 +92,26 @@ Route::get('/logout', [UserController::class, 'logout'])->middleware("userAuth")
 
 // Route::post('/createUser', [UserController::class, 'testLogin']);
 // end :: Login
-
+function generate_new_kode($val) {
+    $no_urut = random_int(100,999);
+    $no_urut = str_pad(strval($no_urut), 3, 0, STR_PAD_LEFT);
+    $kode_proyek = $val;
+    $is_kode_proyek_exist = Proyek::find($kode_proyek);
+    if(!empty($is_kode_proyek_exist)) {
+        $kode_proyek = generate_new_kode($kode_proyek);
+    }
+    return $kode_proyek;
+}
 Route::get('/generate-kode-proyek/{kode_proyek}', function ($kode_proyek) {
     
     $list_kode_proyek = collect(explode("-",$kode_proyek));
     $list_new_kode_proyek = collect();
+    $counter = 253;
     foreach($list_kode_proyek as $key => $p) {
 
         $newProyek = Proyek::find($p);
         // if(empty($newProyek->tahun_perolehan) && $newProyek->tahun_perolehan != 2023 && $newProyek->is_rkap != true) dd($newProyek);
-        if(empty($newProyek->tahun_perolehan) && empty($newProyek->is_rkap)) continue;
+        if(empty($newProyek) && empty($newProyek->tahun_perolehan) && empty($newProyek->is_rkap)) continue;
         
         //begin::Generate Kode Proyek
         
@@ -115,7 +125,7 @@ Route::get('/generate-kode-proyek/{kode_proyek}', function ($kode_proyek) {
             $newProyek->stage = 1;
         }
         $tahun = $newProyek->tahun_perolehan;
-    
+
         // Kondisi kalau tahun lebih besar dari 2021 maka O Selain itu A
         // $kode_tahun = $tahun == 2021 ? "A" : "O";
         $kode_tahun = get_year_code($tahun);
@@ -126,7 +136,7 @@ Route::get('/generate-kode-proyek/{kode_proyek}', function ($kode_proyek) {
         // $no_urut = $generateProyek->count(function($p) use($kode_proyek) {
         //     return str_contains($p->kode_proyek, $kode_proyek);
         // }) + $key;
-        $no_urut = random_int(100,999);
+        $no_urut = ++$counter;
     
         // Untuk membuat 3 digit nomor urut terakhir
         $no_urut = str_pad(strval($no_urut), 3, 0, STR_PAD_LEFT);
@@ -137,24 +147,49 @@ Route::get('/generate-kode-proyek/{kode_proyek}', function ($kode_proyek) {
         //     // $no_urut = count($generateProyek)+1;
         //     $no_urut = (int) $generateProyek->last()->id + 1;
         // }
+        
         $kode_proyek = $kode_proyek . $no_urut;
         $is_kode_proyek_exist = Proyek::find($kode_proyek);
         if(!empty($is_kode_proyek_exist)) {
-            $kode_proyek = generate_new_kode($kode_proyek);
+            // $kode_proyek = generate_new_kode($kode_proyek);
+            $no_urut = ++$counter;
+        
+            // Untuk membuat 3 digit nomor urut terakhir
+            $no_urut = str_pad(strval($no_urut), 3, 0, STR_PAD_LEFT);
         }
-        $list_new_kode_proyek->push($kode_proyek);
-    }
-    function generate_new_kode($val) {
-        $no_urut = random_int(100,999);
-        $no_urut = str_pad(strval($no_urut), 3, 0, STR_PAD_LEFT);
-        $kode_proyek = $val;
-        $is_kode_proyek_exist = Proyek::find($kode_proyek);
-        if(!empty($is_kode_proyek_exist)) {
-            $kode_proyek = generate_new_kode($kode_proyek);
+        $pb = $newProyek->proyekBerjalan;
+        if(!empty($pb)) {
+            $new_pb = new ProyekBerjalans();
+            $new_pb->id_customer = $pb->id_customer;
+            $new_pb->name_customer = $pb->name_customer;
+            $new_pb->nama_proyek = $pb->nama_proyek;
+            $new_pb->kode_proyek = $kode_proyek;
+            $new_pb->pic_proyek = $pb->pic_proyek;
+            $new_pb->unit_kerja = $pb->unit_kerja;
+            $new_pb->jenis_proyek = $pb->jenis_proyek;
+            $new_pb->nilaiok_proyek = $pb->nilaiok_proyek;
+            $new_pb->stage = $pb->stage;
+            $new_pb->save();
         }
-        return $kode_proyek;
+        $newProyek->kode_proyek = $kode_proyek;
+
+        // // Sync Dokumen Proyek
+        // $attachment_menang = $newProyek->AttachmentMenang;
+        // $risk_tender_proyek_docs = $newProyek->RiskTenderProyek;
+        // $dokumen_prakualifikasi = $newProyek->DokumenPrakualifikasi;
+        // dump($attachment_menang, $risk_tender_proyek_docs, $dokumen_prakualifikasi);
+
+
+
+        // dd($new_pb);
+        // $list_new_kode_proyek->push($kode_proyek);
+        $newProyek->save();
     }
-    dd($list_new_kode_proyek);
+    if(!empty($new_pb)) {
+        return response()->json(["proyek" => $newProyek, "proyek_berjalan_new" => $new_pb, "proyek_berjalan_old" => $pb]);
+    }
+    return response()->json($newProyek);
+    // dd($list_new_kode_proyek);
     //end::Generate Kode Proyek
 });
 

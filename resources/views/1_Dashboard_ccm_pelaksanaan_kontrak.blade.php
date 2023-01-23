@@ -315,7 +315,7 @@
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-warning">
                                     {{-- <h2 class="m-0 text-center">{{ $table->jenis_claim }}</h2> --}}
-                                    <h2 class="m-0 text-center">{{ $table[0] }}</h2>
+                                    <h2 class="m-0 text-center">{{ $table["jenis_perubahan"] }}</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
@@ -323,7 +323,7 @@
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-secondary">
                                     {{-- <h2 class="m-0 text-center">{{ $table->total_proyek }}</h2> --}}
-                                    <h2 class="m-0 text-center">{{ $table[1] }}</h2>
+                                    <h2 class="m-0 text-center">{{ $table["total_item"] }}</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
@@ -331,7 +331,7 @@
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-secondary">
                                     {{-- <h2 class="m-0 text-center">Rp {{ number_format($table->total_nilai, 0, ".", ".") }}</h2> --}}
-                                    <h2 class="m-0 text-center">Rp {{ number_format($table[2], 0, ".", ".") }}</h2>
+                                    <h2 class="m-0 text-center">Rp {{ number_format($table["total_nilai"], 0, ".", ".") }}</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
@@ -339,7 +339,7 @@
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-secondary">
                                     {{-- <h2 class="m-0 text-center">{{ $table->total_persen }}</h2> --}}
-                                    <h2 class="m-0 text-center">{{ $table[3] }} %</h2>
+                                    <h2 class="m-0 text-center">{{ $table["persen"] }} </h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
