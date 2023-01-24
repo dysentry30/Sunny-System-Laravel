@@ -157,8 +157,27 @@
                                 <div class="card">
                                     <div class="card-title">
                                         <div class="row">
-                                            <div class="col-1">
-                                            <p class="mt-3 text-end">Periode : </p>
+                                            <div class="col">
+                                                @php
+                                                $now = Carbon\Carbon::now()->subMonths(2);
+                                                @endphp
+                                                <ul class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-5">
+                                                    @foreach (range(1,3) as $item)
+                                                        <!--begin:::Tab item Pasar Dini-->
+                                                        <li class="nav-item">
+                                                            <a class="nav-link text-active-primary {{$item == 3 ? "active" : ""}}" data-bs-toggle="tab"
+                                                                href="#kt_user_view_forecasts_{{(int) $now->format("m")}}_{{$now->format("Y")}}"
+                                                                style="font-size:14px;">{{$now->translatedFormat("F Y")}}</a>
+                                                        </li>
+                                                        @php
+                                                            $now = $now->addMonths(1);
+                                                        @endphp
+                                                        <!--end:::Tab item Pasar Dini-->
+                                                    @endforeach
+                                                </ul>
+                                            </div>
+                                            {{-- <div class="col-1">
+                                                <p class="mt-3 text-end">Periode : </p>
                                             </div>
                                             <div class="col-3">
                                                 <form action="/request-approval-history/2022" method="get">
@@ -190,7 +209,7 @@
                                                 <form action="" method="GET">
                                                     <button type="submit" class="btn btn-light">Reset</button>
                                                 </form>
-                                            </div>
+                                            </div> --}}
                                         </div>
                                     </div>
                                 </div>
@@ -202,318 +221,356 @@
                         <!--end::Card "style edited"-->
 
                         <!--begin::Post-->
-                        <div class="post d-flex flex-column-fluid" id="kt_post">
+                        <div class="post" id="kt_post">
                             <!--begin::Container-->
                             <div id="kt_content_container" class="w-100"
                                 style="overflow: auto; background-color:white; white-space: nowrap;">
                                 <!--begin::Contacts App- Edit Contact-->
-                                <div class="">
+                                @php
+                                    $now = Carbon\Carbon::now()->subMonths(2);
+                                @endphp
+                                <div class="tab-content">
+                                    @foreach (range(1,3) as $item)
+                                        <div class="tab-pane fade {{$item == 3 ? "show active" : ""}}" id="kt_user_view_forecasts_{{(int) $now->format("m")}}_{{$now->format("Y")}}" role="tabpanel">
 
-                                    <!--begin::All Content-->
-                                    <div class="col-xl-15">
+                                            <!--begin::All Content-->
+                                            <div class="col-xl-15">
 
-                                        <!--begin::Contacts-->
-                                        <div class="card card-flush h-lg-100"
-                                            style="max-height: 70vh; overflow-y: scroll; scroll-behavior: smooth;"
-                                            id="kt_contacts_main">
+                                                <!--begin::Contacts-->
+                                                <div class="card card-flush h-lg-100"
+                                                    style="max-height: 70vh; overflow-y: scroll; scroll-behavior: smooth;"
+                                                    id="kt_contacts_main">
 
-                                            <!--begin::Card body-->
-                                            <div class="card-body mt-0" style="background-color: white;">
-                                                @forelse ($historyForecast as $dop => $historyUnitKerjas)
-                                                    <!--begin::Card Content-->
-                                                    <div class="card-content mb-5">
-                                                        <div class="position-sticky start-0 bg-white border shadow-sm p-5 mb-3 text-center"
-                                                            style="z-index: 99; top:5px;">
-                                                            @php
-                                                                $month = "";
-                                                                switch ($historyUnitKerjas->first()->first()->periode_prognosa) {
-                                                                    case 1:
-                                                                        $month = "Januari";
-                                                                        break;
-                                                                    case 2:
-                                                                        $month = "Februari";
-                                                                        break;
-                                                                    case 3:
-                                                                        $month = "Maret";
-                                                                        break;
-                                                                    case 4:
-                                                                        $month = "April";
-                                                                        break;
-                                                                    case 5:
-                                                                        $month = "Mei";
-                                                                        break;
-                                                                    case 6:
-                                                                        $month = "Juni";
-                                                                        break;
-                                                                    case 7:
-                                                                        $month = "Juli";
-                                                                        break;
-                                                                    case 8:
-                                                                        $month = "Agustus";
-                                                                        break;
-                                                                    case 9:
-                                                                        $month = "September";
-                                                                        break;
-                                                                    case 10:
-                                                                        $month = "Oktober";
-                                                                        break;
-                                                                    case 11:
-                                                                        $month = "November";
-                                                                        break;
-                                                                    case 12:
-                                                                        $month = "Desember";
-                                                                        break;
+                                                    <!--begin::Card body-->
+                                                    <div class="card-body mt-0" style="background-color: white;">
+                                                        @php
+                                                            $historyForecast_new = $historyForecast->map(function ($h, $key) use($now, &$historyForecast) {
+                                                                $condition = false;
+                                                                if($condition) {
+                                                                    return $h->map(function ($histories) use(&$condition, $now) {
+                                                                        return $histories->map(function($ph) use(&$condition, $now) {
+                                                                            if($ph->periode_prognosa == (int) $now->format("m") && $ph->periode_prognosa == (int) $now->format("Y")) {
+                                                                                $condition = true;
+                                                                            }
+                                                                            return $ph;
+                                                                        });
+                                                                    });
+                                                                } else {
+                                                                    // unset($h);
+                                                                    return $historyForecast->forget($key);
                                                                 }
-                                                            @endphp
-                                                            {{-- <h4 class="h4">{{ $dop }} - Periode {{$month}} {{Carbon\Carbon::parse($historyUnitKerjas->first()->created_at, "UTC")->translatedFormat("F")}}</h4> --}}
-                                                            <h4 class="h4">{{ $dop }} - {{$historyUnitKerjas->first()->first()->created_at->translatedFormat("Y")}}</h4>
-                                                        </div>
-                                                        @foreach ($historyUnitKerjas as $unit_kerja => $unit_kerja_history)
-                                                            @foreach ($unit_kerja_history as $periode => $history)
-                                                                <div class="row mb-5">
-                                                                    <div class="col">
-                                                                        <div
-                                                                            class="card border shadow-sm bg-body border-dashed">
-                                                                            <div class="card-body">
-                                                                                <div
-                                                                                    class="row d-flex align-items-center justify-content-between w-100">
-                                                                                    <div class="col-9 text-wrap">
-                                                                                        <div
-                                                                                            class="d-flex align-items-center mb-3">
-                                                                                            <div class="col-6">
-                                                                                                <div class="row">
-                                                                                                    <div class="col text-end">
-                                                                                                        <span>Unit Kerja:
-                                                                                                        </span>
-                                                                                                    </div>
-                                                                                                    <div class="col">
-                                                                                                        <span><b>{{ $unit_kerja }}</b></span>
-                                                                                                    </div>
-                                                                                                </div>
+                                                            });
+                                                            // dd($historyForecast_new);
+                                                        @endphp
+                                                        @forelse ($historyForecast_new as $dop => $historyUnitKerjas)
+                                                            @if ($historyUnitKerjas->isNotEmpty())
+                                                                <!--begin::Card Content-->
+                                                                <div class="card-content mb-5">
+                                                                    <div class="position-sticky start-0 bg-white border shadow-sm p-5 mb-3 text-center"
+                                                                        style="z-index: 99; top:5px;">
+                                                                        @php
+                                                                            $month = "";
+                                                                            switch ($historyUnitKerjas->first()->first()->periode_prognosa) {
+                                                                                case 1:
+                                                                                    $month = "Januari";
+                                                                                    break;
+                                                                                case 2:
+                                                                                    $month = "Februari";
+                                                                                    break;
+                                                                                case 3:
+                                                                                    $month = "Maret";
+                                                                                    break;
+                                                                                case 4:
+                                                                                    $month = "April";
+                                                                                    break;
+                                                                                case 5:
+                                                                                    $month = "Mei";
+                                                                                    break;
+                                                                                case 6:
+                                                                                    $month = "Juni";
+                                                                                    break;
+                                                                                case 7:
+                                                                                    $month = "Juli";
+                                                                                    break;
+                                                                                case 8:
+                                                                                    $month = "Agustus";
+                                                                                    break;
+                                                                                case 9:
+                                                                                    $month = "September";
+                                                                                    break;
+                                                                                case 10:
+                                                                                    $month = "Oktober";
+                                                                                    break;
+                                                                                case 11:
+                                                                                    $month = "November";
+                                                                                    break;
+                                                                                case 12:
+                                                                                    $month = "Desember";
+                                                                                    break;
+                                                                            }
+                                                                        @endphp
+                                                                        {{-- <h4 class="h4">{{ $dop }} - Periode {{$month}} {{Carbon\Carbon::parse($historyUnitKerjas->first()->created_at, "UTC")->translatedFormat("F")}}</h4> --}}
+                                                                        <h4 class="h4">{{ $dop }} - {{$historyUnitKerjas->first()->first()->created_at->translatedFormat("Y")}}</h4>
+                                                                    </div>
+                                                                    @foreach ($historyUnitKerjas as $unit_kerja => $unit_kerja_history)
+                                                                        @foreach ($unit_kerja_history as $periode => $history)
+                                                                            <div class="row mb-5">
+                                                                                <div class="col">
+                                                                                    <div
+                                                                                        class="card border shadow-sm bg-body border-dashed">
+                                                                                        <div class="card-body">
+                                                                                            <div
+                                                                                                class="row d-flex align-items-center justify-content-between w-100">
+                                                                                                <div class="col-9 text-wrap">
+                                                                                                    <div
+                                                                                                        class="d-flex align-items-center mb-3">
+                                                                                                        <div class="col-6">
+                                                                                                            <div class="row">
+                                                                                                                <div class="col text-end">
+                                                                                                                    <span>Unit Kerja:
+                                                                                                                    </span>
+                                                                                                                </div>
+                                                                                                                <div class="col">
+                                                                                                                    <span><b>{{ $unit_kerja }}</b></span>
+                                                                                                                </div>
+                                                                                                            </div>
 
-                                                                                                @php
-                                                                                                    switch ($history->periode_prognosa) {
-                                                                                                        case 1:
-                                                                                                            $month = "Januari";
-                                                                                                            break;
-                                                                                                        case 2:
-                                                                                                            $month = "Februari";
-                                                                                                            break;
-                                                                                                        case 3:
-                                                                                                            $month = "Maret";
-                                                                                                            break;
-                                                                                                        case 4:
-                                                                                                            $month = "April";
-                                                                                                            break;
-                                                                                                        case 5:
-                                                                                                            $month = "Mei";
-                                                                                                            break;
-                                                                                                        case 6:
-                                                                                                            $month = "Juni";
-                                                                                                            break;
-                                                                                                        case 7:
-                                                                                                            $month = "Juli";
-                                                                                                            break;
-                                                                                                        case 8:
-                                                                                                            $month = "Agustus";
-                                                                                                            break;
-                                                                                                        case 9:
-                                                                                                            $month = "September";
-                                                                                                            break;
-                                                                                                        case 10:
-                                                                                                            $month = "Oktober";
-                                                                                                            break;
-                                                                                                        case 11:
-                                                                                                            $month = "November";
-                                                                                                            break;
-                                                                                                        case 12:
-                                                                                                            $month = "Desember";
-                                                                                                            break;
-                                                                                                    }
-                                                                                                @endphp
+                                                                                                            @php
+                                                                                                                switch ($history->periode_prognosa) {
+                                                                                                                    case 1:
+                                                                                                                        $month = "Januari";
+                                                                                                                        break;
+                                                                                                                    case 2:
+                                                                                                                        $month = "Februari";
+                                                                                                                        break;
+                                                                                                                    case 3:
+                                                                                                                        $month = "Maret";
+                                                                                                                        break;
+                                                                                                                    case 4:
+                                                                                                                        $month = "April";
+                                                                                                                        break;
+                                                                                                                    case 5:
+                                                                                                                        $month = "Mei";
+                                                                                                                        break;
+                                                                                                                    case 6:
+                                                                                                                        $month = "Juni";
+                                                                                                                        break;
+                                                                                                                    case 7:
+                                                                                                                        $month = "Juli";
+                                                                                                                        break;
+                                                                                                                    case 8:
+                                                                                                                        $month = "Agustus";
+                                                                                                                        break;
+                                                                                                                    case 9:
+                                                                                                                        $month = "September";
+                                                                                                                        break;
+                                                                                                                    case 10:
+                                                                                                                        $month = "Oktober";
+                                                                                                                        break;
+                                                                                                                    case 11:
+                                                                                                                        $month = "November";
+                                                                                                                        break;
+                                                                                                                    case 12:
+                                                                                                                        $month = "Desember";
+                                                                                                                        break;
+                                                                                                                }
+                                                                                                            @endphp
 
-                                                                                                <div class="row">
-                                                                                                    <div class="col text-end">
-                                                                                                        <span>Bulan Otorisasi:
-                                                                                                        </span>
-                                                                                                    </div>
-                                                                                                    <div class="col">
-                                                                                                        <span><b>{{ $month }}</b></span>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <div class="col-6">
-                                                                                                <div class="row">
-                                                                                                    <div class="col">
-                                                                                                        <div
-                                                                                                            class="d-flex align-items-center">
-                                                                                                            <div class="col-4">
-                                                                                                                <span>Nilai
-                                                                                                                    RKAP:
-                                                                                                                </span>
+                                                                                                            <div class="row">
+                                                                                                                <div class="col text-end">
+                                                                                                                    <span>Bulan Otorisasi:
+                                                                                                                    </span>
+                                                                                                                </div>
+                                                                                                                <div class="col">
+                                                                                                                    <span><b>{{ $month }}</b></span>
+                                                                                                                </div>
                                                                                                             </div>
-                                                                                                            <div class="col">
-                                                                                                                <span><b>Rp.
-                                                                                                                        <span
-                                                                                                                            class="text-end">{{ number_format($history->rkap_forecast, 0, '.', '.') }}</span></b></span>
+                                                                                                        </div>
+                                                                                                        <div class="col-6">
+                                                                                                            <div class="row">
+                                                                                                                <div class="col">
+                                                                                                                    <div
+                                                                                                                        class="d-flex align-items-center">
+                                                                                                                        <div class="col-4">
+                                                                                                                            <span>Nilai
+                                                                                                                                RKAP:
+                                                                                                                            </span>
+                                                                                                                        </div>
+                                                                                                                        <div class="col">
+                                                                                                                            <span><b>Rp.
+                                                                                                                                    <span
+                                                                                                                                        class="text-end">{{ number_format($history->rkap_forecast, 0, '.', '.') }}</span></b></span>
+                                                                                                                        </div>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                            <div class="row">
+                                                                                                                <div class="col">
+                                                                                                                    <div
+                                                                                                                        class="d-flex align-items-center">
+                                                                                                                        <div class="col-4">
+                                                                                                                            <span>Nilai
+                                                                                                                                Forecast:
+                                                                                                                            </span>
+                                                                                                                        </div>
+                                                                                                                        <div class="col">
+                                                                                                                            <span><b>Rp.
+                                                                                                                                    <span
+                                                                                                                                        class="text-end">{{ number_format($history->nilai_forecast, 0, '.', '.') }}</span></b></span>
+                                                                                                                        </div>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                            <div class="row">
+                                                                                                                <div class="col">
+                                                                                                                    <div
+                                                                                                                        class="d-flex align-items-center">
+                                                                                                                        <div class="col-4">
+                                                                                                                            <span>Nilai
+                                                                                                                                Realisasi:
+                                                                                                                            </span>
+                                                                                                                        </div>
+                                                                                                                        <div class="col">
+                                                                                                                            <span><b>Rp.
+                                                                                                                                    <span
+                                                                                                                                        class="text-end">{{ number_format($history->realisasi_forecast, 0, '.', '.') }}</span></b></span>
+                                                                                                                        </div>
+                                                                                                                    </div>
+                                                                                                                </div>
                                                                                                             </div>
                                                                                                         </div>
                                                                                                     </div>
                                                                                                 </div>
-                                                                                                <div class="row">
-                                                                                                    <div class="col">
-                                                                                                        <div
-                                                                                                            class="d-flex align-items-center">
-                                                                                                            <div class="col-4">
-                                                                                                                <span>Nilai
-                                                                                                                    Forecast:
-                                                                                                                </span>
+                                                                                                <div class="col-3">
+                                                                                                    @if (Auth::user()->check_administrator || str_contains(Auth::user()->name, "PIC"))
+                                                                                                        @if ($history->is_approved_1 == "t")
+                                                                                                            <div
+                                                                                                                class="d-flex flex-row justify-content-evenly align-items-center w-100">
+                                                                                                                <button type="button"
+                                                                                                                    class="btn btn-sm btn-success text-white disabled"
+                                                                                                                    style="background-color: rgb(17, 179, 17)">Approved</button>
+                                                                                                                @if ($history->is_request_unlock == "f")
+                                                                                                                    <form action=""></form>
+                                                                                                                    <form action="/history/unlock" onsubmit="requestUnlock()" class="mt-4" method="POST">
+                                                                                                                        @csrf
+                                                                                                                        <input type="hidden" name="unit_kerja" value="{{$unit_kerja}}">
+                                                                                                                        <input type="hidden" name="periode-prognosa" value="{{$history->periode_prognosa}}">
+                                                                                                                        <button type="submit"
+                                                                                                                            class="btn btn-sm btn-active-primary text-white"
+                                                                                                                            style="background-color:#008CB4;">Unlock Forecast</button>
+                                                                                                                    </form>
+                                                                                                                @endif
                                                                                                             </div>
-                                                                                                            <div class="col">
-                                                                                                                <span><b>Rp.
-                                                                                                                        <span
-                                                                                                                            class="text-end">{{ number_format($history->nilai_forecast, 0, '.', '.') }}</span></b></span>
+                                                                                                        @elseif($history->is_approved_1 == "f")
+                                                                                                            <div
+                                                                                                                class="d-flex flex-row justify-content-evenly align-items-center w-100">
+                                                                                                                <button type="button"
+                                                                                                                    class="btn btn-sm btn-danger text-white disabled">Approval ditolak</button>
                                                                                                             </div>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                                <div class="row">
-                                                                                                    <div class="col">
-                                                                                                        <div
-                                                                                                            class="d-flex align-items-center">
-                                                                                                            <div class="col-4">
-                                                                                                                <span>Nilai
-                                                                                                                    Realisasi:
-                                                                                                                </span>
+                                                                                                        @else
+                                                                                                            <div
+                                                                                                                class="d-flex flex-row justify-content-evenly align-items-center w-100">
+                                                                                                                <button type="button"
+                                                                                                                    onclick="confirmAction(this, '{{ $unit_kerja }}', true, '{{$history->periode_prognosa}}')"
+                                                                                                                    class="btn btn-sm btn-active-primary text-white"
+                                                                                                                    style="background-color:#008CB4;">Approve</button>
+                                                                                                                <button type="button"
+                                                                                                                    onclick="confirmAction(this, '{{ $unit_kerja }}', false, '{{$history->periode_prognosa}}')"
+                                                                                                                    class="btn btn-sm btn-light btn-active-danger">Cancel</button>
                                                                                                             </div>
-                                                                                                            <div class="col">
-                                                                                                                <span><b>Rp.
-                                                                                                                        <span
-                                                                                                                            class="text-end">{{ number_format($history->realisasi_forecast, 0, '.', '.') }}</span></b></span>
+                                                                                                        @endif
+                                                                                                    @else
+                                                                                                        @if ($history->is_approved_1 == "t")
+                                                                                                            <div
+                                                                                                                class="d-flex flex-row justify-content-evenly align-items-center w-100">
+                                                                                                                <button type="button"
+                                                                                                                    class="btn btn-sm btn-success text-white disabled"
+                                                                                                                    style="background-color: rgb(17, 179, 17)">Approved</button>
+                                                                                                                <form action=""></form>
+                                                                                                                @if($history->is_request_unlock == "f")
+                                                                                                                    <button type="button"
+                                                                                                                        class="btn btn-sm btn-active-primary text-white disabled ms-7"
+                                                                                                                        style="background-color:#008CB4;">Menunggu Approval Unlock...</button>
+                                                                                                                @elseif($history->is_request_unlock == "t")
+                                                                                                                    <form action="/forecast/set-unlock" onsubmit="requestUnlock()" class="mt-4" method="POST">
+                                                                                                                        @csrf
+                                                                                                                        <input type="hidden" name="unit_kerja" value="{{$unit_kerja}}">
+                                                                                                                        <input type="hidden" name="periode-prognosa" value="{{$history->periode_prognosa}}">
+                                                                                                                        <button type="submit"
+                                                                                                                        onclick="confirmDeleteHistory(this); return false"
+                                                                                                                        class="btn btn-sm btn-danger text-white"
+                                                                                                                        style="background-color:#008CB4;">Hapus History</button>
+                                                                                                                    </form>
+                                                                                                                @else
+                                                                                                                    <form action="/history/request-unlock" onsubmit="requestUnlock()" class="mt-4" method="POST">
+                                                                                                                        @csrf
+                                                                                                                        <input type="hidden" name="unit_kerja" value="{{$unit_kerja}}">
+                                                                                                                        <input type="hidden" name="periode-prognosa" value="{{$history->periode_prognosa}}">
+                                                                                                                        <button type="submit"
+                                                                                                                            class="btn btn-sm btn-active-primary text-white"
+                                                                                                                            style="background-color:#008CB4;">Request Unlock</button>
+                                                                                                                    </form>
+                                                                                                                @endif 
                                                                                                             </div>
-                                                                                                        </div>
-                                                                                                    </div>
+                                                                                                        @elseif($history->is_approved_1 == "f")
+                                                                                                            <div
+                                                                                                                class="d-flex flex-row justify-content-evenly align-items-center w-100">
+                                                                                                                <button type="button"
+                                                                                                                    class="btn btn-sm btn-danger text-white disabled">Approval ditolak</button>
+                                                                                                                <form action=""></form>
+                                                                                                                <form action="/forecast/set-unlock"class="mt-4" method="POST">
+                                                                                                                    @csrf
+                                                                                                                    <input type="hidden" name="unit_kerja" value="{{$unit_kerja}}">
+                                                                                                                    <input type="hidden" name="periode-prognosa" value="{{$history->periode_prognosa}}">
+                                                                                                                    <button type="submit"
+                                                                                                                    class="btn btn-sm btn-active-primary text-white"
+                                                                                                                    style="background-color:#008CB4;">Hapus History</button>
+                                                                                                                </form>
+                                                                                                            </div>
+                                                                                                        @else
+                                                                                                            <div
+                                                                                                                class="d-flex flex-row justify-content-evenly align-items-center w-100">
+                                                                                                                <button type="button"
+                                                                                                                    class="btn btn-sm btn-active-primary text-white disabled"
+                                                                                                                    style="background-color:#008CB4;">Menunggu untuk approval...</button>
+                                                                                                            </div>
+                                                                                                        @endif
+                                                                                                    @endif
                                                                                                 </div>
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
-                                                                                    <div class="col-3">
-                                                                                        @if (Auth::user()->check_administrator || str_contains(Auth::user()->name, "PIC"))
-                                                                                            @if ($history->is_approved_1 == "t")
-                                                                                                <div
-                                                                                                    class="d-flex flex-row justify-content-evenly align-items-center w-100">
-                                                                                                    <button type="button"
-                                                                                                        class="btn btn-sm btn-success text-white disabled"
-                                                                                                        style="background-color: rgb(17, 179, 17)">Approved</button>
-                                                                                                    @if ($history->is_request_unlock == "f")
-                                                                                                        <form action=""></form>
-                                                                                                        <form action="/history/unlock" onsubmit="requestUnlock()" class="mt-4" method="POST">
-                                                                                                            @csrf
-                                                                                                            <input type="hidden" name="unit_kerja" value="{{$unit_kerja}}">
-                                                                                                            <input type="hidden" name="periode-prognosa" value="{{$history->periode_prognosa}}">
-                                                                                                            <button type="submit"
-                                                                                                                class="btn btn-sm btn-active-primary text-white"
-                                                                                                                style="background-color:#008CB4;">Unlock Forecast</button>
-                                                                                                        </form>
-                                                                                                    @endif
-                                                                                                </div>
-                                                                                            @elseif($history->is_approved_1 == "f")
-                                                                                                <div
-                                                                                                    class="d-flex flex-row justify-content-evenly align-items-center w-100">
-                                                                                                    <button type="button"
-                                                                                                        class="btn btn-sm btn-danger text-white disabled">Approval ditolak</button>
-                                                                                                </div>
-                                                                                            @else
-                                                                                                <div
-                                                                                                    class="d-flex flex-row justify-content-evenly align-items-center w-100">
-                                                                                                    <button type="button"
-                                                                                                        onclick="confirmAction(this, '{{ $unit_kerja }}', true, '{{$history->periode_prognosa}}')"
-                                                                                                        class="btn btn-sm btn-active-primary text-white"
-                                                                                                        style="background-color:#008CB4;">Approve</button>
-                                                                                                    <button type="button"
-                                                                                                        onclick="confirmAction(this, '{{ $unit_kerja }}', false, '{{$history->periode_prognosa}}')"
-                                                                                                        class="btn btn-sm btn-light btn-active-danger">Cancel</button>
-                                                                                                </div>
-                                                                                            @endif
-                                                                                        @else
-                                                                                            @if ($history->is_approved_1 == "t")
-                                                                                                <div
-                                                                                                    class="d-flex flex-row justify-content-evenly align-items-center w-100">
-                                                                                                    <button type="button"
-                                                                                                        class="btn btn-sm btn-success text-white disabled"
-                                                                                                        style="background-color: rgb(17, 179, 17)">Approved</button>
-                                                                                                    <form action=""></form>
-                                                                                                    @if($history->is_request_unlock == "f")
-                                                                                                        <button type="button"
-                                                                                                            class="btn btn-sm btn-active-primary text-white disabled ms-7"
-                                                                                                            style="background-color:#008CB4;">Menunggu Approval Unlock...</button>
-                                                                                                    @elseif($history->is_request_unlock == "t")
-                                                                                                        <form action="/forecast/set-unlock" onsubmit="requestUnlock()" class="mt-4" method="POST">
-                                                                                                            @csrf
-                                                                                                            <input type="hidden" name="unit_kerja" value="{{$unit_kerja}}">
-                                                                                                            <input type="hidden" name="periode-prognosa" value="{{$history->periode_prognosa}}">
-                                                                                                            <button type="submit"
-                                                                                                            onclick="confirmDeleteHistory(this); return false"
-                                                                                                            class="btn btn-sm btn-danger text-white"
-                                                                                                            style="background-color:#008CB4;">Hapus History</button>
-                                                                                                        </form>
-                                                                                                    @else
-                                                                                                        <form action="/history/request-unlock" onsubmit="requestUnlock()" class="mt-4" method="POST">
-                                                                                                            @csrf
-                                                                                                            <input type="hidden" name="unit_kerja" value="{{$unit_kerja}}">
-                                                                                                            <input type="hidden" name="periode-prognosa" value="{{$history->periode_prognosa}}">
-                                                                                                            <button type="submit"
-                                                                                                                class="btn btn-sm btn-active-primary text-white"
-                                                                                                                style="background-color:#008CB4;">Request Unlock</button>
-                                                                                                        </form>
-                                                                                                    @endif 
-                                                                                                </div>
-                                                                                            @elseif($history->is_approved_1 == "f")
-                                                                                                <div
-                                                                                                    class="d-flex flex-row justify-content-evenly align-items-center w-100">
-                                                                                                    <button type="button"
-                                                                                                        class="btn btn-sm btn-danger text-white disabled">Approval ditolak</button>
-                                                                                                    <form action=""></form>
-                                                                                                    <form action="/forecast/set-unlock"class="mt-4" method="POST">
-                                                                                                        @csrf
-                                                                                                        <input type="hidden" name="unit_kerja" value="{{$unit_kerja}}">
-                                                                                                        <input type="hidden" name="periode-prognosa" value="{{$history->periode_prognosa}}">
-                                                                                                        <button type="submit"
-                                                                                                        class="btn btn-sm btn-active-primary text-white"
-                                                                                                        style="background-color:#008CB4;">Hapus History</button>
-                                                                                                    </form>
-                                                                                                </div>
-                                                                                            @else
-                                                                                                <div
-                                                                                                    class="d-flex flex-row justify-content-evenly align-items-center w-100">
-                                                                                                    <button type="button"
-                                                                                                        class="btn btn-sm btn-active-primary text-white disabled"
-                                                                                                        style="background-color:#008CB4;">Menunggu untuk approval...</button>
-                                                                                                </div>
-                                                                                            @endif
-                                                                                        @endif
-                                                                                    </div>
                                                                                 </div>
                                                                             </div>
-                                                                        </div>
-                                                                    </div>
+                                                                        @endforeach
+                                                                    @endforeach
                                                                 </div>
-                                                            @endforeach
-                                                        @endforeach
+                                                                <hr>
+                                                                <!--begin::Card Content-->
+                                                            @else 
+                                                                <div class="row">
+                                                                    <div class="col text-center">Data tidak ditemukan!</div>
+                                                                </div>
+                                                                @php
+                                                                    continue;
+                                                                @endphp
+                                                            @endif
+                                                        @empty
+                                                            <div class="row">
+                                                                <div class="col text-center">Data tidak ditemukan!</div>
+                                                            </div>
+                                                        @endforelse
                                                     </div>
-                                                    <hr>
-                                                    <!--begin::Card Content-->
-                                                @empty
-                                                    <div class="row">
-                                                        <div class="col text-center">Data tidak ditemukan!</div>
-                                                    </div>
-                                                @endforelse
+                                                    <!--end::Card body-->
+                                                </div>
+                                                <!--end::Contacts-->
                                             </div>
-                                            <!--end::Card body-->
+                                            <!--end::All Content-->
                                         </div>
-                                        <!--end::Contacts-->
-                                    </div>
-                                    <!--end::All Content-->
+                                        @php
+                                            $now = $now->addMonths(1);
+                                        @endphp
+                                    @endforeach
                                 </div>
                                 <!--end::Contacts App- Edit Contact-->
                             </div>
