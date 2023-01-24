@@ -145,94 +145,99 @@
                                 <!--Begin:: BUTTON FILTER-->
                                 <form action="" class="d-flex flex-row w-auto" method="get">
                                     <!--Begin:: Select Options-->
-                                    <select id="column" name="column" onchange="changes(this)"
+                                    {{-- <select id="column" name="column" onchange="changes(this)"
                                         class="form-select form-select-solid select2-hidden-accessible"
                                         style="margin-right: 2rem" data-control="select2" data-hide-search="true"
                                         data-placeholder="Column" data-select2-id="select2-data-bulan" tabindex="-1"
                                         aria-hidden="true">
-                                        {{-- <option {{ $column == '' ? 'selected' : '' }}></option> --}}
-                                        {{-- <option value="nama_proyek" {{ $column == 'nama_proyek' ? 'selected' : '' }}>Nama Proyek</option> --}}
-                                        {{-- <option value="kode_proyek" {{ $column == 'kode_proyek' ? 'selected' : '' }}>Kode Proyek</option> --}}
-                                        {{-- <option value="tahun_perolehan" {{ $column == 'tahun_perolehan' ? 'selected' : '' }}>Tahun Perolehan</option> --}}
+                                        <option {{ $column == '' ? 'selected' : '' }}></option>
+                                        <option value="nama_proyek" {{ $column == 'nama_proyek' ? 'selected' : '' }}>Nama Proyek</option>
+                                        <option value="kode_proyek" {{ $column == 'kode_proyek' ? 'selected' : '' }}>Kode Proyek</option>
+                                        <option value="tahun_perolehan" {{ $column == 'tahun_perolehan' ? 'selected' : '' }}>Tahun Perolehan</option>
                                         <option value="stage" {{$column == "stage" ? "selected" : ""}}>Stage</option>
                                         <option value="unit_kerja" {{$column == "unit_kerja" ? "selected" : ""}}>Unit Kerja</option>
                                         <option value="jenis_proyek" {{$column == "jenis_proyek" ? "selected" : ""}}>Jenis Proyek</option>
                                         <option value="tipe_proyek" {{$column == "tipe_proyek" ? "selected" : ""}}>Tipe Proyek</option>
 
-                                    </select>
+                                    </select> --}}
                                     <!--End:: Select Options-->
 
+                                    
                                     <!--begin:: Input Filter-->
-                                        <div style="" id="filterStage" class="d-flex align-items-center position-relative">
-                                            <select name="filter-stage"
-                                                class="form-select form-select-solid select2-hidden-accessible w-auto ms-2"
-                                                data-control="select2" data-hide-search="true" data-placeholder="Pilih Stage"
-                                                tabindex="-1" aria-hidden="true">
-                                                <option></option>
-                                                <option value="1" {{ $filterStage == '1' ? 'selected' : '' }}>Pasar Dini
-                                                </option>
-                                                <option value="2" {{ $filterStage == '2' ? 'selected' : '' }}>Pasar Potensial
-                                                </option>
-                                                <option value="3" {{ $filterStage == '3' ? 'selected' : '' }}>Prakualifikasi
-                                                </option>
-                                                <option value="4" {{ $filterStage == '4' ? 'selected' : '' }}>Tender Diikuti
-                                                </option>
-                                                <option value="5" {{ $filterStage == '5' ? 'selected' : '' }}>Perolehan</option>
-                                                <option value="6" {{ $filterStage == '6' ? 'selected' : '' }}>Menang</option>
-                                                <option value="7" {{ $filterStage == '7' ? 'selected' : '' }}>Kalah</option>
-                                                <option value="8" {{ $filterStage == '8' ? 'selected' : '' }}>Terkontrak
-                                                </option>
-                                                <option value="9" {{ $filterStage == '9' ? 'selected' : '' }}>Terendah</option>
-                                                <option value="10" {{ $filterStage == '10' ? 'selected' : '' }}>Selesai</option>
-                                            </select>
-                                        </div>
 
-                                        <div style="display: none !important" id="filterJenis" class="d-flex align-items-center position-relative">
-                                            <select name="filter-jenis"
-                                                class="form-select form-select-solid select2-hidden-accessible w-auto ms-2"
-                                                data-control="select2" data-hide-search="true" data-placeholder="Jenis Proyek"
-                                                tabindex="-1" aria-hidden="true">
-                                                <option></option>
-                                                <option value="I" {{ $filter == 'I' ? 'selected' : '' }}>Internal</option>
-                                                <option value="N" {{ $filter == 'N' ? 'selected' : '' }}>External</option>
-                                                <option value="J" {{ $filter == 'J' ? 'selected' : '' }}>JO</option>
-                                            </select>
-                                        </div>
-
-                                        <div style="display: none !important" id="filterTipe" class="d-flex align-items-center position-relative">
-                                            <select name="filter-tipe"
-                                                class="form-select form-select-solid select2-hidden-accessible w-auto ms-2"
-                                                data-control="select2" data-hide-search="true" data-placeholder="Tipe Proyek"
-                                                tabindex="-1" aria-hidden="true">
-                                                <option></option>
-                                                <option value="R" {{ $filter == 'R' ? 'selected' : '' }}>Retail</option>
-                                                <option value="P" {{ $filter == 'P' ? 'selected' : '' }}>Non-Retail</option>
-                                            </select>
-                                        </div>
-
-                                        <div style="display: none !important" id="filterUnit" class="d-flex align-items-center position-relative">
-                                            <select name="filter-unit" class="form-select form-select-solid w-200px ms-2"
-                                                data-control="select2" data-hide-search="true" data-placeholder="Unit Kerja">
-                                                <option></option>
-                                                @foreach ($unitkerjas as $unitkerja)
-                                                    <option value="{{ $unitkerja->divcode }}"
-                                                        {{ old('unit-kerja') == $unitkerja->divcode ? 'selected' : '' }}>
-                                                        {{ $unitkerja->unit_kerja }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-
-                                        <!--begin::Select Options-->
+                                    <!--begin::Select Options-->
+                                    <div style="" id="filterTahun" class="d-flex align-items-center position-relative me-3">
                                         <select id="tahun-proyek" name="tahun-proyek"
                                             class="form-select form-select-solid select2-hidden-accessible mx-3"
                                             data-control="select2" data-hide-search="true" data-placeholder="Tahun"
                                             tabindex="-1" aria-hidden="true">
-                                                <option value="" selected></option>
+                                                <option value="">{{ date("Y") }}</option>
                                                 @foreach ($tahun_proyeks as $tahun)
                                                     <option value="{{$tahun}}" {{$selected_year == $tahun ? "selected" : ""}}>{{$tahun}}</option>
                                                 @endforeach
                                         </select>
-                                        <!--end::Select Options-->
+                                    </div>
+                                    <!--end::Select Options-->
+
+                                    <div id="filterUnit" class="d-flex align-items-center position-relative">
+                                        <select name="filter-unit" class="form-select form-select-solid w-200px ms-2"
+                                            data-control="select2" data-hide-search="true" data-placeholder="Unit Kerja">
+                                            <option></option>
+                                            @foreach ($unitkerjas as $unitkerja)
+                                                <option value="{{ $unitkerja->divcode }}"
+                                                    {{ $filterUnit == $unitkerja->divcode ? 'selected' : '' }}>
+                                                    {{ $unitkerja->unit_kerja }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    
+                                    <div style="" id="filterStage" class="d-flex align-items-center position-relative">
+                                        <select name="filter-stage"
+                                            class="form-select form-select-solid select2-hidden-accessible w-auto ms-2"
+                                            data-control="select2" data-hide-search="true" data-placeholder="Pilih Stage"
+                                            tabindex="-1" aria-hidden="true">
+                                            <option></option>
+                                            <option value="1" {{ $filterStage == '1' ? 'selected' : '' }}>Pasar Dini
+                                            </option>
+                                            <option value="2" {{ $filterStage == '2' ? 'selected' : '' }}>Pasar Potensial
+                                            </option>
+                                            <option value="3" {{ $filterStage == '3' ? 'selected' : '' }}>Prakualifikasi
+                                            </option>
+                                            <option value="4" {{ $filterStage == '4' ? 'selected' : '' }}>Tender Diikuti
+                                            </option>
+                                            <option value="5" {{ $filterStage == '5' ? 'selected' : '' }}>Perolehan</option>
+                                            <option value="6" {{ $filterStage == '6' ? 'selected' : '' }}>Menang</option>
+                                            <option value="7" {{ $filterStage == '7' ? 'selected' : '' }}>Kalah</option>
+                                            <option value="8" {{ $filterStage == '8' ? 'selected' : '' }}>Terkontrak
+                                            </option>
+                                            {{-- <option value="9" {{ $filterStage == '9' ? 'selected' : '' }}>Terendah</option> --}}
+                                            {{-- <option value="10" {{ $filterStage == '10' ? 'selected' : '' }}>Selesai</option> --}}
+                                        </select>
+                                    </div>
+
+                                    <div id="filterJenis" class="d-flex align-items-center position-relative">
+                                        <select name="filter-jenis"
+                                            class="form-select form-select-solid select2-hidden-accessible w-auto ms-2"
+                                            data-control="select2" data-hide-search="true" data-placeholder="Jenis Proyek"
+                                            tabindex="-1" aria-hidden="true">
+                                            <option></option>
+                                            <option value="I" {{ $filterJenis == 'I' ? 'selected' : '' }}>Internal</option>
+                                            <option value="N" {{ $filterJenis == 'N' ? 'selected' : '' }}>External</option>
+                                            <option value="J" {{ $filterJenis == 'J' ? 'selected' : '' }}>JO</option>
+                                        </select>
+                                    </div>
+
+                                    <div id="filterTipe" class="d-flex align-items-center position-relative">
+                                        <select name="filter-tipe"
+                                            class="form-select form-select-solid select2-hidden-accessible w-auto ms-2"
+                                            data-control="select2" data-hide-search="true" data-placeholder="Tipe Proyek"
+                                            tabindex="-1" aria-hidden="true">
+                                            <option></option>
+                                            <option value="R" {{ $filterTipe == 'R' ? 'selected' : '' }}>Retail</option>
+                                            <option value="P" {{ $filterTipe == 'P' ? 'selected' : '' }}>Non-Retail</option>
+                                        </select>
+                                    </div>
+                                    <!--end:: Input Filter-->
 
                                         {{-- <div id="filter" class="d-flex align-items-center position-relative">
                                             <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
@@ -247,47 +252,46 @@
                                         </div> --}}
 
                                     <script>
-                                        function changes(e) {
-                                            if (e.value == "stage") {
-                                                // console.log(e);
-                                                // window.location.href = "/proyek?column=stage";
-                                                document.getElementById("filterStage").style.display = "";
-                                                document.getElementById("filterUnit").style.setProperty("display", "none", "important");
-                                                document.getElementById("filterTipe").style.setProperty("display", "none", "important");
-                                                document.getElementById("filterJenis").style.setProperty("display", "none", "important");
-                                                document.getElementById("filter").style.setProperty("display", "none", "important");
-                                                document.getElementById("filter").value = "";
-                                            } else if (e.value == "unit_kerja") {
-                                                document.getElementById("filterUnit").style.display = "";
-                                                document.getElementById("filterJenis").style.setProperty("display", "none", "important");
-                                                document.getElementById("filterTipe").style.setProperty("display", "none", "important");
-                                                document.getElementById("filterStage").style.setProperty("display", "none", "important");
-                                                document.getElementById("filter").style.setProperty("display", "none", "important");
-                                                document.getElementById("filter").value = "";
-                                            } else if (e.value == "jenis_proyek") {
-                                                document.getElementById("filterJenis").style.display = "";
-                                                document.getElementById("filterUnit").style.setProperty("display", "none", "important");
-                                                document.getElementById("filterTipe").style.setProperty("display", "none", "important");
-                                                document.getElementById("filterStage").style.setProperty("display", "none", "important");
-                                                document.getElementById("filter").style.setProperty("display", "none", "important");
-                                                document.getElementById("filter").value = "";
-                                            } else if (e.value == "tipe_proyek") {
-                                                document.getElementById("filterTipe").style.display = "";
-                                                document.getElementById("filterJenis").style.setProperty("display", "none", "important");
-                                                document.getElementById("filterUnit").style.setProperty("display", "none", "important");
-                                                document.getElementById("filterStage").style.setProperty("display", "none", "important");
-                                                document.getElementById("filter").style.setProperty("display", "none", "important");
-                                                document.getElementById("filter").value = "";
-                                            } else {
-                                                document.getElementById("filter").style.display = "";
-                                                document.getElementById("filterUnit").style.setProperty("display", "none", "important");
-                                                document.getElementById("filterStage").style.setProperty("display", "none", "important");
-                                                document.getElementById("filterJenis").style.setProperty("display", "none", "important");
-                                                document.getElementById("filterTipe").style.setProperty("display", "none", "important");
-                                            }
-                                        }
+                                        // function changes(e) {
+                                        //     if (e.value == "stage") {
+                                        //         // console.log(e);
+                                        //         // window.location.href = "/proyek?column=stage";
+                                        //         document.getElementById("filterStage").style.display = "";
+                                        //         document.getElementById("filterUnit").style.setProperty("display", "none", "important");
+                                        //         document.getElementById("filterTipe").style.setProperty("display", "none", "important");
+                                        //         document.getElementById("filterJenis").style.setProperty("display", "none", "important");
+                                        //         document.getElementById("filter").style.setProperty("display", "none", "important");
+                                        //         document.getElementById("filter").value = "";
+                                        //     } else if (e.value == "unit_kerja") {
+                                        //         document.getElementById("filterUnit").style.display = "";
+                                        //         document.getElementById("filterJenis").style.setProperty("display", "none", "important");
+                                        //         document.getElementById("filterTipe").style.setProperty("display", "none", "important");
+                                        //         document.getElementById("filterStage").style.setProperty("display", "none", "important");
+                                        //         document.getElementById("filter").style.setProperty("display", "none", "important");
+                                        //         document.getElementById("filter").value = "";
+                                        //     } else if (e.value == "jenis_proyek") {
+                                        //         document.getElementById("filterJenis").style.display = "";
+                                        //         document.getElementById("filterUnit").style.setProperty("display", "none", "important");
+                                        //         document.getElementById("filterTipe").style.setProperty("display", "none", "important");
+                                        //         document.getElementById("filterStage").style.setProperty("display", "none", "important");
+                                        //         document.getElementById("filter").style.setProperty("display", "none", "important");
+                                        //         document.getElementById("filter").value = "";
+                                        //     } else if (e.value == "tipe_proyek") {
+                                        //         document.getElementById("filterTipe").style.display = "";
+                                        //         document.getElementById("filterJenis").style.setProperty("display", "none", "important");
+                                        //         document.getElementById("filterUnit").style.setProperty("display", "none", "important");
+                                        //         document.getElementById("filterStage").style.setProperty("display", "none", "important");
+                                        //         document.getElementById("filter").style.setProperty("display", "none", "important");
+                                        //         document.getElementById("filter").value = "";
+                                        //     } else {
+                                        //         document.getElementById("filter").style.display = "";
+                                        //         document.getElementById("filterUnit").style.setProperty("display", "none", "important");
+                                        //         document.getElementById("filterStage").style.setProperty("display", "none", "important");
+                                        //         document.getElementById("filterJenis").style.setProperty("display", "none", "important");
+                                        //         document.getElementById("filterTipe").style.setProperty("display", "none", "important");
+                                        //     }
+                                        // }
                                     </script>
-                                    <!--end:: Input Filter-->
 
                                     <!--begin:: Filter-->
                                     <button type="submit" class="btn btn-sm btn-light btn-active-primary ms-4"

@@ -60,7 +60,8 @@ class ProyekController extends Controller
     public function view(Request $request, $datatables = "")
     {
         $cari = $request->query("cari");
-        $column = $request->get("column");
+        // $column = $request->get("column");
+        $column = null;
         $filter = $request->query("filter");
         $filterStage = $request->query("filter-stage");
         $filterJenis = $request->query("filter-jenis");
@@ -80,60 +81,66 @@ class ProyekController extends Controller
         if (Auth::user()->check_administrator) {
             $unitkerjas = UnitKerja::all();
             // dd($unitkerjas);
-            $proyeks = Proyek::with(['UnitKerja', 'Forecasts', 'proyekBerjalan'])->sortable();
+            $proyeks = Proyek::with(['UnitKerja', 'Forecasts', 'proyekBerjalan']);
         } else {
-            // $proyeks = Proyek::with(['UnitKerja', 'Forecasts', 'proyekBerjalan'])->sortable()->where("unit_kerja", "=", Auth::user()->unit_kerja);
-            $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
+            // $proyeks = Proyek::with(['UnitKerja', 'Forecasts', 'proyekBerjalan'])->where("unit_kerja", "=", Auth::user()->unit_kerja);
+            $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja);
             if ($unit_kerja_user instanceof \Illuminate\Support\Collection) {
                 $unitkerjas = UnitKerja::all()->whereIn("divcode", $unit_kerja_user->toArray());
-                $proyeks = Proyek::with(['UnitKerja', 'Forecasts', 'proyekBerjalan'])->sortable()->whereIn("unit_kerja", $unit_kerja_user->toArray());
-            } else {
-                $unitkerjas = UnitKerja::where("divcode", "=", Auth::user()->unit_kerja)->get();
-                $proyeks = Proyek::with(['UnitKerja', 'Forecasts', 'proyekBerjalan'])->sortable()->where("unit_kerja", "=", $unit_kerja_user);
+                $proyeks = Proyek::with(['UnitKerja', 'Forecasts', 'proyekBerjalan'])->whereIn("unit_kerja", $unit_kerja_user->toArray());
             }
         }
         $tahun_proyeks = $proyeks->get()->groupBy("tahun_perolehan")->keys();
         if(!empty($selected_year)) {
             $proyeks = $proyeks->where("tahun_perolehan", "=", $selected_year);
+        } else {
+            $proyeks = $proyeks->where("tahun_perolehan", "=", $year);
         }
 
         // Begin::FILTER
-        // if (!empty($column)) {
-        if (!empty($filter)) {
-            // $proyeks = $proyeks->where($column, 'like', '%' . $filter . '%')->get();
-            $proyeks = $proyeks->get()->filter(function ($p) use ($column, $filter) {
-                return preg_match("/$filter/i", $p[$column]);
-            });
-        } elseif (!empty($filterUnit)) {
-            // $proyeks = $proyeks->where($column, 'like', '%' . $filterUnit . '%')->get();
-            $proyeks = $proyeks->get()->filter(function ($p) use ($column, $filterUnit) {
-                return preg_match("/$filterUnit/i", $p[$column]);
-            });
-        } elseif (!empty($filterStage)) {
-            // $proyeks = $proyeks->where($column, 'like', '%' . $filterStage . '%')->get();
-            $proyeks = $proyeks->get()->filter(function ($p) use ($column, $filterStage) {
-                return preg_match("/$filterStage/i", $p[$column]);
-            });
-        } elseif (!empty($filterJenis)) {
-            // $proyeks = $proyeks->where($column, 'like', '%' . $filterJenis . '%')->get();
-            $proyeks = $proyeks->get()->filter(function ($p) use ($column, $filterJenis) {
-                return preg_match("/$filterJenis/i", $p[$column]);
-            });
-        } elseif (!empty($filterTipe)) {
-            // $proyeks = $proyeks->where($column, 'like', '%' . $filterTipe . '%')->get();
-            $proyeks = $proyeks->get()->filter(function ($p) use ($column, $filterTipe) {
-                return preg_match("/$filterTipe/i", $p[$column]);
-            });
-        } else {
-            $proyeks = $proyeks->get();
-        }
+        // if (!empty($filter)) {
+        //     // $proyeks = $proyeks->where($column, 'like', '%' . $filter . '%')->get();
+        //     $proyeks = $proyeks->get()->filter(function ($p) use ($column, $filter) {
+        //         return preg_match("/$filter/i", $p[$column]);
+        //     });
+        // } 
+        
+        if (!empty($filterUnit)) {
+            $proyeks = $proyeks->where('unit_kerja', '=', $filterUnit);
+            // $proyeks = $proyeks->get()->filter(function ($p) use ($column, $filterUnit) {
+            //     return preg_match("/$filterUnit/i", $p[$column]);
+            // });
+        } 
+        
+        if (!empty($filterStage)) {
+            $proyeks = $proyeks->where('stage', '=', (int) $filterStage);
+            // $proyeks = $proyeks->get()->filter(function ($p) use ($column, $filterStage) {
+            //     return preg_match("/$filterStage/i", $p[$column]);
+            // });
+        } 
+        
+        if (!empty($filterJenis)) {
+            $proyeks = $proyeks->where('jenis_proyek', '=', $filterJenis);
+            // $proyeks = $proyeks->get()->filter(function ($p) use ($column, $filterJenis) {
+            //     return preg_match("/$filterJenis/i", $p[$column]);
+            // });
+        } 
+        
+        if (!empty($filterTipe)) {
+            $proyeks = $proyeks->where('tipe_proyek', '=', $filterTipe);
+            // $proyeks = $proyeks->get()->filter(function ($p) use ($column, $filterTipe) {
+            //     return preg_match("/$filterTipe/i", $p[$column]);
+            // });
+        } 
+
+        $proyeks = $proyeks->get();
         $filter = null;
         // dd($filter);
 
         if (empty($datatables)) {
-            return view('3_Proyek', compact(["tahun_proyeks", "filterStage", "selected_year", "proyeks", "cari", "column", "filter", "customers", "sumberdanas", "unitkerjas", "jenisProyek", "tipeProyek"]));
+            return view('3_Proyek', compact(["tahun_proyeks", "filterJenis", "filterTipe", "filterUnit", "filterStage", "selected_year", "proyeks", "cari", "column", "filter", "customers", "sumberdanas", "unitkerjas", "jenisProyek", "tipeProyek"]));
         }
-        return view('3_DataSetProyek', compact(["tahun_proyeks", "filterStage", "selected_year" ,"proyeks", "cari", "column", "filter", "customers", "sumberdanas", "unitkerjas", "jenisProyek", "tipeProyek"]));
+        return view('3_DataSetProyek', compact(["tahun_proyeks", "filterJenis", "filterTipe", "filterUnit", "filterStage", "selected_year" ,"proyeks", "cari", "column", "filter", "customers", "sumberdanas", "unitkerjas", "jenisProyek", "tipeProyek"]));
     }
 
     public function save(Request $request, Proyek $newProyek)
