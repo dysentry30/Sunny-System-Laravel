@@ -1566,7 +1566,7 @@ class DashboardController extends Controller
                 // $proyeks = Proyek::all()->where("unit_kerja", "=", $filter);
             } else {
                 if ($unit_kerja_user instanceof \Illuminate\Support\Collection) {
-                    $proyeks = Proyek::with(["UnitKerja", "Forecasts"])->where("is_cancel", "=", false)->get(["nama_proyek", "kode_proyek", "bulan_awal", "bulan_ri_perolehan", "bulan_pelaksanaan", "nilai_kontrak_keseluruhan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "hps_pagu", "tipe_proyek"])->whereIn("unit_kerja", $unit_kerja_user->toArray());
+                    $proyeks = Proyek::with(["UnitKerja", "Forecasts"])->where("is_cancel", "=", false)->get(["nama_proyek", "kode_proyek", "bulan_awal", "bulan_ri_perolehan", "bulan_pelaksanaan", "nilai_kontrak_keseluruhan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "hps_pagu", "tipe_proyek"])->whereNotIn("unit_kerja", ["B", "C", "D", "8"])->whereIn("unit_kerja", $unit_kerja_user->toArray());
                 } else {
                     $proyeks = Proyek::with(["UnitKerja", "Forecasts"])->where("is_cancel", "=", false)->get(["nama_proyek", "kode_proyek", "bulan_awal", "bulan_ri_perolehan", "bulan_pelaksanaan", "nilai_kontrak_keseluruhan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "hps_pagu", "tipe_proyek"])->where("unit_kerja", $unit_kerja_user);
                 }
@@ -1575,7 +1575,7 @@ class DashboardController extends Controller
             $proyeks = Proyek::with(["UnitKerja", "Forecasts"])->where("is_cancel", "=", false)->get(["nama_proyek", "kode_proyek", "bulan_awal", "bulan_ri_perolehan", "bulan_pelaksanaan", "nilai_kontrak_keseluruhan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "hps_pagu", "tipe_proyek"]);
         }
         // $proyeks = $proyeks->where("tipe_proyek", "!=", "R")->where("jenis_proyek", "!=", "I");
-        $proyeks = $proyeks->where("jenis_proyek", "!=", "I")->where("tahun_perolehan", "=", $year)->whereNotIn("unit_kerja", ["B", "C", "D", "8"])->where(function ($p) use ($prognosa) {
+        $proyeks = $proyeks->where("jenis_proyek", "!=", "I")->where("tahun_perolehan", "=", $year)->where(function ($p) use ($prognosa) {
             return $p->forecasts->where("periode_prognosa", "=", $prognosa);
         });
 
