@@ -282,13 +282,6 @@ class DashboardController extends Controller
 
         // $proyeks_test = Proyek::all()->whereIn("unit_kerja", ["O", "U"])->whereIn("stage", [1, 2, 4, 5])->count();
 
-        // Begin :: CHART PROYEK KALAH - CANCEL - TIDAK LULUS PQ
-        $proyek_kalah_cancel_tidak_lulus_pq = collect();
-        $proyek_kalah_cancel_tidak_lulus_pq->push($proyeks->where("stage", 7)->count()); // Kalah
-        $proyek_kalah_cancel_tidak_lulus_pq->push($proyeks->where("stage", 0)->count()); // Tidak Lulus PQ
-        $proyek_kalah_cancel_tidak_lulus_pq->push($proyeks->where("is_cancel", true)->count()); // Cancel
-        // End :: CHART PROYEK KALAH - CANCEL - TIDAK LULUS PQ
-
         //begin:: Monitoring Proyek
         $proses = 0;
         $menang = 0;
@@ -297,7 +290,7 @@ class DashboardController extends Controller
         foreach ($proyeks as $proyek) {
             $stg = $proyek->stage;
             if ($stg == 1 || $stg == 2) {
-                $proses++;
+                // $proses++;
             } else if ($stg == 3) {
                 $prakualifikasi++;
             } else if ($stg == 4 || $stg == 5) {
@@ -311,6 +304,14 @@ class DashboardController extends Controller
             };
         };
         //end:: Monitoring Proyek
+
+        // Begin :: CHART PROYEK KALAH - CANCEL - TIDAK LULUS PQ
+        $proyek_kalah_cancel_tidak_lulus_pq = collect();
+        $proyek_kalah_cancel_tidak_lulus_pq->push($proyeks->where("stage", 7)->count()); // Kalah
+        $proyek_kalah_cancel_tidak_lulus_pq->push($proyeks->where("stage", 0)->count()); // Tidak Lulus PQ
+        $proyek_kalah_cancel_tidak_lulus_pq->push($proyeks->where("is_cancel", true)->count()); // Cancel
+        // End :: CHART PROYEK KALAH - CANCEL - TIDAK LULUS PQ
+
 
         //Begin::Terendah Terkontrak
         $nilaiTerkontrak = 0;
