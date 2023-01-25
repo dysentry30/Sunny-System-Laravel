@@ -1794,7 +1794,7 @@ class DashboardController extends Controller
         $sheet->setCellValue('F1', "Nilai Perolehan");
 
         // dd($tipe);
-
+        $year = (int) date("Y");
         $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
         if (!Auth::user()->check_administrator) {
             if ($filter != false) {
@@ -1813,7 +1813,7 @@ class DashboardController extends Controller
                 $proyeks = Proyek::with(["UnitKerja", "Forecasts"])->where("jenis_proyek", "!=", "I")->where("tipe_proyek", "!=", "R")->where("is_cancel", "!=", true)->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "bulan_ri_perolehan", "nilai_perolehan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "hps_pagu"]);
             }
         }
-        $proyeks = $proyeks->where("is_cancel", "=", false);
+        $proyeks = $proyeks->where("is_cancel", "=", false)->where("jenis_proyek", "!=", "I")->where("tahun_perolehan", "=", $year);
         switch ($tipe) {
             case "Proyek Menang Tender":
                 $proyeks = $proyeks->whereIn("stage", [6, 8])->sortBy([
@@ -1866,7 +1866,7 @@ class DashboardController extends Controller
         $sheet->setCellValue('F1', "Nilai Penawaran");
 
         // dd($tipe);    
-
+        $year = (int) date("Y");
         $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
         if (!Auth::user()->check_administrator) {
             if ($filter != false) {
@@ -1885,6 +1885,7 @@ class DashboardController extends Controller
                 $proyeks = Proyek::with(["UnitKerja", "Forecasts"])->where("jenis_proyek", "!=", "I")->where("tipe_proyek", "!=", "R")->where("is_cancel", "!=", true)->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "bulan_ri_perolehan", "nilai_perolehan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "hps_pagu"]);
             }
         }
+        $proyeks = $proyeks->where("jenis_proyek", "!=", "I")->where("tahun_perolehan", "=", $year);
         $stage = null;
         switch ($tipe) {
             case "Nilai Menang Tender":
