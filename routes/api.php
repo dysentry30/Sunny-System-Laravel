@@ -446,12 +446,15 @@ Route::middleware(["web"])->group(function () {
             $p->jenis_proyek = $jenis_proyek;
             $tipe_proyek = ($proyek["UsrRetail"] == true ? 'R' : 'P');
             $p->tipe_proyek = $tipe_proyek;
-            $p->nilaiok_awal = round((int) $proyek["UsrNilaiOKAwal"]);
+            // $p->nilaiok_awal = round((int) $proyek["UsrNilaiOKAwal"]);
+            $p->nilaiok_awal = 0;
             $p->nilai_rkap = round((int) $proyek["UsrNilaiOKAwal"]);
             $p->bulan_pelaksanaan = $proyek["UsrBulanRealisasiAwal"];
             $p->bulan_awal = $proyek["UsrBulanRealisasiAwal"];
-            $p->nilaiok_review = round((int) $proyek["UsrNilaiOKReview"]);
-            $p->nilai_valas_review = round((int) $proyek["UsrNilaiOKReview"]);
+            // $p->nilaiok_review = round((int) $proyek["UsrNilaiOKReview"]);
+            // $p->nilai_valas_review = round((int) $proyek["UsrNilaiOKReview"]);
+            $p->nilaiok_review = 0;
+            $p->nilai_valas_review = 0;
             $p->bulan_review = $proyek["UsrBulanPelaksanaan"];
             $p->unit_kerja = $unit_kerja->divcode;
             $p->tahun_perolehan = $tahun;

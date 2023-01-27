@@ -67,7 +67,7 @@ class ProyekController extends Controller
         $filterJenis = $request->query("filter-jenis");
         $filterTipe = $request->query("filter-tipe");
         $filterUnit = $request->query("filter-unit");
-        $selected_year = $request->query("tahun-proyek");
+        $selected_year = $request->query("tahun-proyek") ?? (int) date("Y");
         // dd($column);
         // $proyekBerjalan = ProyekBerjalans::all();
         // dd($proyekBerjalan);
@@ -215,7 +215,7 @@ class ProyekController extends Controller
         $newProyek->is_cancel = false;
 
         //begin::Generate Kode Proyek
-        $generateProyek = Proyek::whereYear("created_at", "=", (int) date("Y"))->get()->sortBy("id");
+        $generateProyek = Proyek::where("tahun_perolehan", "=", (int) date("Y"))->get()->sortBy("id");
 
         $unit_kerja = $dataProyek["unit-kerja"];
         $jenis_proyek = $dataProyek["jenis-proyek"];
@@ -267,7 +267,7 @@ class ProyekController extends Controller
                 $uuid = new Uuid();
                 $contractManagements = new ContractManagements();
                 // dd($contractManagements);
-                $contractManagements->project_id = $kode_proyek;
+                $contractManagements->project_id = $kode_proyek . $no_urut;
                 $contractManagements->id_contract = $uuid->uuid3();
                 // $contractManagements->contract_in = $dataProyek["tanggal-mulai-kontrak"];
                 // $contractManagements->contract_out = $dataProyek["tanggal-akhir-kontrak"];
@@ -1539,7 +1539,7 @@ class ProyekController extends Controller
                     if (empty($customer->syarat_pembayaran)) {
                         $error_msg->push("Term Payment");
                     }
-                    if (empty($customer->tax)) {
+                    if ($customer->tax == null) {
                         $error_msg->push("Tax");
                     }
                     if ($error_msg->isNotEmpty()) {

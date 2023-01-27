@@ -1971,12 +1971,12 @@
                                                                     data-placeholder="Pilih Negara">
                                                                     <option value=""></option>
                                                                     @foreach ($data_negara as $negara)
-                                                                        @if ($negara->country == $proyek->negara)
+                                                                        @if ($negara->abbreviation == $proyek->negara)
                                                                             <option value="{{ $negara->abbreviation }}"
                                                                                 selected>{{ $negara->country }}
                                                                             </option>
                                                                         @else
-                                                                            <option value="{{ $negara->country }}">
+                                                                            <option value="{{ $negara->abbreviation }}">
                                                                                 {{ $negara->country }}</option>
                                                                         @endif
                                                                     @endforeach
@@ -2190,7 +2190,7 @@
                                                                     class="form-select form-select-solid"
                                                                     data-control="select2" data-hide-search="true"
                                                                     data-placeholder="Pilih Company">
-                                                                    <option selected>{{ $proyek->company }}</option>
+                                                                    <option selected>{{ $proyek->company ?? $proyek->UnitKerja->unit_kerja }}</option>
                                                                     {{-- @foreach ($companies as $company)
                                                                     @if ($company->nama_company == $proyek->company)
                                                                         <option value="{{ $company->nama_company }}" selected>{{$company->nama_company }}</option>

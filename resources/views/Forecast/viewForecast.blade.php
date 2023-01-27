@@ -1640,7 +1640,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                                 @if ($month_counter == (int) $forecast->month_rkap)
                                                                                                                     <td data-column-ok-bulanan="{{ $month_counter }}" data-dop="{{$dop->dop}}"
                                                                                                                         data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}" data-unit-kerja="{{$unitKerja->unit_kerja}}">
-                                                                                                                        {{ number_format($forecast->rkap_forecast / $per_sejuta, 0, ".", ".") }}
+                                                                                                                        {{ number_format($forecast->rkap_forecast, 0, ".", ".") }}
                                                                                                                     </td>
                                                                                                                 @else
                                                                                                                     <td data-column-ok-bulanan="{{ $month_counter }}" data-dop="{{$dop->dop}}"
@@ -1797,11 +1797,16 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                 @endif
                                                                                             @endif
                                                                                         </td>
+                                                                                        @php
+                                                                                            $total_ok_formatted = $forecasts->sum(function($f) {
+                                                                                                return (int) $f->rkap_forecast;
+                                                                                            });
+                                                                                        @endphp
                                                                                         <td class="pinForecast ShowPin"
                                                                                             data-id-proyek-ok-bulanan-total="{{ $proyek->kode_proyek }}"
                                                                                             style="position: -wekit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
                                                                                             <center>
-                                                                                                <b>{{ $total_ok_formatted }}</b>
+                                                                                                <b>{{ number_format($total_ok_formatted, 0, ',', '.') }}</b>
                                                                                             </center>
                                                                                         </td>
                                                                                         <td class="pinForecast ShowPin total-month-x-forecast"

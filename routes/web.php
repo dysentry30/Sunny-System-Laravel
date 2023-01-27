@@ -1568,6 +1568,38 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         // dd($instansi);
         return view("/MasterData/KriteriaGreenLine", compact(["instansi", "sumber_danas"]));
     });
+    
+    Route::get('/kriteria/{item}', function ($item) {
+        if($item == "Instansi") {
+            $data = SumberDana::all()->map(function($sd) {
+                return $sd = $sd->nama_sumber;
+            });
+        } else if($item == "Sumber Dana" || $item == "Proyek Luar Negeri") {
+            $data = SumberDana::all()->map(function($sd) {
+                return $sd = $sd->sumber_dana_id;
+            })->unique()->sort()->values();
+        } else if($item == "APBD" || $item == "Pemerintah Provinsi") {
+            $data = Provinsi::all();
+        } else {
+            $data = collect();
+        }
+        return response()->json($data->toArray());
+    });
+
+    Route::post('/kriteria-green-line/save', function (Request $request) {
+        $data = $request->collect();
+        $data = $data->map(function($d, $key) use($data) {
+            // $new_class->item = $data["Item"];
+            // $new_class->isi = $data["isi"];
+            if(is_array($d)) {
+                 $d = !empty($data["sub-isi"][0]) ? $data["sub-isi"][0] : $data["sub-isi"][1];
+            }
+            return $d;
+        })->toArray();
+        dd($data);
+    });
+
+    
     //End :: Master Data
 
 
@@ -2140,19 +2172,21 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
     // $proyeks = Proyek::where("tahun_perolehan", "=", $periode[0])->where("stage", "=", 8)->get(["id", "tanggal_selesai_pho", "tanggal_selesai_fho", "jenis_proyek", "kode_proyek", "nama_proyek", "tanggal_mulai_terkontrak", "tanggal_akhir_terkontrak", "nospk_external", "porsi_jo", "nilai_kontrak_keseluruhan", "nomor_terkontrak", "nilai_valas_review", "tglspk_internal", "tanggal_terkontrak", "nilai_perolehan", "kurs_review", "klasifikasi_terkontrak"])->filter(function ($p) use ($periode) {
     $periodeOtor = 0;
     $yearOtor = 0;
-    $proyeks = Proyek::where("stage", "=", 8)->where("unit_kerja", "=", $unitKerjaPis)->get(["id", "tanggal_selesai_pho", "tanggal_selesai_fho", "jenis_proyek", "kode_proyek", "nama_proyek", "tanggal_mulai_terkontrak", "tanggal_akhir_terkontrak", "nospk_external", "porsi_jo", "nilai_kontrak_keseluruhan", "nomor_terkontrak", "nilai_valas_review", "tglspk_internal", "tanggal_terkontrak", "nilai_perolehan", "kurs_review", "klasifikasi_terkontrak", "provinsi", "negara", "sistem_bayar", "sumber_dana", "sbu", "jenis_terkontrak", "lokasi_tender", "mata_uang_review", "mata_uang_awal", "longitude", "latitude"])->filter(function ($p) use (&$periodeOtor, $periode, &$yearOtor) {
-        if ($periode[1] == 1) {
-            $periodeOtor = 12;
-            $yearOtor = (int) date("Y") - 1;
-            $is_forecast_exist = $p->HistoryForecasts->where("periode_prognosa", $periodeOtor)->where("tahun", "=", $yearOtor)->count() > 0;
-        } else {
-            $periodeOtor = $periode[1] - 1;
-            $yearOtor = (int) date("Y");
-            $is_forecast_exist = $p->HistoryForecasts->where("periode_prognosa", $periodeOtor)->where("tahun", "=", $yearOtor)->count() > 0;
-        }
-        unset($p->HistoryForecasts);
-        return $is_forecast_exist;
-    });
+    // $proyeks = Proyek::where("stage", "=", 8)->where("unit_kerja", "=", $unitKerjaPis)->get(["id", "tanggal_selesai_pho", "tanggal_selesai_fho", "jenis_proyek", "kode_proyek", "nama_proyek", "tanggal_mulai_terkontrak", "tanggal_akhir_terkontrak", "nospk_external", "porsi_jo", "nilai_kontrak_keseluruhan", "nomor_terkontrak", "nilai_valas_review", "tglspk_internal", "tanggal_terkontrak", "nilai_perolehan", "kurs_review", "klasifikasi_terkontrak", "provinsi", "negara", "sistem_bayar", "sumber_dana", "sbu", "jenis_terkontrak", "lokasi_tender", "mata_uang_review", "mata_uang_awal", "longitude", "latitude"])->filter(function ($p) use (&$periodeOtor, $periode, &$yearOtor) {
+    //     if ($periode[1] == 1) {
+    //         $periodeOtor = 12;
+    //         $yearOtor = (int) date("Y") - 1;
+    //         $is_forecast_exist = $p->HistoryForecasts->where("periode_prognosa", $periodeOtor)->where("tahun", "=", $yearOtor)->count() > 0;
+    //     } else {
+    //         $periodeOtor = $periode[1] - 1;
+    //         $yearOtor = (int) date("Y");
+    //         $is_forecast_exist = $p->HistoryForecasts->where("periode_prognosa", $periodeOtor)->where("tahun", "=", $yearOtor)->count() > 0;
+    //     }
+    //     unset($p->HistoryForecasts);
+    //     return $is_forecast_exist;
+    // });
+    $proyeks = Proyek::where("stage", "=", 8)->where("tahun_perolehan", "=", $periode[0])->where("unit_kerja", "=", $unitKerjaPis)->get(["id", "tanggal_selesai_pho", "tanggal_selesai_fho", "jenis_proyek", "kode_proyek", "nama_proyek", "tanggal_mulai_terkontrak", "tanggal_akhir_terkontrak", "nospk_external", "porsi_jo", "nilai_kontrak_keseluruhan", "nomor_terkontrak", "nilai_valas_review", "tglspk_internal", "tanggal_terkontrak", "nilai_perolehan", "kurs_review", "klasifikasi_terkontrak", "provinsi", "negara", "sistem_bayar", "sumber_dana", "sbu", "jenis_terkontrak", "lokasi_tender", "mata_uang_review", "mata_uang_awal", "longitude", "latitude"]);
+
 
     // if (isset($request->unitkerjaid)) {
     //     // $proyeks = Proyek::where("unit_kerja", "=", $request->unitkerjaid)->where("tahun_perolehan", "=", $periode[0])->where("bulan_pelaksanaan", "=", $periode[1])->get(["nama_proyek", "kode_proyek", "unit_kerja", "jenis_proyek", "stage", "tanggal_mulai_terkontrak", "tanggal_akhir_terkontrak"]);

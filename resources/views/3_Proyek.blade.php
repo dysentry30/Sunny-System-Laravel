@@ -569,7 +569,7 @@
                                                         return (int) $f->realisasi_forecast;
                                                     });
                                                 } else {
-                                                    $total_realisasi = $proyek->nilai_perolehan;
+                                                    $total_realisasi = 0;
                                                 }
                                                 @endphp
                                                 <small>
