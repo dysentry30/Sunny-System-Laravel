@@ -2801,6 +2801,7 @@
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                         <th class="min-w-auto">Kategori</th>
                                         <th class="min-w-auto">Tanggal Pembuatan</th>
+                                        <th class="min-w-auto">Action</th>
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>
@@ -2811,6 +2812,9 @@
                                         <tr>
                                             <td><a onclick="getChecklistManajemen(this)" style="cursor: pointer;" data-url="/contract-management/view/{{ $contract->id_contract}}/get-manajemen-kontrak/{{ $cm->id }}" class="text-hover-primary">{{ $cm->kategori }}</a></td>
                                             <td>{{ Carbon\Carbon::create($cm->created_at)->translatedFormat("d F Y") }}</td>
+                                            <td>
+                                                <a href="/checklist-manajemen-kontrak/{{ $contract->id_contract }}/{{ $cm->kategori }}delete" class="btn btn-sm btn-danger p-2 text-white">Delete</a>
+                                            </td>
                                         </tr>
                                     @empty
                                     @endforelse                                
