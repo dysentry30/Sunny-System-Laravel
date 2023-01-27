@@ -256,37 +256,73 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="row">
-                                    <div class="col-4">
-                                        <select onchange="selectFilter(this)" id="dop" name="dop"
-                                                class="form-select form-select-solid w-auto"
-                                                style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
-                                                data-placeholder="Direktorat" data-select2-id="select2-data-dop" tabindex="-1"
-                                                aria-hidden="true">
-                                                <option value="" selected></option>
-                                                @foreach ($dops as $dop)
-                                                    <option value="{{ $dop->dop }}" {{ $dop_get == $dop->dop ? 'selected' : '' }} >{{ $dop->dop }}</option>
-                                                @endforeach
-                                        </select>
-                                    </div>
+                                    <form action="" class="row" method="GET">
+                                        <div class="col-2">
+                                            <select id="dop" onchange="filterUnitKerja(this)" name="dop"
+                                                    class="form-select form-select-solid w-auto"
+                                                    style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
+                                                    data-placeholder="Direktorat" data-select2-id="select2-data-dop" tabindex="-1"
+                                                    aria-hidden="true">
+                                                    <option value="" selected></option>
+                                                    @foreach ($dops as $dop)
+                                                        <option value="{{ $dop->dop }}" {{ $dop_get == $dop->dop ? 'selected' : '' }} >{{ $dop->dop }}</option>
+                                                    @endforeach
+                                            </select>
+                                        </div>
+    
+                                        <div class="col-2">
+                                            <select id="unit-kerja" name="unit-kerja"
+                                                    class="form-select form-select-solid w-auto"
+                                                    style="margin-right: 2rem;" data-control="select2" data-hide-search="false"
+                                                    data-placeholder="Unit Kerja" data-select2-id="select2-data-unit-kerja" tabindex="-1"
+                                                    aria-hidden="true">
+                                                    <option value="" selected></option>
+                                                    @foreach ($unit_kerjas as $unit_kerja)
+                                                        <option value="{{ $unit_kerja->divcode }}" {{ $unit_kerja_get == $unit_kerja->divcode ? 'selected' : '' }} >{{ $unit_kerja->unit_kerja }}</option>
+                                                    @endforeach
+                                            </select>
+                                        </div>
 
-                                    <div class="col-4">
-                                        <select onchange="selectFilter(this)" id="unit-kerja" name="unit-kerja"
-                                                class="form-select form-select-solid w-auto"
-                                                style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
-                                                data-placeholder="Unit Kerja" data-select2-id="select2-data-unit-kerja" tabindex="-1"
-                                                aria-hidden="true">
-                                                <option value="" selected></option>
-                                                @foreach ($unit_kerjas as $unit_kerjas)
-                                                    <option value="{{ $unit_kerjas->divcode }}" {{ $unit_kerja_get == $unit_kerjas->divcode ? 'selected' : '' }} >{{ $unit_kerjas->unit_kerja }}</option>
-                                                @endforeach
-                                        </select>
-                                    </div>
+                                        <div class="col-2">
+                                            <select id="tahun" name="tahun"
+                                                    class="form-select form-select-solid w-auto"
+                                                    style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
+                                                    data-placeholder="Tahun" data-select2-id="select2-data-tahun" tabindex="-1"
+                                                    aria-hidden="true">
+                                                    <option value="" selected></option>
+                                                    @foreach ($tahun as $t)
+                                                        <option value="{{$t}}" {{ $tahun_get == $t ? 'selected' : '' }}>{{$t}}</option>
+                                                    @endforeach
+                                            </select>
+                                        </div>
 
-                                    <div class="col">
-                                        <form action="" method="GET">
-                                            <button type="submit" class="btn btn-secondary">Reset</button>
-                                        </form>
-                                    </div>
+                                        <div class="col-2">
+                                            <select id="bulan" name="bulan"
+                                                    class="form-select form-select-solid w-auto"
+                                                    style="margin-right: 2rem;" data-control="select2" data-hide-search="false"
+                                                    data-placeholder="Tahun" data-select2-id="select2-data-bulan" tabindex="-1"
+                                                    aria-hidden="true">
+                                                    <option value="" selected></option>
+                                                    @foreach (range(1, 12) as $m)
+                                                        @php
+                                                            $full_month = Carbon\Carbon::createFromFormat("m", $m)->translatedFormat("F");
+                                                        @endphp
+                                                        <option value="{{$m}}" {{ $bulan_get == $m ? 'selected' : '' }}>{{$full_month}}</option>
+                                                    @endforeach
+                                            </select>
+                                        </div>
+
+                                        <div class="col-1">
+                                            <button type="submit" class="btn btn-primary">Filter</button>
+                                        </div>
+                                        <div class="col">
+                                            <form action=""></form>
+                                            <form action="" method="GET">
+                                                <button type="submit" class="btn btn-secondary">Reset</button>
+                                            </form>
+                                        </div>
+                                    </form>
+
                                 </div>
                             </div>
                         </div>
@@ -483,7 +519,8 @@
                                                             <!--begin::Title-->
                                                             <div class="card-title d-flex flex-column">
                                                                 <!--begin::Amount-->
-                                                                <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2" id="data-items">0</span>
+                                                                {{-- <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2 tender-review-text" id="data-items">0</span> --}}
+                                                                <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2 tender-review-text" id="">0</span>
                                                                 <!--end::Amount-->
                                                                 <!--begin::Subtitle-->
                                                                 <span class="text-white opacity-75 pt-1 fw-semibold fs-3">Tender Review</span>
@@ -787,9 +824,18 @@
                                     <tr>
                                             <!--begin::NIP-->
                                             <td>
+                                                @php
+                                                    $contract = $proyek->ContractManagements;
+                                                @endphp
                                                 <small>
-                                                    <a target="_blank" href="/proyek/view/{{ $proyek->kode_proyek }}" id="click-name"
-                                                        class="ps-3 text-gray-800 text-hover-primary">{{ $proyek->nama_proyek }}</a>
+                                                    @if (!empty($contract))
+                                                        <a target="_blank" href="/contract-management/view/{{ $contract->id_contract }}" id="click-name"
+                                                            class="ps-3 text-gray-800 text-hover-primary">{{ $proyek->nama_proyek }}</a>
+                                                    @else
+                                                        <p class="text-hover-primary mt-4" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top"
+                                                            data-bs-custom-class="custom-tooltip"
+                                                            data-bs-title="Proyek ini belum ada kontrak">{{ $proyek->nama_proyek }}</p>
+                                                    @endif
                                                 </small>
                                             </td>
                                             <!--end::NIP-->
@@ -934,7 +980,10 @@
                                             <!--end::PIC-->
                                             <!--begin::STATUS-->
                                             <td class="text-center">
-                                                <P class="badge badge-light-primary">Open</P>
+                                                @php
+                                                    $status = $proyek->DokumenNda->isNotEmpty() && $proyek->DokumenMou->isNotEmpty() && $proyek->AttachmentMenang->isNotEmpty() && $proyek->RiskTenderProyek->isNotEmpty() && $proyek->DokumenEca->isNotEmpty() && $proyek->DokumenIca->isNotEmpty();
+                                                @endphp
+                                                <P class="badge {{$status ? "badge-light-success" : "badge-light-danger"}} tender-review">{{$status ? "Closed" : "Open"}}</P>
                                             </td>
                                             <!--end::STATUS-->
                                         </tr>
@@ -1444,19 +1493,39 @@
 
     <!-- Begin :: Select Filter Dropdown -->
     <script>
-        function selectFilter(e) {
-            const value = e.value;
-            const type = e.getAttribute("id");
-            let url = "";
-            if(type == "dop") {
-                url = `/dashboard-ccm/perolehan-kontrak?dop=${value}`;
-            } else {
-                url = `/dashboard-ccm/perolehan-kontrak?unit-kerja=${value}`;
-            }
-            window.location.href = url;
-            return;
+        // function selectFilter(e) {
+        //     const value = e.value;
+        //     const type = e.getAttribute("id");
+        //     let url = "";
+        //     let currentUrl = document.URL.replace(window.location.search, "") + "?";
+        //     if(type == "dop") {
+        //         url = currentUrl + `dop=${value}`;
+        //     } 
+        //     if(type == "unit-kerja") {
+        //         url = currentUrl + `unit-kerja=${value}`;
+        //     }
+        //     window.location.href = url;
+        //     return;
+        // }
+        const unitKerjas = JSON.parse('{!!$unit_kerjas_all->toJson()!!}');
+        function filterUnitKerja(e) {
+            let html = "";
+            unitKerjas.forEach(unitKerja => {
+                if(unitKerja.dop == e.value) {
+                    html += `<option value="${ unitKerja.dop }" >${unitKerja.unit_kerja}</option>`;
+                }
+            });
+            document.querySelector("#unit-kerja").innerHTML = html;
         }
     </script>
     <!-- End :: Select Filter Dropdown -->
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const counterTenderReview = document.querySelectorAll(".tender-review");
+            console.log(document.querySelector(".tender-review-text"));
+            document.querySelector(".tender-review-text").innerHTML = counterTenderReview.length;
+        });
+    </script>
 
 @endsection

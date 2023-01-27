@@ -227,72 +227,131 @@
                 </div>
                 <!--end::Modal header-->
 
-                <!--begin::Modal body-->
-                <div class="modal-body py-lg-6 px-lg-6">
-
-
-                    <!--begin::Row Kanan+Kiri-->
-                    <div class="row fv-row">
-                        <!--begin::Col-->
-                        <div class="">
-                            <!--begin::Input group Website-->
-                            <div class="fv-row mb-7">
-                                <!--begin::Label-->
-                                <label class="fs-6 fw-bold form-label mt-3">
-                                    <span class="required">Instansi</span>
-                                </label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <select id="instansi" name="instansi"
-                                    class="form-select form-select-solid select2-hidden-accessible"
-                                    data-control="select2" data-hide-search="false" data-placeholder="Instansi"
-                                    data-select2-id="select2-instansi" tabindex="-1" aria-hidden="true">
-                                    <option value="" selected></option>
-                                    @foreach ($instansi as $ins)
-                                        <option value="{{$ins->instansi}}">{{$ins->instansi}}</option>
-                                    @endforeach
-                                </select>
-                            <!--end::Input-->
-                            </div>
-                            <!--end::Input group-->
-                        </div>
-                        <!--End begin::Col-->
-                        <div class="">
-                            <!--begin::Input group Website-->
-                            <div class="fv-row mb-7">
-                                <!--begin::Label-->
-                                <label class="fs-6 fw-bold form-label mt-3">
-                                    <span class="">Sumber Dana</span>
-                                </label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                    
-                                <select id="sumber-dana" name="sumber-dana"
-                                    class="form-select form-select-solid select2-hidden-accessible"
-                                    data-control="select2" data-hide-search="false" data-placeholder="Sumber Dana"
-                                    data-select2-id="select2-sumber-dana" tabindex="-1" aria-hidden="true">
-                                    <option value="" selected></option>
-                                    @foreach ($sumber_danas as $sd)
-                                        <option value="{{$sd->kode}}">{{$sd->kode}}</option>
-                                    @endforeach
-                                </select>
+                <form action="/kriteria-green-line/save" method="POST">
+                    @csrf
+                    <!--begin::Modal body-->
+                    <div class="modal-body py-lg-6 px-lg-6">
+    
+    
+                        <!--begin::Row Kanan+Kiri-->
+                        <div class="row fv-row">
+                            <!--begin::Col-->
+                            <div class="">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span class="required">Item</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <select id="Item" name="item"
+                                        class="form-select form-select-solid select2-hidden-accessible"
+                                        data-control="select2" onchange="getData(this, '#isi')" data-hide-search="false" data-placeholder="Pilh Item..."
+                                        data-select2-id="select2-item" tabindex="-1" aria-hidden="true">
+                                        <option value="" selected></option>
+                                        <option value="Instansi">Instansi</option>
+                                        <option value="Sumber Dana">Sumber Dana</option>
+                                        <option value="Proyek Luar Negeri">Proyek Luar Negeri</option>
+                                        
+                                    </select>
                                 <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
                             </div>
-                            <!--end::Input group-->
+                            <!--End begin::Col-->
+                            <div class="">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span class="">Isi</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                        
+                                    <select id="isi" name="isi"
+                                        class="form-select form-select-solid select2-hidden-accessible"
+                                        data-control="select2" onchange="getData(this, '#provisi', true)" data-hide-search="false" data-placeholder="Pilih Isi..."
+                                        data-select2-id="select2-isi" tabindex="-1" aria-hidden="true">
+                                        <option value="" selected></option>
+                                        {{-- @foreach ($instansi as $ins)
+                                            <option value="{{$ins->instansi}}">{{$ins->instansi}}</option>
+                                        @endforeach --}}
+                                        {{-- @foreach ($sumber_danas as $sd)
+                                            <option value="{{$sd->kode}}">{{$sd->kode}}</option>
+                                        @endforeach --}}
+                                    </select>
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End begin::Col-->
+    
+                            <div class="row">
+                                <div class="col">
+                                    <div id="tier" hidden>
+                                        <!--begin::Label-->
+                                        <label class="fs-6 fw-bold form-label mt-3">
+                                            <span class="">Sub Isi</span>
+                                        </label>
+                                        <!--end::Label-->
+    
+                                        <!--begin::Input-->
+                                        <select id="tier-select" name="sub-isi[]"
+                                            class="form-select form-select-solid select2-hidden-accessible"
+                                            data-control="select2" data-hide-search="false" data-placeholder="Pilih Tier..."
+                                            data-select2-id="select2-tier" tabindex="-1" aria-hidden="true">
+                                            <option value="" selected></option>
+                                            <option value="Tier A">Tier A</option>
+                                            <option value="Tier B">Tier B</option>
+                                            <option value="Tier C">Tier C</option>
+                                            {{-- @foreach ($instansi as $ins)
+                                                <option value="{{$ins->instansi}}">{{$ins->instansi}}</option>
+                                            @endforeach --}}
+                                            {{-- @foreach ($sumber_danas as $sd)
+                                                <option value="{{$sd->kode}}">{{$sd->kode}}</option>
+                                            @endforeach --}}
+                                        </select>
+                                        <!--end::Input-->
+                                    </div>
+                                    <div id="provinsi" hidden>
+                                        <!--begin::Label-->
+                                        <label class="fs-6 fw-bold form-label mt-3">
+                                            <span class="">Sub Isi</span>
+                                        </label>
+                                        <!--end::Label-->
+    
+                                        <!--begin::Input-->
+                                        <select id="provinsi-select" name="sub-isi[]"
+                                            class="form-select form-select-solid select2-hidden-accessible"
+                                            data-control="select2" data-hide-search="false" data-placeholder="Pilih Provinsi..."
+                                            data-select2-id="select2-provinsi" tabindex="-1" aria-hidden="true">
+                                            <option value="" selected></option>
+                                            {{-- @foreach ($instansi as $ins)
+                                                <option value="{{$ins->instansi}}">{{$ins->instansi}}</option>
+                                            @endforeach --}}
+                                            {{-- @foreach ($sumber_danas as $sd)
+                                                <option value="{{$sd->kode}}">{{$sd->kode}}</option>
+                                            @endforeach --}}
+                                        </select>
+                                        <!--end::Input-->
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <!--End begin::Col-->
+                        <!--End::Row Kanan+Kiri-->
+    
+    
+    
                     </div>
-                    <!--End::Row Kanan+Kiri-->
-
-
-
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white" id="new_save"
-                        style="background-color:#008CB4">Save</button>
-
-                </div>
-                <!--end::Modal body-->
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white" id="new_save"
+                            style="background-color:#008CB4">Save</button>
+    
+                    </div>
+                    <!--end::Modal body-->
+                </form>
             </div>
             <!--end::Modal content-->
         </div>
@@ -528,6 +587,49 @@
 @endsection
 
 @section('js-script')
+<script>
+    async function getData(e, dropdownElt, isShow = false) {
+        const value = e.value;
+        let html = '<option value="" selected></option>';
+        const getDataKategoriRes = await fetch(`/kriteria/${value}`).then(res => res.json());
+        getDataKategoriRes.forEach(item => {
+            if(item.province_id) {
+                html += `<option value="${item.province_id}">${item.province_name}</option>`
+            } else {
+                html += `<option value="${item}">${item}</option>`
+            }
+        }) 
+        if(isShow) {
+            if(value.includes("BUMN")) {
+                document.querySelector("#tier").removeAttribute("hidden");
+                document.querySelector("#provinsi").setAttribute("hidden", true);
+                $('#tier-select').select2({
+                    dropdownParent: $('#kt_modal_input_kriteria_green_line'),
+                    // minimumResultsForSearch: Infinity,
+                });
+                $('#provinsi-select').select2("destroy");
+            } else if(value.includes("APBD") || value.includes("Provinsi")) {
+                document.querySelector("#tier").setAttribute("hidden", true);
+                document.querySelector("#provinsi").removeAttribute("hidden");
+                document.querySelector("#provinsi-select").innerHTML = html;
+                $('#tier-select').select2("destroy");
+                $('#provinsi-select').select2({
+                    dropdownParent: $('#kt_modal_input_kriteria_green_line'),
+                    // minimumResultsForSearch: Infinity,
+                });
+            }
+        } else {
+            document.querySelector(dropdownElt).innerHTML = html;
+        }
+        return;
+    }
+    $(document).ready(function() {
+        $('#provinsi-select', "#tier-select").select2({
+            dropdownParent: $('#kt_modal_input_kriteria_green_line'),
+            // minimumResultsForSearch: Infinity,
+        });
+    });
+</script>
 @endsection
 
 <!--end::Main-->
