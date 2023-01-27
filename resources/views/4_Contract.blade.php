@@ -394,7 +394,7 @@
                                             @forelse ($proyeks_pelaksanaan as $proyek)
                                                 <tr>
                                                     <!--begin::Name=-->
-                                                    @if (!empty($proyek->ContractManagements))
+                                                    @if ($proyek->ContractManagements->no_contract != null)
                                                         <td>
                                                             <a target="_blank" href="/contract-management/view/{{ url_encode($proyek->ContractManagements->id_contract) }}" id="click-name"
                                                                 class="text-hover-primary">{{ $proyek->ContractManagements->no_contract }}</a>
@@ -487,7 +487,7 @@
                                             @forelse ($proyeks_pemeliharaan as $proyek)
                                                 <tr>
                                                     <!--begin::Name=-->
-                                                    @if (!empty($proyek->ContractManagements))
+                                                    @if ($proyek->ContractManagements->no_contract != null)
                                                         <td>
                                                             <a target="_blank" href="/contract-management/view/{{ url_encode($proyek->ContractManagements->id_contract) }}" id="click-name"
                                                                 class="text-hover-primary">{{ $proyek->ContractManagements->no_contract }}</a>
