@@ -184,7 +184,7 @@
                                         <!--end::Table head-->
                                         <!--begin::Table body-->
                                         <tbody class="fw-bold text-gray-600">
-                                            @forelse ($proyekClaim as $proyekClaims)
+                                            @forelse ($proyekClaim as $proyekClaims);
                                                     <tr>
                                                         <!--begin::Name-->
                                                         <td>

@@ -143,9 +143,10 @@
                                                         <th class="min-w-auto">Tanggal Perubahan</th>
                                                         <th class="min-w-auto">No Proposal Klaim</th>
                                                         <th class="min-w-auto">Tanggal Pengajuan</th>
+                                                        <th class="min-w-auto">Biaya Pengajuan</th>
                                                         <th class="min-w-auto">Waktu Pengajuan</th>
                                                         <th class="min-w-auto">Status</th>
-                                                        <th class="min-w-auto">Action</th>
+                                                        {{-- <th class="min-w-auto">Action</th> --}}
                                                         {{-- <th class=""><center>Action</center></th> --}}
                                                     </tr>
                                                     <!--end::Table row-->
@@ -173,6 +174,11 @@
                                                             <!--begin::Unit Kerja-->
                                                             <td>
                                                                 {{ Carbon\Carbon::create($claim->tanggal_pengajuan)->translatedFormat("d F Y") }}
+                                                            </td>
+                                                            <!--end::Unit Kerja-->
+                                                            <!--begin::Unit Kerja-->
+                                                            <td>
+                                                                {{ number_format($claim->biaya_pengajuan ?? 0, 0, '.', '.') }}
                                                             </td>
                                                             <!--end::Unit Kerja-->
                                                             <!--begin::Unit Kerja-->
@@ -222,7 +228,7 @@
                                                                 </small>
                                                             </td>
                                                             <!--begin::Action=-->
-                                                            <td>
+                                                            {{-- <td>
                                                                 <form action="/claim-management/delete"
                                                                     style="height: 1.5rem" method="POST">
                                                                     @csrf
@@ -231,7 +237,7 @@
                                                                     <input type="hidden"
                                                                         value="{{ $claim->id_claim }}" name="id-claim">
                                                                 </form>
-                                                            </td>
+                                                            </td> --}}
                                                             <!--end::Action=-->
                                                         </tr>
                                                     @endforeach

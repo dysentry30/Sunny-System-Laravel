@@ -2012,7 +2012,7 @@
                                                                             <th class="min-w-auto">Unit kerja</th>
                                                                             <th class="min-w-auto">Nilai OK</th>
                                                                             <th class="min-w-auto">Tanggal Mulai</th>
-                                                                            <th class="min-w-auto">Tanggal Akhir</th>
+                                                                            <th class="min-w-auto">Tanggal Selesai</th>
                                                                             <th class="min-w-auto">Durasi</th>
                                                                         </tr>
                                                                         <!--end::Table row-->
@@ -2216,7 +2216,6 @@
                                                                             <th class="min-w-auto">Stage</th>
                                                                             <th class="min-w-auto text-center">Nilai ok</th>
                                                                             <th class="min-w-auto text-center">Bulan Forecast</th>
-                                                                            <th class="min-w-auto">Layer Segmentasi</th>
                                                                         </tr>
                                                                         <!--end::Table row-->
                                                                     </thead>
@@ -2362,11 +2361,6 @@
                                                                                         @endisset
                                                                                     </td>
                                                                                     <!--end::Bulan Forecast-->
-                                                                                    <!--begin::Layer-->
-                                                                                    <td>
-                                                                                        *Layer
-                                                                                    </td>
-                                                                                    <!--end::Layer-->
                                                                                 </tr>
                                                                                 @endif
                                                                             @endforeach
@@ -2402,7 +2396,7 @@
                                                                             <!--begin::Table row-->
                                                                             <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                                                                 <th class="min-w-auto">Nama Proyek</th>
-                                                                                <th class="min-w-auto">Jenis Masalah Hukum</th>
+                                                                                <th class="min-w-auto">Bentuk Masalah Hukum</th>
                                                                                 <th class="min-w-auto">Status</th>
                                                                             </tr>
                                                                             <!--end::Table row-->
@@ -4731,7 +4725,7 @@
                                         <span class="">Score</span>
                                     </label>
                                     <!--Begin::Select-->
-                                    <input type="number" name="score_csi" id="score-csi" placeholder="Range 1 - 100" class="form-control form-control-solid" min="0" max="100">
+                                    <input type="text" name="score_csi" id="score-csi" placeholder="Range 1 - 100" pattern="^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)$" class="form-control form-control-solid" min="0" max="100">
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -4807,7 +4801,7 @@
                                     <span class="">Score</span>
                                 </label>
                                 <!--Begin::Select-->
-                                <input type="number" name="score_csi" id="score-csi" placeholder="Range 1 - 100" class="form-control form-control-solid" min="0" max="100" value="{{ $item->score }}">
+                                <input type="text" name="score_csi" id="score-csi" placeholder="Range 1 - 100" pattern="^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)$" class="form-control form-control-solid" min="0" max="100" value="{{ $item->score }}">
                             </div>
                         </div>
                     </div>
@@ -4889,7 +4883,7 @@
                                     <span class="">Score</span>
                                 </label>
                                 <!--Begin::Select-->
-                                <input type="number" name="score_cli" id="score-cli" placeholder="Range 1 - 100" class="form-control form-control-solid" min="0" max="100">
+                                <input type="text" name="score_cli" id="score-cli" placeholder="Range 1 - 100" pattern="^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)$" class="form-control form-control-solid" min="0" max="100">
                             </div>
                         </div>
                     </div>
@@ -4968,7 +4962,7 @@
                                     <span class="">Score</span>
                                 </label>
                                 <!--Begin::Select-->
-                                <input type="number" name="score_cli" id="score-cli" placeholder="Range 1 - 100" class="form-control form-control-solid" min="0" max="100" value="{{ $item->score }}">
+                                <input type="text" name="score_cli" id="score-cli" placeholder="Range 1 - 100" pattern="^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)$" class="form-control form-control-solid" min="0" max="100" value="{{ $item->score }}">
                             </div>
                         </div>
                     </div>
@@ -5002,7 +4996,7 @@
                     <!--begin::Modal header-->
                     <div class="modal-header">
                         <!--begin::Modal title-->
-                        <h2>Add CLI</h2>
+                        <h2>Add NPS</h2>
                         <!--end::Modal title-->
                         <!--begin::Close-->
                         <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
@@ -5052,7 +5046,7 @@
                                     <span class="">Score</span>
                                 </label>
                                 <!--Begin::Select-->
-                                <input type="number" name="score_nps" id="score_nps" placeholder="Range 1 - 100" class="form-control form-control-solid" min="0" max="100">
+                                <input type="text" name="score_nps" id="score_nps" placeholder="Range 1 - 100" pattern="^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)$" class="form-control form-control-solid" min="0" max="100">
                             </div>
                         </div>
                     </div>
@@ -5132,7 +5126,7 @@
                                     <span class="">Score</span>
                                 </label>
                                 <!--Begin::Select-->
-                                <input type="number" name="score_nps" id="score-nps" placeholder="Range 1 - 100" class="form-control form-control-solid" min="0" max="100" value="{{ $item->score }}">
+                                <input type="text" name="score_nps" id="score-nps" placeholder="Range 1 - 100" pattern="^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)$" class="form-control form-control-solid" min="0" max="100" value="{{ $item->score }}">
                             </div>
                         </div>
                     </div>
@@ -7112,7 +7106,7 @@
                                         "TITLELETTER": "{{$customer->name ?? ""}}",
                                         "SEARCHTERM1": "",
                                         "SEARCHTERM2": "",
-                                        "STREET": "{{$customer->sap->street}}",
+                                        "STREET": "{{$customer->address_1}}",
                                         "HOUSE_NO": "",
                                         "POSTL_COD1": "{{$customer->kode_pos}}",
                                         "CITY": "",
@@ -7121,9 +7115,9 @@
                                         "PO_BOX": "",
                                         "POSTL_COD3": "",
                                         "LANGU": "E",
-                                        "TELEPHONE": "{{$customer->phone_number}}",
+                                        "TELEPHONE": "{{$customer->phone_number ?? ""}}",
                                         "PHONE_EXTENSION": "",
-                                        "MOBPHONE": "{{$customer->handphone}}",
+                                        "MOBPHONE": "{{$customer->handphone ?? ""}}",
                                         "FAX": "{{$customer->fax}}",
                                         "FAX_EXTENSION": "",
                                         "E_MAIL": "{{$customer->email}}",
@@ -7132,7 +7126,7 @@
                                         "IDENTIFICATION": [
                                         {
                                             "TAXTYPE": "",
-                                            "TAXNUMBER": "{{$customer->npwp_company}}"
+                                            "TAXNUMBER": "{{$customer->npwp_company ?? ""}}"
                                         }],
                                         "BANK": [
                                         {
@@ -7183,7 +7177,7 @@
                                         "WEBRE": "",
                                         "VEND_WAERS": "",
                                         "LEBRE": "",
-                                        "BRAN2": "{{$customer->IndustrySector->id_industry_sector}}"
+                                        "BRAN2": "{{$customer->IndustrySector->id_industry_sector ?? ""}}"
                                     }
                                 ]
                             }
