@@ -341,8 +341,8 @@
 </form>
 @else
 <!--begin::Content-->
-<div class="content d-flex flex-column flex-column-fluid" id="kt_content" style="padding: 0 !important;">
-    <form action="/contract-management/update" method="post">
+<form action="/contract-management/update" method="post">
+    <div class="content d-flex flex-column flex-column-fluid" id="kt_content" style="padding: 0 !important;">
         @csrf
         <!--begin::Toolbar-->
         <div class="toolbar" id="kt_toolbar">
@@ -362,9 +362,11 @@
                 <div class="d-flex align-items-center py-1">
 
                     <!--begin::Button-->
+                    @if ($contract->where("id_contract", "=", $contract->id_contract)->where("stages", "!=", 1)->get()->isNotEmpty())
                     <button type="submit" class="btn btn-sm btn-primary" id="kt_toolbar_primary_button"
                         style="background-color:#008CB4;">
                         Save</button>
+                    @endif
                     <!--end::Button-->
 
                     <!--begin::Button-->
@@ -672,1213 +674,424 @@
                 </div>
             </div>
         </div>
-</div>
+    </div>
+
 <!--end::Header Contract-->
-</form>
-<!--begin::Content-->
-<div class="col-xl-15 mx-6">
-    <!--begin::Contacts-->
-    <div class="card card-flush" id="kt_contacts_main">
+    <!--begin::Content-->
+    <div class="col-xl-15 mx-6">
+        <!--begin::Contacts-->
+        <div class="card card-flush" id="kt_contacts_main">
 
-        <!--begin::Card body-->
-        <div class="card-body pt-5">
-            <!--begin:::Tabs-->
-            <ul class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-8">
-                <!--begin:::Tab item Informasi Perusahaan-->
-                <li class="nav-item">
-                    <a class="nav-link text-active-primary pb-4 ms-6 active" data-bs-toggle="tab"
-                        href="#kt_user_view_overview_tab" style="font-size:14px;">Perolehan</a>
-                </li>
-                <!--end:::Tab item Informasi Perusahaan-->
-
-                {{-- @if ($contract->stages > 0)
-                    <!--begin:::Tab item History-->
+            <!--begin::Card body-->
+            <div class="card-body pt-5">
+                <!--begin:::Tabs-->
+                <ul class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-8">
+                    <!--begin:::Tab item Informasi Perusahaan-->
                     <li class="nav-item">
-                        <a class="nav-link text-active-primary pb-4 ms-6" data-kt-countup-tabs="true" data-bs-toggle="tab"
-                            href="#kt_user_view_overview_history" style="font-size:14px;">Terkontrak</a>
+                        <a class="nav-link text-active-primary pb-4 ms-6 active" data-bs-toggle="tab"
+                            href="#kt_user_view_overview_tab" style="font-size:14px;">Perolehan</a>
                     </li>
-                    <!--end:::Tab item History-->
-                @endif --}}
+                    <!--end:::Tab item Informasi Perusahaan-->
 
-                @if ($contract->stages > 1)
-                    <!--begin:::Tab item Atachment & Notes-->
-                    <li class="nav-item">
-                        <a class="nav-link text-active-primary pb-4 ms-6" data-kt-countup-tabs="true" data-bs-toggle="tab"
-                            href="#kt_user_view_overview_Performance" style="font-size:14px;">Pelaksanaan</a>
-                    </li>
-                    <!--end:::Tab item Atachment & Notes-->
+                    {{-- @if ($contract->stages > 0)
+                        <!--begin:::Tab item History-->
+                        <li class="nav-item">
+                            <a class="nav-link text-active-primary pb-4 ms-6" data-kt-countup-tabs="true" data-bs-toggle="tab"
+                                href="#kt_user_view_overview_history" style="font-size:14px;">Terkontrak</a>
+                        </li>
+                        <!--end:::Tab item History-->
+                    @endif --}}
 
-                @endif
+                    @if ($contract->stages > 1)
+                        <!--begin:::Tab item Atachment & Notes-->
+                        <li class="nav-item">
+                            <a class="nav-link text-active-primary pb-4 ms-6" data-kt-countup-tabs="true" data-bs-toggle="tab"
+                                href="#kt_user_view_overview_Performance" style="font-size:14px;">Pelaksanaan</a>
+                        </li>
+                        <!--end:::Tab item Atachment & Notes-->
 
-                @if ($contract->stages > 2)
-                    <!--begin:::Tab item Atachment & Notes-->
-                    <li class="nav-item">
-                        <a class="nav-link text-active-primary pb-4 ms-6" data-kt-countup-tabs="true" data-bs-toggle="tab"
-                            href="#kt_user_view_overview_SerahTerima" style="font-size:14px;">Pemeliharaan</a>
-                    </li>
-                    <!--end:::Tab item Atachment & Notes-->
+                    @endif
 
-                @endif
+                    @if ($contract->stages > 2)
+                        <!--begin:::Tab item Atachment & Notes-->
+                        <li class="nav-item">
+                            <a class="nav-link text-active-primary pb-4 ms-6" data-kt-countup-tabs="true" data-bs-toggle="tab"
+                                href="#kt_user_view_overview_SerahTerima" style="font-size:14px;">Pemeliharaan</a>
+                        </li>
+                        <!--end:::Tab item Atachment & Notes-->
 
-                @if ($contract->stages > 3)
-                    <!--begin:::Tab item Atachment & Notes-->
-                    <li class="nav-item">
-                        <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true" data-bs-toggle="tab"
-                            href="#kt_user_view_overview_penutupan_proyek" style="font-size:14px;">Penutupan
-                            Proyek</a>
-                    </li>
-                    <!--end:::Tab item Atachment & Notes-->
+                    @endif
 
-                @endif
+                    @if ($contract->stages > 3)
+                        <!--begin:::Tab item Atachment & Notes-->
+                        <li class="nav-item">
+                            <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true" data-bs-toggle="tab"
+                                href="#kt_user_view_overview_penutupan_proyek" style="font-size:14px;">Penutupan
+                                Proyek</a>
+                        </li>
+                        <!--end:::Tab item Atachment & Notes-->
 
-            </ul>
-            <!--end:::Tabs-->
+                    @endif
 
-            <!--begin:::Tab content -->
-            <div class="tab-content" id="myTabContent">
-                <!--Informasi Perusahaan-->
-                <div class="tab-pane fade show active" id="kt_user_view_overview_tab" role="tabpanel">
+                </ul>
+                <!--end:::Tabs-->
 
-                    <!--begin::Row-->
-                    {{-- <div class="row fv-row">
-                        <!--begin::Col-->
-                        <div class="col-6">
-                            <!--begin::Input group Website-->
-                            <div class="fv-row mb-7">
-                                <!--begin::Label-->
-                                <label class="fs-6 fw-bold form-label mt-3">
-                                    <span>Rekomendasi</span>
-                                </label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <select name="rekomendasi-1" class="form-select form-select-solid"
-                                    data-control="select2" data-hide-search="true" data-placeholder="Rekomendasi">
-                                    <option value="1">Yes</option>
-                                    <option value="0">No</option>
-                                </select>
-                                <!--end::Input-->
+                <!--begin:::Tab content -->
+                <div class="tab-content" id="myTabContent">
+                    <!--Informasi Perusahaan-->
+                    <div class="tab-pane fade show active" id="kt_user_view_overview_tab" role="tabpanel">
+
+                        <!--begin::Row-->
+                        {{-- <div class="row fv-row">
+                            <!--begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span>Rekomendasi</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <select name="rekomendasi-1" class="form-select form-select-solid"
+                                        data-control="select2" data-hide-search="true" data-placeholder="Rekomendasi">
+                                        <option value="1">Yes</option>
+                                        <option value="0">No</option>
+                                    </select>
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
                             </div>
-                            <!--end::Input group-->
-                        </div>
-                        <!--End begin::Col-->
-                        <div class="col">
-                            <!--begin::Input group Website-->
-                            <div class="fv-row mb-7">
+                            <!--End begin::Col-->
+                            <div class="col">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
 
+                                </div>
+                                <!--end::Input group-->
                             </div>
-                            <!--end::Input group-->
-                        </div>
-                        <!--End begin::Col-->
-                    </div> --}}
-                    <!--End begin::Row-->
+                            <!--End begin::Col-->
+                        </div> --}}
+                        <!--End begin::Row-->
 
-                    <!--begin::Card title-->
-                    <div class="card-title m-0">
+                        <!--begin::Card title-->
+                        <div class="card-title m-0">
 
-                        <h3 class="fw-bolder m-0 mb-3" id="HeadDetail" style="font-size:14px;">
-                            Aanwitjzing
-                            <a href="#" Id="Plus" data-bs-toggle="modal"
-                                data-bs-target="#kt_modal_question_proyek">+</a>
+                            <h3 class="fw-bolder m-0 mb-3" id="HeadDetail" style="font-size:14px;">
+                                Aanwitjzing
                                 @if (!empty($contract->questionsProjects->toArray()))
-                                    <a href="#" data-bs-toggle="modal"
-                                    data-bs-target="#kt_modal_upload_aanwitjzing" class="btn btn-primary btn-sm p-2 mx-3 text-end">Upload</a>
+                                    <a href="#" onclick="exportToExcel(this, '#data-aanwitjzing')" class="">(Klik di sini untuk Export ke Excel)</a>
                                 @endif
-                        </h3>
+                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_question_proyek">+</a>
+                                    @if (!empty($contract->questionsProjects->toArray()))
+                                        <a href="#" data-bs-toggle="modal"
+                                        data-bs-target="#kt_modal_upload_aanwitjzing" class="btn btn-primary btn-sm p-2 mx-3 text-end">Upload</a>
+                                    @endif
+                            </h3>
 
-                        <!--begin:Table: Review-->
-                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="data-aanwitjzing">
-                            <!--begin::Table head-->
-                            <thead>
-                                <!--begin::Table row-->
-                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-125px">Item</th>
-                                    <th class="min-w-125px">Sub Pasal</th>
-                                    <th class="min-w-125px">Daftar Pertanyaan</th>
-                                    <th class="min-w-125px">Tanggal</th>
-                                </tr>
-                                <!--end::Table row-->
-                            </thead>
-                            <!--end::Table head-->
-                            <!--begin::Table body-->
-                            <tbody class="fw-bold text-gray-400">
-                                @if (isset($contract))
-                                    @forelse ($contract->questionsProjects as $questionProject)
-                                        @if ($questionProject->tender_menang == 0)
-                                            <tr>
-                                                <!--begin::Column-->
-                                                <td>
-                                                    {{ $questionProject->item }}
-                                                </td>
-                                                <!--end::Column-->
-                                                <!--begin::Column-->
-                                                <td>
-                                                    {{ $questionProject->sub_pasal }}
-                                                </td>
-                                                <!--end::Column-->
-                                                <!--begin::Column-->
-                                                <td>
-                                                    {{ $questionProject->note_question }}
-                                                </td>
-                                                <!--end::Column-->
-                                                <!--begin::Kode=-->
-                                                <td>
-                                                    <a href="#" class="text-gray-400 text-hover-primary mb-1">
-                                                        {{ Carbon\Carbon::createFromTimeString($questionProject->created_at)->translatedFormat("d F Y") }}</a>
-                                                </td>
-                                                <!--end::Kode=-->
-                                            </tr>
-                                        @endif
-                                    @empty
+                            <!--begin:Table: Review-->
+                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="data-aanwitjzing">
+                                <!--begin::Table head-->
+                                <thead>
+                                    <!--begin::Table row-->
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-125px">Item</th>
+                                        <th class="min-w-125px">Sub Pasal</th>
+                                        <th class="min-w-125px">Daftar Pertanyaan</th>
+                                        <th class="min-w-125px">Tanggal</th>
+                                    </tr>
+                                    <!--end::Table row-->
+                                </thead>
+                                <!--end::Table head-->
+                                <!--begin::Table body-->
+                                <tbody class="fw-bold text-gray-400">
+                                    @if (isset($contract))
+                                        @forelse ($contract->questionsProjects as $questionProject)
+                                            @if ($questionProject->tender_menang == 0)
+                                                <tr>
+                                                    <!--begin::Column-->
+                                                    <td>
+                                                        {{ $questionProject->item }}
+                                                    </td>
+                                                    <!--end::Column-->
+                                                    <!--begin::Column-->
+                                                    <td>
+                                                        {{ $questionProject->sub_pasal }}
+                                                    </td>
+                                                    <!--end::Column-->
+                                                    <!--begin::Column-->
+                                                    <td>
+                                                        {{ $questionProject->note_question }}
+                                                    </td>
+                                                    <!--end::Column-->
+                                                    <!--begin::Kode=-->
+                                                    <td>
+                                                        <a href="#" class="text-gray-400 text-hover-primary mb-1">
+                                                            {{ Carbon\Carbon::createFromTimeString($questionProject->created_at)->translatedFormat("d F Y") }}</a>
+                                                    </td>
+                                                    <!--end::Kode=-->
+                                                </tr>
+                                            @endif
+                                        @empty
+                                            
+                                        @endforelse
+                                    @else
                                         
-                                    @endforelse
-                                @else
-                                    
-                                @endif
-                            </tbody>
-                            <!--end::Table body-->
+                                    @endif
+                                </tbody>
+                                <!--end::Table body-->
 
-                        </table>
-                        @php
-                            $uploadFileAanwitjzing = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "aanwitjzing")->first();
-                        @endphp
-                        <!--End:Table: Review-->
-                        @if (!empty($uploadFileAanwitjzing))
-                        <a target="_blank" href="{{ asset('words/'.$uploadFileAanwitjzing->id_document) }}" class="text-hover-primary">
-                          <small> <b>Download File :</b> {{ $uploadFileAanwitjzing->nama_document }}
-                          </small></a>
-                        @endif
+                            </table>
+                            @php
+                                $uploadFileAanwitjzing = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "aanwitjzing")->first();
+                            @endphp
+                            <!--End:Table: Review-->
+                            @if (!empty($uploadFileAanwitjzing))
+                            <a target="_blank" href="{{ asset('words/'.$uploadFileAanwitjzing->id_document) }}" class="text-hover-primary">
+                            <small> <b>Download File :</b> {{ $uploadFileAanwitjzing->nama_document }}
+                            </small></a>
+                            @endif
 
-                        <br><br>
+                            <br><br>
 
-                        {{-- <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                            Draft Kontrak
-                            <a href="/contract-management/view/{{ url_encode($contract->id_contract) }}/draft-contract"
-                                Id="Plus">+</a>
-                        </h3>
+                            {{-- <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                Draft Kontrak
+                                <a href="/contract-management/view/{{ url_encode($contract->id_contract) }}/draft-contract"
+                                    Id="Plus">+</a>
+                            </h3>
 
-                        <!--begin:Table: Draft Contract-->
-                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
-                            <!--begin::Table head-->
-                            <thead>
-                                <!--begin::Table row-->
-                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-125px">Nama Dokumen
-                                    </th>
-                                    <th class="min-w-125px">No. Dokumen</th>
-                                    <th class="min-w-125px">Tanggal</th>
-                                    <th class="min-w-125px">Catatan</th>
-                                </tr>
-                                <!--end::Table row-->
-                            </thead>
-                            <!--end::Table head-->
-                            <!--begin::Table body-->
-                            <tbody class="fw-bold text-gray-400">
-                                @if (isset($contract))
-                                    @forelse ($contract->draftContracts as $draftContract)
-                                        @if ($draftContract->tender_menang == 0)
+                            <!--begin:Table: Draft Contract-->
+                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                <!--begin::Table head-->
+                                <thead>
+                                    <!--begin::Table row-->
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-125px">Nama Dokumen
+                                        </th>
+                                        <th class="min-w-125px">No. Dokumen</th>
+                                        <th class="min-w-125px">Tanggal</th>
+                                        <th class="min-w-125px">Catatan</th>
+                                    </tr>
+                                    <!--end::Table row-->
+                                </thead>
+                                <!--end::Table head-->
+                                <!--begin::Table body-->
+                                <tbody class="fw-bold text-gray-400">
+                                    @if (isset($contract))
+                                        @forelse ($contract->draftContracts as $draftContract)
+                                            @if ($draftContract->tender_menang == 0)
+                                                <tr>
+                                                    <!--begin::Column-->
+                                                    <td>
+                                                        <a target="_blank"
+                                                            href="/contract-management/view/{{ $contract->id_contract }}/draft-contract/{{ $draftContract->id_draft }}"
+                                                            class="text-gray-600 text-hover-primary mb-1">
+                                                            {{ $draftContract->title_draft }}
+                                                        </a>
+                                                    </td>
+                                                    <!--end::Column-->
+                                                    <!--begin::Column-->
+                                                    <td>
+                                                        <a target="_blank"
+                                                            href="/document/view/{{ $draftContract->id_draft }}/{{ $draftContract->id_document }}"
+                                                            class="text-gray-600 text-hover-primary mb-1">
+                                                            {{ $draftContract->id_document }}
+                                                        </a>
+                                                    </td>
+                                                    <!--end::Column-->
+                                                    <!--begin::Kode=-->
+                                                    <td>
+                                                        <a href="#" class="text-gray-400 text-hover-primary mb-1">
+                                                            {{ date_format(new DateTime($draftContract->created_at), 'd M, Y') }}</a>
+                                                    </td>
+                                                    <!--end::Kode=-->
+                                                    <!--begin::Unit=-->
+                                                    <td>{{ $draftContract->draft_note }}
+                                                    </td>
+                                                    <!--end::Unit=-->
+
+                                                </tr>
+                                            @endif
+                                        @empty
                                             <tr>
-                                                <!--begin::Column-->
-                                                <td>
-                                                    <a target="_blank"
-                                                        href="/contract-management/view/{{ $contract->id_contract }}/draft-contract/{{ $draftContract->id_draft }}"
-                                                        class="text-gray-600 text-hover-primary mb-1">
-                                                        {{ $draftContract->title_draft }}
-                                                    </a>
+                                                <td colspan="4" class="text-center">
+                                                    <h6><b>There is no data</b></h6>
                                                 </td>
-                                                <!--end::Column-->
-                                                <!--begin::Column-->
-                                                <td>
-                                                    <a target="_blank"
-                                                        href="/document/view/{{ $draftContract->id_draft }}/{{ $draftContract->id_document }}"
-                                                        class="text-gray-600 text-hover-primary mb-1">
-                                                        {{ $draftContract->id_document }}
-                                                    </a>
-                                                </td>
-                                                <!--end::Column-->
-                                                <!--begin::Kode=-->
-                                                <td>
-                                                    <a href="#" class="text-gray-400 text-hover-primary mb-1">
-                                                        {{ date_format(new DateTime($draftContract->created_at), 'd M, Y') }}</a>
-                                                </td>
-                                                <!--end::Kode=-->
-                                                <!--begin::Unit=-->
-                                                <td>{{ $draftContract->draft_note }}
-                                                </td>
-                                                <!--end::Unit=-->
-
                                             </tr>
-                                        @endif
-                                    @empty
+                                        @endforelse
+                                    @else
                                         <tr>
                                             <td colspan="4" class="text-center">
                                                 <h6><b>There is no data</b></h6>
                                             </td>
                                         </tr>
-                                    @endforelse
-                                @else
-                                    <tr>
-                                        <td colspan="4" class="text-center">
-                                            <h6><b>There is no data</b></h6>
-                                        </td>
-                                    </tr>
-                                @endif
-                            </tbody>
-                            <!--end::Table body-->
+                                    @endif
+                                </tbody>
+                                <!--end::Table body-->
 
-                        </table>
-                        <!--End:Table: Draft Contract--> --}}
+                            </table>
+                            <!--End:Table: Draft Contract--> --}}
 
-                        <br><br>
-                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                            Tinjauan Dokumen Kontrak - Perolehan
-                            @if ($contract->reviewProjects->where('stage', '=', 1)->isEmpty())
-                                <a href="/review-contract/view/{{ $contract->id_contract }}/stage/1" target="_blank" Id="Plus">+</a>    
-                                @else
-                                <a href="/review-contract/view/{{ $contract->id_contract }}/stage/1" target="_blank" class="btn btn-primary btn-sm p-2 px-3 mx-3">view</a>    
-                            @endif
-                            @if (!empty($contract->reviewProjects->toArray()))
-                                    <a href="#" data-bs-toggle="modal"
-                                    data-bs-target="#kt_modal_upload_tinjauan_perolehan" class="btn btn-primary btn-sm p-2 text-end">Upload</a>
-                            @endif
-                        </h3>
-
-                        @php
-                            $uploadFilePerubahan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "tinjauan-perolehan")->first();
-                        @endphp
-                        <!--End:Table: Review-->
-                        @if (!empty($uploadFilePerubahan))
-                            <a target="_blank" href="{{ asset('words/'.$uploadFilePerubahan->id_document) }}" class="text-hover-primary">
-                            <small><b>Download File :</b> {{ $uploadFilePerubahan->nama_document }}</small>
-                            </a>
-                        @endif
-
-                        <br><br>
-                        <!--begin:Table: Review-->
-                        {{-- <table class="table align-middle table-row-dashed fs-6 gy-5" id="tinjauan-kontrak">
-                            <!--begin::Table head-->
-                            <thead>
-                                <!--begin::Table row-->
-                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-125px">Data</th>
-                                    <th class="min-w-125px">Keterangan</th>
-                                </tr>
-                                <!--end::Table row-->
-                            </thead>
-                            <!--end::Table head-->
-                            <tbody class="fw-bold text-gray-400">
-                                @if (!empty($review[1]))
-                                    <!--begin::Table body-->   
-                                    <tr>
-                                    <td>
-                                        <a href="#" data-bs-target="#kt_modal_tabel_review_kontrak" class="text-hover-primary"><p>Lihat Review Kontrak Perolehan</p></a>
-                                    </td>
-                                    <td>
-                                        <p>Terisi</p>
-                                    </td>
-                                    </tr>
+                            <br>
+                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                Tinjauan Dokumen Kontrak - Perolehan
+                                @if ($contract->reviewProjects->where('stage', '=', 1)->isEmpty())
+                                    <a href="/review-contract/view/{{ $contract->id_contract }}/stage/1" target="_blank" Id="Plus">+</a>    
                                     @else
-                                    <tr>
-                                        <td>
-                                            <p><b>There is no data.</b></p>
-                                        </td>
-                                    </tr>
-                                    <!--end::Table body-->
+                                    <a href="/review-contract/view/{{ $contract->id_contract }}/stage/1" target="_blank" class="btn btn-primary btn-sm p-2 px-3 mx-3">view</a>    
                                 @endif
-                            </tbody>
-                        </table> --}}
-                        <!--End:Table: Review-->
+                                @if (!empty($contract->reviewProjects->toArray()))
+                                        <a href="#" data-bs-toggle="modal"
+                                        data-bs-target="#kt_modal_upload_tinjauan_perolehan" class="btn btn-primary btn-sm p-2 text-end">Upload</a>
+                                @endif
+                            </h3>
+
+                            @php
+                                $uploadFilePerubahan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "tinjauan-perolehan")->first();
+                            @endphp
+                            <!--End:Table: Review-->
+                            @if (!empty($uploadFilePerubahan))
+                                <a target="_blank" href="{{ asset('words/'.$uploadFilePerubahan->id_document) }}" class="text-hover-primary">
+                                <small><b>Download File :</b> {{ $uploadFilePerubahan->nama_document }}</small>
+                                </a>
+                            @endif
+
+                            <br><br>
+                            <!--begin:Table: Review-->
+                            {{-- <table class="table align-middle table-row-dashed fs-6 gy-5" id="tinjauan-kontrak">
+                                <!--begin::Table head-->
+                                <thead>
+                                    <!--begin::Table row-->
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-125px">Data</th>
+                                        <th class="min-w-125px">Keterangan</th>
+                                    </tr>
+                                    <!--end::Table row-->
+                                </thead>
+                                <!--end::Table head-->
+                                <tbody class="fw-bold text-gray-400">
+                                    @if (!empty($review[1]))
+                                        <!--begin::Table body-->   
+                                        <tr>
+                                        <td>
+                                            <a href="#" data-bs-target="#kt_modal_tabel_review_kontrak" class="text-hover-primary"><p>Lihat Review Kontrak Perolehan</p></a>
+                                        </td>
+                                        <td>
+                                            <p>Terisi</p>
+                                        </td>
+                                        </tr>
+                                        @else
+                                        <tr>
+                                            <td>
+                                                <p><b>There is no data.</b></p>
+                                            </td>
+                                        </tr>
+                                        <!--end::Table body-->
+                                    @endif
+                                </tbody>
+                            </table> --}}
+                            <!--End:Table: Review-->
 
 
-                        {{-- &nbsp;<br>
-                        &nbsp;<br>
+                            {{-- &nbsp;<br>
+                            &nbsp;<br>
 
-                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                            Input Resiko
-                            <a href="#" Id="Plus" data-bs-toggle="modal"
-                                data-bs-target="#kt_modal_risk_proyek">+</a>
-                        </h3>
+                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                Input Resiko
+                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_risk_proyek">+</a>
+                            </h3>
 
-                        <!--begin:Table: Review-->
-                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
-                            <!--begin::Table head-->
-                            <thead>
-                                <!--begin::Table row-->
-                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-125px">Verifikasi</th>
-                                    <th class="min-w-125px">Kategori</th>
-                                    <th class="min-w-125px">Kriteria</th>
-                                    <th class="min-w-125px">Probis Level 1 - 2</th>
-                                    <th class="min-w-125px">Probis Yang Terganggu</th>
-                                </tr>
-                                <!--end::Table row-->
-                            </thead>
-                            <!--end::Table head-->
-                            <!--begin::Table body-->
-                            <tbody class="fw-bold text-gray-400">
-                                @if ($contract->inputRisks->contains('stage', 0))
-                                    @forelse ($contract->inputRisks as $inputRisk)
-                                        @if ($inputRisk->stage == 0)
+                            <!--begin:Table: Review-->
+                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                <!--begin::Table head-->
+                                <thead>
+                                    <!--begin::Table row-->
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-125px">Verifikasi</th>
+                                        <th class="min-w-125px">Kategori</th>
+                                        <th class="min-w-125px">Kriteria</th>
+                                        <th class="min-w-125px">Probis Level 1 - 2</th>
+                                        <th class="min-w-125px">Probis Yang Terganggu</th>
+                                    </tr>
+                                    <!--end::Table row-->
+                                </thead>
+                                <!--end::Table head-->
+                                <!--begin::Table body-->
+                                <tbody class="fw-bold text-gray-400">
+                                    @if ($contract->inputRisks->contains('stage', 0))
+                                        @forelse ($contract->inputRisks as $inputRisk)
+                                            @if ($inputRisk->stage == 0)
+                                                <tr>
+                                                    <!--begin::Column-->
+                                                    <td>
+                                                        <p class="text-gray-600 mb-1">{{ $inputRisk->verifikasi }}</p>
+                                                    </td>
+                                                    <!--end::Column-->
+                                                    <!--begin::Column-->
+                                                    <td>
+                                                        <p class="text-gray-600 mb-1">{{ $inputRisk->kategori }}</p>
+                                                    </td>
+                                                    <!--end::Column-->
+                                                    <!--begin::Kode=-->
+                                                    <td>
+                                                        <p class="text-gray-600 mb-1">{{ $inputRisk->kriteria }}</p>
+                                                    </td>
+                                                    <!--end::Kode=-->
+                                                    <!--begin::Unit=-->
+                                                    <td>
+                                                        <p class="text-gray-600 mb-1">{{ $inputRisk->probis_1_2 }}</p>
+                                                    </td>
+                                                    <!--end::Unit=-->
+                                                    <!--begin::Unit=-->
+                                                    <td>
+                                                        <p class="text-gray-600 mb-1">{{ $inputRisk->probis_terganggu }}</p>
+                                                    </td>
+                                                    <!--end::Unit=-->
+                                                </tr>
+                                            @endif
+                                        @empty
                                             <tr>
-                                                <!--begin::Column-->
-                                                <td>
-                                                    <p class="text-gray-600 mb-1">{{ $inputRisk->verifikasi }}</p>
+                                                <td colspan="5" class="text-center">
+                                                    <h6><b>There is no data</b></h6>
                                                 </td>
-                                                <!--end::Column-->
-                                                <!--begin::Column-->
-                                                <td>
-                                                    <p class="text-gray-600 mb-1">{{ $inputRisk->kategori }}</p>
-                                                </td>
-                                                <!--end::Column-->
-                                                <!--begin::Kode=-->
-                                                <td>
-                                                    <p class="text-gray-600 mb-1">{{ $inputRisk->kriteria }}</p>
-                                                </td>
-                                                <!--end::Kode=-->
-                                                <!--begin::Unit=-->
-                                                <td>
-                                                    <p class="text-gray-600 mb-1">{{ $inputRisk->probis_1_2 }}</p>
-                                                </td>
-                                                <!--end::Unit=-->
-                                                <!--begin::Unit=-->
-                                                <td>
-                                                    <p class="text-gray-600 mb-1">{{ $inputRisk->probis_terganggu }}</p>
-                                                </td>
-                                                <!--end::Unit=-->
                                             </tr>
-                                        @endif
-                                    @empty
+                                        @endforelse
+                                    @else
                                         <tr>
                                             <td colspan="5" class="text-center">
                                                 <h6><b>There is no data</b></h6>
                                             </td>
                                         </tr>
-                                    @endforelse
-                                @else
-                                    <tr>
-                                        <td colspan="5" class="text-center">
-                                            <h6><b>There is no data</b></h6>
-                                        </td>
-                                    </tr>
-                                @endif
-                            </tbody>
-                            <!--end::Table body-->
+                                    @endif
+                                </tbody>
+                                <!--end::Table body-->
 
-                        </table> --}}
-                        <!--End:Table: Review-->
-                        <br>
+                            </table> --}}
+                            <!--End:Table: Review-->
+                            <br>
 
-                        
-
-                    <h3 class="fw-bolder m-0 mb-3" id="HeadDetail" style="font-size:14px;">
-                        Input Resiko - Perolehan (<i class="text-hover-primary text-gray"><a 
-                                                        href="https://crm.wika.co.id/faqs/104625_RiskTender_Input-Kosong.rev.xlsx"> Download
-                                                        Template Risk Tender </a></i>)
-                        {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
-                            data-bs-target="#kt_modal_input_resiko_perolehan">+</a> --}}
-                        <a href="#" Id="Plus" data-bs-toggle="modal"
-                        data-bs-target="#kt_modal_upload_resiko_perolehan">+</a>
-                    </h3>
-
-                    <!--begin:Table: Review-->
-                    <table class="table align-middle table-row-dashed fs-6 gy-5">
-                        <!--begin::Table head-->
-                        <thead>
-                            <!--begin::Table row-->
-                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                <th class="min-w-125px">File</th>
-                                <th class="min-w-125px">Tanggal</th>
-                            </tr>
-                            <!--end::Table row-->
-                        </thead>
-                        <!--end::Table head-->
-                        <!--begin::Table body-->
-                        <tbody class="fw-bold text-gray-400">
-                            @php
-                                $uploadResikoPerolehan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "resiko-perolehan")->first();
-                            @endphp
-                                @if (!empty($uploadResikoPerolehan))
-                                    <tr>
-                                        <!--begin::Column-->
-                                        <td>
-                                            <!--End:Table: Review-->
-                                            <a target="_blank" href="{{ asset('words/'.$uploadResikoPerolehan->id_document) }}" class="text-hover-primary">
-                                            <p>{{ $uploadResikoPerolehan->nama_document }}</p>
-                                            </a>
-                                        </td>
-                                        <!--end::Column-->
-                                        <!--begin::tanggal=-->
-                                        <td>
-                                            <p class="text-gray-600 mb-1">{{ Carbon\Carbon::createFromTimeString($uploadResikoPerolehan->created_at)->translatedFormat("d F Y") }}</p>
-                                        </td>
-                                        <!--end::tanggal=-->
-                                    </tr>
-                                @else
-                                    <tr>
-                                        <td colspan="5" class="text-center">
-                                            <h6><b>There is no data</b></h6>
-                                        </td>
-                                    </tr>
-                                @endif
-                        </tbody>
-                        <!--end::Table body-->
-
-                    </table>
-                    <!--End:Table: Review-->
-
-                        <br>
+                            
 
                         <h3 class="fw-bolder m-0 mb-3" id="HeadDetail" style="font-size:14px;">
-                            Usulan Perubahan Draft Kontrak
+                            Input Resiko - Perolehan (<i class="text-hover-primary text-gray"><a 
+                                                            href="https://crm.wika.co.id/faqs/104625_RiskTender_Input-Kosong.rev.xlsx"> Download
+                                                            Template Risk Tender </a></i>)
+                            {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
+                                data-bs-target="#kt_modal_input_resiko_perolehan">+</a> --}}
                             <a href="#" Id="Plus" data-bs-toggle="modal"
-                                data-bs-target="#kt_modal_usulan_perubahan_draft_kontrak">+</a>
-                                @if (!empty($contract->UsulanPerubahanDraft->toArray()))
-                                    <a href="#" data-bs-toggle="modal"
-                                    data-bs-target="#kt_modal_upload_perubahan_kontrak" class="btn btn-primary btn-sm p-2 mx-3 text-end">Upload</a>
-                                @endif
+                            data-bs-target="#kt_modal_upload_resiko_perolehan">+</a>
                         </h3>
 
                         <!--begin:Table: Review-->
-                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="usulan-draft">
+                        <table class="table align-middle table-row-dashed fs-6 gy-5">
                             <!--begin::Table head-->
                             <thead>
                                 <!--begin::Table row-->
                                 <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-auto">Isu</th>
-                                    <th class="min-w-auto">Kategori</th>
-                                    <th class="min-w-auto">Deskripsi Klausul Awal</th>
-                                    <th class="min-w-auto">Usulan Perubahan</th>
-                                    <th class="min-w-auto">Keterangan</th>
-                                </tr>
-                                <!--end::Table row-->
-                            </thead>
-                            <!--end::Table head-->
-                            <!--begin::Table body-->
-                            <tbody class="fw-bold text-gray-600">
-                                @if ($contract->UsulanPerubahanDraft->contains('kategori', 1))
-                                    {{-- <tr>
-                                        <td colspan="5" class= "px-4 text-bg-dark">
-                                            <b>Surat Perjanjian Kontrak</b>
-                                        </td>
-                                    </tr> --}}
-                                    <tr>
-                                        @foreach ($contract->UsulanPerubahanDraft as $perubahan_draft)
-                                            @php
-                                                $pasals = collect(explode("|", $perubahan_draft->pasal_perbaikan));
-                                            @endphp
-                                            @if ($perubahan_draft->kategori == 1)
-                                                <td>{{$perubahan_draft->isu}}</td>
-                                                <td>Surat Perjanjian Kontrak</td>
-                                                <td>{{$perubahan_draft->deskripsi_klausul_awal}}</td>
-                                                <td>{{$perubahan_draft->usulan_perubahan_klausul}}</td>
-                                                <td>{{$perubahan_draft->keterangan}}</td>
-                                            @endif
-                                        @endforeach
-                                    </tr>
-                                @endif
-
-                                @if ($contract->UsulanPerubahanDraft->contains('kategori', 2))
-                                    {{-- <tr>
-                                        <td colspan="5" class= "px-4 text-bg-dark">
-                                            <b>Syarat-syarat Umum Kontrak (SSUK)</b>
-                                        </td>
-                                    </tr> --}}
-                                    <tr>
-                                        @foreach ($contract->UsulanPerubahanDraft as $perubahan_draft)
-                                            @php
-                                                $pasals = collect(explode("|", $perubahan_draft->pasal_perbaikan));
-                                            @endphp
-                                            @if ($perubahan_draft->kategori == 2)
-                                                <td>{{$perubahan_draft->isu}}</td>
-                                                <td>Syarat-syarat Umum Kontrak (SSUK)</td>
-                                                <td>{{$perubahan_draft->deskripsi_klausul_awal}}</td>
-                                                <td>{{$perubahan_draft->usulan_perubahan_klausul}}</td>
-                                                <td>{{$perubahan_draft->keterangan}}</td>
-                                            @endif
-                                        @endforeach
-                                    </tr>
-                                @endif
-
-                                @if ($contract->UsulanPerubahanDraft->contains('kategori', 3))
-                                    {{-- <tr>
-                                        <td colspan="5" class= "px-4 text-bg-dark">
-                                            <b>Syarat-syarat Khusus Kontrak (SSKK)</b>
-                                        </td>
-                                    </tr> --}}
-                                    <tr>
-                                        @foreach ($contract->UsulanPerubahanDraft as $perubahan_draft)
-                                            @php
-                                                $pasals = collect(explode("|", $perubahan_draft->pasal_perbaikan));
-                                            @endphp
-                                            @if ($perubahan_draft->kategori == 3)
-                                                <td>{{$perubahan_draft->isu}}</td>
-                                                <td>Syarat-syarat Khusus Kontrak (SSKK)</td>
-                                                <td>{{$perubahan_draft->deskripsi_klausul_awal}}</td>
-                                                <td>{{$perubahan_draft->usulan_perubahan_klausul}}</td>
-                                                <td>{{$perubahan_draft->keterangan}}</td>
-                                            @endif
-                                        @endforeach
-                                    </tr>
-                                @endif
-                            </tbody>
-                            <!--end::Table body-->
-
-                        </table>
-                        <!--End:Table: Review-->
-                        @php
-                        $uploadFilePerubahan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "usulan-perubahan")->first();
-                        @endphp
-                        <!--End:Table: Review-->
-                        @if (!empty($uploadFilePerubahan))
-                        <a target="_blank" href="{{ asset('words/'.$uploadFilePerubahan->id_document) }}" class="text-hover-primary">
-                           <small><b>Download File :</b> {{ $uploadFilePerubahan->nama_document }}</small>
-                        </a>
-                        @endif
-
-                        &nbsp;<br>
-                        &nbsp;<br>
-                        <br>
-                        
-                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                            Dokumen NDA
-                            <i class="bi-info-circle-fill" class="btn btn-secondary mx-4"
-                            data-bs-toggle="tooltip" data-bs-placement="top"
-                            data-bs-custom-class="custom-tooltip"
-                            data-bs-title="Upload dokumen ini ada di <b>CRM Detail Proyek</b>"
-                            data-bs-html="true"></i>
-                            {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
-                                data-bs-target="#kt_modal_risk_proyek">+</a> --}}
-                        </h3>
-
-                        <!--begin:Table: Review-->
-                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
-                            <!--begin::Table head-->
-                            <thead>
-                                <!--begin::Table row-->
-                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-125px">Nama</th>
+                                    <th class="min-w-125px">File</th>
                                     <th class="min-w-125px">Tanggal</th>
-                                </tr>
-                                <!--end::Table row-->
-                            </thead>
-                            <!--end::Table head-->
-                            <!--begin::Table body-->
-                            <tbody class="fw-bold text-gray-400">
-                                {{-- @if ($contract->inputRisks->contains('stage', 0))
-                                    @forelse ($contract->inputRisks as $inputRisk)
-                                        @if ($inputRisk->stage == 0)
-                                            <tr>
-                                                <!--begin::Column-->
-                                                <td>
-                                                    <p class="text-gray-600 mb-1">{{ $inputRisk->resiko }}</p>
-                                                </td>
-                                                <!--end::Column-->
-                                                <!--begin::Column-->
-                                                <td>
-                                                    <p class="text-gray-600 mb-1">{{ $inputRisk->penyebab }}</p>
-                                                </td>
-                                                <!--end::Column-->
-                                                <!--begin::Kode=-->
-                                                <td>
-                                                    <p class="text-gray-600 mb-1">{{ $inputRisk->dampak }}</p>
-                                                </td>
-                                                <!--end::Kode=-->
-                                                <!--begin::Unit=-->
-                                                <td>
-                                                    <p class="text-gray-600 mb-1">{{ $inputRisk->mitigasi }}</p>
-                                                </td>
-                                                <!--end::Unit=-->
-                                            </tr>
-                                        @endif
-                                    @empty
-                                        <tr>
-                                            <td colspan="4" class="text-center">
-                                                <h6><b>There is no data</b></h6>
-                                            </td>
-                                        </tr>
-                                    @endforelse
-                                @else
-                                    <tr>
-                                        <td colspan="4" class="text-center">
-                                            <h6><b>There is no data</b></h6>
-                                        </td>
-                                    </tr>
-                                @endif --}}
-                                @forelse ($contract->project->DokumenNda as $nda)
-                                    <tr>
-                                        <td>
-                                            <a target="_blank" href="{{asset("/words/$nda->id_document.pdf")}}" class="text-hover-primary">{{$nda->nama_dokumen}}</a>
-                                        </td>
-                                        <td>
-                                            {{Carbon\Carbon::createFromTimeString($nda->created_at)->translatedFormat("d F Y")}}
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="2" class="text-center"><b>There is no data</b></td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                            <!--end::Table body-->
-
-                        </table>
-                        <!--End:Table: Review-->
-                        <br>
-                        <br>
-
-                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                            Dokumen MoU
-                            <i class="bi-info-circle-fill" class="btn btn-secondary mx-4"
-                            data-bs-toggle="tooltip" data-bs-placement="top"
-                            data-bs-custom-class="custom-tooltip"
-                            data-bs-title="Upload dokumen ini ada di <b>CRM Detail Proyek</b>"
-                            data-bs-html="true"></i>
-                            {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
-                                data-bs-target="#kt_modal_risk_proyek">+</a> --}}
-                        </h3>
-
-                        <!--begin:Table: Review-->
-                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
-                            <!--begin::Table head-->
-                            <thead>
-                                <!--begin::Table row-->
-                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-125px">Nama</th>
-                                    <th class="min-w-125px">Tanggal</th>
-                                </tr>
-                                <!--end::Table row-->
-                            </thead>
-                            <!--end::Table head-->
-                            <!--begin::Table body-->
-                            <tbody class="fw-bold text-gray-400">
-                                @forelse ($contract->project->DokumenMou as $nda)
-                                    <tr>
-                                        <td>
-                                            <a target="_blank" href="{{asset("/words/$nda->id_document.pdf")}}" class="text-hover-primary">{{$nda->nama_dokumen}}</a>
-                                        </td>
-                                        <td>
-                                            {{Carbon\Carbon::createFromTimeString($nda->created_at)->translatedFormat("d F Y")}}
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="2" class="text-center">
-                                            <b>There is no data</b>
-                                        </td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                            <!--end::Table body-->
-
-                        </table>
-                        <!--End:Table: Review-->
-
-                        <br><br>
-
-                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                            Dokumen ECA
-                            <i class="bi-info-circle-fill" class="btn btn-secondary mx-4"
-                            data-bs-toggle="tooltip" data-bs-placement="top"
-                            data-bs-custom-class="custom-tooltip"
-                            data-bs-title="Upload dokumen ini ada di <b>CRM Detail Proyek</b>"
-                            data-bs-html="true"></i>
-                            {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
-                                data-bs-target="#kt_modal_risk_proyek">+</a> --}}
-                        </h3>
-
-                        <!--begin:Table: Review-->
-                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
-                            <!--begin::Table head-->
-                            <thead>
-                                <!--begin::Table row-->
-                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-125px">Nama</th>
-                                    <th class="min-w-125px">Tanggal</th>
-                                </tr>
-                                <!--end::Table row-->
-                            </thead>
-                            <!--end::Table head-->
-                            <!--begin::Table body-->
-                            <tbody class="fw-bold text-gray-400">
-                                @forelse ($contract->project->DokumenEca as $nda)
-                                    <tr>
-                                        <td>
-                                            <a target="_blank" href="{{asset("/words/$nda->id_document.pdf")}}" class="text-hover-primary">{{$nda->nama_dokumen}}</a>
-                                        </td>
-                                        <td>
-                                            {{Carbon\Carbon::createFromTimeString($nda->created_at)->translatedFormat("d F Y")}}
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="2" class="text-center">
-                                            <b>There is no data</b>
-                                        </td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                            <!--end::Table body-->
-
-                        </table>
-                        <!--End:Table: Review-->
-
-                        <br><br>
-
-
-                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                            Dokumen ICA
-                            <i class="bi-info-circle-fill" class="btn btn-secondary mx-4"
-                            data-bs-toggle="tooltip" data-bs-placement="top"
-                            data-bs-custom-class="custom-tooltip"
-                            data-bs-title="Upload dokumen ini ada di <b>CRM Detail Proyek</b>"
-                            data-bs-html="true"></i>
-                            {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
-                                data-bs-target="#kt_modal_risk_proyek">+</a> --}}
-                        </h3>
-
-                        <!--begin:Table: Review-->
-                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
-                            <!--begin::Table head-->
-                            <thead>
-                                <!--begin::Table row-->
-                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-125px">Nama</th>
-                                    <th class="min-w-125px">Tanggal</th>
-                                </tr>
-                                <!--end::Table row-->
-                            </thead>
-                            <!--end::Table head-->
-                            <!--begin::Table body-->
-                            <tbody class="fw-bold text-gray-400">
-                                @forelse ($contract->project->DokumenIca as $nda)
-                                    <tr>
-                                        <td>
-                                            <a target="_blank" href="{{asset("/words/$nda->id_document.pdf")}}" class="text-hover-primary">{{$nda->nama_dokumen}}</a>
-                                        </td>
-                                        <td>
-                                            {{Carbon\Carbon::createFromTimeString($nda->created_at)->translatedFormat("d F Y")}}
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="2" class="text-center">
-                                            <b>There is no data</b>
-                                        </td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                            <!--end::Table body-->
-
-                        </table>
-                        <!--End:Table: Review-->
-                        <br><br>
-                        
-                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                            Dokumen ITB / TOR
-                            <i class="bi-info-circle-fill" class="btn btn-secondary mx-4"
-                            data-bs-toggle="tooltip" data-bs-placement="top"
-                            data-bs-custom-class="custom-tooltip"
-                            data-bs-title="Upload dokumen ini ada di <b>CRM Detail Proyek</b>"
-                            data-bs-html="true"></i>
-                            {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
-                                data-bs-target="#kt_modal_risk_proyek">+</a> --}}
-                        </h3>
-
-                        <!--begin:Table: Review-->
-                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
-                            <!--begin::Table head-->
-                            <thead>
-                                <!--begin::Table row-->
-                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-125px">Nama</th>
-                                    <th class="min-w-125px">Tanggal</th>
-                                </tr>
-                                <!--end::Table row-->
-                            </thead>
-                            <!--end::Table head-->
-                            <!--begin::Table body-->
-                            <tbody class="fw-bold text-gray-400">
-                                @forelse ($contract->project->DokumenItbTor as $nda)
-                                    <tr>
-                                        <td>
-                                            <a target="_blank" href="{{asset("/words/$nda->id_document.pdf")}}" class="text-hover-primary">{{$nda->nama_dokumen}}</a>
-                                        </td>
-                                        <td>
-                                            {{Carbon\Carbon::createFromTimeString($nda->created_at)->translatedFormat("d F Y")}}
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="2" class="text-center">
-                                            <b>There is no data</b>
-                                        </td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                            <!--end::Table body-->
-
-                        </table>
-                        <br><br>
-                        <!--End:Table: Review-->
-                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                            Dokumen RKS / Project Spesification
-                            <i class="bi-info-circle-fill" class="btn btn-secondary mx-4"
-                            data-bs-toggle="tooltip" data-bs-placement="top"
-                            data-bs-custom-class="custom-tooltip"
-                            data-bs-title="Upload dokumen ini ada di <b>CRM Detail Proyek</b>"
-                            data-bs-html="true"></i>
-                            {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
-                                data-bs-target="#kt_modal_risk_proyek">+</a> --}}
-                        </h3>
-
-                        <!--begin:Table: Review-->
-                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
-                            <!--begin::Table head-->
-                            <thead>
-                                <!--begin::Table row-->
-                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-125px">Nama</th>
-                                    <th class="min-w-125px">Tanggal</th>
-                                </tr>
-                                <!--end::Table row-->
-                            </thead>
-                            <!--end::Table head-->
-                            <!--begin::Table body-->
-                            <tbody class="fw-bold text-gray-400">
-                                @forelse ($contract->project->DokumenRks as $nda)
-                                    <tr>
-                                        <td>
-                                            <a target="_blank" href="{{asset("/words/$nda->id_document.pdf")}}" class="text-hover-primary">{{$nda->nama_dokumen}}</a>
-                                        </td>
-                                        <td>
-                                            {{Carbon\Carbon::createFromTimeString($nda->created_at)->translatedFormat("d F Y")}}
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="2" class="text-center">
-                                            <b>There is no data</b>
-                                        </td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                            <!--end::Table body-->
-
-                        </table>
-                        <br><br>
-                        <!--End:Table: Review-->
-                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                            Dokumen Draft Kontrak
-                            <i class="bi-info-circle-fill" class="btn btn-secondary mx-4"
-                            data-bs-toggle="tooltip" data-bs-placement="top"
-                            data-bs-custom-class="custom-tooltip"
-                            data-bs-title="Upload dokumen ini ada di <b>CRM Detail Proyek</b>"
-                            data-bs-html="true"></i>
-                            {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
-                                data-bs-target="#kt_modal_risk_proyek">+</a> --}}
-                        </h3>
-
-                        <!--begin:Table: Review-->
-                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
-                            <!--begin::Table head-->
-                            <thead>
-                                <!--begin::Table row-->
-                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-125px">Nama</th>
-                                    <th class="min-w-125px">Tanggal</th>
-                                </tr>
-                                <!--end::Table row-->
-                            </thead>
-                            <!--end::Table head-->
-                            <!--begin::Table body-->
-                            <tbody class="fw-bold text-gray-400">
-                                @forelse ($contract->project->DokumenDraft as $nda)
-                                    <tr>
-                                        <td>
-                                            <a target="_blank" href="{{asset("/words/$nda->id_document.pdf")}}" class="text-hover-primary">{{$nda->nama_dokumen}}</a>
-                                        </td>
-                                        <td>
-                                            {{Carbon\Carbon::createFromTimeString($nda->created_at)->translatedFormat("d F Y")}}
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="2" class="text-center">
-                                            <b>There is no data</b>
-                                        </td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                            <!--end::Table body-->
-
-                        </table>
-                        <!--End:Table: Review-->
-                        
-                        <br><br>
-
-                        <!--End:Table: Review-->
-                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                            Dokumen LOI
-                            <i class="bi-info-circle-fill" class="btn btn-secondary mx-4"
-                            data-bs-toggle="tooltip" data-bs-placement="top"
-                            data-bs-custom-class="custom-tooltip"
-                            data-bs-title="Upload dokumen ini ada di <b>CRM Detail Proyek</b>"
-                            data-bs-html="true"></i>
-                            {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
-                                data-bs-target="#kt_modal_risk_proyek">+</a> --}}
-                        </h3>
-
-                        <!--begin:Table: Review-->
-                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
-                            <!--begin::Table head-->
-                            <thead>
-                                <!--begin::Table row-->
-                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-125px">Nama</th>
-                                    <th class="min-w-125px">Tanggal</th>
-                                </tr>
-                                <!--end::Table row-->
-                            </thead>
-                            <!--end::Table head-->
-                            <!--begin::Table body-->
-                            <tbody class="fw-bold text-gray-400">
-                                @forelse ($contract->project->AttachmentMenang as $nda)
-                                    <tr>
-                                        <td>
-                                            <a target="_blank" href="{{asset("/words/$nda->id_document.pdf")}}" class="text-hover-primary">{{$nda->nama_attachment}}</a>
-                                        </td>
-                                        <td>
-                                            {{Carbon\Carbon::createFromTimeString($nda->created_at)->translatedFormat("d F Y")}}
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="2" class="text-center">
-                                            <b>There is no data</b>
-                                        </td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                            <!--end::Table body-->
-
-                        </table>
-                        <!--End:Table: Review-->
- 
-                    </div>
-                    
-                {{-- </div>
-                <!--end:::Tab pane Informasi Perusahaan-->
-
-                <!--begin:::Tab pane History-->
-                <div class="tab-pane fade" id="kt_user_view_overview_history" role="tabpanel"> --}}
-
-                    <!--begin::Row-->
-                    {{-- <div class="row fv-row">
-                        <!--begin::Col-->
-                        <div class="col-6">
-                            <!--begin::Input group Website-->
-                            <div class="fv-row mb-7">
-                                <!--begin::Label-->
-                                <label class="fs-6 fw-bold form-label mt-3">
-                                    <span>Rekomendasi</span>
-                                </label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <select name="rekomendasi-2" class="form-select form-select-solid"
-                                    data-control="select2" data-hide-search="true" data-placeholder="Rekomendasi">
-                                    <option value="Yes">Yes</option>
-                                    <option value="No">No</option>
-                                </select>
-                                <!--end::Input-->
-                            </div>
-                            <!--end::Input group-->
-                        </div>
-                        <!--End begin::Col-->
-                        <div class="col-6">
-
-                            <div class="fv-row mb-7">
-
-                            </div>
-                            <!--end::Input group-->
-                        </div>
-                        <!--End begin::Col-->
-                    </div> --}}
-                    <!--End begin::Row-->
-
-                    &nbsp;<br>
-                    &nbsp;<br>
-
-                    <!--begin::Card title-->
-                    <div class="card-title m-0">
-
-                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                            Perjanjian KSO
-                            <a href="#" Id="Plus" data-bs-toggle="modal"
-                                data-bs-target="#kt_modal_input_perjanjian_kso">+</a>
-                        </h3>
-
-                        <!--begin:Table: Review-->
-                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
-                            <!--begin::Table head-->
-                            <thead>
-                                <!--begin::Table row-->
-                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-125px">Nama Dokumen</th>
-                                    <th class="min-w-125px">Dibuat Oleh</th>
-                                    <th class="min-w-125px">Dibuat Tanggal</th>
-                                    <th class="min-w-125px">Catatan</th>
-                                </tr>
-                                <!--end::Table row-->
-                            </thead>
-                            <!--end::Table head-->
-                            <!--begin::Table body-->
-                            <tbody class="fw-bold text-gray-400">
-                                @if (!empty($contract->PerjanjianKSO))
-                                    @forelse ($contract->PerjanjianKSO as $perjanjian_kso)
-                                        <tr>
-                                            <!--begin::Column-->
-                                            <td>
-                                                <a target="_blank"
-                                                    href="/document/view/{{ $perjanjian_kso->id_perjanjian_kso }}/{{ $perjanjian_kso->id_document }}"
-                                                    class="text-gray-600 text-hover-primary mb-1">
-                                                    {{ $perjanjian_kso->document_name }}
-                                                </a>
-                                            </td>
-                                            <!--end::Column-->
-                                            <!--begin::Column-->
-                                            <td>
-                                                <p class="text-gray-600 mb-1">{{ $perjanjian_kso->User->name }}</p>
-                                            </td>
-                                            <!--end::Column-->
-                                            <!--begin::Kode=-->
-                                            <td>
-                                                <p class="text-gray-600 mb-1">
-                                                    {{ date_format(new DateTime($perjanjian_kso->created_at), 'd-m-Y') }}
-                                                </p>
-                                            </td>
-                                            <!--end::Kode=-->
-                                            <!--begin::Unit=-->
-                                            <td>
-                                                <p class="text-gray-600 mb-1">{{ $perjanjian_kso->note }}</p>
-                                            </td>
-                                            <!--end::Unit=-->
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="4" class="text-center">
-                                                <h6><b>There is no data</b></h6>
-                                            </td>
-                                        </tr>
-                                    @endforelse
-                                @else
-                                    <tr>
-                                        <td colspan="4" class="text-center">
-                                            <h6><b>There is no data</b></h6>
-                                        </td>
-                                    </tr>
-                                @endif
-                            </tbody>
-                            <!--end::Table body-->
-
-                        </table>
-                        <!--End:Table: Review-->
-
-                        {{-- <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                            Dokumen Pendukung
-                            <a href="#" Id="Plus" data-bs-toggle="modal"
-                                data-bs-target="#kt_modal_input_dokumen_pendukung">+</a>
-                        </h3>
-
-                        <!--begin:Table: Review-->
-                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
-                            <!--begin::Table head-->
-                            <thead>
-                                <!--begin::Table row-->
-                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-125px">Nama Dokumen</th>
-                                    <th class="min-w-125px">Dibuat Oleh</th>
-                                    <th class="min-w-125px">Dibuat Tanggal</th>
-                                    <th class="min-w-125px">Catatan</th>
-                                </tr>
-                                <!--end::Table row-->
-                            </thead>
-                            <!--end::Table head-->
-                            <!--begin::Table body-->
-                            <tbody class="fw-bold text-gray-400">
-                                @if (!empty($contract->DokumenPendukung))
-                                    @forelse ($contract->DokumenPendukung as $dokumen_pendukung)
-                                        <tr>
-                                            <!--begin::Column-->
-                                            <td>
-                                                <a target="_blank"
-                                                    href="/document/view/{{ $dokumen_pendukung->id_dokumen_pendukung }}/{{ $dokumen_pendukung->id_document }}"
-                                                    class="text-gray-600 text-hover-primary mb-1">
-                                                    {{ $dokumen_pendukung->document_name }}
-                                                </a>
-                                            </td>
-                                            <!--end::Column-->
-                                            <!--begin::Column-->
-                                            <td>
-                                                <p class="text-gray-600 mb-1">{{ $dokumen_pendukung->User->name }}
-                                                </p>
-                                            </td>
-                                            <!--end::Column-->
-                                            <!--begin::Kode=-->
-                                            <td>
-                                                <p class="text-gray-600 mb-1">
-                                                    {{ date_format(new DateTime($dokumen_pendukung->created_at), 'd-m-Y') }}
-                                                </p>
-                                            </td>
-                                            <!--end::Kode=-->
-                                            <!--begin::Unit=-->
-                                            <td>
-                                                <p class="text-gray-600 mb-1">{{ $dokumen_pendukung->note }}</p>
-                                            </td>
-                                            <!--end::Unit=-->
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="4" class="text-center">
-                                                <h6><b>There is no data</b></h6>
-                                            </td>
-                                        </tr>
-                                    @endforelse
-                                @else
-                                    <tr>
-                                        <td colspan="4" class="text-center">
-                                            <h6><b>There is no data</b></h6>
-                                        </td>
-                                    </tr>
-                                @endif
-                            </tbody>
-                            <!--end::Table body-->
-
-                        </table>
-                        <!--End:Table: Review--> --}}
-                    </div>
-                </div>
-                <!--end:::Tab pane History-->
-
-                <!--begin:::Tab pane Laporan Bulanan-->
-                <div class="tab-pane fade" id="kt_user_view_overview_Performance" role="tabpanel">
-                    <!--begin::Card title-->
-                    <div class="card-title m-0">
-                        {{-- <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                            Laporan Bulanan
-                            <a href="#" Id="Plus" data-bs-toggle="modal"
-                                data-bs-target="#kt_modal_laporan_bulanan">+</a>
-                        </h3>
-
-                        <!--begin:Table: Laporan Bulanan-->
-                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
-                            <!--begin::Table head-->
-                            <thead>
-                                <!--begin::Table row-->
-                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-125px">Nama Dokumen
-                                    </th>
-                                    <th class="min-w-125px">No. Dokumen</th>
-                                    <th class="min-w-125px">Tanggal</th>
-                                    <th class="min-w-125px">Catatan</th>
                                 </tr>
                                 <!--end::Table row-->
                             </thead>
@@ -1886,1568 +1099,2427 @@
                             <!--begin::Table body-->
                             <tbody class="fw-bold text-gray-400">
                                 @php
-                                    $classes = '';
-                                    if (isset($contract)) {
-                                        $classes = 'form-control-solid';
-                                    } else {
-                                        $classes = 'border-bottom-dashed border-top-0 border-left-0 border-right-0';
-                                    }
+                                    $uploadResikoPerolehan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "resiko-perolehan")->first();
                                 @endphp
-                                @if (isset($contract))
-                                    @forelse ($contract->monthlyReports as $monthlyReport)
+                                    @if (!empty($uploadResikoPerolehan))
                                         <tr>
                                             <!--begin::Column-->
                                             <td>
-                                                <a target="_blank"
-                                                    href="/document/view/{{ $monthlyReport->id_report }}/{{ $monthlyReport->id_document }}"
-                                                    class="text-gray-600 {{ $classes }} text-hover-primary mb-1">
-                                                    {{ $monthlyReport->document_name_report }}
+                                                <!--End:Table: Review-->
+                                                <a target="_blank" href="{{ asset('words/'.$uploadResikoPerolehan->id_document) }}" class="text-hover-primary">
+                                                <p>{{ $uploadResikoPerolehan->nama_document }}</p>
                                                 </a>
                                             </td>
                                             <!--end::Column-->
-                                            <!--begin::Column-->
+                                            <!--begin::tanggal=-->
                                             <td>
-                                                <a target="_blank"
-                                                    href="/document/view/{{ $monthlyReport->id_report }}/{{ $monthlyReport->id_document }}"
-                                                    class="text-gray-600 text-hover-primary mb-1">
-                                                    {{ $monthlyReport->id_document }}
-                                                </a>
+                                                <p class="text-gray-600 mb-1">{{ Carbon\Carbon::createFromTimeString($uploadResikoPerolehan->created_at)->translatedFormat("d F Y") }}</p>
                                             </td>
-                                            <!--end::Column-->
-                                            <!--begin::Kode=-->
-                                            <td>
-                                                <a href="#" class="text-gray-400 text-hover-primary mb-1">
-                                                    {{ date_format(new DateTime($monthlyReport->created_at), 'd M, Y') }}</a>
-                                                </a>
-                                            </td>
-                                            <!--end::Kode=-->
-                                            <!--begin::Unit=-->
-                                            <td>
-                                                {{ $monthlyReport->note_report }}
-                                            </td>
-                                            <!--end::Unit=-->
+                                            <!--end::tanggal=-->
                                         </tr>
-                                    @empty
+                                    @else
+                                        <tr>
+                                            <td colspan="5" class="text-center">
+                                                <h6><b>There is no data</b></h6>
+                                            </td>
+                                        </tr>
+                                    @endif
+                            </tbody>
+                            <!--end::Table body-->
+
+                        </table>
+                        <!--End:Table: Review-->
+
+                            <br>
+
+                            <h3 class="fw-bolder m-0 mb-3" id="HeadDetail" style="font-size:14px;">
+                                Usulan Perubahan Draft Kontrak
+                                @if (!empty($contract->UsulanPerubahanDraft->toArray()))
+                                    <a href="#" onclick="exportToExcel(this, '#usulan-draft')" class="">(Klik di sini untuk Export ke Excel)</a>
+                                @endif
+                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_usulan_perubahan_draft_kontrak">+</a>
+                                    @if (!empty($contract->UsulanPerubahanDraft->toArray()))
+                                        <a href="#" data-bs-toggle="modal"
+                                        data-bs-target="#kt_modal_upload_perubahan_kontrak" class="btn btn-primary btn-sm p-2 mx-3 text-end">Upload</a>
+                                    @endif
+                            </h3>
+
+                            <!--begin:Table: Review-->
+                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="usulan-draft">
+                                <!--begin::Table head-->
+                                <thead>
+                                    <!--begin::Table row-->
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-auto">Isu</th>
+                                        <th class="min-w-auto">Kategori</th>
+                                        <th class="min-w-auto">Deskripsi Klausul Awal</th>
+                                        <th class="min-w-auto">Usulan Perubahan</th>
+                                        <th class="min-w-auto">Keterangan</th>
+                                    </tr>
+                                    <!--end::Table row-->
+                                </thead>
+                                <!--end::Table head-->
+                                <!--begin::Table body-->
+                                <tbody class="fw-bold text-gray-600">
+                                    @foreach ($contract->UsulanPerubahanDraft as $perubahan_draft)
+                                        @php
+                                            switch ($perubahan_draft->kategori) {
+                                                case 1:
+                                                    $kategori = "Surat Perjanjian Kontrak";
+                                                    break;
+                                                case 2:
+                                                    $kategori = "Syarat-syarat Umum Kontrak (SSUK)";
+                                                    # code...
+                                                    break;
+                                                case 3:
+                                                    $kategori = "Syarat-syarat Khusus Kontak (SSKK)";
+                                                    # code...
+                                                    break;
+                                            }
+                                        @endphp
+                                        <tr>
+                                            <td>{{$perubahan_draft->isu}}</td>
+                                            <td>{{$kategori}}</td>
+                                            <td>{{$perubahan_draft->deskripsi_klausul_awal}}</td>
+                                            <td>{{$perubahan_draft->usulan_perubahan_klausul}}</td>
+                                            <td>{{$perubahan_draft->keterangan}}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                                <!--end::Table body-->
+
+                            </table>
+                            <!--End:Table: Review-->
+                            @php
+                            $uploadFilePerubahan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "usulan-perubahan")->first();
+                            @endphp
+                            <!--End:Table: Review-->
+                            @if (!empty($uploadFilePerubahan))
+                            <a target="_blank" href="{{ asset('words/'.$uploadFilePerubahan->id_document) }}" class="text-hover-primary">
+                            <small><b>Download File :</b> {{ $uploadFilePerubahan->nama_document }}</small>
+                            </a>
+                            @endif
+
+                            &nbsp;<br>
+                            &nbsp;<br>
+                            <br>
+                            
+                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                Dokumen NDA
+                                <i class="bi-info-circle-fill" class="btn btn-secondary mx-4"
+                                data-bs-toggle="tooltip" data-bs-placement="top"
+                                data-bs-custom-class="custom-tooltip"
+                                data-bs-title="Upload dokumen ini ada di <b>CRM Detail Proyek</b>"
+                                data-bs-html="true"></i>
+                                {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_risk_proyek">+</a> --}}
+                            </h3>
+
+                            <!--begin:Table: Review-->
+                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                <!--begin::Table head-->
+                                <thead>
+                                    <!--begin::Table row-->
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-125px">Nama</th>
+                                        <th class="min-w-125px">Tanggal</th>
+                                    </tr>
+                                    <!--end::Table row-->
+                                </thead>
+                                <!--end::Table head-->
+                                <!--begin::Table body-->
+                                <tbody class="fw-bold text-gray-400">
+                                    {{-- @if ($contract->inputRisks->contains('stage', 0))
+                                        @forelse ($contract->inputRisks as $inputRisk)
+                                            @if ($inputRisk->stage == 0)
+                                                <tr>
+                                                    <!--begin::Column-->
+                                                    <td>
+                                                        <p class="text-gray-600 mb-1">{{ $inputRisk->resiko }}</p>
+                                                    </td>
+                                                    <!--end::Column-->
+                                                    <!--begin::Column-->
+                                                    <td>
+                                                        <p class="text-gray-600 mb-1">{{ $inputRisk->penyebab }}</p>
+                                                    </td>
+                                                    <!--end::Column-->
+                                                    <!--begin::Kode=-->
+                                                    <td>
+                                                        <p class="text-gray-600 mb-1">{{ $inputRisk->dampak }}</p>
+                                                    </td>
+                                                    <!--end::Kode=-->
+                                                    <!--begin::Unit=-->
+                                                    <td>
+                                                        <p class="text-gray-600 mb-1">{{ $inputRisk->mitigasi }}</p>
+                                                    </td>
+                                                    <!--end::Unit=-->
+                                                </tr>
+                                            @endif
+                                        @empty
+                                            <tr>
+                                                <td colspan="4" class="text-center">
+                                                    <h6><b>There is no data</b></h6>
+                                                </td>
+                                            </tr>
+                                        @endforelse
+                                    @else
                                         <tr>
                                             <td colspan="4" class="text-center">
                                                 <h6><b>There is no data</b></h6>
                                             </td>
                                         </tr>
-                                    @endforelse
-                                @else
-                                    <tr>
-                                        <td colspan="4" class="text-center">
-                                            <h6><b>There is no data</b></h6>
-                                        </td>
-                                    </tr>
-                                @endif
-                            </tbody>
-                            <!--end::Table body-->
-                        </table>
-                        <!--End:Table: Laporan Bulanan--> --}}
-
-                        {{-- <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                            Change Request
-                            <a href="/contract-management/view/{{ $contract->id_contract }}/addendum-contract"
-                                Id="Plus">+</a>
-                        </h3>
-
-                        <!--begin:Table: Addendum Kontrak-->
-                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
-                            <!--begin::Table head-->
-                            <thead>
-                                <!--begin::Table row-->
-                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-125px">No. Change Request</th>
-                                    <th class="min-w-125px">Dibuat Oleh
-                                    </th>
-                                    <th class="min-w-125px">Tanggal</th>
-                                </tr>
-                                <!--end::Table row-->
-                            </thead>
-                            <!--end::Table head-->
-                            <!--begin::Table body-->
-                            <tbody class="fw-bold text-gray-400">
-                                @if (isset($contract))
-                                    @forelse ($contract->addendumContracts as $addendumContract)
+                                    @endif --}}
+                                    @forelse ($contract->project->DokumenNda as $nda)
                                         <tr>
-                                            <!--begin::Column-->
                                             <td>
-                                                <a target="_blank"
-                                                    href="/contract-management/view/{{ $contract->id_contract }}/addendum-contract/{{ $addendumContract->id_addendum }}"
-                                                    class="text-gray-600 text-hover-primary mb-1">
-                                                    {{ $addendumContract->no_addendum }}
-                                                </a>
+                                                <a target="_blank" href="{{asset("/words/$nda->id_document.pdf")}}" class="text-hover-primary">{{$nda->nama_dokumen}}</a>
                                             </td>
-                                            <!--end::Column-->
-                                            <!--begin::Column-->
                                             <td>
-                                                <a href="#" class="text-gray-600 text-hover-primary mb-1">
-                                                    {{ $addendumContract->created_by }}
-                                                </a>
+                                                {{Carbon\Carbon::createFromTimeString($nda->created_at)->translatedFormat("d F Y")}}
                                             </td>
-                                            <!--end::Column-->
-                                            <!--begin::Kode=-->
-                                            <td>
-                                                <a href="#" class="text-gray-400 text-hover-primary mb-1">
-                                                    {{ date_format(new DateTime($addendumContract->created_at), 'd M, Y') }}</a>
-                                                </a>
-                                            </td>
-                                            <!--end::Kode=-->
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="3" class="text-center">
-                                                <h6><b>There is no data</b></h6>
-                                            </td>
+                                            <td colspan="2" class="text-center"><b>There is no data</b></td>
                                         </tr>
                                     @endforelse
-                                @else
-                                    <tr>
-                                        <td colspan="3" class="text-center">
-                                            <h6><b>There is no data</b></h6>
-                                        </td>
+                                </tbody>
+                                <!--end::Table body-->
+
+                            </table>
+                            <!--End:Table: Review-->
+                            <br>
+                            <br>
+
+                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                Dokumen MoU
+                                <i class="bi-info-circle-fill" class="btn btn-secondary mx-4"
+                                data-bs-toggle="tooltip" data-bs-placement="top"
+                                data-bs-custom-class="custom-tooltip"
+                                data-bs-title="Upload dokumen ini ada di <b>CRM Detail Proyek</b>"
+                                data-bs-html="true"></i>
+                                {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_risk_proyek">+</a> --}}
+                            </h3>
+
+                            <!--begin:Table: Review-->
+                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                <!--begin::Table head-->
+                                <thead>
+                                    <!--begin::Table row-->
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-125px">Nama</th>
+                                        <th class="min-w-125px">Tanggal</th>
                                     </tr>
-                                @endif
-                            </tbody>
-                            <!--end::Table body-->
-                        </table>
-                        <!--End:Table: Addendum Kontrak-->
-                        <br> --}}
-
-
-                        {{-- <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                            Klaim Kontrak
-                            <a href="/claim-management/{{ $contract->project->kode_proyek }}/{{ urlencode(urlencode($contract->id_contract)) }}/new"
-                                Id="Plus">+</a>
-                        </h3>
-                        <!--begin:Table: Claim Contract-->
-                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
-                            <!--begin::Table head-->
-                            <thead>
-                                <!--begin::Table row-->
-                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-125px">No. Klaim</th>
-                                    <th class="min-w-125px">Dibuat Oleh
-                                    </th>
-                                    <th class="min-w-125px">Tanggal</th>
-                                </tr>
-                                <!--end::Table row-->
-                            </thead>
-                            <!--end::Table head-->
-                            <!--begin::Table body-->
-                            <tbody class="fw-bold text-gray-400">
-                                @if (isset($contract->project->ClaimManagements))
-                                    @forelse ($contract->project->ClaimManagements as $claimManagement)
+                                    <!--end::Table row-->
+                                </thead>
+                                <!--end::Table head-->
+                                <!--begin::Table body-->
+                                <tbody class="fw-bold text-gray-400">
+                                    @forelse ($contract->project->DokumenMou as $nda)
                                         <tr>
-                                            <!--begin::Column-->
                                             <td>
-                                                <a target="_blank"
-                                                    href="/claim-management/view/{{ $claimManagement->id_claim }}"
-                                                    class="text-gray-600 text-hover-primary mb-1">
-                                                    {{ $claimManagement->id_claim }}
-                                                </a>
+                                                <a target="_blank" href="{{asset("/words/$nda->id_document.pdf")}}" class="text-hover-primary">{{$nda->nama_dokumen}}</a>
                                             </td>
-                                            <!--end::Column-->
-                                            <!--begin::Column-->
                                             <td>
-                                                <a href="#" class="text-gray-600 text-hover-primary mb-1">
-                                                    {{ $claimManagement->pic }}
-                                                </a>
+                                                {{Carbon\Carbon::createFromTimeString($nda->created_at)->translatedFormat("d F Y")}}
                                             </td>
-                                            <!--end::Column-->
-                                            <!--begin::Kode=-->
-                                            <td>
-                                                <a href="#" class="text-gray-400 text-hover-primary mb-1">
-                                                    {{ date_format(new DateTime($claimManagement->tanggal_claim), 'd M, Y') }}</a>
-                                                </a>
-                                            </td>
-                                            <!--end::Kode=-->
-
-
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="3" class="text-center">
-                                                <h6><b>There is no data</b></h6>
+                                            <td colspan="2" class="text-center">
+                                                <b>There is no data</b>
                                             </td>
                                         </tr>
                                     @endforelse
-                                @else
-                                    <tr>
-                                        <td colspan="3" class="text-center">
-                                            <h6><b>There is no data</b></h6>
-                                        </td>
+                                </tbody>
+                                <!--end::Table body-->
+
+                            </table>
+                            <!--End:Table: Review-->
+
+                            <br><br>
+
+                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                Dokumen ECA
+                                <i class="bi-info-circle-fill" class="btn btn-secondary mx-4"
+                                data-bs-toggle="tooltip" data-bs-placement="top"
+                                data-bs-custom-class="custom-tooltip"
+                                data-bs-title="Upload dokumen ini ada di <b>CRM Detail Proyek</b>"
+                                data-bs-html="true"></i>
+                                {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_risk_proyek">+</a> --}}
+                            </h3>
+
+                            <!--begin:Table: Review-->
+                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                <!--begin::Table head-->
+                                <thead>
+                                    <!--begin::Table row-->
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-125px">Nama</th>
+                                        <th class="min-w-125px">Tanggal</th>
                                     </tr>
-                                @endif
-                            </tbody>
-                            <!--end::Table body-->
-                        </table>
-                        <!--End:Table: Claim Contract--> --}}
-
-                        {{-- <br> --}}
-
-                        {{-- <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                            MoM Kick Off Meeting
-                            <a href="#" Id="Plus" data-bs-toggle="modal"
-                                data-bs-target="#kt_modal_mom_meeting">+</a>
-                        </h3>
-                        <!--begin:Table: Claim Contract-->
-                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
-                            <!--begin::Table head-->
-                            <thead>
-                                <!--begin::Table row-->
-                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-125px">Nama Dokumen</th>
-                                    <th class="min-w-125px">Dibuat Oleh
-                                    </th>
-                                    <th class="min-w-125px">Tanggal</th>
-                                    <th class="min-w-125px">Catatan</th>
-                                </tr>
-                                <!--end::Table row-->
-                            </thead>
-                            <!--end::Table head-->
-                            <!--begin::Table body-->
-                            <tbody class="fw-bold text-gray-400">
-                                @if (!empty($contract->MoMMeeting))
-                                    @forelse ($contract->MoMMeeting as $mom_meeting)
+                                    <!--end::Table row-->
+                                </thead>
+                                <!--end::Table head-->
+                                <!--begin::Table body-->
+                                <tbody class="fw-bold text-gray-400">
+                                    @forelse ($contract->project->DokumenEca as $nda)
                                         <tr>
-                                            <!--begin::Column-->
                                             <td>
-                                                <a target="_blank"
-                                                    href="/document/view/{{ $mom_meeting->id_mom }}/{{ $mom_meeting->id_document }}"
-                                                    class="text-gray-600 text-hover-primary mb-1">
-                                                    {{ $mom_meeting->document_name }}
-                                                </a>
+                                                <a target="_blank" href="{{asset("/words/$nda->id_document.pdf")}}" class="text-hover-primary">{{$nda->nama_dokumen}}</a>
                                             </td>
-                                            <!--end::Column-->
-                                            <!--begin::Column-->
                                             <td>
-                                                <p class="text-gray-600 mb-1">{{ $mom_meeting->User->name }}</p>
+                                                {{Carbon\Carbon::createFromTimeString($nda->created_at)->translatedFormat("d F Y")}}
                                             </td>
-                                            <!--end::Column-->
-                                            <!--begin::Kode=-->
-                                            <td>
-                                                <p class="text-gray-600 mb-1">
-                                                    {{ date_format(new DateTime($mom_meeting->created_at), 'd-m-Y') }}
-                                                </p>
-                                            </td>
-                                            <!--end::Kode=-->
-                                            <!--begin::Unit=-->
-                                            <td>
-                                                <p class="text-gray-600 mb-1">{{ $mom_meeting->note }}</p>
-                                            </td>
-                                            <!--end::Unit=-->
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="4" class="text-center">
-                                                <h6><b>There is no data</b></h6>
+                                            <td colspan="2" class="text-center">
+                                                <b>There is no data</b>
                                             </td>
                                         </tr>
                                     @endforelse
-                                @else
-                                    <tr>
-                                        <td colspan="4" class="text-center">
-                                            <h6><b>There is no data</b></h6>
-                                        </td>
-                                    </tr>
-                                @endif
-                            </tbody>
-                            <!--end::Table body-->
-                        </table>
-                        <!--End:Table: Claim Contract--> --}}
+                                </tbody>
+                                <!--end::Table body-->
 
-                        <div class="row mb-5">
-                            <div class="col-6">
-                                <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                                    LAW
-                                </h3>
-                            </div>
-                            <div class="col-6">
-                                <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                                    LD
-                                </h3>
-                            </div>
+                            </table>
+                            <!--End:Table: Review-->
+
+                            <br><br>
+
+
+                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                Dokumen ICA
+                                <i class="bi-info-circle-fill" class="btn btn-secondary mx-4"
+                                data-bs-toggle="tooltip" data-bs-placement="top"
+                                data-bs-custom-class="custom-tooltip"
+                                data-bs-title="Upload dokumen ini ada di <b>CRM Detail Proyek</b>"
+                                data-bs-html="true"></i>
+                                {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_risk_proyek">+</a> --}}
+                            </h3>
+
+                            <!--begin:Table: Review-->
+                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                <!--begin::Table head-->
+                                <thead>
+                                    <!--begin::Table row-->
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-125px">Nama</th>
+                                        <th class="min-w-125px">Tanggal</th>
+                                    </tr>
+                                    <!--end::Table row-->
+                                </thead>
+                                <!--end::Table head-->
+                                <!--begin::Table body-->
+                                <tbody class="fw-bold text-gray-400">
+                                    @forelse ($contract->project->DokumenIca as $nda)
+                                        <tr>
+                                            <td>
+                                                <a target="_blank" href="{{asset("/words/$nda->id_document.pdf")}}" class="text-hover-primary">{{$nda->nama_dokumen}}</a>
+                                            </td>
+                                            <td>
+                                                {{Carbon\Carbon::createFromTimeString($nda->created_at)->translatedFormat("d F Y")}}
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="2" class="text-center">
+                                                <b>There is no data</b>
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                                <!--end::Table body-->
+
+                            </table>
+                            <!--End:Table: Review-->
+                            <br><br>
+                            
+                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                Dokumen ITB / TOR
+                                <i class="bi-info-circle-fill" class="btn btn-secondary mx-4"
+                                data-bs-toggle="tooltip" data-bs-placement="top"
+                                data-bs-custom-class="custom-tooltip"
+                                data-bs-title="Upload dokumen ini ada di <b>CRM Detail Proyek</b>"
+                                data-bs-html="true"></i>
+                                {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_risk_proyek">+</a> --}}
+                            </h3>
+
+                            <!--begin:Table: Review-->
+                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                <!--begin::Table head-->
+                                <thead>
+                                    <!--begin::Table row-->
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-125px">Nama</th>
+                                        <th class="min-w-125px">Tanggal</th>
+                                    </tr>
+                                    <!--end::Table row-->
+                                </thead>
+                                <!--end::Table head-->
+                                <!--begin::Table body-->
+                                <tbody class="fw-bold text-gray-400">
+                                    @forelse ($contract->project->DokumenItbTor as $nda)
+                                        <tr>
+                                            <td>
+                                                <a target="_blank" href="{{asset("/words/$nda->id_document.pdf")}}" class="text-hover-primary">{{$nda->nama_dokumen}}</a>
+                                            </td>
+                                            <td>
+                                                {{Carbon\Carbon::createFromTimeString($nda->created_at)->translatedFormat("d F Y")}}
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="2" class="text-center">
+                                                <b>There is no data</b>
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                                <!--end::Table body-->
+
+                            </table>
+                            <br><br>
+                            <!--End:Table: Review-->
+                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                Dokumen RKS / Project Spesification
+                                <i class="bi-info-circle-fill" class="btn btn-secondary mx-4"
+                                data-bs-toggle="tooltip" data-bs-placement="top"
+                                data-bs-custom-class="custom-tooltip"
+                                data-bs-title="Upload dokumen ini ada di <b>CRM Detail Proyek</b>"
+                                data-bs-html="true"></i>
+                                {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_risk_proyek">+</a> --}}
+                            </h3>
+
+                            <!--begin:Table: Review-->
+                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                <!--begin::Table head-->
+                                <thead>
+                                    <!--begin::Table row-->
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-125px">Nama</th>
+                                        <th class="min-w-125px">Tanggal</th>
+                                    </tr>
+                                    <!--end::Table row-->
+                                </thead>
+                                <!--end::Table head-->
+                                <!--begin::Table body-->
+                                <tbody class="fw-bold text-gray-400">
+                                    @forelse ($contract->project->DokumenRks as $nda)
+                                        <tr>
+                                            <td>
+                                                <a target="_blank" href="{{asset("/words/$nda->id_document.pdf")}}" class="text-hover-primary">{{$nda->nama_dokumen}}</a>
+                                            </td>
+                                            <td>
+                                                {{Carbon\Carbon::createFromTimeString($nda->created_at)->translatedFormat("d F Y")}}
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="2" class="text-center">
+                                                <b>There is no data</b>
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                                <!--end::Table body-->
+
+                            </table>
+                            <br><br>
+                            <!--End:Table: Review-->
+                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                Dokumen Draft Kontrak
+                                <i class="bi-info-circle-fill" class="btn btn-secondary mx-4"
+                                data-bs-toggle="tooltip" data-bs-placement="top"
+                                data-bs-custom-class="custom-tooltip"
+                                data-bs-title="Upload dokumen ini ada di <b>CRM Detail Proyek</b>"
+                                data-bs-html="true"></i>
+                                {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_risk_proyek">+</a> --}}
+                            </h3>
+
+                            <!--begin:Table: Review-->
+                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                <!--begin::Table head-->
+                                <thead>
+                                    <!--begin::Table row-->
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-125px">Nama</th>
+                                        <th class="min-w-125px">Tanggal</th>
+                                    </tr>
+                                    <!--end::Table row-->
+                                </thead>
+                                <!--end::Table head-->
+                                <!--begin::Table body-->
+                                <tbody class="fw-bold text-gray-400">
+                                    @forelse ($contract->project->DokumenDraft as $nda)
+                                        <tr>
+                                            <td>
+                                                <a target="_blank" href="{{asset("/words/$nda->id_document.pdf")}}" class="text-hover-primary">{{$nda->nama_dokumen}}</a>
+                                            </td>
+                                            <td>
+                                                {{Carbon\Carbon::createFromTimeString($nda->created_at)->translatedFormat("d F Y")}}
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="2" class="text-center">
+                                                <b>There is no data</b>
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                                <!--end::Table body-->
+
+                            </table>
+                            <!--End:Table: Review-->
+                            
+                            <br><br>
+
+                            <!--End:Table: Review-->
+                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                Dokumen LOI
+                                <i class="bi-info-circle-fill" class="btn btn-secondary mx-4"
+                                data-bs-toggle="tooltip" data-bs-placement="top"
+                                data-bs-custom-class="custom-tooltip"
+                                data-bs-title="Upload dokumen ini ada di <b>CRM Detail Proyek</b>"
+                                data-bs-html="true"></i>
+                                {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_risk_proyek">+</a> --}}
+                            </h3>
+
+                            <!--begin:Table: Review-->
+                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                <!--begin::Table head-->
+                                <thead>
+                                    <!--begin::Table row-->
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-125px">Nama</th>
+                                        <th class="min-w-125px">Tanggal</th>
+                                    </tr>
+                                    <!--end::Table row-->
+                                </thead>
+                                <!--end::Table head-->
+                                <!--begin::Table body-->
+                                <tbody class="fw-bold text-gray-400">
+                                    @forelse ($contract->project->AttachmentMenang as $nda)
+                                        <tr>
+                                            <td>
+                                                <a target="_blank" href="{{asset("/words/$nda->id_document.pdf")}}" class="text-hover-primary">{{$nda->nama_attachment}}</a>
+                                            </td>
+                                            <td>
+                                                {{Carbon\Carbon::createFromTimeString($nda->created_at)->translatedFormat("d F Y")}}
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="2" class="text-center">
+                                                <b>There is no data</b>
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                                <!--end::Table body-->
+
+                            </table>
+                            <!--End:Table: Review-->
+    
                         </div>
-                        <form action="/ld-law/upload" enctype="multipart/form-data" method="POST">
-                            @csrf
-                            <div class="row">
-                                <div class="col-6 mr-3">
-                                     <!--begin::Input-->
-                                     <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
-                                     name="id-contract">
-                                 <input type="hidden" class="modal-name" name="modal-name">
- 
-                                 <!--begin::Label-->
-                                 <label class="fs-6 fw-bold form-label mt-3">
-                                     <span style="font-weight: normal">Governing Law</span>
-                                 </label>
-                                 <!--end::Label-->
-                                 <!--begin::Input-->
-                                 <input type="text" id="governing-law" name="governing-law" class="form-control form-control-solid" 
-                                 value="{{ !empty($contract->law_governing) ? $contract->law_governing : "" }}">
-                                 <!--end::Input-->
- 
-                                 <br>
-                                 
-                                 <!--begin::Label-->
-                                 <label class="fs-6 fw-bold form-label mt-3">
-                                     <span style="font-weight: normal">Dispute Resolution</span>
-                                 </label>
-                                 <!--end::Label-->
-                                 <!--begin::Input-->
-                                 <input type="text" id="dispute-resolution" name="dispute-resolution" class="form-control form-control-solid"
-                                 value="{{ !empty($contract->law_dispute_resolution) ? $contract->law_dispute_resolution : "" }}">
-                                 <!--end::Input-->
-                                 
-                                 <br>
- 
-                                 <!--begin::Label-->
-                                 <label class="fs-6 fw-bold form-label mt-3">
-                                     <span style="font-weight: normal">Prevailing Language</span>
-                                 </label>
-                                 <!--end::Label-->
-                                 <!--begin::Input-->
-                                 <input type="text" id="prevailing-language" name="prevailing-language" class="form-control form-control-solid"
-                                 value="{{ !empty($contract->law_prevailing_language) ? $contract->law_prevailing_language : "" }}">
-                                 <!--end::Input-->
+                        
+                    {{-- </div>
+                    <!--end:::Tab pane Informasi Perusahaan-->
+
+                    <!--begin:::Tab pane History-->
+                    <div class="tab-pane fade" id="kt_user_view_overview_history" role="tabpanel"> --}}
+
+                        <!--begin::Row-->
+                        {{-- <div class="row fv-row">
+                            <!--begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span>Rekomendasi</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <select name="rekomendasi-2" class="form-select form-select-solid"
+                                        data-control="select2" data-hide-search="true" data-placeholder="Rekomendasi">
+                                        <option value="Yes">Yes</option>
+                                        <option value="No">No</option>
+                                    </select>
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End begin::Col-->
+                            <div class="col-6">
+
+                                <div class="fv-row mb-7">
+
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End begin::Col-->
+                        </div> --}}
+                        <!--End begin::Row-->
+
+                        &nbsp;<br>
+                        &nbsp;<br>
+
+                        <!--begin::Card title-->
+                        <div class="card-title m-0">
+
+                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                Perjanjian KSO
+                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_input_perjanjian_kso">+</a>
+                            </h3>
+
+                            <!--begin:Table: Review-->
+                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                <!--begin::Table head-->
+                                <thead>
+                                    <!--begin::Table row-->
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-125px">Nama Dokumen</th>
+                                        <th class="min-w-125px">Dibuat Oleh</th>
+                                        <th class="min-w-125px">Dibuat Tanggal</th>
+                                        <th class="min-w-125px">Catatan</th>
+                                    </tr>
+                                    <!--end::Table row-->
+                                </thead>
+                                <!--end::Table head-->
+                                <!--begin::Table body-->
+                                <tbody class="fw-bold text-gray-400">
+                                    @if (!empty($contract->PerjanjianKSO))
+                                        @forelse ($contract->PerjanjianKSO as $perjanjian_kso)
+                                            <tr>
+                                                <!--begin::Column-->
+                                                <td>
+                                                    <a target="_blank"
+                                                        href="/document/view/{{ $perjanjian_kso->id_perjanjian_kso }}/{{ $perjanjian_kso->id_document }}"
+                                                        class="text-gray-600 text-hover-primary mb-1">
+                                                        {{ $perjanjian_kso->document_name }}
+                                                    </a>
+                                                </td>
+                                                <!--end::Column-->
+                                                <!--begin::Column-->
+                                                <td>
+                                                    <p class="text-gray-600 mb-1">{{ $perjanjian_kso->User->name }}</p>
+                                                </td>
+                                                <!--end::Column-->
+                                                <!--begin::Kode=-->
+                                                <td>
+                                                    <p class="text-gray-600 mb-1">
+                                                        {{ date_format(new DateTime($perjanjian_kso->created_at), 'd-m-Y') }}
+                                                    </p>
+                                                </td>
+                                                <!--end::Kode=-->
+                                                <!--begin::Unit=-->
+                                                <td>
+                                                    <p class="text-gray-600 mb-1">{{ $perjanjian_kso->note }}</p>
+                                                </td>
+                                                <!--end::Unit=-->
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="4" class="text-center">
+                                                    <h6><b>There is no data</b></h6>
+                                                </td>
+                                            </tr>
+                                        @endforelse
+                                    @else
+                                        <tr>
+                                            <td colspan="4" class="text-center">
+                                                <h6><b>There is no data</b></h6>
+                                            </td>
+                                        </tr>
+                                    @endif
+                                </tbody>
+                                <!--end::Table body-->
+
+                            </table>
+                            <!--End:Table: Review-->
+
+                            {{-- <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                Dokumen Pendukung
+                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_input_dokumen_pendukung">+</a>
+                            </h3>
+
+                            <!--begin:Table: Review-->
+                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                <!--begin::Table head-->
+                                <thead>
+                                    <!--begin::Table row-->
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-125px">Nama Dokumen</th>
+                                        <th class="min-w-125px">Dibuat Oleh</th>
+                                        <th class="min-w-125px">Dibuat Tanggal</th>
+                                        <th class="min-w-125px">Catatan</th>
+                                    </tr>
+                                    <!--end::Table row-->
+                                </thead>
+                                <!--end::Table head-->
+                                <!--begin::Table body-->
+                                <tbody class="fw-bold text-gray-400">
+                                    @if (!empty($contract->DokumenPendukung))
+                                        @forelse ($contract->DokumenPendukung as $dokumen_pendukung)
+                                            <tr>
+                                                <!--begin::Column-->
+                                                <td>
+                                                    <a target="_blank"
+                                                        href="/document/view/{{ $dokumen_pendukung->id_dokumen_pendukung }}/{{ $dokumen_pendukung->id_document }}"
+                                                        class="text-gray-600 text-hover-primary mb-1">
+                                                        {{ $dokumen_pendukung->document_name }}
+                                                    </a>
+                                                </td>
+                                                <!--end::Column-->
+                                                <!--begin::Column-->
+                                                <td>
+                                                    <p class="text-gray-600 mb-1">{{ $dokumen_pendukung->User->name }}
+                                                    </p>
+                                                </td>
+                                                <!--end::Column-->
+                                                <!--begin::Kode=-->
+                                                <td>
+                                                    <p class="text-gray-600 mb-1">
+                                                        {{ date_format(new DateTime($dokumen_pendukung->created_at), 'd-m-Y') }}
+                                                    </p>
+                                                </td>
+                                                <!--end::Kode=-->
+                                                <!--begin::Unit=-->
+                                                <td>
+                                                    <p class="text-gray-600 mb-1">{{ $dokumen_pendukung->note }}</p>
+                                                </td>
+                                                <!--end::Unit=-->
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="4" class="text-center">
+                                                    <h6><b>There is no data</b></h6>
+                                                </td>
+                                            </tr>
+                                        @endforelse
+                                    @else
+                                        <tr>
+                                            <td colspan="4" class="text-center">
+                                                <h6><b>There is no data</b></h6>
+                                            </td>
+                                        </tr>
+                                    @endif
+                                </tbody>
+                                <!--end::Table body-->
+
+                            </table>
+                            <!--End:Table: Review--> --}}
+                        </div>
+                    </div>
+                    <!--end:::Tab pane History-->
+
+                    <!--begin:::Tab pane Laporan Bulanan-->
+                    <div class="tab-pane fade" id="kt_user_view_overview_Performance" role="tabpanel">
+                        <!--begin::Card title-->
+                        <div class="card-title m-0">
+                            {{-- <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                Laporan Bulanan
+                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_laporan_bulanan">+</a>
+                            </h3>
+
+                            <!--begin:Table: Laporan Bulanan-->
+                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                <!--begin::Table head-->
+                                <thead>
+                                    <!--begin::Table row-->
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-125px">Nama Dokumen
+                                        </th>
+                                        <th class="min-w-125px">No. Dokumen</th>
+                                        <th class="min-w-125px">Tanggal</th>
+                                        <th class="min-w-125px">Catatan</th>
+                                    </tr>
+                                    <!--end::Table row-->
+                                </thead>
+                                <!--end::Table head-->
+                                <!--begin::Table body-->
+                                <tbody class="fw-bold text-gray-400">
+                                    @php
+                                        $classes = '';
+                                        if (isset($contract)) {
+                                            $classes = 'form-control-solid';
+                                        } else {
+                                            $classes = 'border-bottom-dashed border-top-0 border-left-0 border-right-0';
+                                        }
+                                    @endphp
+                                    @if (isset($contract))
+                                        @forelse ($contract->monthlyReports as $monthlyReport)
+                                            <tr>
+                                                <!--begin::Column-->
+                                                <td>
+                                                    <a target="_blank"
+                                                        href="/document/view/{{ $monthlyReport->id_report }}/{{ $monthlyReport->id_document }}"
+                                                        class="text-gray-600 {{ $classes }} text-hover-primary mb-1">
+                                                        {{ $monthlyReport->document_name_report }}
+                                                    </a>
+                                                </td>
+                                                <!--end::Column-->
+                                                <!--begin::Column-->
+                                                <td>
+                                                    <a target="_blank"
+                                                        href="/document/view/{{ $monthlyReport->id_report }}/{{ $monthlyReport->id_document }}"
+                                                        class="text-gray-600 text-hover-primary mb-1">
+                                                        {{ $monthlyReport->id_document }}
+                                                    </a>
+                                                </td>
+                                                <!--end::Column-->
+                                                <!--begin::Kode=-->
+                                                <td>
+                                                    <a href="#" class="text-gray-400 text-hover-primary mb-1">
+                                                        {{ date_format(new DateTime($monthlyReport->created_at), 'd M, Y') }}</a>
+                                                    </a>
+                                                </td>
+                                                <!--end::Kode=-->
+                                                <!--begin::Unit=-->
+                                                <td>
+                                                    {{ $monthlyReport->note_report }}
+                                                </td>
+                                                <!--end::Unit=-->
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="4" class="text-center">
+                                                    <h6><b>There is no data</b></h6>
+                                                </td>
+                                            </tr>
+                                        @endforelse
+                                    @else
+                                        <tr>
+                                            <td colspan="4" class="text-center">
+                                                <h6><b>There is no data</b></h6>
+                                            </td>
+                                        </tr>
+                                    @endif
+                                </tbody>
+                                <!--end::Table body-->
+                            </table>
+                            <!--End:Table: Laporan Bulanan--> --}}
+
+                            {{-- <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                Change Request
+                                <a href="/contract-management/view/{{ $contract->id_contract }}/addendum-contract"
+                                    Id="Plus">+</a>
+                            </h3>
+
+                            <!--begin:Table: Addendum Kontrak-->
+                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                <!--begin::Table head-->
+                                <thead>
+                                    <!--begin::Table row-->
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-125px">No. Change Request</th>
+                                        <th class="min-w-125px">Dibuat Oleh
+                                        </th>
+                                        <th class="min-w-125px">Tanggal</th>
+                                    </tr>
+                                    <!--end::Table row-->
+                                </thead>
+                                <!--end::Table head-->
+                                <!--begin::Table body-->
+                                <tbody class="fw-bold text-gray-400">
+                                    @if (isset($contract))
+                                        @forelse ($contract->addendumContracts as $addendumContract)
+                                            <tr>
+                                                <!--begin::Column-->
+                                                <td>
+                                                    <a target="_blank"
+                                                        href="/contract-management/view/{{ $contract->id_contract }}/addendum-contract/{{ $addendumContract->id_addendum }}"
+                                                        class="text-gray-600 text-hover-primary mb-1">
+                                                        {{ $addendumContract->no_addendum }}
+                                                    </a>
+                                                </td>
+                                                <!--end::Column-->
+                                                <!--begin::Column-->
+                                                <td>
+                                                    <a href="#" class="text-gray-600 text-hover-primary mb-1">
+                                                        {{ $addendumContract->created_by }}
+                                                    </a>
+                                                </td>
+                                                <!--end::Column-->
+                                                <!--begin::Kode=-->
+                                                <td>
+                                                    <a href="#" class="text-gray-400 text-hover-primary mb-1">
+                                                        {{ date_format(new DateTime($addendumContract->created_at), 'd M, Y') }}</a>
+                                                    </a>
+                                                </td>
+                                                <!--end::Kode=-->
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="3" class="text-center">
+                                                    <h6><b>There is no data</b></h6>
+                                                </td>
+                                            </tr>
+                                        @endforelse
+                                    @else
+                                        <tr>
+                                            <td colspan="3" class="text-center">
+                                                <h6><b>There is no data</b></h6>
+                                            </td>
+                                        </tr>
+                                    @endif
+                                </tbody>
+                                <!--end::Table body-->
+                            </table>
+                            <!--End:Table: Addendum Kontrak-->
+                            <br> --}}
+
+
+                            {{-- <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                Klaim Kontrak
+                                <a href="/claim-management/{{ $contract->project->kode_proyek }}/{{ urlencode(urlencode($contract->id_contract)) }}/new"
+                                    Id="Plus">+</a>
+                            </h3>
+                            <!--begin:Table: Claim Contract-->
+                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                <!--begin::Table head-->
+                                <thead>
+                                    <!--begin::Table row-->
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-125px">No. Klaim</th>
+                                        <th class="min-w-125px">Dibuat Oleh
+                                        </th>
+                                        <th class="min-w-125px">Tanggal</th>
+                                    </tr>
+                                    <!--end::Table row-->
+                                </thead>
+                                <!--end::Table head-->
+                                <!--begin::Table body-->
+                                <tbody class="fw-bold text-gray-400">
+                                    @if (isset($contract->project->ClaimManagements))
+                                        @forelse ($contract->project->ClaimManagements as $claimManagement)
+                                            <tr>
+                                                <!--begin::Column-->
+                                                <td>
+                                                    <a target="_blank"
+                                                        href="/claim-management/view/{{ $claimManagement->id_claim }}"
+                                                        class="text-gray-600 text-hover-primary mb-1">
+                                                        {{ $claimManagement->id_claim }}
+                                                    </a>
+                                                </td>
+                                                <!--end::Column-->
+                                                <!--begin::Column-->
+                                                <td>
+                                                    <a href="#" class="text-gray-600 text-hover-primary mb-1">
+                                                        {{ $claimManagement->pic }}
+                                                    </a>
+                                                </td>
+                                                <!--end::Column-->
+                                                <!--begin::Kode=-->
+                                                <td>
+                                                    <a href="#" class="text-gray-400 text-hover-primary mb-1">
+                                                        {{ date_format(new DateTime($claimManagement->tanggal_claim), 'd M, Y') }}</a>
+                                                    </a>
+                                                </td>
+                                                <!--end::Kode=-->
+
+
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="3" class="text-center">
+                                                    <h6><b>There is no data</b></h6>
+                                                </td>
+                                            </tr>
+                                        @endforelse
+                                    @else
+                                        <tr>
+                                            <td colspan="3" class="text-center">
+                                                <h6><b>There is no data</b></h6>
+                                            </td>
+                                        </tr>
+                                    @endif
+                                </tbody>
+                                <!--end::Table body-->
+                            </table>
+                            <!--End:Table: Claim Contract--> --}}
+
+                            {{-- <br> --}}
+
+                            {{-- <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                MoM Kick Off Meeting
+                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_mom_meeting">+</a>
+                            </h3>
+                            <!--begin:Table: Claim Contract-->
+                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                <!--begin::Table head-->
+                                <thead>
+                                    <!--begin::Table row-->
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-125px">Nama Dokumen</th>
+                                        <th class="min-w-125px">Dibuat Oleh
+                                        </th>
+                                        <th class="min-w-125px">Tanggal</th>
+                                        <th class="min-w-125px">Catatan</th>
+                                    </tr>
+                                    <!--end::Table row-->
+                                </thead>
+                                <!--end::Table head-->
+                                <!--begin::Table body-->
+                                <tbody class="fw-bold text-gray-400">
+                                    @if (!empty($contract->MoMMeeting))
+                                        @forelse ($contract->MoMMeeting as $mom_meeting)
+                                            <tr>
+                                                <!--begin::Column-->
+                                                <td>
+                                                    <a target="_blank"
+                                                        href="/document/view/{{ $mom_meeting->id_mom }}/{{ $mom_meeting->id_document }}"
+                                                        class="text-gray-600 text-hover-primary mb-1">
+                                                        {{ $mom_meeting->document_name }}
+                                                    </a>
+                                                </td>
+                                                <!--end::Column-->
+                                                <!--begin::Column-->
+                                                <td>
+                                                    <p class="text-gray-600 mb-1">{{ $mom_meeting->User->name }}</p>
+                                                </td>
+                                                <!--end::Column-->
+                                                <!--begin::Kode=-->
+                                                <td>
+                                                    <p class="text-gray-600 mb-1">
+                                                        {{ date_format(new DateTime($mom_meeting->created_at), 'd-m-Y') }}
+                                                    </p>
+                                                </td>
+                                                <!--end::Kode=-->
+                                                <!--begin::Unit=-->
+                                                <td>
+                                                    <p class="text-gray-600 mb-1">{{ $mom_meeting->note }}</p>
+                                                </td>
+                                                <!--end::Unit=-->
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="4" class="text-center">
+                                                    <h6><b>There is no data</b></h6>
+                                                </td>
+                                            </tr>
+                                        @endforelse
+                                    @else
+                                        <tr>
+                                            <td colspan="4" class="text-center">
+                                                <h6><b>There is no data</b></h6>
+                                            </td>
+                                        </tr>
+                                    @endif
+                                </tbody>
+                                <!--end::Table body-->
+                            </table>
+                            <!--End:Table: Claim Contract--> --}}
+
+                            <div class="row mb-5">
+                                <div class="col-6">
+                                    <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                        LAW
+                                    </h3>
                                 </div>
                                 <div class="col-6">
-                                    <!--begin::Input-->
-                                    <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                    <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                        LD
+                                    </h3>
+                                </div>
+                            </div>
+                            {{-- <form action="/ld-law/upload" enctype="multipart/form-data" method="POST">
+                                @csrf --}}
+                                <div class="row">
+                                    <div class="col-6 mr-3">
+                                        <!--begin::Input-->
+                                        <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
                                         name="id-contract">
                                     <input type="hidden" class="modal-name" name="modal-name">
     
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
-                                        <span style="font-weight: normal">Delay</span>
+                                        <span style="font-weight: normal">Governing Law</span>
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
-                                    <input type="text" id="delay" name="delay" class="form-control form-control-solid"
-                                    value="{{ !empty($contract->ld_delay) ? $contract->ld_delay : "" }}">
+                                    <input type="text" id="governing-law" name="governing-law" class="form-control form-control-solid" 
+                                    value="{{ !empty($contract->law_governing) ? $contract->law_governing : "" }}">
                                     <!--end::Input-->
     
                                     <br>
                                     
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
-                                        <span style="font-weight: normal">Performance</span>
+                                        <span style="font-weight: normal">Dispute Resolution</span>
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
-                                    <input type="text" id="performance" name="performance" class="form-control form-control-solid"
-                                    value="{{ !empty($contract->ld_performance) ? $contract->ld_performance : "" }}">
+                                    <input type="text" id="dispute-resolution" name="dispute-resolution" class="form-control form-control-solid"
+                                    value="{{ !empty($contract->law_dispute_resolution) ? $contract->law_dispute_resolution : "" }}">
                                     <!--end::Input-->
+                                    
+                                    <br>
+    
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Prevailing Language</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text" id="prevailing-language" name="prevailing-language" class="form-control form-control-solid"
+                                    value="{{ !empty($contract->law_prevailing_language) ? $contract->law_prevailing_language : "" }}">
+                                    <!--end::Input-->
+                                    </div>
+                                    <div class="col-6">
+                                        <!--begin::Input-->
+                                        <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                            name="id-contract">
+                                        <input type="hidden" class="modal-name" name="modal-name">
+        
+                                        <!--begin::Label-->
+                                        <label class="fs-6 fw-bold form-label mt-3">
+                                            <span style="font-weight: normal">Delay</span>
+                                        </label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <input type="text" id="delay" name="delay" class="form-control form-control-solid"
+                                        value="{{ !empty($contract->ld_delay) ? $contract->ld_delay : "" }}">
+                                        <!--end::Input-->
+        
+                                        <br>
+                                        
+                                        <!--begin::Label-->
+                                        <label class="fs-6 fw-bold form-label mt-3">
+                                            <span style="font-weight: normal">Performance</span>
+                                        </label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <input type="text" id="performance" name="performance" class="form-control form-control-solid"
+                                        value="{{ !empty($contract->ld_performance) ? $contract->ld_performance : "" }}">
+                                        <!--end::Input-->
+                                    </div>
                                 </div>
-                            </div>
+{{-- 
+                                <div class="d-flex justify-content-end">
+                                    <button type="submit" id="save-question" class="btn btn-sm btn-primary"
+                                        data-bs-dismiss="modal">Save</button>
+                                </div>
+                            </form> --}}
 
-                            <div class="d-flex justify-content-end">
-                                <button type="submit" id="save-question" class="btn btn-sm btn-primary"
-                                    data-bs-dismiss="modal">Save</button>
-                            </div>
-                        </form>
-
-                    <hr>
-                    <br>
-                    <br>
+                        <hr>
+                        <br>
+                        <br>
 
 
-                        <h3 class="fw-bolder m-0 mb-3" id="HeadDetail" style="font-size:14px;">
-                            Input Resiko - Pelaksanaan (<i class="text-hover-primary text-gray"><a 
-                                href="https://crm.wika.co.id/faqs/104625_RiskTender_Input-Kosong.rev.xlsx"> Download
-                                Template Risk Tender </a></i>)
-                            <a href="#" Id="Plus" data-bs-toggle="modal"
-                                data-bs-target="#kt_modal_input_resiko_pelaksanaan">+</a>
-                        </h3>
+                            <h3 class="fw-bolder m-0 mb-3" id="HeadDetail" style="font-size:14px;">
+                                Input Resiko - Pelaksanaan (<i class="text-hover-primary text-gray"><a 
+                                    href="https://crm.wika.co.id/faqs/104625_RiskTender_Input-Kosong.rev.xlsx"> Download
+                                    Template Risk Tender </a></i>)
+                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_input_resiko_pelaksanaan">+</a>
+                            </h3>
 
-                        <!--begin:Table: Review-->
-                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="input-risk">
-                            <!--begin::Table head-->
-                            <thead>
-                                <!--begin::Table row-->
-                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-125px">Periode</th>
-                                    <th class="min-w-125px">File</th>
-                                </tr>
-                                <!--end::Table row-->
-                            </thead>
-                            <!--end::Table head-->
-                            <!--begin::Table body-->
-                            <tbody class="fw-bold text-gray-400">
-                                @php
-                                    $uploadResikoPelaksanaan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "resiko-pelaksanaan");
-                                @endphp
-                                @forelse ($uploadResikoPelaksanaan as $inputRisk)
-                                    <tr>
-                                        <!--begin::Column-->
-                                        <td>
-                                            <p class="text-gray-600 mb-1">{{ Carbon\Carbon::createFromFormat("m-Y", $inputRisk->periode)->translatedFormat("F Y") }}</p>
-                                        </td>
-                                        <td>
-                                            <!--End:Table: Review-->
-                                            <a target="_blank" href="{!! asset('words/'.$inputRisk->id_document) !!}" class="text-hover-primary">
-                                            <p>{{ $inputRisk->nama_document }}</p>
-                                            </a>
-                                        </td>
+                            <!--begin:Table: Review-->
+                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="input-risk">
+                                <!--begin::Table head-->
+                                <thead>
+                                    <!--begin::Table row-->
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-125px">Periode</th>
+                                        <th class="min-w-125px">File</th>
                                     </tr>
-                                @empty
-                                @endforelse
-                            </tbody>
-                            <!--end::Table body-->
-
-                        </table>
-                        <!--End:Table: Review-->
-                        
-                        @php
-                        $uploadFileResiko = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "resiko-pelaksanaan")->first();
-                        @endphp
-                        <!--End:Table: Review-->
-                        @if (!empty($uploadFileResiko))
-                        <a target="_blank" href="{{ asset('words/'.$uploadFileResiko->id_document) }}" class="text-hover-primary">
-                           <small><b>Download File :</b> {{ $uploadFileResiko->nama_document }}</small>
-                        </a>
-                        @endif
-                        <br><br><br>
-
-                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                            Rencana Kerja Manajemen Kontrak
-                            <a href="#" Id="Plus" data-bs-toggle="modal"
-                                data-bs-target="#kt_modal_input_rencana_kerja_kontrak">+</a>
-                        </h3>
-
-                        <!--begin:Table: Review-->
-                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
-                            <!--begin::Table head-->
-                            <thead>
-                                <!--begin::Table row-->
-                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-125px">Nama File</th>
-                                    <th class="min-w-125px">Tanggal Upload</th>
-                                </tr>
-                                <!--end::Table row-->
-                            </thead>
-                            <!--end::Table head-->
-                            <!--begin::Table body-->
-                            <tbody class="fw-bold text-gray-400">
-                                @if ($contract->RencanaKerjaManajemen->count() > 0)
-                                    @forelse ($contract->RencanaKerjaManajemen as $key => $rencana_kerja)
+                                    <!--end::Table row-->
+                                </thead>
+                                <!--end::Table head-->
+                                <!--begin::Table body-->
+                                <tbody class="fw-bold text-gray-400">
+                                    @php
+                                        $uploadResikoPelaksanaan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "resiko-pelaksanaan");
+                                    @endphp
+                                    @forelse ($uploadResikoPelaksanaan as $inputRisk)
                                         <tr>
                                             <!--begin::Column-->
                                             <td>
-                                                <a target="_blank" href="{{ asset('words/'.$rencana_kerja->id_document) }}" class="text-hover-primary">
-                                                    {{ $rencana_kerja->nama_document }}
+                                                <p class="text-gray-600 mb-1">{{ Carbon\Carbon::createFromFormat("m-Y", $inputRisk->periode)->translatedFormat("F Y") }}</p>
+                                            </td>
+                                            <td>
+                                                <!--End:Table: Review-->
+                                                <a target="_blank" href="{!! asset('words/'.$inputRisk->id_document) !!}" class="text-hover-primary">
+                                                <p>{{ $inputRisk->nama_document }}</p>
                                                 </a>
                                             </td>
-                                            <!--end::Column-->
-                                            <!--begin::Column-->
-                                            <td>
-                                                <p class="text-gray-600 mb-1">{{ Carbon\Carbon::parse($rencana_kerja->created_at)->translatedFormat("d F Y") }}</p>
-                                            </td>
-                                            <!--end::Column-->
                                         </tr>
                                     @empty
-                                        <tr>
-                                            <td colspan="3" class="text-center">
-                                                <h6><b>There is no data</b></h6>
-                                            </td>
-                                        </tr>
                                     @endforelse
-                                @else
-                                    <tr>
-                                        <td colspan="3" class="text-center">
-                                            <h6><b>There is no data</b></h6>
-                                        </td>
-                                    </tr>
-                                @endif
-                            </tbody>
-                            <!--end::Table body-->
+                                </tbody>
+                                <!--end::Table body-->
 
-                        </table>
-                        <!--End:Table: Review-->
-
-                        <br>
-                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                            Tinjauan Dokumen Kontrak - Pelaksanaan
-                            @if ($contract->reviewProjects->where('stage', '=', 2)->isEmpty())
-                                <a href="/review-contract/view/{{ $contract->id_contract }}/stage/2" target="_blank" Id="Plus">+</a>    
-                                @else
-                                <a href="/review-contract/view/{{ $contract->id_contract }}/stage/2" target="_blank" class="btn btn-primary btn-sm p-2 px-3 mx-3">view</a>    
+                            </table>
+                            <!--End:Table: Review-->
+                            
+                            @php
+                            $uploadFileResiko = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "resiko-pelaksanaan")->first();
+                            @endphp
+                            <!--End:Table: Review-->
+                            @if (!empty($uploadFileResiko))
+                            <a target="_blank" href="{{ asset('words/'.$uploadFileResiko->id_document) }}" class="text-hover-primary">
+                            <small><b>Download File :</b> {{ $uploadFileResiko->nama_document }}</small>
+                            </a>
                             @endif
-                        </h3>
+                            <br><br><br>
 
-                        <br><br>
-                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                            Pasal Kontraktual
-                            <a href="#" Id="Plus" data-bs-toggle="modal"
-                                data-bs-target="#kt_modal_input_pasal_kontraktual">+</a>
-                        </h3>
+                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                Rencana Kerja Manajemen Kontrak
+                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_input_rencana_kerja_kontrak">+</a>
+                            </h3>
 
-                        <!--begin:Table: Pasal Kontraktual-->
-                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
-                            <!--begin::Table head-->
-                            <thead>
-                                <!--begin::Table row-->
-                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-50px">No</th>
-                                    <th class="min-w-125px">Item</th>
-                                    <th class="min-w-125px">Pasal</th>
-                                    <th class="min-w-125px">Perpanjangan Waktu</th>
-                                    <th class="min-w-125px">Tambahan Biaya</th>
-                                </tr>
-                                <!--end::Table row-->
-                            </thead>
-                            <!--end::Table head-->
-                            <!--begin::Table body-->
-                            <tbody class="fw-bold text-gray-400">
-                                @if ($contract->PasalKontraktual->count() > 0)
-                                    @forelse ($contract->PasalKontraktual as $key => $pk)
-                                        <tr>
-                                            <td>
-                                                <p class="text-gray-600 mb-1">{{ $key + 1 }}</p>
-                                            </td>
-                                            <!--begin::Column-->
-                                            <td>
-                                                <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! $pk->item !!}</pre>
-                                            </td>
-                                            <!--end::Column-->
-                                            <!--begin::Column-->
-                                            <td>
-                                                <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! $pk->pasal !!}</pre>
-                                            </td>
-                                            <!--end::Column-->
-                                            <!--begin::Column-->
-                                            <td>
-                                                <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! Carbon\Carbon::create($pk->perpanjangan_waktu)->translatedFormat("d F Y") !!}</pre>
-                                            </td>
-                                            <!--end::Column-->
-                                            <!--begin::Column-->
-                                            <td>
-                                                <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! number_format($pk->tambahan_biaya, 0, ".", ".") !!}</pre>
-                                            </td>
-                                            <!--end::Column-->
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="3" class="text-center">
-                                                <h6><b>There is no data</b></h6>
-                                            </td>
-                                        </tr>
-                                    @endforelse
-                                @else
-                                    <tr>
-                                        <td colspan="5" class="text-center">
-                                            <h6><b>There is no data</b></h6>
-                                        </td>
+                            <!--begin:Table: Review-->
+                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                <!--begin::Table head-->
+                                <thead>
+                                    <!--begin::Table row-->
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-125px">Nama File</th>
+                                        <th class="min-w-125px">Tanggal Upload</th>
                                     </tr>
-                                @endif
-                            </tbody>
-                            <!--end::Table body-->
-
-                        </table>
-                        <!--End:Table: Pasal Kontraktual-->
-                        <br><br>
-
-                        <h3 class="fw-bolder m-0 mb-3 " id="HeadDetail" style="font-size:14px;">
-                            Perubahan Kontrak
-                            <a href="#" Id="Plus" data-bs-toggle="modal"
-                                data-bs-target="#kt_modal_input_perubahan_kontrak">+</a>
-                            @if (!empty($contract->PerubahanKontrak->toArray()))
-                                <a href="#" data-bs-toggle="modal"
-                                data-bs-target="#kt_modal_upload_perubahan" class="btn btn-primary btn-sm p-2 mx-3 text-end">Upload</a>
-                            @endif
-                        </h3><br>
-
-
-                        <!--begin:Table: Perubahan Kontrak-->
-                        <table class="table align-middle table-row-dashed fs-6 gy-5 w-100 p-3" id="perubahan-kontrak">
-                            <!--begin::Table head-->
-                            <thead>
-                                <!--begin::Table row-->
-                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-auto">Jenis Perubahan</th>
-                                    <th class="min-w-auto">Tanggal Perubahan</th>
-                                    <th class="min-w-auto">Uraian Perubahan</th>
-                                    <th class="min-w-auto">Jenis Dokumen</th>
-                                    <th class="min-w-auto">Nomor Dokumen</th>
-                                    <th class="min-w-auto">No Proposal Klaim</th>
-                                    <th class="min-w-auto">Tanggal Pengajuan</th>
-                                    <th class="min-w-auto">Biaya Pengajuan</th>
-                                    <th class="min-w-auto">Waktu Pengajuan</th>
-                                    <th class="min-w-auto">Status</th>
-                                </tr>
-                                <!--end::Table row-->
-                            </thead>
-                            <!--end::Table head-->
-                            <!--begin::Table body-->
-                            <tbody class="fw-bold text-gray-400">
-                                @forelse ($contract->PerubahanKontrak as $key => $pk)
-                                    <tr class="fw-bold">
-                                        <td>
-                                            <small>
-                                                <a target="_blank" href="/contract-management/view/{{url_encode($contract->id_contract)}}/perubahan-kontrak/{{$pk->id_perubahan_kontrak}}" class="text-hover-primary">{{ $pk->jenis_perubahan }}</a>
-                                            </small>
-                                        </td>
-                                        <!--begin::Column-->
-                                        <td>
-                                            <small>
-                                                <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! Carbon\Carbon::create($pk->tanggal_perubahan)->translatedFormat("d F Y") !!}</pre>
-                                            </small>
-                                        </td>
-                                        <!--end::Column-->
-                                        <!--begin::Column-->
-                                        <td>
-                                            <small>
-                                                <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! $pk->uraian_perubahan !!}</pre>
-                                            </small>
-                                        </td>
-                                        <!--end::Column-->
-                                        <!--begin::Column-->
-                                        @if (!empty($pk->JenisDokumen->toArray()))
-                                            @foreach ($pk->JenisDokumen as $jd)
+                                    <!--end::Table row-->
+                                </thead>
+                                <!--end::Table head-->
+                                <!--begin::Table body-->
+                                <tbody class="fw-bold text-gray-400">
+                                    @if ($contract->RencanaKerjaManajemen->count() > 0)
+                                        @forelse ($contract->RencanaKerjaManajemen as $key => $rencana_kerja)
+                                            <tr>
+                                                <!--begin::Column-->
                                                 <td>
-                                                    <small>
-                                                        <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! $jd->jenis_dokumen !!}</pre>
-                                                    </small>
+                                                    <a target="_blank" href="{{ asset('words/'.$rencana_kerja->id_document) }}" class="text-hover-primary">
+                                                        {{ $rencana_kerja->nama_document }}
+                                                    </a>
                                                 </td>
+                                                <!--end::Column-->
+                                                <!--begin::Column-->
+                                                <td>
+                                                    <p class="text-gray-600 mb-1">{{ Carbon\Carbon::parse($rencana_kerja->created_at)->translatedFormat("d F Y") }}</p>
+                                                </td>
+                                                <!--end::Column-->
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="3" class="text-center">
+                                                    <h6><b>There is no data</b></h6>
+                                                </td>
+                                            </tr>
+                                        @endforelse
+                                    @else
+                                        <tr>
+                                            <td colspan="3" class="text-center">
+                                                <h6><b>There is no data</b></h6>
+                                            </td>
+                                        </tr>
+                                    @endif
+                                </tbody>
+                                <!--end::Table body-->
+
+                            </table>
+                            <!--End:Table: Review-->
+
+                            <br>
+                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                Tinjauan Dokumen Kontrak - Pelaksanaan
+                                @if ($contract->reviewProjects->where('stage', '=', 2)->isEmpty())
+                                    <a href="/review-contract/view/{{ $contract->id_contract }}/stage/2" target="_blank" Id="Plus">+</a>    
+                                    @else
+                                    <a href="/review-contract/view/{{ $contract->id_contract }}/stage/2" target="_blank" class="btn btn-primary btn-sm p-2 px-3 mx-3">view</a>    
+                                @endif
+                            </h3>
+
+                            <br><br>
+                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                Idetifikasi Pasal Kontraktual
+                                @if ($contract->PasalKontraktual->isNotEmpty())
+                                <a href="#" onclick="exportToExcel(this, '#kt_pasal_kontraktual')" class="">(Klik di sini untuk Export ke Excel)</a>
+                                @endif
+                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_input_pasal_kontraktual">+</a>
+                                @if (!empty($contract->PasalKontraktual->toArray()))
+                                    <a href="#" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_upload_pasal_kontraktual" class="btn btn-primary btn-sm p-2 mx-3 text-end">Upload</a>
+                                @endif
+                            </h3>
+
+                            <!--begin:Table: Pasal Kontraktual-->
+                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="pasal_kontraktual">
+                                <!--begin::Table head-->
+                                <thead>
+                                    <!--begin::Table row-->
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-50px">No</th>
+                                        <th class="min-w-125px">Item</th>
+                                        <th class="min-w-125px">Pasal</th>
+                                        <th class="min-w-125px">Perpanjangan Waktu</th>
+                                        <th class="min-w-125px">Tambahan Biaya</th>
+                                    </tr>
+                                    <!--end::Table row-->
+                                </thead>
+                                <!--end::Table head-->
+                                <!--begin::Table body-->
+                                <tbody class="fw-bold text-gray-400">
+                                    @if ($contract->PasalKontraktual->count() > 0)
+                                        @forelse ($contract->PasalKontraktual as $key => $pk)
+                                            <tr>
+                                                <td>
+                                                    <p class="text-gray-600 mb-1">{{ $key + 1 }}</p>
+                                                </td>
+                                                <!--begin::Column-->
+                                                <td>
+                                                    <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! $pk->item !!}</pre>
+                                                </td>
+                                                <!--end::Column-->
+                                                <!--begin::Column-->
+                                                <td>
+                                                    <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! $pk->pasal !!}</pre>
+                                                </td>
+                                                <!--end::Column-->
+                                                <!--begin::Column-->
+                                                <td>
+                                                    <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! Carbon\Carbon::create($pk->perpanjangan_waktu)->translatedFormat("d F Y") !!}</pre>
+                                                </td>
+                                                <!--end::Column-->
+                                                <!--begin::Column-->
+                                                <td>
+                                                    <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! number_format($pk->tambahan_biaya, 0, ".", ".") !!}</pre>
+                                                </td>
+                                                <!--end::Column-->
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="3" class="text-center">
+                                                    <h6><b>There is no data</b></h6>
+                                                </td>
+                                            </tr>
+                                        @endforelse
+                                    @else
+                                        <tr>
+                                            <td colspan="5" class="text-center">
+                                                <h6><b>There is no data</b></h6>
+                                            </td>
+                                        </tr>
+                                    @endif
+                                </tbody>
+                                <!--end::Table body-->
+
+                            </table>
+                            <!--End:Table: Pasal Kontraktual-->
+                            @php
+                            $uploadFilePasalKontraktual = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "pasal-kontraktual")->first();
+                            @endphp
+                            <!--End:Table: Review-->
+                            @if (!empty($uploadFilePasalKontraktual))
+                            <a target="_blank" href="{{ asset('words/'.$uploadFilePasalKontraktual->id_document) }}" class="text-hover-primary">
+                            <small><b>Download File :</b> {{ $uploadFilePasalKontraktual->nama_document }}</small>
+                            </a>
+                            @endif
+                            <br><br><br>
+
+                            <h3 class="fw-bolder m-0 mb-3 " id="HeadDetail" style="font-size:14px;">
+                                Perubahan Kontrak
+                                @if (!empty($contract->PerubahanKontrak->toArray()))
+                                    <a href="#" onclick="exportToExcel(this, '#perubahan-kontrak')" class="">(Klik di sini untuk Export ke Excel)</a>
+                                @endif
+                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_input_perubahan_kontrak">+</a>
+                                @if (!empty($contract->PerubahanKontrak->toArray()))
+                                    <a href="#" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_upload_perubahan" class="btn btn-primary btn-sm p-2 mx-3 text-end">Upload</a>
+                                @endif
+                            </h3>
+
+
+                            <!--begin:Table: Perubahan Kontrak-->
+                            <table class="table align-middle table-row-dashed fs-6 gy-5 w-100 p-3" id="perubahan-kontrak">
+                                <!--begin::Table head-->
+                                <thead>
+                                    <!--begin::Table row-->
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-auto">Jenis Perubahan</th>
+                                        <th class="min-w-auto">Tanggal Perubahan</th>
+                                        <th class="min-w-auto">Uraian Perubahan</th>
+                                        <th class="min-w-auto">Jenis Dokumen</th>
+                                        <th class="min-w-auto">Nomor Dokumen</th>
+                                        <th class="min-w-auto">No Proposal Klaim</th>
+                                        <th class="min-w-auto">Tanggal Pengajuan</th>
+                                        <th class="min-w-auto">Biaya Pengajuan</th>
+                                        <th class="min-w-auto">Waktu Pengajuan</th>
+                                        <th class="min-w-auto">Status</th>
+                                    </tr>
+                                    <!--end::Table row-->
+                                </thead>
+                                <!--end::Table head-->
+                                <!--begin::Table body-->
+                                <tbody class="fw-bold text-gray-400">
+                                    @forelse ($contract->PerubahanKontrak as $key => $pk)
+                                        <tr class="fw-bold">
+                                            <td>
+                                                <small>
+                                                    <a target="_blank" href="/contract-management/view/{{url_encode($contract->id_contract)}}/perubahan-kontrak/{{$pk->id_perubahan_kontrak}}" class="text-hover-primary">{{ $pk->jenis_perubahan }}</a>
+                                                </small>
+                                            </td>
+                                            <!--begin::Column-->
+                                            <td>
+                                                <small>
+                                                    <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! Carbon\Carbon::create($pk->tanggal_perubahan)->translatedFormat("d F Y") !!}</pre>
+                                                </small>
+                                            </td>
+                                            <!--end::Column-->
+                                            <!--begin::Column-->
+                                            <td>
+                                                <small>
+                                                    <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! $pk->uraian_perubahan !!}</pre>
+                                                </small>
+                                            </td>
+                                            <!--end::Column-->
+                                            <!--begin::Column-->
+                                            @if (!empty($pk->JenisDokumen->toArray()))
                                                 @php
-                                                    $list_instruksi_owner = collect(explode(",", $jd->list_instruksi_owner));
+                                                    $jenis_dokumen = $pk->JenisDokumen;
+                                                    $kategori_dokumen_list = $jenis_dokumen->map(function($item) {
+                                                        return $item->jenis_dokumen;
+                                                    });
+                                                    $dokumen_list = $jenis_dokumen->map(function($item) {
+                                                        $new_class = new stdClass();
+                                                        $new_class->jenis_dokumen = $item->jenis_dokumen;
+                                                        $new_class->list_instruksi_owner = explode(",", $item->list_instruksi_owner);
+                                                        return $new_class;
+                                                    });
+                                                    // dd($dokumen_list);
                                                 @endphp
+                                                <td class="align-middle">
+                                                    @foreach ($kategori_dokumen_list as $kategori)
+                                                        <small class="text-gray-600 mb-1 fw-normal">
+                                                            {{-- <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';"></pre> --}}
+                                                            - {!! $kategori !!}   
+                                                        </small><br><br>
+                                                    @endforeach
+                                                </td>
                                                 <td>
                                                     <small>
-                                                        @foreach ($list_instruksi_owner as $lio)
-                                                            @switch($jd->jenis_dokumen)
-                                                                @case("Site Instruction")
-                                                                        @php
-                                                                            $lio = App\Models\SiteInstruction::where("nomor_dokumen" , "=", $lio)->get()->first();
-                                                                        @endphp
-                                                                    @break
-                                                                @case("Technical Form")
-                                                                        @php
-                                                                            $lio = App\Models\TechnicalForm::where("nomor_dokumen" , "=", $lio)->get()->first();
-                                                                        @endphp
-                                                                    @break
-                                                                @case("Technical Query")
-                                                                        @php
-                                                                            $lio = App\Models\TechnicalQuery::where("nomor_dokumen" , "=", $lio)->get()->first();
-                                                                        @endphp
-                                                                    @break
-                                                                @case("Field Design Change")
-                                                                        @php
-                                                                            $lio = App\Models\FieldChange::where("nomor_dokumen" , "=", $lio)->get()->first();
-                                                                        @endphp
-                                                                    @break
-                                                                @case("Contract Change Notice")
-                                                                        @php
-                                                                            $lio = App\Models\ContractChangeNotice::where("nomor_dokumen" , "=", $lio)->get()->first();
-                                                                        @endphp
-                                                                    @break
-                                                                @case("Contract Change Proposal")
-                                                                        @php
-                                                                            $lio = App\Models\ContractChangeProposal::where("nomor_dokumen" , "=", $lio)->get()->first();
-                                                                        @endphp
-                                                                    @break
-                                                                @case("Contract Change Order")
-                                                                        @php
-                                                                            $lio = App\Models\ContractChangeOrder::where("nomor_dokumen" , "=", $lio)->get()->first();
-                                                                        @endphp
-                                                                    @break
-                                                            @endswitch
-                                                            - <a target="_blank" href="{{ asset("words/$lio->id_document.pdf"); }}">{{$lio->nomor_dokumen}}</a> <br>
+                                                        @foreach ($dokumen_list as $lio)
+                                                            @foreach ($lio->list_instruksi_owner as $dokumen)
+                                                                @switch($lio->jenis_dokumen)
+                                                                    @case("Site Instruction")
+                                                                            @php
+                                                                                $lio = App\Models\SiteInstruction::where("nomor_dokumen" , "=", $dokumen)->get()->first();
+                                                                            @endphp
+                                                                        @break
+                                                                    @case("Technical Form")
+                                                                            @php
+                                                                                $lio = App\Models\TechnicalForm::where("nomor_dokumen" , "=", $dokumen)->get()->first();
+                                                                            @endphp
+                                                                        @break
+                                                                    @case("Technical Query")
+                                                                            @php
+                                                                                $lio = App\Models\TechnicalQuery::where("nomor_dokumen" , "=", $dokumen)->get()->first();
+                                                                            @endphp
+                                                                        @break
+                                                                    @case("Field Design Change")
+                                                                            @php
+                                                                                $lio = App\Models\FieldChange::where("nomor_dokumen" , "=", $dokumen)->get()->first();
+                                                                            @endphp
+                                                                        @break
+                                                                    @case("Contract Change Notice")
+                                                                            @php
+                                                                                $lio = App\Models\ContractChangeNotice::where("nomor_dokumen" , "=", $dokumen)->get()->first();
+                                                                            @endphp
+                                                                        @break
+                                                                    @case("Contract Change Proposal")
+                                                                            @php
+                                                                                $lio = App\Models\ContractChangeProposal::where("nomor_dokumen" , "=", $dokumen)->get()->first();
+                                                                            @endphp
+                                                                        @break
+                                                                    @case("Contract Change Order")
+                                                                            @php
+                                                                                $lio = App\Models\ContractChangeOrder::where("nomor_dokumen" , "=", $dokumen)->get()->first();
+                                                                            @endphp
+                                                                        @break
+                                                                @endswitch
+                                                                - <a target="_blank" class="text-hover-primary" href="{{ asset("words/$lio->id_document.pdf"); }}">{{$lio->nomor_dokumen}}</a> <br>
+                                                            @endforeach
                                                         @endforeach
                                                     </small>
                                                 </td>
-                                            @endforeach
-                                        @else
+                                            @else
+                                                <td>
+                                                    <small>
+                                                        <p class="mb-1 fw-normal badge badge-light-danger" style="font-family: 'Poppins';">Belum Ditentukan</p>
+                                                    </small>
+                                                </td>
+                                                <td>
+                                                    <small>
+                                                        <p class="mb-1 fw-normal badge badge-light-danger" style="font-family: 'Poppins';">Belum Ditentukan</p>
+                                                    </small>
+                                                </td>
+                                            @endif
+                                            <!--end::Column-->
+                                            <!--begin::Column-->
                                             <td>
                                                 <small>
-                                                    <p class="mb-1 fw-normal badge badge-light-danger" style="font-family: 'Poppins';">Belum Ditentukan</p>
+                                                    <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! $pk->proposal_klaim !!}</pre>
                                                 </small>
                                             </td>
+                                            <!--end::Column-->
+                                            <!--begin::Column-->
                                             <td>
                                                 <small>
-                                                    <p class="mb-1 fw-normal badge badge-light-danger" style="font-family: 'Poppins';">Belum Ditentukan</p>
+                                                    <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! Carbon\Carbon::create($pk->tanggal_pengajuan)->translatedFormat("d F Y") !!}</pre>
                                                 </small>
                                             </td>
-                                        @endif
-                                        <!--end::Column-->
-                                        <!--begin::Column-->
-                                        <td>
-                                            <small>
-                                                <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! $pk->proposal_klaim !!}</pre>
-                                            </small>
-                                        </td>
-                                        <!--end::Column-->
-                                        <!--begin::Column-->
-                                        <td>
-                                            <small>
-                                                <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! Carbon\Carbon::create($pk->tanggal_pengajuan)->translatedFormat("d F Y") !!}</pre>
-                                            </small>
-                                        </td>
-                                        <!--end::Column-->
-                                        <!--begin::Column-->
-                                        <td>
-                                            <small>
-                                                <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! number_format($pk->biaya_pengajuan, 0, ".", ".") !!}</pre>
-                                            </small>
-                                        </td>
-                                        <!--end::Column-->
-                                        <!--begin::Column-->
-                                        <td>
-                                            <small>
-                                                <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! Carbon\Carbon::create($pk->waktu_pengajuan)->translatedFormat("d F Y") !!}</pre>
-                                            </small>
-                                        </td>
-                                        <!--end::Column-->
-                                        <!--begin::Column-->
-                                        <td>
-                                            @php
-                                                $class_name = "";
-                                                $status = "";
-                                                if($pk->status) {
-                                                    $class_name = "badge badge-light-danger";
-                                                    $status = "Open";
-                                                } else {
-                                                    $class_name = "badge badge-light-success";
-                                                    $status = "Closed";
-                                                }
-                                            @endphp
-                                            <small>
-                                                <p class="{{$class_name}}">{{$status}}</p>
-                                            </small>
-                                        </td>
-                                        <!--end::Column-->
-                                    </tr>
-                                @empty
-                                @endforelse
-                                
-                            </tbody>
-                            <!--end::Table body-->
+                                            <!--end::Column-->
+                                            <!--begin::Column-->
+                                            <td>
+                                                <small>
+                                                    <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! number_format($pk->biaya_pengajuan, 0, ".", ".") !!}</pre>
+                                                </small>
+                                            </td>
+                                            <!--end::Column-->
+                                            <!--begin::Column-->
+                                            <td>
+                                                <small>
+                                                    <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! Carbon\Carbon::create($pk->waktu_pengajuan)->translatedFormat("d F Y") !!}</pre>
+                                                </small>
+                                            </td>
+                                            <!--end::Column-->
+                                            <!--begin::Column-->
+                                            <td>
+                                                @php
+                                                    $class_name = "";
+                                                    $status = "";
+                                                    if($pk->status) {
+                                                        $class_name = "badge badge-light-danger";
+                                                        $status = "Open";
+                                                    } else {
+                                                        $class_name = "badge badge-light-success";
+                                                        $status = "Closed";
+                                                    }
+                                                @endphp
+                                                <small>
+                                                    <p class="{{$class_name}}">{{$status}}</p>
+                                                </small>
+                                            </td>
+                                            <!--end::Column-->
+                                        </tr>
+                                    @empty
+                                    @endforelse
+                                    
+                                </tbody>
+                                <!--end::Table body-->
 
-                        </table>
-                        <!--End:Table: Perubahan Kontrak-->
-                        @php
-                            $uploadFilePerubahan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Pending Issue")->first();
-                        @endphp
-                        <!--End:Table: Review-->
-                        @if (!empty($uploadFilePerubahan))
-                            <a target="_blank" href="{{ asset('words/'.$uploadFilePerubahan->id_document) }}" class="text-hover-primary">
-                            <small><b>Download File :</b> {{ $uploadFilePerubahan->nama_document }}</small>
-                            </a>
-                        @endif
-
-                        <br>
-                        <br>
-
-                        <h3 class="fw-bolder m-0 mb-3 " id="HeadDetail" style="font-size:14px;">
-                            Checklist Manajemen Kontrak
-                            <a href="#" Id="Plus" data-bs-toggle="modal"
-                                data-bs-target="#kt_modal_input_checklist_manajemen">+</a>
-                            @if (!empty($contract->ChecklistManajemen->toArray()))
-                            <a href="#" data-bs-toggle="modal"
-                            data-bs-target="#kt_modal_upload_checklist_manajemen" class="btn btn-primary btn-sm p-2 text-end">Upload</a>
+                            </table>
+                            <!--End:Table: Perubahan Kontrak-->
+                            @php
+                                $uploadFilePerubahan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "perubahan-kontrak")->first();
+                            @endphp
+                            <!--End:Table: Review-->
+                            @if (!empty($uploadFilePerubahan))
+                                <a target="_blank" href="{{ asset('words/'.$uploadFilePerubahan->id_document) }}" class="text-hover-primary">
+                                <small><b>Download File :</b> {{ $uploadFilePerubahan->nama_document }}</small>
+                                </a>
                             @endif
-                        </h3>
 
-                        <!--begin:Table: Checklist Manajemen Kontrak-->
-                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="checklist-manajemen-kontrak">
-                            <!--begin::Table head-->
-                            <thead>
-                                <!--begin::Table row-->
-                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-auto">Kategori</th>
-                                    <th class="min-w-auto">Tanggal Pembuatan</th>
-                                </tr>
-                                <!--end::Table row-->
-                            </thead>
-                            <!--end::Table head-->
-                            <!--begin::Table body-->
-                            <tbody class="fw-bold text-gray-400">
-                                @forelse ($contract->ChecklistManajemen as $key => $cm)
-                                    <tr>
-                                        <td><a onclick="getChecklistManajemen(this)" style="cursor: pointer;" data-url="/contract-management/view/{{ $contract->id_contract}}/get-manajemen-kontrak/{{ $cm->id }}" class="text-hover-primary">{{ $cm->kategori }}</a></td>
-                                        <td>{{ Carbon\Carbon::create($cm->created_at)->translatedFormat("d F Y") }}</td>
+                            <br>
+                            <br>
+
+                            <!--Begin::Klaim Jaminan-->
+                            <h3 class="fw-bolder m-0 mb-3 " id="HeadDetail" style="font-size:14px;">
+                                Jaminan
+                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_jaminan">+</a>
+                            </h3>
+
+                            <!--Begin::Tabel-->
+                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                <!--begin::Table head-->
+                                <thead>
+                                    <!--begin::Table row-->
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-125px">Kategori Jaminan</th>
+                                        <th class="min-w-125px">Nomor Jaminan</th>
+                                        <th class="min-w-125px">Penerbit Jaminan</th>
+                                        <th class="min-w-125px">Tanggal Penerbitan</th>
+                                        <th class="min-w-125px">Tanggal Berakhir</th>
+                                        {{-- <th class="min-w-125px">Status</th> --}}
                                     </tr>
-                                @empty
-                                @endforelse                                
-                            </tbody>
-                            <!--end::Table body-->
+                                    <!--end::Table row-->
+                                </thead>
+                                <!--end::Table head-->
+                                <!--begin::Table body-->
+                                <tbody class="fw-bold text-gray-400">
+                                <tbody class="fw-bold text-gray-400">
+                                    @if (!empty($contract->Jaminan))
+                                    @forelse ($contract->Jaminan as $jaminan )
+                                    <tr>
+                                        <td>
+                                            <p class="text-gray-600 mb-1">{{ $jaminan->kategori_jaminan }}</p>
+                                        </td>
+                                        <td>
+                                            <p class="text-gray-600 mb-1">{{ $jaminan->nomor_jaminan }}</p>
+                                        </td>
+                                        <td>
+                                            <p class="text-gray-600 mb-1">{{ $jaminan->penerbit_jaminan }}</p>
+                                        </td>
+                                        <td>
+                                            <p class="text-gray-600 mb-1">{{Carbon\Carbon::create($jaminan->tanggal_penerbitan)->translatedFormat("d F Y")}}</p>
+                                        </td>
+                                        <td>
+                                            <p class="text-gray-600 mb-1">{{Carbon\Carbon::create($jaminan->tanggal_berakhir)->translatedFormat("d F Y")}}</p>
+                                        </td>
+                                        {{-- <td>
+                                            <p class="badge mb-1 {{ $jaminan->status == "Valid" ? "badge-light-success text-success" : "badge-light-danger text-danger" }}">{{ $jaminan->status }}</p>
+                                        </td> --}}
+                                    </tr>   
+                                    @empty
+                                    <tr>
+                                        <td colspan="4" class="text-center">
+                                            <h6><b>There is no data</b></h6>
+                                        </td>
+                                    </tr>
+                                    @endforelse
+                                    @else
+                                    <tr>
+                                        <td colspan="4" class="text-center">
+                                            <h6><b>There is no data</b></h6>
+                                        </td>
+                                    </tr>
+                                    @endif
+                                    
+                                </tbody>
+                                </tbody>
+                                <!--end::Table body-->
+                            </table>
+                            <!--End::Tabel-->
 
-                        </table>
-                        <!--End:Table: Checklist Manajemen Kontrak-->
-                        @php
-                            $uploadFilePerubahan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "checklist-manajemen")->first();
-                        @endphp
-                        <!--End:Table: Review-->
-                        @if (!empty($uploadFilePerubahan))
-                            <a target="_blank" href="{{ asset('words/'.$uploadFilePerubahan->id_document) }}" class="text-hover-primary">
-                            <small><b>Download File :</b> {{ $uploadFilePerubahan->nama_document }}</small>
-                            </a>
-                        @endif
-
+                        <!--End::Klaim Jaminan--> 
                         <br>
                         <br>
 
-                        <!--Begin::Document Site Instruction-->
-                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                            Dokumen Site Instruction
+                        <!--Begin::Klaim Asuransi-->
+                        <h3 class="fw-bolder m-0 mb-3 " id="HeadDetail" style="font-size:14px;">
+                            Asuransi
                             <a href="#" Id="Plus" data-bs-toggle="modal"
-                                data-bs-target="#kt_modal_dokumen_site_instruction">+</a>
+                                data-bs-target="#kt_modal_asuransi">+</a>
                         </h3>
-                        <!--begin:Table:Dokumen Site Instruction-->
-                        
+
+                        <!--Begin::Tabel-->
                         <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
                             <!--begin::Table head-->
                             <thead>
                                 <!--begin::Table row-->
                                 <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-125px">No. Dokumen</th>
-                                    <th class="min-w-125px">Tanggal</th>
-                                    <th class="min-w-125px">Uraian</th>
-                                    <th class="min-w-125px">File</th>
+                                    {{-- <th class="min-w-125px">Nama Dokumen</th> --}}
+                                    <th class="min-w-125px">Kategori Asuransi</th>
+                                    <th class="min-w-125px">Nomor Polis</th>
+                                    <th class="min-w-125px">Penerbit Polis</th>
+                                    <th class="min-w-125px">Tanggal Penerbitan</th>
+                                    <th class="min-w-125px">Tanggal Berakhir</th>
+                                    {{-- <th class="min-w-125px">Status</th> --}}
                                 </tr>
                                 <!--end::Table row-->
                             </thead>
-                                                           
                             <!--end::Table head-->
                             <!--begin::Table body-->
                             <tbody class="fw-bold text-gray-400">
-                                @php
-                                    $classes = '';
-                                    if (isset($contract)) {
-                                        $classes = 'form-control-solid';
-                                    } else {
-                                        $classes = 'border-bottom-dashed border-top-0 border-left-0 border-right-0';
-                                    }
-                                @endphp
-                                @if (isset($contract))
-                                    @if (!empty($contract->SiteInstruction))
-                                        @forelse ($contract->SiteInstruction as $site_instruction)
+                                @if (!empty($contract->Asuransi))
+                                @forelse ($contract->Asuransi as $asuransi )
+                                <tr>
+                                    <td>
+                                        <p class="text-gray-600 mb-1">{{ $asuransi->kategori_asuransi }}</p>
+                                    </td>
+                                    <td>
+                                        <p class="text-gray-600 mb-1">{{ $asuransi->nomor_polis }}</p>
+                                    </td>
+                                    <td>
+                                        <p class="text-gray-600 mb-1">{{ $asuransi->penerbit_polis }}</p>
+                                    </td>
+                                    <td>
+                                        <p class="text-gray-600 mb-1">{{Carbon\Carbon::create($asuransi->tanggal_penerbitan)->translatedFormat("d F Y")}}</p>
+                                    </td>
+                                    <td>
+                                        <p class="text-gray-600 mb-1">{{Carbon\Carbon::create($asuransi->tanggal_berakhir)->translatedFormat("d F Y")}}</p>
+                                    </td>
+                                    {{-- <td>
+                                        <p class="badge mb-1 {{ $asuransi->status == "Valid" ? "badge-light-success text-success" : "badge-light-danger text-danger" }}">{{ $asuransi->status }}</p>
+                                    </td> --}}
+                                </tr> 
+                                @empty
+                                <tr>
+                                    <td colspan="4" class="text-center">
+                                        <h6><b>There is no data</b></h6>
+                                    </td>
+                                </tr>
+                                @endforelse
+                                @else
+                                <tr>
+                                    <td colspan="4" class="text-center">
+                                        <h6><b>There is no data</b></h6>
+                                    </td>
+                                </tr>
+                                @endif
+                                
+                            </tbody>
+                            <!--end::Table body-->
+                        </table>
+                        <!--End::Tabel-->
+                    <!--End::Klaim Asuransi-->
+                    <br>
+                    <br>
+
+                            <h3 class="fw-bolder m-0 mb-3 " id="HeadDetail" style="font-size:14px;">
+                                Checklist Manajemen Kontrak
+                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_input_checklist_manajemen">+</a>
+                                @if (!empty($contract->ChecklistManajemen->toArray()))
+                                <a href="#" data-bs-toggle="modal"
+                                data-bs-target="#kt_modal_upload_checklist_manajemen" class="btn btn-primary btn-sm p-2 text-end ml-2">Upload</a>
+                                @endif
+                            </h3>
+
+                            <!--begin:Table: Checklist Manajemen Kontrak-->
+                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="checklist-manajemen-kontrak">
+                                <!--begin::Table head-->
+                                <thead>
+                                    <!--begin::Table row-->
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-auto">Kategori</th>
+                                        <th class="min-w-auto">Tanggal Pembuatan</th>
+                                    </tr>
+                                    <!--end::Table row-->
+                                </thead>
+                                <!--end::Table head-->
+                                <!--begin::Table body-->
+                                <tbody class="fw-bold text-gray-400">
+                                    @forelse ($contract->ChecklistManajemen as $key => $cm)
+                                        <tr>
+                                            <td><a onclick="getChecklistManajemen(this)" style="cursor: pointer;" data-url="/contract-management/view/{{ $contract->id_contract}}/get-manajemen-kontrak/{{ $cm->id }}" class="text-hover-primary">{{ $cm->kategori }}</a></td>
+                                            <td>{{ Carbon\Carbon::create($cm->created_at)->translatedFormat("d F Y") }}</td>
+                                        </tr>
+                                    @empty
+                                    @endforelse                                
+                                </tbody>
+                                <!--end::Table body-->
+
+                            </table>
+                            <!--End:Table: Checklist Manajemen Kontrak-->
+                            @php
+                                $uploadFilePerubahan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "checklist-pelaksanaan")->first();
+                            @endphp
+                            <!--End:Table: Review-->
+                            @if (!empty($uploadFilePerubahan))
+                                <a target="_blank" href="{{ asset('words/'.$uploadFilePerubahan->id_document) }}" class="text-hover-primary">
+                                <small><b>Download File :</b> {{ $uploadFilePerubahan->nama_document }}</small>
+                                </a>
+                            @endif
+
+                            <br>
+                            <br>
+                            <br>
+
+                            <!--Begin::Document Site Instruction-->
+                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                Dokumen Site Instruction
+                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_dokumen_site_instruction">+</a>
+                            </h3>
+                            <!--begin:Table:Dokumen Site Instruction-->
+                            
+                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                <!--begin::Table head-->
+                                <thead>
+                                    <!--begin::Table row-->
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-125px">No. Dokumen</th>
+                                        <th class="min-w-125px">Tanggal</th>
+                                        <th class="min-w-125px">Uraian</th>
+                                        <th class="min-w-125px">File</th>
+                                    </tr>
+                                    <!--end::Table row-->
+                                </thead>
+                                                            
+                                <!--end::Table head-->
+                                <!--begin::Table body-->
+                                <tbody class="fw-bold text-gray-400">
+                                    @php
+                                        $classes = '';
+                                        if (isset($contract)) {
+                                            $classes = 'form-control-solid';
+                                        } else {
+                                            $classes = 'border-bottom-dashed border-top-0 border-left-0 border-right-0';
+                                        }
+                                    @endphp
+                                    @if (isset($contract))
+                                        @if (!empty($contract->SiteInstruction))
+                                            @forelse ($contract->SiteInstruction as $site_instruction)
+                                            <tr>
+                                                <!--begin::Uraian-->
+                                                <td>
+                                                    {{ $site_instruction->nomor_dokumen }}
+                                                </td>
+                                                <!--end::Uraian-->
+                                                <!--begin::Nomor Dokumen-->
+                                                <td>
+                                                    {{ Carbon\Carbon::parse($site_instruction->tanggal_dokumen)->translatedFormat("d F Y") }}
+                                                </td>
+                                                <!--end::Nomor Dokumen-->
+                                                <!--begin::Uraian-->
+                                                <td>
+                                                    <pre style="font-family: Poppins">{!! $site_instruction->uraian_dokumen !!}</pre>
+                                                </td>
+                                                <!--end::Uraian-->
+                                                <!--begin::Nomor Dokumen-->
+                                                <td>
+                                                    <a target="_blank" href="{{ asset('words/'.$site_instruction->id_document) }}" class="text-hover-primary">
+                                                        {{ $site_instruction->id_document }}
+                                                    </a>
+                                                </td>
+                                                <!--end::Nomor Dokumen-->
+                                            </tr>
+                                            @empty
+                                            <tr>
+                                                    <td colspan="4" class="text-center">
+                                                        <h6><b>There is no data</b></h6>
+                                                    </td>
+                                                </tr>
+                                                @endforelse
+                                                @else
+                                                <tr>
+                                                    <td colspan="4" class="text-center">
+                                                        <h6><b>There is no data</b></h6>
+                                                    </td>
+                                                </tr>
+                                                @endif
+                                                @endif
+                                            </tbody>
+                                <!--end::Table body-->
+                            </table>
+                            <!--End:Table: Dokumen Site Instruction-->
+                            <br>
+                            <!--End::Document Site Instruction-->
+
+                            <!--Begin::Document Technical Form-->
+                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                Dokumen Technical Form
+                                <a target="_blank" href="#" Id="Plus" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_dokumen_technical_form">+</a>
+                            </h3>
+                            
+                            <!--begin:: Table Dokumen Technical Form-->
+                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                <!--begin::Table head-->
+                                <thead>
+                                    <!--begin::Table row-->
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-125px">No. Dokumen</th>
+                                        <th class="min-w-125px">Tanggal</th>
+                                        <th class="min-w-125px">Uraian</th>
+                                        <th class="min-w-125px">File</th>
+                                    </tr>
+                                    <!--end::Table row-->
+                                </thead>
+                                <!--end::Table head-->
+                                <!--begin::Table body-->
+                                <tbody class="fw-bold text-gray-400">
+                                    @php
+                                        $classes = '';
+                                        if (isset($contract)) {
+                                            $classes = 'form-control-solid';
+                                        } else {
+                                            $classes = 'border-bottom-dashed border-top-0 border-left-0 border-right-0';
+                                        }
+                                    @endphp
+                                    @if (isset($contract))
+                                    @if (!empty($contract->TechnicalForm))
+                                        @forelse ($contract->TechnicalForm as $technical_form)
                                         <tr>
                                             <!--begin::Uraian-->
                                             <td>
-                                                {{ $site_instruction->nomor_dokumen }}
+                                                {{ $technical_form->nomor_dokumen }}
                                             </td>
                                             <!--end::Uraian-->
                                             <!--begin::Nomor Dokumen-->
                                             <td>
-                                                {{ Carbon\Carbon::parse($site_instruction->tanggal_dokumen)->translatedFormat("d F Y") }}
+                                                {{ Carbon\Carbon::parse($technical_form->tanggal_dokumen)->translatedFormat("d F Y") }}
                                             </td>
                                             <!--end::Nomor Dokumen-->
                                             <!--begin::Uraian-->
                                             <td>
-                                                <pre style="font-family: Poppins">{!! $site_instruction->uraian_dokumen !!}</pre>
+                                                <pre style="font-family: Poppins">{!! $technical_form->uraian_dokumen !!}</pre>
                                             </td>
                                             <!--end::Uraian-->
                                             <!--begin::Nomor Dokumen-->
                                             <td>
-                                                <a target="_blank" href="{{ asset('words/'.$site_instruction->id_document) }}" class="text-hover-primary">
-                                                    {{ $site_instruction->id_document }}
+                                                <a target="_blank" href="{{ asset('words/'.$technical_form->id_document) }}" class="text-hover-primary">
+                                                    {{ $technical_form->id_document }}
                                                 </a>
                                             </td>
                                             <!--end::Nomor Dokumen-->
                                         </tr>
                                         @empty
                                         <tr>
-                                                <td colspan="4" class="text-center">
-                                                    <h6><b>There is no data</b></h6>
-                                                </td>
-                                            </tr>
-                                            @endforelse
-                                            @else
-                                            <tr>
-                                                <td colspan="4" class="text-center">
-                                                    <h6><b>There is no data</b></h6>
-                                                </td>
-                                            </tr>
-                                            @endif
-                                            @endif
-                                        </tbody>
-                            <!--end::Table body-->
-                        </table>
-                        <!--End:Table: Dokumen Site Instruction-->
-                        <br>
-                        <!--End::Document Site Instruction-->
-
-                        <!--Begin::Document Technical Form-->
-                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                            Dokumen Technical Form
-                            <a target="_blank" href="#" Id="Plus" data-bs-toggle="modal"
-                                data-bs-target="#kt_modal_dokumen_technical_form">+</a>
-                        </h3>
-                        
-                        <!--begin:: Table Dokumen Technical Form-->
-                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
-                            <!--begin::Table head-->
-                            <thead>
-                                <!--begin::Table row-->
-                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-125px">No. Dokumen</th>
-                                    <th class="min-w-125px">Tanggal</th>
-                                    <th class="min-w-125px">Uraian</th>
-                                    <th class="min-w-125px">File</th>
-                                </tr>
-                                <!--end::Table row-->
-                            </thead>
-                            <!--end::Table head-->
-                            <!--begin::Table body-->
-                            <tbody class="fw-bold text-gray-400">
-                                @php
-                                    $classes = '';
-                                    if (isset($contract)) {
-                                        $classes = 'form-control-solid';
-                                    } else {
-                                        $classes = 'border-bottom-dashed border-top-0 border-left-0 border-right-0';
-                                    }
-                                @endphp
-                                @if (isset($contract))
-                                @if (!empty($contract->TechnicalForm))
-                                    @forelse ($contract->TechnicalForm as $technical_form)
-                                    <tr>
-                                         <!--begin::Uraian-->
-                                         <td>
-                                            {{ $technical_form->nomor_dokumen }}
-                                        </td>
-                                        <!--end::Uraian-->
-                                        <!--begin::Nomor Dokumen-->
-                                        <td>
-                                            {{ Carbon\Carbon::parse($technical_form->tanggal_dokumen)->translatedFormat("d F Y") }}
-                                        </td>
-                                        <!--end::Nomor Dokumen-->
-                                        <!--begin::Uraian-->
-                                        <td>
-                                            <pre style="font-family: Poppins">{!! $technical_form->uraian_dokumen !!}</pre>
-                                        </td>
-                                        <!--end::Uraian-->
-                                        <!--begin::Nomor Dokumen-->
-                                        <td>
-                                            <a target="_blank" href="{{ asset('words/'.$technical_form->id_document) }}" class="text-hover-primary">
-                                                {{ $technical_form->id_document }}
-                                            </a>
-                                        </td>
-                                        <!--end::Nomor Dokumen-->
-                                    </tr>
-                                    @empty
+                                            <td colspan="4" class="text-center">
+                                                <h6><b>There is no data</b></h6>
+                                            </td>
+                                        </tr>
+                                        @endforelse
+                                    @else
                                     <tr>
                                         <td colspan="4" class="text-center">
                                             <h6><b>There is no data</b></h6>
                                         </td>
                                     </tr>
-                                    @endforelse
-                                @else
-                                <tr>
-                                    <td colspan="4" class="text-center">
-                                        <h6><b>There is no data</b></h6>
-                                    </td>
-                                </tr>
-                                @endif
-                                @endif
-                            </tbody>
-                            <!--end::Table body-->
-                        </table>
-                        <!--end:: Table Dokumen Technical Form-->
-                        <br>
-                        <!--End::Document Technical Form-->
+                                    @endif
+                                    @endif
+                                </tbody>
+                                <!--end::Table body-->
+                            </table>
+                            <!--end:: Table Dokumen Technical Form-->
+                            <br>
+                            <!--End::Document Technical Form-->
 
-                        <!--Begin::Document Technical Query-->
-                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                            Dokumen Technical Query
-                            <a href="#" Id="Plus" data-bs-toggle="modal"
-                                data-bs-target="#kt_modal_dokumen_technical_query">+</a>
-                        </h3>
-                        <!--begin:: Table Dokumen Technical Query-->
-                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
-                            <!--begin::Table head-->
-                            <thead>
-                                <!--begin::Table row-->
-                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-125px">No. Dokumen</th>
-                                    <th class="min-w-125px">Tanggal</th>
-                                    <th class="min-w-125px">Uraian</th>
-                                    <th class="min-w-125px">File</th>
-                                </tr>
-                                <!--end::Table row-->
-                            </thead>
-                            <!--end::Table head-->
-                            <!--begin::Table body-->
-                            <tbody class="fw-bold text-gray-400">
-                                @php
-                                    $classes = '';
-                                    if (isset($contract)) {
-                                        $classes = 'form-control-solid';
-                                    } else {
-                                        $classes = 'border-bottom-dashed border-top-0 border-left-0 border-right-0';
-                                    }
-                                @endphp
-                                @if (isset($contract))
-                                @if (!empty($contract->TechnicalQuery))
-                                    @forelse ($contract->TechnicalQuery as $technical_query)
-                                    <tr>
-                                        <!--begin::Uraian-->
-                                        <td>
-                                            {{ $technical_query->nomor_dokumen }}
-                                        </td>
-                                        <!--end::Uraian-->
-                                        <!--begin::Nomor Dokumen-->
-                                        <td>
-                                            {{ Carbon\Carbon::parse($technical_query->tanggal_dokumen)->translatedFormat("d F Y") }}
-                                        </td>
-                                        <!--end::Nomor Dokumen-->
-                                        <!--begin::Uraian-->
-                                        <td>
-                                            <pre style="font-family: Poppins">{!! $technical_query->uraian_dokumen !!}</pre>
-                                        </td>
-                                        <!--end::Uraian-->
-                                        <!--begin::Nomor Dokumen-->
-                                        <td>
-                                            <a target="_blank" href="{{ asset('words/'.$technical_query->id_document) }}" class="text-hover-primary">
-                                                {{ $technical_query->id_document }}
-                                            </a>
-                                        </td>
-                                        <!--end::Nomor Dokumen-->
+                            <!--Begin::Document Technical Query-->
+                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                Dokumen Technical Query
+                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_dokumen_technical_query">+</a>
+                            </h3>
+                            <!--begin:: Table Dokumen Technical Query-->
+                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                <!--begin::Table head-->
+                                <thead>
+                                    <!--begin::Table row-->
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-125px">No. Dokumen</th>
+                                        <th class="min-w-125px">Tanggal</th>
+                                        <th class="min-w-125px">Uraian</th>
+                                        <th class="min-w-125px">File</th>
                                     </tr>
-                                    @empty
+                                    <!--end::Table row-->
+                                </thead>
+                                <!--end::Table head-->
+                                <!--begin::Table body-->
+                                <tbody class="fw-bold text-gray-400">
+                                    @php
+                                        $classes = '';
+                                        if (isset($contract)) {
+                                            $classes = 'form-control-solid';
+                                        } else {
+                                            $classes = 'border-bottom-dashed border-top-0 border-left-0 border-right-0';
+                                        }
+                                    @endphp
+                                    @if (isset($contract))
+                                    @if (!empty($contract->TechnicalQuery))
+                                        @forelse ($contract->TechnicalQuery as $technical_query)
+                                        <tr>
+                                            <!--begin::Uraian-->
+                                            <td>
+                                                {{ $technical_query->nomor_dokumen }}
+                                            </td>
+                                            <!--end::Uraian-->
+                                            <!--begin::Nomor Dokumen-->
+                                            <td>
+                                                {{ Carbon\Carbon::parse($technical_query->tanggal_dokumen)->translatedFormat("d F Y") }}
+                                            </td>
+                                            <!--end::Nomor Dokumen-->
+                                            <!--begin::Uraian-->
+                                            <td>
+                                                <pre style="font-family: Poppins">{!! $technical_query->uraian_dokumen !!}</pre>
+                                            </td>
+                                            <!--end::Uraian-->
+                                            <!--begin::Nomor Dokumen-->
+                                            <td>
+                                                <a target="_blank" href="{{ asset('words/'.$technical_query->id_document) }}" class="text-hover-primary">
+                                                    {{ $technical_query->id_document }}
+                                                </a>
+                                            </td>
+                                            <!--end::Nomor Dokumen-->
+                                        </tr>
+                                        @empty
+                                        <tr>
+                                            <td colspan="4" class="text-center">
+                                                <h6><b>There is no data</b></h6>
+                                            </td>
+                                        </tr>
+                                        @endforelse
+                                    @else
                                     <tr>
                                         <td colspan="4" class="text-center">
                                             <h6><b>There is no data</b></h6>
                                         </td>
                                     </tr>
-                                    @endforelse
-                                @else
-                                <tr>
-                                    <td colspan="4" class="text-center">
-                                        <h6><b>There is no data</b></h6>
-                                    </td>
-                                </tr>
-                                @endif
-                                @endif
-                            </tbody>
-                            <!--end::Table body-->
-                        </table>
-                        <!--end:: Table Dokumen Technical Query-->
-                        <br>
-                        <!--End::Document Technical Query-->
-                        
-                        <!--Begin::Document Field Design Change-->
-                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                            Dokumen Field Design Change
-                            <a target="_blank" href="#" Id="Plus" data-bs-toggle="modal"
-                                data-bs-target="#kt_modal_dokumen_field_design_change">+</a>
-                        </h3>
+                                    @endif
+                                    @endif
+                                </tbody>
+                                <!--end::Table body-->
+                            </table>
+                            <!--end:: Table Dokumen Technical Query-->
+                            <br>
+                            <!--End::Document Technical Query-->
+                            
+                            <!--Begin::Document Field Design Change-->
+                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                Dokumen Field Design Change
+                                <a target="_blank" href="#" Id="Plus" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_dokumen_field_design_change">+</a>
+                            </h3>
 
-                        <!--begin:: Table Dokumen Field Design Change-->
-                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
-                            <!--begin::Table head-->
-                            <thead>
-                                <!--begin::Table row-->
-                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-125px">No. Dokumen</th>
-                                    <th class="min-w-125px">Tanggal</th>
-                                    <th class="min-w-125px">Uraian</th>
-                                    <th class="min-w-125px">File</th>
-                                </tr>
-                                <!--end::Table row-->
-                            </thead>
-                            <!--end::Table head-->
-                            <!--begin::Table body-->
-                            <tbody class="fw-bold text-gray-400">
-                                @php
-                                    $classes = '';
-                                    if (isset($contract)) {
-                                        $classes = 'form-control-solid';
-                                    } else {
-                                        $classes = 'border-bottom-dashed border-top-0 border-left-0 border-right-0';
-                                    }
-                                @endphp
-                                @if (isset($contract))
-                                @if (!empty($contract->FieldChange))
-                                    @forelse ($contract->FieldChange as $field_change)
-                                    <tr>
-                                         <!--begin::Uraian-->
-                                         <td>
-                                            {{ $field_change->nomor_dokumen }}
-                                        </td>
-                                        <!--end::Uraian-->
-                                        <!--begin::Nomor Dokumen-->
-                                        <td>
-                                            {{ Carbon\Carbon::parse($field_change->tanggal_dokumen)->translatedFormat("d F Y") }}
-                                        </td>
-                                        <!--end::Nomor Dokumen-->
-                                        <!--begin::Uraian-->
-                                        <td>
-                                            <pre style="font-family: Poppins">{!! $field_change->uraian_dokumen !!}</pre>
-                                        </td>
-                                        <!--end::Uraian-->
-                                        <!--begin::Nomor Dokumen-->
-                                        <td>
-                                            <a target="_blank" href="{{ asset('words/'.$field_change->id_document) }}" class="text-hover-primary">
-                                                {{ $field_change->id_document }}
-                                            </a>
-                                        </td>
-                                        <!--end::Nomor Dokumen-->
+                            <!--begin:: Table Dokumen Field Design Change-->
+                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                <!--begin::Table head-->
+                                <thead>
+                                    <!--begin::Table row-->
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-125px">No. Dokumen</th>
+                                        <th class="min-w-125px">Tanggal</th>
+                                        <th class="min-w-125px">Uraian</th>
+                                        <th class="min-w-125px">File</th>
                                     </tr>
-                                    @empty
+                                    <!--end::Table row-->
+                                </thead>
+                                <!--end::Table head-->
+                                <!--begin::Table body-->
+                                <tbody class="fw-bold text-gray-400">
+                                    @php
+                                        $classes = '';
+                                        if (isset($contract)) {
+                                            $classes = 'form-control-solid';
+                                        } else {
+                                            $classes = 'border-bottom-dashed border-top-0 border-left-0 border-right-0';
+                                        }
+                                    @endphp
+                                    @if (isset($contract))
+                                    @if (!empty($contract->FieldChange))
+                                        @forelse ($contract->FieldChange as $field_change)
+                                        <tr>
+                                            <!--begin::Uraian-->
+                                            <td>
+                                                {{ $field_change->nomor_dokumen }}
+                                            </td>
+                                            <!--end::Uraian-->
+                                            <!--begin::Nomor Dokumen-->
+                                            <td>
+                                                {{ Carbon\Carbon::parse($field_change->tanggal_dokumen)->translatedFormat("d F Y") }}
+                                            </td>
+                                            <!--end::Nomor Dokumen-->
+                                            <!--begin::Uraian-->
+                                            <td>
+                                                <pre style="font-family: Poppins">{!! $field_change->uraian_dokumen !!}</pre>
+                                            </td>
+                                            <!--end::Uraian-->
+                                            <!--begin::Nomor Dokumen-->
+                                            <td>
+                                                <a target="_blank" href="{{ asset('words/'.$field_change->id_document) }}" class="text-hover-primary">
+                                                    {{ $field_change->id_document }}
+                                                </a>
+                                            </td>
+                                            <!--end::Nomor Dokumen-->
+                                        </tr>
+                                        @empty
+                                        <tr>
+                                            <td colspan="4" class="text-center">
+                                                <h6><b>There is no data</b></h6>
+                                            </td>
+                                        </tr>
+                                        @endforelse
+                                    @else
                                     <tr>
                                         <td colspan="4" class="text-center">
                                             <h6><b>There is no data</b></h6>
                                         </td>
                                     </tr>
-                                    @endforelse
-                                @else
-                                <tr>
-                                    <td colspan="4" class="text-center">
-                                        <h6><b>There is no data</b></h6>
-                                    </td>
-                                </tr>
-                                @endif
-                                @endif
-                            </tbody>
-                            <!--end::Table body-->
-                        </table>
-                        <!--end:: Table Dokumen Field Design Change-->
-                        <!--End::Document Field Design Change-->
+                                    @endif
+                                    @endif
+                                </tbody>
+                                <!--end::Table body-->
+                            </table>
+                            <!--end:: Table Dokumen Field Design Change-->
+                            <!--End::Document Field Design Change-->
 
-                        <!--Begin::Document Contract Change Notice-->
-                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                            Dokumen Contract Change Notice
-                            <a target="_blank" href="#" Id="Plus" data-bs-toggle="modal"
-                                data-bs-target="#kt_modal_dokumen_contract_change_notice">+</a>
-                        </h3>
+                            <!--Begin::Document Contract Change Notice-->
+                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                Dokumen Contract Change Notice
+                                <a target="_blank" href="#" Id="Plus" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_dokumen_contract_change_notice">+</a>
+                            </h3>
 
-                        <!--begin:: Table Dokumen Contract Change Notice-->
-                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
-                            <!--begin::Table head-->
-                            <thead>
-                                <!--begin::Table row-->
-                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-125px">No. Dokumen</th>
-                                    <th class="min-w-125px">Tanggal</th>
-                                    <th class="min-w-125px">Uraian</th>
-                                    <th class="min-w-125px">File</th>
-                                </tr>
-                                <!--end::Table row-->
-                            </thead>
-                            <!--end::Table head-->
-                            <!--begin::Table body-->
-                            <tbody class="fw-bold text-gray-400">
-                                @php
-                                    $classes = '';
-                                    if (isset($contract)) {
-                                        $classes = 'form-control-solid';
-                                    } else {
-                                        $classes = 'border-bottom-dashed border-top-0 border-left-0 border-right-0';
-                                    }
-                                @endphp
-                                @if (isset($contract))
-                                @if (!empty($contract->ChangeNotice))
-                                    @forelse ($contract->ChangeNotice as $change_notice)
-                                    <tr>
-                                        <!--begin::Uraian-->
-                                        <td>
-                                            {{ $change_notice->nomor_dokumen }}
-                                        </td>
-                                        <!--end::Uraian-->
-                                        <!--begin::Nomor Dokumen-->
-                                        <td>
-                                            {{ Carbon\Carbon::parse($change_notice->tanggal_dokumen)->translatedFormat("d F Y") }}
-                                        </td>
-                                        <!--end::Nomor Dokumen-->
-                                        <!--begin::Uraian-->
-                                        <td>
-                                            <pre style="font-family: Poppins">{!! $change_notice->uraian_dokumen !!}</pre>
-                                        </td>
-                                        <!--end::Uraian-->
-                                        <!--begin::Nomor Dokumen-->
-                                        <td>
-                                            <a target="_blank" href="{{ asset('words/'.$change_notice->id_document) }}" class="text-hover-primary">
-                                                {{ $change_notice->id_document }}
-                                            </a>
-                                        </td>
-                                        <!--end::Nomor Dokumen-->
+                            <!--begin:: Table Dokumen Contract Change Notice-->
+                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                <!--begin::Table head-->
+                                <thead>
+                                    <!--begin::Table row-->
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-125px">No. Dokumen</th>
+                                        <th class="min-w-125px">Tanggal</th>
+                                        <th class="min-w-125px">Uraian</th>
+                                        <th class="min-w-125px">File</th>
                                     </tr>
-                                    @empty
-                                    <tr>
-                                        <td colspan="4" class="text-center">
-                                            <h6><b>There is no data</b></h6>
-                                        </td>
-                                    </tr>
-                                    @endforelse
-                                @else
-                                <tr>
-                                    <td colspan="4" class="text-center">
-                                        <h6><b>There is no data</b></h6>
-                                    </td>
-                                </tr>
-                                @endif
-                                @endif
-                            </tbody>
-                            <!--end::Table body-->
-                        </table>
-                        <!--end:: Table Dokumen Table Dokumen Contract Change Notice-->
-                        <!--End::Document Table Dokumen Contract Change Notice-->
-
-                        <!--Begin::Document Contract Change Proposal-->
-                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                            Dokumen Contract Change Proposal
-                            <a target="_blank" href="#" Id="Plus" data-bs-toggle="modal"
-                                data-bs-target="#kt_modal_dokumen_contract_change_proposal">+</a>
-                        </h3>
-
-                        <!--begin:: Table Dokumen Contract Change Proposal-->
-                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
-                            <!--begin::Table head-->
-                            <thead>
-                                <!--begin::Table row-->
-                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-125px">No. Dokumen</th>
-                                    <th class="min-w-125px">Tanggal</th>
-                                    <th class="min-w-125px">Uraian</th>
-                                    <th class="min-w-125px">File</th>
-                                </tr>
-                                <!--end::Table row-->
-                            </thead>
-                            <!--end::Table head-->
-                            <!--begin::Table body-->
-                            <tbody class="fw-bold text-gray-400">
-                                @php
-                                    $classes = '';
-                                    if (isset($contract)) {
-                                        $classes = 'form-control-solid';
-                                    } else {
-                                        $classes = 'border-bottom-dashed border-top-0 border-left-0 border-right-0';
-                                    }
-                                @endphp
-                                @if (isset($contract))
-                                @if (!empty($contract->ChangeProposal))
-                                    @forelse ($contract->ChangeProposal as $change_proposal)
-                                    <tr>
-                                        <!--begin::Uraian-->
-                                        <td>
-                                            {{ $change_proposal->nomor_dokumen }}
-                                        </td>
-                                        <!--end::Uraian-->
-                                        <!--begin::Nomor Dokumen-->
-                                        <td>
-                                            {{ Carbon\Carbon::parse($change_proposal->tanggal_dokumen)->translatedFormat("d F Y") }}
-                                        </td>
-                                        <!--end::Nomor Dokumen-->
-                                        <!--begin::Uraian-->
-                                        <td>
-                                            <pre style="font-family: Poppins">{!! $change_proposal->uraian_dokumen !!}</pre>
-                                        </td>
-                                        <!--end::Uraian-->
-                                        <!--begin::Nomor Dokumen-->
-                                        <td>
-                                            <a target="_blank" href="{{ asset('words/'.$change_proposal->id_document) }}" class="text-hover-primary">
-                                                {{ $change_proposal->id_document }}
-                                            </a>
-                                        </td>
-                                        <!--end::Nomor Dokumen-->
-                                    </tr>
-                                    @empty
+                                    <!--end::Table row-->
+                                </thead>
+                                <!--end::Table head-->
+                                <!--begin::Table body-->
+                                <tbody class="fw-bold text-gray-400">
+                                    @php
+                                        $classes = '';
+                                        if (isset($contract)) {
+                                            $classes = 'form-control-solid';
+                                        } else {
+                                            $classes = 'border-bottom-dashed border-top-0 border-left-0 border-right-0';
+                                        }
+                                    @endphp
+                                    @if (isset($contract))
+                                    @if (!empty($contract->ChangeNotice))
+                                        @forelse ($contract->ChangeNotice as $change_notice)
+                                        <tr>
+                                            <!--begin::Uraian-->
+                                            <td>
+                                                {{ $change_notice->nomor_dokumen }}
+                                            </td>
+                                            <!--end::Uraian-->
+                                            <!--begin::Nomor Dokumen-->
+                                            <td>
+                                                {{ Carbon\Carbon::parse($change_notice->tanggal_dokumen)->translatedFormat("d F Y") }}
+                                            </td>
+                                            <!--end::Nomor Dokumen-->
+                                            <!--begin::Uraian-->
+                                            <td>
+                                                <pre style="font-family: Poppins">{!! $change_notice->uraian_dokumen !!}</pre>
+                                            </td>
+                                            <!--end::Uraian-->
+                                            <!--begin::Nomor Dokumen-->
+                                            <td>
+                                                <a target="_blank" href="{{ asset('words/'.$change_notice->id_document) }}" class="text-hover-primary">
+                                                    {{ $change_notice->id_document }}
+                                                </a>
+                                            </td>
+                                            <!--end::Nomor Dokumen-->
+                                        </tr>
+                                        @empty
+                                        <tr>
+                                            <td colspan="4" class="text-center">
+                                                <h6><b>There is no data</b></h6>
+                                            </td>
+                                        </tr>
+                                        @endforelse
+                                    @else
                                     <tr>
                                         <td colspan="4" class="text-center">
                                             <h6><b>There is no data</b></h6>
                                         </td>
                                     </tr>
-                                    @endforelse
-                                @else
-                                <tr>
-                                    <td colspan="4" class="text-center">
-                                        <h6><b>There is no data</b></h6>
-                                    </td>
-                                </tr>
-                                @endif
-                                @endif
-                            </tbody>
-                            <!--end::Table body-->
-                        </table>
-                        <!--end:: Table Dokumen Table Dokumen Contract Change Proposal-->
-                        <!--End::Document Table Dokumen Contract Change Proposal-->
+                                    @endif
+                                    @endif
+                                </tbody>
+                                <!--end::Table body-->
+                            </table>
+                            <!--end:: Table Dokumen Table Dokumen Contract Change Notice-->
+                            <!--End::Document Table Dokumen Contract Change Notice-->
 
-                        <!--Begin::Document Contract Change Order-->
-                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                            Dokumen Contract Change Order
-                            <a target="_blank" href="#" Id="Plus" data-bs-toggle="modal"
-                                data-bs-target="#kt_modal_dokumen_contract_change_order">+</a>
-                        </h3>
+                            <!--Begin::Document Contract Change Proposal-->
+                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                Dokumen Contract Change Proposal
+                                <a target="_blank" href="#" Id="Plus" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_dokumen_contract_change_proposal">+</a>
+                            </h3>
 
-                        <!--begin:: Table Dokumen Contract Change Order-->
-                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
-                            <!--begin::Table head-->
-                            <thead>
-                                <!--begin::Table row-->
-                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-125px">No. Dokumen</th>
-                                    <th class="min-w-125px">Tanggal</th>
-                                    <th class="min-w-125px">Uraian</th>
-                                    <th class="min-w-125px">File</th>
-                                </tr>
-                                <!--end::Table row-->
-                            </thead>
-                            <!--end::Table head-->
-                            <!--begin::Table body-->
-                            <tbody class="fw-bold text-gray-400">
-                                @php
-                                    $classes = '';
-                                    if (isset($contract)) {
-                                        $classes = 'form-control-solid';
-                                    } else {
-                                        $classes = 'border-bottom-dashed border-top-0 border-left-0 border-right-0';
-                                    }
-                                @endphp
-                                @if (isset($contract))
-                                @if (!empty($contract->ChangeOrder))
-                                    @forelse ($contract->ChangeOrder as $change_order)
-                                    <tr>
-                                        <!--begin::Uraian-->
-                                        <td>
-                                            {{ $change_order->nomor_dokumen }}
-                                        </td>
-                                        <!--end::Uraian-->
-                                        <!--begin::Nomor Dokumen-->
-                                        <td>
-                                            {{ Carbon\Carbon::parse($change_order->tanggal_dokumen)->translatedFormat("d F Y") }}
-                                        </td>
-                                        <!--end::Nomor Dokumen-->
-                                        <!--begin::Uraian-->
-                                        <td>
-                                            <pre style="font-family: Poppins">{!! $change_order->uraian_dokumen !!}</pre>
-                                        </td>
-                                        <!--end::Uraian-->
-                                        <!--begin::Nomor Dokumen-->
-                                        <td>
-                                            <a target="_blank" href="{{ asset('words/'.$change_order->id_document) }}" class="text-hover-primary">
-                                                {{ $change_order->id_document }}
-                                            </a>
-                                        </td>
-                                        <!--end::Nomor Dokumen-->
+                            <!--begin:: Table Dokumen Contract Change Proposal-->
+                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                <!--begin::Table head-->
+                                <thead>
+                                    <!--begin::Table row-->
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-125px">No. Dokumen</th>
+                                        <th class="min-w-125px">Tanggal</th>
+                                        <th class="min-w-125px">Uraian</th>
+                                        <th class="min-w-125px">File</th>
                                     </tr>
-                                    @empty
+                                    <!--end::Table row-->
+                                </thead>
+                                <!--end::Table head-->
+                                <!--begin::Table body-->
+                                <tbody class="fw-bold text-gray-400">
+                                    @php
+                                        $classes = '';
+                                        if (isset($contract)) {
+                                            $classes = 'form-control-solid';
+                                        } else {
+                                            $classes = 'border-bottom-dashed border-top-0 border-left-0 border-right-0';
+                                        }
+                                    @endphp
+                                    @if (isset($contract))
+                                    @if (!empty($contract->ChangeProposal))
+                                        @forelse ($contract->ChangeProposal as $change_proposal)
+                                        <tr>
+                                            <!--begin::Uraian-->
+                                            <td>
+                                                {{ $change_proposal->nomor_dokumen }}
+                                            </td>
+                                            <!--end::Uraian-->
+                                            <!--begin::Nomor Dokumen-->
+                                            <td>
+                                                {{ Carbon\Carbon::parse($change_proposal->tanggal_dokumen)->translatedFormat("d F Y") }}
+                                            </td>
+                                            <!--end::Nomor Dokumen-->
+                                            <!--begin::Uraian-->
+                                            <td>
+                                                <pre style="font-family: Poppins">{!! $change_proposal->uraian_dokumen !!}</pre>
+                                            </td>
+                                            <!--end::Uraian-->
+                                            <!--begin::Nomor Dokumen-->
+                                            <td>
+                                                <a target="_blank" href="{{ asset('words/'.$change_proposal->id_document) }}" class="text-hover-primary">
+                                                    {{ $change_proposal->id_document }}
+                                                </a>
+                                            </td>
+                                            <!--end::Nomor Dokumen-->
+                                        </tr>
+                                        @empty
+                                        <tr>
+                                            <td colspan="4" class="text-center">
+                                                <h6><b>There is no data</b></h6>
+                                            </td>
+                                        </tr>
+                                        @endforelse
+                                    @else
                                     <tr>
                                         <td colspan="4" class="text-center">
                                             <h6><b>There is no data</b></h6>
                                         </td>
                                     </tr>
-                                    @endforelse
-                                @else
-                                <tr>
-                                    <td colspan="4" class="text-center">
-                                        <h6><b>There is no data</b></h6>
-                                    </td>
-                                </tr>
-                                @endif
-                                @endif
-                            </tbody>
-                            <!--end::Table body-->
-                        </table>
-                        <!--end:: Table Dokumen Table Dokumen Contract Change Order-->
-                        <!--End::Document Table Dokumen Contract Change Order-->
+                                    @endif
+                                    @endif
+                                </tbody>
+                                <!--end::Table body-->
+                            </table>
+                            <!--end:: Table Dokumen Table Dokumen Contract Change Proposal-->
+                            <!--End::Document Table Dokumen Contract Change Proposal-->
+
+                            <!--Begin::Document Contract Change Order-->
+                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                Dokumen Contract Change Order
+                                <a target="_blank" href="#" Id="Plus" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_dokumen_contract_change_order">+</a>
+                            </h3>
+
+                            <!--begin:: Table Dokumen Contract Change Order-->
+                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                <!--begin::Table head-->
+                                <thead>
+                                    <!--begin::Table row-->
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-125px">No. Dokumen</th>
+                                        <th class="min-w-125px">Tanggal</th>
+                                        <th class="min-w-125px">Uraian</th>
+                                        <th class="min-w-125px">File</th>
+                                    </tr>
+                                    <!--end::Table row-->
+                                </thead>
+                                <!--end::Table head-->
+                                <!--begin::Table body-->
+                                <tbody class="fw-bold text-gray-400">
+                                    @php
+                                        $classes = '';
+                                        if (isset($contract)) {
+                                            $classes = 'form-control-solid';
+                                        } else {
+                                            $classes = 'border-bottom-dashed border-top-0 border-left-0 border-right-0';
+                                        }
+                                    @endphp
+                                    @if (isset($contract))
+                                    @if (!empty($contract->ChangeOrder))
+                                        @forelse ($contract->ChangeOrder as $change_order)
+                                        <tr>
+                                            <!--begin::Uraian-->
+                                            <td>
+                                                {{ $change_order->nomor_dokumen }}
+                                            </td>
+                                            <!--end::Uraian-->
+                                            <!--begin::Nomor Dokumen-->
+                                            <td>
+                                                {{ Carbon\Carbon::parse($change_order->tanggal_dokumen)->translatedFormat("d F Y") }}
+                                            </td>
+                                            <!--end::Nomor Dokumen-->
+                                            <!--begin::Uraian-->
+                                            <td>
+                                                <pre style="font-family: Poppins">{!! $change_order->uraian_dokumen !!}</pre>
+                                            </td>
+                                            <!--end::Uraian-->
+                                            <!--begin::Nomor Dokumen-->
+                                            <td>
+                                                <a target="_blank" href="{{ asset('words/'.$change_order->id_document) }}" class="text-hover-primary">
+                                                    {{ $change_order->id_document }}
+                                                </a>
+                                            </td>
+                                            <!--end::Nomor Dokumen-->
+                                        </tr>
+                                        @empty
+                                        <tr>
+                                            <td colspan="4" class="text-center">
+                                                <h6><b>There is no data</b></h6>
+                                            </td>
+                                        </tr>
+                                        @endforelse
+                                    @else
+                                    <tr>
+                                        <td colspan="4" class="text-center">
+                                            <h6><b>There is no data</b></h6>
+                                        </td>
+                                    </tr>
+                                    @endif
+                                    @endif
+                                </tbody>
+                                <!--end::Table body-->
+                            </table>
+                            <!--end:: Table Dokumen Table Dokumen Contract Change Order-->
+                            <!--End::Document Table Dokumen Contract Change Order-->
+                        </div>
                     </div>
-                </div>
-                <!--end:::Tab pane Laporan Bulanan-->
+                    <!--end:::Tab pane Laporan Bulanan-->
 
-                <!--begin:::Tab pane Serah Terima-->
-                <div class="tab-pane fade" id="kt_user_view_overview_SerahTerima" role="tabpanel">
-                    <div class="card-title m-0">
-                        {{-- <form action="/contract-management/document-bast/upload" method="POST"
-                            enctype="multipart/form-data"> --}}
-                            @csrf
-                            <input type="hidden" name="id-contract" value="{{ $contract->id_contract }}">
-                            <div class="row">
-                                <div class="col">
-                                    
-                                    <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                                        Daftar BA Defect
-                                        <a href="#" Id="Plus" data-bs-toggle="modal"
-                                            data-bs-target="#kt_modal_defect_ba">+</a>
-                                    </h3>
+                    <!--begin:::Tab pane Serah Terima-->
+                    <div class="tab-pane fade" id="kt_user_view_overview_SerahTerima" role="tabpanel">
+                        <div class="card-title m-0">
+                            {{-- <form action="/contract-management/document-bast/upload" method="POST"
+                                enctype="multipart/form-data"> --}}
+                                @csrf
+                                <input type="hidden" name="id-contract" value="{{ $contract->id_contract }}">
+                                <div class="row">
+                                    <div class="col">
+                                        
+                                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                            Daftar BA Defect
+                                            <a href="#" Id="Plus" data-bs-toggle="modal"
+                                                data-bs-target="#kt_modal_defect_ba">+</a>
+                                        </h3>
 
-                                    <!--begin:Table: List Defect BA-->
-                                    <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
-                                        <!--begin::Table head-->
-                                        <thead>
-                                            <!--begin::Table row-->
-                                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                <th class="min-w-125px">Dokumen</th>
-                                            </tr>
-                                            <!--end::Table row-->
-                                        </thead>
-                                        <!--end::Table head-->
-                                        <!--begin::Table body-->
-                                        @php
-                                            $list_document_ba_defect = explode(',', $contract->list_dokumen_ba_defect);
-                                        @endphp
-                                        <tbody class="fw-bold text-gray-400">
-                                            @if (count($list_document_ba_defect) > 0 && $list_document_ba_defect[0] != '')
-                                                @forelse ($list_document_ba_defect as $key => $ba_defect)
-                                                    <tr>
-                                                        <!--begin::Column-->
-                                                        <td>
-                                                            {{-- <a href="/document/view/{{ $contract->id_contract }}/{{ $ba_defect }}"
-                                                                class="text-gray-600 text-hover-primary">Dokumen BA Defect
-                                                                #{{ $key + 1 }}</a> --}}
-                                                            <a target="_blank" href="{{ asset('words/' . $ba_defect . '.pdf') }}" class="text-gray-400 text-hover-primary">Klik Dokumen BA Defect Disini</a>
-                                                        </td>
-                                                        <!--end::Column-->
-                                                    </tr>
-                                                @empty
+                                        <!--begin:Table: List Defect BA-->
+                                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                            <!--begin::Table head-->
+                                            <thead>
+                                                <!--begin::Table row-->
+                                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                    <th class="min-w-125px">Dokumen</th>
+                                                </tr>
+                                                <!--end::Table row-->
+                                            </thead>
+                                            <!--end::Table head-->
+                                            <!--begin::Table body-->
+                                            @php
+                                                $list_document_ba_defect = explode(',', $contract->list_dokumen_ba_defect);
+                                            @endphp
+                                            <tbody class="fw-bold text-gray-400">
+                                                @if (count($list_document_ba_defect) > 0 && $list_document_ba_defect[0] != '')
+                                                    @forelse ($list_document_ba_defect as $key => $ba_defect)
+                                                        <tr>
+                                                            <!--begin::Column-->
+                                                            <td>
+                                                                {{-- <a href="/document/view/{{ $contract->id_contract }}/{{ $ba_defect }}"
+                                                                    class="text-gray-600 text-hover-primary">Dokumen BA Defect
+                                                                    #{{ $key + 1 }}</a> --}}
+                                                                <a target="_blank" href="{{ asset('words/' . $ba_defect . '.pdf') }}" class="text-gray-400 text-hover-primary">Klik Dokumen BA Defect Disini</a>
+                                                            </td>
+                                                            <!--end::Column-->
+                                                        </tr>
+                                                    @empty
+                                                        <tr>
+                                                            <td colspan="2" class="text-center">
+                                                                <h6><b>There is no data</b></h6>
+                                                            </td>
+                                                        </tr>
+                                                    @endforelse
+                                                @else
                                                     <tr>
                                                         <td colspan="2" class="text-center">
                                                             <h6><b>There is no data</b></h6>
                                                         </td>
                                                     </tr>
-                                                @endforelse
-                                            @else
-                                                <tr>
-                                                    <td colspan="2" class="text-center">
-                                                        <h6><b>There is no data</b></h6>
-                                                    </td>
-                                                </tr>
-                                            @endif
-                                        </tbody>
-                                        <!--end::Table body-->
-
-                                    </table>
-                                </div>
-                            </div>
-
-                            @if (!empty($contract->list_dokumen_ba_defect))
-                            
-                            <br>
-                                <div class="row">
-                                    <div class="col">
-                                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                                            Dokumen Bast 1
-                                            <a href="#" Id="Plus" data-bs-toggle="modal"
-                                                data-bs-target="#kt_modal_bast_1">+</a>
-                                        </h3>
-                                        {{-- <input type="file" name="dokumen-bast-1" accept=".docx"
-                                            class="form-control form-control-solid"> --}}
-                                        {{-- @if (!empty($contract->dokumen_bast_1))
-                                            <small>Lihat Dokumen Bast 1: 
-                                                <a target="_blank" href="{{ asset('words/' . $contract->dokumen_bast_2 . '.docx') }}" class="text-gray-400 text-hover-primary">Klik disini</a>
-                                            </small>
-                                            <a target="_blank" class="text-gray-400 text-hover-primary"
-                                                href="/document/view/{{ url_encode($contract->id_contract) }}/{{ $contract->dokumen_bast_1 }}">Klik disini</a></small>
-                                        @else
-                                            <small>Belum mendapatkan Dokumen Bast 1</small>
-                                        @endif --}}
-                                    </div>
-                                    <div class="col">
-                                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                                            Dokumen Bast 2
-                                            <a href="#" Id="Plus" data-bs-toggle="modal"
-                                                data-bs-target="#kt_modal_bast_2">+</a>
-                                        </h3>
-                                        {{-- @if (!empty($contract->dokumen_bast_1))
-                                            <small>Lihat Dokumen Bast 2: 
-                                                <a target="_blank" href="{{ asset('words/' . $contract->dokumen_bast_2 . '.docx') }}" class="text-gray-400 text-hover-primary">Klik disini</a>
-                                            </small>
-                                            <a target="_blank" class="text-gray-400 text-hover-primary"
-                                                href="/document/view/{{ url_encode($contract->id_contract) }}/{{ $contract->dokumen_bast_2 }}">Klik disini</a></small>
-                                        @else
-                                            <small>Belum mendapatkan Dokumen Bast 2</small>
-                                        @endif --}}
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-6">
-                                        <!--begin::Table-->
-                                        <table class="table align-middle table-row-dashed fs-6 gy-2"
-                                            id="kt_customers_table">
-                                            <!--begin::Table head-->
-                                            <thead>
-                                                <!--begin::Table row-->
-                                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                    <th class="w-50px text-center">No.</th>
-                                                    <th class="w-auto">Jenis Dokumen</th>
-                                                    <th class="w-auto">File</th>
-                                                    {{-- <th class="w-auto text-center"></th> --}}
-                                                </tr>
-                                                <!--end::Table row-->
-                                            </thead>
-                                            <!--end::Table head-->
-                                            @php
-                                                $no = 1;
-                                            @endphp
-                                            <!--begin::Table body-->
-                                            <tbody class="fw-bold text-gray-400">
-                                                @foreach ($contract->ContractBast as $dokumen)
-                                                    @if ($dokumen->bast == 1)
-                                                    <tr>
-                                                        <!--begin::Nomor-->
-                                                        <td class="text-center">
-                                                            {{ $no++ }}
-                                                        </td>
-                                                        <!--end::Nomor-->
-                                                        <!--begin::Column-->
-                                                        <td>
-                                                            {{ $dokumen->jenis_dokumen }}
-                                                        </td>
-                                                        <!--end::Column-->
-                                                        <!--begin::Name-->
-                                                        <td>
-                                                            @if (str_contains("$dokumen->nama_dokumen", '.pdf'))
-                                                                <a href="{{ asset('words/' . $dokumen->id_document . '.pdf') }}"
-                                                                    class="text-hover-primary">{{ $dokumen->nama_dokumen }}</a>
-                                                            @else
-                                                                <a target="_blank" href="{{ asset('words/' . $dokumen->id_document . '.docx') }}"
-                                                                    class="text-hover-primary">{{ $dokumen->nama_dokumen }}</a>
-                                                            @endif
-                                                        </td>
-                                                        <!--end::Name-->
-                                                        <!--begin::Action-->
-                                                        {{-- <td class="text-center">
-                                                            <small>
-                                                                <p data-bs-toggle="modal"
-                                                                    data-bs-target="#kt_dokumen_rks_delete"
-                                                                    id="modal-delete"
-                                                                    class="btn btn-sm btn-light btn-active-primary">
-                                                                    Delete
-                                                                </p>
-                                                            </small>
-                                                        </td> --}}
-                                                        <!--end::Action-->
-                                                    </tr>
-                                                    @endif
-                                                @endforeach
-                                                @if ($contract->ContractBast->count() == 0)
-                                                <tr>
-                                                    <td colspan="3" class="text-center">
-                                                        <h6><b>There is no data</b></h6>
-                                                    </td>
-                                                </tr>
                                                 @endif
                                             </tbody>
                                             <!--end::Table body-->
+
                                         </table>
-                                        <!--end::Table-->
                                     </div>
-                                    <div class="col-6">
-                                        <!--begin::Table-->
-                                        <table class="table align-middle table-row-dashed fs-6 gy-2"
-                                            id="kt_customers_table">
-                                            <!--begin::Table head-->
-                                            <thead>
-                                                <!--begin::Table row-->
-                                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                    <th class="w-50px text-center">No.</th>
-                                                    <th class="w-auto">Jenis Dokumen</th>
-                                                    <th class="w-auto">File</th>
-                                                    {{-- <th class="w-auto text-center"></th> --}}
-                                                </tr>
-                                                <!--end::Table row-->
-                                            </thead>
-                                            <!--end::Table head-->
-                                            @php
-                                                $no = 1;
-                                            @endphp
-                                            <!--begin::Table body-->
-                                            <tbody class="fw-bold text-gray-400">
+                                </div>
+
+                                @if (!empty($contract->list_dokumen_ba_defect))
+                                
+                                <br>
+                                    <div class="row">
+                                        <div class="col">
+                                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                                Dokumen Bast 1
+                                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                                    data-bs-target="#kt_modal_bast_1">+</a>
+                                            </h3>
+                                            {{-- <input type="file" name="dokumen-bast-1" accept=".docx"
+                                                class="form-control form-control-solid"> --}}
+                                            {{-- @if (!empty($contract->dokumen_bast_1))
+                                                <small>Lihat Dokumen Bast 1: 
+                                                    <a target="_blank" href="{{ asset('words/' . $contract->dokumen_bast_2 . '.docx') }}" class="text-gray-400 text-hover-primary">Klik disini</a>
+                                                </small>
+                                                <a target="_blank" class="text-gray-400 text-hover-primary"
+                                                    href="/document/view/{{ url_encode($contract->id_contract) }}/{{ $contract->dokumen_bast_1 }}">Klik disini</a></small>
+                                            @else
+                                                <small>Belum mendapatkan Dokumen Bast 1</small>
+                                            @endif --}}
+                                        </div>
+                                        <div class="col">
+                                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                                Dokumen Bast 2
+                                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                                    data-bs-target="#kt_modal_bast_2">+</a>
+                                            </h3>
+                                            {{-- @if (!empty($contract->dokumen_bast_1))
+                                                <small>Lihat Dokumen Bast 2: 
+                                                    <a target="_blank" href="{{ asset('words/' . $contract->dokumen_bast_2 . '.docx') }}" class="text-gray-400 text-hover-primary">Klik disini</a>
+                                                </small>
+                                                <a target="_blank" class="text-gray-400 text-hover-primary"
+                                                    href="/document/view/{{ url_encode($contract->id_contract) }}/{{ $contract->dokumen_bast_2 }}">Klik disini</a></small>
+                                            @else
+                                                <small>Belum mendapatkan Dokumen Bast 2</small>
+                                            @endif --}}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <!--begin::Table-->
+                                            <table class="table align-middle table-row-dashed fs-6 gy-2"
+                                                id="kt_customers_table">
+                                                <!--begin::Table head-->
+                                                <thead>
+                                                    <!--begin::Table row-->
+                                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                        <th class="w-50px text-center">No.</th>
+                                                        <th class="w-auto">Jenis Dokumen</th>
+                                                        <th class="w-auto">File</th>
+                                                        {{-- <th class="w-auto text-center"></th> --}}
+                                                    </tr>
+                                                    <!--end::Table row-->
+                                                </thead>
+                                                <!--end::Table head-->
+                                                @php
+                                                    $no = 1;
+                                                @endphp
+                                                <!--begin::Table body-->
+                                                <tbody class="fw-bold text-gray-400">
                                                     @foreach ($contract->ContractBast as $dokumen)
-                                                        @if ($dokumen->bast == 2)
+                                                        @if ($dokumen->bast == 1)
                                                         <tr>
                                                             <!--begin::Nomor-->
                                                             <td class="text-center">
@@ -3492,280 +3564,357 @@
                                                         </td>
                                                     </tr>
                                                     @endif
-                                            </tbody>
-                                            <!--end::Table body-->
-                                        </table>
-                                        <!--end::Table-->
+                                                </tbody>
+                                                <!--end::Table body-->
+                                            </table>
+                                            <!--end::Table-->
+                                        </div>
+                                        <div class="col-6">
+                                            <!--begin::Table-->
+                                            <table class="table align-middle table-row-dashed fs-6 gy-2"
+                                                id="kt_customers_table">
+                                                <!--begin::Table head-->
+                                                <thead>
+                                                    <!--begin::Table row-->
+                                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                        <th class="w-50px text-center">No.</th>
+                                                        <th class="w-auto">Jenis Dokumen</th>
+                                                        <th class="w-auto">File</th>
+                                                        {{-- <th class="w-auto text-center"></th> --}}
+                                                    </tr>
+                                                    <!--end::Table row-->
+                                                </thead>
+                                                <!--end::Table head-->
+                                                @php
+                                                    $no = 1;
+                                                @endphp
+                                                <!--begin::Table body-->
+                                                <tbody class="fw-bold text-gray-400">
+                                                        @foreach ($contract->ContractBast as $dokumen)
+                                                            @if ($dokumen->bast == 2)
+                                                            <tr>
+                                                                <!--begin::Nomor-->
+                                                                <td class="text-center">
+                                                                    {{ $no++ }}
+                                                                </td>
+                                                                <!--end::Nomor-->
+                                                                <!--begin::Column-->
+                                                                <td>
+                                                                    {{ $dokumen->jenis_dokumen }}
+                                                                </td>
+                                                                <!--end::Column-->
+                                                                <!--begin::Name-->
+                                                                <td>
+                                                                    @if (str_contains("$dokumen->nama_dokumen", '.pdf'))
+                                                                        <a href="{{ asset('words/' . $dokumen->id_document . '.pdf') }}"
+                                                                            class="text-hover-primary">{{ $dokumen->nama_dokumen }}</a>
+                                                                    @else
+                                                                        <a target="_blank" href="{{ asset('words/' . $dokumen->id_document . '.docx') }}"
+                                                                            class="text-hover-primary">{{ $dokumen->nama_dokumen }}</a>
+                                                                    @endif
+                                                                </td>
+                                                                <!--end::Name-->
+                                                                <!--begin::Action-->
+                                                                {{-- <td class="text-center">
+                                                                    <small>
+                                                                        <p data-bs-toggle="modal"
+                                                                            data-bs-target="#kt_dokumen_rks_delete"
+                                                                            id="modal-delete"
+                                                                            class="btn btn-sm btn-light btn-active-primary">
+                                                                            Delete
+                                                                        </p>
+                                                                    </small>
+                                                                </td> --}}
+                                                                <!--end::Action-->
+                                                            </tr>
+                                                            @endif
+                                                        @endforeach
+                                                        @if ($contract->ContractBast->count() == 0)
+                                                        <tr>
+                                                            <td colspan="3" class="text-center">
+                                                                <h6><b>There is no data</b></h6>
+                                                            </td>
+                                                        </tr>
+                                                        @endif
+                                                </tbody>
+                                                <!--end::Table body-->
+                                            </table>
+                                            <!--end::Table-->
+                                        </div>
                                     </div>
+                                    <br>
+                                    <br>
+                                @endif
+                                {{-- <button type="submit" class="btn btn-sm btn-active-primary text-white"
+                                    style="background-color: #008cb4;">Save Dokumen Bast</button> --}}
+                            {{-- </form> --}}
+                            <br>    
+
+                            {{-- <hr> --}}
+                            <div class="row">
+                                <div class="col">
+                                    <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                        Input Resiko - Pemeliharaan
+                                        <a href="#" Id="Plus" data-bs-toggle="modal"
+                                            data-bs-target="#kt_modal_input_resiko_pemeliharaan">+</a>
+                                    </h3>
+
+                                    <!--begin:Table: Review-->
+                                    <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                        <!--begin::Table head-->
+                                        <thead>
+                                            <!--begin::Table row-->
+                                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                <th class="min-w-125px">Kategori</th>
+                                                <th class="min-w-125px">Kriteria</th>
+                                                <th class="min-w-125px">Penyebab</th>
+                                                <th class="min-w-125px">Risiko</th>
+                                                <th class="min-w-125px">Dampak</th>
+                                                <th class="min-w-125px">Status</th>
+                                            </tr>
+                                            <!--end::Table row-->
+                                        </thead>
+                                        <!--end::Table head-->
+                                        <!--begin::Table body-->
+                                        <tbody class="fw-bold text-gray-400">
+                                            @forelse ($contract->inputRisks as $inputRisk)
+                                                @if ($inputRisk->stage <= 3)
+                                                <tr>
+                                                    <!--begin::Column-->
+                                                    <td>
+                                                        <a href="#" Id="edit_resiko_perolehan" data-bs-toggle="modal"
+                                                            data-bs-target="#kt_modal_edit_resiko_perolehan_{{ $inputRisk->id_risk }}"><p class="text-gray-600 mb-1 text-hover-primary">{{ $inputRisk->kategori }}</p></a>
+                                                    </td>
+                                                    <!--end::Column-->
+                                                    <!--begin::Kode=-->
+                                                    <td>
+                                                        <p class="text-gray-600 mb-1">{{ $inputRisk->kriteria }}</p>
+                                                    </td>
+                                                    <!--end::Kode=-->
+                                                    <!--begin::Unit=-->
+                                                    <td>
+                                                        <p class="text-gray-600 mb-1">{{ $inputRisk->penyebab }}</p>
+                                                    </td>
+                                                    <!--end::Unit=-->
+                                                    <!--begin::Unit=-->
+                                                    <td>
+                                                        <p class="text-gray-600 mb-1">{{ $inputRisk->resiko_peluang }}</p>
+                                                    </td>
+                                                    <!--end::Unit=-->
+                                                    <!--begin::Unit=-->
+                                                    <td>
+                                                        <p class="text-gray-600 mb-1">{{ $inputRisk->dampak }}</p>
+                                                    </td>
+                                                    <!--end::Unit=-->
+                                                    <!--begin::Unit=-->
+                                                    <td>
+                                                        @php
+                                                            $status = $inputRisk->is_closed == 0 ? "Open" : "Closed";
+                                                            $class = $inputRisk->is_closed == 0 ? "badge-light-success text-success" : "badge-light-danger text-danger";
+                                                        @endphp
+                                                        <p class="mb-1 badge {{$class}}">{{ $status }}</p>
+                                                    </td>
+                                                    <!--end::Unit=-->
+                                                </tr>
+                                                @endif
+                                            @empty
+                                                <tr>
+                                                    <td colspan="5" class="text-center">
+                                                        <h6><b>There is no data</b></h6>
+                                                    </td>
+                                                </tr>
+                                            @endforelse
+                                        </tbody>
+                                        <!--end::Table body-->
+
+                                    </table>
+
                                 </div>
-                                <br>
-                                <br>
-                            @endif
-                            {{-- <button type="submit" class="btn btn-sm btn-active-primary text-white"
-                                style="background-color: #008cb4;">Save Dokumen Bast</button> --}}
-                        {{-- </form> --}}
-                        <br>    
-
-                        {{-- <hr> --}}
-                        <div class="row">
-                            <div class="col">
-                                <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                                    Input Resiko - Pemeliharaan
-                                    <a href="#" Id="Plus" data-bs-toggle="modal"
-                                        data-bs-target="#kt_modal_input_resiko_pemeliharaan">+</a>
-                                </h3>
-
-                                <!--begin:Table: Review-->
-                                <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
-                                    <!--begin::Table head-->
-                                    <thead>
-                                        <!--begin::Table row-->
-                                        <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                            <th class="min-w-125px">Kategori</th>
-                                            <th class="min-w-125px">Kriteria</th>
-                                            <th class="min-w-125px">Penyebab</th>
-                                            <th class="min-w-125px">Risiko</th>
-                                            <th class="min-w-125px">Dampak</th>
-                                            <th class="min-w-125px">Status</th>
-                                        </tr>
-                                        <!--end::Table row-->
-                                    </thead>
-                                    <!--end::Table head-->
-                                    <!--begin::Table body-->
-                                    <tbody class="fw-bold text-gray-400">
-                                        @forelse ($contract->inputRisks as $inputRisk)
-                                            @if ($inputRisk->stage <= 3)
-                                            <tr>
-                                                <!--begin::Column-->
-                                                <td>
-                                                    <a href="#" Id="edit_resiko_perolehan" data-bs-toggle="modal"
-                                                        data-bs-target="#kt_modal_edit_resiko_perolehan_{{ $inputRisk->id_risk }}"><p class="text-gray-600 mb-1 text-hover-primary">{{ $inputRisk->kategori }}</p></a>
-                                                </td>
-                                                <!--end::Column-->
-                                                <!--begin::Kode=-->
-                                                <td>
-                                                    <p class="text-gray-600 mb-1">{{ $inputRisk->kriteria }}</p>
-                                                </td>
-                                                <!--end::Kode=-->
-                                                <!--begin::Unit=-->
-                                                <td>
-                                                    <p class="text-gray-600 mb-1">{{ $inputRisk->penyebab }}</p>
-                                                </td>
-                                                <!--end::Unit=-->
-                                                <!--begin::Unit=-->
-                                                <td>
-                                                    <p class="text-gray-600 mb-1">{{ $inputRisk->resiko_peluang }}</p>
-                                                </td>
-                                                <!--end::Unit=-->
-                                                <!--begin::Unit=-->
-                                                <td>
-                                                    <p class="text-gray-600 mb-1">{{ $inputRisk->dampak }}</p>
-                                                </td>
-                                                <!--end::Unit=-->
-                                                <!--begin::Unit=-->
-                                                <td>
-                                                    @php
-                                                        $status = $inputRisk->is_closed == 0 ? "Open" : "Closed";
-                                                        $class = $inputRisk->is_closed == 0 ? "badge-light-success text-success" : "badge-light-danger text-danger";
-                                                    @endphp
-                                                    <p class="mb-1 badge {{$class}}">{{ $status }}</p>
-                                                </td>
-                                                <!--end::Unit=-->
-                                            </tr>
-                                            @endif
-                                        @empty
-                                            <tr>
-                                                <td colspan="5" class="text-center">
-                                                    <h6><b>There is no data</b></h6>
-                                                </td>
-                                            </tr>
-                                        @endforelse
-                                    </tbody>
-                                    <!--end::Table body-->
-
-                                </table>
-
                             </div>
+
                         </div>
 
-                    </div>
-
-                    {{-- list_dokumen_ba_defect --}}
-                    <br>
-                    <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                        Pending Issue
-                        <a href="#" Id="Plus" data-bs-toggle="modal"
-                            data-bs-target="#kt_modal_pending_issue">+</a>
-                        @if (!empty($contract->PendingIssue->toArray()))
-                            <a href="#" data-bs-toggle="modal"
-                            data-bs-target="#kt_modal_upload_pending_issue" class="btn btn-primary btn-sm p-2 mx-3 text-end">Upload</a>
-                        @endif
-                    </h3><br>
-
-                    <!--begin:Table: List Defect BA-->
-                    <table class="table align-middle table-row-dashed dataTable fs-6 gy-5" id="pending-issue">
-                        <!--begin::Table head-->
-                        <thead>
-                            <!--begin::Table row-->
-                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                <th class="min-w-125px">Issue</th>
-                                <th class="min-w-125px">Penyebab</th>
-                                <th class="min-w-125px">Status</th>
-                            </tr>
-                            <!--end::Table row-->
-                        </thead>
-                        <!--end::Table head-->
-                        <!--begin::Table body-->
-                        <tbody class="fw-bold text-gray-400">
-                            @if ($contract->PendingIssue->count() > 0)
-
-                                @foreach ($contract->PendingIssue as $key => $pending_issue)
-                                    <tr>
-                                        <td>
-                                            <p class="text-gray-600">{{ $pending_issue->issue }}</p>
-                                        </td>
-                                        <!--end::Column-->
-                                        
-                                        <td>
-                                            <p class="text-gray-600">{{ $pending_issue->penyebab }}</p>
-                                        </td>
-
-                                        @if ($pending_issue->status)
-                                            <!--begin::Column-->
-                                            <td>
-                                                <p class="text-gray-600">Open</p>
-                                            </td>
-                                            <!--end::Column-->
-                                        @else
-                                            <!--begin::Column-->
-                                            <td>
-                                                <p class="text-gray-600">Closed</p>
-                                            </td>
-                                            <!--end::Column-->
-                                        @endif
-                                    </tr>
-                                @endforeach
-                            @else
+                        {{-- list_dokumen_ba_defect --}}
+                        <br>
+                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                            Pending Issue
+                            @if (!empty($contract->PendingIssue->toArray()))
+                                <a href="#" onclick="exportToExcel(this, '#pending-issue')" class="">(Klik di sini untuk Export ke Excel)</a>
                             @endif
-                        </tbody>
-                        <!--end::Table body-->
+                            <a href="#" Id="Plus" data-bs-toggle="modal"
+                                data-bs-target="#kt_modal_pending_issue">+</a>
+                            @if (!empty($contract->PendingIssue->toArray()))
+                                <a href="#" data-bs-toggle="modal"
+                                data-bs-target="#kt_modal_upload_pending_issue" class="btn btn-primary btn-sm p-2 mx-3 text-end">Upload</a>
+                            @endif
+                        </h3><br>
 
-                    </table>
-                    @php
-                        $uploadFilePending = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Pending Issue")->first();
-                        @endphp
-                        <!--End:Table: Review-->
-                        @if (!empty($uploadFilePending))
-                            <a target="_blank" href="{{ asset('words/'.$uploadFilePending->id_document) }}" class="text-hover-primary">
-                            <small><b>Download File :</b> {{ $uploadFilePending->nama_document }}</small>
-                            </a>
-                        @endif
-                    <br><br>
-                    <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                        Dokumen Lainnya
-                        <a href="#" Id="Plus" data-bs-toggle="modal"
-                            data-bs-target="#kt_modal_dokumen_pendukung_serah_terima">+</a>
-                    </h3>
+                        <!--begin:Table: List Defect BA-->
+                        <table class="table align-middle table-row-dashed dataTable fs-6 gy-5" id="pending-issue">
+                            <!--begin::Table head-->
+                            <thead>
+                                <!--begin::Table row-->
+                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                    <th class="min-w-125px">Issue</th>
+                                    <th class="min-w-125px">Penyebab</th>
+                                    <th class="min-w-125px">Status</th>
+                                </tr>
+                                <!--end::Table row-->
+                            </thead>
+                            <!--end::Table head-->
+                            <!--begin::Table body-->
+                            <tbody class="fw-bold text-gray-400">
+                                @if ($contract->PendingIssue->count() > 0)
 
-                    <!--begin:Table: List Defect BA-->
-                    <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
-                        <!--begin::Table head-->
-                        <thead>
-                            <!--begin::Table row-->
-                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                <th class="min-w-125px">No Dokumen</th>
-                            </tr>
-                            <!--end::Table row-->
-                        </thead>
-                        <!--end::Table head-->
-                        <!--begin::Table body-->
+                                    @foreach ($contract->PendingIssue as $key => $pending_issue)
+                                        <tr>
+                                            <td>
+                                                <p class="text-gray-600">{{ $pending_issue->issue }}</p>
+                                            </td>
+                                            <!--end::Column-->
+                                            
+                                            <td>
+                                                <p class="text-gray-600">{{ $pending_issue->penyebab }}</p>
+                                            </td>
+
+                                            @if ($pending_issue->status)
+                                                <!--begin::Column-->
+                                                <td>
+                                                    <p class="text-gray-600">Open</p>
+                                                </td>
+                                                <!--end::Column-->
+                                            @else
+                                                <!--begin::Column-->
+                                                <td>
+                                                    <p class="text-gray-600">Closed</p>
+                                                </td>
+                                                <!--end::Column-->
+                                            @endif
+                                        </tr>
+                                    @endforeach
+                                @else
+                                @endif
+                            </tbody>
+                            <!--end::Table body-->
+
+                        </table>
                         @php
-                            $list_document_dokumen_pendukung = explode(',', $contract->dokumen_pendukung);
-                        @endphp
-                        <tbody class="fw-bold text-gray-400">
-                            @if (count($list_document_dokumen_pendukung) > 0 && $list_document_dokumen_pendukung[0] != '')
-                                @forelse ($list_document_dokumen_pendukung as $key => $dokumen_pendukung)
-                                    <tr>
-                                        <!--begin::Column-->
-                                        <td>
-                                            <a href="/document/view/{{ $contract->id_contract }}/{{ $dokumen_pendukung }}"
-                                                class="text-gray-600 text-hover-primary">Dokumen Lainnya
-                                                #{{ $key + 1 }}</a>
-                                        </td>
-                                        <!--end::Column-->
-                                    </tr>
-                                @empty
+                            $uploadFilePending = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Pending Issue")->first();
+                            @endphp
+                            <!--End:Table: Review-->
+                            @if (!empty($uploadFilePending))
+                                <a target="_blank" href="{{ asset('words/'.$uploadFilePending->id_document) }}" class="text-hover-primary">
+                                <small><b>Download File :</b> {{ $uploadFilePending->nama_document }}</small>
+                                </a>
+                            @endif
+                        <br><br>
+
+
+                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                            Dokumen Lainnya
+                            <a href="#" Id="Plus" data-bs-toggle="modal"
+                                data-bs-target="#kt_modal_dokumen_pendukung_serah_terima">+</a>
+                        </h3>
+
+                        <!--begin:Table: List Defect BA-->
+                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                            <!--begin::Table head-->
+                            <thead>
+                                <!--begin::Table row-->
+                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                    <th class="min-w-125px">No Dokumen</th>
+                                </tr>
+                                <!--end::Table row-->
+                            </thead>
+                            <!--end::Table head-->
+                            <!--begin::Table body-->
+                            @php
+                                $list_document_dokumen_pendukung = explode(',', $contract->dokumen_pendukung);
+                            @endphp
+                            <tbody class="fw-bold text-gray-400">
+                                @if (count($list_document_dokumen_pendukung) > 0 && $list_document_dokumen_pendukung[0] != '')
+                                    @forelse ($list_document_dokumen_pendukung as $key => $dokumen_pendukung)
+                                        <tr>
+                                            <!--begin::Column-->
+                                            <td>
+                                                <a href="/document/view/{{ $contract->id_contract }}/{{ $dokumen_pendukung }}"
+                                                    class="text-gray-600 text-hover-primary">Dokumen Lainnya
+                                                    #{{ $key + 1 }}</a>
+                                            </td>
+                                            <!--end::Column-->
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="3" class="text-center">
+                                                <h6><b>There is no data</b></h6>
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                @else
                                     <tr>
                                         <td colspan="3" class="text-center">
                                             <h6><b>There is no data</b></h6>
                                         </td>
                                     </tr>
-                                @endforelse
+                                @endif
+                            </tbody>
+                            <!--end::Table body-->
+
+                        </table>
+
+                        <br>
+
+                    {{-- </div>
+                    <!--begin:::Tab pane Serah Terima-->
+                    <div class="tab-pane fade" id="kt_user_view_overview_penutupan_proyek" role="tabpanel"> --}}
+                        
+                        <div class="card-title m-0">
+                            <h3 class="fw-normal mb-2" style="font-size:14px;">
+                                Upload Dokumen Kontrak dan Addendum
+                            </h3>
+                            <form action="/contract-management/penutupan-proyek/upload" method="POST"
+                                enctype="multipart/form-data">
+                                @csrf
+                                <input type="hidden" value="{{ $contract->id_contract }}" name="id-contract">
+                                <input type="file" accept=".docx" multiple name="kontrak-dan-addendum-file[]"
+                                    class="form-control form-control-solid">
+                                <small>* Support multiple file upload</small>
+                                <br><br>
+                                <button type="submit" class="btn btn-sm btn-active-primary text-white"
+                                    style="background-color: #008CB4;">Save Dokumen</button>
+                            </form>
+                            <hr>
+                            @php
+                                $list_dokumen_kontrak_dan_addendum = explode(',', $contract->dokumen_kontrak_dan_addendum);
+                            @endphp
+                            @if (count($list_dokumen_kontrak_dan_addendum) > 0 && $list_dokumen_kontrak_dan_addendum[0] != '')
+                                <b>Daftar Dokumen Kontrak dan Addendum</b>
+                                <ul class="list-group list-group-flush">
+                                    @foreach ($list_dokumen_kontrak_dan_addendum as $key => $kontrak_dan_addendum)
+                                        <li class="list-group-item">
+                                            <a href="/document/view/{{ $contract->id_contract }}/{{ $kontrak_dan_addendum }}"
+                                                class="text-gray-600 text-hover-primary">Dokumen #{{ $key + 1 }}</a>
+                                        </li>
+                                    @endforeach
+                                </ul>
                             @else
-                                <tr>
-                                    <td colspan="3" class="text-center">
-                                        <h6><b>There is no data</b></h6>
-                                    </td>
-                                </tr>
+                                <p>Dokumen Belum Diupload</p>
                             @endif
-                        </tbody>
-                        <!--end::Table body-->
-
-                    </table>
-
-                    <br>
-
-                {{-- </div>
-                <!--begin:::Tab pane Serah Terima-->
-                <div class="tab-pane fade" id="kt_user_view_overview_penutupan_proyek" role="tabpanel"> --}}
-                    
-                    <div class="card-title m-0">
-                        <h3 class="fw-normal mb-2" style="font-size:14px;">
-                            Upload Dokumen Kontrak dan Addendum
-                        </h3>
-                        <form action="/contract-management/penutupan-proyek/upload" method="POST"
-                            enctype="multipart/form-data">
-                            @csrf
-                            <input type="hidden" value="{{ $contract->id_contract }}" name="id-contract">
-                            <input type="file" accept=".docx" multiple name="kontrak-dan-addendum-file[]"
-                                class="form-control form-control-solid">
-                            <small>* Support multiple file upload</small>
-                            <br><br>
-                            <button type="submit" class="btn btn-sm btn-active-primary text-white"
-                                style="background-color: #008CB4;">Save Dokumen</button>
-                        </form>
-                        <hr>
-                        @php
-                            $list_dokumen_kontrak_dan_addendum = explode(',', $contract->dokumen_kontrak_dan_addendum);
-                        @endphp
-                        @if (count($list_dokumen_kontrak_dan_addendum) > 0 && $list_dokumen_kontrak_dan_addendum[0] != '')
-                            <b>Daftar Dokumen Kontrak dan Addendum</b>
-                            <ul class="list-group list-group-flush">
-                                @foreach ($list_dokumen_kontrak_dan_addendum as $key => $kontrak_dan_addendum)
-                                    <li class="list-group-item">
-                                        <a href="/document/view/{{ $contract->id_contract }}/{{ $kontrak_dan_addendum }}"
-                                            class="text-gray-600 text-hover-primary">Dokumen #{{ $key + 1 }}</a>
-                                    </li>
-                                @endforeach
-                            </ul>
-                        @else
-                            <p>Dokumen Belum Diupload</p>
-                        @endif
+                        </div>
+                        {{-- list_dokumen_ba_defect --}}
                     </div>
-                    {{-- list_dokumen_ba_defect --}}
+                    <!--end:::Tab pane Serah Terima-->
                 </div>
                 <!--end:::Tab pane Serah Terima-->
+
+
             </div>
-            <!--end:::Tab pane Serah Terima-->
-
-
+            <!--end:::Tab content-->
+</form>
         </div>
-        <!--end:::Tab content-->
-        </form>
+        <!--end::Card body-->
     </div>
-    <!--end::Card body-->
-</div>
-<!--end::Contacts-->
+    <!--end::Contacts-->
 </div>
 <!--end::Content-->
 </div>
@@ -5802,13 +5951,13 @@
     <!--begin::Modal - Input Resiko Pelaksanaan-->
     <div class="modal fade" id="kt_modal_input_resiko_pelaksanaan" tabindex="-1" aria-hidden="true">
         <!--begin::Modal dialog-->
-        <div class="modal-dialog modal-dialog-centered mw-900px">
+        <div class="modal-dialog modal-dialog-centered mw-500px">
             <!--begin::Modal content-->
             <div class="modal-content">
                 <!--begin::Modal header-->
                 <div class="modal-header">
                     <!--begin::Modal title-->
-                    <h2>Add Resiko Proyek - Perolehan</h2>
+                    <h2>Add Resiko Proyek - Pelaksanaan</h2>
                     <!--end::Modal title-->
                     <!--begin::Close-->
                     <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
@@ -5830,7 +5979,7 @@
                         <input type="hidden" value="resiko-pelaksanaan" name="kategori">
                         <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" name="id-contract">
         
-                        @php
+                        {{-- @php
                             $month = (int) date("m") - 1 == 0 ? 12 : (int) date("m") - 1;
                             $year = (int) date("m") - 1 == 0 ?  (int) date("Y") - 1 : (int) date("Y");
 
@@ -5883,12 +6032,12 @@
                                     @endif
                                 </select>
                             </div>
-                        </div>
+                        </div> --}}
                         <br>
                         <div class="row">
                             <div class="col">
-                                <label for="resiko-file">File</label>
-                                <input type="file" class="form-control form-control-solid" name="file-document">
+                                <label for="resiko-file">Upload File</label>
+                                <input type="file" class="form-control form-control-solid" name="file-document" accept=".pdf">
                             </div>
                         </div>
 
@@ -7796,6 +7945,270 @@
     </div>
     <!--end::Modal - Perubahan Kontrak Menang-->
 
+    <!--Begin::Modal - Jaminan-->
+    <div class="modal fade" id="kt_modal_jaminan" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-600px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Add Jaminan</h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <i class="bi bi-x-lg"></i>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
+        
+                    <!--begin::Input group Website-->
+                    <div class="fv-row mb-5">
+                        <form action="/jaminan-pelaksanaan/upload" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <!--begin::Input-->
+                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                name="id-contract">
+                            <input type="hidden" class="modal-name" name="modal-name">
+                            <input type="hidden" value="{{ $perubahan_kontrak->id_perubahan_kontrak ?? 0 }}" id="id-perubahan-kontrak" name="id-perubahan-kontrak">
+                            <!--end::Input-->
+        
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label">
+                                <span style="font-weight: normal">Kategori</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <select name="kategori-jaminan" id="kategori-jaminan" class="form-select form-select-solid"
+                            data-control="select2" data-hide-search="true"
+                            data-placeholder="Pilih Kategori Jaminan">
+                                <option value=""></option>
+                                <option value="Advance Payment">Advance Payment</option>
+                                <option value="Performance">Performance</option>
+                                <option value="Warranty">Warranty</option>
+                                <option value="Partner">Partner</option>
+                            </select>
+                            <!--end::Input-->
+                            
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">No. Jaminan</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" class="form-control form-control-solid" name="nomor-jaminan"
+                                id="nomor-jaminan" value="" style="font-weight: normal"
+                                placeholder="Input No. Jaminan" />
+                            <!--end::Input-->
+                            
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Penerbit Jaminan</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" class="form-control form-control-solid" name="penerbit-jaminan"
+                                id="penerbit-jaminan" value="" style="font-weight: normal"
+                                placeholder="Input Penerbit Jaminan" />
+                            <!--end::Input-->
+        
+                            <!--begin::Input-->
+                            <div class="tanggal-penerbitan">
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Tanggal Penerbitan</span>
+                                    <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="tanggal_dokumen">
+                                        <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
+                                    </a>
+                                </label>
+                                <input type="date" class="form-control form-control-solid mb-3" name="tanggal-penerbitan-jaminan"
+                                id="tanggal_penerbitan" value="" placeholder="Tanggal Penerbitan" style="font-weight: normal" />
+                            </div>
+                            <!--end::Input-->
+                            
+                            <!--begin::Input-->
+                            <div class="tanggal-berakhir">
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Tanggal Berakhir</span>
+                                    <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="tanggal_dokumen">
+                                        <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
+                                    </a>
+                                </label>
+                                <input type="date" class="form-control form-control-solid mb-3" name="tanggal-berakhir-jaminan"
+                                id="tanggal_berakhir" value="" placeholder="Tanggal Berakhir" style="font-weight: normal" />
+                            </div>
+                            <!--end::Input-->
+
+                            <!--begin::Input-->
+                            {{-- <div class="status">
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Status</span>
+                                </label>
+                                <select name="status-jaminan" id="status-jaminan" class="form-select form-select-solid"
+                                data-control="select2" data-hide-search="true"
+                                data-placeholder="Pilih Status">
+                                    <option value=""></option>
+                                    <option value="Valid">Valid</option>
+                                    <option value="Expired">Expired</option>
+                                </select>                                    
+                            </div> --}}
+                            <!--end::Input-->
+
+                            <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
+                            
+                            <button type="submit" id="save-dokumen-site-instruction" class="btn btn-sm btn-primary mt-5"
+                            data-bs-dismiss="modal">Save</button>
+                        </form>
+                    </div>
+                    <!--end::Input group-->
+
+                </div>
+                <!--end::Modal body-->
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+    </div>
+    <!--End::Modal - Jaminan-->
+
+    <!--Begin::Modal - Asuransi-->
+    <div class="modal fade" id="kt_modal_asuransi" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-600px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Add Asuransi</h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <i class="bi bi-x-lg"></i>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
+        
+                    <!--begin::Input group Website-->
+                    <div class="fv-row mb-5">
+                        <form action="/asuransi-pelaksanaan/upload" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <!--begin::Input-->
+                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                name="id-contract">
+                            <input type="hidden" class="modal-name" name="modal-name">
+                            <input type="hidden" value="{{ $perubahan_kontrak->id_perubahan_kontrak ?? 0 }}" id="id-perubahan-kontrak" name="id-perubahan-kontrak">
+                            <!--end::Input-->
+        
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label">
+                                <span style="font-weight: normal">Kategori</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <select name="kategori-asuransi" id="kategori-asuransi" class="form-select form-select-solid"
+                            data-control="select2" data-hide-search="true"
+                            data-placeholder="Pilih Kategori Asuransi">
+                                <option value=""></option>
+                                <option value="CAR/EAR">CAR/EAR</option>
+                                <option value="Third Party Liability">Third Party Liability</option>
+                                <option value="Professional Indemnity">Professional Indemnity</option>
+                            </select>
+                            <!--end::Input-->
+                            
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">No. Polis</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" class="form-control form-control-solid" name="nomor-polis-asuransi"
+                                id="nomor-polis" value="" style="font-weight: normal"
+                                placeholder="Input No. Polis" />
+                            <!--end::Input-->
+                            
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Penerbit Polis</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" class="form-control form-control-solid" name="penerbit-polis-asuransi"
+                                id="penerbit-polis" value="" style="font-weight: normal"
+                                placeholder="Input Penerbit Polis" />
+                            <!--end::Input-->
+        
+                            <!--begin::Input-->
+                            <div class="tanggal-penerbitan">
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Tanggal Penerbitan</span>
+                                    <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="tanggal_dokumen">
+                                        <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
+                                    </a>
+                                </label>
+                                <input type="date" class="form-control form-control-solid mb-3" name="tanggal-penerbitan-asuransi"
+                                id="tanggal_penerbitan" value="" placeholder="Tanggal Dokumen" style="font-weight: normal" />
+                            </div>
+                            <!--end::Input-->
+                            
+                            <!--begin::Input-->
+                            <div class="tanggal-berakhir">
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Tanggal Berakhir</span>
+                                    <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="tanggal_dokumen">
+                                        <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
+                                    </a>
+                                </label>
+                                <input type="date" class="form-control form-control-solid mb-3" name="tanggal-berakhir-asuransi"
+                                id="tanggal_berakhir" value="" placeholder="Tanggal Dokumen" style="font-weight: normal" />
+                            </div>
+                            <!--end::Input-->
+
+                            <!--begin::Input-->
+                            {{-- <div class="status">
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Status</span>
+                                </label>
+                                <select name="status-asuransi" id="status-asuransi" class="form-select form-select-solid"
+                                data-control="select2" data-hide-search="true"
+                                data-placeholder="Pilih Status">
+                                    <option value=""></option>
+                                    <option value="Valid">Valid</option>
+                                    <option value="Expired">Expired</option>
+                                </select>
+                            </div> --}}
+                            <!--end::Input-->
+
+                            <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
+                            
+                            <button type="submit" id="save-asuransi" class="btn btn-sm btn-primary mt-5"
+                            data-bs-dismiss="modal">Save</button>
+                        </form>
+                    </div>
+                    <!--end::Input group-->
+                </div>
+                <!--end::Modal body-->
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+    </div>
+    <!--End::Modal - Asuransi-->
+
     <!--begin::Modal - Pasal Kontraktual-->
 <div class="modal fade" id="kt_modal_input_pasal_kontraktual" tabindex="-1" aria-hidden="true">
     <!--begin::Modal dialog-->
@@ -7805,7 +8218,7 @@
             <!--begin::Modal header-->
             <div class="modal-header">
                 <!--begin::Modal title-->
-                <h2>Add Pasal Kontraktual</h2>
+                <h2>Add Identifikasi Pasal Kontraktual</h2>
                 <!--end::Modal title-->
                 <!--begin::Close-->
                 <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
@@ -7911,7 +8324,7 @@
 <!--begin::Modal - Checklist Menejemen Kontrak-->
 <div class="modal fade" id="kt_modal_input_checklist_manajemen" tabindex="-1" aria-hidden="true">
     <!--begin::Modal dialog-->
-        <div class="modal-dialog modal-dialog-centered mw-900px">
+        <div class="modal-dialog modal-dialog-centered mw-700px">
             <!--begin::Modal content-->
             <div class="modal-content">
                 <!--begin::Modal header-->
@@ -9185,7 +9598,7 @@
                                         <span style="font-weight: normal">Termin yang sudah diterima</span>
                                     </label><br>
                                     <!--end::Label-->
-                                    <input type="text" class="form-control reformat" name="jawaban-12[]">
+                                    <input type="text" class="form-control reformat" value="0" name="jawaban-12[]">
                                 </div>
                                 <div id="slide-7" class="animate slide" style="display: none; opacity: 0;">
                                     <!--begin::Label-->
@@ -10877,6 +11290,65 @@
     <!--end::Modal dialog-->
 </div>
 <!--end::Modal - Upload Final Questions-->
+<!--begin::Modal - Upload Final Questions-->
+<div class="modal fade" id="kt_modal_upload_pasal_kontraktual" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog modal-dialog-centered mw-500px">
+        <!--begin::Modal content-->
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header">
+                <!--begin::Modal title-->
+                <h2>Upload Final | Pasal Kontraktual</h2>
+                <!--end::Modal title-->
+                <!--begin::Close-->
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                        <i class="bi bi-x-lg"></i>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--end::Modal header-->
+            <!--begin::Modal body-->
+            <div class="modal-body py-lg-6 px-lg-6">
+                <!--begin::Input group Website-->
+                <form action="/contract-management/final-dokumen/upload" method="POST"
+                    enctype="multipart/form-data">
+                    <div class="row">
+                        @csrf
+                        <div class="col mt-4">
+                            <!--begin::Label-->
+                            <label for="ketentuan-rencana-kerja" class="fs-6 fw-bold form-label">
+                                <span style="font-weight: normal">Upload Dokumen</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="hidden" name="kategori" value="pasal-kontraktual">
+                            <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
+                            <!--end::Input-->
+                        </div>
+                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                name="id-contract">
+                            <input type="hidden" class="modal-name" name="modal-name">
+                        </div>
+                    </div>
+                    <!--end::Input group-->
+                    <div class="modal-footer mt-4">
+                        <button type="submit" id="save-question-tender-menang"
+                            class="btn btn-sm btn-primary">Save</button>
+                    </div>
+                </form>
+            </div>
+            <!--end::Modal body-->
+        </div>
+        <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+</div>
+<!--end::Modal - Upload Final Questions-->
 
 <!--begin::Modal - Upload Final Tinjauan Perolehan-->
 <div class="modal fade" id="kt_modal_upload_tinjauan_perolehan" tabindex="-1" aria-hidden="true">
@@ -11980,6 +12452,62 @@ aria-hidden="true">
             currentSlideElt = document.querySelector(`${progressId} #slide-${currentSlide}`);
         }
 
+        // function validateInput(){
+        //     const getInputGroup = currentSlideElt.querySelectorAll('.input-group');
+        //     const getInputFormCheck = currentSlideElt.querySelectorAll('.form-check');
+        //     const getLabelForm = currentSlideElt.querySelectorAll('.form-label');
+        //     if(getInputGroup){
+        //         if(getInputFormCheck){
+        //             for(let data of getInputFormCheck){
+        //                 // console.log(data.querySelector('input:checked'))
+        //                 // console.log(data)
+        //                 let counter = 0
+        //                 const checkedCounter = currentSlideElt.querySelectorAll('input')
+
+        //                 for(let item of checkedCounter){
+        //                     if(item.checked){
+        //                         counter++
+        //                     }else if(item.getAttribute('type') != 'radio' && (item.value)){
+        //                         console.log(item.value)
+        //                         if(item.value.trim() == '0'){
+        //                             continue
+        //                         }else{
+        //                             counter++
+        //                         }
+        //                     }
+        //                 }
+        //                 const is_inputHasValue = counter == getLabelForm.length ? true : false
+        //                 console.log(is_inputHasValue, getLabelForm.length, counter)
+        //                 if (!is_inputHasValue) {
+        //                     return false;
+        //                 }
+        //                 return true
+        //             }
+        //             // getInputFormCheck.forEach((data)=>{
+                        
+        //             // })
+        //         }
+        //         // getInputGroup.forEach((data)=>{
+        //         //         const inputGroup = data.querySelectorAll('input')
+        //         //         inputGroup.forEach((input)=>{
+        //         //             console.log(input)
+        //         //             const is_inputHasValue = input.value != null ? true : false
+        //         //             if (!is_inputHasValue) {
+        //         //                 return false;
+        //         //             }
+        //         //         })
+        //         //     }
+        //         // )
+        //         return true
+        //     }
+        // }
+
+        // const checkValidate = validateInput()
+        // console.log(checkValidate)
+        // if(!checkValidate){
+        //     return
+        // }
+
         // Animasi Slide Opacity
         showSlide(currentSlideElt, nextSlideElt);
 
@@ -12031,6 +12559,29 @@ aria-hidden="true">
     }
 </script>
 {{-- End :: Animating Slide Checklist Manajemen Kontrak --}}
+
+{{-- Begin :: Export To Excel Data --}}
+<script>
+    function exportToExcel(e, tableElt) {
+        // console.log(e.parentElement);
+        document.querySelector(`${tableElt}_wrapper .buttons-excel`).click();
+        return;
+    }
+</script>
+{{-- End :: Export To Excel Data --}}
+
+{{-- Begin :: Hide All Excel Btn --}}
+<script>
+    window.addEventListener("DOMContentLoaded", () => {
+        setTimeout(() => {
+            const exportBtn = document.querySelectorAll(".buttons-excel");
+            exportBtn.forEach(item => {
+                item.style.display = "none";
+            }); 
+        }, 1000);
+    });
+</script>
+{{-- End :: Hide All Excel Btn --}}
 
 <!--begin::Data Tables-->
 <script src="/datatables/jquery.dataTables.min.js"></script>
@@ -12114,7 +12665,7 @@ aria-hidden="true">
                     extend: 'excelHtml5',
                     title: 'Data Perubahan Kontrak'
                 },
-                    'copy', 'pdf', 'print'
+                   
                 ]
         } );
     });
@@ -12130,7 +12681,7 @@ aria-hidden="true">
                     extend: 'excelHtml5',
                     title: 'Data Aanwitjzing'
                 },
-                    'copy', 'pdf', 'print'
+                   
                 ]
         } );
     });
@@ -12146,7 +12697,7 @@ aria-hidden="true">
                     extend: 'excelHtml5',
                     title: 'Data Input Risk'
                 },
-                    'copy', 'pdf', 'print'
+                   
                 ]
         } );
     });
@@ -12162,7 +12713,23 @@ aria-hidden="true">
                     extend: 'excelHtml5',
                     title: 'Data Usulan Draft'
                 },
-                    'copy', 'pdf', 'print'
+                   
+                ]
+        } );
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        $('#pasal_kontraktual').DataTable( {
+            // dom: 'Bfrtip',
+            dom: 'Brti',
+            pageLength : 50,
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    title: 'Daftar Identifikasi Pasal Kontraktual'
+                },
+                   
                 ]
         } );
     });
@@ -12179,7 +12746,7 @@ aria-hidden="true">
                     extend: 'excelHtml5',
                     title: 'Data Pending Issue'
                 },
-                    'copy', 'pdf', 'print'
+                   
                 ]
         } );
     });

@@ -173,6 +173,23 @@
                             </div>
                         @endif
 
+                        @if (auth()->user()->check_administrator || $adminPIC)
+                            <div class="menu-item">
+                                <a class="menu-link " href="/rekomendasi"
+                                    style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'rekomendasi') ? 'background-color:#008CB4' : '' }}">
+                                    <span class="menu-icon">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                        <span class="svg-icon svg-icon-2">
+                                            <img alt="Logo" src="/media/icons/duotune/creatio/documents.svg"
+                                                class="h-30px logo" />
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Rekomendasi</span>
+                                </a>
+                            </div>
+                        @endif
+
 
                         @if (auth()->user()->check_administrator || $adminPIC)
                             <!--Begin::Master Data Expand-->

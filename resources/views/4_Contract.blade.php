@@ -103,9 +103,23 @@
                                     </select> --}}
                                     <!--End:: Select Options-->
 
+                                     <!--begin::Select Options-->
+                                     <div style="" id="filterTahun" class="d-flex align-items-center position-relative me-3">
+                                        <select id="tahun-proyek" name="tahun-proyek" onchange="this.form.submit()"
+                                            class="form-select form-select-solid select2-hidden-accessible mx-3"
+                                            data-control="select2" data-hide-search="true" data-placeholder="Tahun"
+                                            tabindex="-1" aria-hidden="true">
+                                                <option value="">{{ date("Y") }}</option>
+                                                @foreach ($tahun_proyeks as $tahun)
+                                                    <option value="{{$tahun}}" {{$filterTahun == $tahun ? "selected" : ""}}>{{$tahun}}</option>
+                                                @endforeach
+                                        </select>
+                                    </div>
+                                    <!--end::Select Options-->
+
                                     <!--begin:: Input Filter-->
                                     <div id="filterUnit" class="d-flex align-items-center position-relative">
-                                        <select onchange="this.form.submit()" name="filter" class="form-select form-select-solid w-200px ms-2"
+                                        <select onchange="this.form.submit()" name="filter-unit" class="form-select form-select-solid w-200px ms-2"
                                             data-control="select2" data-hide-search="true" data-placeholder="Unit Kerja">
                                             <option></option>
                                             @foreach ($unitkerjas as $unitkerja)
@@ -236,119 +250,117 @@
                                                         $total_forecast = $proyek->nilai_rkap;
                                                     }
                                                 @endphp
-                                                @if ($total_forecast > 0)
-                                                    <tr>
-                                                        <!--begin::Name=-->
-                                                        @if (!empty($proyek->ContractManagements))
-                                                            <td>
-                                                                <a target="_blank" href="/contract-management/view/{{ url_encode($proyek->ContractManagements->id_contract) }}" id="click-name"
-                                                                    class="text-hover-primary">{{ $proyek->nama_proyek }}</a>
-                                                            </td>
-                                                        @else
-                                                            <td>
-                                                                <a href="#" id="click-name" class="text-hover-primary"><small class="badge badge-light-danger">
-                                                                        Belum Ditentukan
-                                                                    </small></a>
-                                                            </td>
-                                                        @endif
-                                                        {{-- <td>
-                                                            <a target="_blank" href="/proyek/view/{{ $proyek->kode_proyek }}" id="click-name" class="text-hover-primary mb-1">{{ $proyek->nama_proyek }}</a>
-                                                        </td> --}}
-                                                        <!--end::Name=-->
-                                                        <!--begin::Email-->
+                                                <tr>
+                                                    <!--begin::Name=-->
+                                                    @if (!empty($proyek))
                                                         <td>
-                                                            {{ $proyek->UnitKerja->unit_kerja }}
+                                                            <a target="_blank" href="/contract-management/view/{{ url_encode($proyek->id_contract) }}" id="click-name"
+                                                                class="text-hover-primary">{{ $proyek->nama_proyek }}</a>
                                                         </td>
-                                                        <!--end::Email-->
-                                                        <!--begin::Stage-->
+                                                    @else
                                                         <td>
-                                                            @switch($proyek->stage)
-                                                                @case('0')
-                                                                    Gugur PQ
-                                                                @break
-
-                                                                @case('1')
-                                                                    Pasar Dini
-                                                                @break
-
-                                                                @case('2')
-                                                                    Pasar Potensial
-                                                                @break
-
-                                                                @case('3')
-                                                                    Prakualifikasi
-                                                                @break
-
-                                                                @case('4')
-                                                                    Tender Diikuti
-                                                                @break
-
-                                                                @case('5')
-                                                                    Perolehan
-                                                                @break
-
-                                                                @case('6')
-                                                                    Menang
-                                                                @break
-
-                                                                @case('7')
-                                                                    Kalah
-                                                                @break
-
-                                                                @case('8')
-                                                                    Terkontrak
-                                                                @break
-
-                                                                @case('9')
-                                                                    Terendah
-                                                                @break
-
-                                                                @case('10')
-                                                                    Gugur PQ
-                                                                @break
-
-                                                                @default
-                                                                    *Belum Ditentukan
-                                                            @endswitch
+                                                            <a href="#" id="click-name" class="text-hover-primary"><small class="badge badge-light-danger">
+                                                                    Belum Ditentukan
+                                                                </small></a>
                                                         </td>
-                                                        <!--end::Stage-->
-                                                        <!--begin::Jenis-->
-                                                        <td>
-                                                            @switch($proyek->jenis_proyek)
-                                                                @case('I')
-                                                                    Internal
-                                                                @break
+                                                    @endif
+                                                    {{-- <td>
+                                                        <a target="_blank" href="/proyek/view/{{ $proyek->kode_proyek }}" id="click-name" class="text-hover-primary mb-1">{{ $proyek->nama_proyek }}</a>
+                                                    </td> --}}
+                                                    <!--end::Name=-->
+                                                    <!--begin::Email-->
+                                                    <td>
+                                                        {{ $proyek->UnitKerja->unit_kerja }}
+                                                    </td>
+                                                    <!--end::Email-->
+                                                    <!--begin::Stage-->
+                                                    <td>
+                                                        @switch($proyek->stage)
+                                                            @case('0')
+                                                                Gugur PQ
+                                                            @break
 
-                                                                @case('N')
-                                                                    Eksternal
-                                                                @break
+                                                            @case('1')
+                                                                Pasar Dini
+                                                            @break
 
-                                                                @case('J')
-                                                                    JO
-                                                                @break
+                                                            @case('2')
+                                                                Pasar Potensial
+                                                            @break
 
-                                                            @endswitch
-                                                        </td>
-                                                        <!--end::Jenis-->
-                                                        <!--begin::Forecast-->
-                                                        <td class="text-end">
-                                                            <small>
-                                                                {{ number_format((int)$total_forecast, 0, '.', '.') ?? '-' }}
-                                                            </small>
-                                                        </td>
-                                                        <!--end::Forecast-->
-                                                        <!--begin::Email-->
-                                                        <td>
-                                                            {{ $proyek->tahun_perolehan }}
-                                                        </td>
-                                                        <!--end::Email-->
-                                                        <!--begin::Email-->
-                                                        <td>
-                                                            {{ Carbon\Carbon::create(date("Y") ,$proyek->bulan_pelaksanaan)->translatedFormat("F") }}
-                                                        </td>
-                                                        <!--end::Email-->
-                                                    </tr>
-                                                @endif
+                                                            @case('3')
+                                                                Prakualifikasi
+                                                            @break
+
+                                                            @case('4')
+                                                                Tender Diikuti
+                                                            @break
+
+                                                            @case('5')
+                                                                Perolehan
+                                                            @break
+
+                                                            @case('6')
+                                                                Menang
+                                                            @break
+
+                                                            @case('7')
+                                                                Kalah
+                                                            @break
+
+                                                            @case('8')
+                                                                Terkontrak
+                                                            @break
+
+                                                            @case('9')
+                                                                Terendah
+                                                            @break
+
+                                                            @case('10')
+                                                                Gugur PQ
+                                                            @break
+
+                                                            @default
+                                                                *Belum Ditentukan
+                                                        @endswitch
+                                                    </td>
+                                                    <!--end::Stage-->
+                                                    <!--begin::Jenis-->
+                                                    <td>
+                                                        @switch($proyek->jenis_proyek)
+                                                            @case('I')
+                                                                Internal
+                                                            @break
+
+                                                            @case('N')
+                                                                Eksternal
+                                                            @break
+
+                                                            @case('J')
+                                                                JO
+                                                            @break
+
+                                                        @endswitch
+                                                    </td>
+                                                    <!--end::Jenis-->
+                                                    <!--begin::Forecast-->
+                                                    <td class="text-end">
+                                                        <small>
+                                                            {{ number_format((int)$total_forecast, 0, '.', '.') ?? '-' }}
+                                                        </small>
+                                                    </td>
+                                                    <!--end::Forecast-->
+                                                    <!--begin::Email-->
+                                                    <td>
+                                                        {{ $proyek->tahun_perolehan }}
+                                                    </td>
+                                                    <!--end::Email-->
+                                                    <!--begin::Email-->
+                                                    <td>
+                                                        {{ Carbon\Carbon::create(date("Y") ,$proyek->bulan_pelaksanaan)->translatedFormat("F") }}
+                                                    </td>
+                                                    <!--end::Email-->
+                                                </tr>
                                             @empty
                                             @endforelse
                                         </tbody>

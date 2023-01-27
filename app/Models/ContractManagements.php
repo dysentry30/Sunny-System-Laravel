@@ -69,7 +69,7 @@ class ContractManagements extends Model
 
     public function project()
     {
-        return $this->hasOne(Proyek::class, "kode_proyek", "project_id");
+        return $this->belongsTo(Proyek::class, "project_id", "kode_proyek");
     }
     public function KlarifikasiNegosiasiCDA()
     {
@@ -158,6 +158,14 @@ class ContractManagements extends Model
     public function ChecklistManajemen()
     {
         return $this->hasMany(ContractChecklist::class, "id_contract");
+    }
+
+    public function Asuransi(){
+        return $this->hasMany(ContractAsuransi::class, "id_contract");
+    }
+    
+    public function Jaminan(){
+        return $this->hasMany(ContractJaminan::class, "id_contract");
     }
 
     public function getAll()

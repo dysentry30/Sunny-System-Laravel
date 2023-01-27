@@ -39,7 +39,14 @@ class ClaimController extends Controller
         // } else {
         //     $claims = PerubahanKontrak::join("contract_managements", "contract_managements.id_contract", "=", "perubahan_kontrak.id_contract")->where("contract_managements.unit_kerja", "=", Auth::user()->unit_kerja)->select("perubahan_kontrak.*")->get();
         // }
-        $claims = PerubahanKontrak::with(["ContractManagement"])->get();
+        // $claims = PerubahanKontrak::with(["ContractManagement"])->get();
+        $claims = PerubahanKontrak::all();
+        // $claims = ContractManagements::with(["project", "PerubahanKontrak"])->get();
+        // $claims = ContractManagements::get();
+        $test = $claims->each(function($data){
+            return $data->ContractManagements;
+        });
+        // dd($test->groupBy('id_contract'));
         if (!empty($column)) {
 
             $proyekClaim = $claims->where('jenis_perubahan', '=', "Klaim")->filter(function($data) use($column, $filter) {
@@ -59,14 +66,26 @@ class ClaimController extends Controller
             });
             
         } else {
-            $proyekClaim = $claims->where('jenis_perubahan', '=', "Klaim");
-
-            $proyekAnti = $claims->where('jenis_perubahan', '=', "Anti Klaim");
-
-            $proyekAsuransi = $claims->where('jenis_perubahan', '=', "Klaim Asuransi");
-
-            $proyekVos = $claims->where('jenis_perubahan', '=', "VO");
+            $proyekClaim = $claims->where('jenis_perubahan', '=', "Klaim")->groupBy('id_contract')->map(function($data){
+                return $data->first();
+            });
+            
+            $proyekAnti = $claims->where('jenis_perubahan', '=', "Anti Klaim")->groupBy('id_contract')->map(function($data){
+                return $data->first();
+            });
+            
+            $proyekAsuransi = $claims->where('jenis_perubahan', '=', "Klaim Asuransi")->groupBy('id_contract')->map(function($data){
+                return $data->first();
+            });
+            
+            $proyekVos = $claims->where('jenis_perubahan', '=', "VO")->groupBy('id_contract')->map(function($data){
+                return $data->first();
+            });
         }
+        // dd($proyekClaim);
+        // dd($proyekAnti);
+        // dd($proyekAsuransi);
+        // dd($proyekVos);
         return view("5_Claim", compact(["proyekVos" ,"proyekClaim", "proyekAnti", "proyekAsuransi", "column", "filter"]));
     }
 
