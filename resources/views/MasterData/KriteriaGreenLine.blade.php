@@ -145,8 +145,9 @@
                                 <thead>
                                     <!--begin::Table row-->
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                        <th class="min-w-auto">ID Industry Sector</th>
-                                        <th class="min-w-auto">Description</th>
+                                        <th class="min-w-auto">Item</th>
+                                        <th class="min-w-auto">Isi Item</th>
+                                        <th class="min-w-auto">Sub Item</th>
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>
@@ -157,26 +158,20 @@
                                     $no = 1;
                                 @endphp
                                 <tbody class="fw-bold text-gray-600">
-                                    {{-- @foreach ($industrySector as $j)
+                                    @foreach ($kriteria_green_line_all as $kriteria)
+                                        @php
+                                            try {
+                                                $sub_isi = App\Models\Provinsi::find($kriteria->sub_isi)->firstOrFail()->province_name;
+                                            } catch (\Throwable $th) {
+                                                $sub_isi = $kriteria->sub_isi;
+                                            }
+                                            @endphp
                                         <tr>
-                                            
-                                            <!--begin::Nama Company-->
-                                            <td>
-                                                <a type="button" data-bs-toggle="modal"
-                                                data-bs-target="#kt_edit_{{ $j->province_id  }}"
-                                                class="text-gray-600 text-gray text-hover-primary">{{ $j->id_industry_sector  }}</a>
-                                                </a>
-                                            </td>
-                                            <!--end::Nama Company-->
-                                            
-                                            <!--begin::No-->
-                                            <td class="">
-                                                {{ $j->description }}
-                                            </td>
-                                            <!--end::No-->
-
+                                            <td>{{$kriteria->item}}</td>
+                                            <td>{{$kriteria->isi}}</td>
+                                            <td>{{$sub_isi}}</td>
                                         </tr>
-                                    @endforeach --}}
+                                    @endforeach
                                 </tbody>
                                 <!--end::Table body-->
                             </table>
@@ -617,6 +612,9 @@
                     dropdownParent: $('#kt_modal_input_kriteria_green_line'),
                     // minimumResultsForSearch: Infinity,
                 });
+            } else {
+                document.querySelector("#tier").setAttribute("hidden", true);
+                document.querySelector("#provinsi").setAttribute("hidden", true);
             }
         } else {
             document.querySelector(dropdownElt).innerHTML = html;

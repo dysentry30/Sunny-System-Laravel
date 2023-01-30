@@ -832,9 +832,10 @@ class DashboardController extends Controller
             return view("/DashboardCCM/Dashboard_pelaksanaan_proyek", compact(["bond", "insurance", "jumlahKontrak", "totalKontrak", "totalPersen", "kategori_kontrak", "proyek_get", "unit_kerja_get", "dop_get", "proyeks", "dops", "unit_kerjas"]));
         }
         
-        $claims = Proyek::all()->filter(function($cl) use($proyeks) {
-            return $cl->ContractManagements->PerubahanKontrak->isNotEmpty() && $cl->ContractManagements->PerubahanKontrak->firstWhere("kode_proyek", "=", $cl->kode_proyek);
-        });
+        // $claims = PerubahanKontrak::all()->filter(function($cl) use($proyeks) {
+        //     return $cl->ContractManagements->PerubahanKontrak->isNotEmpty() && $cl->ContractManagements->PerubahanKontrak->firstWhere("kode_proyek", "=", $cl->kode_proyek);
+        // });
+        $claims = PerubahanKontrak::all();
 
         // Begin :: Pemilik Pekerjaan
         $pemilik_pekerjaan = $proyeks->map(function ($p) {
@@ -851,23 +852,23 @@ class DashboardController extends Controller
         // End :: Pemilik Pekerjaan
 
         // Begin :: Changes Overview
-        $kategori_kontrak = $claims->groupBy("jenis_claim")->map(function ($c, $key) {
-            return [$key, $c->count()];
-        })->values();
-        $proyek = $proyeks->map(function($item){
-            return PerubahanKontrak::where("id_contract", "=", $item->ContractManagements->id_contract)->get();
-        });
-        // dd($proyek
+        // $kategori_kontrak = $claims->groupBy("jenis_perubahan")->map(function ($c, $key) {
+        //     return [$key, $c->count()];
+        // })->values();
+        // $proyek = $proyeks->map(function($item){
+        //     return PerubahanKontrak::where("id_contract", "=", $item->ContractManagements->id_contract)->get();
+        // });
+        // // dd($proyek
         // dd($kategori_kontrak);
 
         $jumlahKontrak = 0;
         $totalKontrak = 0;
         $totalPersen = 0;
-        foreach ($kategori_kontrak as $key => $k) {
-            $jumlahKontrak += (int) $k[1];
-            $totalKontrak += (int) $k[2];
-            $totalPersen += (int) $k[3];
-        }
+        // foreach ($kategori_kontrak as $key => $k) {
+        //     $jumlahKontrak += (int) $k[1];
+        //     $totalKontrak += (int) $k[2];
+        //     $totalPersen += (int) $k[3];
+        // }
         // End :: Changes Overview
         // dd($kategori_kontrak);
 

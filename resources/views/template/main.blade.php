@@ -96,6 +96,10 @@
         .fr-wrapper div:not(.fr-element.fr-view):nth-child(1) {
             display: none;
         }
+        select[readonly].select2-hidden-accessible + .select2-container {
+            pointer-events: none;
+            touch-action: none;
+        }
     </style>
     {{-- end:: Disable Native Date Browser --}}
 </head>

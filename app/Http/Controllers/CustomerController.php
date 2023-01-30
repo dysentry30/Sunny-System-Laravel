@@ -518,6 +518,7 @@ class CustomerController extends Controller
         $editCustomer->syarat_pembayaran = $data["syarat_pembayaran"];
         $editCustomer->unique_code = $data["unique_code"];
         $editCustomer->key_client = isset($data["key-client"]);
+        $editCustomer->group_tier = $data["group-tier"];
 
         // $editCustomer->journey_company = $data["journey-company"];
         // $editCustomer->segmentation_company = $data["segmentation-company"];

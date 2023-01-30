@@ -436,6 +436,9 @@ class ProyekController extends Controller
         } else {
             $newProyek->jenis_jo = null;
         }
+        if(isset($dataProyek["proyek-rekomendasi"])) {
+            $newProyek->is_request_rekomendasi  = true;
+        }
         // $newProyek->nama_pendek_proyek = $dataProyek["short-name"];
 
         // form PASAR POTENSIAL
