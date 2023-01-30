@@ -109,8 +109,8 @@
                                             class="form-select form-select-solid select2-hidden-accessible mx-3"
                                             data-control="select2" data-hide-search="true" data-placeholder="Tahun"
                                             tabindex="-1" aria-hidden="true">
-                                                <option value="">{{ date("Y") }}</option>
-                                                @foreach ($tahun_proyeks as $tahun)
+                                            <option value="" selected>{{date("Y")}}</option>
+                                            @foreach ($tahun_proyeks as $tahun)
                                                     <option value="{{$tahun}}" {{$filterTahun == $tahun ? "selected" : ""}}>{{$tahun}}</option>
                                                 @endforeach
                                         </select>

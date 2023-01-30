@@ -71,7 +71,7 @@ class ContractManagementsController extends Controller
         // $column = $request->get("column");
         $filterUnit = $request->query("filter-unit");
         $filterJenis = $request->query("filter-jenis");
-        $filterTahun = $request->query("tahun-proyek");
+        $filterTahun = $request->query("tahun-proyek") ?? (int) date("Y");
         // dd($filterTahun);
 
         $year = (int) date("Y");
@@ -103,11 +103,11 @@ class ContractManagementsController extends Controller
             } else if(!empty($filterTahun)){
                 $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $filterTahun)->get();
             } else {
-                $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->get();
+                $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $year)->get();
                 // $proyeks_all = Proyek::all();
             }
             // dd($proyeks_all);
-            $proyeks_perolehan = $proyeks_all->whereIn("stage", [2, 3, 4, 5, 6])->where("is_cancel", "!=", true)->where("is_tidak_lulus_pq", "!=", true);
+            $proyeks_perolehan = $proyeks_all->whereIn("stage", [2, 3, 4, 5, 6])->where("is_cancel", "!=", true)->where("is_tidak_lulus_pq", "!=", true)->where("stages", "=", 1);
             // dd($proyeks_perolehan);
 
             $proyeks_pelaksanaan = $proyeks_all->where("stage", "=", 8)->where("is_cancel", "!=", true)->filter(function ($p) {
@@ -421,8 +421,25 @@ class ContractManagementsController extends Controller
         // $draftContracts = DraftContracts::join("contract_managements as c", "draft_contracts.id_contract", "=", "c.id_contract")->select("draft_contracts.*")->get();
         // $review_contracts = ReviewContracts::join("draft_contracts as d", "review_contracts.id_draft_contract", "=", "d.id_draft")->select("review_contracts.*")->get();
         $projects = Proyek::all();
+        $contract = ContractManagements::where("id_contract", "=", $id_contract)->first();
+        $perubahan_kontrak = PerubahanKontrak::where("id_contract", "=", $id_contract)->get();
+        $perubahan_group = $perubahan_kontrak->groupBy("jenis_perubahan")->toArray();
+        $perubahan_vo = array_key_exists("VO", $perubahan_group);
+        $perubahan_klaim = array_key_exists("Klaim", $perubahan_group);
+        $perubahan_anti_klaim = array_key_exists("Anti Klaim", $perubahan_group);       
+        $perubahan_klaim_asuransi = array_key_exists("Klaim Asuransi", $perubahan_group);       
 
-        return view('Contract/view', ["contract" => ContractManagements::find(urldecode(urldecode($id_contract))), "projects" => $projects]);
+        // dd(array_key_exists("VO", $perubahan_group), count($perubahan_group["Klaim"]));
+
+        return view('Contract/view', [
+            "contract" => $contract,
+            "projects" => $projects,
+            "perubahan_group" => $perubahan_group,
+            "perubahan_vo" => $perubahan_vo,
+            "perubahan_klaim" => $perubahan_klaim,
+            "perubahan_anti_klaim" => $perubahan_anti_klaim,
+            "perubahan_klaim_asuransi" => $perubahan_klaim_asuransi,
+        ]);
     }
 
 
@@ -2373,12 +2390,18 @@ class ContractManagementsController extends Controller
             // return redirect()->back();
         }
 
+        $asuransiExpired = new DateTime($data["tanggal-berakhir-asuransi"]);
+        $currentDate = new DateTime();
+        $interval = $currentDate->diff($asuransiExpired);
+        $is_expired = $interval->invert == 1 ? true : false;
+
         $asuransi->id_contract = $data["id-contract"];
         $asuransi->kategori_asuransi = $data["kategori-asuransi"];
         $asuransi->nomor_polis = $data["nomor-polis-asuransi"];
         $asuransi->penerbit_polis = $data["penerbit-polis-asuransi"];
         $asuransi->tanggal_penerbitan = $data["tanggal-penerbitan-asuransi"];
         $asuransi->tanggal_berakhir = $data["tanggal-berakhir-asuransi"];
+        $asuransi->is_expired = $is_expired;
         // $asuransi->status = $data["status-asuransi"];
 
         if ($asuransi->save()) {
@@ -2419,13 +2442,18 @@ class ContractManagementsController extends Controller
             // return redirect()->back();
         }
 
+        $jaminanExpired = new DateTime($data["tanggal-berakhir-jaminan"]);
+        $currentDate = new DateTime();
+        $interval = $currentDate->diff($jaminanExpired);
+        $is_expired = $interval->invert == 1 ? true : false;
+
         $jaminan->id_contract = $data["id-contract"];
         $jaminan->kategori_jaminan = $data["kategori-jaminan"];
         $jaminan->nomor_jaminan = $data["nomor-jaminan"];
         $jaminan->penerbit_jaminan = $data["penerbit-jaminan"];
         $jaminan->tanggal_penerbitan = $data["tanggal-penerbitan-jaminan"];
         $jaminan->tanggal_berakhir = $data["tanggal-berakhir-jaminan"];
-        // $jaminan->status = $data["status-jaminan"];
+        $jaminan->is_expired = $is_expired;
 
         if ($jaminan->save()) {
             Alert::success("Success", "Data Jaminan berhasil ditambahkan");
