@@ -2449,7 +2449,7 @@
                             <!--begin:Table: Perubahan Kontrak-->
                             <table class="table align-middle table-row-dashed fs-6 gy-5 w-100 p-3" id="perubahan-kontrak">
                                 <!--begin::Table head-->
-                                <thead>
+                                {{-- <thead>
                                     <!--begin::Table row-->
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                         <th class="min-w-auto">Jenis Perubahan</th>
@@ -2464,165 +2464,113 @@
                                         <th class="min-w-auto">Status</th>
                                     </tr>
                                     <!--end::Table row-->
+                                </thead> --}}
+                                <thead>
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-auto">Jenis Perubahan</th>
+                                        <th class="min-w-auto">Jumlah Dokumen</th>
+                                        <th class="min-w-auto">Detail</th>
+                                    </tr>
                                 </thead>
                                 <!--end::Table head-->
-                                <!--begin::Table body-->
-                                <tbody class="fw-bold text-gray-400">
-                                    @forelse ($contract->PerubahanKontrak as $key => $pk)
-                                        <tr class="fw-bold">
-                                            <td>
-                                                <small>
-                                                    <a target="_blank" href="/contract-management/view/{{url_encode($contract->id_contract)}}/perubahan-kontrak/{{$pk->id_perubahan_kontrak}}" class="text-hover-primary">{{ $pk->jenis_perubahan }}</a>
-                                                </small>
-                                            </td>
-                                            <!--begin::Column-->
-                                            <td>
-                                                <small>
-                                                    <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! Carbon\Carbon::create($pk->tanggal_perubahan)->translatedFormat("d F Y") !!}</pre>
-                                                </small>
-                                            </td>
-                                            <!--end::Column-->
-                                            <!--begin::Column-->
-                                            <td>
-                                                <small>
-                                                    <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! $pk->uraian_perubahan !!}</pre>
-                                                </small>
-                                            </td>
-                                            <!--end::Column-->
-                                            <!--begin::Column-->
-                                            @if (!empty($pk->JenisDokumen->toArray()))
-                                                @php
-                                                    $jenis_dokumen = $pk->JenisDokumen;
-                                                    $kategori_dokumen_list = $jenis_dokumen->map(function($item) {
-                                                        return $item->jenis_dokumen;
-                                                    });
-                                                    $dokumen_list = $jenis_dokumen->map(function($item) {
-                                                        $new_class = new stdClass();
-                                                        $new_class->jenis_dokumen = $item->jenis_dokumen;
-                                                        $new_class->list_instruksi_owner = explode(",", $item->list_instruksi_owner);
-                                                        return $new_class;
-                                                    });
-                                                    // dd($dokumen_list);
-                                                @endphp
-                                                <td class="align-middle">
-                                                    @foreach ($kategori_dokumen_list as $kategori)
-                                                        <small class="text-gray-600 mb-1 fw-normal">
-                                                            {{-- <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';"></pre> --}}
-                                                            - {!! $kategori !!}   
-                                                        </small><br><br>
-                                                    @endforeach
-                                                </td>
-                                                <td>
-                                                    <small>
-                                                        @foreach ($dokumen_list as $lio)
-                                                            @foreach ($lio->list_instruksi_owner as $dokumen)
-                                                                @switch($lio->jenis_dokumen)
-                                                                    @case("Site Instruction")
-                                                                            @php
-                                                                                $lio = App\Models\SiteInstruction::where("nomor_dokumen" , "=", $dokumen)->get()->first();
-                                                                            @endphp
-                                                                        @break
-                                                                    @case("Technical Form")
-                                                                            @php
-                                                                                $lio = App\Models\TechnicalForm::where("nomor_dokumen" , "=", $dokumen)->get()->first();
-                                                                            @endphp
-                                                                        @break
-                                                                    @case("Technical Query")
-                                                                            @php
-                                                                                $lio = App\Models\TechnicalQuery::where("nomor_dokumen" , "=", $dokumen)->get()->first();
-                                                                            @endphp
-                                                                        @break
-                                                                    @case("Field Design Change")
-                                                                            @php
-                                                                                $lio = App\Models\FieldChange::where("nomor_dokumen" , "=", $dokumen)->get()->first();
-                                                                            @endphp
-                                                                        @break
-                                                                    @case("Contract Change Notice")
-                                                                            @php
-                                                                                $lio = App\Models\ContractChangeNotice::where("nomor_dokumen" , "=", $dokumen)->get()->first();
-                                                                            @endphp
-                                                                        @break
-                                                                    @case("Contract Change Proposal")
-                                                                            @php
-                                                                                $lio = App\Models\ContractChangeProposal::where("nomor_dokumen" , "=", $dokumen)->get()->first();
-                                                                            @endphp
-                                                                        @break
-                                                                    @case("Contract Change Order")
-                                                                            @php
-                                                                                $lio = App\Models\ContractChangeOrder::where("nomor_dokumen" , "=", $dokumen)->get()->first();
-                                                                            @endphp
-                                                                        @break
-                                                                @endswitch
-                                                                - <a target="_blank" class="text-hover-primary" href="{{ asset("words/$lio->id_document.pdf"); }}">{{$lio->nomor_dokumen}}</a> <br>
-                                                            @endforeach
-                                                        @endforeach
-                                                    </small>
-                                                </td>
-                                            @else
-                                                <td>
-                                                    <small>
-                                                        <p class="mb-1 fw-normal badge badge-light-danger" style="font-family: 'Poppins';">Belum Ditentukan</p>
-                                                    </small>
-                                                </td>
-                                                <td>
-                                                    <small>
-                                                        <p class="mb-1 fw-normal badge badge-light-danger" style="font-family: 'Poppins';">Belum Ditentukan</p>
-                                                    </small>
-                                                </td>
-                                            @endif
-                                            <!--end::Column-->
-                                            <!--begin::Column-->
-                                            <td>
-                                                <small>
-                                                    <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! $pk->proposal_klaim !!}</pre>
-                                                </small>
-                                            </td>
-                                            <!--end::Column-->
-                                            <!--begin::Column-->
-                                            <td>
-                                                <small>
-                                                    <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! Carbon\Carbon::create($pk->tanggal_pengajuan)->translatedFormat("d F Y") !!}</pre>
-                                                </small>
-                                            </td>
-                                            <!--end::Column-->
-                                            <!--begin::Column-->
-                                            <td>
-                                                <small>
-                                                    <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! number_format($pk->biaya_pengajuan, 0, ".", ".") !!}</pre>
-                                                </small>
-                                            </td>
-                                            <!--end::Column-->
-                                            <!--begin::Column-->
-                                            <td>
-                                                <small>
-                                                    <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! Carbon\Carbon::create($pk->waktu_pengajuan)->translatedFormat("d F Y") !!}</pre>
-                                                </small>
-                                            </td>
-                                            <!--end::Column-->
-                                            <!--begin::Column-->
-                                            <td>
-                                                @php
-                                                    $class_name = "";
-                                                    $status = "";
-                                                    if($pk->status) {
-                                                        $class_name = "badge badge-light-danger";
-                                                        $status = "Open";
-                                                    } else {
-                                                        $class_name = "badge badge-light-success";
-                                                        $status = "Closed";
-                                                    }
-                                                @endphp
-                                                <small>
-                                                    <p class="{{$class_name}}">{{$status}}</p>
-                                                </small>
-                                            </td>
-                                            <!--end::Column-->
-                                        </tr>
-                                    @empty
-                                    @endforelse
-                                    
+                                <tbody>
+                                    <tr>
+                                        @php
+                                            if($perubahan_vo == false){
+                                                $class_name = "badge badge-light-primary";
+                                                $status = "Belum dibuat";
+                                            }else{
+                                                $class_name = "";
+                                                $status = count($perubahan_group["VO"]);
+                                            }
+                                        @endphp
+                                        <td>
+                                            VO
+                                        </td>
+                                        <td>
+                                            <p class="{{ $class_name }}">
+                                                {{ $status }}
+                                            </p>
+                                        </td>
+                                        <td>
+                                            <small>
+                                                <a class="badge badge-light-primary" href="/claim-management/proyek/{{ $contract->project->kode_proyek }}/VO">Lihat Detail</a>
+                                            </small>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        @php
+                                            if($perubahan_klaim == false){
+                                                $class_name = "badge badge-light-primary";
+                                                $status = "Belum dibuat";
+                                            }else{
+                                                $class_name = "";
+                                                $status = count($perubahan_group["Klaim"]);
+                                            };
+                                        @endphp
+                                        <td>
+                                            Klaim
+                                        </td>
+                                        <td>
+                                            <p class="{{ $class_name }}">
+                                                {{ $status }}
+                                            </p>
+                                        </td>
+                                        <td>
+                                            <small>
+                                                <a class="badge badge-light-primary" href="/claim-management/proyek/{{ $contract->project->kode_proyek }}/Klaim">Lihat Detail</a>
+                                            </small>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        @php
+                                            if($perubahan_anti_klaim == false){
+                                                $class_name = "badge badge-light-primary";
+                                                $status = "Belum dibuat";
+                                            }else{
+                                                $class_name = "";
+                                                $status = count($perubahan_group["Anti Klaim"]);
+                                            };
+                                        @endphp
+                                        <td>
+                                            Anti Klaim
+                                        </td>
+                                        <td>
+                                            <p class="{{ $class_name }}">
+                                                {{ $status }}
+                                            </p>
+                                        </td>
+                                        <td>
+                                            <small>
+                                                <a class="badge badge-light-primary" href="/claim-management/proyek/{{ $contract->project->kode_proyek }}/Anti-Klaim">Lihat Detail</a>
+                                            </small>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        @php
+                                            if($perubahan_klaim_asuransi == false){
+                                                $class_name = "badge badge-light-primary";
+                                                $status = "Belum dibuat";
+                                            }else{
+                                                $class_name = "";
+                                                $status = count($perubahan_group["Klaim Asuransi"]);
+                                            };
+                                        @endphp
+                                        <td>
+                                            Klaim Asuransi
+                                        </td>
+                                        <td>
+                                           <p class="{{ $class_name }}">
+                                                {{ $status }}
+                                           </p>
+                                        </td>
+                                        <td>
+                                            <small>
+                                                <a class="badge badge-light-primary" href="/claim-management/proyek/{{ $contract->project->kode_proyek }}/Klaim-Asuransi">Lihat Detail</a>
+                                            </small>
+                                        </td>
+                                    </tr>
                                 </tbody>
-                                <!--end::Table body-->
 
                             </table>
                             <!--End:Table: Perubahan Kontrak-->
@@ -2657,16 +2605,24 @@
                                         <th class="min-w-125px">Penerbit Jaminan</th>
                                         <th class="min-w-125px">Tanggal Penerbitan</th>
                                         <th class="min-w-125px">Tanggal Berakhir</th>
-                                        {{-- <th class="min-w-125px">Status</th> --}}
+                                        <th class="min-w-125px">Status</th>
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
                                 <tbody class="fw-bold text-gray-400">
-                                <tbody class="fw-bold text-gray-400">
                                     @if (!empty($contract->Jaminan))
                                     @forelse ($contract->Jaminan as $jaminan )
+                                    @php
+                                        if($jaminan->is_expired == true){
+                                            $style = "badge badge-light-danger";
+                                            $is_expired = "Expired";
+                                        }else{
+                                            $style = "badge badge-light-success";
+                                            $is_expired = "Valid";
+                                        }
+                                    @endphp
                                     <tr>
                                         <td>
                                             <p class="text-gray-600 mb-1">{{ $jaminan->kategori_jaminan }}</p>
@@ -2683,26 +2639,25 @@
                                         <td>
                                             <p class="text-gray-600 mb-1">{{Carbon\Carbon::create($jaminan->tanggal_berakhir)->translatedFormat("d F Y")}}</p>
                                         </td>
-                                        {{-- <td>
-                                            <p class="badge mb-1 {{ $jaminan->status == "Valid" ? "badge-light-success text-success" : "badge-light-danger text-danger" }}">{{ $jaminan->status }}</p>
-                                        </td> --}}
+                                        <td>
+                                            <p class="{{ $style }}">{{ $is_expired }}</p>
+                                        </td>
                                     </tr>   
                                     @empty
                                     <tr>
-                                        <td colspan="4" class="text-center">
+                                        <td colspan="6" class="text-center">
                                             <h6><b>There is no data</b></h6>
                                         </td>
                                     </tr>
                                     @endforelse
                                     @else
                                     <tr>
-                                        <td colspan="4" class="text-center">
+                                        <td colspan="6" class="text-center">
                                             <h6><b>There is no data</b></h6>
                                         </td>
                                     </tr>
                                     @endif
                                     
-                                </tbody>
                                 </tbody>
                                 <!--end::Table body-->
                             </table>
@@ -2731,6 +2686,7 @@
                                     <th class="min-w-125px">Penerbit Polis</th>
                                     <th class="min-w-125px">Tanggal Penerbitan</th>
                                     <th class="min-w-125px">Tanggal Berakhir</th>
+                                    <th class="min-w-125px">Status</th>
                                     {{-- <th class="min-w-125px">Status</th> --}}
                                 </tr>
                                 <!--end::Table row-->
@@ -2740,6 +2696,15 @@
                             <tbody class="fw-bold text-gray-400">
                                 @if (!empty($contract->Asuransi))
                                 @forelse ($contract->Asuransi as $asuransi )
+                                @php
+                                    if($asuransi->is_expired == true){
+                                        $style = "badge badge-light-danger";
+                                        $is_expired = "Expired";
+                                    }else{
+                                        $style = "badge badge-light-success";
+                                        $is_expired = "Valid";
+                                    }
+                                @endphp
                                 <tr>
                                     <td>
                                         <p class="text-gray-600 mb-1">{{ $asuransi->kategori_asuransi }}</p>
@@ -2756,20 +2721,20 @@
                                     <td>
                                         <p class="text-gray-600 mb-1">{{Carbon\Carbon::create($asuransi->tanggal_berakhir)->translatedFormat("d F Y")}}</p>
                                     </td>
-                                    {{-- <td>
-                                        <p class="badge mb-1 {{ $asuransi->status == "Valid" ? "badge-light-success text-success" : "badge-light-danger text-danger" }}">{{ $asuransi->status }}</p>
-                                    </td> --}}
+                                    <td>
+                                        <p class="{{ $style }}">{{ $is_expired }}</p>
+                                    </td>
                                 </tr> 
                                 @empty
                                 <tr>
-                                    <td colspan="4" class="text-center">
+                                    <td colspan="6" class="text-center">
                                         <h6><b>There is no data</b></h6>
                                     </td>
                                 </tr>
                                 @endforelse
                                 @else
                                 <tr>
-                                    <td colspan="4" class="text-center">
+                                    <td colspan="6" class="text-center">
                                         <h6><b>There is no data</b></h6>
                                     </td>
                                 </tr>
