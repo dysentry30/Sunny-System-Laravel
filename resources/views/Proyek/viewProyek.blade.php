@@ -96,9 +96,20 @@
 
                                 <!--begin::Button-->
                                 @if ($proyek->is_cancel == false)
-                                    <button type="submit" class="btn btn-sm btn-primary ms-2" id="proyek-save"
+                                    <button type="submit" name="proyek-save" class="btn btn-sm btn-primary ms-2" id="proyek-save"
                                         style="background-color:#008CB4">
                                         Save</button>
+                                @endif
+                                <!--end::Button-->
+
+                                <!--begin::Button-->    
+                                @if ($proyek->is_request_rekomendasi == false)
+                                    <input type="submit" name="proyek-rekomendasi" value="Pengajuan Rekomendasi" class="btn btn-sm btn-success ms-2" id="proyek-rekomendasi"
+                                        style="background-color:#00b48d">
+                                @else 
+                                    <div class="" data-bs-toggle="tooltip" data-bs-title="Sedang Dalam Proses Pengajuan Rekomendasi">
+                                        <input type="submit" name="proyek-rekomendasi" value="Pengajuan Rekomendasi" class="btn btn-sm btn-secondary ms-2" id="proyek-rekomendasi" disabled >
+                                    </div>
                                 @endif
                                 <!--end::Button-->
 
@@ -941,7 +952,7 @@
                                                     <!--End::Row Kanan+Kiri-->
 
                                                     <!--begin::Row Kanan+Kiri-->
-                                                    <div class="row fv-row">
+                                                    <div class="d-flex flex-row align-items-center">
                                                         {{-- <!--begin::Col-->
                                                             <div class="col-6">
                                                                 <!--begin::Input group Website-->
@@ -984,6 +995,18 @@
                                                                 <!--end::Input-->
                                                             </div>
                                                             <!--end::Input group-->
+                                                        </div>
+
+                                                        <div class="col-6 mt-5 ms-5">
+                                                            @php
+                                                                $check_green_line = checkGreenLine($proyekberjalans);
+                                                            @endphp
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" name="is-green-line" type="checkbox" {{(bool) $check_green_line ? "checked" : ""}} disabled id="flexCheckDefault">
+                                                                <label class="form-check-label" for="flexCheckDefault">
+                                                                  Green Line
+                                                                </label>
+                                                            </div>
                                                         </div>
                                                         <!--End::Col-->
                                                     </div>

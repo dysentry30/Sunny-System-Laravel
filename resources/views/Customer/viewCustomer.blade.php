@@ -527,6 +527,52 @@
                                                                     <!--end::Input group-->
                                                                 </div>
                                                                 <!--End begin::Col-->
+                                                                <!--begin::Col-->
+                                                                @php
+                                                                    $is_instansi_BUMN = $customer->jenis_instansi == "BUMN";
+                                                                    $is_user_pic = str_contains(Auth::user()->name, "PIC") || Auth::user()->check_administrator;
+                                                                    $title_tooltip = collect('Hanya bisa diinput');
+                                                                    if($is_user_pic) {
+                                                                        $title_tooltip->push("oleh <b>DMROP</b>");
+                                                                    }
+                                                                    if(!$is_instansi_BUMN) {
+                                                                        $title_tooltip->push("jika instansi <b>BUMN</b> atau <b>Anak dan Turunan</b>");
+                                                                    }
+                                                                    if($title_tooltip->count() > 1) {
+                                                                        $title_tooltip = ($title_tooltip->count() < 2) ? $title_tooltip->join(" ") : $title_tooltip->join(" ", " dan ");
+                                                                    } else {
+                                                                        $title_tooltip = null;
+                                                                    }
+                                                                @endphp
+                                                                <div class="col-6">
+                                                                    <!--begin::Input group Website-->
+                                                                    <div class="fv-row mb-7">
+                                                                        <!--begin::Label-->
+                                                                        <label class="fs-6 fw-bold form-label mt-3">
+                                                                            <span class="required">Group Tier</span>
+                                                                        </label>
+                                                                        <!--end::Label-->
+                                                                        <!--begin::Input-->
+                                                                        @if (!empty($title_tooltip))
+                                                                        <div class="" data-bs-toggle="tooltip" data-bs-html="true" data-bs-title="{!! $title_tooltip !!}">
+                                                                        @else
+                                                                        <div class="">
+                                                                        @endif
+                                                                            <select name="group-tier" id="group-tier" {{!empty($title_tooltip) ? "readonly" : ""}} class="form-select form-select-solid" data-control="select2" data-hide-search="true"
+                                                                                {{-- onchange="selectNegara(this)" --}}
+                                                                                data-placeholder="Pilih Group Tier">
+                                                                                <option value="" selected></option>
+                                                                                <option value="Tier A" {{$customer->group_tier == "Tier A" ? "selected" : ""}}>Tier A</option>
+                                                                                <option value="Tier B" {{$customer->group_tier == "Tier B" ? "selected" : ""}}>Tier B</option>
+                                                                                <option value="Tier C" {{$customer->group_tier == "Tier C" ? "selected" : ""}}>Tier C</option>
+                                                                            </select>
+                                                                        </div>
+                                                                        <!--end::Input-->
+                                                                        
+                                                                    </div>
+                                                                    <!--end::Input group-->
+                                                                </div>
+                                                                <!--End begin::Col-->
                                                             </div>
                                                             <!--End begin::Row-->
 
@@ -2215,7 +2261,7 @@
                                                                             <th class="min-w-auto">Unit kerja</th>
                                                                             <th class="min-w-auto">Stage</th>
                                                                             <th class="min-w-auto text-center">Nilai ok</th>
-                                                                            <th class="min-w-auto text-center">Bulan Forecast</th>
+                                                                            <th class="min-w-auto text-center">Bulan Forecast Perolehan</th>
                                                                         </tr>
                                                                         <!--end::Table row-->
                                                                     </thead>

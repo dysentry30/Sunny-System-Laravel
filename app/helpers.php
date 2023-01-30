@@ -3,6 +3,7 @@
 // if(!function_exists("url_encode")) {
 // }
 
+use App\Models\Provinsi;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
 use PhpOffice\PhpWord\PhpWord;
@@ -125,5 +126,17 @@ function setLogging($file, $message, $data) {
         'driver' => 'single',
         'path' => storage_path("logs/$file.log"),
     ])->info("$message", $data);
+}
+
+function checkGreenLine(App\Models\ProyekBerjalans $proyek) {
+    $customer = $proyek->Customer;
+    if(str_contains($customer->jenis_instansi, "BUMN") || str_contains($customer->jenis_instansi, "APBD") || str_contains($customer->jenis_instansi, "Provinsi")) {
+        if(!empty($customer->group_tier)) {
+            return App\Models\KriteriaGreenLine::where("isi", "=", $customer->jenis_instansi)->where("sub_isi", "=", $customer->group_tier)->count() > 0;
+        }
+        $provinsi = Provinsi::find($customer->provinsi) ?? $customer->provinsi;
+        return App\Models\KriteriaGreenLine::where("isi", "=", $customer->jenis_instansi)->where("sub_isi", "=", $provinsi)->count() > 0;
+    }
+    return App\Models\KriteriaGreenLine::where("isi", "=", $customer->jenis_instansi)->count() > 0;
 }
 ?>

@@ -728,7 +728,7 @@ class ForecastController extends Controller
     public function requestApprovalHistoryView(Request $request, $year = "")
     {
         $periode = $request->query("periode-prognosa");
-        $year = (int) $year ?? (int) date("Y");
+        $year = $year != "" ? $year : (int) date("Y");
 
         $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja);
 
