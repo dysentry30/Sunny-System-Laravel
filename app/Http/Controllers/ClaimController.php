@@ -46,6 +46,10 @@ class ClaimController extends Controller
         $test = $claims->each(function($data){
             return $data->ContractManagements;
         });
+
+        $proyeks = Proyek::all();
+
+
         // dd($test->groupBy('id_contract'));
         if (!empty($column)) {
 
@@ -86,7 +90,7 @@ class ClaimController extends Controller
         // dd($proyekAnti);
         // dd($proyekAsuransi);
         // dd($proyekVos);
-        return view("5_Claim", compact(["proyekVos" ,"proyekClaim", "proyekAnti", "proyekAsuransi", "column", "filter"]));
+        return view("5_Claim", compact(["proyekVos" ,"proyekClaim", "proyekAnti", "proyekAsuransi", "column", "filter", "proyeks"]));
     }
 
     public function viewClaim($id_proyek, $jenis_claim)
@@ -150,6 +154,54 @@ class ClaimController extends Controller
         $no_urut = str_pad(strval($no_urut), 3, 0, STR_PAD_LEFT);
         $kode_claim = "CL." . date("Y") . "." . $no_urut;
         return view("claimManagement/new", ["contractManagements" => ContractManagements::all(), "currentContract" => $contract, "proyek" => $proyek, "kode_claim" => $kode_claim, "claimContract" => null]);
+    }
+
+    //New Claim
+    public function newClaim(Request $request) {
+        $data = $request->all();
+        // if(isset($data["id-perubahan-kontrak"])) {
+        //     $perubahan_kontrak = PerubahanKontrak::find($data["id-perubahan-kontrak"]);
+        //     $perubahan_kontrak->id_contract = $data["id-contract"];
+        //     $perubahan_kontrak->jenis_perubahan = $data["jenis-perubahan"];
+        //     $perubahan_kontrak->tanggal_perubahan = $data["tanggal-perubahan"];
+        //     $perubahan_kontrak->uraian_perubahan = $data["uraian-perubahan"];
+        //     // $perubahan_kontrak->jenis_dokumen = $data["jenis-dokumen"];
+        //     // $perubahan_kontrak->instruksi_owner = $data["instruksi-owner"];
+        //     $perubahan_kontrak->proposal_klaim = $data["proposal-klaim"];
+        //     $perubahan_kontrak->tanggal_pengajuan = $data["tanggal-pengajuan"];
+        //     $perubahan_kontrak->biaya_pengajuan = str_replace(".", "", $data["biaya-pengajuan"]);
+        //     $perubahan_kontrak->waktu_pengajuan = $data["waktu-pengajuan"];
+        //     $perubahan_kontrak->stage = 1;
+        //     if ($perubahan_kontrak->save()) {
+        //         Alert::success("Success", "Perubahan Kontrak berhasil diperbarui");
+        //         return redirect()->back();
+        //     }
+        //     Alert::error("Erorr", "Perubahan Kontrak gagal diperbarui");
+        //     return Redirect::back();
+        // } else {
+            $contract = ContractManagements::where("project_id", "=", $data["kode-proyek"])->first();
+            // dd($contract->id_contract);
+            $perubahan_kontrak = new PerubahanKontrak();
+            $perubahan_kontrak->kode_proyek = $data["kode-proyek"];
+            $perubahan_kontrak->id_contract = $contract->id_contract;
+            $perubahan_kontrak->jenis_perubahan = $data["jenis-perubahan"];
+            $perubahan_kontrak->tanggal_perubahan = $data["tanggal-perubahan"];
+            $perubahan_kontrak->uraian_perubahan = $data["uraian-perubahan"];
+            // $perubahan_kontrak->jenis_dokumen = $data["jenis-dokumen"];
+            // $perubahan_kontrak->instruksi_owner = $data["instruksi-owner"];
+            $perubahan_kontrak->proposal_klaim = $data["proposal-klaim"];
+            $perubahan_kontrak->tanggal_pengajuan = $data["tanggal-pengajuan"];
+            $perubahan_kontrak->biaya_pengajuan = str_replace(".", "", $data["biaya-pengajuan"]);
+            $perubahan_kontrak->waktu_pengajuan = $data["waktu-pengajuan"];
+            $perubahan_kontrak->stage = 1;
+            // dd($perubahan_kontrak);
+            if ($perubahan_kontrak->save()) {
+                Alert::success("Success", "Perubahan Kontrak berhasil ditambahkan");
+                return redirect()->back();
+            }
+            Alert::error("Erorr", "Perubahan Kontrak gagal ditambahkan");
+            return Redirect::back()->with("modal", $data["modal-name"]);
+        // }
     }
 
     /**

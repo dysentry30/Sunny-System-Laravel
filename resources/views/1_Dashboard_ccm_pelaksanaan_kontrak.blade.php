@@ -149,51 +149,71 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="row">
-                                    <div class="col-3">
-                                        <select onchange="selectFilter(this)" id="dop" name="dop"
-                                                class="form-select form-select-solid w-auto"
-                                                style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
-                                                data-placeholder="Direktorat" data-select2-id="select2-data-dop" tabindex="-1"
-                                                aria-hidden="true">
-                                                <option value="" selected></option>
-                                                @foreach ($dops as $dop)
-                                                    <option value="{{ $dop->dop }}" {{ $dop_get == $dop->dop ? 'selected' : '' }} >{{ $dop->dop }}</option>
-                                                @endforeach
-                                        </select>
-                                    </div>
+                                    <form action="" class="row" method="GET">
+                                        <div class="col-2">
+                                            <select id="dop" onchange="filterUnitKerja(this)" name="dop"
+                                                    class="form-select form-select-solid w-auto"
+                                                    style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
+                                                    data-placeholder="Direktorat" data-select2-id="select2-data-dop" tabindex="-1"
+                                                    aria-hidden="true">
+                                                    <option value="" selected></option>
+                                                    @foreach ($dops as $dop)
+                                                        <option value="{{ $dop->dop }}" {{ $dop_get == $dop->dop ? 'selected' : '' }} >{{ $dop->dop }}</option>
+                                                    @endforeach
+                                            </select>
+                                        </div>
+    
+                                        <div class="col-2">
+                                            <select id="unit-kerja" name="unit-kerja"
+                                                    class="form-select form-select-solid w-auto"
+                                                    style="margin-right: 2rem;" data-control="select2" data-hide-search="false"
+                                                    data-placeholder="Unit Kerja" data-select2-id="select2-data-unit-kerja" tabindex="-1"
+                                                    aria-hidden="true">
+                                                    <option value="" selected></option>
+                                                    @foreach ($unit_kerjas as $unit_kerja)
+                                                        <option value="{{ $unit_kerja->divcode }}" {{ $unit_kerja_get == $unit_kerja->divcode ? 'selected' : '' }} >{{ $unit_kerja->unit_kerja }}</option>
+                                                    @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col-2">
+                                            <select id="tahun" name="tahun"
+                                                    class="form-select form-select-solid w-auto"
+                                                    style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
+                                                    data-placeholder="Tahun" data-select2-id="select2-data-tahun" tabindex="-1"
+                                                    aria-hidden="true">
+                                                    <option value="" selected></option>
+                                                    @foreach ($tahun as $t)
+                                                        <option value="{{$t}}" {{ $tahun_get == $t ? 'selected' : '' }}>{{$t}}</option>
+                                                    @endforeach
+                                            </select>
+                                        </div>
 
-                                    <div class="col-3">
-                                        <select onchange="selectFilter(this)" id="unit-kerja" name="unit-kerja"
-                                                class="form-select form-select-solid w-auto"
-                                                style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
-                                                data-placeholder="Unit Kerja" data-select2-id="select2-data-unit-kerja" tabindex="-1"
-                                                aria-hidden="true">
-                                                <option value="" selected></option>
-                                                @foreach ($unit_kerjas as $unit_kerjas)
-                                                    <option value="{{ $unit_kerjas->divcode }}" {{ $unit_kerja_get == $unit_kerjas->divcode ? 'selected' : '' }} >{{ $unit_kerjas->unit_kerja }}</option>
-                                                @endforeach
-                                        </select>
-                                    </div>
+                                        <div class="col-2">
+                                            <select id="bulan" name="bulan"
+                                                    class="form-select form-select-solid w-auto"
+                                                    style="margin-right: 2rem;" data-control="select2" data-hide-search="false"
+                                                    data-placeholder="Tahun" data-select2-id="select2-data-bulan" tabindex="-1"
+                                                    aria-hidden="true">
+                                                    <option value="" selected></option>
+                                                    @foreach (range(1, 12) as $m)
+                                                        @php
+                                                            $full_month = Carbon\Carbon::createFromFormat("m", $m)->translatedFormat("F");
+                                                        @endphp
+                                                        <option value="{{$m}}" {{ $bulan_get == $m ? 'selected' : '' }}>{{$full_month}}</option>
+                                                    @endforeach
+                                            </select>
+                                        </div>
 
-                                    <div class="col-3">
-                                        <select onchange="selectFilter(this)" id="proyek" name="proyek"
-                                                class="form-select form-select-solid w-auto"
-                                                style="margin-right: 2rem;" data-control="select2" data-hide-search="false"
-                                                data-placeholder="Proyek" data-select2-id="select2-data-proyek" tabindex="-1"
-                                                aria-hidden="true">
-                                                {{-- <option value="" {{$dop_get == "" ? "selected" : ""}}></option> --}}
-                                                <option value="" selected></option>
-                                                @foreach ($proyeks as $proyek)
-                                                    {{-- <option value="{{ $proyek->divcode }}" {{ $proyek_get == $proyek->divcode ? 'selected' : '' }} >{{ $proyek->unit_kerja }}</option> --}}
-                                                    <option value="{{ $proyek->kode_proyek }}" >{{ $proyek->nama_proyek }} ({{$proyek->kode_proyek}})</option>
-                                                @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="col-3">
-                                        <form action="" method="GET">
-                                            <button type="submit" class="btn btn-secondary">Reset</button>
-                                        </form>
-                                    </div>
+                                        <div class="col-1">
+                                            <button type="submit" class="btn btn-primary">Filter</button>
+                                        </div>
+                                        <div class="col">
+                                            <form action=""></form>
+                                            <form action="" method="GET">
+                                                <button type="submit" class="btn btn-secondary">Reset</button>
+                                            </form>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -518,7 +538,7 @@
 
     <!--begin::Highchart Donut Changes Overview-->
     <script>
-        const changesOverview = JSON.parse('{!! $kategori_kontrak->toJson() !!}');
+        const changesOverview = JSON.parse('{!! $changes_overview->toJson() !!}');
         Highcharts.chart('contract-divisi', {
             chart: {
                 // height: 250,

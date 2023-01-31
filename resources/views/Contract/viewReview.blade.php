@@ -246,13 +246,13 @@
                 </div>
 
 
-                    <!--begin:::Tab Forecast Retail-->
+                    <!--begin:::Isi Data-->
                     <!--begin::Table-->
                     <div class="d-flex flex-column bg-white px-15 py-8 mx-7">
                         <form action="/review-contract/upload" method="POST" class="card card-flush">
                             @csrf
                             <input type="hidden" class="form-control form-control-solid" name="id-contract" value="{{ $contract->id_contract }}">
-                            <input type="hidden" class="form-control form-control-solid" name="stage" value="{{ $stage }}">
+                            {{-- <input type="hidden" class="form-control form-control-solid" name="stage" value="{{ $stage }}"> --}}
                             
                             <table class="table align-middle table-row-dashed fs-6 gy-2 card-body" id="tinjauan-kontrak">
                                 <!--begin::Table head-->

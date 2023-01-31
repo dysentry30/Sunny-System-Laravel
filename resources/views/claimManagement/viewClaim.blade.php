@@ -126,6 +126,9 @@
                                         <!--begin::Title-->
                                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                             {{ $proyek->kode_proyek }} - {{ $proyek->nama_proyek }}
+                                            <span class="gap-3">
+                                                <a href="#" onclick="exportToExcel(this, '#kt_proyek_table')" class="">(Klik di sini untuk Export ke Excel)</a>
+                                            </span>
                                         </h3>
                                         <br>
                                         <!--end::Title-->
@@ -139,15 +142,26 @@
                                                 <thead>
                                                     <!--begin::Table row-->
                                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                        <th class="min-w-auto">Uraian Perubahan</th>
+                                                        {{-- <th class="min-w-auto">Uraian Perubahan</th>
                                                         <th class="min-w-auto">Tanggal Perubahan</th>
                                                         <th class="min-w-auto">No Proposal Klaim</th>
                                                         <th class="min-w-auto">Tanggal Pengajuan</th>
                                                         <th class="min-w-auto">Biaya Pengajuan</th>
                                                         <th class="min-w-auto">Waktu Pengajuan</th>
-                                                        <th class="min-w-auto">Status</th>
+                                                        <th class="min-w-auto">Status</th> --}}
                                                         {{-- <th class="min-w-auto">Action</th> --}}
                                                         {{-- <th class=""><center>Action</center></th> --}}
+
+                                                        {{-- <th class="min-w-auto">Jenis Perubahan</th> --}}
+                                                        <th class="min-w-auto">Tanggal Perubahan</th>
+                                                        <th class="min-w-auto">Uraian Perubahan</th>
+                                                        {{-- <th class="min-w-auto">Jenis Dokumen</th>
+                                                        <th class="min-w-auto">Nomor Dokumen</th> --}}
+                                                        <th class="min-w-auto">No Proposal Klaim</th>
+                                                        <th class="min-w-auto">Tanggal Pengajuan</th>
+                                                        <th class="min-w-auto">Biaya Pengajuan</th>
+                                                        <th class="min-w-auto">Waktu Pengajuan</th>
+                                                        <th class="min-w-auto">Status</th>
                                                     </tr>
                                                     <!--end::Table row-->
                                                 </thead>
@@ -156,16 +170,16 @@
                                                 <tbody class="fw-bold text-gray-600">
                                                     @foreach ($proyekClaims as $claim)
                                                         <tr>
-                                                            <!--begin::Name-->
-                                                            <td>
-                                                                <a href="/contract-management/view/{{$claim->id_contract}}/perubahan-kontrak/{{$claim->id_perubahan_kontrak}}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $claim->uraian_perubahan }}</a>
-                                                            </td>
-                                                            <!--end::Name-->
                                                             <!--begin::Name Proyek-->
                                                             <td>
                                                                 {{ Carbon\Carbon::create($claim->tanggal_perubahan)->translatedFormat("d F Y") }}
                                                             </td>
                                                             <!--end::Name Proyek-->
+                                                            <!--begin::Name-->
+                                                            <td>
+                                                                {{ $claim->uraian_perubahan }}
+                                                            </td>
+                                                            <!--end::Name-->
                                                             <!--begin::Unit Kerja-->
                                                             <td>
                                                                 {{ $claim->proposal_klaim }}
@@ -223,9 +237,11 @@
                                                                 }
                                                             @endphp
                                                             <td>
-                                                                <small class="{{$class_name}}">
-                                                                    {{ $stage }}
-                                                                </small>
+                                                                <a href="/contract-management/view/{{$claim->id_contract}}/perubahan-kontrak/{{$claim->id_perubahan_kontrak}}" id="click-name" class="text-gray-800 text-hover-primary mb-1">
+                                                                    <small class="{{$class_name}}">
+                                                                        {{ $stage }}
+                                                                    </small>
+                                                                </a>
                                                             </td>
                                                             <!--begin::Action=-->
                                                             {{-- <td>
@@ -477,4 +493,47 @@
         // end reformatNumber
     </script>
 
+<script>
+    function exportToExcel(e, tableElt) {
+        // console.log(e.parentElement);
+        document.querySelector(`${tableElt}_wrapper .buttons-excel`).click();
+        return;
+    }
+</script>
+
+<script>
+    window.addEventListener("DOMContentLoaded", () => {
+        setTimeout(() => {
+            const exportBtn = document.querySelectorAll(".buttons-excel");
+            exportBtn.forEach(item => {
+                item.style.display = "none";
+            }); 
+        }, 1000);
+    });
+</script>
+
+<script src="/datatables/jquery.dataTables.min.js"></script>
+<script src="/datatables/dataTables.buttons.min.js"></script>
+<script src="/datatables/buttons.html5.min.js"></script>
+<script src="/datatables/buttons.colVis.min.js"></script>
+<script src="/datatables/jszip.min.js"></script>
+<script src="/datatables/pdfmake.min.js"></script>
+<script src="/datatables/vfs_fonts.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#kt_proyek_table').DataTable( {
+            // dom: 'Bfrtip',
+            dom: 'Brti',
+            pageLength : 50,
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    title: 'Data Perubahan Kontrak {{ $title }}'
+                },
+                   
+                ]
+        } );
+    });
+</script>
 @endsection
