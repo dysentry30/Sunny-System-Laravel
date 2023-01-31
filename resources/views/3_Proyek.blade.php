@@ -562,7 +562,7 @@
                                             <!--begin::Realisasi-->
                                             <td class="text-end">
                                                 @php
-                                                if ($proyek->tipe_proyek == 'R' && $proyek->stage == 8) {
+                                                if ($proyek->stage == 8) {
                                                     $total_realisasi = $proyek->Forecasts->filter(function($f) {
                                                         return $f->periode_prognosa == (int) date("m") && $f->tahun == (int) date("Y") ;
                                                     })->sum(function($f) {

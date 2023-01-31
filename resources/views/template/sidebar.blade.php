@@ -173,7 +173,7 @@
                             </div>
                         @endif
 
-                        @if (auth()->user()->check_administrator || $adminPIC)
+                        @if (auth()->user()->check_administrator || $adminPIC || auth()->user()->check_user_sales )
                             <div class="menu-item">
                                 <a class="menu-link " href="/rekomendasi"
                                     style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'rekomendasi') ? 'background-color:#008CB4' : '' }}">

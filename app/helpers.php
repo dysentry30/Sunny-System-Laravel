@@ -128,15 +128,20 @@ function setLogging($file, $message, $data) {
     ])->info("$message", $data);
 }
 
-function checkGreenLine(App\Models\ProyekBerjalans $proyek) {
-    $customer = $proyek->Customer;
-    if(str_contains($customer->jenis_instansi, "BUMN") || str_contains($customer->jenis_instansi, "APBD") || str_contains($customer->jenis_instansi, "Provinsi")) {
-        if(!empty($customer->group_tier)) {
-            return App\Models\KriteriaGreenLine::where("isi", "=", $customer->jenis_instansi)->where("sub_isi", "=", $customer->group_tier)->count() > 0;
+function checkGreenLine($proyek) {
+    if($proyek instanceof App\Models\ProyekBerjalans) {
+        $customer = $proyek->Customer;
+        if(!empty($customer->jenis_instansi)) {
+            if((str_contains($customer->jenis_instansi, "BUMN") || str_contains($customer->jenis_instansi, "APBD") || str_contains($customer->jenis_instansi, "Provinsi"))) {
+                if(!empty($customer->group_tier)) {
+                    return App\Models\KriteriaGreenLine::where("isi", "=", $customer->jenis_instansi)->where("sub_isi", "=", $customer->group_tier)->count() > 0;
+                }
+                $provinsi = Provinsi::find($customer->provinsi) ?? $customer->provinsi;
+                return App\Models\KriteriaGreenLine::where("isi", "=", $customer->jenis_instansi)->where("sub_isi", "=", $provinsi)->count() > 0;
+            }
         }
-        $provinsi = Provinsi::find($customer->provinsi) ?? $customer->provinsi;
-        return App\Models\KriteriaGreenLine::where("isi", "=", $customer->jenis_instansi)->where("sub_isi", "=", $provinsi)->count() > 0;
+        return false;
     }
-    return App\Models\KriteriaGreenLine::where("isi", "=", $customer->jenis_instansi)->count() > 0;
+    return false;
 }
 ?>
