@@ -275,6 +275,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     Route::post('/contract-management/pending-issue/upload', [ContractManagementsController::class, 'pendingIssueContractUpload']);
 
+    Route::post('/contract-management/pending-issue/edit', [ContractManagementsController::class, 'pendingIssueContractEdit']);
+
     Route::post('/contract-management/penutupan-proyek/upload', [ContractManagementsController::class, 'penutupanProyekContractUpload']);
 
     Route::post('/contract-management/usulan-perubahan-draft/upload', [ContractManagementsController::class, 'usulanPerubahanDraftContractUpload']);
@@ -299,7 +301,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     Route::get('/contract-management/view/{id_contract}/perubahan-kontrak/{perubahan_kontrak}', [ContractManagementsController::class, 'perubahanKontrakView']);
 
-    Route::get('/review-contract/view/{id_contract}/stage/{stage}', [ContractManagementsController::class, 'reviewKontrakView']);
+    Route::get('/review-contract/view/{id_contract}', [ContractManagementsController::class, 'reviewKontrakView']);
     
     // Route::get('/contract-management/view/{id_contract}/draft-contract/{is_tender_menang}', [ContractManagementsController::class, 'draftContractView']);
     Route::get('/contract-management/view/{id_contract}/draft-contract/tender-menang/1', [ContractManagementsController::class, 'tenderMenang']);
@@ -392,6 +394,10 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     // customer dashboard all database
     // Route::get('/customer', [CustomerController::class, 'index']);
+
+    // Begin Rekomendasi
+    Route::get('/rekomendasi', [RekomendasiController::class, "index"]);
+    // End Rekomendasi
 
 
     // DELETE data customer pada dasboard customer by ID 
@@ -1705,7 +1711,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     Route::post("/mom-meeting/upload", [ContractManagementsController::class, "momMeeting"]);
 
-    Route::post("/perubahan-kontrak/upload", [ContractManagementsController::class, "uploadPerubahanKontrak"]);
+    Route::post("/perubahan-kontrak/upload", [ClaimController::class, "newClaim"]);
 
     Route::post("/perubahan-kontrak/update", [ContractManagementsController::class, "uploadPerubahanKontrak"]);
 
@@ -1714,6 +1720,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post("/checklist-manajemen-kontrak/upload", [ContractManagementsController::class, "uploadChecklistKontrak"]);
     
     Route::post("/asuransi-pelaksanaan/upload", [ContractManagementsController::class, "uploadAsuransi"]);
+
+    Route::post("/asuransi-pelaksanaan/edit", [ContractManagementsController::class, "editAsuransi"]);
     
     Route::post("/ld-law/upload", [ContractManagementsController::class, "ld_law"]);
     
