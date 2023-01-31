@@ -62,6 +62,14 @@
 
                 <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
 
+                    @php
+                        if(!empty($proyekBerjalans)) {
+                            $check_green_line = checkGreenLine($proyekberjalans);
+                        } else {
+                            $check_green_line = false;
+                        }
+                    @endphp
+
                     <!--begin::Toolbar-->
                     <div class="toolbar" id="kt_toolbar">
                         <!--begin::Container-->
@@ -103,9 +111,13 @@
                                 <!--end::Button-->
 
                                 <!--begin::Button-->    
-                                @if ($proyek->is_request_rekomendasi == false)
+                                @if ($proyek->is_request_rekomendasi == false && !$check_green_line)
                                     <input type="submit" name="proyek-rekomendasi" value="Pengajuan Rekomendasi" class="btn btn-sm btn-success ms-2" id="proyek-rekomendasi"
                                         style="background-color:#00b48d">
+                                @elseif($check_green_line)
+                                    <div class="" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="left" data-bs-title="Proyek ini sudah termasuk ke dalam kategori <b>Green Line</b>">
+                                        <input type="submit" name="proyek-rekomendasi" value="Pengajuan Rekomendasi" class="btn btn-sm btn-secondary ms-2" id="proyek-rekomendasi" disabled >
+                                    </div>
                                 @else 
                                     <div class="" data-bs-toggle="tooltip" data-bs-title="Sedang Dalam Proses Pengajuan Rekomendasi">
                                         <input type="submit" name="proyek-rekomendasi" value="Pengajuan Rekomendasi" class="btn btn-sm btn-secondary ms-2" id="proyek-rekomendasi" disabled >
@@ -998,9 +1010,6 @@
                                                         </div>
 
                                                         <div class="col-6 mt-5 ms-5">
-                                                            @php
-                                                                $check_green_line = checkGreenLine($proyekberjalans);
-                                                            @endphp
                                                             <div class="form-check">
                                                                 <input class="form-check-input" name="is-green-line" type="checkbox" {{(bool) $check_green_line ? "checked" : ""}} disabled id="flexCheckDefault">
                                                                 <label class="form-check-label" for="flexCheckDefault">
@@ -1244,10 +1253,18 @@
                                                                     data-control="select2" data-hide-search="true"
                                                                     data-placeholder="RA Klasifikasi Proyek">
                                                                     <option value="" selected></option>
-                                                                    <option value="Proyek Kecil">Proyek Kecil</option>
-                                                                    <option value="Proyek Menengah">Proyek Menengah</option>
-                                                                    <option value="Proyek Besar">Proyek Besar</option>
-                                                                    <option value="Proyek Mega">Proyek Mega</option>
+                                                                    <option value="Proyek Besar"
+                                                                        {{ $proyek->klasifikasi_pasdin == 'Proyek Besar' ? 'selected' : '' }}>
+                                                                        Proyek Besar</option>
+                                                                    <option value="Proyek Menengah"
+                                                                        {{ $proyek->klasifikasi_pasdin == 'Proyek Menengah' ? 'selected' : '' }}>
+                                                                        Proyek Menengah</option>
+                                                                    <option value="Proyek Kecil"
+                                                                        {{ $proyek->klasifikasi_pasdin == 'Proyek Kecil' ? 'selected' : '' }}>
+                                                                        Proyek Kecil</option>
+                                                                    <option value="Mega Proyek"
+                                                                        {{ $proyek->klasifikasi_pasdin == 'Mega Proyek' ? 'selected' : '' }}>
+                                                                        Mega Proyek</option>
                                                                 </select>
                                                                 <!--end::Input-->
                                                             </div>

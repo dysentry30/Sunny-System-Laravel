@@ -431,6 +431,7 @@ class ProyekController extends Controller
         $newProyek->status_pasdin  = $dataProyek["status-pasardini"];
         $newProyek->info_asal_proyek  = $dataProyek["info-proyek"];
         $newProyek->laporan_kualitatif_pasdin = $dataProyek["laporan-kualitatif-pasdin"];
+        $newProyek->klasifikasi_pasdin = $dataProyek["ra-klasifikasi-proyek"];
         if ($newProyek->jenis_proyek == "J") {
             $newProyek->jenis_jo = $dataProyek["jo-category"];
         } else {

@@ -532,11 +532,11 @@
                                                                     $is_instansi_BUMN = $customer->jenis_instansi == "BUMN";
                                                                     $is_user_pic = str_contains(Auth::user()->name, "PIC") || Auth::user()->check_administrator;
                                                                     $title_tooltip = collect('Hanya bisa diinput');
-                                                                    if($is_user_pic) {
+                                                                    if(!$is_user_pic) {
                                                                         $title_tooltip->push("oleh <b>DMROP</b>");
                                                                     }
                                                                     if(!$is_instansi_BUMN) {
-                                                                        $title_tooltip->push("jika instansi <b>BUMN</b> atau <b>Anak dan Turunan</b>");
+                                                                        $title_tooltip->push("jika instansi <b>BUMN</b> atau <b>Anak dan Turunan BUMN</b>");
                                                                     }
                                                                     if($title_tooltip->count() > 1) {
                                                                         $title_tooltip = ($title_tooltip->count() < 2) ? $title_tooltip->join(" ") : $title_tooltip->join(" ", " dan ");

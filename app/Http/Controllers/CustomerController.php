@@ -485,7 +485,6 @@ class CustomerController extends Controller
 
 
         $editCustomer = Customer::find($data["id-customer"]);
-        // dd($request);
         $editCustomer->name = $data["name-customer"];
         $editCustomer->handphone = $data["handphone"];
         $editCustomer->check_customer = $request->has("check-customer"); //boolean check
@@ -518,7 +517,8 @@ class CustomerController extends Controller
         $editCustomer->syarat_pembayaran = $data["syarat_pembayaran"];
         $editCustomer->unique_code = $data["unique_code"];
         $editCustomer->key_client = isset($data["key-client"]);
-        $editCustomer->group_tier = $data["group-tier"];
+        $editCustomer->group_tier = isset($data["group-tier"]) ? $data["group-tier"] : null;
+        // dd($data);
 
         // $editCustomer->journey_company = $data["journey-company"];
         // $editCustomer->segmentation_company = $data["segmentation-company"];
