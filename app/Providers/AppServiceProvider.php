@@ -30,7 +30,7 @@ class AppServiceProvider extends ServiceProvider
         Paginator::useBootstrap();
         config(['app.locale' => 'id']);
         Carbon::setLocale('id');
-        if (str_contains(Request::url(), 'crm.wika.co.id')) {
+        if (str_contains(Request::url(), 'crm')) {
             URL::forceScheme('https');
         }
     }
