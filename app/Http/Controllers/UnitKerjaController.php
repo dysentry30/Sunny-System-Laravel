@@ -78,6 +78,8 @@ class UnitKerjaController extends Controller
             $newUnitKerja->company = $dataUnitKerja["company"];
             $newUnitKerja->divisi = $dataUnitKerja["divisi"];
             $newUnitKerja->is_active = (int) $dataUnitKerja["is-active"];
+            $newUnitKerja->id_profit_center = $dataUnitKerja["profit-center"];
+            $newUnitKerja->company_code = $dataUnitKerja["company-code"];
     
             Alert::success('Success', $dataUnitKerja["unit-kerja"].", Berhasil Ditambahkan");
     
@@ -99,6 +101,53 @@ class UnitKerjaController extends Controller
     public function show(UnitKerja $unitKerja)
     {
         //
+    }
+
+    /**
+     * Update Data Unit Kerja, Different with Setting Appproval Update
+     * @param UnitKerja $unitKerja
+     * 
+     * @return [type]
+     */
+    public function updateUnitKerja(Request $request) {
+        $dataUnitKerja = $request->all();
+        $messages = [
+            "required" => "This field is required",
+        ];
+        $rules = [
+            "nomor-unit" => "required",
+            "unit-kerja" => "required",
+            "divcode" => "required",
+            "dop" => "required",
+            "company" => "required",
+        ];
+        $validation = Validator::make($dataUnitKerja, $rules, $messages);
+        if ($validation->fails()) {
+            $request->old("nomor-unit");
+            $request->old("unit-kerja");
+            $request->old("divcode");
+            $request->old("dop");
+            $request->old("company");
+            Alert::error('Error', "Unit Kerja Gagal Dibuat, Periksa Kembali !");
+        }
+        $validation->validate();   
+        $update_unit_kerja = UnitKerja::find($dataUnitKerja["divcode"]);
+        $update_unit_kerja->nomor_unit = $dataUnitKerja["nomor-unit"];
+        $update_unit_kerja->unit_kerja = $dataUnitKerja["unit-kerja"];
+        $update_unit_kerja->divcode = $dataUnitKerja["divcode"];
+        $update_unit_kerja->dop = $dataUnitKerja["dop"];
+        $update_unit_kerja->company = $dataUnitKerja["company"];
+        $update_unit_kerja->divisi = $dataUnitKerja["divisi"];
+        $update_unit_kerja->is_active = (int) $dataUnitKerja["is-active"];
+        $update_unit_kerja->id_profit_center = $dataUnitKerja["profit-center"];
+        $update_unit_kerja->company_code = $dataUnitKerja["company-code"];
+
+        if ($update_unit_kerja->save()) {
+            Alert::html('Success', "Update untuk <b>" . $update_unit_kerja->unit_kerja ."</b> Berhasil Ditambahkan", "success");
+            return redirect('/unit-kerja')->with("success", true);
+        }
+        Alert::html('Error', "Update untuk <b>" . $update_unit_kerja->unit_kerja . "</b> gagal disimpan, Periksa Kembali!", "error");
+        return redirect()->back();
     }
 
     /**
