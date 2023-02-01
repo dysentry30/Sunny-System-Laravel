@@ -1733,6 +1733,7 @@ class ContractManagementsController extends Controller
     public function dokumenPendukungUpload(Request $request)
     {
         $data = $request->all();
+        // dd($data);
 
         $messages = [
             "required" => "Field di atas wajib diisi",
@@ -1763,6 +1764,7 @@ class ContractManagementsController extends Controller
         $file = $request->file("attach-file");
         $model = new DokumenPendukung();
         $model->id_perubahan_kontrak = $data["id-perubahan-kontrak"];
+        $model->id_contract = $data["id_contract"];
         // $model->id_document = Str::uuid();
         $id_document = date("His_") . $file->getClientOriginalName();
         $model->id_document = $id_document;

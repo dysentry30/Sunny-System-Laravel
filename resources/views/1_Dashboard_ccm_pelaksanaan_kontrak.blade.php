@@ -485,7 +485,7 @@
                 }
             },
             title: {
-                text: 'Pemilik Pekerjaan',
+                text: 'Kategori Pemilik Pekerjaan',
                 style: {
                     fontWeight: 'bold',
                     fontSize: '20px'
@@ -666,6 +666,7 @@
 
     <!--begin::Highchart Donut Bentuk Proyek -->
     <script>
+        const jenisProyek = JSON.parse('{!! $jenis_proyek->toJson() !!}');
         Highcharts.chart('contract-jo', {
             chart: {
                 type: 'pie',
@@ -721,10 +722,7 @@
             },
             series: [{
                 name: 'Kontrak',
-                data: [
-                    ['JO', 8],
-                    ['Non-JO', 16],
-                ]
+                data: jenisProyek
             }]
         });
     </script>

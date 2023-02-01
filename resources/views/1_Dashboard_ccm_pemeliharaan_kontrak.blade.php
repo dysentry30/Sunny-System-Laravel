@@ -426,7 +426,7 @@
                 }
             },
             title: {
-                text: 'Pemilik Pekerjaan',
+                text: 'Kategori Pemilik Pekerjaan',
                 style: {
                     fontWeight: 'bold',
                     fontSize: '20px'

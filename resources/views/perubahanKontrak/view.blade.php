@@ -513,7 +513,8 @@
                                                                     <!--begin::Kode-->
                                                                     <td>
                                                                         <p class="text-gray-600 mb-1">
-                                                                            {{ date_format(new DateTime($dokumen_pendukung->created_at), 'd-m-Y') }}
+                                                                            {{ Carbon\Carbon::createFromTimeString(($dokumen_pendukung->created_at))->translatedFormat("d F Y") }}
+                                                                            {{-- {{ date_format(new DateTime($dokumen_pendukung->created_at), 'd-m-Y') }} --}}
                                                                         </p>
                                                                     </td>
                                                                     <!--end::Kode-->
@@ -680,6 +681,7 @@
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="hidden" class="modal-name" name="modal-name">
+                            <input type="hidden" class="id_contract" name="id_contract" value="{{ $contract->id_contract }}">
                             <input type="hidden" value="{{ $perubahan_kontrak->id_perubahan_kontrak ?? 0 }}" id="id-perubahan-kontrak"
                                 name="id-perubahan-kontrak">
                             <input type="file" style="font-weight: normal"

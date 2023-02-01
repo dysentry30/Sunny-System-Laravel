@@ -401,7 +401,7 @@
                                                         </td>
                                                     @else
                                                         <td>
-                                                            <a href="#" id="click-name" class="text-hover-primary"><small class="badge badge-light-danger">
+                                                            <a target="_blank" href="/contract-management/view/{{ url_encode($proyek->ContractManagements->id_contract) }} id="click-name" class="text-hover-primary"><small class="badge badge-light-danger">
                                                                 Belum Ditentukan</small></a>
                                                         </td>
                                                     @endif
@@ -494,7 +494,7 @@
                                                         </td>
                                                     @else
                                                         <td>
-                                                            <a href="#" id="click-name" class="text-hover-primary"><small class="badge badge-light-danger">
+                                                            <a target="_blank" href="/contract-management/view/{{ url_encode($proyek->ContractManagements->id_contract) }} id="click-name" class="text-hover-primary"><small class="badge badge-light-danger">
                                                                     Belum Ditentukan
                                                                 </small></a>
                                                         </td>
