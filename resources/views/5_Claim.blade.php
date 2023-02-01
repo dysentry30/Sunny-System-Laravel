@@ -440,7 +440,7 @@
                                                                         <span style="font-weight: normal">Nama Proyek</span>
                                                                     </label>
                                                                     <select name="kode-proyek" id="nama-proyek" class="form-select form-select-solid"
-                                                                        data-control="select2" data-hide-search="false" data-placeholder="Pilih Jenis Perubahan" tabindex="-1" aria-hidden="true">
+                                                                        data-control="select2" data-hide-search="false" data-placeholder="Pilih Nama Proyek" tabindex="-1" aria-hidden="true">
                                                                         <option value=""></option>
                                                                         @foreach ($proyeks as $proyek)
                                                                         <option value="{{ $proyek->kode_proyek }}">{{ $proyek->nama_proyek }}</option>

@@ -616,10 +616,12 @@ class DashboardController extends Controller
         $dops = Dop::whereNotIn("dop", ["EA", "PUSAT"])->get();
         if($tahun_get < 2023) {
             $unit_kerjas_all = UnitKerja::whereNotIn("divcode", ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "N", "P", "J"])->get();
+            $proyeks = Proyek::whereIn("unit_kerja", ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "N", "P", "J"])->get();
         } else {
             $unit_kerjas_all = UnitKerja::whereNotIn("divcode", ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "N", "L", "F", "U", "O"])->get();
+            $proyeks = Proyek::whereIn("unit_kerja", ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "N", "L", "F", "U", "O"])->get();
         }
-        $proyeks = Proyek::whereIn("unit_kerja", $unit_kerjas_all->toArray())->get();
+        // dd(Proyek::whereIn("unit_kerja", $unit_kerjas_all->toArray())->get());
         if(!empty($dop_get)) {
             $unit_kerjas = $unit_kerjas_all->where("dop", "=", $dop_get);
         } else {
@@ -741,9 +743,22 @@ class DashboardController extends Controller
         $tahun_get = $request->query("tahun") ?? (int) date("Y");
         $bulan_get = $request->query("bulan") ?? (int) date("m");
         $dops = Dop::whereNotIn("dop", ["EA", "PUSAT"])->get();
-        $unit_kerjas_all = UnitKerja::whereNotIn("divcode", ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "N"])->get();
-        $proyeks = Proyek::whereNotIn("unit_kerja", ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "N"])->get();
+        // $unit_kerjas_all = UnitKerja::whereNotIn("divcode", ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "N"])->get();
+        // $proyeks = Proyek::whereNotIn("unit_kerja", ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "N"])->get();
+        if($tahun_get < 2023) {
+            $unit_kerja_code =  ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "N", "P", "J"];
+            $unit_kerjas_all = UnitKerja::whereNotIn("divcode",$unit_kerja_code)->get();
+            $unit_kerjas = UnitKerja::whereNotIn("divcode",  $unit_kerja_code)->get();
+            $proyeks = Proyek::whereNotIn("unit_kerja", $unit_kerja_code)->get();
+        } else {
+            $unit_kerja_code =   ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "N", "L", "F", "U", "O"];
+            $unit_kerjas_all = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->get();
+            $unit_kerjas = UnitKerja::whereNotIn("divcode",   $unit_kerja_code)->get();
+            $proyeks = Proyek::whereNotIn("unit_kerja", $unit_kerja_code)->get();
+            // dd($proyeks);
+        }
         $tahun = $proyeks->groupBy("tahun_perolehan")->keys();
+        // dd($tahun);
         if(!empty($dop_get)) {
             $unit_kerjas = $unit_kerjas_all->where("dop", "=", $dop_get);
         } else {
@@ -761,10 +776,10 @@ class DashboardController extends Controller
         }
 
         $dops = Dop::whereNotIn("dop", ["EA", "PUSAT"])->get();
-        $unit_kerjas = UnitKerja::whereNotIn("divcode", ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "N"])->get();
-        $proyeks = Proyek::whereNotIn("unit_kerja", ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "N"])->where("stage", "=", 8)->get()->filter(function ($p) {
+        $proyeks = $proyeks->where("stage", "=", 8)->filter(function ($p) {
             return !empty($p->ContractManagements) && $p->stage == 8;
         });
+        // dd($proyeks);
         $proyek_get = $request->query("kode-proyek") ?? "";
         $contracts_pelaksanaan = $proyeks->map(function($item){
             return $item->ContractManagements;
@@ -790,7 +805,7 @@ class DashboardController extends Controller
                 $pengajuan = $kategori->sum(function ($c) {
                     return (int) $c->biaya_pengajuan; 
                 });
-                $persen = (float) $pengajuan * 100 / (float) $proyek->nilai_perolehan;
+                $persen = (float) $pengajuan * 100 / ((float) $proyek->nilai_perolehan == null ? 1 : $proyek->nilai_perolehan);
                 $potensial = 0;
                 $subs = 0;
                 $revisi = 0;
@@ -862,9 +877,10 @@ class DashboardController extends Controller
         //     return $cl->ContractManagements->PerubahanKontrak->isNotEmpty() && $cl->ContractManagements->PerubahanKontrak->firstWhere("kode_proyek", "=", $cl->kode_proyek);
         // });
         $claims = PerubahanKontrak::all();
+        // $sumberDanas = SumberDana::count();
 
         // Begin :: Pemilik Pekerjaan
-        $pemilik_pekerjaan = $proyeks->map(function ($p) {
+        $get_pemilik_pekerjaan = $proyeks->map(function ($p) {
             $new_class = new stdClass();
             if (!empty($p->SumberDana)) {
                 $new_class->kategori = $p->SumberDana->kategori;
@@ -872,20 +888,40 @@ class DashboardController extends Controller
                 $new_class->kategori = "Other";
             }
             return $new_class;
-        })->groupBy("kategori")->map(function ($p, $key) {
-            return [$key, $p->count()];
+        });
+        // dd($get_pemilik_pekerjaan);
+
+        $pemilik_pekerjaan = $get_pemilik_pekerjaan->groupBy("kategori")->map(function ($p, $key) use ($get_pemilik_pekerjaan) {
+            return [$key . "<br>" . " <b>" . Percentage::fromFractionAndTotal($p->count(), $get_pemilik_pekerjaan->count())->asString() . "</b>", $p->count()];
         })->values();
+
+        // dd($pemilik_pekerjaan, $get_pemilik_pekerjaan);
         // End :: Pemilik Pekerjaan
+
+        $get_jenis_proyek = $proyeks->map(function($p){
+            $new_class = new stdClass;
+            if($p->jenis_proyek == "J"){
+                $new_class->jenis_proyek = "JO"; 
+            }else{
+                $new_class->jenis_proyek = "Non JO";
+            };
+            return $new_class;
+        });
+        // dd($get_jenis_proyek);
+        $jenis_proyek = $get_jenis_proyek->groupBy("jenis_proyek")->map(function ($p, $key) use ($get_jenis_proyek) {
+            return [$key . " <b>" . Percentage::fromFractionAndTotal($p->count(), $get_jenis_proyek->count())->asString() . "</b>", $p->count()];
+        })->values();
+        // dd($jenis_proyek);
 
         // Begin :: Changes Overview
         $total_changes = $claims->count();
         $changes_overview = $claims->groupBy("jenis_perubahan")->map(function ($c, $key) use($total_changes){
-            return [$key . " <b>" . Percentage::fromFractionAndTotal($c->count(), $total_changes)->asString() . "</b>", $c->count()];
+            return [$key . "<br>" . " <b>" . Percentage::fromFractionAndTotal($c->count(), $total_changes)->asString() . "</b>", $c->count()];
         })->values();
         $proyek = $proyeks->map(function($item){
             return PerubahanKontrak::where("id_contract", "=", $item->ContractManagements->id_contract)->get();
         });
-        // dd($proyek
+        // dd($changes_overview);
 
         $jumlahKontrak = 0;
         $totalKontrak = 0;
@@ -899,7 +935,7 @@ class DashboardController extends Controller
         // dd($kategori_kontrak);
 
         // Begin :: Jenis Kontrak
-        $jenis_kontrak = $proyeks->map(function ($p) {
+        $get_jenis_kontrak = $proyeks->map(function ($p) {
             // dd($p);
             if (!empty($p->jenis_terkontrak)) {
                 if ($p->jenis_terkontrak == "Design & Build") {
@@ -913,8 +949,10 @@ class DashboardController extends Controller
                 $p->jenis_terkontrak = "Uncategorized";
             }
             return $p;
-        })->groupBy("jenis_terkontrak")->map(function ($p, $key) {
-            return [$key, $p->count()];
+        });
+
+        $jenis_kontrak = $get_jenis_kontrak->groupBy("jenis_terkontrak")->map(function ($p, $key) use($get_jenis_kontrak){
+            return [$key ."<br>" . " <b>" . Percentage::fromFractionAndTotal($p->count(), $get_jenis_kontrak->count())->asString() . "</b>", $p->count()];
         })->values();
         // dd($jenis_kontrak);
         // End :: Jenis Kontrak
@@ -1051,18 +1089,51 @@ class DashboardController extends Controller
         // dd($persentasePerubahan);
 
         return view("1_Dashboard_ccm_pelaksanaan_kontrak", 
-        compact(["changes_overview", "bulan_get", "unit_kerjas_all", "tahun_get", "tahun", "jumlahKontrak", "totalKontrak", "totalKontrakFull", "totalPersen", "persentasePerubahan", "totalPerubahan", "jumlahKontrak", "dops", "unit_kerjas", "proyeks", "pemilik_pekerjaan", "jenis_kontrak", "dop_get", "unit_kerja_get", "proyek_get", "nilai_tender_proyeks", "total_nilai_perubahan", "nilai_perubahan_table", "perubahan_total", "kategori_kontrak"]));
+        compact(["changes_overview", "bulan_get", "unit_kerjas_all", "tahun_get", "tahun", "jumlahKontrak", "totalKontrak", "totalKontrakFull", "totalPersen", "persentasePerubahan", "totalPerubahan", "jumlahKontrak", "dops", "unit_kerjas", "proyeks", "pemilik_pekerjaan", "jenis_proyek", "jenis_kontrak", "dop_get", "unit_kerja_get", "proyek_get", "nilai_tender_proyeks", "total_nilai_perubahan", "nilai_perubahan_table", "perubahan_total", "kategori_kontrak"]));
     }
 
     public function dashboard_pemeliharaan_kontrak(Request $request)
     {
-        $dops = Dop::whereNotIn("dop", ["EA", "PUSAT"])->get();
-        $unit_kerjas = UnitKerja::whereNotIn("divcode", ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "N"])->get();
-        $proyeks = Proyek::whereNotIn("unit_kerja", ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "N"])->where("stage", "=", 8)->get()->filter(function ($p) {
-            return !empty($p->ContractManagements) && $p->stage == 8;
-        });
         $dop_get = $request->query("dop") ?? "";
         $unit_kerja_get = $request->query("unit-kerja") ?? "";
+        $tahun_get = $request->query("tahun") ?? (int) date("Y");
+        $bulan_get = $request->query("bulan") ?? (int) date("m");
+        $dops = Dop::whereNotIn("dop", ["EA", "PUSAT"])->get();
+        // $unit_kerjas_all = UnitKerja::whereNotIn("divcode", ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "N"])->get();
+        // $proyeks = Proyek::whereNotIn("unit_kerja", ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "N"])->get();
+        if($tahun_get < 2023) {
+            $unit_kerja_code =  ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "N", "P", "J"];
+            $unit_kerjas_all = UnitKerja::whereNotIn("divcode",$unit_kerja_code)->get();
+            $unit_kerjas = UnitKerja::whereNotIn("divcode",  $unit_kerja_code)->get();
+            $proyeks = Proyek::whereNotIn("unit_kerja", $unit_kerja_code)->get();
+        } else {
+            $unit_kerja_code =   ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "N", "L", "F", "U", "O"];
+            $unit_kerjas_all = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->get();
+            $unit_kerjas = UnitKerja::whereNotIn("divcode",   $unit_kerja_code)->get();
+            $proyeks = Proyek::whereNotIn("unit_kerja", $unit_kerja_code)->get();
+            // dd($proyeks);
+        }
+        $tahun = $proyeks->groupBy("tahun_perolehan")->keys();
+        // dd($tahun);
+        if(!empty($dop_get)) {
+            $unit_kerjas = $unit_kerjas_all->where("dop", "=", $dop_get);
+        } else {
+            $unit_kerjas = $unit_kerjas_all;
+        }
+
+        if ($dop_get != "") {
+            $proyeks = $proyeks->filter(function ($p) use ($dop_get) {
+                return $p->Dop->dop == $dop_get;
+            });
+        } else if ($unit_kerja_get) {
+            $proyeks = $proyeks->filter(function ($p) use ($unit_kerja_get) {
+                return $p->UnitKerja->divcode == $unit_kerja_get;
+            });
+        }
+
+        // $dops = Dop::whereNotIn("dop", ["EA", "PUSAT"])->get();
+        // $dop_get = $request->query("dop") ?? "";
+        // $unit_kerja_get = $request->query("unit-kerja") ?? "";
         $proyek_get = $request->query("kode-proyek") ?? "";
         $contracts_pemeliharaan = $proyeks->map(function($item){
             return $item->ContractManagements;
@@ -1086,7 +1157,7 @@ class DashboardController extends Controller
                 $pengajuan = $kategori->sum(function ($c) {
                     return (int) $c->biaya_pengajuan; 
                 });
-                $persen = (float) $pengajuan * 100 / (float) $proyek->nilai_perolehan;
+                $persen = (float) $pengajuan * 100 / ((float) $proyek->nilai_perolehan == null ? 1 : (float) $proyek->nilai_perolehan);
                 $potensial = 0;
                 $subs = 0;
                 $revisi = 0;
@@ -1160,7 +1231,7 @@ class DashboardController extends Controller
 
 
         // Begin :: Pemilik Pekerjaan
-        $pemilik_pekerjaan = $proyeks->map(function ($p) {
+        $get_pemilik_pekerjaan = $proyeks->map(function ($p) {
             $new_class = new stdClass();
             if (!empty($p->SumberDana)) {
                 $new_class->kategori = $p->SumberDana->kategori;
@@ -1168,8 +1239,11 @@ class DashboardController extends Controller
                 $new_class->kategori = "Other";
             }
             return $new_class;
-        })->groupBy("kategori")->map(function ($p, $key) {
-            return [$key, $p->count()];
+        });
+        // dd($get_pemilik_pekerjaan);
+
+        $pemilik_pekerjaan = $get_pemilik_pekerjaan->groupBy("kategori")->map(function ($p, $key) use ($get_pemilik_pekerjaan) {
+            return [$key . "<br>" . " <b>" . Percentage::fromFractionAndTotal($p->count(), $get_pemilik_pekerjaan->count())->asString() . "</b>", $p->count()];
         })->values();
         // End :: Pemilik Pekerjaan
 
@@ -1189,12 +1263,12 @@ class DashboardController extends Controller
         // dd($claims);
 
         // Begin :: Jenis Kontrak
-        $jenis_kontrak = $proyeks->map(function ($p) {
+        $get_jenis_kontrak = $proyeks->map(function ($p) {
             // dd($p);
             if (!empty($p->jenis_terkontrak)) {
                 if ($p->jenis_terkontrak == "Design & Build") {
                     $p->jenis_terkontrak = "Lumpsum";
-                } else if ($p->jenis_terkontrak == "OM") {
+                }else if ($p->jenis_terkontrak == "OM") {
                     $p->jenis_terkontrak = "Unit Price";
                 } else {
                     $p->jenis_terkontrak = $p->jenis_terkontrak;
@@ -1203,11 +1277,33 @@ class DashboardController extends Controller
                 $p->jenis_terkontrak = "Uncategorized";
             }
             return $p;
-        })->groupBy("jenis_terkontrak")->map(function ($p, $key) {
-            return [$key, $p->count()];
+        });
+
+        $jenis_kontrak = $get_jenis_kontrak->groupBy("jenis_terkontrak")->map(function ($p, $key) use($get_jenis_kontrak){
+            return [$key ."<br>" . " <b>" . Percentage::fromFractionAndTotal($p->count(), $get_jenis_kontrak->count())->asString() . "</b>", $p->count()];
         })->values();
         // dd($jenis_kontrak);
         // End :: Jenis Kontrak
+
+        $get_jenis_proyek = $proyeks->map(function($p){
+            $new_class = new stdClass;
+            if($p->jenis_proyek == "J"){
+                $new_class->jenis_proyek = "JO"; 
+            }else{
+                $new_class->jenis_proyek = "Non JO";
+            };
+            return $new_class;
+        });
+        // dd($get_jenis_proyek);
+        $jenis_proyek = $get_jenis_proyek->groupBy("jenis_proyek")->map(function ($p, $key) use ($get_jenis_proyek) {
+            return [$key . " <b>" . Percentage::fromFractionAndTotal($p->count(), $get_jenis_proyek->count())->asString() . "</b>", $p->count()];
+        })->values();
+
+
+        $total_changes = $claims->count();
+        $changes_overview = $claims->groupBy("jenis_perubahan")->map(function ($c, $key) use($total_changes){
+            return [$key . "<br>" . " <b>" . Percentage::fromFractionAndTotal($c->count(), $total_changes)->asString() . "</b>", $c->count()];
+        })->values();
 
         // Begin :: Nilai Tender Chart
         $nilai_tender_proyeks = $proyeks->groupBy("unit_kerja");
@@ -1283,7 +1379,7 @@ class DashboardController extends Controller
         $jumlahKontrak = $proyeks->count();
 
         return view("1_Dashboard_ccm_pemeliharaan_kontrak", 
-        compact(["jumlahKontrak", "totalKontrak", "totalKontrakFull", "persentasePerubahan", "totalPersen", "totalPerubahan", "jumlahKontrak", "dops", "unit_kerjas", "proyeks", "pemilik_pekerjaan", "kategori_kontrak", "jenis_kontrak", "dop_get", "unit_kerja_get", "proyek_get", "nilai_tender_proyeks", "total_nilai_perubahan", "nilai_perubahan_table", "perubahan_total", ]));
+        compact(["jumlahKontrak", "totalKontrak", "totalKontrakFull", "persentasePerubahan", "totalPersen", "totalPerubahan", "jumlahKontrak", "dops", "unit_kerjas", "proyeks", "pemilik_pekerjaan", "kategori_kontrak", "jenis_kontrak", "dop_get", "unit_kerja_get", "proyek_get", "nilai_tender_proyeks", "total_nilai_perubahan", "nilai_perubahan_table", "perubahan_total", "changes_overview" ]));
     }
 
     /**
