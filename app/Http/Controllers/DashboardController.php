@@ -2312,12 +2312,13 @@ class DashboardController extends Controller
     {
         $month = (int) date("m");
         $year = (int) date("Y");
-        $is_forecasts_exist = Forecast::where("periode_prognosa", "=", $month)->whereYear("created_at", "=", $year)->get()->count() > 0 ? true : false;
+        $is_forecasts_exist = Forecast::where("periode_prognosa", "=", $month)->where("tahun", "=", $year)->get()->count() > 0 ? true : false;
         if (!$is_forecasts_exist) {
             if ($month == 1) {
-                $forecasts = Forecast::where("periode_prognosa", "=", $month + 11)->whereYear("created_at", "=", $year - 1)->get();
+                return;
+                // $forecasts = Forecast::where("periode_prognosa", "=", $month + 11)->where("tahun", "=", $year - 1)->get();
             } else {
-                $forecasts = Forecast::where("periode_prognosa", "=", $month - 1)->whereYear("created_at", "=", $year)->get();
+                $forecasts = Forecast::where("periode_prognosa", "=", $month - 1)->where("tahun", "=", $year)->get();
             }
             // dd($forecasts);
             $forecasts->each(function ($f) use ($month) {
