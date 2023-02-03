@@ -1651,7 +1651,7 @@
             const dataCollect = document.querySelector("#id-data-collect").innerHTML;
             // console.log(reviewRate);
             let review = Number(tenderReview) / Number(dataCollect) * 100;
-            document.querySelector("#review-persen").innerHTML = review+' '+'<i class="bi bi-percent text-white fs-1">';
+            document.querySelector("#review-persen").innerHTML = review.toFixed(2)+' '+'<i class="bi bi-percent text-white fs-1">';
         });
     </script>
 

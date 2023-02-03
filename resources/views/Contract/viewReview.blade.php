@@ -252,7 +252,7 @@
                         <form action="/review-contract/upload" method="POST" class="card card-flush">
                             @csrf
                             <input type="hidden" class="form-control form-control-solid" name="id-contract" value="{{ $contract->id_contract }}">
-                            {{-- <input type="hidden" class="form-control form-control-solid" name="stage" value="{{ $stage }}"> --}}
+                            <input type="hidden" class="form-control form-control-solid" name="stage" value="{{ $stage }}">
                             
                             <table class="table align-middle table-row-dashed fs-6 gy-2 card-body" id="tinjauan-kontrak">
                                 <!--begin::Table head-->
@@ -410,7 +410,7 @@
                                         <tr class="text-grey">
                                             <td>
                                                 <label><b>Nilai Pugu/HPS (jika ada)</b></label>
-                                                <input type="hidden" class="form-control form-control-solid" name="kategori[]" value="Nilai Pugu/HPS">
+                                                <input type="hidden" class="form-control form-control-solid" name="kategori[]" value="Nilai Pugu/HPS (jika ada)">
                                             </td>
                                             <td>
                                                 <input name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
@@ -536,7 +536,7 @@
                                         <tr class="text-grey">
                                             <td>
                                                 <label><b>Jangka Waktu Masa Performa (jika ada)</b></label>
-                                                <input type="hidden" class="form-control form-control-solid" name="kategori[]" value="Jangka Waktu Masa Performa">
+                                                <input type="hidden" class="form-control form-control-solid" name="kategori[]" value="Jangka Waktu Masa Performa (jika ada)">
                                             </td>
                                             <td>
                                                 <input name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
@@ -830,7 +830,7 @@
                                         <tr class="text-grey">
                                             <td>
                                                 <label><b>Jaminan Performa (jika ada)</b></label>
-                                                <input type="hidden" class="form-control form-control-solid" name="kategori[]" value="Jaminan Performa">
+                                                <input type="hidden" class="form-control form-control-solid" name="kategori[]" value="Jaminan Performa (jika ada)">
                                             </td>
                                             <td>
                                                 <input name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
@@ -851,7 +851,7 @@
                                         <tr class="text-grey">
                                             <td>
                                                 <label><b>Asuransi (CAR/CECR)</b></label>
-                                                <input type="hidden" class="form-control form-control-solid" name="kategori[]" value="Asuransi">
+                                                <input type="hidden" class="form-control form-control-solid" name="kategori[]" value="Asuransi (CAR/CECR)">
                                             </td>
                                             <td>
                                                 <input name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
@@ -872,7 +872,7 @@
                                         <tr class="text-grey">
                                             <td>
                                                 <label><b>Serah Terima Pekerjaan (parsial/tidak)</b></label>
-                                                <input type="hidden" class="form-control form-control-solid" name="kategori[]" value="Serah Terima Pekerjaan">
+                                                <input type="hidden" class="form-control form-control-solid" name="kategori[]" value="Serah Terima Pekerjaan (parsial/tidak)">
                                             </td>
                                             <td>
                                                 <input name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
@@ -893,7 +893,7 @@
                                         <tr class="text-grey">
                                             <td>
                                                 <label><b>Pembayaran Material On Site (jika ada)</b></label>
-                                                <input type="hidden" class="form-control form-control-solid" name="kategori[]" value="Pembayaran Material On Site">
+                                                <input type="hidden" class="form-control form-control-solid" name="kategori[]" value="Pembayaran Material On Site (jika ada)">
                                             </td>
                                             <td>
                                                 <input name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
