@@ -177,7 +177,9 @@
                                                             <!--end::Name Proyek-->
                                                             <!--begin::Name-->
                                                             <td>
-                                                                {{ $claim->uraian_perubahan }}
+                                                                <a href="/contract-management/view/{{$claim->id_contract}}/perubahan-kontrak/{{$claim->id_perubahan_kontrak}}" id="click-name" class="text-gray-800 text-hover-primary mb-1">
+                                                                    {{ $claim->uraian_perubahan }}
+                                                                </a>
                                                             </td>
                                                             <!--end::Name-->
                                                             <!--begin::Unit Kerja-->
@@ -237,11 +239,9 @@
                                                                 }
                                                             @endphp
                                                             <td>
-                                                                <a href="/contract-management/view/{{$claim->id_contract}}/perubahan-kontrak/{{$claim->id_perubahan_kontrak}}" id="click-name" class="text-gray-800 text-hover-primary mb-1">
-                                                                    <small class="{{$class_name}}">
-                                                                        {{ $stage }}
-                                                                    </small>
-                                                                </a>
+                                                                <small class="{{$class_name}}">
+                                                                    {{ $stage }}
+                                                                </small>
                                                             </td>
                                                             <!--begin::Action=-->
                                                             {{-- <td>

@@ -23,7 +23,7 @@ class PerubahanKontrak extends Model
         return $this->belongsTo(ContractManagements::class, "id_contract");
     }
 
-    // public function Proyek() {
-    //     return $this->belongsTo(Proyek::class, "project_id", "kode_proyek");
-    // }
+    public function Proyek() {
+        return $this->belongsTo(Proyek::class, "kode_proyek");
+    }
 }

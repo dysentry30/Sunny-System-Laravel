@@ -15,6 +15,8 @@ use App\Models\ClaimManagements;
 use App\Models\ContractManagements;
 use App\Models\Pasals;
 use App\Models\PerubahanKontrak;
+use App\Models\UnitKerja;
+use Google\Service\FactCheckTools\Resource\Claims;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
@@ -30,89 +32,155 @@ class ClaimController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    // public function index(Request $request)
+    // {
+    //     $column = $request->get("column");
+    //     $filter = $request->get("filter");
+    //     // if (Auth::user()->check_administrator) {
+    //     //     $claims = PerubahanKontrak::join("contract_managements", "contract_managements.id_contract", "=", "perubahan_kontrak.id_contract")->select("perubahan_kontrak.*")->get();
+    //     // } else {
+    //     //     $claims = PerubahanKontrak::join("contract_managements", "contract_managements.id_contract", "=", "perubahan_kontrak.id_contract")->where("contract_managements.unit_kerja", "=", Auth::user()->unit_kerja)->select("perubahan_kontrak.*")->get();
+    //     // }
+    //     // $claims = PerubahanKontrak::with(["ContractManagement"])->get();
+    //     $claims = PerubahanKontrak::all();
+    //     // $claims = ContractManagements::with(["project", "PerubahanKontrak"])->get();
+    //     // $claims = ContractManagements::get();
+    //     $test = $claims->each(function($data){
+    //         return $data->ContractManagements;
+    //     });
+
+    //     $proyeks = Proyek::all();
+
+
+    //     // dd($test->groupBy('id_contract'));
+    //     if (!empty($column)) {
+
+    //         $proyekClaim = $claims->where('jenis_perubahan', '=', "Klaim")->filter(function($data) use($column, $filter) {
+    //             return preg_match("/^$filter/", $data[$column]);
+    //         });
+            
+    //         $proyekAnti = $claims->where('jenis_perubahan', '=', "Anti Klaim")->filter(function($data) use($column, $filter) {
+    //             return preg_match("/^$filter/", $data[$column]);
+    //         });
+
+    //         $proyekAsuransi = $claims->where('jenis_perubahan', '=', "Klaim Asuransi")->filter(function($data) use($column, $filter) {
+    //             return preg_match("/^$filter/", $data[$column]);
+    //         });
+            
+    //         $proyekVos = $claims->where('jenis_perubahan', '=', "VO")->filter(function($data) use($column, $filter) {
+    //             return preg_match("/^$filter/", $data[$column]);
+    //         });
+            
+    //     } else {
+    //         $proyekClaim = $claims->where('jenis_perubahan', '=', "Klaim")->groupBy('id_contract')->map(function($data){
+    //             return $data->first();
+    //         });
+            
+    //         $proyekAnti = $claims->where('jenis_perubahan', '=', "Anti Klaim")->groupBy('id_contract')->map(function($data){
+    //             return $data->first();
+    //         });
+            
+    //         $proyekAsuransi = $claims->where('jenis_perubahan', '=', "Klaim Asuransi")->groupBy('id_contract')->map(function($data){
+    //             return $data->first();
+    //         });
+            
+    //         $proyekVos = $claims->where('jenis_perubahan', '=', "VO")->groupBy('id_contract')->map(function($data){
+    //             return $data->first();
+    //         });
+    //     }
+    //     // dd($proyekClaim);
+    //     // dd($proyekAnti);
+    //     // dd($proyekAsuransi);
+    //     // dd($proyekVos);
+    //     return view("5_Claim", compact(["proyekVos" ,"proyekClaim", "proyekAnti", "proyekAsuransi", "column", "filter", "proyeks"]));
+    // }
+
     public function index(Request $request)
     {
-        $column = $request->get("column");
-        $filter = $request->get("filter");
-        // if (Auth::user()->check_administrator) {
-        //     $claims = PerubahanKontrak::join("contract_managements", "contract_managements.id_contract", "=", "perubahan_kontrak.id_contract")->select("perubahan_kontrak.*")->get();
-        // } else {
-        //     $claims = PerubahanKontrak::join("contract_managements", "contract_managements.id_contract", "=", "perubahan_kontrak.id_contract")->where("contract_managements.unit_kerja", "=", Auth::user()->unit_kerja)->select("perubahan_kontrak.*")->get();
-        // }
-        // $claims = PerubahanKontrak::with(["ContractManagement"])->get();
-        $claims = PerubahanKontrak::all();
-        // $claims = ContractManagements::with(["project", "PerubahanKontrak"])->get();
-        // $claims = ContractManagements::get();
-        $test = $claims->each(function($data){
-            return $data->ContractManagements;
-        });
-
-        $proyeks = Proyek::all();
-
-
-        // dd($test->groupBy('id_contract'));
-        if (!empty($column)) {
-
-            $proyekClaim = $claims->where('jenis_perubahan', '=', "Klaim")->filter(function($data) use($column, $filter) {
-                return preg_match("/^$filter/", $data[$column]);
-            });
-            
-            $proyekAnti = $claims->where('jenis_perubahan', '=', "Anti Klaim")->filter(function($data) use($column, $filter) {
-                return preg_match("/^$filter/", $data[$column]);
-            });
-
-            $proyekAsuransi = $claims->where('jenis_perubahan', '=', "Klaim Asuransi")->filter(function($data) use($column, $filter) {
-                return preg_match("/^$filter/", $data[$column]);
-            });
-            
-            $proyekVos = $claims->where('jenis_perubahan', '=', "VO")->filter(function($data) use($column, $filter) {
-                return preg_match("/^$filter/", $data[$column]);
-            });
-            
-        } else {
-            $proyekClaim = $claims->where('jenis_perubahan', '=', "Klaim")->groupBy('id_contract')->map(function($data){
-                return $data->first();
-            });
-            
-            $proyekAnti = $claims->where('jenis_perubahan', '=', "Anti Klaim")->groupBy('id_contract')->map(function($data){
-                return $data->first();
-            });
-            
-            $proyekAsuransi = $claims->where('jenis_perubahan', '=', "Klaim Asuransi")->groupBy('id_contract')->map(function($data){
-                return $data->first();
-            });
-            
-            $proyekVos = $claims->where('jenis_perubahan', '=', "VO")->groupBy('id_contract')->map(function($data){
-                return $data->first();
-            });
+        $filterTahun = $request->query("tahun-proyek");
+        $filterUnitKerja = $request->query("unit-kerja");
+        $year = new DateTime("Y");
+        $unitkerjas = UnitKerja::get()->whereNotIn("divcode", ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "8"]);
+        $tahun_proyek = Proyek::get()->groupBy("tahun_perolehan")->keys();
+        // dd($unitkerjas);
+        // $proyeks = ContractManagements::join("proyeks", "contract_managements.project_id", "=", "proyeks.kode_proyek")->get();
+        // $claims = $proyeks->map(function($proyek){
+        //     $claim = PerubahanKontrak::where("id_contract", "=", $proyek->id_contract)->get();
+        //     return $claim;
+        // });
+        // $proyeks = ContractManagements::with(["project", "PerubahanKontrak"])->get();
+        // $claims = $proyeks->map(function($p){
+        //     $map = $p->PerubahanKontrak;
+        //     return $map;
+        // })->flatten();
+        // $claim = $claims->map(function($p){
+        //     return $p->Proyek;
+        // })->groupBy("kode_proyek");
+        // $claims = ContractManagements::where("stages", "=", 2)->join("proyeks", "contract_managements.project_id", "=", "proyeks.kode_proyek")->get();
+        if(!empty($filterTahun)){
+            $proyeks = Proyek::join("contract_managements", "proyeks.kode_proyek", "=", "contract_managements.project_id")->where("tahun_perolehan", "=", $filterTahun)->get();
+        }elseif(!empty($filterUnitKerja)){
+            $proyeks = Proyek::join("contract_managements", "proyeks.kode_proyek", "=", "contract_managements.project_id")->where("unit_kerja", "=", $filterUnitKerja)->get();
+        }else{
+            $proyeks = Proyek::join("contract_managements", "proyeks.kode_proyek", "=", "contract_managements.project_id")->where("tahun_perolehan", "=", $year)->get();
         }
-        // dd($proyekClaim);
-        // dd($proyekAnti);
-        // dd($proyekAsuransi);
-        // dd($proyekVos);
-        return view("5_Claim", compact(["proyekVos" ,"proyekClaim", "proyekAnti", "proyekAsuransi", "column", "filter", "proyeks"]));
+        $claims = $proyeks->where("stages", "=", 2);
+        // dd($claims);
+
+        return view("5_Claim", compact(["claims", "tahun_proyek", "unitkerjas", "filterUnitKerja", "filterTahun"]));
+
     }
 
-    public function viewClaim($id_proyek, $jenis_claim)
+    public function view($kode_proyek, $id_contract, Request $request)
     {
-        $proyek = Proyek::find($id_proyek);
-        $claim = $proyek->ContractManagements->PerubahanKontrak;
-        // dd($claim);
-        $jenis_claim = str_replace('-', ' ', $jenis_claim);
-        $proyekClaim = $claim->where("jenis_perubahan", "=", $jenis_claim);
-        // foreach ($claim as $claims) {
-        //     if ($claims->jenis_claim == $jenis_claim) {
-        //         array_push($proyekClaim, $claims);
-        //     }
-        // }
+        // $filterBulan = $request->query("bulan-perubahan");
+        $filterStatus = $request->query("stage");
+        // dd($filterStatus);
+        // $filterBulan = $data["bulan-perubahan"];
 
-        // dd($jenis_claim);
+        $monthNow = new DateTime("M");
+        $contracts = ContractManagements::where("id_contract", "=", $id_contract)->first();
+        $proyek = Proyek::where("kode_proyek", "=", $kode_proyek)->first();
 
-        // $proyekClaim = ClaimManagements::where('jenis_claim', "=", "Claim")->get();
+        if(!empty($filterStatus)){
+            $claims = PerubahanKontrak::where("id_contract", "=", $id_contract)->where("stage", "=", $filterStatus)->get();
+        }else{
+            $claims = PerubahanKontrak::where("id_contract", "=", $id_contract)->get();
+        }
 
+        $claim_all = PerubahanKontrak::where("id_contract", "=", $id_contract)->get(); 
 
-        return view("claimManagement/viewClaim", ['proyekClaims' => $proyekClaim, 'proyek' => $proyek, "jenis_claim" => $jenis_claim]);
+        // dd($contract);
+
+        $claims_vo = $claims->where("jenis_perubahan", "=", "VO");
+        $claims_klaim = $claims->where("jenis_perubahan", "=", "Klaim");
+        $claims_anti_klaim = $claims->where("jenis_perubahan", "=", "Anti Klaim");
+        $claims_klaim_asuransi = $claims->where("jenis_perubahan", "=", "Klaim Asuransi");
+        // dd($claims_vo);
+
+        return view("claimManagement/viewDetail", compact(["contracts", "claims_vo", "claims_klaim", "claims_anti_klaim", "claims_klaim_asuransi", "proyek", "claim_all"]));
     }
+
+    // public function viewClaim($id_proyek, $jenis_claim)
+    // {
+    //     $proyek = Proyek::find($id_proyek);
+    //     $claim = $proyek->ContractManagements->PerubahanKontrak;
+    //     // dd($claim);
+    //     $jenis_claim = str_replace('-', ' ', $jenis_claim);
+    //     $proyekClaim = $claim->where("jenis_perubahan", "=", $jenis_claim);
+    //     // foreach ($claim as $claims) {
+    //     //     if ($claims->jenis_claim == $jenis_claim) {
+    //     //         array_push($proyekClaim, $claims);
+    //     //     }
+    //     // }
+
+    //     // dd($jenis_claim);
+
+    //     // $proyekClaim = ClaimManagements::where('jenis_claim', "=", "Claim")->get();
+
+
+    //     return view("claimManagement/viewClaim", ['proyekClaims' => $proyekClaim, 'proyek' => $proyek, "jenis_claim" => $jenis_claim]);
+    // }
 
     public function claimDelete(Request $request)
     {
@@ -159,6 +227,30 @@ class ClaimController extends Controller
     //New Claim
     public function newClaim(Request $request) {
         $data = $request->all();
+        $messages = [
+            "required" => "Field di atas wajib diisi",
+            "string" => "Field di atas wajib diisi string",
+        ];
+        $rules = [
+            "kode-proyek" => "required|string",
+            "jenis-perubahan" => "required|string",
+            "tanggal-perubahan" => "required|string",
+            "uraian-perubahan" => "required|string",
+            "proposal-klaim" => "required|string",
+            "tanggal-pengajuan" => "required|string",
+            "biaya-pengajuan" => "required|string",
+            "waktu-pengajuan" => "required|string",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+
+        if ($validation->fails()) {
+            Alert::error('Error', "Perubahan Kontrak gagal ditambahkan");
+            return Redirect::back();
+            // return Redirect::back();
+            // dd($validation->errors());
+        }
+
+        $validation->validate();
         // if(isset($data["id-perubahan-kontrak"])) {
         //     $perubahan_kontrak = PerubahanKontrak::find($data["id-perubahan-kontrak"]);
         //     $perubahan_kontrak->id_contract = $data["id-contract"];

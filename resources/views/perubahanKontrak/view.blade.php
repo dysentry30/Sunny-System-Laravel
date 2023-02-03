@@ -49,9 +49,10 @@
                                 <!--end::Button-->
 
                                 <!--begin::Button-->
-                                <a href="/contract-management/view/{{ $perubahan_kontrak->id_contract }}" class="btn btn-sm btn-primary" id="cloedButton"
+                                <a href="/claim-management/proyek/{{ $contract->project_id }}/{{ $perubahan_kontrak->id_contract }}" class="btn btn-sm btn-primary" id="cloedButton"
                                     style="background-color:#f3f6f9;margin-left:10px;color: black;">
                                     Close</a>
+                                    
                                 <!--end::Button-->
 
                             </div>
