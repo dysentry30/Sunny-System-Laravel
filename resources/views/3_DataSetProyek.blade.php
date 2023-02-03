@@ -672,8 +672,8 @@
                                             <td class="text-end">
                                                 @php
                                                 if ($proyek->tipe_proyek == 'R') {
-                                                    $total_rkap = $proyek->Forecasts->filter(function($f) {
-                                                        return $f->periode_prognosa == (int) date("m") && $f->tahun == (int) date("Y") ;
+                                                    $total_rkap = $proyek->Forecasts->filter(function($f) use($selected_year){
+                                                        return $f->tahun == (int) $selected_year ;
                                                     })->sum(function($f) {
                                                         return (int) $f->rkap_forecast;
                                                     });
@@ -686,27 +686,32 @@
                                                 </small>
                                             </td>
                                             <!--end::Nilai OK-->
-
                                             <!--begin::Nilai OK-->
                                             <td class="text-end">
-                                                <small>
-                                                    {{ number_format((int)$proyek->nilaiok_awal, 0, '.', '.') ?? '0' }}
-                                                </small>
+                                                @if ($proyek->is_rkap == true)
+                                                    <small>
+                                                        0
+                                                    </small>
+                                                @else
+                                                    <small>
+                                                        {{ number_format((int)$proyek->nilaiok_awal, 0, '.', '.') ?? '0' }}
+                                                    </small>
+                                                @endif
                                             </td>
                                             <!--end::Nilai OK-->
 
                                             <!--begin::Forecast-->
                                             <td class="text-end">
                                                 @php
-                                                    $total_forecast = $proyek->Forecasts->filter(function($f) {
+                                                    $total_forecast = $proyek->Forecasts->filter(function($f) use($selected_year){
                                                         $date = date_create($f->created_at);
-                                                        return $f->periode_prognosa == (int) date("m") && date_format($date, "Y") == date("Y");
+                                                        return date_format($date, "Y") == $selected_year;
                                                     })->sum(function($f) {
                                                         return (int) $f->nilai_forecast;
                                                     });
                                                 @endphp
                                                 <small>
-                                                    {{ number_format((int)$total_forecast, 0, '.', '.') ?? '-' }}
+                                                    {{ number_format((int)$total_forecast, 0, '.', '.') ?? '0' }}
                                                 </small>
                                             </td>
                                             <!--end::Forecast-->
@@ -714,26 +719,18 @@
                                             <!--begin::Realisasi-->
                                             <td class="text-end">
                                                 @php
-                                                if ($proyek->tipe_proyek == 'R' && $proyek->stage == 8) {
-                                                    $total_realisasi = $proyek->Forecasts->filter(function($f) {
-                                                        return $f->periode_prognosa == (int) date("m") && $f->tahun == (int) date("Y") ;
+                                                if ($proyek->stage == 8) {
+                                                    $total_realisasi = $proyek->Forecasts->filter(function($f) use($selected_year){
+                                                        return $f->tahun == (int) $selected_year ;
                                                     })->sum(function($f) {
                                                         return (int) $f->realisasi_forecast;
                                                     });
                                                 } else {
-                                                    $total_realisasi = $proyek->nilai_perolehan;
+                                                    $total_realisasi = 0;
                                                 }
                                                 @endphp
                                                 <small>
-                                                    {{ number_format((int)$total_realisasi, 0, '.', '.') ?? '-' }}
-                                                </small>
-                                            </td>
-                                            <!--end::Realisasi-->
-
-                                            <!--begin::Realisasi-->
-                                            <td class="text-start {{ $proyek->proyekBerjalan ? '' : 'text-danger' }}">
-                                                <small>
-                                                    {{ $proyek->proyekBerjalan->name_customer ?? "*Belum Ditentukan" }}
+                                                    {{ number_format((int)$total_realisasi, 0, '.', '.') ?? '0' }}
                                                 </small>
                                             </td>
                                             <!--end::Realisasi-->

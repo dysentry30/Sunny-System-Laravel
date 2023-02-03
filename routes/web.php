@@ -40,6 +40,7 @@ use App\Http\Controllers\AddendumContractController;
 use App\Http\Controllers\ContractManagementsController;
 use App\Http\Controllers\JenisProyekController;
 use App\Http\Controllers\MataUangController;
+use App\Http\Controllers\RekomendasiController;
 use App\Http\Controllers\TipeProyekController;
 use App\Models\ContractChangeNotice;
 use App\Models\ContractChangeOrder;
@@ -47,6 +48,7 @@ use App\Models\ContractChangeProposal;
 use App\Models\FieldChange;
 use App\Models\IndustrySector;
 use App\Models\JenisProyek;
+use App\Models\KriteriaAssessment;
 use App\Models\KriteriaGreenLine;
 use App\Models\MataUang;
 use App\Models\Provinsi;
@@ -301,7 +303,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     Route::get('/contract-management/view/{id_contract}/perubahan-kontrak/{perubahan_kontrak}', [ContractManagementsController::class, 'perubahanKontrakView']);
 
-    Route::get('/review-contract/view/{id_contract}', [ContractManagementsController::class, 'reviewKontrakView']);
+    Route::get('/review-contract/view/{id_contract}/{stage}', [ContractManagementsController::class, 'reviewKontrakView']);
     
     // Route::get('/contract-management/view/{id_contract}/draft-contract/{is_tender_menang}', [ContractManagementsController::class, 'draftContractView']);
     Route::get('/contract-management/view/{id_contract}/draft-contract/tender-menang/1', [ContractManagementsController::class, 'tenderMenang']);
@@ -349,7 +351,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     Route::get('claim-management', [ClaimController::class, 'index']);
 
-    Route::get('claim-management/proyek/{kode_proyek}/{jenis_claim}', [ClaimController::class, 'viewClaim']);
+    // Route::get('claim-management/proyek/{kode_proyek}/{jenis_claim}', [ClaimController::class, 'viewClaim']);
+    Route::get('claim-management/proyek/{kode_proyek}/{id_contract}', [ClaimController::class, 'view']);
 
     // Route::get('claim-management/view/{kode_proyek}', [ClaimController::class, 'viewClaim']);
 
@@ -1672,6 +1675,40 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         Alert::error('Error', "Kriteria Green Line gagal ditambahkan");
         return redirect()->back();
     });
+    
+    Route::post('/kriteria-assessment/save', function (Request $request) {
+        $data = $request->collect();
+        $data = $data->map(function($d, $key) use($data) {
+            if(is_array($d)) {
+                $d = collect($d)->filter(function($d_item) {
+                    return $d_item != null;
+                })->first();
+            }
+            return $d;
+        })->toArray();
+
+        $new_kriteria = new KriteriaAssessment();
+        $new_kriteria->tahun = $data["tahun"];
+        $new_kriteria->kategori = $data["kategori"];
+        $new_kriteria->kriteria_penilaian = $data["kriteria-penilaian"];
+        $new_kriteria->klasifikasi = $data["klasifikasi"];
+        $new_kriteria->nilai = $data["nilai"];
+        $new_kriteria->isi = $data["isi"];
+
+        if($new_kriteria->save()) {
+            Alert::success('Success', "Kriteria Assessment berhasil ditambahkan");
+            return redirect()->back();
+        }
+        Alert::error('Error', "Kriteria Assessment gagal ditambahkan");
+        return redirect()->back();
+    });
+
+    Route::get('/kriteria-assessment', function (Request $request) {
+        $kriteria_assessments = KriteriaAssessment::all();
+        return view("MasterData/KriteriaAssessment", compact(["kriteria_assessments"]));
+    });
+
+
 
     
     //End :: Master Data
@@ -1782,6 +1819,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post("/ld-law/upload", [ContractManagementsController::class, "ld_law"]);
     
     Route::post("/jaminan-pelaksanaan/upload", [ContractManagementsController::class, "uploadJaminan"]);
+
+    Route::post("/jaminan-pelaksanaan/edit", [ContractManagementsController::class, "editJaminan"]);
 
     Route::post("/dokumen-site-instruction/upload", [ContractManagementsController::class, "siteInstruction"]);
     

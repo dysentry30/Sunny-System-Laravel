@@ -198,7 +198,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                     </button> --}}
 
                                                     <!--begin::Select Options-->
-                                                    <select id="periode-prognosa" onchange="return document.location.href = `/forecast/${this.value}/{{$year}}`" name="periode-prognosa"
+                                                    <select id="periode-prognosa" onchange="return document.location.href = `/{{Request::segment(1)}}/${this.value}/{{$year}}`" name="periode-prognosa"
                                                         class="form-select form-select-solid select2-hidden-accessible w-auto ms-2"
                                                         style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
                                                         data-placeholder="Bulan" data-select2-id="select2-data-bulan" tabindex="-1"
@@ -224,7 +224,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                 @if (($periode != (int) date("m") || $year != (int) date("Y")) && isset($periode))
                                                     <div class="col-2">
                                                         <div class="d-flex flex-row align-items-center justify-content-center">
-                                                            <button type="button" onClick="window.location.href='/forecast/{{ (int) date("m") }}/{{(int) date("Y")}}';" id="unlock-previous-forecast"
+                                                            <button type="button" onClick="window.location.href='/{{Request::segment(1)}}/{{ (int) date("m") }}/{{(int) date("Y")}}';" id="unlock-previous-forecast"
                                                             class="btn btn-sm btn-light btn-active-danger mt-4 me-3">
                                                             <span class="mx-2 fs-6">Pindah ke {{Carbon\Carbon::parse(new DateTime("now"))->translatedFormat("F")}}</span>
                                                             </button>
@@ -1932,6 +1932,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                     @endphp
                                                                     {{-- End :: TOTAL TAHUNAN  --}}
                                                                     <td
+                                                                        data-bs-toggle="tooltip" data-bs-title="{{ number_format($total_ok_tahunan, 0, ".", ".") }}"
                                                                         class="pinForecast HidePin">
                                                                         <center>
                                                                             <p class="">
@@ -1940,6 +1941,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                         </center>
                                                                     </td>
                                                                     <td
+                                                                        data-bs-toggle="tooltip" data-bs-title="{{ number_format($nilaiTotalForecastTahun, 0, ".", ".") }}"
                                                                         class="pinForecast HidePin">
                                                                         @if (isset($unitKerja))
                                                                             <center>
@@ -1964,6 +1966,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                         @endif
                                                                     </td> --}}
                                                                     <td
+                                                                        data-bs-toggle="tooltip" data-bs-title="{{ number_format($nilaiTotalRealisasiTahun, 0, ".", ".") }}"
                                                                         class="pinForecast HidePin">
                                                                         @if (isset($unitKerja))
                                                                             <center>
@@ -1988,6 +1991,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                         @endif
                                                                     </td> --}}
                                                                     <td class="pinForecast ShowPin"
+                                                                        data-bs-toggle="tooltip" data-bs-title="{{ number_format($total_ok_tahunan, 0, ".", ".") }}"
                                                                         style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
                                                                         <center>
                                                                             <p class="mt-4">
@@ -2004,6 +2008,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                         </center>
                                                                     </td> --}}
                                                                     <td class="pinForecast ShowPin"
+                                                                        data-bs-toggle="tooltip" data-bs-title="{{number_format($nilaiTotalForecastTahun, 0, ".", ".")}}"
                                                                         style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
                                                                         @if (isset($unitKerja))
                                                                             <center>
@@ -2028,6 +2033,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                         @endif
                                                                     </td> --}}
                                                                     <td class="pinForecast ShowPin"
+                                                                        data-bs-toggle="tooltip" data-bs-title="{{number_format($nilaiTotalRealisasiTahun, 0, ".", ".")}}"
                                                                         style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
                                                                         @if (isset($unitKerja))
                                                                             <center>

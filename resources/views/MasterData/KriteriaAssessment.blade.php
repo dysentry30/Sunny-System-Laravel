@@ -3,7 +3,7 @@
 {{-- End::Extend Header --}}
 
 {{-- Begin::Title --}}
-@section('title', 'Kriteria Green Line')
+@section('title', 'Kriteria Assessment')
 {{-- End::Title --}}
 
 <!--begin::Main-->
@@ -54,7 +54,7 @@
                                     <!--begin::Button-->
                                     <a href="#kt_modal_input_kriteria_green_line" data-bs-toggle="modal" class="btn btn-sm btn-primary py-3"
                                         style="background-color:#008CB4; padding: 6px">
-                                        Tambah Kriteria Green Line</a>
+                                        Tambah Kriteria Assessment</a>
 
                                 </div>
                                 <!--end::Actions-->
@@ -145,9 +145,12 @@
                                 <thead>
                                     <!--begin::Table row-->
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                        <th class="min-w-auto">Item</th>
-                                        <th class="min-w-auto">Isi Item</th>
-                                        <th class="min-w-auto">Sub Item</th>
+                                        <th class="min-w-auto">Tahun</th>
+                                        <th class="min-w-auto">Kategori</th>
+                                        <th class="min-w-auto">Kriteria Penilaian</th>
+                                        <th class="min-w-auto">Klasifikasi</th>
+                                        <th class="min-w-auto">Isi</th>
+                                        <th class="min-w-auto">Nilai</th>
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>
@@ -158,18 +161,21 @@
                                     $no = 1;
                                 @endphp
                                 <tbody class="fw-bold text-gray-600">
-                                    @foreach ($kriteria_green_line_all as $kriteria)
-                                        @php
+                                    @foreach ($kriteria_assessments as $kriteria)
+                                        {{-- @php
                                             try {
                                                 $sub_isi = App\Models\Provinsi::where("province_id", "=" , $kriteria->sub_isi)->firstOrFail()->province_name;
                                             } catch (\Throwable $th) {
                                                 $sub_isi = $kriteria->sub_isi;
                                             }
                                             @endphp
-                                        <tr>
-                                            <td>{{$kriteria->item}}</td>
+                                        <tr> --}}
+                                            <td>{{$kriteria->tahun}}</td>
+                                            <td>{{$kriteria->kategori}}</td>
+                                            <td>{{$kriteria->kriteria_penilaian}}</td>
+                                            <td>{{$kriteria->klasifikasi}}</td>
                                             <td>{{$kriteria->isi}}</td>
-                                            <td>{{$sub_isi}}</td>
+                                            <td>{{$kriteria->nilai}}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -208,7 +214,7 @@
                 <!--begin::Modal header-->
                 <div class="modal-header">
                     <!--begin::Modal title-->
-                    <h2>Tambah Kriteria Green Line</h2>
+                    <h2>Tambah Assessment</h2>
                     <!--end::Modal title-->
                     <!--begin::Close-->
                     <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
@@ -222,7 +228,7 @@
                 </div>
                 <!--end::Modal header-->
 
-                <form action="/kriteria-green-line/save" method="POST">
+                <form action="/kriteria-assessment/save" method="POST">
                     @csrf
                     <!--begin::Modal body-->
                     <div class="modal-body py-lg-6 px-lg-6">
@@ -236,19 +242,24 @@
                                 <div class="fv-row mb-7">
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Item</span>
+                                        <span class="required">Tahun</span>
                                     </label>
+                                    @php
+                                        $tahun = (int) date("Y");
+                                    @endphp
                                     <!--end::Label-->
                                     <!--begin::Input-->
-                                    <select id="Item" name="item"
+                                    <select id="tahun" name="tahun"
                                         class="form-select form-select-solid select2-hidden-accessible"
-                                        data-control="select2" onchange="getData(this, '#isi')" data-hide-search="false" data-placeholder="Pilh Item..."
-                                        data-select2-id="select2-item" tabindex="-1" aria-hidden="true">
+                                        data-control="select2" data-hide-search="true" data-placeholder="Pilh Tahun..."
+                                        data-select2-id="select2-tahun" tabindex="-1" aria-hidden="true">
                                         <option value="" selected></option>
-                                        <option value="Instansi">Instansi</option>
-                                        <option value="Sumber Dana">Sumber Dana</option>
-                                        <option value="Proyek Luar Negeri">Proyek Luar Negeri</option>
-                                        
+                                        @foreach (range(1, 2) as $item)
+                                            <option value="{{$tahun}}">{{$tahun}}</option>
+                                            @php
+                                                $tahun++;
+                                            @endphp
+                                        @endforeach
                                     </select>
                                 <!--end::Input-->
                                 </div>
@@ -260,16 +271,18 @@
                                 <div class="fv-row mb-7">
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="">Isi</span>
+                                        <span class="">Kategori</span>
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
                                         
-                                    <select id="isi" name="isi"
+                                    <select id="kategori" name="kategori"
                                         class="form-select form-select-solid select2-hidden-accessible"
-                                        data-control="select2" onchange="getData(this, '#provisi', true)" data-hide-search="false" data-placeholder="Pilih Isi..."
-                                        data-select2-id="select2-isi" tabindex="-1" aria-hidden="true">
+                                        data-control="select2" onchange="changeSelectView(this)" data-hide-search="false" data-placeholder="Pilih Kategori..."
+                                        data-select2-id="select2-kategori" tabindex="-1" aria-hidden="true">
                                         <option value="" selected></option>
+                                        <option value="Internal">Internal</option>
+                                        <option value="Eksternal">Eksternal</option>
                                         {{-- @foreach ($instansi as $ins)
                                             <option value="{{$ins->instansi}}">{{$ins->instansi}}</option>
                                         @endforeach --}}
@@ -285,22 +298,105 @@
     
                             <div class="row">
                                 <div class="col">
-                                    <div id="tier" hidden>
+                                    <div id="tier">
                                         <!--begin::Label-->
                                         <label class="fs-6 fw-bold form-label mt-3">
-                                            <span class="">Sub Isi</span>
+                                            <span class="">Kriteria Penilaian</span>
                                         </label>
                                         <!--end::Label-->
     
                                         <!--begin::Input-->
-                                        <select id="tier-select" name="sub-isi[]"
+                                        <div id="kriteria-penilaian-internal">
+                                            <select id="kriteria-penilaian-internal-select" onchange="changeSelectView(this)" name="kriteria-penilaian[]"
+                                                class="form-select form-select-solid select2-hidden-accessible"
+                                                data-control="select2" data-hide-search="false" data-placeholder="Pilih Kriteria Penilaian..."
+                                                data-select2-id="select2-kriteria-penilaian-internal-select" tabindex="-1" aria-hidden="true">
+                                                <option value="" selected></option>
+                                                <option value="Piutang">Piutang</option>
+                                                <option value="Bowheer Bermasalah">Bowheer Bermasalah</option>
+                                                <option value="Key Client">Key Client</option>
+                                                
+                                                {{-- @foreach ($instansi as $ins)
+                                                    <option value="{{$ins->instansi}}">{{$ins->instansi}}</option>
+                                                @endforeach --}}
+                                                {{-- @foreach ($sumber_danas as $sd)
+                                                    <option value="{{$sd->kode}}">{{$sd->kode}}</option>
+                                                @endforeach --}}
+                                            </select>
+                                        </div>
+                                        <!--end::Input-->
+
+                                        <!--begin::Input-->
+                                        <div id="kriteria-penilaian-eksternal" style="display: none;">
+                                            <select id="kriteria-penilaian-eksternal-select" onchange="changeSelectView(this)" name="kriteria-penilaian[]"
+                                                class="form-select form-select-solid select2-hidden-accessible"
+                                                data-control="select2" data-hide-search="false" data-placeholder="Pilih Kriteria Penilaian..."
+                                                data-select2-id="select2-kriteria-penilaian-eksternal-select" tabindex="-1" aria-hidden="true">
+                                                <option value="" selected></option>
+                                                <option value="Industry Attractive">Industry Attractive</option>
+                                                <option value="Top 100 Perusahan Besar di Indonesia">Top 100 Perusahan Besar di Indonesia</option>
+                                                <option value="Lembaga Lain yang mengeluarkan rating perusahaan di Indonesia">Lembaga Lain yang mengeluarkan rating perusahaan di Indonesia</option>
+                                                {{-- @foreach ($instansi as $ins)
+                                                    <option value="{{$ins->instansi}}">{{$ins->instansi}}</option>
+                                                @endforeach --}}
+                                                {{-- @foreach ($sumber_danas as $sd)
+                                                    <option value="{{$sd->kode}}">{{$sd->kode}}</option>
+                                                @endforeach --}}
+                                            </select>
+                                        </div>
+                                        <!--end::Input-->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span class="">Klasifikasi</span>
+                                    </label>
+                                    <!--end::Label-->
+
+                                    <!--begin::Input-->
+                                    <select id="klasifikasi" name="klasifikasi"
+                                        class="form-select form-select-solid select2-hidden-accessible"
+                                        data-control="select2" data-hide-search="false" data-placeholder="Pilih Klasifikasi..."
+                                        data-select2-id="select2-klasifikasi" tabindex="-1" aria-hidden="true">
+                                        <option value="" selected></option>
+                                        <option value="A">A</option>
+                                        <option value="B">B</option>
+                                        <option value="C">C</option>
+                                        
+                                        {{-- @foreach ($instansi as $ins)
+                                            <option value="{{$ins->instansi}}">{{$ins->instansi}}</option>
+                                        @endforeach --}}
+                                        {{-- @foreach ($sumber_danas as $sd)
+                                            <option value="{{$sd->kode}}">{{$sd->kode}}</option>
+                                        @endforeach --}}
+                                    </select>
+                                    <!--end::Input-->
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span class="">Isi</span>
+                                    </label>
+                                    <!--end::Label-->
+
+                                    <!--begin::Input-->
+                                    <div id="piutang">
+                                        <select id="isi" name="isi[]"
                                             class="form-select form-select-solid select2-hidden-accessible"
-                                            data-control="select2" data-hide-search="false" data-placeholder="Pilih Tier..."
-                                            data-select2-id="select2-tier" tabindex="-1" aria-hidden="true">
+                                            data-control="select2" data-hide-search="false" data-placeholder="Pilih Isi..."
+                                            data-select2-id="select2-piutang" tabindex="-1" aria-hidden="true">
                                             <option value="" selected></option>
-                                            <option value="Tier A">Tier A</option>
-                                            <option value="Tier B">Tier B</option>
-                                            <option value="Tier C">Tier C</option>
+                                            <option value="Tidak Ada Piutang">Tidak Ada Piutang</option>
+                                            <option value="Piutang < 3 Bulan">Piutang < 3 Bulan</option>
+                                            <option value="Piutang > 3 Bulan">Piutang > 3 Bulan</option>
+                                            
                                             {{-- @foreach ($instansi as $ins)
                                                 <option value="{{$ins->instansi}}">{{$ins->instansi}}</option>
                                             @endforeach --}}
@@ -308,21 +404,20 @@
                                                 <option value="{{$sd->kode}}">{{$sd->kode}}</option>
                                             @endforeach --}}
                                         </select>
-                                        <!--end::Input-->
                                     </div>
-                                    <div id="provinsi" hidden>
-                                        <!--begin::Label-->
-                                        <label class="fs-6 fw-bold form-label mt-3">
-                                            <span class="">Sub Isi</span>
-                                        </label>
-                                        <!--end::Label-->
-    
-                                        <!--begin::Input-->
-                                        <select id="provinsi-select" name="sub-isi[]"
+                                    <!--end::Input-->
+
+                                    <!--begin::Input-->
+                                    <div id="bowheer-bermasalah" style="display: none">
+                                        <select id="isi" name="isi[]"
                                             class="form-select form-select-solid select2-hidden-accessible"
-                                            data-control="select2" data-hide-search="false" data-placeholder="Pilih Provinsi..."
-                                            data-select2-id="select2-provinsi" tabindex="-1" aria-hidden="true">
+                                            data-control="select2" data-hide-search="false" data-placeholder="Pilih Isi..."
+                                            data-select2-id="select2-bowheer-bermasalah" tabindex="-1" aria-hidden="true">
                                             <option value="" selected></option>
+                                            <option value="Tidak Berperkara Dengan WIKA">Tidak Berperkara Dengan WIKA</option>
+                                            <option value="Ada Perkara, WIKA Menang">Ada Perkara, WIKA Menang</option>
+                                            <option value="Ada Perkara, WIKA Kalah">Ada Perkara, WIKA Kalah</option>
+                                            
                                             {{-- @foreach ($instansi as $ins)
                                                 <option value="{{$ins->instansi}}">{{$ins->instansi}}</option>
                                             @endforeach --}}
@@ -330,8 +425,104 @@
                                                 <option value="{{$sd->kode}}">{{$sd->kode}}</option>
                                             @endforeach --}}
                                         </select>
-                                        <!--end::Input-->
                                     </div>
+                                    <!--end::Input-->
+
+                                    <!--begin::Input-->
+                                    <div id="key-client" style="display: none">
+                                        <select id="isi" name="isi[]"
+                                            class="form-select form-select-solid select2-hidden-accessible"
+                                            data-control="select2" data-hide-search="false" data-placeholder="Pilih Isi..."
+                                            data-select2-id="select2-key-client" tabindex="-1" aria-hidden="true">
+                                            <option value="" selected></option>
+                                            <option value="Perusahaan menjadi bagian Key Client">Perusahaan menjadi bagian Key Client</option>
+                                            
+                                            {{-- @foreach ($instansi as $ins)
+                                                <option value="{{$ins->instansi}}">{{$ins->instansi}}</option>
+                                            @endforeach --}}
+                                            {{-- @foreach ($sumber_danas as $sd)
+                                                <option value="{{$sd->kode}}">{{$sd->kode}}</option>
+                                            @endforeach --}}
+                                        </select>
+                                    </div>
+                                    <!--end::Input-->
+
+                                    <!--begin::Input-->
+                                    <div id="industry-attractive" style="display: none">
+                                        <select id="isi" name="isi[]"
+                                            class="form-select form-select-solid select2-hidden-accessible"
+                                            data-control="select2" data-hide-search="false" data-placeholder="Pilih Isi..."
+                                            data-select2-id="select2-industry-attractive" tabindex="-1" aria-hidden="true">
+                                            <option value="" selected></option>
+                                            <option value="Industri Menarik dan Cenderung Menarik">Industri Menarik dan Cenderung Menarik</option>
+                                            <option value="Industri Netral dan Cenderung Waspada">Industri Netral dan Cenderung Waspada</option>
+                                            <option value="Industri Waspada">Industri Waspada</option>
+                                            
+                                            {{-- @foreach ($instansi as $ins)
+                                                <option value="{{$ins->instansi}}">{{$ins->instansi}}</option>
+                                            @endforeach --}}
+                                            {{-- @foreach ($sumber_danas as $sd)
+                                                <option value="{{$sd->kode}}">{{$sd->kode}}</option>
+                                            @endforeach --}}
+                                        </select>
+                                    </div>
+                                    <!--end::Input-->
+
+                                    <!--begin::Input-->
+                                    <div id="top-100" style="display: none">
+                                        <select id="isi" name="isi[]"
+                                            class="form-select form-select-solid select2-hidden-accessible"
+                                            data-control="select2" data-hide-search="false" data-placeholder="Pilih Isi..."
+                                            data-select2-id="select2-top-100" tabindex="-1" aria-hidden="true">
+                                            <option value="" selected></option>
+                                            <option value="Perusahaan berada pada urutan 1-50">Perusahaan berada pada urutan 1-50</option>
+                                            <option value="Perusahaan berada pada urutan 51-100">Perusahaan berada pada urutan 51-100</option>
+                                            <option value="Perusahaan tidak berada pada daftar Top Perusahaan">Perusahaan tidak berada pada daftar Top Perusahaan</option>
+                                            
+                                            {{-- @foreach ($instansi as $ins)
+                                                <option value="{{$ins->instansi}}">{{$ins->instansi}}</option>
+                                            @endforeach --}}
+                                            {{-- @foreach ($sumber_danas as $sd)
+                                                <option value="{{$sd->kode}}">{{$sd->kode}}</option>
+                                            @endforeach --}}
+                                        </select>
+                                    </div>
+                                    <!--end::Input-->
+
+                                    <!--begin::Input-->
+                                    <div id="rating" style="display: none">
+                                        <select id="isi" name="isi[]"
+                                            class="form-select form-select-solid select2-hidden-accessible"
+                                            data-control="select2" data-hide-search="false" data-placeholder="Pilih Isi..."
+                                            data-select2-id="select2-rating" tabindex="-1" aria-hidden="true">
+                                            <option value="" selected></option>
+                                            <option value="Perusahaan berada pada urutan 1-50">Perusahaan berada pada urutan 1-50</option>
+                                            <option value="Perusahaan berada pada urutan 51-100">Perusahaan berada pada urutan 51-100</option>
+                                            <option value="Perusahaan tidak berada pada daftar Rating Perusahaan">Perusahaan tidak berada pada daftar Rating Perusahaan</option>
+                                                                                        
+                                            {{-- @foreach ($instansi as $ins)
+                                                <option value="{{$ins->instansi}}">{{$ins->instansi}}</option>
+                                            @endforeach --}}
+                                            {{-- @foreach ($sumber_danas as $sd)
+                                                <option value="{{$sd->kode}}">{{$sd->kode}}</option>
+                                            @endforeach --}}
+                                        </select>
+                                    </div>
+                                    <!--end::Input-->
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span class="">Nilai</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    
+                                    <!--begin::input-->
+                                    <input type="text" class="form-control form-control-solid" placeholder="Nilai" name="nilai" id="nilai">
+                                    <!--end::input-->
                                 </div>
                             </div>
                         </div>
@@ -583,50 +774,112 @@
 
 @section('js-script')
 <script>
-    async function getData(e, dropdownElt, isShow = false) {
-        const value = e.value;
-        let html = '<option value="" selected></option>';
-        const getDataKategoriRes = await fetch(`/kriteria/${value}`).then(res => res.json());
-        getDataKategoriRes.forEach(item => {
-            if(item.province_id) {
-                html += `<option value="${item.province_id}">${item.province_name}</option>`
-            } else {
-                html += `<option value="${item}">${item}</option>`
-            }
-        }) 
-        if(isShow) {
-            if(value.includes("BUMN")) {
-                document.querySelector("#tier").removeAttribute("hidden");
-                document.querySelector("#provinsi").setAttribute("hidden", true);
-                $('#tier-select').select2({
-                    dropdownParent: $('#kt_modal_input_kriteria_green_line'),
-                    // minimumResultsForSearch: Infinity,
-                });
-                $('#provinsi-select').select2("destroy");
-            } else if(value.includes("APBD") || value.includes("Provinsi")) {
-                document.querySelector("#tier").setAttribute("hidden", true);
-                document.querySelector("#provinsi").removeAttribute("hidden");
-                document.querySelector("#provinsi-select").innerHTML = html;
-                $('#tier-select').select2("destroy");
-                $('#provinsi-select').select2({
-                    dropdownParent: $('#kt_modal_input_kriteria_green_line'),
-                    // minimumResultsForSearch: Infinity,
-                });
-            } else {
-                document.querySelector("#tier").setAttribute("hidden", true);
-                document.querySelector("#provinsi").setAttribute("hidden", true);
-            }
-        } else {
-            document.querySelector(dropdownElt).innerHTML = html;
+     function changeSelectView(e) {
+         const value = e.value;
+        if(value == "Internal") {
+            document.querySelector("#kriteria-penilaian-internal").style.display = "";
+            document.querySelector("#kriteria-penilaian-eksternal").style.display = "none";
+
+            document.querySelector("#kriteria-penilaian-internal select").removeAttribute("disabled");
+            document.querySelector("#kriteria-penilaian-eksternal select").setAttribute("disabled", true);
+        } else if(value == "Eksternal") {
+            document.querySelector("#kriteria-penilaian-internal").style.display = "none";
+            document.querySelector("#kriteria-penilaian-eksternal").style.display = "";
+            
+            document.querySelector("#kriteria-penilaian-internal select").setAttribute("disabled", true);
+            document.querySelector("#kriteria-penilaian-eksternal select").removeAttribute("disabled");
+        } else if(value == "Piutang") {
+            document.querySelector("#piutang").style.display = "";
+            document.querySelector("#bowheer-bermasalah").style.display = "none";
+            document.querySelector("#key-client").style.display = "none";
+            document.querySelector("#industry-attractive").style.display = "none";
+            document.querySelector("#top-100").style.display = "none";
+            document.querySelector("#rating").style.display = "none";
+
+            document.querySelector("#piutang select").removeAttribute("disabled");
+            document.querySelector("#bowheer-bermasalah select").setAttribute("disabled", true);
+            document.querySelector("#key-client select").setAttribute("disabled", true);
+            document.querySelector("#industry-attractive select").setAttribute("disabled", true);
+            document.querySelector("#top-100 select").setAttribute("disabled", true);
+            document.querySelector("#rating select").setAttribute("disabled", true);
+        } else if(value == "Bowheer Bermasalah") {
+            document.querySelector("#piutang").style.display = "none";
+            document.querySelector("#bowheer-bermasalah").style.display = "";
+            document.querySelector("#key-client").style.display = "none";
+            document.querySelector("#industry-attractive").style.display = "none";
+            document.querySelector("#top-100").style.display = "none";
+            document.querySelector("#rating").style.display = "none";
+
+            document.querySelector("#piutang select").setAttribute("disabled", true);
+            document.querySelector("#bowheer-bermasalah select").removeAttribute("disabled");
+            document.querySelector("#key-client select").setAttribute("disabled", true);
+            document.querySelector("#industry-attractive select").setAttribute("disabled", true);
+            document.querySelector("#top-100 select").setAttribute("disabled", true);
+            document.querySelector("#rating select").setAttribute("disabled", true);
+        } else if(value == "Key Client") {
+            document.querySelector("#piutang").style.display = "none";
+            document.querySelector("#bowheer-bermasalah").style.display = "none";
+            document.querySelector("#key-client").style.display = "";
+            document.querySelector("#industry-attractive").style.display = "none";
+            document.querySelector("#top-100").style.display = "none";
+            document.querySelector("#rating").style.display = "none";
+            
+            document.querySelector("#piutang select").setAttribute("disabled", true);
+            document.querySelector("#bowheer-bermasalah select").setAttribute("disabled", true);
+            document.querySelector("#key-client select").removeAttribute("disabled");
+            document.querySelector("#industry-attractive select").setAttribute("disabled", true);
+            document.querySelector("#top-100 select").setAttribute("disabled", true);
+            document.querySelector("#rating select").setAttribute("disabled", true);
+        } else if(value == "Industry Attractive") {
+            document.querySelector("#piutang").style.display = "none";
+            document.querySelector("#bowheer-bermasalah").style.display = "none";
+            document.querySelector("#key-client").style.display = "none";
+            document.querySelector("#industry-attractive").style.display = "";
+            document.querySelector("#top-100").style.display = "none";
+            document.querySelector("#rating").style.display = "none";
+
+            document.querySelector("#piutang select").setAttribute("disabled", true);
+            document.querySelector("#bowheer-bermasalah select").setAttribute("disabled", true);
+            document.querySelector("#key-client select").setAttribute("disabled", true);
+            document.querySelector("#industry-attractive select").removeAttribute("disabled");
+            document.querySelector("#top-100 select").setAttribute("disabled", true);
+            document.querySelector("#rating select").setAttribute("disabled", true);
+        } else if(value == "Top 100 Perusahan Besar di Indonesia") {
+            document.querySelector("#piutang").style.display = "none";
+            document.querySelector("#bowheer-bermasalah").style.display = "none";
+            document.querySelector("#key-client").style.display = "none";
+            document.querySelector("#industry-attractive").style.display = "none";
+            document.querySelector("#top-100").style.display = "";
+            document.querySelector("#rating").style.display = "none";
+
+            document.querySelector("#piutang select").setAttribute("disabled", true);
+            document.querySelector("#bowheer-bermasalah select").setAttribute("disabled", true);
+            document.querySelector("#key-client select").setAttribute("disabled", true);
+            document.querySelector("#industry-attractive select").setAttribute("disabled", true);
+            document.querySelector("#top-100 select").removeAttribute("disabled");
+            document.querySelector("#rating select").setAttribute("disabled", true);
+        } else if(value == "Lembaga Lain yang mengeluarkan rating perusahaan di Indonesia") {
+            document.querySelector("#piutang").style.display = "none";
+            document.querySelector("#bowheer-bermasalah").style.display = "none";
+            document.querySelector("#key-client").style.display = "none";
+            document.querySelector("#industry-attractive").style.display = "none";
+            document.querySelector("#top-100").style.display = "none";
+            document.querySelector("#rating").style.display = "";
+
+            document.querySelector("#piutang select").setAttribute("disabled", true);
+            document.querySelector("#bowheer-bermasalah select").setAttribute("disabled", true);
+            document.querySelector("#key-client select").setAttribute("disabled", true);
+            document.querySelector("#industry-attractive select").setAttribute("disabled", true);
+            document.querySelector("#top-100 select").setAttribute("disabled", true);
+            document.querySelector("#rating select").removeAttribute("disabled");
         }
-        return;
     }
-    $(document).ready(function() {
-        $('#provinsi-select', "#tier-select").select2({
-            dropdownParent: $('#kt_modal_input_kriteria_green_line'),
-            // minimumResultsForSearch: Infinity,
-        });
-    });
+    // $(document).ready(function() {
+    //     $('#provinsi-select', "#tier-select").select2({
+    //         dropdownParent: $('#kt_modal_input_kriteria_green_line'),
+    //         // minimumResultsForSearch: Infinity,
+    //     });
+    // });
 </script>
 @endsection
 

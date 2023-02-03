@@ -156,7 +156,6 @@
                                                 <th class="min-w-auto">Kategori Proyek</th>
                                                 <th class="min-w-auto">Mengusulkan</th>
                                                 <th class="min-w-auto">Status</th>
-                                                <th class="min-w-auto"></th>
                                                 {{-- <th class="min-w-auto">ID Contract</th> --}}
                                             </tr>
                                             <!--end::Table row-->
@@ -168,25 +167,19 @@
                                                 @forelse ($proyeks_pengajuan as $proyek)
                                                     @php
                                                         $customer = $proyek->proyekBerjalan->Customer;
-                                                        $approved_data = collect([json_decode($proyek->approved_rekomendasi)]);
-                                                        $is_user_id_exist = $approved_data->filter(function($d) {
-                                                            if(is_array($d)) {
-                                                                return in_array(Auth::user()->id, $d);
-                                                            }
-                                                            return !empty($d->user_id) && $d->user_id == Auth::user()->id;
-                                                        });
-                                                        $is_approved = is_array(collect($approved_data->first())->values()->first()) ? collect($approved_data->first())->values()->count() == $all_super_user_counter : $approved_data->count() == $all_super_user_counter;
-                                                        // dd($approved_data->first());
+                                                        $approved_data = collect([json_decode($proyek->approved_rekomendasi)])->flatten();
+                                                        $is_approved = $approved_data->every(function($item) {
+                                                            return !empty($item) && $item->status == "approved";
+                                                        }) && ($approved_data->count() == $all_super_user_counter);
+                                                        // dd($approved_data);
                                                         if($is_approved) {
-                                                            $approved_data_first = $approved_data;
-                                                            $is_approved = collect($approved_data_first)->every(function($adf) {
-                                                                return collect($adf->status)->every(function($s){
-                                                                    return $s == "approved";
-                                                                });
+                                                            // $approved_data_first = $approved_data;
+                                                        } else {
+                                                            $is_user_id_exist = $approved_data->filter(function($d) {
+                                                                return !empty($d->user_id) && $d->user_id == Auth::user()->id;
                                                             });
                                                         }
-                                                        $is_pending = $proyek->is_request_rekomendasi;
-                                                        // dump($approved_data->count(), $all_super_user_counter);
+                                                        $is_pending = !$is_approved && ($approved_data->count() < $all_super_user_counter);
                                                     @endphp
                                                     <tr>
                                                         <td>
@@ -237,13 +230,10 @@
                                                             </small>
                                                         </td>
                                                         <td>
-                                                            @php
-                                                                $status_approval = $is_user_id_exist->first();
-                                                            @endphp
                                                             @if ($is_approved)
                                                                 <small class="badge badge-light-success">Disetujui</small>
                                                             @elseif($is_pending)
-                                                                <small class="badge badge-light-primary">Pengajuan</small>
+                                                                <small class="badge badge-light-primary">Proses Pengajuan</small>
                                                             @else
                                                                 <small class="badge badge-light-danger">Ditolak</small>
                                                             @endif
@@ -290,22 +280,16 @@
                                                 @forelse ($proyeks_persetujuan as $proyek)
                                                     @php
                                                         $customer = $proyek->proyekBerjalan->Customer;
-                                                        $approved_data = collect([json_decode($proyek->approved_rekomendasi)]);
-                                                        $is_approved = is_array(collect($approved_data->first())->values()->first()) ? collect($approved_data->first())->values()->count() == $all_super_user_counter : $approved_data->count() == $all_super_user_counter;
+                                                        $approved_data = collect([json_decode($proyek->approved_rekomendasi)])->flatten();
+                                                        $is_approved = $approved_data->every(function($item) {
+                                                            return !empty($item) && $item->status == "approved";
+                                                        });
                                                         
-                                                        // dd($approved_data->first());
+                                                        // dd($approved_data);
                                                         if($is_approved) {
-                                                            $approved_data_first = $approved_data;
-                                                            $is_approved = collect($approved_data_first)->every(function($adf) {
-                                                                return collect($adf->status)->every(function($s){
-                                                                    return $s == "approved";
-                                                                });
-                                                            });
+                                                            // $approved_data_first = $approved_data;
                                                         } else {
                                                             $is_user_id_exist = $approved_data->filter(function($d) {
-                                                                if(is_array($d)) {
-                                                                    return in_array(Auth::user()->id, $d);
-                                                                }
                                                                 return !empty($d->user_id) && $d->user_id == Auth::user()->id;
                                                             });
                                                         }
@@ -361,36 +345,56 @@
                                                             </small>
                                                         </td>
                                                         <td>
-                                                            {{-- @if ((bool) $proyek->is_rekomendasi == false && !is_null($proyek->is_rekomendasi))
-                                                                <small class="badge badge-light-danger">Ditolak</small>
-                                                            @elseif($proyek->is_rekomendasi)
-                                                                <small class="badge badge-light-success">Disetujui</small>
-                                                            @else 
-                                                                <small class="badge badge-light-primary">Pengajuan</small>
-                                                            @endif --}}
-                                                            @if (isset($is_approved))
+                                                            @php
+                                                                $msg = "";
+                                                                $is_approved = $approved_data->every(function($item) {
+                                                                    return !empty($item) && $item->status == "approved";
+                                                                }) && ($approved_data->count() == $all_super_user_counter);
+                                                                $is_pending = !$is_approved && ($approved_data->count() < $all_super_user_counter);
+                                                                if(!$is_approved) {
+                                                                    // $is_user_id_exist = $approved_data->map(function($d) {
+                                                                    //     $new_class = new stdClass();
+                                                                    //     if(!empty($d) && $d->status  == "rejected") {
+                                                                    //         $new_class->user_id = $d->user_id;
+                                                                    //         $new_class->status = $d->status;
+                                                                    //         return $new_class;
+                                                                    //     }
+                                                                    // });
+                                                                    if(!empty($approved_data) && !$is_approved) {
+                                                                        $nama_user = collect();
+                                                                        foreach ($approved_data as $item) {
+                                                                            if(!empty($item) && $item->status == "rejected") {
+                                                                                try {
+                                                                                    $user = App\Models\User::find($item->user_id)->name;
+                                                                                    if(!empty($user)) $nama_user->push($user);
+                                                                                } catch (\Throwable $th) {
+                                                                                    //throw $th;
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                        $nama_user = $nama_user->join(", ", " dan ");
+                                                                        if(!empty($nama_user)) {
+                                                                            $msg = "Rekomendasi ini ditolak oleh <b>$nama_user</b>";
+                                                                        }
+                                                                    }
+                                                                }   
+                                                            @endphp
+                                                            @if ($is_approved)
                                                                 @if ($is_approved)
                                                                     <small class="badge badge-light-success">Disetujui</small>
                                                                 @elseif($is_pending)
-                                                                    <small class="badge badge-light-primary">Pengajuan</small>
+                                                                    <small class="badge badge-light-primary">Proses Pengajuan</small>
                                                                 @else
-                                                                    <small class="badge badge-light-danger">Ditolak</small>
+                                                                    <small class="badge badge-light-danger" data-bs-toggle="tooltip" data-bs-html="true" data-bs-title="{{ $msg }}">Ditolak</small>
                                                                 @endif
                                                             @else
-                                                                @php
-                                                                    $status_approval = isset($is_user_id_exist) ? $is_user_id_exist->first() : null;
-                                                                @endphp
-                                                                @switch($status_approval->status ?? "")
-                                                                    @case("approved")
-                                                                        <small class="badge badge-light-success">Disetujui</small>
-                                                                        @break
-                                                                    @case("rejected")
-                                                                        <small class="badge badge-light-danger">Ditolak</small>
-                                                                        @break
-                                                                    @default
-                                                                        <small class="badge badge-light-primary">Pengajuan</small>
-                                                                        @break
-                                                                @endswitch
+                                                                @if(!$is_pending && !$is_approved)
+                                                                    <small class="badge badge-light-danger"  data-bs-toggle="tooltip" data-bs-html="true" data-bs-title="{{ $msg }}">Ditolak</small>
+                                                                @elseif(!$is_pending && $is_approved)        
+                                                                    <small class="badge badge-light-success">Disetujui</small>
+                                                                @else
+                                                                    <small class="badge badge-light-primary">Proses Pengajuan</small>
+                                                                @endif
                                                             @endif
                                                         </td>
                                                     </tr>
@@ -1469,24 +1473,39 @@
                     <h6 class="text-danger fw-normal">(*) Kolom Ini Harus Diisi !</h6>
                 </div>
                 <div class="modal-footer">
-                    
-                    @if ($is_super_user && isset($is_user_id_exist) && !$is_user_id_exist->count() > 0 && $proyek->is_request_rekomendasi && $approved_data->count() != $all_super_user_counter)
+                    @php
+                        $approved_data = collect([json_decode($proyek->approved_rekomendasi)])->flatten();
+                        $is_user_id_exist = $approved_data->map(function($d) {
+                            if(!empty($d) && $d->user_id == Auth::user()->id) {
+                                $new_class = new stdClass();
+                                $new_class->user_id = $d->user_id;
+                                $new_class->status = $d->status;
+                                return $new_class;
+                            }
+                            // if(is_array($d->user_id)) {
+                            //     return in_array(Auth::user()->id, $d->user_id);
+                            // }
+                            // return !empty($d->user_id) && $d->user_id == Auth::user()->id;
+                        })->firstWhere("user_id", "!=", null);
+                        // dump($is_user_id_exist)
+                    @endphp
+                    @if ($is_super_user && empty($is_user_id_exist) && $proyek->is_request_rekomendasi && $approved_data->count() != $all_super_user_counter)
                         <form action="" method="GET">
                             @csrf
                             <input type="hidden" name="kode-proyek" value="{{$proyek->kode_proyek}}">
                             <input type="submit" name="tolak" value="Tolak" class="btn btn-sm btn-danger">
                             <input type="submit" name="setuju" value="Setujui" class="btn btn-sm btn-success">
                         </form>
-                    @elseif(isset($is_user_id_exist) && $is_user_id_exist->isNotEmpty())
-                        @php
+                    @elseif(!empty($is_user_id_exist))
+                        {{-- @php
                             $status_approval = $is_user_id_exist->first();
-                        @endphp
-                        @switch($status_approval->status)
+                        @endphp --}}
+                        @switch($is_user_id_exist->status)
                             @case("approved")
                                 <small class="badge badge-light-success">Disetujui</small>
                                 @break
                             @case("rejected")
-                                <small class="badge badge-light-success">Ditolak</small>
+                                <small class="badge badge-light-danger">Ditolak</small>
                                 @break
                             @default
                                 
@@ -1503,24 +1522,25 @@
 @section('js-script')
     <!--begin::Data Tables-->
     <script src="/datatables/jquery.dataTables.min.js"></script>
-    <script src="/datatables/dataTables.buttons.min.js"></script>
+    {{-- <script src="/datatables/dataTables.buttons.min.js"></script>
     <script src="/datatables/buttons.html5.min.js"></script>
     <script src="/datatables/buttons.colVis.min.js"></script>
     <script src="/datatables/jszip.min.js"></script>
     <script src="/datatables/pdfmake.min.js"></script>
-    <script src="/datatables/vfs_fonts.js"></script>
+    <script src="/datatables/vfs_fonts.js"></script> --}}
     <!--end::Data Tables-->
 
     <script>
         $(document).ready(function() {
             $("#rekomendasi-pengajuan, #rekomendasi-persetujuan").DataTable( {
-                // dom: '<"float-start"f><"#example"t>rtip',
+                dom: '<"float-start"f><"#example"t>rtip',
                 // dom: 'Brti',
-                dom: 'frtip',
-                pageLength : 20,
+                // dom: 'frtip',
+            pageLength : 20,
             } );
         });
     </script>
+    
 
     <script>
         const modals = document.querySelectorAll(".modal");

@@ -23,12 +23,14 @@ class RekomendasiController extends Controller
                 if(is_array($d)) {
                     return in_array(Auth::user()->id, $d);
                 }
-                return $d == Auth::user()->id;
+                return $d->user_id == Auth::user()->id;
             })->count() > 0;
             $check_user_approval_counter = is_array(collect($data->first())->values()->first()) ? collect($data->first())->values()->count() == $all_super_user_counter : $data->count() == $all_super_user_counter;
             $data = $data->mergeRecursive([
-                "user_id" => Auth::user()->id,
-                "status" => "approved",
+                [
+                    "user_id" => Auth::user()->id,
+                    "status" => "approved",
+                ]
             ]);
             if(!$is_user_id_exist) {
                 if($check_user_approval_counter) {
@@ -46,17 +48,22 @@ class RekomendasiController extends Controller
             $proyek = Proyek::find($request->get("kode-proyek"));
             // $proyek->is_request_rekomendasi = true;
             $data = collect(json_decode($proyek->approved_rekomendasi));
+            // dd($data);
             $is_user_id_exist = $data->filter(function($d) {
                 if(is_array($d)) {
                     return in_array(Auth::user()->id, $d);
                 }
-                return $d == Auth::user()->id;
+                return $d->user_id == Auth::user()->id;
             })->count() > 0;
             $check_user_approval_counter = is_array(collect($data->first())->values()->first()) ? collect($data->first())->values()->count() == $all_super_user_counter : $data->count() == $all_super_user_counter;
-            $data = $data->mergeRecursive([
-                "user_id" => Auth::user()->id,
-                "status" => "rejected",
-            ]);
+            $data = $data->mergeRecursive(
+                [
+                    [
+                        "user_id" => Auth::user()->id,
+                        "status" => "rejected",
+                    ]
+                ]
+            );
             if($check_user_approval_counter) {
                 $proyek->is_request_rekomendasi = false;
             }

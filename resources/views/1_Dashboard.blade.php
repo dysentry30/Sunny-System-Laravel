@@ -4225,7 +4225,11 @@
                                     }
                                 });
                             } else {
-                                nilai = forecasts[forecastLength - 1].realisasi_forecast ?? 0;
+                                if (forecasts[forecastLength - 1]) {
+                                    nilai = forecasts[forecastLength - 1].realisasi_forecast ?? 0;
+                                } else {
+                                    nilai = 0;
+                                }
                             }
                             break;
                         default:
