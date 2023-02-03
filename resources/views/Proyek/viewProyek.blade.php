@@ -63,11 +63,7 @@
                 <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
 
                     @php
-                        if(!empty($proyekBerjalans)) {
-                            $check_green_line = checkGreenLine($proyekberjalans);
-                        } else {
-                            $check_green_line = false;
-                        }
+                        $check_green_line = checkGreenLine($proyek);
                     @endphp
 
                     <!--begin::Toolbar-->
@@ -111,10 +107,14 @@
                                 <!--end::Button-->
 
                                 <!--begin::Button-->    
-                                @if ($proyek->is_request_rekomendasi == false && !$check_green_line)
+                                @if ($proyek->is_request_rekomendasi == false && !$check_green_line && $proyek->stage == 1)
                                     <input type="submit" name="proyek-rekomendasi" value="Pengajuan Rekomendasi" class="btn btn-sm btn-success ms-2" id="proyek-rekomendasi"
                                         style="background-color:#00b48d">
-                                @elseif($check_green_line)
+                                @elseif($proyek->stage > 1 && !$check_green_line)
+                                    <div class="" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="left" data-bs-title="Proyek ini sudah melewati tahap <b>Rekomendasi</b>">
+                                        <input type="submit" name="proyek-rekomendasi" value="Pengajuan Rekomendasi" class="btn btn-sm btn-secondary ms-2" id="proyek-rekomendasi" disabled >
+                                    </div>
+                                @elseif($proyek->stage == 1 && $check_green_line)
                                     <div class="" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="left" data-bs-title="Proyek ini sudah termasuk ke dalam kategori <b>Green Line</b>">
                                         <input type="submit" name="proyek-rekomendasi" value="Pengajuan Rekomendasi" class="btn btn-sm btn-secondary ms-2" id="proyek-rekomendasi" disabled >
                                     </div>
@@ -237,11 +237,21 @@
                                                             Pasar Potensial
                                                         </a>
                                                     @else
-                                                        <a href="#"
-                                                            class="stage-button stage-action color-is-default stage-is-not-active"
-                                                            style="outline: 0px; cursor: pointer;" stage="2">
-                                                            Pasar Potensial
-                                                        </a>
+                                                        @if ($check_green_line)
+                                                            <a href="#"
+                                                                class="stage-button stage-action color-is-default stage-is-not-active"
+                                                                style="outline: 0px; cursor: pointer;" stage="2">
+                                                                Pasar Potensial
+                                                            </a>
+                                                        @else
+                                                            <div class="stage-button color-is-default stage-is-not-active" data-bs-toggle="tooltip" data-bs-html="true" data-bs-title="Tidak bisa lanjut ke <b>Pasar Potensial</b>, karena Proyek <b>Non Green Line</b>. Silahkan ajukan Rekomendasi dengan tekan button <b>Pengajuan Rekomendasi</b>.">
+                                                                <a href="#"
+                                                                    class="text-white stage-action"
+                                                                    style="outline: 0px; pointer-events: none;" stage="2">
+                                                                    Pasar Potensial
+                                                                </a>
+                                                            </div>
+                                                        @endif
                                                     @endif
 
                                                     @if ($proyek->is_tidak_lulus_pq)
@@ -1011,9 +1021,15 @@
 
                                                         <div class="col-6 mt-5 ms-5">
                                                             <div class="form-check">
-                                                                <input class="form-check-input" name="is-green-line" type="checkbox" {{(bool) $check_green_line ? "checked" : ""}} disabled id="flexCheckDefault">
+                                                                <input class="form-check-input" name="is-green-line" disabled type="checkbox" {{(bool) $check_green_line ? "checked" : ""}} disabled id="flexCheckDefault">
                                                                 <label class="form-check-label" for="flexCheckDefault">
                                                                   Green Line
+                                                                </label>
+                                                            </div><br>
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" name="is-green-line" disabled type="checkbox" {{(bool) $proyek->is_rkap ? "checked" : ""}} disabled id="flexCheckDefault">
+                                                                <label class="form-check-label" for="flexCheckDefault">
+                                                                  Proyek RKAP
                                                                 </label>
                                                             </div>
                                                         </div>

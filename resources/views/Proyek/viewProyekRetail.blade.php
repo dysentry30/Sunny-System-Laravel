@@ -1527,7 +1527,8 @@
                     <div class="row">
                         <div class="d-flex flex-row-reverse">
                             @php
-                                $now = Carbon\Carbon::now()->subMonths(2);
+                                $now = Carbon\Carbon::now();
+                                $now = $now->setDays(1)->subMonths(2);
                             @endphp
                             <ul
                                 class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-5">
@@ -1553,7 +1554,7 @@
                         <hr>
 
                         @php
-                        $now_pane = Carbon\Carbon::now()->subMonths(2);
+                        $now_pane = Carbon\Carbon::now()->setDays(1)->subMonths(2);
                         @endphp
                         <div class="tab-content">
                             @foreach (range(1,3) as $item)

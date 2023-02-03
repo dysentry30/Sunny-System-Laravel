@@ -149,7 +149,6 @@
                         <!--begin::Toolbar-->
 
                         <!--begin::Card "style edited"-->
-                        @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)"))
                         <div class="card mt-2 mb-0">
                             <!--begin::Card body-->
                             <div class="card-body pt-6 pb-0 mb-0">
@@ -217,7 +216,6 @@
                             </div>
                             <!--end::Card body-->
                         </div>
-                        @endif
                         <!--end::Card "style edited"-->
 
                         <!--begin::Post-->

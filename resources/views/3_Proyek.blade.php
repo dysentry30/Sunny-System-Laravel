@@ -103,11 +103,11 @@
                                                     id="kt_toolbar_import">
                                                     <i class="bi bi-file-earmark-spreadsheet"></i>Import Excel
                                                 </button> --}}
-                                                <a href="/proyek/export-proyek"
+                                                {{-- <a href="/proyek/export-proyek"
                                                     class="btn btn-active-primary dropdown-item rounded-0"
                                                     id="kt_toolbar_export">
                                                     <i class="bi bi-download"></i>Export Excel
-                                                </a>
+                                                </a> --}}
                                                 <a target="_blank" href="/proyek-datatables/set"
                                                     class="btn btn-active-primary dropdown-item rounded-0"
                                                     id="kt_toolbar_export">
@@ -171,7 +171,7 @@
                                             class="form-select form-select-solid select2-hidden-accessible mx-3"
                                             data-control="select2" data-hide-search="true" data-placeholder="Tahun"
                                             tabindex="-1" aria-hidden="true">
-                                                <option value="">{{ date("Y") }}</option>
+                                                <option value="">{{ $selected_year }}</option>
                                                 @foreach ($tahun_proyeks as $tahun)
                                                     <option value="{{$tahun}}" {{$selected_year == $tahun ? "selected" : ""}}>{{$tahun}}</option>
                                                 @endforeach
@@ -515,8 +515,13 @@
                                             <td class="text-end">
                                                 @php
                                                 if ($proyek->tipe_proyek == 'R') {
-                                                    $total_rkap = $proyek->Forecasts->filter(function($f) {
-                                                        return $f->periode_prognosa == (int) date("m") && $f->tahun == (int) date("Y") ;
+                                                    $total_rkap = $proyek->Forecasts->filter(function($f) use($selected_year){
+                                                        if($selected_year < (int) date("Y")) {
+                                                            $month = 12;
+                                                        } else {
+                                                            $month = (int) date("m");
+                                                        }
+                                                        return $f->periode_prognosa == $month && $f->tahun == (int) $selected_year ;
                                                     })->sum(function($f) {
                                                         return (int) $f->rkap_forecast;
                                                     });
@@ -546,9 +551,14 @@
                                             <!--begin::Forecast-->
                                             <td class="text-end">
                                                 @php
-                                                    $total_forecast = $proyek->Forecasts->filter(function($f) {
+                                                    $total_forecast = $proyek->Forecasts->filter(function($f) use($selected_year){
                                                         $date = date_create($f->created_at);
-                                                        return $f->periode_prognosa == (int) date("m") && date_format($date, "Y") == date("Y");
+                                                        if($selected_year < (int) date("Y")) {
+                                                            $month = 12;
+                                                        } else {
+                                                            $month = (int) date("m");
+                                                        }
+                                                        return $f->periode_prognosa == $month && date_format($date, "Y") == $selected_year;
                                                     })->sum(function($f) {
                                                         return (int) $f->nilai_forecast;
                                                     });
@@ -563,8 +573,13 @@
                                             <td class="text-end">
                                                 @php
                                                 if ($proyek->stage == 8) {
-                                                    $total_realisasi = $proyek->Forecasts->filter(function($f) {
-                                                        return $f->periode_prognosa == (int) date("m") && $f->tahun == (int) date("Y") ;
+                                                    $total_realisasi = $proyek->Forecasts->filter(function($f) use($selected_year){
+                                                        if($selected_year < (int) date("Y")) {
+                                                            $month = 12;
+                                                        } else {
+                                                            $month = (int) date("m");
+                                                        }
+                                                        return $f->periode_prognosa == $month && $f->tahun == (int) $selected_year ;
                                                     })->sum(function($f) {
                                                         return (int) $f->realisasi_forecast;
                                                     });
@@ -1048,18 +1063,27 @@
 @endsection
 @section('js-script')
     <!--begin::Data Tables-->
-    <script src="/datatables/jquery.dataTables.min.js"></script>
+    {{-- <script src="/datatables/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/fixedcolumns/4.2.1/js/dataTables.fixedColumns.min.js"></script>
-    {{-- <script src="/datatables/dataTables.buttons.min.js"></script>
+    <script src="/datatables/dataTables.buttons.min.js"></script>
     <script src="/datatables/buttons.colVis.min.js"></script>
     <script src="/datatables/jszip.min.js"></script>
     <script src="/datatables/pdfmake.min.js"></script>
     <script src="/datatables/vfs_fonts.js"></script> --}}
+
+    {{-- <script src="https://code.jquery.com/jquery-3.5.1.js"></script> --}}
+    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script> 
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script> 
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.colVis.min.js"></script> 
     
     <script>
         $(document).ready(function() {
             $('#example').DataTable( {
-                dom: 'frtip',
+                dom: 'Bfrtip',
                 // dom: '<"float-start"f><"#example"t>rtip',
                 pageLength : 50,
                 scrollY : "1000px",
@@ -1070,9 +1094,9 @@
                     left: 2,
                     right: 0
                 },
-                // buttons: [
-                //     'copy', 'csv', 'excel', 'pdf', 'print'
-                // ]
+                buttons: [
+                    'copy', 'csv', 'excel', 'pdf', 'print'
+                ]
             } );
         } );
     </script>

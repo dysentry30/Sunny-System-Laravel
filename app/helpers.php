@@ -129,18 +129,29 @@ function setLogging($file, $message, $data) {
 }
 
 function checkGreenLine($proyek) {
-    if($proyek instanceof App\Models\ProyekBerjalans) {
-        $customer = $proyek->Customer;
+    if($proyek instanceof App\Models\Proyek) {
+        $customer = $proyek->proyekBerjalan->Customer ?? null;
+        $results = collect();
+        if(!empty($proyek->sumber_dana)) {
+            $results->push(App\Models\KriteriaGreenLine::where("isi", "=", $proyek->sumber_dana)->where("item", "=", "Sumber Dana")->count() > 0);
+        }
         if(!empty($customer->jenis_instansi)) {
             if((str_contains($customer->jenis_instansi, "BUMN") || str_contains($customer->jenis_instansi, "APBD") || str_contains($customer->jenis_instansi, "Provinsi"))) {
                 if(!empty($customer->group_tier)) {
-                    return App\Models\KriteriaGreenLine::where("isi", "=", $customer->jenis_instansi)->where("sub_isi", "=", $customer->group_tier)->count() > 0;
+                    $results->push(App\Models\KriteriaGreenLine::where("item", "=", "Instansi")->where("isi", "=", $customer->jenis_instansi)->where("sub_isi", "=", $customer->group_tier)->count() > 0);
+                } else {
+                    $provinsi = Provinsi::find($customer->provinsi) ?? $customer->provinsi; 
+                    $results->push(App\Models\KriteriaGreenLine::where("item", "=", "Instansi")->where("isi", "=", $customer->jenis_instansi)->where("sub_isi", "=", $provinsi)->count() > 0);
                 }
-                $provinsi = Provinsi::find($customer->provinsi) ?? $customer->provinsi;
-                return App\Models\KriteriaGreenLine::where("isi", "=", $customer->jenis_instansi)->where("sub_isi", "=", $provinsi)->count() > 0;
+            } else {
+                $results->push(App\Models\KriteriaGreenLine::where("item", "=", "Instansi")->where("isi", "=", $customer->jenis_instansi)->count() > 0);
             }
+        } else {
+            $results->push(false);
         }
-        return false;
+        return $results->count() > 1 && $results->every(function($item) {
+            return $item === true;
+        });
     }
     return false;
 }
