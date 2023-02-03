@@ -145,7 +145,7 @@
                     <!--begin::Body Dashboard-->
                     <div id="dashboard-body" style="overflow-x: hidden" class="mt-3">
 
-                        <!--Begin :: Filter-->
+                        {{-- <!--Begin :: Filter-->
                         <div class="card">
                             <div class="card-body">
                                 <div class="row">
@@ -184,7 +184,7 @@
                                                     <option value="" selected></option>
                                                     @foreach ($tahun as $t)
                                                         <option value="{{$t}}" {{ $tahun_get == $t ? 'selected' : '' }}>{{$t}}</option>
-                                                    @endforeach
+                                                    @endforeach 
                                             </select>
                                         </div>
 
@@ -217,6 +217,73 @@
                                 </div>
                             </div>
                         </div>
+                        <!--End :: Filter--> --}}
+
+                        <!--Begin :: Filter-->
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-2">
+                                        <select onchange="selectFilter(this)" id="dop" name="dop"
+                                                class="form-select form-select-solid w-auto"
+                                                style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
+                                                data-placeholder="Direktorat" data-select2-id="select2-data-dop" tabindex="-1"
+                                                aria-hidden="true">
+                                                <option value="" selected></option>
+                                                @foreach ($dops as $dop)
+                                                    <option value="{{ $dop->dop }}" {{ $dop_get == $dop->dop ? 'selected' : '' }} >{{ $dop->dop }}</option>
+                                                @endforeach
+                                        </select>
+                                    </div>
+
+                                    <div class="col-3">
+                                        <select onchange="selectFilter(this)" id="unit-kerja" name="unit-kerja"
+                                                class="form-select form-select-solid w-auto"
+                                                style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
+                                                data-placeholder="Unit Kerja" data-select2-id="select2-data-unit-kerja" tabindex="-1"
+                                                aria-hidden="true">
+                                                <option value="" selected></option>
+                                                @foreach ($unit_kerjas as $unit_kerjas)
+                                                    <option value="{{ $unit_kerjas->divcode }}" {{ $unit_kerja_get == $unit_kerjas->divcode ? 'selected' : '' }} >{{ $unit_kerjas->unit_kerja }}</option>
+                                                @endforeach
+                                        </select>
+                                    </div>
+
+                                    <div class="col-3">
+                                        <select onchange="selectFilter(this)" id="proyek" name="proyek"
+                                                class="form-select form-select-solid w-auto"
+                                                style="margin-right: 2rem;" data-control="select2" data-hide-search="false"
+                                                data-placeholder="Proyek" data-select2-id="select2-data-proyek" tabindex="-1"
+                                                aria-hidden="true">
+                                                <option value="" selected></option>
+                                                @foreach ($proyeks as $proyek)
+                                                    <option value="{{ $proyek->divcode }}" {{ $proyek_get == $proyek->divcode ? 'selected' : '' }} >{{ $proyek->unit_kerja }}</option>
+                                                    <option value="{{ $proyek->kode_proyek }}" >{{ $proyek->nama_proyek }} ({{$proyek->kode_proyek}})</option>
+                                                @endforeach
+                                        </select>
+                                    </div>
+
+                                    <div class="col-2">
+                                        <select id="tahun" name="tahun"
+                                                class="form-select form-select-solid w-auto"
+                                                style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
+                                                data-placeholder="Tahun" data-select2-id="select2-data-tahun" tabindex="-1"
+                                                aria-hidden="true">
+                                                <option value="" selected></option>
+                                                @foreach ($tahun as $t)
+                                                    <option value="{{$t}}" {{ $tahun_get == $t ? 'selected' : '' }}>{{$t}}</option>
+                                                @endforeach 
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="col-2">
+                                        <form action="" method="GET">
+                                            <button type="submit" class="btn btn-secondary">Reset</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <!--End :: Filter-->
 
                         <br>
@@ -245,13 +312,30 @@
                         <!--begin::Card Diagram Column dan Donut-->
                         <div class="row mx-3">
                             <!--begin::Card column-->
-                            <div class="col-4">
+                            <div class="col-6">
                                 <!--begin::COLUMN CHART-->
                                 <div id="contract-stage"></div>
                                 <!-- data table is inserted here -->
                                 <!--end::COLUMN CHART-->
                             </div>
-                            <div class="col-4">
+                            <div class="col-6">
+                                <!--begin::PIE CHART-->
+                                <figure class="highcharts-figure">
+                                    <div id="tender-menang"></div>
+                                    <!-- data table is inserted here -->
+                                </figure>
+                                <!--end::PIE CHART-->
+                            </div>
+                            <!--end::Card column-->
+                        </div>
+                        <!--end::Card Diagram Column dan Donut-->
+
+                        <br>
+
+                        <!--begin::Card Diagram Column dan Donut-->
+                        <div class="row mx-3">
+                            <!--begin::Card column-->
+                            <div class="col-6">
                                 <!--begin::PIE CHART-->
                                 <figure class="highcharts-figure">
                                     <div id="contract-jo"></div>
@@ -261,7 +345,7 @@
                             </div>
                             <!--end::Card column-->
                             <!--end-begin::Card column-->
-                            <div class="col-4">
+                            <div class="col-6">
                                 <!--begin::COLUMN CHART-->
                                 <div id="contract-classification"></div>
                                 <!-- data table is inserted here -->
@@ -270,6 +354,8 @@
                             <!--end-begin::Card column-->
                         </div>
                         <!--end::Card Diagram Column dan Donut-->
+                        
+                        <br>
 
                         <!--begin::Title-->
                         <div class="mb-4">
@@ -307,20 +393,20 @@
                             <!--end::Card column-->
                         </div>
                         <!--end::Card Diagram Column dan Donut-->
-
+                        
                         <!--begin::Tabel Header-->
                         <div class="row mb-4">
                             <div class="col-9">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-warning">
-                                    <h2 class="m-0 text-center">TOTAL NILAI PERUBAHAN : Rp {{ number_format($perubahan_total, 0, ".", ".") }}</h2>
+                                    <h2 class="m-0 text-center">CCM STATUS</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
                             <div class="col-3">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-warning">
-                                    <h2 class="m-0 text-center">{{ number_format($persentasePerubahan, 2) }} %</h2>
+                                    <h2 class="m-0 text-center"><i class="bi bi-percent text-dark fs-3"></i> PERUBAHAN</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
@@ -366,19 +452,26 @@
                         </div>
                         @endforeach
                         <!--end::Table Body-->
-
+                        
                         <!--begin::Tabel Header-->
                         <div class="row mb-4">
-                            <div class="col-12">
+                            <div class="col-9">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-warning">
-                                    <h2 class="m-0 text-center">% PERUBAHAN VS KONTRAK</h2>
+                                    <h2 class="m-0 text-center">TOTAL NILAI PERUBAHAN : Rp {{ number_format($perubahan_total, 0, ".", ".") }}</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col-3">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-warning">
+                                    <h2 class="m-0 text-center">{{ number_format($persentasePerubahan, 2) }} %</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
                         </div>
                         <!--end::Tabel Header-->
-
+                        
                         <!--begin::Card Line col-12-->
                         {{-- <div class="card mx-8">
                             <div class="card-body">
@@ -485,7 +578,7 @@
                 }
             },
             title: {
-                text: 'Kategori Pemilik Pekerjaan',
+                text: 'Kategori Pemilik Proyek',
                 style: {
                     fontWeight: 'bold',
                     fontSize: '20px'
@@ -666,6 +759,70 @@
 
     <!--begin::Highchart Donut Bentuk Proyek -->
     <script>
+        const jenisMenang = JSON.parse('{!! $menang_kontrak->toJson() !!}');
+        Highcharts.chart('tender-menang', {
+            chart: {
+                type: 'pie',
+                // height: 250,
+                options3d: {
+                    enabled: true,
+                    alpha: 5
+                }
+            },
+            title: {
+                text: 'Kategori Menang',
+                style: {
+                    fontWeight: 'bold',
+                    fontSize: '20px'
+                }
+            },
+            subtitle: {
+                // text: '3D donut in Highcharts'
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:15px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>&nbsp;{point.y}</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                pie: {
+                    innerSize: 0,
+                    depth: 5,
+                    showInLegend: false,
+                    dataLabels: {
+                        enabled: true,
+                    }
+                }
+            },
+            legend: {
+                layout: 'horizontal',
+                align: 'center',
+                verticalAlign: 'bottom',
+                format : '<b>{point.key}</b><br>',
+                itemStyle: {
+                    fontSize:'15px',
+                },
+            },
+            credits: {
+                enabled: false
+            },
+            exporting: {
+                showTable: false,
+                allowHTML: true
+            },
+            series: [{
+                name: 'Kontrak',
+                data: jenisMenang
+            }]
+        });
+    </script>
+    <!--end::Highchart Donut Bentuk Proyek -->
+
+    <!--begin::Highchart Donut Bentuk Proyek -->
+    <script>
         const jenisProyek = JSON.parse('{!! $jenis_proyek->toJson() !!}');
         Highcharts.chart('contract-jo', {
             chart: {
@@ -730,6 +887,7 @@
     
     <!--begin::Highchart Donut Changes Status -->
     <script>
+        const changeStatus = JSON.parse('{!! $change_status_out->toJson() !!}');
         Highcharts.chart('changes-status', {
             chart: {
                 type: 'pie',
@@ -785,12 +943,7 @@
             },
             series: [{
                 name: 'Kontrak',
-                data: [
-                    ['Dispute', 8],
-                    ['Revision', 16],
-                    ['Reject', 2],
-                    ['Approve', 10],
-                ]
+                data: changeStatus
             }]
         });
     </script>

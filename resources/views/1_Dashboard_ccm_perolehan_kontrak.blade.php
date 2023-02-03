@@ -485,7 +485,7 @@
                                             <!--end-begin::Card column-->
                                             <div class="row">
                                                 <!--begin::Card body-->
-                                                <div class="mb-6 pt-0">
+                                                <div class="mb-0 pt-0">
                                                     <!--begin::Card widget 20-->
                                                     <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #F7AD1A;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
                                                         <!--begin::Header-->
@@ -507,20 +507,56 @@
                                                 </div>
                                                 <!--end::Card body-->
                                             </div>
+                                            <!--end-begin::Card column-->
+                                            <div class="row">
+                                                <!--begin::Card body-->
+                                                <div class="mb-6 pt-0">
+                                                    <!--begin::Card widget 20-->
+                                                    <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #28B3AC;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                                        <!--begin::Header-->
+                                                        <div class="card-header py-3">
+                                                            <!--begin::Title-->
+                                                            <div class="card-title d-flex flex-column">
+                                                                <!--begin::Amount-->
+                                                                <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2" id="data-items">{{$proyeks->count()}}</span>
+                                                                <!--end::Amount-->
+                                                                <!--begin::Subtitle-->
+                                                                <span class="text-white opacity-75 pt-1 fw-semibold fs-3">Total Proyeks</span>
+                                                                <!--end::Subtitle-->
+                                                            </div>
+                                                            <!--end::Title-->
+                                                        </div>
+                                                        <!--end::Header-->
+                                                    </div>
+                                                    <!--end::Card widget 20-->
+                                                </div>
+                                                <!--end::Card body-->
+                                            </div>
                                             <!--end::Card column-->
                                             <h2>MANKON</h2>
                                             <div class="row">
                                                 <!--begin::Card body-->
                                                 <div class="mb-3 pt-0">
                                                     <!--begin::Card widget 20-->
-                                                    <div class="py-5 rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #017EB8;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                                    <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #017EB8;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
                                                         <!--begin::Header-->
                                                         <div class="card-header">
                                                             <!--begin::Title-->
                                                             <div class="card-title d-flex flex-column">
                                                                 <!--begin::Amount-->
                                                                 {{-- <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2 tender-review-text" id="data-items">0</span> --}}
-                                                                <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2 tender-review-text" id="">0</span>
+                                                                {{-- @php
+                                                                    $tenderReview = 0;
+                                                                    foreach ($proyeks as $key => $p) {
+                                                                        $contract = $p->ContractManagements;
+                                                                        if (!empty($contract)){
+                                                                            if ($p->ContractManagements->reviewProjects->isNotEmpty() && $p->ContractManagements->inputRisks->isNotEmpty() && $p->ContractManagements->questionsProjects->isNotEmpty()) {
+                                                                                $tenderReview += 1;
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                @endphp --}}
+                                                                <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2 tender-review-text" id="id-tender-review">0</span>
                                                                 <!--end::Amount-->
                                                                 <!--begin::Subtitle-->
                                                                 <span class="text-white opacity-75 pt-1 fw-semibold fs-3">Tender Review</span>
@@ -544,13 +580,13 @@
                                                 <!--begin::Card body-->
                                                 <div class="mb-6 pt-0">
                                                     <!--begin::Card widget 20-->
-                                                    <div class="py-5 rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #017EB8;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                                    <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #017EB8;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
                                                         <!--begin::Header-->
                                                         <div class="card-header">
                                                             <!--begin::Title-->
                                                             <div class="card-title d-flex flex-column">
                                                                 <!--begin::Amount-->
-                                                                <span id="data-items" class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2">{{$proyeks->count()}}</span>
+                                                                <span id="id-data-collect" class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2">{{$proyeks->count()}}</span>
                                                                 <!--end::Amount-->
                                                                 <!--begin::Subtitle-->
                                                                 <span class="text-white opacity-75 pt-1 fw-semibold fs-4">Data Collection</span>
@@ -575,9 +611,9 @@
                                     </div>
                                     <div class="col-2">
                                         <!--begin::Card Status-->
-                                        <div class="col ms-6 ">
+                                        <div class="col ms-6 mt-10">
                                             <!--begin::Card column-->
-                                            <div class="row mt-5">
+                                            <div class="row ">
                                                 <!--begin::Card body-->
                                                 <div class="pt-0">
                                                     <!--begin::Card widget 20-->
@@ -655,7 +691,7 @@
                                             <!--end::Card column-->
                                             <div class="row">
                                                 <!--begin::Card body-->
-                                                <div class="mb-6 pt-0">
+                                                <div class="mb-0 pt-0">
                                                     <!--begin::Card widget 20-->
                                                     <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #28B3AC;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
                                                         <!--begin::Header-->
@@ -679,21 +715,46 @@
                                                 <!--end::Card body-->
                                             </div>
                                             <!--end-begin::Card column-->
-                                            <br>
                                             <div class="row">
                                                 <!--begin::Card body-->
                                                 <div class="pt-0">
                                                     <!--begin::Card widget 20-->
-                                                    <div class="rounded-0 py-20 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #017EB8;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                                    <div class="rounded-0 py-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #F7AD1A;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
                                                         <!--begin::Header-->
-                                                        <div class="py-4 card-header">
+                                                        <div class="card-header">
                                                             <!--begin::Title-->
                                                             <div class="card-title d-flex flex-column">
                                                                 <!--begin::Amount-->
-                                                                <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2" id="data-persen">{{$success_rate}}%</span>
+                                                                <span class="col fs-2hx fw-bold text-white me-2 lh-1 ls-n2" id="data-persen">{{$success_rate}}</span>
                                                                 <!--end::Amount-->
                                                                 <!--begin::Subtitle-->
-                                                                <span class="text-white opacity-75 pt-1 fw-semibold fs-3">Success Rate</span>
+                                                                <span class="text-white opacity-75 pt-1 fw-semibold fs-3"><i class='bi bi-percent text-white fs-3'></i> Success Rate</span>
+                                                                <!--end::Subtitle-->
+                                                            </div>
+                                                            <!--end::Title-->
+                                                        </div>
+                                                        <!--end::Header-->
+                                                    </div>
+                                                    <!--end::Card widget 20-->
+                                                </div>
+                                                <!--end::Card body-->
+                                            </div>
+                                            <!--end-begin::Card column-->
+                                            <br>
+                                            <div class="row">
+                                                <!--begin::Card body-->
+                                                <div class="pt-0 mt-9">
+                                                    <!--begin::Card widget 20-->
+                                                    <div class="py-9 rounded-0 py-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #017EB8;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                                        <!--begin::Header-->
+                                                        <div class="card-header">
+                                                            <!--begin::Title-->
+                                                            <div class="card-title d-flex flex-column">
+                                                                <!--begin::Amount-->
+                                                                <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2 review-rate-text" id="review-persen"><i class="bi bi-percent text-white fs-3"></i></span>
+                                                                <!--end::Amount-->
+                                                                <!--begin::Subtitle-->
+                                                                <span class="text-white opacity-75 pt-1 fw-semibold fs-3">Review Rate</span>
                                                                 <!--end::Subtitle-->
                                                             </div>
                                                             <!--end::Title-->
@@ -784,31 +845,35 @@
                     <!--begin::Card body-->
                         <div class="card-body pt-0 px-2">
                             <!--begin::Table-->
-                            <table class="table align-middle table-bordered fs-6 gy-2">
+                            <table class="table align-middle table-bordered fs-6 gy-2" style="max-width: 100%">
                                 <!--begin::Table head-->
                                 <thead style="border: white 1px solid; background-color: #F7AD1A">
                                     <!--begin::Table row-->
                                     <tr class="text-start text-dark fw-bolder fs-7 text-uppercase gs-0">
                                         {{-- <th rowspan="2" class="min-w-auto px-4 align-middle text-center">NO</th> --}}
-                                        <th rowspan="2" class="min-w-auto align-middle text-center">PROJECT</th>
-                                        <th rowspan="2" width="15%" class="align-middle text-center">OWNER</th>
-                                        <th rowspan="2" class="min-w-auto align-middle text-center">TYPE</th>
-                                        <th colspan="2" class="min-w-auto align-middle text-center">EST. CONTRACT</th>
-                                        <th colspan="8" class="min-w-auto align-middle text-center">REVIEW STATUS</th>
-                                        <th colspan="2" class="min-w-auto align-middle text-center">PIC</th>
-                                        <th rowspan="2" class="min-w-auto align-middle text-center">STATUS &nbsp;&nbsp;</th>
+                                        <th rowspan="2" class="min-w-auto align-middle text-center fs-8">PROJECT</th>
+                                        <th rowspan="2" width="15%" class="align-middle text-center fs-8">OWNER</th>
+                                        <th rowspan="2" class="min-w-auto align-middle text-center fs-8">TYPE</th>
+                                        <th colspan="2" class="min-w-auto align-middle text-center fs-8">EST. CONTRACT</th>
+                                        <th colspan="8" class="min-w-auto align-middle text-center fs-8">DATA COLLECTION</th>
+                                        <th colspan="3" class="min-w-auto align-middle text-center fs-8">TENDER STATUS</th>
+                                        <th colspan="2" class="min-w-auto align-middle text-center fs-8">PIC</th>
+                                        <th rowspan="2" class="min-w-auto align-middle text-center fs-8">STATUS &nbsp;&nbsp;</th>
                                     </tr>
-                                    <tr class="text-start text-dark fw-bolder fs-7 text-uppercase gs-0">
+                                    <tr class="text-start text-dark fw-bolder fs-7 text-uppercase gs-0 fs-8">
                                         <th class="min-w-auto align-middle text-center">AWARD</th>
                                         <th class="min-w-auto align-middle text-center">VALUE</th>
                                         <th class="min-w-auto align-middle text-center">NDA</th>
-                                        <th class="min-w-auto align-middle text-center">MOU</th>
                                         <th class="min-w-auto align-middle text-center">LOI</th>
-                                        <th class="min-w-auto align-middle text-center">CONTRACT REVIEW</th>
-                                        <th class="min-w-auto align-middle text-center">DEVIATION</th>
-                                        <th class="min-w-auto align-middle text-center">RISK</th>
+                                        <th class="min-w-auto align-middle text-center">MOU</th>
                                         <th class="min-w-auto align-middle text-center">ECA</th>
                                         <th class="min-w-auto align-middle text-center">ICA</th>
+                                        <th class="min-w-auto align-middle text-center">DRAFT KONTRAK</th>
+                                        <th class="min-w-auto align-middle text-center">RKS</th>
+                                        <th class="min-w-auto align-middle text-center">ITB/TOR</th>
+                                        <th class="min-w-auto align-middle text-center">TENDER REVIEW</th>
+                                        <th class="min-w-auto align-middle text-center">RISK</th>
+                                        <th class="min-w-auto align-middle text-center">DAFTAR PERTANYAAN</th>
                                         <th class="min-w-auto align-middle text-center">MANKON</th>
                                         <th class="min-w-auto align-middle text-center">BUSDEV&nbsp;&nbsp;</th>
                                     </tr>
@@ -816,9 +881,9 @@
                                 </thead>
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
-                                <tbody class="fw-bold text-gray-600">
+                                <tbody class="fw-bold text-gray-600 fs-8">
                                     <tr>
-                                        <td colspan="16" class="ps-3" style="border: white 1px solid; background-color: #F7DFAE">Sasaran</td>
+                                        <td colspan="19" class="ps-3" style="border: white 1px solid; background-color: #F7DFAE">Sasaran</td>
                                     </tr>
                                     @foreach ($proyeks as $proyek)
                                     <tr>
@@ -834,7 +899,7 @@
                                                     @else
                                                         <p class="text-hover-primary mt-4" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top"
                                                             data-bs-custom-class="custom-tooltip"
-                                                            data-bs-title="Proyek ini belum ada kontrak">{{ $proyek->nama_proyek }}</p>
+                                                            data-bs-title="Proyek ini belum memiliki kontrak">{{ $proyek->nama_proyek }}</p>
                                                     @endif
                                                 </small>
                                             </td>
@@ -883,8 +948,8 @@
                                             
                                             <!--begin::NDA-->
                                             <td class="text-center">
-                                                <small class="{{ $proyek->DokumenNda->first() ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
-                                                    @if ($proyek->DokumenNda->first())
+                                                <small class="{{ $proyek->DokumenNda->isNotEmpty() ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
+                                                    @if ($proyek->DokumenNda->isNotEmpty())
                                                     Yes
                                                     @else
                                                     No
@@ -892,21 +957,10 @@
                                                 </small>
                                             </td>
                                             <!--end::NDA-->
-                                            <!--begin::MOU-->
-                                            <td class="text-center">
-                                                <small class="{{ $proyek->DokumenMou->first() ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
-                                                    @if ($proyek->DokumenMou->first())
-                                                    Yes
-                                                    @else
-                                                    No
-                                                    @endif
-                                                </small>
-                                            </td>
-                                            <!--end::MOU-->
                                             <!--begin::LOI-->
                                             <td class="text-center">
-                                                <small class="{{ $proyek->AttachmentMenang->first() ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
-                                                    @if ($proyek->AttachmentMenang->first())
+                                                <small class="{{ $proyek->AttachmentMenang->isNotEmpty() ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
+                                                    @if ($proyek->AttachmentMenang->isNotEmpty())
                                                     Yes
                                                     @else
                                                     No
@@ -914,45 +968,21 @@
                                                 </small>
                                             </td>
                                             <!--end::LOI-->
-                                            <!--begin::REVIEW-->
+                                            <!--begin::MOU-->
                                             <td class="text-center">
-                                                {{-- <small class="{{ $proyek->AttachmentMenang->first() ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
-                                                    @if ($proyek->AttachmentMenang->first())
-                                                    Yes
-                                                    @else
-                                                    No
-                                                    @endif
-                                                </small> --}}
-                                                -
-                                            </td>
-                                            <!--end::REVIEW-->
-                                            <!--begin::DEVIATION-->
-                                            <td class="text-center">
-                                                {{-- <small class="{{ $proyek->AttachmentMenang->first() ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
-                                                    @if ($proyek->AttachmentMenang->first())
-                                                    Yes
-                                                    @else
-                                                    No
-                                                    @endif
-                                                </small> --}}
-                                                -
-                                            </td>
-                                            <!--end::DEVIATION-->
-                                            <!--begin::RISK-->
-                                            <td class="text-center">
-                                                <small class="{{ $proyek->RiskTenderProyek->first() ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
-                                                    @if ($proyek->RiskTenderProyek->first())
+                                                <small class="{{ $proyek->DokumenMou->isNotEmpty() ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
+                                                    @if ($proyek->DokumenMou->isNotEmpty())
                                                     Yes
                                                     @else
                                                     No
                                                     @endif
                                                 </small>
                                             </td>
-                                            <!--end::RISK-->
+                                            <!--end::MOU-->
                                             <!--begin::ECA-->
                                             <td class="text-center">
-                                                <small class="{{ $proyek->DokumenEca->first() ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
-                                                    @if ($proyek->DokumenEca->first())
+                                                <small class="{{ $proyek->DokumenEca->isNotEmpty() ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
+                                                    @if ($proyek->DokumenEca->isNotEmpty())
                                                     Yes
                                                     @else
                                                     No
@@ -962,8 +992,8 @@
                                             <!--end::ECA-->
                                             <!--begin::ICA-->
                                             <td class="text-center">
-                                                <small class="{{ $proyek->DokumenIca->first() ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
-                                                    @if ($proyek->DokumenIca->first())
+                                                <small class="{{ $proyek->DokumenIca->isNotEmpty() ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
+                                                    @if ($proyek->DokumenIca->isNotEmpty())
                                                     Yes
                                                     @else
                                                     No
@@ -971,6 +1001,85 @@
                                                 </small>
                                             </td>
                                             <!--end::ICA-->
+                                            <!--begin::DRAFT-->
+                                            <td class="text-center">
+                                                <small class="{{ $proyek->DokumenDraft->isNotEmpty() ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
+                                                    @if ($proyek->DokumenDraft->isNotEmpty())
+                                                    Yes
+                                                    @else
+                                                    No
+                                                    @endif
+                                                </small>
+                                            </td>
+                                            <!--end::DRAFT-->
+                                            <!--begin::DEVIATION-->
+                                            <td class="text-center">
+                                                {{-- <small class="{{ $proyek->AttachmentMenang->isNotEmpty() ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
+                                                    @if ($proyek->AttachmentMenang->isNotEmpty())
+                                                    Yes
+                                                    @else
+                                                    No
+                                                    @endif
+                                                </small> --}}
+                                                -
+                                            </td>
+                                            <!--end::DEVIATION-->
+                                            <!--begin::ITB-->
+                                            <td class="text-center">
+                                                <small class="{{ $proyek->DokumenItbTor->isNotEmpty() ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
+                                                    @if ($proyek->DokumenItbTor->isNotEmpty())
+                                                    Yes
+                                                    @else
+                                                    No
+                                                    @endif
+                                                </small>
+                                            </td>
+                                            <!--end::ITB-->
+                                            <!--begin::TENDER-->
+                                            <td class="text-center">
+                                                @if (!empty($contract))
+                                                    @if ($contract->reviewProjects->isNotEmpty())
+                                                        <small class="badge badge-light-success">
+                                                            Yes
+                                                        </small>
+                                                    @endif
+                                                @else
+                                                    <small class="badge badge-light-danger">
+                                                        No
+                                                    </small>
+                                                @endif
+                                            </td>
+                                            <!--end::TENDER-->
+                                            <!--begin::RISK-->
+                                            <td class="text-center">
+                                                @if (!empty($contract))
+                                                    @if ($contract->inputRisks->isNotEmpty())
+                                                        <small class="badge badge-light-success">
+                                                            Yes
+                                                        </small>
+                                                    @endif
+                                                @else
+                                                    <small class="badge badge-light-danger">
+                                                        No
+                                                    </small>
+                                                @endif
+                                            </td>
+                                            <!--end::RISK-->
+                                            <!--begin::DAFTAR-->
+                                            <td class="text-center">
+                                                @if (!empty($contract))
+                                                    @if ($contract->questionsProjects->isNotEmpty())
+                                                        <small class="badge badge-light-success">
+                                                            Yes
+                                                        </small>
+                                                    @endif
+                                                @else
+                                                    <small class="badge badge-light-danger">
+                                                        No
+                                                    </small>
+                                                @endif
+                                            </td>
+                                            <!--end::DAFTAR-->
                                             
                                             <!--begin::PIC-->
                                             <td class="text-center">-</td>
@@ -981,7 +1090,12 @@
                                             <!--begin::STATUS-->
                                             <td class="text-center">
                                                 @php
-                                                    $status = $proyek->DokumenNda->isNotEmpty() && $proyek->DokumenMou->isNotEmpty() && $proyek->AttachmentMenang->isNotEmpty() && $proyek->RiskTenderProyek->isNotEmpty() && $proyek->DokumenEca->isNotEmpty() && $proyek->DokumenIca->isNotEmpty();
+                                                if (!empty($contract)) {
+                                                    $status = $proyek->ContractManagements->reviewProjects->isNotEmpty() && $proyek->ContractManagements->inputRisks->isNotEmpty() && $proyek->ContractManagements->questionsProjects->isNotEmpty();
+                                                    // $status = $proyek->DokumenNda->isNotEmpty() && $proyek->DokumenMou->isNotEmpty() && $proyek->AttachmentMenang->isNotEmpty() && $proyek->RiskTenderProyek->isNotEmpty() && $proyek->DokumenEca->isNotEmpty() && $proyek->DokumenIca->isNotEmpty();
+                                                } else {
+                                                    $status = false;
+                                                }
                                                 @endphp
                                                 <P class="badge {{$status ? "badge-light-success" : "badge-light-danger"}} tender-review">{{$status ? "Closed" : "Open"}}</P>
                                             </td>
@@ -1045,7 +1159,7 @@
                 }
             },
             title: {
-                text: 'Kontrak Berdasarkan Stage',
+                text: 'Tender Status',
                 style: {
                     fontWeight: 'bold',
                     fontSize: '20px'
@@ -1109,7 +1223,7 @@
                 }
             },
             title: {
-                text: 'Kontrak Berdasarkan Divisi',
+                text: 'Tender Berdasarkan Divisi',
                 style: {
                     fontWeight: 'bold',
                     fontSize: '20px'
@@ -1162,6 +1276,7 @@
 
     <!--begin::Highchart Donut Kontrak Klasifikasi-->
     <script>
+        const KlasifikasiTender = JSON.parse('{!! $klasifikasi_tender->toJson() !!}');
         Highcharts.chart('contract-classification', {
             chart: {
                 type: 'pie',
@@ -1172,7 +1287,7 @@
                 }
             },
             title: {
-                text: 'Klasifikasi Kontrak',
+                text: 'Klasifikasi Tender',
                 style: {
                     fontWeight: 'bold',
                     fontSize: '20px'
@@ -1216,12 +1331,8 @@
                 allowHTML: true
             },
             series: [{
-                name: 'Kontrak',
-                data: [
-                    ['Sasaran', 8],
-                    ['Cadangan', 16],
-                    ['Potensi', 12]
-                ]
+                name: 'Tender',
+                data: KlasifikasiTender
             }]
         });
     </script>
@@ -1240,7 +1351,7 @@
                 }
             },
             title: {
-                text: 'Kontrak JO & Non-JO',
+                text: 'Tender JO & Non-JO',
                 style: {
                     fontWeight: 'bold',
                     fontSize: '20px'
@@ -1284,7 +1395,7 @@
                 allowHTML: true
             },
             series: [{
-                name: 'Kontrak',
+                name: 'Tender',
                 data: JONonJOCounter
             }]
         });
@@ -1486,7 +1597,7 @@
         // }
 
 
-        animateCounterNumber("#data-persen", "", "%");
+        animateCounterNumber("#data-persen", "", " ");
         animateCounterNumber("#data-items", "", "");
     </script>
     <!-- End :: Animation Counter Number -->
@@ -1523,8 +1634,24 @@
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const counterTenderReview = document.querySelectorAll(".tender-review");
-            console.log(document.querySelector(".tender-review-text"));
-            document.querySelector(".tender-review-text").innerHTML = counterTenderReview.length;
+            // console.log(document.querySelector(".tender-review-text"));
+            let tenderCount = 0;
+            counterTenderReview.forEach(tender => {
+                if(tender.innerHTML == "Closed") {
+                    tenderCount ++;
+                    // html += `<option value="${ unitKerja.dop }" >${unitKerja.unit_kerja}</option>`;
+                }
+            });
+            document.querySelector(".tender-review-text").innerHTML = tenderCount;
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const tenderReview = document.querySelector("#id-tender-review").innerHTML;
+            const dataCollect = document.querySelector("#id-data-collect").innerHTML;
+            // console.log(reviewRate);
+            let review = Number(tenderReview) / Number(dataCollect) * 100;
+            document.querySelector("#review-persen").innerHTML = review+' '+'<i class="bi bi-percent text-white fs-1">';
         });
     </script>
 

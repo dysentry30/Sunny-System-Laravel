@@ -177,9 +177,9 @@
                                                 aria-hidden="true">
                                                 {{-- <option value="" {{$dop_get == "" ? "selected" : ""}}></option> --}}
                                                 <option value="" selected></option>
-                                                @foreach ($proyeks as $proyek)
-                                                    {{-- <option value="{{ $proyek->divcode }}" {{ $proyek_get == $proyek->divcode ? 'selected' : '' }} >{{ $proyek->unit_kerja }}</option> --}}
-                                                    <option value="{{ $proyek->kode_proyek }}" {{ $proyek_get == $proyek->kode_proyek ? 'selected' : '' }} >{{ $proyek->nama_proyek }} ({{$proyek->kode_proyek}})</option>
+                                                @foreach ($proyeks as $p)
+                                                    {{-- <option value="{{ $p->divcode }}" {{ $p_get == $p->divcode ? 'selected' : '' }} >{{ $p->unit_kerja }}</option> --}}
+                                                    <option value="{{ $p->kode_proyek }}" {{ $proyek_get == $p->kode_proyek ? 'selected' : '' }} >{{ $p->nama_proyek }} ({{$p->kode_proyek}})</option>
                                                 @endforeach
                                         </select>
                                     </div>
@@ -200,7 +200,7 @@
                             <div class="col-12">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-secondary">
-                                    <h2 class="m-0 text-center">{{ $proyek->UnitKerja->unit_kerja }} &nbsp; - &nbsp; {{ $proyek->nama_proyek }}</h2>
+                                    <h2 class="m-0 text-center">{{ "SP00".sprintf("%02d", mt_rand(0, 99)) }}- {{ $proyek->UnitKerja->unit_kerja }} &nbsp; - &nbsp; {{ $proyek->nama_proyek }}</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
@@ -211,7 +211,7 @@
                             <div class="col-12">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-secondary">
-                                    <h2 class="m-0 text-center">Pemilik Pekerjaan : {{ $proyek->proyekBerjalan->name_customer }} &nbsp; - &nbsp; Nilai Kontrak : Rp {{ number_format($proyek->nilai_perolehan, 0, ".", ".") }}</h2>
+                                    <h2 class="m-0 text-center">Pemilik Pekerjaan : {{ $proyek->proyekBerjalan->name_customer ?? 'NA' }} &nbsp; - &nbsp; Nilai Kontrak : Rp {{ number_format($proyek->nilai_perolehan, 0, ".", ".") }}</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
@@ -223,16 +223,16 @@
                             <!--begin::Card-->
                             <div class="ms-6 col mb-6 pt-0">
                                 <!--begin::Card widget 20-->
-                                <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #027DB8;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #F7AD1A;background-repeat: no-repeat;background-size: auto;">
                                     <!--begin::Header-->
                                     <div class="card-header">
                                         <!--begin::Title-->
                                         <div class="card-title d-flex flex-column">
                                             <!--begin::Amount-->
-                                            <span class="fs-2 fw-bold text-white me-2 lh-1 ls-n2" id="data-items">Tanggal-Kontrak</span>
+                                            <span class="fs-2 opacity-75 fw-bold text-white me-2 lh-1 ls-n2" id="data-items">RI KONTRAK</span>
                                             <!--end::Amount-->
                                             <!--begin::Subtitle-->
-                                            <span class="text-white opacity-75 pt-1 fs-3">{{ $proyek->tanggal_mulai_terkontrak }}</span>
+                                            <span class="text-white pt-1 fs-3">{!! $proyek->tanggal_mulai_terkontrak !!}</span>
                                             <!--end::Subtitle-->
                                         </div>
                                         <!--end::Title-->
@@ -245,16 +245,16 @@
                             <!--begin::Card-->
                             <div class="col mb-6 pt-0">
                                 <!--begin::Card widget 20-->
-                                <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #28B3AC;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #28B3AC;background-repeat: no-repeat;background-size: auto;">
                                     <!--begin::Header-->
                                     <div class="card-header">
                                         <!--begin::Title-->
                                         <div class="card-title d-flex flex-column">
                                             <!--begin::Amount-->
-                                            <span class="fs-2 fw-bold text-white me-2 lh-1 ls-n2" id="data-items">Tanggal-Efektif</span>
+                                            <span class="fs-2 opacity-75 fw-bold text-white me-2 lh-1 ls-n2" id="data-items">RI EFEKTIF</span>
                                             <!--end::Amount-->
                                             <!--begin::Subtitle-->
-                                            <span class="text-white opacity-75 pt-1 fs-3">{{ $proyek->tanggal_mulai_terkontrak }}</span>
+                                            <span class="text-white pt-1 fs-3">{{ $proyek->tanggal_akhir_terkontrak }}</span>
                                             <!--end::Subtitle-->
                                         </div>  
                                         <!--end::Title-->
@@ -267,16 +267,16 @@
                             <!--end::Card-->
                             <div class="col mb-6 pt-0">
                                 <!--begin::Card widget 20-->
-                                <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #F7AD1A;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #F7AD1A;background-repeat: no-repeat;background-size: auto;">
                                     <!--begin::Header-->
                                     <div class="card-header">
                                         <!--begin::Title-->
                                         <div class="card-title d-flex flex-column">
                                             <!--begin::Amount-->
-                                            <span class="fs-2 fw-bold text-white me-2 lh-1 ls-n2" id="data-items">Bast-1</span>
+                                            <span class="fs-2 opacity-75 fw-bold text-white me-2 lh-1 ls-n2" id="data-items">RI BAST 1</span>
                                             <!--end::Amount-->
                                             <!--begin::Subtitle-->
-                                            <span class="text-white opacity-75 pt-1 fs-3">{{ $proyek->tanggal_selesai_pho }}</span>
+                                            <span class="text-white pt-1 fs-3">{{ $proyek->tanggal_selesai_pho }}</span>
                                             <!--end::Subtitle-->
                                         </div>  
                                         <!--end::Title-->
@@ -285,20 +285,52 @@
                                 </div>
                                 <!--end::Card widget 20-->
                             </div>
-                            <!--begin::Card-->
                             <!--end::Card-->
+                            <!--begin::Card-->
+                            <div class="col mb-6 pt-0">
+                                <!--begin::Card widget 20-->
+                                <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #28B3AC;background-repeat: no-repeat;background-size: auto;">
+                                    <!--begin::Header-->
+                                    <div class="card-header">
+                                        <!--begin::Title-->
+                                        <div class="card-title d-flex flex-column">
+                                            <!--begin::Amount-->
+                                            <span class="fs-2 opacity-75 fw-bold text-white me-2 lh-1 ls-n2" id="data-items">RI BAST 2</span>
+                                            <!--end::Amount-->
+                                            <!--begin::Subtitle-->
+                                            <span class="text-white pt-1 fs-3">{{ $proyek->tanggal_selesai_fho }}</span>
+                                            <!--end::Subtitle-->
+                                        </div>  
+                                        <!--end::Title-->
+                                    </div>
+                                    <!--end::Header-->
+                                </div>
+                                <!--end::Card widget 20-->
+                            </div>
+                            <!--end::Card-->
+                            <!--begin::Card-->
                             <div class="me-6 col mb-6 pt-0">
                                 <!--begin::Card widget 20-->
-                                <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #C34424;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #027DB8;background-repeat: no-repeat;background-size: auto;">
                                     <!--begin::Header-->
                                     <div class="card-header">
                                         <!--begin::Title-->
                                         <div class="card-title d-flex flex-column">
                                             <!--begin::Amount-->
-                                            <span class="fs-2 fw-bold text-white me-2 lh-1 ls-n2" id="data-items">Bast-2</span>
+                                            <span class="fs-2 fw-bold text-white me-2 lh-1 ls-n2 opacity-75" id="data-items">PROJECT STATUS</span>
                                             <!--end::Amount-->
                                             <!--begin::Subtitle-->
-                                            <span class="text-white opacity-75 pt-1 fs-3">{{ $proyek->tanggal_selesai_fho }}</span>
+                                            @if (empty($proyek->tanggal_mulai_terkontrak))
+                                            <span class="text-white pt-1 fs-2">Persiapan</span>
+                                            @elseif ($proyek->tanggal_mulai_terkontrak < now()->translatedFormat("Y-m-d") && $proyek->tanggal_akhir_terkontrak > now()->translatedFormat("Y-m-d") )
+                                            <span class="text-white pt-1 fs-2">Pelaksanaan</span>
+                                            @elseif ($proyek->tanggal_selesai_pho )
+                                            <span class="text-white pt-1 fs-2">Pemeliharaan</span>
+                                            @elseif ($proyek->tanggal_selesai_fho < now()->translatedFormat("Y-m-d") )
+                                            <span class="text-white pt-1 fs-2">Proyek Selesai</span>
+                                            @else
+                                            <span class="text-white pt-1 fs-2">-</span>
+                                            @endif 
                                             <!--end::Subtitle-->
                                         </div>  
                                         <!--end::Title-->
@@ -307,7 +339,7 @@
                                 </div>
                                 <!--end::Card widget 20-->
                             </div>
-                            <!--begin::Card-->
+                            <!--end::Card-->
                         </div>
                         <!--end::Row-->
 
@@ -320,15 +352,15 @@
                                     <!--begin::Card body-->
                                     <div class="pt-0">
                                         <!--begin::Card widget 20-->
-                                        <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #027DB8;background-image:url('/assets/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                        <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #E4E6EF;background-image:url('/assets/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
                                             <!--begin::Card body-->
                                             <div class="btn rounded-0 btn-active-primary card-body d-flex align-items-end pt-3">
                                                 <!--begin::Progress-->
                                                 <div class="d-flex align-items-center flex-column  w-100">
                                                     @if (empty($proyek->ContractManagements))
-                                                    <a target="_blank" class="text-white fs-3" href="#">Lihat Kontrak</a>
+                                                    <a target="_blank" class="text-gray-800 fs-3" href="#">Lihat Kontrak</a>
                                                     @else    
-                                                    <a target="_blank" class="text-white fs-3" href="/contract-management/view/{{ urlencode(urlencode($proyek->ContractManagements->id_contract)) }}">Lihat Kontrak</a>
+                                                    <a target="_blank" class="text-gray-800 fs-3" href="/contract-management/view/{{ urlencode(urlencode($proyek->ContractManagements->id_contract)) }}">Lihat Kontrak</a>
                                                     @endif
                                                 </div>
                                                 <!--end::Progress-->
@@ -345,12 +377,12 @@
                                     <!--begin::Card body-->
                                     <div class="pt-0">
                                         <!--begin::Card widget 20-->
-                                        <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #027DB8;background-image:url('/assets/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                        <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #E4E6EF;background-image:url('/assets/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
                                             <!--begin::Card body-->
                                             <div class="btn rounded-0 btn-active-primary card-body d-flex align-items-end pt-3">
                                                 <!--begin::Progress-->
                                                 <div class="d-flex align-items-center flex-column  w-100">
-                                                    <a target="_blank" class="text-white fs-3" href="/proyek/view/{{ $proyek->kode_proyek }}">Lihat Proyek</a>
+                                                    <a target="_blank" class="text-gray-800 fs-3" href="/proyek/view/{{ $proyek->kode_proyek }}">Lihat Proyek</a>
                                                 </div>
                                                 <!--end::Progress-->
                                             </div>
@@ -366,15 +398,15 @@
                                     <!--begin::Card body-->
                                     <div class="pt-0">
                                         <!--begin::Card widget 20-->
-                                        <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #027DB8;background-image:url('/assets/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                        <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #E4E6EF;background-image:url('/assets/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
                                             <!--begin::Card body-->
                                             <div class="btn rounded-0 btn-active-primary card-body d-flex align-items-end pt-3">
                                                 <!--begin::Progress-->
                                                 <div class="d-flex align-items-center flex-column  w-100">
                                                     @if (empty($proyek->ContractManagements))
-                                                    <a target="_blank" class="text-white fs-3" href="#">Lihat Kontrak</a>
+                                                    <a target="_blank" class="text-gray-800 fs-3" href="#">Lihat Kontrak</a>
                                                     @else    
-                                                    <a target="_blank" class="text-white fs-3" href="/contract-management/view/{{ urlencode(urlencode($proyek->ContractManagements->id_contract)) }}">Lihat Kontrak</a>
+                                                    <a target="_blank" class="text-gray-800 fs-3" href="/contract-management/view/{{ urlencode(urlencode($proyek->ContractManagements->id_contract)) }}">Lihat Kontrak</a>
                                                     @endif
                                                 </div>
                                                 <!--end::Progress-->
@@ -391,12 +423,12 @@
                                     <!--begin::Card body-->
                                     <div class="pt-0">
                                         <!--begin::Card widget 20-->
-                                        <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #027DB8;background-image:url('/assets/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                        <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #E4E6EF;background-image:url('/assets/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
                                             <!--begin::Card body-->
                                             <div class="btn rounded-0 btn-active-primary card-body d-flex align-items-end pt-3">
                                                 <!--begin::Progress-->
                                                 <div class="d-flex align-items-center flex-column  w-100">
-                                                    <a target="_blank" class="text-white fs-3" href="/proyek/view/{{ $proyek->kode_proyek }}">Lihat Proyek</a>
+                                                    <a target="_blank" class="text-gray-800 fs-3" href="/proyek/view/{{ $proyek->kode_proyek }}">Lihat Proyek</a>
                                                 </div>
                                                 <!--end::Progress-->
                                             </div>
@@ -412,15 +444,15 @@
                                     <!--begin::Card body-->
                                     <div class="pt-0">
                                         <!--begin::Card widget 20-->
-                                        <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #027DB8;background-image:url('/assets/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                        <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #E4E6EF;background-image:url('/assets/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
                                             <!--begin::Card body-->
                                             <div class="btn rounded-0 btn-active-primary card-body d-flex align-items-end pt-3">
                                                 <!--begin::Progress-->
                                                 <div class="d-flex align-items-center flex-column  w-100">
                                                     @if (empty($proyek->ContractManagements))
-                                                    <a target="_blank" class="text-white fs-3" href="#">Lihat Kontrak</a>
+                                                    <a target="_blank" class="text-gray-800 fs-3" href="#">Lihat Kontrak</a>
                                                     @else    
-                                                    <a target="_blank" class="text-white fs-3" href="/contract-management/view/{{ urlencode(urlencode($proyek->ContractManagements->id_contract)) }}">Lihat Kontrak</a>
+                                                    <a target="_blank" class="text-gray-800 fs-3" href="/contract-management/view/{{ urlencode(urlencode($proyek->ContractManagements->id_contract)) }}">Lihat Kontrak</a>
                                                     @endif
                                                 </div>
                                                 <!--end::Progress-->
@@ -437,12 +469,12 @@
                                     <!--begin::Card body-->
                                     <div class="pt-0">
                                         <!--begin::Card widget 20-->
-                                        <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #027DB8;background-image:url('/assets/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                        <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #E4E6EF;background-image:url('/assets/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
                                             <!--begin::Card body-->
                                             <div class="btn rounded-0 btn-active-primary card-body d-flex align-items-end pt-3">
                                                 <!--begin::Progress-->
                                                 <div class="d-flex align-items-center flex-column  w-100">
-                                                    <a target="_blank" class="text-white fs-3" href="/proyek/view/{{ $proyek->kode_proyek }}">Lihat Proyek</a>
+                                                    <a target="_blank" class="text-gray-800 fs-3" href="/proyek/view/{{ $proyek->kode_proyek }}">Lihat Proyek</a>
                                                 </div>
                                                 <!--end::Progress-->
                                             </div>
@@ -458,15 +490,15 @@
                                     <!--begin::Card body-->
                                     <div class="pt-0">
                                         <!--begin::Card widget 20-->
-                                        <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #027DB8;background-image:url('/assets/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                        <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #E4E6EF;background-image:url('/assets/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
                                             <!--begin::Card body-->
                                             <div class="btn rounded-0 btn-active-primary card-body d-flex align-items-end pt-3">
                                                 <!--begin::Progress-->
                                                 <div class="d-flex align-items-center flex-column  w-100">
                                                     @if (empty($proyek->ContractManagements))
-                                                    <a target="_blank" class="text-white fs-3" href="#">Lihat Kontrak</a>
+                                                    <a target="_blank" class="text-gray-800 fs-3" href="#">Lihat Kontrak</a>
                                                     @else    
-                                                    <a target="_blank" class="text-white fs-3" href="/contract-management/view/{{ urlencode(urlencode($proyek->ContractManagements->id_contract)) }}">Lihat Kontrak</a>
+                                                    <a target="_blank" class="text-gray-800 fs-3" href="/contract-management/view/{{ urlencode(urlencode($proyek->ContractManagements->id_contract)) }}">Lihat Kontrak</a>
                                                     @endif
                                                 </div>
                                                 <!--end::Progress-->
@@ -483,12 +515,12 @@
                                     <!--begin::Card body-->
                                     <div class="pt-0">
                                         <!--begin::Card widget 20-->
-                                        <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #027DB8;background-image:url('/assets/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                        <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #E4E6EF;background-image:url('/assets/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
                                             <!--begin::Card body-->
                                             <div class="btn rounded-0 btn-active-primary card-body d-flex align-items-end pt-3">
                                                 <!--begin::Progress-->
                                                 <div class="d-flex align-items-center flex-column  w-100">
-                                                    <a target="_blank" class="text-white fs-3" href="/proyek/view/{{ $proyek->kode_proyek }}">Lihat Proyek</a>
+                                                    <a target="_blank" class="text-gray-800 fs-3" href="/proyek/view/{{ $proyek->kode_proyek }}">Lihat Proyek</a>
                                                 </div>
                                                 <!--end::Progress-->
                                             </div>
@@ -800,7 +832,7 @@
                             <!--begin::Card-->
                             <div class="ms-6 col mb-6 pt-0">
                                 <!--begin::Card widget 20-->
-                                <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #027DB8;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #027DB8;background-repeat: no-repeat;background-size: auto;">
                                     <!--begin::Header-->
                                     <div class="card-header">
                                         <!--begin::Title-->
@@ -822,7 +854,7 @@
                             <!--begin::Card-->
                             <div class="col mb-6 pt-0">
                                 <!--begin::Card widget 20-->
-                                <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #28B3AC;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #28B3AC;background-repeat: no-repeat;background-size: auto;">
                                     <!--begin::Header-->
                                     <div class="card-header">
                                         <!--begin::Title-->
@@ -844,7 +876,7 @@
                             <!--begin::Card-->
                             <div class="me-6 col mb-6 pt-0">
                                 <!--begin::Card widget 20-->
-                                <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #F7AD1A;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #F7AD1A;background-repeat: no-repeat;background-size: auto;">
                                     <!--begin::Header-->
                                     <div class="card-header">
                                         <!--begin::Title-->
@@ -1460,8 +1492,10 @@
             let url = "";
             if(type == "dop") {
                 url = `/dashboard-ccm/pelaksanaan-kontrak?dop=${value}`;
-            } else {
+            } else if (type == "unit-kerja"){
                 url = `/dashboard-ccm/pelaksanaan-kontrak?unit-kerja=${value}`;
+            } else {
+                url = `/dashboard-ccm/pelaksanaan-kontrak?kode-proyek=${value}`;
             }
             window.location.href = url;
             return;
