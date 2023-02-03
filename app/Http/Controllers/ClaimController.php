@@ -99,7 +99,7 @@ class ClaimController extends Controller
     {
         $filterTahun = $request->query("tahun-proyek");
         $filterUnitKerja = $request->query("unit-kerja");
-        $year = new DateTime("Y");
+        $year = (int) date("Y");
         $unitkerjas = UnitKerja::get()->whereNotIn("divcode", ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "8"]);
         $tahun_proyek = Proyek::get()->groupBy("tahun_perolehan")->keys();
         // dd($unitkerjas);
@@ -124,7 +124,7 @@ class ClaimController extends Controller
         }else{
             $proyeks = Proyek::join("contract_managements", "proyeks.kode_proyek", "=", "contract_managements.project_id")->where("tahun_perolehan", "=", $year)->get();
         }
-        $claims = $proyeks->where("stages", "=", 2);
+        $claims = $proyeks->where("stages", ">=", 2);
         // dd($claims);
 
         return view("5_Claim", compact(["claims", "tahun_proyek", "unitkerjas", "filterUnitKerja", "filterTahun"]));
