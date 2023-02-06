@@ -2755,8 +2755,8 @@
     <!--Begin::Trigger Point Chart Forecast-->
     <script>
         // Begin :: Checking is filter active
-        const isFilterActive = !Boolean("{{empty($unit_kerja_get)}}");
-        const filterGet = "{{$unit_kerja_get}}";
+        const isFilterActive = !Boolean("{{empty($unit_kerja_get) || empty($dop_get)}}");
+        const filterGet = "{{!empty($unit_kerja_get) ? $unit_kerja_get : $dop_get}}";
         // End :: Checking is filter active
 
         function getFullscreenElement() {
@@ -2892,8 +2892,9 @@
                 let theadHTML =
                 '<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">' +
                     '<th>Nama Proyek</th>' +
+                    '<th>Pelanggan</th>' +
                     '<th>Status Pasar</th>' +
-                    '<th>Stage</th>' +
+                    '<th style="width:150px">Stage</th>' +
                     '<th>Unit Kerja</th>' +
                     '<th>Bulan</th>' +
                     `<th class="text-end">Nilai Forecast</th>`
@@ -2927,7 +2928,11 @@
                             stage = "Kalah";
                             break;
                         case 8:
-                            stage = "Terkontrak";
+                            if (filter.tipe_proyek == 'R') {
+                                stage = "Terkontrak-Retail";
+                            } else {
+                                stage = "Terkontrak";
+                            }
                             break;
                         case 9:
                             stage = "Terendah";
@@ -2982,7 +2987,6 @@
                             bulan = "Bulan Unknown"
                             break;
                     }
-
                     tbodyHTML += `<tr>
 
                             <!--begin::Email-->
@@ -2991,11 +2995,18 @@
                             class="text-gray-800 text-hover-primary mb-1">${filter.nama_proyek}</a>
                             </td>
                             <!--end::Email-->
-                            <!--begin::Name-->
+
+                            <!--begin::Pelanggan-->
+                            <td>
+                                ${ filter.proyek_berjalan?.name_customer ?? "-" }
+                            </td>
+                            <!--end::Pelanggan-->
+
+                            <!--begin::Column-->
                             <td>
                                 ${filter.status_pasdin == null ? "-" : (filter.status_pasdin == "" ? "-" : filter.status_pasdin) }
                             </td>
-                            <!--end::Name-->
+                            <!--end::Column-->
                             <!--begin::Stage-->
                             <td>
                                 ${stage}
@@ -3037,8 +3048,9 @@
                 let theadHTML =
                 '<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">' +
                     '<th>Nama Proyek</th>' +
+                    '<th>Pelanggan</th>' +
                     '<th>Status Pasar</th>' +
-                    '<th>Stage</th>' +
+                    '<th style="width:150px">Stage</th>' +
                     '<th>Unit Kerja</th>' +
                     '<th>Tipe Proyek</th>' +
                     '<th>Bulan</th>' +
@@ -3076,7 +3088,11 @@
                             stage = "Kalah";
                             break;
                         case 8:
-                            stage = "Terkontrak";
+                            if (filter.tipe_proyek == 'R') {
+                                stage = "Terkontrak-Retail";
+                            } else {
+                                stage = "Terkontrak";
+                            }
                             break;
                         case 9:
                             stage = "Terendah";
@@ -3148,6 +3164,11 @@
                                     class="text-gray-800 text-hover-primary mb-1">${filter.nama_proyek}</a>
                             </td>
                             <!--end::Email-->
+                            <!--begin::Pelanggan-->
+                            <td>
+                                ${ filter.proyek_berjalan?.name_customer ?? "-" }
+                            </td>
+                            <!--end::Pelanggan-->
                             <!--begin::Name-->
                             <td>
                                 ${filter.status_pasdin == null ? "-" : (filter.status_pasdin == "" ? "-" : filter.status_pasdin)}
@@ -3200,8 +3221,9 @@
                 let theadHTML =
                 '<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">' +
                     '<th>Nama Proyek</th>' +
+                    '<th>Pelanggan</th>' +
                     '<th>Status Pasar</th>' +
-                    '<th>Stage</th>' +
+                    '<th style="width:150px">Stage</th>' +
                     '<th>Unit Kerja</th>' +
                     '<th>Bulan</th>' +
                     `<th class="text-end">Nilai Realisasi</th>`
@@ -3238,7 +3260,11 @@
                             stage = "Kalah";
                             break;
                         case 8:
-                            stage = "Terkontrak";
+                            if (filter.tipe_proyek == 'R') {
+                                stage = "Terkontrak-Retail";
+                            } else {
+                                stage = "Terkontrak";
+                            }
                             break;
                         case 9:
                             stage = "Terendah";
@@ -3301,6 +3327,11 @@
                                     class="text-gray-800 text-hover-primary mb-1">${filter.nama_proyek}</a>
                             </td>
                             <!--end::Email-->
+                            <!--begin::Pelanggan-->
+                            <td>
+                                ${ filter.proyek_berjalan?.name_customer ?? "-" }
+                            </td>
+                            <!--end::Pelanggan-->
                             <!--begin::Name-->
                             <td>
                                 ${filter.status_pasdin == null ? "-" : (filter.status_pasdin == "" ? "-" : filter.status_pasdin)}
@@ -3349,7 +3380,7 @@
                 '<tr class="text-start bg-white text-gray-400 fw-bolder fs-7 text-uppercase gs-0">' +
                     '<th>Nama Proyek</th>' +
                     '<th>Status Pasar</th>' +
-                    '<th>Stage</th>' +
+                    '<th style="width:150px">Stage</th>' +
                     '<th>Unit Kerja</th>' +
                     '<th>Bulan</th>' +
                     `<th class="text-end">Nilai OK</th>`
@@ -3384,7 +3415,11 @@
                             stage = "Kalah";
                             break;
                         case 8:
-                            stage = "Terkontrak";
+                            if (filter.tipe_proyek == 'R') {
+                                stage = "Terkontrak-Retail";
+                            } else {
+                                stage = "Terkontrak";
+                            }
                             break;
                         case 9:
                             stage = "Terendah";
@@ -3497,7 +3532,7 @@
                 '<tr class="text-start bg-white text-gray-400 fw-bolder fs-7 text-uppercase gs-0">' +
                     '<th>Nama Proyek</th>' +
                     '<th>Status Pasar</th>' +
-                    '<th>Stage</th>' +
+                    '<th style="width:150px">Stage</th>' +
                     '<th>Unit Kerja</th>' +
                     '<th>Bulan</th>' +
                     `<th class="text-end">Nilai Realisasi</th>`
@@ -3529,7 +3564,11 @@
                             stage = "Kalah";
                             break;
                         case 8:
-                            stage = "Terkontrak";
+                            if (filter.tipe_proyek == 'R') {
+                                stage = "Terkontrak-Retail";
+                            } else {
+                                stage = "Terkontrak";
+                            }
                             break;
                         case 9:
                             stage = "Terendah";
@@ -3638,7 +3677,7 @@
                 '<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">' +
                     '<th>Nama Proyek</th>' +
                     '<th>Status Pasar</th>' +
-                    '<th>Stage</th>' +
+                    '<th style="width:150px">Stage</th>' +
                     '<th>Unit Kerja</th>' +
                     '<th>Bulan</th>' +
                     `<th class="text-end">Nilai ${type}</th>`
@@ -3649,6 +3688,7 @@
                     filter = filtering[filter];
                     let stage = "";
                     totalNilaiLainnya += Number(filter.nilai_perolehan);
+                    totalNilaiPagu += Number(filter.hps_pagu);
                     // if(filter.tipe == "Proyek Menang") {
                     // } else {
                     //     totalNilaiLainnya += Number(filter.nilai_rkap);
@@ -3680,7 +3720,11 @@
                             stage = "Kalah";
                             break;
                         case 8:
-                            stage = "Terkontrak";
+                            if (filter.tipe_proyek == 'R') {
+                                stage = "Terkontrak-Retail";
+                            } else {
+                                stage = "Terkontrak";
+                            }
                             break;
                         case 9:
                             stage = "Terendah";
@@ -3790,7 +3834,11 @@
                 thead.innerHTML = theadHTML;
                 tbody.innerHTML = tbodyHTML;
                 titleTable.innerHTML = `Nilai ${type}`;
-                total.innerHTML = `Total Nilai ${type} = <b>${Intl.NumberFormat((["id"])).format(totalNilaiLainnya)}</b>`;
+                if(type == "Proyek Menang Tender") {
+                        total.innerHTML = `Total Nilai ${type} = <b>${Intl.NumberFormat((["id"])).format(totalNilaiLainnya)}</b>`;
+                    } else {
+                        total.innerHTML = `Total Nilai ${type} = <b>${Intl.NumberFormat((["id"])).format(totalNilaiPagu)}</b>`;
+                    }
                 table.style.display = "";
                 const chartLine = document.querySelector(chartElt);
                 chartLine.style.display = "none";
@@ -3802,7 +3850,7 @@
                 '<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">' +
                     '<th>Nama Proyek</th>' +
                     '<th>Status Pasar</th>' +
-                    '<th>Stage</th>' +
+                    '<th style="width:150px">Stage</th>' +
                     '<th>Unit Kerja</th>' +
                     '<th>Bulan</th>' +
                     `<th class="text-end">Nilai ${type}</th>`
@@ -3843,7 +3891,11 @@
                             stage = "Kalah";
                             break;
                         case 8:
-                            stage = "Terkontrak";
+                            if (filter.tipe_proyek == 'R') {
+                                stage = "Terkontrak-Retail";
+                            } else {
+                                stage = "Terkontrak";
+                            }
                             break;
                         case 9:
                             stage = "Terendah";
@@ -3972,7 +4024,7 @@
                 '<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">' +
                     '<th>Nama Proyek</th>' +
                     '<th>Status Pasar</th>' +
-                    '<th>Stage</th>' +
+                    '<th style="width:150px">Stage</th>' +
                     '<th>Unit Kerja</th>' +
                     '<th>Tipe Proyek</th>' +
                     '<th>'+bulanText+'</th>' +
@@ -4009,7 +4061,11 @@
                             stage = "Kalah";
                             break;
                         case 8:
-                            stage = "Terkontrak";
+                            if (filter.tipe_proyek == 'R') {
+                                stage = "Terkontrak-Retail";
+                            } else {
+                                stage = "Terkontrak";
+                            }
                             break;
                         case 9:
                             stage = "Terendah";
@@ -4146,7 +4202,7 @@
                 '<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">' +
                     '<th>Nama Proyek</th>' +
                     '<th>Status Pasar</th>' +
-                    '<th>Stage</th>' +
+                    '<th style="width:150px">Stage</th>' +
                     '<th>Unit Kerja</th>' +
                     '<th>Tipe Proyek</th>' +
                     '<th>'+ textBulan +'</th>' +
@@ -4184,7 +4240,11 @@
                             stage = "Kalah";
                             break;
                         case 8:
-                            stage = "Terkontrak";
+                            if (filter.tipe_proyek == 'R') {
+                                stage = "Terkontrak-Retail";
+                            } else {
+                                stage = "Terkontrak";
+                            }
                             break;
                         case 9:
                             stage = "Terendah";
@@ -4347,7 +4407,7 @@
                 let theadHTML =
                 '<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">' +
                     '<th>Nama Proyek</th>' +
-                    '<th>Stage</th>' +
+                    '<th style="width:150px">Stage</th>' +
                     '<th>Unit Kerja</th>' +
                     `<th class="text-end">Nilai</th>`
                 '</tr>';
@@ -4387,7 +4447,11 @@
                             stage = "Kalah";
                             break;
                         case 8:
-                            stage = "Terkontrak";
+                            if (filter.tipe_proyek == 'R') {
+                                stage = "Terkontrak-Retail";
+                            } else {
+                                stage = "Terkontrak";
+                            }
                             break;
                         case 9:
                             stage = "Terendah";
@@ -4536,8 +4600,11 @@
             point.addEventListener("click", async e => {
                 const tipe = point.parentElement.getAttribute("aria-label").replaceAll(/[^a-z][^A-Z]|proyek stage|\./gi, "");
                 // console.log(tipe);
-                getDataTable("#datatable-terendah-terkontrak", "#terendah-terkontrak", `/dashboard/terendah-terkontrak/${tipe}`, tipe, 9);
-                
+                if(filterGet) {
+                    getDataTable("#datatable-terendah-terkontrak", "#terendah-terkontrak", `/dashboard/terendah-terkontrak/${tipe}/${filterGet}`, tipe, 9);
+                } else {
+                    getDataTable("#datatable-terendah-terkontrak", "#terendah-terkontrak", `/dashboard/terendah-terkontrak/${tipe}`, tipe, 9);
+                }
             })
         })
 
@@ -4551,6 +4618,7 @@
         competitiveIndex.forEach(point => {
             point.addEventListener("click", async e => {
                 const tipe = point.parentElement.getAttribute("aria-label").replaceAll(/[^a-z][^A-Z]|proyek stage|\./gi, "");
+                // console.log(filterGet);
                 if(filterGet) {
                     getDataTable("#datatable-index-jumlah", "#index-jumlah", `/dashboard/index-jumlah/${tipe}/${filterGet}`, tipe, 9);
                 } else {

@@ -486,6 +486,38 @@
                                     </div>
                                     <!--end::Menu Colapse-->
                                     @endif
+                                    @if (auth()->user()->check_administrator)
+                                    <!--begin::Menu Colapse-->
+                                    <div id="#kt_aside_menu" data-kt-menu="true"
+                                        style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'jabatan' ? 'background-color:#008CB4' : '' }}">
+                                        <a class="menu-link " href="/jabatan" style="color:white; padding-left:20px;">
+                                            <span class="menu-icon">
+                                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                                {{-- <i class="bi bi-buildings text-white"></i> --}}
+                                                <i class="bi bi-bezier text-white"></i>
+                                                <!--end::Svg Icon-->
+                                            </span>
+                                            <span class="menu-title" style="font-size: 16px; padding-left: 10px">Jabatan</span>
+                                        </a>
+                                    </div>
+                                    <!--end::Menu Colapse-->
+                                    @endif
+                                    @if (auth()->user()->check_administrator)
+                                    <!--begin::Menu Colapse-->
+                                    <div id="#kt_aside_menu" data-kt-menu="true"
+                                        style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'matriks-approval-rekomendasi' ? 'background-color:#008CB4' : '' }}">
+                                        <a class="menu-link " href="/matriks-approval-rekomendasi" style="color:white; padding-left:20px;">
+                                            <span class="menu-icon">
+                                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                                {{-- <i class="bi bi-buildings text-white"></i> --}}
+                                                <i class="bi bi-person-fill-lock text-white"></i>
+                                                <!--end::Svg Icon-->
+                                            </span>
+                                            <span class="menu-title" style="font-size: 16px; padding-left: 10px">Matriks Approval Rekomendasi</span>
+                                        </a>
+                                    </div>
+                                    <!--end::Menu Colapse-->
+                                    @endif
                                 </div>
                                 <!--end::Colapse-->
                                 <!--end::Svg Icon-->
