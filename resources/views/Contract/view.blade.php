@@ -2384,7 +2384,7 @@
                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Identifikasi Pasal Kontraktual
                                 @if ($contract->PasalKontraktual->isNotEmpty())
-                                <a href="#" onclick="exportToExcel(this, '#kt_pasal_kontraktual')" class="">(Klik di sini untuk Export ke Excel)</a>
+                                <a href="#" onclick="exportToExcel(this, '#table-pasal-kontraktual')" class="">(Klik di sini untuk Export ke Excel)</a>
                                 @endif
                                 <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_input_pasal_kontraktual">+</a>
@@ -2395,7 +2395,7 @@
                             </h3>
 
                             <!--begin:Table: Pasal Kontraktual-->
-                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="pasal_kontraktual">
+                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="table-pasal-kontraktual">
                                 <!--begin::Table head-->
                                 <thead>
                                     <!--begin::Table row-->
@@ -2777,11 +2777,11 @@
                                 <tbody class="fw-bold text-gray-400">
                                     @if (!empty($contract->Jaminan))
                                     @php
-                                        $asuransiTableView = $contract->Jaminan->groupBy("kategori_jaminan")->map(function($item, $key){
+                                        $jaminanTableView = $contract->Jaminan->groupBy("kategori_jaminan")->map(function($item, $key){
                                             return $item->sortByDesc("created_at")->first();    
                                         })->values();
                                     @endphp
-                                    @forelse ($contract->Jaminan as $jaminan )
+                                    @forelse ($jaminanTableView as $jaminan )
                                     @php
                                         $jaminanExpired = new DateTime($jaminan->tanggal_berakhir);
                                         $currentDate = new DateTime();
@@ -2791,7 +2791,7 @@
                                             $style_expired = "badge badge-light-danger";
                                             $style_kategori = "text-gray-600";
                                             $is_expired = $check;
-                                        }elseif ($jaminan->is_expired == false && $interval->m == 0) {
+                                        }elseif ($jaminan->is_expired == false && $interval->m == 0 || $interval->d == 0) {
                                             $check = $interval->format('Expired %d hari lagi');
                                             $style_expired = "badge badge-light-danger";
                                             $style_kategori = "text-danger";
@@ -2808,7 +2808,7 @@
                                         </td>
                                         <td>
                                             <a href="#" data-bs-toggle="modal"
-                                            data-bs-target="#kt_modal_history_jaminan_{{ $jaminan->nomor_jaminan }}" class="text-gray-600 mb-1 text-hover-primary">
+                                            data-bs-target="#kt_modal_history_jaminan_{{ $jaminan->id_jaminan }}" class="text-gray-600 mb-1 text-hover-primary">
                                             {{ $jaminan->nomor_jaminan }}
                                             </a>
                                         </td>
@@ -2829,7 +2829,7 @@
                                         </td>
                                         <td>
                                             <a href="#" data-bs-toggle="modal"
-                                            data-bs-target="#kt_modal_edit_jaminan_{{ $jaminan->nomor_jaminan }}" class="btn btn-sm btn-primary text-white">
+                                            data-bs-target="#kt_modal_edit_jaminan_{{ $jaminan->id_jaminan }}" class="btn btn-sm btn-primary text-white">
                                             Edit
                                             </a>
                                         </td>
@@ -2908,6 +2908,11 @@
                                             $style_expired = "badge badge-light-danger";
                                             $style_kategori = "text-danger";
                                             $is_expired = $check;
+                                        }elseif ($asuransi->is_expired == true) {
+                                            $check = $interval->format('Expired');
+                                            $style_expired = "badge badge-light-danger";
+                                            $style_kategori = "text-danger";
+                                            $is_expired = $check;
                                         }else{
                                             $style_expired = "badge badge-light-success";
                                             $style_kategori = "text-gray-600";
@@ -2920,7 +2925,7 @@
                                      </td>
                                      <td>
                                          <a href="#" data-bs-toggle="modal"
-                                         data-bs-target="#kt_modal_history_asuransi_{{ $asuransi->nomor_polis }}" class="text-gray-600 mb-1 text-hover-primary">
+                                         data-bs-target="#kt_modal_history_asuransi_{{ $asuransi->id_asuransi }}" class="text-gray-600 mb-1 text-hover-primary">
                                          {{ $asuransi->nomor_polis }}
                                          </a>
                                      </td>
@@ -2938,7 +2943,7 @@
                                      </td>
                                      <td>
                                          <a href="#" data-bs-toggle="modal"
-                                         data-bs-target="#kt_modal_edit_asuransi_{{ $asuransi->nomor_polis }}" class="btn btn-sm btn-primary text-white">
+                                         data-bs-target="#kt_modal_edit_asuransi_{{ $asuransi->id_asuransi }}" class="btn btn-sm btn-primary text-white">
                                          Edit
                                          </a>
                                      </td>
@@ -3643,7 +3648,6 @@
                                     </div>
                                 </div>
 
-                                @if (!empty($contract->list_dokumen_ba_defect))
                                 
                                 <br>
                                     <div class="row">
@@ -3838,7 +3842,6 @@
                                     </div>
                                     <br>
                                     <br>
-                                @endif
                                 {{-- <button type="submit" class="btn btn-sm btn-active-primary text-white"
                                     style="background-color: #008cb4;">Save Dokumen Bast</button> --}}
                             {{-- </form> --}}
@@ -6578,6 +6581,13 @@
                         <input type="hidden" class="modal-name" name="modal-name">
                         <input type="hidden" name="id-contract" value="{{ $contract->id_contract }}">
 
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span class="">Nomor</span>
+                        </label>
+
+                        <input type="text" class="form-control form-control-solid mb-3" name="nomor-dokumen"
+                        id="nomor_dokumen" value="" placeholder="Nomor Dokumen" style="font-weight: normal" />
+
                         <!--begin::Label-->
                         <label class="fs-6 fw-bold form-label mt-3">
                             <span class="">Jenis Dokumen</span>
@@ -6636,7 +6646,7 @@
     <!--begin::Modal - Input BAST 2-->
     <div class="modal fade" id="kt_modal_bast_2" tabindex="-1" aria-hidden="true">
         <!--begin::Modal dialog-->
-        <div class="modal-dialog modal-dialog-centered mw-800px">
+        <div class="modal-dialog modal-dialog-centered mw-600px">
             <!--begin::Modal content-->
             <div class="modal-content">
                 <!--begin::Modal header-->
@@ -6664,6 +6674,13 @@
                         <input type="hidden" name="bast" value="2">
                         <input type="hidden" class="modal-name" name="modal-name">
                         <input type="hidden" name="id-contract" value="{{ $contract->id_contract }}">
+
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span class="">Nomor</span>
+                        </label>
+
+                        <input type="text" class="form-control form-control-solid mb-3" name="nomor-dokumen"
+                        id="nomor_dokumen" value="" placeholder="Nomor Dokumen" style="font-weight: normal" />
 
                         <!--begin::Label-->
                         <label class="fs-6 fw-bold form-label mt-3">
@@ -8537,6 +8554,7 @@
                                 <option value="CAR/EAR">CAR/EAR</option>
                                 <option value="Third Party Liability">Third Party Liability</option>
                                 <option value="Professional Indemnity">Professional Indemnity</option>
+                                <option value="Heavy Equipment">Heavy Equipment</option>
                             </select>
                             <!--end::Input-->
                             
@@ -8621,7 +8639,7 @@
 
     <!--Begin::Modal - History Jaminan-->
     @foreach ($contract->Jaminan as $history)
-    <div class="modal fade" id="kt_modal_history_jaminan_{{ $history->nomor_jaminan }}" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="kt_modal_history_jaminan_{{ $history->id_jaminan }}" tabindex="-1" aria-hidden="true">
         <!--begin::Modal dialog-->
         <div class="modal-dialog modal-dialog-centered mw-900px">
             <!--begin::Modal content-->
@@ -8719,7 +8737,7 @@
 
     <!--Begin::Modal - Edit Jaminan-->
     @foreach ($contract->Jaminan as $history)
-    <div class="modal fade" id="kt_modal_edit_jaminan_{{ $history->nomor_jaminan }}" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="kt_modal_edit_jaminan_{{ $history->id_jaminan }}" tabindex="-1" aria-hidden="true">
         <!--begin::Modal dialog-->
         <div class="modal-dialog modal-dialog-centered mw-600px">
             <!--begin::Modal content-->
@@ -8850,7 +8868,7 @@
 
     <!--Begin::Modal - History Asuransi-->
     @foreach ($contract->Asuransi as $history)
-    <div class="modal fade" id="kt_modal_history_asuransi_{{ $history->nomor_polis }}" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="kt_modal_history_asuransi_{{ $history->id_asuransi }}" tabindex="-1" aria-hidden="true">
         <!--begin::Modal dialog-->
         <div class="modal-dialog modal-dialog-centered mw-900px">
             <!--begin::Modal content-->
@@ -8948,7 +8966,7 @@
 
     <!--Begin::Modal - Edit Asuransi-->
     @foreach ($contract->Asuransi as $history)
-    <div class="modal fade" id="kt_modal_edit_asuransi_{{ $history->nomor_polis }}" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="kt_modal_edit_asuransi_{{ $history->id_asuransi }}" tabindex="-1" aria-hidden="true">
         <!--begin::Modal dialog-->
         <div class="modal-dialog modal-dialog-centered mw-600px">
             <!--begin::Modal content-->
@@ -13648,7 +13666,7 @@ aria-hidden="true">
 </script>
 <script>
     $(document).ready(function() {
-        $('#pasal_kontraktual').DataTable( {
+        $('#table-pasal-kontraktual').DataTable( {
             // dom: 'Bfrtip',
             dom: 'Brti',
             pageLength : 50,

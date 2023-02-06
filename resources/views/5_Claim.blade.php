@@ -108,7 +108,7 @@
                                                     class="form-select form-select-solid select2-hidden-accessible"
                                                     data-control="select2" data-hide-search="true" data-placeholder="Tahun"
                                                     tabindex="-1" aria-hidden="true">
-                                                    <option></option>
+                                                    <option value="" selected>{{ date("Y") }}</option>
                                                     @foreach ($tahun_proyek as $tahun)
                                                         <option value="{{ $tahun }}"{{$filterTahun == $tahun ? "selected" : ""}}>{{ $tahun }}</option>
                                                     @endforeach
@@ -122,7 +122,7 @@
                                                     tabindex="-1" aria-hidden="true">
                                                     <option></option>
                                                     @foreach ($unitkerjas as $unit)
-                                                        <option value="{{ $unit->divcode }}">{{ $unit->unit_kerja }}</option>
+                                                        <option value="{{ $unit->divcode }}" {{ $filterUnitKerja == $unit->divcode ? 'selected' : '' }}>{{ $unit->unit_kerja }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
