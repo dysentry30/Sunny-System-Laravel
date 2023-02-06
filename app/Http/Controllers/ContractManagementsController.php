@@ -685,12 +685,12 @@ class ContractManagementsController extends Controller
         // dd($data_update);
         // dd($kategori, $sub_pasal, $uraian, $pic, $catatan);
 
-        $is_data_exist = ReviewContracts::where("id_contract", $data["id-contract"])->get();
-        // $is_data_exist = ContractManagements::all()->first();
+        $is_data_exist = ReviewContracts::where("id_contract", $data["id-contract"])->where("stage", "=", 2)->get();
+        // dd($is_data_exist);
         if($is_data_exist->isEmpty()){
             $kategori->each(function($item, $key) use($sub_pasal, $uraian, $pic, $catatan, $data){
-                $tes = ReviewContracts::where("stage", "=", 1)->get();
-                dd($tes);
+                // $tes = ReviewContracts::where("stage", "=", 1)->get();
+                // dd($tes);
                 if($data["stage"] == 1){
                     $review_kontrak = new ReviewContracts();
                     $review_kontrak->id_contract = $data["id-contract"];
@@ -701,10 +701,31 @@ class ContractManagementsController extends Controller
                     $review_kontrak->pic = $pic[$key];
                     $review_kontrak->catatan = $catatan[$key];
 
+                    $duplicate_review = new ReviewContracts();
+                    $duplicate_review->id_contract = $data["id-contract"];
+                    $duplicate_review->stage = 2;
+                    $duplicate_review->kategori = $item;
+                    $duplicate_review->sub_pasal = $sub_pasal[$key];
+                    $duplicate_review->uraian = $uraian[$key];
+                    $duplicate_review->pic = $pic[$key];
+                    $duplicate_review->catatan = $catatan[$key];
+
                     $review_kontrak->save();
+                    $duplicate_review->save();
 
                     // $budi = $review_kontrak->replicate()->fill(["stage" => 2]);
                     // dd($budi);
+                }else{
+                    $review_kontrak = new ReviewContracts();
+                    $review_kontrak->id_contract = $data["id-contract"];
+                    $review_kontrak->stage = $data["stage"];
+                    $review_kontrak->kategori = $item;
+                    $review_kontrak->sub_pasal = $sub_pasal[$key];
+                    $review_kontrak->uraian = $uraian[$key];
+                    $review_kontrak->pic = $pic[$key];
+                    $review_kontrak->catatan = $catatan[$key];
+
+                    $review_kontrak->save();
                 }
                 
             });
@@ -1846,6 +1867,7 @@ class ContractManagementsController extends Controller
         $nama_document = date("His_") . $file_name;
         // $nama_document = date("His_") . substr($uploadedFile->getClientOriginalName(), 0, strlen($uploadedFile->getClientOriginalName()) - 5);
         moveFileTemp($data['dokumen-bast-1'], $id_document);
+        $dokumen->nomor_dokumen = $data["nomor-dokumen"];
         $dokumen->nama_dokumen = $nama_document;
         $dokumen->id_contract =  $data["id-contract"];
         $dokumen->bast =  (int) $data["bast"];
@@ -1853,7 +1875,11 @@ class ContractManagementsController extends Controller
         $dokumen->tanggal_dokumen =  $data["tanggal-dokumen"];
         $dokumen->id_document = $id_document;
         // dd($dokumen);
-        $dokumen->save();
+
+        if($dokumen->save()){
+            Alert::success("Success", "Dokumen Bast berhasil dibuat");
+            return redirect()->back();
+        };
 
         // $messages = [
         //     "required" => "Field di atas wajib diisi",

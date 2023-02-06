@@ -622,10 +622,10 @@ class DashboardController extends Controller
         $dops = Dop::whereNotIn("dop", ["EA", "PUSAT"])->get();
         if($tahun_get < 2023) {
             $unit_kerjas_all = UnitKerja::whereNotIn("divcode", ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "N", "P", "J"])->get();
-            $proyeks = Proyek::whereIn("unit_kerja", ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "N", "P", "J"])->get();
+            $proyeks = Proyek::whereNotIn("unit_kerja", ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "N", "P", "J"])->get();
         } else {
             $unit_kerjas_all = UnitKerja::whereNotIn("divcode", ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "N", "L", "F", "U", "O"])->get();
-            $proyeks = Proyek::whereIn("unit_kerja", ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "N", "L", "F", "U", "O"])->get();
+            $proyeks = Proyek::whereNotIn("unit_kerja", ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "N", "L", "F", "U", "O"])->get();
         }
         // dd(Proyek::whereIn("unit_kerja", $unit_kerjas_all->toArray())->get());
         if(!empty($dop_get)) {
@@ -1187,6 +1187,11 @@ class DashboardController extends Controller
         $tahun = $proyeks->groupBy("tahun_perolehan")->keys();
 
         // dd($proyeks);    
+        if(!empty($dop_get)) {
+            $unit_kerjas = $unit_kerjas_all->where("dop", "=", $dop_get);
+        } else {
+            $unit_kerjas = $unit_kerjas_all;
+        }
 
         $contracts_pemeliharaan = $proyeks->map(function ($item) {
             return $item->ContractManagements;

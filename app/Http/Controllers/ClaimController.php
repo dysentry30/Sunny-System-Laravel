@@ -97,12 +97,16 @@ class ClaimController extends Controller
 
     public function index(Request $request)
     {
-        $filterTahun = $request->query("tahun-proyek");
+        $filterTahun = $request->query("tahun-proyek") ?? (int) date("Y");
         $filterUnitKerja = $request->query("unit-kerja");
         $year = (int) date("Y");
         $unitkerjas = UnitKerja::get()->whereNotIn("divcode", ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "8"]);
         $tahun_proyek = Proyek::get()->groupBy("tahun_perolehan")->keys();
         // dd($unitkerjas);
+        $uk_map = $unitkerjas->map(function($uk){
+            return $uk->divcode;
+        });
+        // dd($uk_map);
         // $proyeks = ContractManagements::join("proyeks", "contract_managements.project_id", "=", "proyeks.kode_proyek")->get();
         // $claims = $proyeks->map(function($proyek){
         //     $claim = PerubahanKontrak::where("id_contract", "=", $proyek->id_contract)->get();
@@ -124,7 +128,7 @@ class ClaimController extends Controller
         }else{
             $proyeks = Proyek::join("contract_managements", "proyeks.kode_proyek", "=", "contract_managements.project_id")->where("tahun_perolehan", "=", $year)->get();
         }
-        $claims = $proyeks->where("stages", ">=", 2);
+        $claims = $proyeks->whereIn("unit_kerja", $uk_map)->where("stages", ">=", 2);
         // dd($claims);
 
         return view("5_Claim", compact(["claims", "tahun_proyek", "unitkerjas", "filterUnitKerja", "filterTahun"]));
@@ -138,7 +142,7 @@ class ClaimController extends Controller
         // dd($filterStatus);
         // $filterBulan = $data["bulan-perubahan"];
 
-        $monthNow = new DateTime("M");
+        // $monthNow = new DateTime("M");
         $contracts = ContractManagements::where("id_contract", "=", $id_contract)->first();
         $proyek = Proyek::where("kode_proyek", "=", $kode_proyek)->first();
 

@@ -851,51 +851,79 @@
                             </div>
                             <div class="col">
                                 <!--begin::Title body-->
-                                <div style="border-radius: 0px" class="card-body bg-secondary">
-                                    <h2 class="m-0 text-center">{{ $table[4] ?? 0 }}</h2>
-                                </div>
+                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                    <!--begin::Title body-->
+                                    <div style="border-radius: 0px" class="card-body bg-secondary">
+                                        <h2 class="m-0 text-center">{{ $table[4] ?? 0 }}</h2>
+                                    </div>
+                                    <!--end::Title body-->
+                                </a>
                                 <!--end::Title body-->
                             </div>
                             <div class="col">
                                 <!--begin::Title body-->
-                                <div style="border-radius: 0px" class="card-body bg-secondary">
-                                    <h2 class="m-0 text-center">{{ $table[5] ?? 0 }}</h2>
-                                </div>
+                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                    <!--begin::Title body-->
+                                    <div style="border-radius: 0px" class="card-body bg-secondary">
+                                        <h2 class="m-0 text-center">{{ $table[5] ?? 0 }}</h2>
+                                    </div>
+                                    <!--end::Title body-->
+                                </a>
                                 <!--end::Title body-->
                             </div>
                             <div class="col-1">
                                 <!--begin::Title body-->
-                                <div style="border-radius: 0px" class="card-body bg-secondary">
-                                    <h2 class="m-0 text-center">{{ $table[6] ?? 0 }}</h2>
-                                </div>
+                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                    <!--begin::Title body-->
+                                    <div style="border-radius: 0px" class="card-body bg-secondary">
+                                        <h2 class="m-0 text-center">{{ $table[6] ?? 0 }}</h2>
+                                    </div>
+                                    <!--end::Title body-->
+                                </a>
                                 <!--end::Title body-->
                             </div>
                             <div class="col-1">
                                 <!--begin::Title body-->
-                                <div style="border-radius: 0px" class="card-body bg-secondary">
-                                    <h2 class="m-0 text-center">{{ $table[7] ?? 0 }}</h2>
-                                </div>
+                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                    <!--begin::Title body-->
+                                    <div style="border-radius: 0px" class="card-body bg-secondary">
+                                        <h2 class="m-0 text-center">{{ $table[7] ?? 0 }}</h2>
+                                    </div>
+                                    <!--end::Title body-->
+                                </a>
                                 <!--end::Title body-->
                             </div>
                             <div class="col-1">
                                 <!--begin::Title body-->
-                                <div style="border-radius: 0px" class="card-body bg-secondary">
-                                    <h2 class="m-0 text-center">{{ $table[8] ?? 0 }}</h2>
-                                </div>
+                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                    <!--begin::Title body-->
+                                    <div style="border-radius: 0px" class="card-body bg-secondary">
+                                        <h2 class="m-0 text-center">{{ $table[8] ?? 0 }}</h2>
+                                    </div>
+                                    <!--end::Title body-->
+                                </a>
                                 <!--end::Title body-->
                             </div>
                             <div class="col-1">
                                 <!--begin::Title body-->
-                                <div style="border-radius: 0px" class="card-body bg-secondary">
-                                    <h2 class="m-0 text-center">{{ $table[9] ?? 0 }}</h2>
-                                </div>
+                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                    <!--begin::Title body-->
+                                    <div style="border-radius: 0px" class="card-body bg-secondary">
+                                        <h2 class="m-0 text-center">{{ $table[9] ?? 0 }}</h2>
+                                    </div>
+                                    <!--end::Title body-->
+                                </a>
                                 <!--end::Title body-->
                             </div>
                             <div class="col">
                                 <!--begin::Title body-->
-                                <div style="border-radius: 0px" class="card-body bg-secondary">
-                                    <h2 class="m-0 text-center">{{ $table[10] ?? 0 }}</h2>
-                                </div>
+                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                    <!--begin::Title body-->
+                                    <div style="border-radius: 0px" class="card-body bg-secondary">
+                                        <h2 class="m-0 text-center">{{ $table[10] ?? 0 }}</h2>
+                                    </div>
+                                    <!--end::Title body-->
+                                </a>
                                 <!--end::Title body-->
                             </div>
                         </div>
@@ -1119,40 +1147,47 @@
                                     </div>
                                 </div>
                                 <!--end::Title body-->
-                                <!--begin::Title body-->
-                                @foreach ($insurance as $status)
-                                <div class="row mb-4 ms-3">
-                                    <div class="col-3">
-                                        <!--begin::Title body-->
-                                        <div style="border-radius: 0px" class="card-body bg-secondary">
-                                            <p class="fw-bolder m-0 text-center">{{ $status[0] }}</p>
-                                        </div>
-                                        <!--end::Title body-->
-                                    </div>
-                                    <div class="col-3">
-                                        <!--begin::Title body-->
-                                        <div style="border-radius: 0px" class="card-body bg-secondary">
-                                            <p class="fw-bolder m-0 text-center">{{ date("d/m/Y") }}</p>
-                                        </div>
-                                        <!--end::Title body-->
-                                    </div>
-                                    <div class="col-3">
-                                        <!--begin::Title body-->
-                                        <div style="border-radius: 0px" class="card-body bg-secondary">
-                                            <p class="fw-bolder m-0 text-center">{{ date("d/m/Y") }}</p>
-                                        </div>
-                                        <!--end::Title body-->
-                                    </div>
-                                    <div class="col-3">
-                                        <!--begin::Title body-->
-                                        <div style="border-radius: 0px" class="card-body bg-secondary">
-                                            <p class="fw-bolder m-0 text-center">{{ $status[1] == 1 ? "VALID" : "EXPIRED" }}</p>
-                                        </div>
-                                        <!--end::Title body-->
-                                    </div>
-                                </div>
-                                @endforeach
-                                <!--end::Title body-->
+                               <!--begin::Title body-->
+                               @if (!empty($proyek->ContractManagements->Asuransi))
+                               @php
+                                   $asuransiTableView = $proyek->ContractManagements->Asuransi->groupBy("kategori_asuransi")->map(function($item, $key){
+                                       return $item->sortByDesc("created_at")->first();    
+                                   })->values();
+                               @endphp
+                           @foreach ($asuransiTableView as $asuransi)
+                           <div class="row mb-4 ms-3">
+                               <div class="col-3">
+                                   <!--begin::Title body-->
+                                   <div style="border-radius: 0px" class="card-body bg-secondary">
+                                       <p class="fw-bolder m-0 text-center">{{ $asuransi->kategori_asuransi }}</p>
+                                   </div>
+                                   <!--end::Title body-->
+                               </div>
+                               <div class="col-3">
+                                   <!--begin::Title body-->
+                                   <div style="border-radius: 0px" class="card-body bg-secondary">
+                                       <p class="fw-bolder m-0 text-center">{{ Carbon\Carbon::create($asuransi->tanggal_penerbitan)->translatedFormat("d/m/Y") }}</p>
+                                   </div>
+                                   <!--end::Title body-->
+                               </div>
+                               <div class="col-3">
+                                   <!--begin::Title body-->
+                                   <div style="border-radius: 0px" class="card-body bg-secondary">
+                                       <p class="fw-bolder m-0 text-center">{{ Carbon\Carbon::create($asuransi->tanggal_berakhir)->translatedFormat("d/m/Y") }}</p>
+                                   </div>
+                                   <!--end::Title body-->
+                               </div>
+                               <div class="col-3">
+                                   <!--begin::Title body-->
+                                   <div style="border-radius: 0px" class="card-body bg-secondary">
+                                       <p class="fw-bolder m-0 text-center">{{ $asuransi->is_expired == 0 ? "VALID" : "EXPIRED" }}</p>
+                                   </div>
+                                   <!--end::Title body-->
+                               </div>
+                           </div>
+                           @endforeach
+                           @endif
+                           <!--end::Title body-->
                             </div>
                             <div class="col-6">
                                 <!--begin::Title body-->
@@ -1187,40 +1222,48 @@
                                     </div>
                                 </div>
                                 <!--end::Title body-->
-                                <!--begin::Title body-->
-                                @foreach ($bond as $status)
-                                <div class="row mb-4 me-3">
-                                    <div class="col-3">
-                                        <!--begin::Title body-->
-                                        <div style="border-radius: 0px" class="card-body bg-secondary">
-                                            <p class="fw-bolder m-0 text-center">{{ $status[0] }}</p>
-                                        </div>
-                                        <!--end::Title body-->
-                                    </div>
-                                    <div class="col-3">
-                                        <!--begin::Title body-->
-                                        <div style="border-radius: 0px" class="card-body bg-secondary">
-                                            <p class="fw-bolder m-0 text-center">{{ date("d/m/Y") }}</p>
-                                        </div>
-                                        <!--end::Title body-->
-                                    </div>
-                                    <div class="col-3">
-                                        <!--begin::Title body-->
-                                        <div style="border-radius: 0px" class="card-body bg-secondary">
-                                            <p class="fw-bolder m-0 text-center">{{ date("d/m/Y") }}</p>
-                                        </div>
-                                        <!--end::Title body-->
-                                    </div>
-                                    <div class="col-3">
-                                        <!--begin::Title body-->
-                                        <div style="border-radius: 0px" class="card-body bg-secondary">
-                                            <p class="fw-bolder m-0 text-center">{{ $status[1] == 1 ? "VALID" : "EXPIRED" }}</p>
-                                        </div>
-                                        <!--end::Title body-->
-                                    </div>
-                                </div>
-                                @endforeach
-                                <!--end::Title body-->
+                               <!--end::Title body-->
+                               @if (!empty($proyek->ContractManagements->Jaminan))
+                               @php
+                                   $jaminanTableView = $proyek->ContractManagements->Jaminan->groupBy("kategori_jaminan")->map(function($item, $key){
+                                       return $item->sortByDesc("created_at")->first();    
+                                   })->values();
+                               @endphp
+                                   <!--begin::Title body-->
+                                   @foreach ($jaminanTableView as $jaminan)
+                                   <div class="row mb-4 me-3">
+                                       <div class="col-3">
+                                           <!--begin::Title body-->
+                                           <div style="border-radius: 0px" class="card-body bg-secondary">
+                                               <p class="fw-bolder m-0 text-center">{{ $jaminan->kategori_jaminan }}</p>
+                                           </div>
+                                           <!--end::Title body-->
+                                       </div>
+                                       <div class="col-3">
+                                           <!--begin::Title body-->
+                                           <div style="border-radius: 0px" class="card-body bg-secondary">
+                                               <p class="fw-bolder m-0 text-center">{{ Carbon\Carbon::create($jaminan->tanggal_penerbitan)->translatedFormat("d/m/Y") }}</p>
+                                           </div>
+                                           <!--end::Title body-->
+                                       </div>
+                                       <div class="col-3">
+                                           <!--begin::Title body-->
+                                           <div style="border-radius: 0px" class="card-body bg-secondary">
+                                               <p class="fw-bolder m-0 text-center">{{ Carbon\Carbon::create($jaminan->tanggal_berakhir)->translatedFormat("d/m/Y") }}</p>
+                                           </div>
+                                           <!--end::Title body-->
+                                       </div>
+                                       <div class="col-3">
+                                           <!--begin::Title body-->
+                                           <div style="border-radius: 0px" class="card-body bg-secondary">
+                                               <p class="fw-bolder m-0 text-center">{{ $jaminan->is_expired == 0 ? "VALID" : "EXPIRED" }}</p>
+                                           </div>
+                                           <!--end::Title body-->
+                                       </div>
+                                   </div>
+                                   @endforeach
+                                   <!--end::Title body-->
+                               @endif
                             </div>
                         </div>
                         <!--end::Title-->
