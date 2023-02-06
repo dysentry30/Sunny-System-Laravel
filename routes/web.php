@@ -47,10 +47,12 @@ use App\Models\ContractChangeOrder;
 use App\Models\ContractChangeProposal;
 use App\Models\FieldChange;
 use App\Models\IndustrySector;
+use App\Models\Jabatan;
 use App\Models\JenisProyek;
 use App\Models\KriteriaAssessment;
 use App\Models\KriteriaGreenLine;
 use App\Models\MataUang;
+use App\Models\MatriksApprovalRekomendasi;
 use App\Models\Provinsi;
 use App\Models\ProyekBerjalans;
 use App\Models\Sbu;
@@ -64,6 +66,7 @@ use Illuminate\Routing\RouteGroup;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Validator;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
@@ -1706,6 +1709,87 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::get('/kriteria-assessment', function (Request $request) {
         $kriteria_assessments = KriteriaAssessment::all();
         return view("MasterData/KriteriaAssessment", compact(["kriteria_assessments"]));
+    });
+
+    Route::get('/matriks-approval-rekomendasi', function () {
+        $approval_rekomendasi = MatriksApprovalRekomendasi::where("tahun", "=", (int) date("Y"))->get();
+        $jabatans = Jabatan::where("tahun", "=", (int) date("Y"))->get();
+        $unit_kerjas = UnitKerja::all();
+        return view("MasterData/MatriksApprovalRekomendasi", compact(["approval_rekomendasi", "jabatans", "unit_kerjas"]));
+    });
+
+    Route::post('/matriks-approval-rekomendasi/save', function (Request $request) {
+        $data = $request->all();
+        $rules = [
+            "tahun" => "required|numeric",
+            "jabatan" => "required",
+            "unit-kerja" => "required",
+        ];
+        // $is_validate = $request->validateWithBag("post", [
+        //     "tahun" => "required|numeric",
+        //     "jabatan" => "required",
+        //     "unit-kerja" => "required",
+        // ]);
+        $is_validated = Validator::make($data, $rules);
+        $errors = $is_validated->errors();
+        if($errors->isNotEmpty()) {
+            $fields = collect($errors->toArray())->map(function($item, $field) {
+                return ucwords(str_replace("-", " ", $field));
+            })->values();
+            $fields = $fields->join(", ", " dan ");
+            Alert::html("Error", "Field <b>$fields</b> harus terisi!", "error");
+            return redirect()->back()->with("modal", $data["modal"]);
+        }
+
+        $approval_rekomendasi = new MatriksApprovalRekomendasi();
+        $approval_rekomendasi->tahun = $data["tahun"];
+        $approval_rekomendasi->jabatan = $data["jabatan"];
+        $approval_rekomendasi->unit_kerja = $data["unit-kerja"];
+        
+        if($approval_rekomendasi->save()) {
+            Alert::success('Success', "Kriteria Assessment berhasil ditambahkan");
+            return redirect()->back();
+        }
+        Alert::error('Error', "Kriteria Assessment gagal ditambahkan");
+        return redirect()->back();
+    });
+
+    Route::get('/jabatan', function () {
+        $jabatans = Jabatan::where("tahun", "=", (int) date("Y"))->get();
+        return view("MasterData/Jabatan", compact(["jabatans"]));
+    });
+
+    Route::get('/get-jabatans', function () {
+        $jabatans = HTTP::get("https://jsonplaceholder.typicode.com/users");
+        $status = 0;
+        $reason = "";
+        $jabatans->onError(function($item) use(&$status, &$reason) {
+            // dd($item->status(), $item->reason());
+            $status = $item->status();
+            $reason = $item->reason();
+        });
+
+        if($status != 0 && !empty($reason)) {
+            return response()->json([
+                "status" => $status,
+                "msg" => $reason
+            ]);
+        }
+        // $new_jabatan = new Jabatan();
+        // $new_jabatan->nama_jabatan = "";
+        // $new_jabatan->unit_kerja = "";
+        // $new_jabatan->tahun = "";
+        // if($new_jabatan->save()) {
+        //     Alert::success('Success', "Jabatan berhasil ditambahkan");
+        //     return response()->json($jabatans);
+        // }
+        // Alert::error('Error', "Jabatan gagal ditambahkan");
+        // return response()->json([
+        //     "status" => 400,
+        //     "msg" => "Gagal menambahkan Jabatan"
+        // ]);
+
+        return response()->json($jabatans->json());
     });
 
 
