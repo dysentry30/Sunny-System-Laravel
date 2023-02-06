@@ -177,9 +177,9 @@
                                                 aria-hidden="true">
                                                 {{-- <option value="" {{$dop_get == "" ? "selected" : ""}}></option> --}}
                                                 <option value="" selected></option>
-                                                @foreach ($proyeks as $proyek)
-                                                    {{-- <option value="{{ $proyek->divcode }}" {{ $proyek_get == $proyek->divcode ? 'selected' : '' }} >{{ $proyek->unit_kerja }}</option> --}}
-                                                    <option value="{{ $proyek->kode_proyek }}" {{ $proyek_get == $proyek->kode_proyek ? 'selected' : '' }} >{{ $proyek->nama_proyek }} ({{$proyek->kode_proyek}})</option>
+                                                @foreach ($proyeks as $p)
+                                                    {{-- <option value="{{ $p->divcode }}" {{ $p_get == $p->divcode ? 'selected' : '' }} >{{ $p->unit_kerja }}</option> --}}
+                                                    <option value="{{ $p->kode_proyek }}" {{ $proyek_get == $p->kode_proyek ? 'selected' : '' }} >{{ $p->nama_proyek }} ({{$p->kode_proyek}})</option>
                                                 @endforeach
                                         </select>
                                     </div>
@@ -200,7 +200,7 @@
                             <div class="col-12">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-secondary">
-                                    <h2 class="m-0 text-center">{{ $proyek->UnitKerja->unit_kerja }} &nbsp; - &nbsp; {{ $proyek->nama_proyek }}</h2>
+                                    <h2 class="m-0 text-center">{{ "SP00".sprintf("%02d", mt_rand(0, 99)) }}- {{ $proyek->UnitKerja->unit_kerja }} &nbsp; - &nbsp; {{ $proyek->nama_proyek }}</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
@@ -211,7 +211,7 @@
                             <div class="col-12">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-secondary">
-                                    <h2 class="m-0 text-center">Pemilik Pekerjaan : {{ $proyek->proyekBerjalan->name_customer }} &nbsp; - &nbsp; Nilai Kontrak : Rp {{ number_format($proyek->nilai_perolehan, 0, ".", ".") }}</h2>
+                                    <h2 class="m-0 text-center">Pemilik Pekerjaan : {{ $proyek->proyekBerjalan->name_customer ?? 'NA' }} &nbsp; - &nbsp; Nilai Kontrak : Rp {{ number_format($proyek->nilai_perolehan, 0, ".", ".") }}</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
@@ -219,20 +219,38 @@
                         <!--end::Title-->
 
                         <!--begin::Row-->
-                        <div class="row">
+                        <div class="row mb-0">
                             <!--begin::Card-->
-                            <div class="ms-6 col mb-6 pt-0">
+                            <div class="ms-6 col pt-0">
                                 <!--begin::Card widget 20-->
-                                <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #027DB8;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #F7AD1A;background-repeat: no-repeat;background-size: auto;">
                                     <!--begin::Header-->
                                     <div class="card-header">
                                         <!--begin::Title-->
                                         <div class="card-title d-flex flex-column">
                                             <!--begin::Amount-->
-                                            <span class="fs-2 fw-bold text-white me-2 lh-1 ls-n2" id="data-items">Tanggal-Kontrak</span>
+                                            <span class="fs-2 opacity-75 fw-bold text-white me-2 lh-1 ls-n2" id="data-items">RA START</span>
                                             <!--end::Amount-->
                                             <!--begin::Subtitle-->
-                                            <span class="text-white opacity-75 pt-1 fs-3">{{ $proyek->tanggal_mulai_terkontrak }}</span>
+                                            <span class="text-white pt-1 fs-3">{!! $proyek->tanggal_mulai_terkontrak !!}</span>
+                                            <!--end::Subtitle-->
+                                        </div>
+                                        <!--end::Title-->
+                                    </div>
+                                    <!--end::Header-->
+                                </div>
+                                <!--end::Card widget 20-->
+                                <!--begin::Card widget 20-->
+                                <div class="mt-3 rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #F7AD1A;background-repeat: no-repeat;background-size: auto;">
+                                    <!--begin::Header-->
+                                    <div class="card-header">
+                                        <!--begin::Title-->
+                                        <div class="card-title d-flex flex-column">
+                                            <!--begin::Amount-->
+                                            <span class="fs-2 opacity-75 fw-bold text-white me-2 lh-1 ls-n2" id="data-items">RI KONTRAK</span>
+                                            <!--end::Amount-->
+                                            <!--begin::Subtitle-->
+                                            <span class="text-white pt-1 fs-3">{!! $proyek->tanggal_mulai_terkontrak !!}</span>
                                             <!--end::Subtitle-->
                                         </div>
                                         <!--end::Title-->
@@ -243,18 +261,36 @@
                             </div>
                             <!--end::Card-->
                             <!--begin::Card-->
-                            <div class="col mb-6 pt-0">
+                            <div class="col pt-0">
                                 <!--begin::Card widget 20-->
-                                <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #28B3AC;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #28B3AC;background-repeat: no-repeat;background-size: auto;">
                                     <!--begin::Header-->
                                     <div class="card-header">
                                         <!--begin::Title-->
                                         <div class="card-title d-flex flex-column">
                                             <!--begin::Amount-->
-                                            <span class="fs-2 fw-bold text-white me-2 lh-1 ls-n2" id="data-items">Tanggal-Efektif</span>
+                                            <span class="fs-2 opacity-75 fw-bold text-white me-2 lh-1 ls-n2" id="data-items">RA EFEKTIF </span>
                                             <!--end::Amount-->
                                             <!--begin::Subtitle-->
-                                            <span class="text-white opacity-75 pt-1 fs-3">{{ $proyek->tanggal_mulai_terkontrak }}</span>
+                                            <span class="text-white pt-1 fs-3">{{ $proyek->tanggal_akhir_terkontrak }}</span>
+                                            <!--end::Subtitle-->
+                                        </div>  
+                                        <!--end::Title-->
+                                    </div>
+                                    <!--end::Header-->
+                                </div>
+                                <!--end::Card widget 20-->
+                                <!--begin::Card widget 20-->
+                                <div class="mt-3 rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #28B3AC;background-repeat: no-repeat;background-size: auto;">
+                                    <!--begin::Header-->
+                                    <div class="card-header">
+                                        <!--begin::Title-->
+                                        <div class="card-title d-flex flex-column">
+                                            <!--begin::Amount-->
+                                            <span class="fs-2 opacity-75 fw-bold text-white me-2 lh-1 ls-n2" id="data-items">RI EFEKTIF</span>
+                                            <!--end::Amount-->
+                                            <!--begin::Subtitle-->
+                                            <span class="text-white pt-1 fs-3">{{ $proyek->tanggal_akhir_terkontrak }}</span>
                                             <!--end::Subtitle-->
                                         </div>  
                                         <!--end::Title-->
@@ -265,18 +301,36 @@
                             </div>
                             <!--begin::Card-->
                             <!--end::Card-->
-                            <div class="col mb-6 pt-0">
+                            <div class="col pt-0">
                                 <!--begin::Card widget 20-->
-                                <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #F7AD1A;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #F7AD1A;background-repeat: no-repeat;background-size: auto;">
                                     <!--begin::Header-->
                                     <div class="card-header">
                                         <!--begin::Title-->
                                         <div class="card-title d-flex flex-column">
                                             <!--begin::Amount-->
-                                            <span class="fs-2 fw-bold text-white me-2 lh-1 ls-n2" id="data-items">Bast-1</span>
+                                            <span class="fs-2 opacity-75 fw-bold text-white me-2 lh-1 ls-n2" id="data-items">RA BAST 1</span>
                                             <!--end::Amount-->
                                             <!--begin::Subtitle-->
-                                            <span class="text-white opacity-75 pt-1 fs-3">{{ $proyek->tanggal_selesai_pho }}</span>
+                                            <span class="text-white pt-1 fs-3">{{ $proyek->tanggal_selesai_pho }}</span>
+                                            <!--end::Subtitle-->
+                                        </div>  
+                                        <!--end::Title-->
+                                    </div>
+                                    <!--end::Header-->
+                                </div>
+                                <!--end::Card widget 20-->
+                                <!--begin::Card widget 20-->
+                                <div class="mt-3  rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #F7AD1A;background-repeat: no-repeat;background-size: auto;">
+                                    <!--begin::Header-->
+                                    <div class="card-header">
+                                        <!--begin::Title-->
+                                        <div class="card-title d-flex flex-column">
+                                            <!--begin::Amount-->
+                                            <span class="fs-2 opacity-75 fw-bold text-white me-2 lh-1 ls-n2" id="data-items">RI BAST 1</span>
+                                            <!--end::Amount-->
+                                            <!--begin::Subtitle-->
+                                            <span class="text-white pt-1 fs-3">{{ $proyek->tanggal_selesai_pho }}</span>
                                             <!--end::Subtitle-->
                                         </div>  
                                         <!--end::Title-->
@@ -285,20 +339,38 @@
                                 </div>
                                 <!--end::Card widget 20-->
                             </div>
-                            <!--begin::Card-->
                             <!--end::Card-->
-                            <div class="me-6 col mb-6 pt-0">
+                            <!--begin::Card-->
+                            <div class="col pt-0">
                                 <!--begin::Card widget 20-->
-                                <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #C34424;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #28B3AC;background-repeat: no-repeat;background-size: auto;">
                                     <!--begin::Header-->
                                     <div class="card-header">
                                         <!--begin::Title-->
                                         <div class="card-title d-flex flex-column">
                                             <!--begin::Amount-->
-                                            <span class="fs-2 fw-bold text-white me-2 lh-1 ls-n2" id="data-items">Bast-2</span>
+                                            <span class="fs-2 opacity-75 fw-bold text-white me-2 lh-1 ls-n2" id="data-items">RA BAST 2</span>
                                             <!--end::Amount-->
                                             <!--begin::Subtitle-->
-                                            <span class="text-white opacity-75 pt-1 fs-3">{{ $proyek->tanggal_selesai_fho }}</span>
+                                            <span class="text-white pt-1 fs-3">{{ $proyek->tanggal_selesai_fho }}</span>
+                                            <!--end::Subtitle-->
+                                        </div>  
+                                        <!--end::Title-->
+                                    </div>
+                                    <!--end::Header-->
+                                </div>
+                                <!--end::Card widget 20-->
+                                <!--begin::Card widget 20-->
+                                <div class="mt-3 rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #28B3AC;background-repeat: no-repeat;background-size: auto;">
+                                    <!--begin::Header-->
+                                    <div class="card-header">
+                                        <!--begin::Title-->
+                                        <div class="card-title d-flex flex-column">
+                                            <!--begin::Amount-->
+                                            <span class="fs-2 opacity-75 fw-bold text-white me-2 lh-1 ls-n2" id="data-items">RI BAST 2</span>
+                                            <!--end::Amount-->
+                                            <!--begin::Subtitle-->
+                                            <span class="text-white pt-1 fs-3">{{ $proyek->tanggal_selesai_fho }}</span>
                                             <!--end::Subtitle-->
                                         </div>  
                                         <!--end::Title-->
@@ -307,28 +379,146 @@
                                 </div>
                                 <!--end::Card widget 20-->
                             </div>
+                            <!--end::Card-->
                             <!--begin::Card-->
+                            <div class="col pt-0">
+                                <!--begin::Card widget 20-->
+                                <div class="py-0 rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #027DB8;background-repeat: no-repeat;background-size: auto;">
+                                    <!--begin::Header-->
+                                    <div class="card-header">
+                                        <!--begin::Title-->
+                                        <div class="card-title d-flex flex-column">
+                                            <!--begin::Amount-->
+                                            <span class="fs-1 fw-bold text-white me-2 lh-1 ls-n2 opacity-75" id="data-items">PROJECT STATUS</span>
+                                            <!--end::Amount-->
+                                        </div>  
+                                        <!--end::Title-->
+                                    </div>
+                                    <!--end::Header-->
+                                    <!--begin::Header-->
+                                    <div class="card-body py-7">
+                                        <!--begin::Subtitle-->
+                                        @if (empty($proyek->tanggal_mulai_terkontrak))
+                                        <span class="text-white fs-1">Persiapan</span>
+                                        @elseif ($proyek->tanggal_mulai_terkontrak < now()->translatedFormat("Y-m-d") && $proyek->tanggal_akhir_terkontrak > now()->translatedFormat("Y-m-d") )
+                                        <span class="text-white fs-1">Pelaksanaan</span>
+                                        @elseif ($proyek->tanggal_selesai_pho )
+                                        <span class="text-white fs-1">Pemeliharaan</span>
+                                        @elseif ($proyek->tanggal_selesai_fho < now()->translatedFormat("Y-m-d") )
+                                        <span class="text-white fs-1">Proyek Selesai</span>
+                                        @else
+                                        <span class="text-white fs-1">-</span>
+                                        @endif 
+                                        <!--end::Subtitle-->
+                                    </div>
+                                    <!--end::Header-->
+                                </div>
+                                <!--end::Card widget 20-->
+                            </div>
+                            <!--end::Card-->
+                            <!--begin::Card-->
+                            <div class="col pt-0">
+                                <!--begin::Card widget 20-->
+                                <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90 mb-5 mb-xl-10" style="background-color: #BB2F5D; border-radius: 0%">
+                                    <!--begin::Header-->
+                                    <div class="card-header pt-5">
+                                        <!--begin::Title-->
+                                        <div class="card-title d-flex flex-column">
+                                            @php
+                                                $timeStatus = mt_rand(10, 95);
+                                                $timePending = 100 - (int) $timeStatus;
+                                            @endphp
+                                            <!--begin::Amount-->
+                                            <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2">{{ $timeStatus }} %</span>
+                                            <!--end::Amount-->
+                                            <!--begin::Subtitle-->
+                                            <span class="text-white opacity-75 pt-1 fw-semibold fs-6">TIME STATUS</span>
+                                            <!--end::Subtitle-->
+                                        </div>
+                                        <!--end::Title-->
+                                    </div>
+                                    <!--end::Header-->
+                                    <!--begin::Card body-->
+                                    <div class="card-body d-flex align-items-end pt-0 pb-6">
+                                        <!--begin::Progress-->
+                                        <div class="d-flex align-items-center flex-column mt-3 w-100">
+                                            <div class="d-flex justify-content-between fw-bold fs-6 text-white opacity-75 w-100 mt-auto mb-2">
+                                                <span>{{ $timeStatus }}%</span>
+                                                {{-- <span>-{{ $timePending }}%</span> --}}
+                                            </div>
+                                            <div class="h-8px mx-3 w-100 bg-white bg-opacity-50 rounded">
+                                                <div class="bg-white rounded h-8px" role="progressbar" style="width: {{ (int) $timeStatus }}%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+                                        </div>
+                                        <!--end::Progress-->
+                                    </div>
+                                    <!--end::Card body-->
+                                </div>
+                                <!--end::Card widget 20-->
+                            </div>
+                            <!--end::Card-->
+                            <!--begin::Card-->
+                            <div class="col pt-0 me-6">
+                                <!--begin::Card widget 20-->
+                                <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90 mb-5 mb-xl-10" style="background-color: #9D4C83; border-radius: 0%">
+                                    <!--begin::Header-->
+                                    <div class="card-header pt-5">
+                                        <!--begin::Title-->
+                                        <div class="card-title d-flex flex-column">
+                                            @php
+                                                $progresStatus = mt_rand(10, 95);
+                                                $progresPending = 100 - (int) $progresStatus;
+                                            @endphp
+                                            <!--begin::Amount-->
+                                            <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2">{{ $progresStatus }} %</span>
+                                            <!--end::Amount-->
+                                            <!--begin::Subtitle-->
+                                            <span class="text-white opacity-75 pt-1 fw-semibold fs-6">PROGRESS STATUS</span>
+                                            <!--end::Subtitle-->
+                                        </div>
+                                        <!--end::Title-->
+                                    </div>
+                                    <!--end::Header-->
+                                    <!--begin::Card body-->
+                                    <div class="card-body d-flex align-items-end pt-0 pb-6">
+                                        <!--begin::Progress-->
+                                        <div class="d-flex align-items-center flex-column mt-3 w-100">
+                                            <div class="d-flex justify-content-between fw-bold fs-6 text-white opacity-75 w-100 mt-auto mb-2">
+                                                <span>{{ $progresStatus }}%</span>
+                                                {{-- <span>-{{ $progresPending }}%</span> --}}
+                                            </div>
+                                            <div class="h-8px mx-3 w-100 bg-white bg-opacity-50 rounded">
+                                                <div class="bg-white rounded h-8px" role="progressbar" style="width: {{ (int) $progresStatus }}%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+                                        </div>
+                                        <!--end::Progress-->
+                                    </div>
+                                    <!--end::Card body-->
+                                </div>
+                                <!--end::Card widget 20-->
+                            </div>
+                            <!--end::Card-->
                         </div>
                         <!--end::Row-->
 
                         <!--begin::Card Diagram-->
                         <div class="row mx-3">
                             <!--begin::Card column-->
-                            <div class="col-2 ">
+                            {{-- <div class="col-2 ">
                                 <!--begin::Link-->
                                 <div class="col mb-4">
                                     <!--begin::Card body-->
                                     <div class="pt-0">
                                         <!--begin::Card widget 20-->
-                                        <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #027DB8;background-image:url('/assets/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                        <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #E4E6EF;background-image:url('/assets/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
                                             <!--begin::Card body-->
                                             <div class="btn rounded-0 btn-active-primary card-body d-flex align-items-end pt-3">
                                                 <!--begin::Progress-->
                                                 <div class="d-flex align-items-center flex-column  w-100">
                                                     @if (empty($proyek->ContractManagements))
-                                                    <a target="_blank" class="text-white fs-3" href="#">Lihat Kontrak</a>
+                                                    <a target="_blank" class="text-gray-800 fs-3" href="#">Lihat Kontrak</a>
                                                     @else    
-                                                    <a target="_blank" class="text-white fs-3" href="/contract-management/view/{{ urlencode(urlencode($proyek->ContractManagements->id_contract)) }}">Lihat Kontrak</a>
+                                                    <a target="_blank" class="text-gray-800 fs-3" href="/contract-management/view/{{ urlencode(urlencode($proyek->ContractManagements->id_contract)) }}">Lihat Kontrak</a>
                                                     @endif
                                                 </div>
                                                 <!--end::Progress-->
@@ -345,12 +535,12 @@
                                     <!--begin::Card body-->
                                     <div class="pt-0">
                                         <!--begin::Card widget 20-->
-                                        <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #027DB8;background-image:url('/assets/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                        <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #E4E6EF;background-image:url('/assets/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
                                             <!--begin::Card body-->
                                             <div class="btn rounded-0 btn-active-primary card-body d-flex align-items-end pt-3">
                                                 <!--begin::Progress-->
                                                 <div class="d-flex align-items-center flex-column  w-100">
-                                                    <a target="_blank" class="text-white fs-3" href="/proyek/view/{{ $proyek->kode_proyek }}">Lihat Proyek</a>
+                                                    <a target="_blank" class="text-gray-800 fs-3" href="/proyek/view/{{ $proyek->kode_proyek }}">Lihat Proyek</a>
                                                 </div>
                                                 <!--end::Progress-->
                                             </div>
@@ -366,15 +556,15 @@
                                     <!--begin::Card body-->
                                     <div class="pt-0">
                                         <!--begin::Card widget 20-->
-                                        <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #027DB8;background-image:url('/assets/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                        <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #E4E6EF;background-image:url('/assets/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
                                             <!--begin::Card body-->
                                             <div class="btn rounded-0 btn-active-primary card-body d-flex align-items-end pt-3">
                                                 <!--begin::Progress-->
                                                 <div class="d-flex align-items-center flex-column  w-100">
                                                     @if (empty($proyek->ContractManagements))
-                                                    <a target="_blank" class="text-white fs-3" href="#">Lihat Kontrak</a>
+                                                    <a target="_blank" class="text-gray-800 fs-3" href="#">Lihat Kontrak</a>
                                                     @else    
-                                                    <a target="_blank" class="text-white fs-3" href="/contract-management/view/{{ urlencode(urlencode($proyek->ContractManagements->id_contract)) }}">Lihat Kontrak</a>
+                                                    <a target="_blank" class="text-gray-800 fs-3" href="/contract-management/view/{{ urlencode(urlencode($proyek->ContractManagements->id_contract)) }}">Lihat Kontrak</a>
                                                     @endif
                                                 </div>
                                                 <!--end::Progress-->
@@ -391,12 +581,12 @@
                                     <!--begin::Card body-->
                                     <div class="pt-0">
                                         <!--begin::Card widget 20-->
-                                        <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #027DB8;background-image:url('/assets/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                        <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #E4E6EF;background-image:url('/assets/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
                                             <!--begin::Card body-->
                                             <div class="btn rounded-0 btn-active-primary card-body d-flex align-items-end pt-3">
                                                 <!--begin::Progress-->
                                                 <div class="d-flex align-items-center flex-column  w-100">
-                                                    <a target="_blank" class="text-white fs-3" href="/proyek/view/{{ $proyek->kode_proyek }}">Lihat Proyek</a>
+                                                    <a target="_blank" class="text-gray-800 fs-3" href="/proyek/view/{{ $proyek->kode_proyek }}">Lihat Proyek</a>
                                                 </div>
                                                 <!--end::Progress-->
                                             </div>
@@ -412,15 +602,15 @@
                                     <!--begin::Card body-->
                                     <div class="pt-0">
                                         <!--begin::Card widget 20-->
-                                        <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #027DB8;background-image:url('/assets/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                        <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #E4E6EF;background-image:url('/assets/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
                                             <!--begin::Card body-->
                                             <div class="btn rounded-0 btn-active-primary card-body d-flex align-items-end pt-3">
                                                 <!--begin::Progress-->
                                                 <div class="d-flex align-items-center flex-column  w-100">
                                                     @if (empty($proyek->ContractManagements))
-                                                    <a target="_blank" class="text-white fs-3" href="#">Lihat Kontrak</a>
+                                                    <a target="_blank" class="text-gray-800 fs-3" href="#">Lihat Kontrak</a>
                                                     @else    
-                                                    <a target="_blank" class="text-white fs-3" href="/contract-management/view/{{ urlencode(urlencode($proyek->ContractManagements->id_contract)) }}">Lihat Kontrak</a>
+                                                    <a target="_blank" class="text-gray-800 fs-3" href="/contract-management/view/{{ urlencode(urlencode($proyek->ContractManagements->id_contract)) }}">Lihat Kontrak</a>
                                                     @endif
                                                 </div>
                                                 <!--end::Progress-->
@@ -437,12 +627,12 @@
                                     <!--begin::Card body-->
                                     <div class="pt-0">
                                         <!--begin::Card widget 20-->
-                                        <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #027DB8;background-image:url('/assets/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                        <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #E4E6EF;background-image:url('/assets/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
                                             <!--begin::Card body-->
                                             <div class="btn rounded-0 btn-active-primary card-body d-flex align-items-end pt-3">
                                                 <!--begin::Progress-->
                                                 <div class="d-flex align-items-center flex-column  w-100">
-                                                    <a target="_blank" class="text-white fs-3" href="/proyek/view/{{ $proyek->kode_proyek }}">Lihat Proyek</a>
+                                                    <a target="_blank" class="text-gray-800 fs-3" href="/proyek/view/{{ $proyek->kode_proyek }}">Lihat Proyek</a>
                                                 </div>
                                                 <!--end::Progress-->
                                             </div>
@@ -458,15 +648,15 @@
                                     <!--begin::Card body-->
                                     <div class="pt-0">
                                         <!--begin::Card widget 20-->
-                                        <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #027DB8;background-image:url('/assets/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                        <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #E4E6EF;background-image:url('/assets/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
                                             <!--begin::Card body-->
                                             <div class="btn rounded-0 btn-active-primary card-body d-flex align-items-end pt-3">
                                                 <!--begin::Progress-->
                                                 <div class="d-flex align-items-center flex-column  w-100">
                                                     @if (empty($proyek->ContractManagements))
-                                                    <a target="_blank" class="text-white fs-3" href="#">Lihat Kontrak</a>
+                                                    <a target="_blank" class="text-gray-800 fs-3" href="#">Lihat Kontrak</a>
                                                     @else    
-                                                    <a target="_blank" class="text-white fs-3" href="/contract-management/view/{{ urlencode(urlencode($proyek->ContractManagements->id_contract)) }}">Lihat Kontrak</a>
+                                                    <a target="_blank" class="text-gray-800 fs-3" href="/contract-management/view/{{ urlencode(urlencode($proyek->ContractManagements->id_contract)) }}">Lihat Kontrak</a>
                                                     @endif
                                                 </div>
                                                 <!--end::Progress-->
@@ -483,12 +673,12 @@
                                     <!--begin::Card body-->
                                     <div class="pt-0">
                                         <!--begin::Card widget 20-->
-                                        <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #027DB8;background-image:url('/assets/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                        <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #E4E6EF;background-image:url('/assets/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
                                             <!--begin::Card body-->
                                             <div class="btn rounded-0 btn-active-primary card-body d-flex align-items-end pt-3">
                                                 <!--begin::Progress-->
                                                 <div class="d-flex align-items-center flex-column  w-100">
-                                                    <a target="_blank" class="text-white fs-3" href="/proyek/view/{{ $proyek->kode_proyek }}">Lihat Proyek</a>
+                                                    <a target="_blank" class="text-gray-800 fs-3" href="/proyek/view/{{ $proyek->kode_proyek }}">Lihat Proyek</a>
                                                 </div>
                                                 <!--end::Progress-->
                                             </div>
@@ -499,9 +689,9 @@
                                     <!--end::Card body-->
                                 </div>
                                 <!--end::Link-->
-                            </div>
+                            </div> --}}
                             <!--end begin::Card column-->
-                            <div class="col-10">
+                            <div class="col-12">
                                 
                                 <!--begin::Title-->
                                 <div class="mb-4">
@@ -713,20 +903,20 @@
                         <!--end::Table Body-->
                         
                         <br>
-                        
+
                         <!--begin::Tabel Header-->
                         <div class="row mb-4 mx-3">
                             <div class="col-9">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-warning">
-                                    <h2 class="m-0 text-center">TOTAL NILAI PERUBAHAN : Rp {{ number_format($totalKontrak, 0, ".", ".") }}</h2>
+                                    <h2 class="m-0 text-center">CCM STATUS</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
                             <div class="col-3">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-warning">
-                                    <h2 class="m-0 text-center">{{ $totalPersen }} %</h2>
+                                    <h2 class="m-0 text-center"><i class="bi bi-percent text-dark fs-3"></i> PERUBAHAN</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
@@ -771,10 +961,17 @@
 
                         <!--begin::Tabel Header-->
                         <div class="row mb-4 mx-3">
-                            <div class="col-12">
+                            <div class="col-9">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-warning">
-                                    <h2 class="m-0 text-center">% PERUBAHAN VS KONTRAK</h2>
+                                    <h2 class="m-0 text-center">TOTAL NILAI PERUBAHAN : Rp {{ number_format($totalKontrak, 0, ".", ".") }}</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col-3">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-warning">
+                                    <h2 class="m-0 text-center">{{ $totalPersen }} %</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
@@ -800,7 +997,7 @@
                             <!--begin::Card-->
                             <div class="ms-6 col mb-6 pt-0">
                                 <!--begin::Card widget 20-->
-                                <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #027DB8;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #027DB8;background-repeat: no-repeat;background-size: auto;">
                                     <!--begin::Header-->
                                     <div class="card-header">
                                         <!--begin::Title-->
@@ -809,7 +1006,7 @@
                                             <span class="text-white fs-3 ms-6">Proses Pre-Claim : </span>
                                             <!--end::Amount-->
                                             <!--begin::Subtitle-->
-                                            <span class="text-white fs-3 ms-12 fw-bolder">{{ mt_rand(85, 95) }} %</span>
+                                            <span class="text-white fs-3 ms-12 fw-bolder">{{ mt_rand(10, 95) }} %</span>
                                             <!--end::Subtitle-->
                                         </div>
                                         <!--end::Title-->
@@ -822,7 +1019,7 @@
                             <!--begin::Card-->
                             <div class="col mb-6 pt-0">
                                 <!--begin::Card widget 20-->
-                                <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #28B3AC;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #28B3AC;background-repeat: no-repeat;background-size: auto;">
                                     <!--begin::Header-->
                                     <div class="card-header">
                                         <!--begin::Title-->
@@ -831,7 +1028,7 @@
                                             <span class="text-white fs-3 ms-6">Proses During-Claim : </span>
                                             <!--end::Amount-->
                                             <!--begin::Subtitle-->
-                                            <span class="text-white fs-3 ms-12 fw-bolder">{{ mt_rand(85, 95) }} %</span>
+                                            <span class="text-white fs-3 ms-12 fw-bolder">{{ mt_rand(10, 95) }} %</span>
                                             <!--end::Subtitle-->
                                         </div>
                                         <!--end::Title-->
@@ -844,7 +1041,7 @@
                             <!--begin::Card-->
                             <div class="me-6 col mb-6 pt-0">
                                 <!--begin::Card widget 20-->
-                                <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #F7AD1A;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #F7AD1A;background-repeat: no-repeat;background-size: auto;">
                                     <!--begin::Header-->
                                     <div class="card-header">
                                         <!--begin::Title-->
@@ -853,7 +1050,7 @@
                                             <span class="text-white fs-3 ms-6">Proses Post-Claim : </span>
                                             <!--end::Amount-->
                                             <!--begin::Subtitle-->
-                                            <span class="text-white fs-3 ms-12 fw-bolder">{{ mt_rand(85, 95) }} %</span>
+                                            <span class="text-white fs-3 ms-12 fw-bolder">{{ mt_rand(10, 95) }} %</span>
                                             <!--end::Subtitle-->
                                         </div>
                                         <!--end::Title-->
@@ -1027,6 +1224,7 @@
                             </div>
                         </div>
                         <!--end::Title-->
+                        
                         
                     </div>
                     <!--end::Body Dashboard-->

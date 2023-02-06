@@ -845,7 +845,7 @@
                     <!--begin::Card body-->
                         <div class="card-body pt-0 px-2">
                             <!--begin::Table-->
-                            <table class="table align-middle table-bordered fs-6 gy-2" style="max-width: 100%">
+                            <table class="table align-middle table-bordered fs-6 gy-2" style="max-width: 100%" id="example">
                                 <!--begin::Table head-->
                                 <thead style="border: white 1px solid; background-color: #F7AD1A">
                                     <!--begin::Table row-->
@@ -882,9 +882,9 @@
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
                                 <tbody class="fw-bold text-gray-600 fs-8">
-                                    <tr>
+                                    {{-- <tr>
                                         <td colspan="19" class="ps-3" style="border: white 1px solid; background-color: #F7DFAE">Sasaran</td>
-                                    </tr>
+                                    </tr> --}}
                                     @foreach ($proyeks as $proyek)
                                     <tr>
                                             <!--begin::NIP-->
@@ -1654,5 +1654,38 @@
             document.querySelector("#review-persen").innerHTML = review.toFixed(2)+' '+'<i class="bi bi-percent text-white fs-1">';
         });
     </script>
+
+    <!--begin::Data Tables-->
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script> 
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script> 
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.colVis.min.js"></script> 
+    
+    <script>
+        $(document).ready(function() {
+            $('#example').DataTable( {
+                dom: 'Bfrtip',
+                // dom: '<"float-start"f><"#example"t>rtip',
+                pageLength : 25,
+                scrollY : "1000px",
+                scrollX : true,
+                scrollCollapse: true,
+                // paging : false,
+                fixedColumns:   {
+                    left: 2,
+                    right: 0
+                },
+                buttons: [
+                    'excel', 'print'
+                    // 'copy', 'csv', 'excel', 'pdf', 'print'
+                ]
+            } );
+        } );
+    </script>
+    <!--end::Data Tables-->
 
 @endsection
