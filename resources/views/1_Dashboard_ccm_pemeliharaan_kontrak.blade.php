@@ -149,7 +149,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="row">
-                                    <div class="col-3">
+                                    <div class="col-2">
                                         <select onchange="selectFilter(this)" id="dop" name="dop"
                                                 class="form-select form-select-solid w-auto"
                                                 style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
@@ -188,8 +188,21 @@
                                                 @endforeach
                                         </select>
                                     </div>
+
+                                    <div class="col-2">
+                                        <select id="tahun" name="tahun"
+                                                class="form-select form-select-solid w-auto"
+                                                style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
+                                                data-placeholder="Tahun" data-select2-id="select2-data-tahun" tabindex="-1"
+                                                aria-hidden="true">
+                                                <option value="" selected></option>
+                                                @foreach ($tahun as $t)
+                                                    <option value="{{$t}}" {{ $tahun_get == $t ? 'selected' : '' }}>{{$t}}</option>
+                                                @endforeach 
+                                        </select>
+                                    </div>
                                     
-                                    <div class="col-3">
+                                    <div class="col-2">
                                         <form action="" method="GET">
                                             <button type="submit" class="btn btn-secondary">Reset</button>
                                         </form>
@@ -315,7 +328,67 @@
                         <br>
 
                         <!--begin::Tabel Header-->
-                        <div class="row mb-4">
+                        <div class="row mb-4 mx-3">
+                            <div class="col-9">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-warning">
+                                    <h2 class="m-0 text-center">CCM STATUS</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col-3">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-warning">
+                                    <h2 class="m-0 text-center"><i class="bi bi-percent text-dark fs-3"></i> PERUBAHAN</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                        </div>
+                        <!--end::Tabel Header-->
+
+                        <!--begin::Table Body-->
+                        {{-- @foreach ($nilai_perubahan_table as $table) --}}
+                        @foreach ($kategori_kontrak as $table)
+                        {{-- @dd($table) --}}
+                        <div class="row mb-4 mx-3">
+                            <div class="col-3">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-warning">
+                                    {{-- <h2 class="m-0 text-center">{{ $table->jenis_claim }}</h2> --}}
+                                    <h2 class="m-0 text-center">{{ $table["jenis_perubahan"] }}</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col-1">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-secondary">
+                                    {{-- <h2 class="m-0 text-center">{{ $table->total_proyek }}</h2> --}}
+                                    <h2 class="m-0 text-center">{{ $table["total_item"] }}</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col-5">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-secondary">
+                                    {{-- <h2 class="m-0 text-center">Rp {{ number_format($table->total_nilai, 0, ".", ".") }}</h2> --}}
+                                    <h2 class="m-0 text-center">Rp {{ number_format($table["total_nilai"], 0, ".", ".") }}</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col-3">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-secondary">
+                                    {{-- <h2 class="m-0 text-center">{{ $table->total_persen }}</h2> --}}
+                                    <h2 class="m-0 text-center">{{ $table["persen"] }} %</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                        </div>
+                        @endforeach
+                        <!--end::Table Body-->
+
+                        <!--begin::Tabel Header-->
+                        <div class="row mb-4 mx-3">
                             <div class="col-9">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-warning">
@@ -332,46 +405,6 @@
                             </div>
                         </div>
                         <!--end::Tabel Header-->
-
-                        <!--begin::Table Body-->
-                        {{-- @foreach ($nilai_perubahan_table as $table) --}}
-                        @foreach ($kategori_kontrak as $table)
-                        <div class="row mb-4">
-                            <div class="col-3">
-                                <!--begin::Title body-->
-                                <div style="border-radius: 0px" class="card-body bg-warning">
-                                    {{-- <h2 class="m-0 text-center">{{ $table->jenis_claim }}</h2> --}}
-                                    <h2 class="m-0 text-center">{{ $table[0] }}</h2>
-                                </div>
-                                <!--end::Title body-->
-                            </div>
-                            <div class="col-1">
-                                <!--begin::Title body-->
-                                <div style="border-radius: 0px" class="card-body bg-secondary">
-                                    {{-- <h2 class="m-0 text-center">{{ $table->total_proyek }}</h2> --}}
-                                    <h2 class="m-0 text-center">{{ $table[1] }}</h2>
-                                </div>
-                                <!--end::Title body-->
-                            </div>
-                            <div class="col-5">
-                                <!--begin::Title body-->
-                                <div style="border-radius: 0px" class="card-body bg-secondary">
-                                    {{-- <h2 class="m-0 text-center">Rp {{ number_format($table->total_nilai, 0, ".", ".") }}</h2> --}}
-                                    <h2 class="m-0 text-center">Rp {{ number_format($table[2], 0, ".", ".") }}</h2>
-                                </div>
-                                <!--end::Title body-->
-                            </div>
-                            <div class="col-3">
-                                <!--begin::Title body-->
-                                <div style="border-radius: 0px" class="card-body bg-secondary">
-                                    {{-- <h2 class="m-0 text-center">{{ $table->total_persen }}</h2> --}}
-                                    <h2 class="m-0 text-center">{{ $table[3] }} %</h2>
-                                </div>
-                                <!--end::Title body-->
-                            </div>
-                        </div>
-                        @endforeach
-                        <!--end::Table Body-->
 
                     </div>
                     <!--end::Body Dashboard-->
@@ -426,7 +459,7 @@
                 }
             },
             title: {
-                text: 'Kategori Pemilik Pekerjaan',
+                text: 'Kategori Pemilik Proyek',
                 style: {
                     fontWeight: 'bold',
                     fontSize: '20px'
@@ -673,6 +706,7 @@
     
     <!--begin::Highchart Donut Changes Status -->
     <script>
+        const changeStatus = JSON.parse('{!! $change_status_out->toJson() !!}');
         Highcharts.chart('changes-status', {
             chart: {
                 type: 'pie',
@@ -728,12 +762,7 @@
             },
             series: [{
                 name: 'Kontrak',
-                data: [
-                    ['Dispute', 8],
-                    ['Revision', 16],
-                    ['Reject', 2],
-                    ['Approve', 10],
-                ]
+                data: changeStatus
             }]
         });
     </script>
@@ -801,6 +830,7 @@
 
     <!--begin::Highchart KSO dan Non-KSO -->
     <script>
+        const jenisProyek = JSON.parse('{!! $jenis_proyek->toJson() !!}');
         Highcharts.chart('kso', {
             chart: {
                 type: 'pie',
@@ -811,7 +841,7 @@
                 }
             },
             title: {
-                text: 'KSO/NON-KSO',
+                text: 'Bentuk Proyek',
                 style: {
                     fontWeight: 'bold',
                     fontSize: '20px'
@@ -856,10 +886,7 @@
             },
             series: [{
                 name: 'Kontrak',
-                data: [
-                    ['KSO', 8],
-                    ['Non-KSO', 16],
-                ]
+                data: jenisProyek,
             }]
         });
     </script>

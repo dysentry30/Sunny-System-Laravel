@@ -395,7 +395,7 @@
                         <!--end::Card Diagram Column dan Donut-->
                         
                         <!--begin::Tabel Header-->
-                        <div class="row mb-4">
+                        <div class="row mb-4 mx-3">
                             <div class="col-9">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-warning">
@@ -416,7 +416,7 @@
                         <!--begin::Table Body-->
                         {{-- @foreach ($nilai_perubahan_table as $table) --}}
                         @foreach ($kategori_kontrak as $table)
-                        <div class="row mb-4">
+                        <div class="row mb-4 mx-3">
                             <div class="col-3">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-warning">
@@ -454,7 +454,7 @@
                         <!--end::Table Body-->
                         
                         <!--begin::Tabel Header-->
-                        <div class="row mb-4">
+                        <div class="row mb-4 mx-3">
                             <div class="col-9">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-warning">
