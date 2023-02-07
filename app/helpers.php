@@ -6,7 +6,9 @@
 use App\Models\Provinsi;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 use PhpOffice\PhpWord\PhpWord;
+use RealRashid\SweetAlert\Facades\Alert;
 
 function url_encode($url) {
     return urlencode(urlencode($url));
@@ -152,6 +154,19 @@ function checkGreenLine($proyek) {
         return $results->count() > 1 && $results->every(function($item) {
             return $item === true;
         });
+    }
+    return false;
+}
+
+function validateInput($data, $rules) {
+    $is_validated = Validator::make($data, $rules);
+    $errors = $is_validated->errors();
+    if($errors->isNotEmpty()) {
+        $fields = collect($errors->toArray())->map(function($item, $field) {
+            return ucwords(str_replace("-", " ", $field));
+        })->values();
+        $fields = $fields->join(", ", " dan ");
+        return $fields;
     }
     return false;
 }

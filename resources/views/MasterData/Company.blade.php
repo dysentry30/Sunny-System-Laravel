@@ -183,6 +183,7 @@
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                         <th class="min-w-auto">No.</th>
                                         <th class="min-w-auto">@sortablelink('nama_company', 'Nama Company')</th>
+                                        <th class="min-w-auto">@sortablelink('company_code', 'Company Code SAP')</th>
                                         @if (auth()->user()->check_administrator)
                                             <th class="text-center">Action</th>
                                         @endif
@@ -211,6 +212,11 @@
                                                     data-bs-target="#kt_edit_{{ $company->id }}"
                                                     class="text-gray-600 text-gray text-hover-primary">{{ $company->nama_company }}</a>
                                                 </a>
+                                            </td>
+                                            <!--end::Nama Company=-->
+                                            <!--begin::Nama Company=-->
+                                            <td>
+                                                {{ $company->UnitKerja->company_code ?? "-" }}
                                             </td>
                                             <!--end::Nama Company=-->
 

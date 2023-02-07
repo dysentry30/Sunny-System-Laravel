@@ -14,4 +14,8 @@ class Company extends Model
     public $sortable = [
         'nama_company'
     ];
+
+    public function UnitKerja() {
+        return $this->hasOne(UnitKerja::class, "unit_kerja", "nama_company");
+    }
 }

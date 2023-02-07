@@ -224,6 +224,7 @@
 
                 <form action="/kriteria-green-line/save" method="POST">
                     @csrf
+                    <input type="hidden" name="modal" value="kt_modal_input_kriteria_green_line">
                     <!--begin::Modal body-->
                     <div class="modal-body py-lg-6 px-lg-6">
     
@@ -260,7 +261,7 @@
                                 <div class="fv-row mb-7">
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="">Isi</span>
+                                        <span class="required">Isi</span>
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->

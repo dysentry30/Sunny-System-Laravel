@@ -38,6 +38,7 @@ use App\Http\Controllers\DraftContractController;
 use App\Http\Controllers\KriteriaPasarController;
 use App\Http\Controllers\AddendumContractController;
 use App\Http\Controllers\ContractManagementsController;
+use App\Http\Controllers\CSIController;
 use App\Http\Controllers\JenisProyekController;
 use App\Http\Controllers\MataUangController;
 use App\Http\Controllers\RekomendasiController;
@@ -403,6 +404,10 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     // Begin Rekomendasi
     Route::get('/rekomendasi', [RekomendasiController::class, "index"]);
+    // End Rekomendasi
+
+    // Begin Rekomendasi
+    Route::get('/csi', [CSIController::class, "index"]);
     // End Rekomendasi
 
 
@@ -1667,6 +1672,18 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             }
             return $d;
         })->toArray();
+
+        $rules = [
+            "item" => "required",
+            "isi" => "required",
+        ];
+
+        $is_invalid = validateInput($data, $rules);
+        if(!empty($is_invalid)) {
+            Alert::html("Error", "Field <b>$is_invalid</b> harus terisi!", "error");
+            return redirect()->back()->with("modal", $data["modal"]);
+        }
+
         $new_kriteria = new KriteriaGreenLine();
         $new_kriteria->item = $data["item"];
         $new_kriteria->isi = $data["isi"];
@@ -1689,6 +1706,19 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             }
             return $d;
         })->toArray();
+        $rules = [
+            "tahun" => "required",
+            "kategori" => "required",
+            "kriteria-penilaian" => "required",
+            "nilai" => "required",
+            "isi" => "required",
+        ];
+
+        $is_invalid = validateInput($data, $rules);
+        if(!empty($is_invalid)) {
+            Alert::html("Error", "Field <b>$is_invalid</b> harus terisi!", "error");
+            return redirect()->back()->with("modal", $data["modal"]);
+        }
 
         $new_kriteria = new KriteriaAssessment();
         $new_kriteria->tahun = $data["tahun"];
@@ -1730,14 +1760,10 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         //     "jabatan" => "required",
         //     "unit-kerja" => "required",
         // ]);
-        $is_validated = Validator::make($data, $rules);
-        $errors = $is_validated->errors();
-        if($errors->isNotEmpty()) {
-            $fields = collect($errors->toArray())->map(function($item, $field) {
-                return ucwords(str_replace("-", " ", $field));
-            })->values();
-            $fields = $fields->join(", ", " dan ");
-            Alert::html("Error", "Field <b>$fields</b> harus terisi!", "error");
+        $is_invalid = validateInput($data, $rules);
+
+        if(!empty($is_invalid)) {
+            Alert::html("Error", "Field <b>$is_invalid</b> harus terisi!", "error");
             return redirect()->back()->with("modal", $data["modal"]);
         }
 

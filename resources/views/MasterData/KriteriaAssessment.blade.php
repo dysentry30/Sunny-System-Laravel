@@ -41,7 +41,7 @@
                                 data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                                 class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
                                 <!--begin::Title-->
-                                <h1 class="d-flex align-items-center fs-3 my-1">Kriteria Green Line
+                                <h1 class="d-flex align-items-center fs-3 my-1">Kriteria Assessment
                                 </h1>
                                 <!--end::Title-->
                             </div>
@@ -230,6 +230,7 @@
 
                 <form action="/kriteria-assessment/save" method="POST">
                     @csrf
+                    <input type="hidden" name="modal" value="kt_modal_input_kriteria_green_line">
                     <!--begin::Modal body-->
                     <div class="modal-body py-lg-6 px-lg-6">
     
@@ -271,7 +272,7 @@
                                 <div class="fv-row mb-7">
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="">Kategori</span>
+                                        <span class="required">Kategori</span>
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
@@ -301,7 +302,7 @@
                                     <div id="tier">
                                         <!--begin::Label-->
                                         <label class="fs-6 fw-bold form-label mt-3">
-                                            <span class="">Kriteria Penilaian</span>
+                                            <span class="required">Kriteria Penilaian</span>
                                         </label>
                                         <!--end::Label-->
     
@@ -353,7 +354,7 @@
                                 <div class="col">
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="">Klasifikasi</span>
+                                        <span class="required">Klasifikasi</span>
                                     </label>
                                     <!--end::Label-->
 
@@ -382,7 +383,7 @@
                                 <div class="col">
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="">Isi</span>
+                                        <span class="required">Isi</span>
                                     </label>
                                     <!--end::Label-->
 
@@ -516,7 +517,7 @@
                                 <div class="col">
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="">Nilai</span>
+                                        <span class="required">Nilai</span>
                                     </label>
                                     <!--end::Label-->
                                     
@@ -601,7 +602,7 @@
                                 <div class="fv-row mb-7">
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="">Jenis Kode</span>
+                                        <span class="required">Jenis Kode</span>
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->

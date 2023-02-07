@@ -243,6 +243,7 @@
                                         <th class="min-w-auto">@sortablelink('company', 'Company')</th>
                                         <th class="min-w-auto">@sortablelink('divisi', 'Divisi PIC')</th>
                                         <th class="min-w-auto">@sortablelink('is_active', 'Is Active')</th>
+                                        <th class="min-w-auto">@sortablelink('id_profit_center', 'ID Profit Center')</th>
                                         @if (auth()->user()->check_administrator)
                                             <th class="text-center">Settings</th>
                                             <th class="text-center">Action</th>
@@ -293,6 +294,11 @@
                                             <!--begin::Coloumn-->
                                             <td>
                                                 {{ $unitkerja->is_active == 1 ? 'Yes' : 'No' }}
+                                            </td>
+                                            <!--end::Coloumn-->
+                                            <!--begin::Coloumn-->
+                                            <td>
+                                                {{ $unitkerja->id_profit_center ?? "-"}}
                                             </td>
                                             <!--end::Coloumn-->
 
@@ -573,7 +579,7 @@
 
         <form action="/unit-kerja/update" method="post" enctype="multipart/form-data">
             @csrf
-
+            <input type="hidden" name="modal" value="kt_modal_update_{{$unitKerja->divcode}}">
             <!--begin::Modal - Create App-->
             {{-- <input type="hidden" name="id-customer" value="{{ $customer->id_customer }}" id="id-customer"> --}}
 
@@ -777,7 +783,7 @@
                                 <div class="col-6">
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
-                                        <span>Profit Center</span>
+                                        <span class="required">Profit Center</span>
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
@@ -792,7 +798,7 @@
                                     <div class="col-6">
                                         <!--begin::Label-->
                                         <label class="fs-6 fw-bold form-label mt-3">
-                                            <span>Company Code</span>
+                                            <span class="required">Company Code</span>
                                         </label>
                                         <!--end::Label-->
                                         <!--begin::Input-->
@@ -826,6 +832,7 @@
 
     <form action="/unit-kerja/save" method="post" enctype="multipart/form-data">
         @csrf
+        <input type="hidden" name="modal" value="kt_modal_create">
 
         <!--begin::Modal - Create App-->
         {{-- <input type="hidden" name="id-customer" value="{{ $customer->id_customer }}" id="id-customer"> --}}
@@ -1030,7 +1037,7 @@
                             <div class="col-6">
                                 <!--begin::Label-->
                                 <label class="fs-6 fw-bold form-label mt-3">
-                                    <span>Profit Center</span>
+                                    <span class="required">Profit Center</span>
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
@@ -1045,7 +1052,7 @@
                                 <div class="col-6">
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
-                                        <span>Company Code</span>
+                                        <span class="required">Company Code</span>
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
