@@ -266,7 +266,7 @@
                                 <div class="fv-row mb-7">
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="">Jabatan</span>
+                                        <span class="required">Jabatan</span>
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
@@ -294,7 +294,7 @@
                                     <div id="tier">
                                         <!--begin::Label-->
                                         <label class="fs-6 fw-bold form-label mt-3">
-                                            <span class="">Unit Kerja</span>
+                                            <span class="required">Unit Kerja</span>
                                         </label>
                                         <!--end::Label-->
     
@@ -393,7 +393,7 @@
                                 <div class="fv-row mb-7">
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="">Jenis Kode</span>
+                                        <span class="required">Jenis Kode</span>
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
