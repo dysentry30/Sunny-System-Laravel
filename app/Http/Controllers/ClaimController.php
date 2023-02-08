@@ -15,6 +15,7 @@ use App\Models\ClaimManagements;
 use App\Models\ContractManagements;
 use App\Models\Pasals;
 use App\Models\PerubahanKontrak;
+use App\Models\ReviewContracts;
 use App\Models\UnitKerja;
 use Google\Service\FactCheckTools\Resource\Claims;
 use Illuminate\Support\Facades\Auth;
@@ -100,12 +101,11 @@ class ClaimController extends Controller
         $filterTahun = $request->query("tahun-proyek") ?? (int) date("Y");
         $filterUnitKerja = $request->query("unit-kerja");
         $year = (int) date("Y");
-        $unitkerjas = UnitKerja::get()->whereNotIn("divcode", ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "8"]);
+        $unitkerjas = UnitKerja::get()->whereNotIn("divcode", ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D"]);
         $tahun_proyek = Proyek::get()->groupBy("tahun_perolehan")->keys();
-        // dd($unitkerjas);
-        $uk_map = $unitkerjas->map(function($uk){
-            return $uk->divcode;
-        });
+        $filter_unit = $unitkerjas->groupBy("divcode")->keys();
+        $proyeks_all = Proyek::join("contract_managements", "proyeks.kode_proyek", "=", "contract_managements.project_id")->where("tahun_perolehan", "=", $filterTahun)->get();
+        // dd($filterUnitKerja);
         // dd($uk_map);
         // $proyeks = ContractManagements::join("proyeks", "contract_managements.project_id", "=", "proyeks.kode_proyek")->get();
         // $claims = $proyeks->map(function($proyek){
@@ -121,14 +121,14 @@ class ClaimController extends Controller
         //     return $p->Proyek;
         // })->groupBy("kode_proyek");
         // $claims = ContractManagements::where("stages", "=", 2)->join("proyeks", "contract_managements.project_id", "=", "proyeks.kode_proyek")->get();
-        if(!empty($filterTahun)){
-            $proyeks = Proyek::join("contract_managements", "proyeks.kode_proyek", "=", "contract_managements.project_id")->where("tahun_perolehan", "=", $filterTahun)->get();
-        }elseif(!empty($filterUnitKerja)){
-            $proyeks = Proyek::join("contract_managements", "proyeks.kode_proyek", "=", "contract_managements.project_id")->where("unit_kerja", "=", $filterUnitKerja)->get();
+        // dd($filterTahun);
+        if(!empty($filterUnitKerja)){
+            $proyeks = $proyeks_all->where("unit_kerja", "=", $filterUnitKerja);
         }else{
-            $proyeks = Proyek::join("contract_managements", "proyeks.kode_proyek", "=", "contract_managements.project_id")->where("tahun_perolehan", "=", $year)->get();
+            $proyeks = $proyeks_all;
         }
-        $claims = $proyeks->whereIn("unit_kerja", $uk_map)->where("stages", ">=", 2);
+        // dd($proyeks);
+        $claims = $proyeks->where("stages", ">=", 2);
         // dd($claims);
 
         return view("5_Claim", compact(["claims", "tahun_proyek", "unitkerjas", "filterUnitKerja", "filterTahun"]));
@@ -276,27 +276,50 @@ class ClaimController extends Controller
         //     return Redirect::back();
         // } else {
             $contract = ContractManagements::where("project_id", "=", $data["kode-proyek"])->first();
-            // dd($contract->id_contract);
-            $perubahan_kontrak = new PerubahanKontrak();
-            $perubahan_kontrak->kode_proyek = $data["kode-proyek"];
-            $perubahan_kontrak->id_contract = $contract->id_contract;
-            $perubahan_kontrak->jenis_perubahan = $data["jenis-perubahan"];
-            $perubahan_kontrak->tanggal_perubahan = $data["tanggal-perubahan"];
-            $perubahan_kontrak->uraian_perubahan = $data["uraian-perubahan"];
-            // $perubahan_kontrak->jenis_dokumen = $data["jenis-dokumen"];
-            // $perubahan_kontrak->instruksi_owner = $data["instruksi-owner"];
-            $perubahan_kontrak->proposal_klaim = $data["proposal-klaim"];
-            $perubahan_kontrak->tanggal_pengajuan = $data["tanggal-pengajuan"];
-            $perubahan_kontrak->biaya_pengajuan = str_replace(".", "", $data["biaya-pengajuan"]);
-            $perubahan_kontrak->waktu_pengajuan = $data["waktu-pengajuan"];
-            $perubahan_kontrak->stage = 1;
-            // dd($perubahan_kontrak);
-            if ($perubahan_kontrak->save()) {
-                Alert::success("Success", "Perubahan Kontrak berhasil ditambahkan");
-                return redirect()->back();
+            dd($data['id_perubahan_kontrak']);
+            if(isset($data['id_perubahan_kontrak'])){
+                $perubahan_kontrak = ReviewContracts::find($data["id_perubahan_kontrak"]);
+                $perubahan_kontrak->kode_proyek = $data["kode-proyek"];
+                $perubahan_kontrak->id_contract = $contract->id_contract;
+                $perubahan_kontrak->jenis_perubahan = $data["jenis-perubahan"];
+                $perubahan_kontrak->tanggal_perubahan = $data["tanggal-perubahan"];
+                $perubahan_kontrak->uraian_perubahan = $data["uraian-perubahan"];
+                // $perubahan_kontrak->jenis_dokumen = $data["jenis-dokumen"];
+                // $perubahan_kontrak->instruksi_owner = $data["instruksi-owner"];
+                $perubahan_kontrak->proposal_klaim = $data["proposal-klaim"];
+                $perubahan_kontrak->tanggal_pengajuan = $data["tanggal-pengajuan"];
+                $perubahan_kontrak->biaya_pengajuan = str_replace(".", "", $data["biaya-pengajuan"]);
+                $perubahan_kontrak->waktu_pengajuan = $data["waktu-pengajuan"];
+                $perubahan_kontrak->stage = 1;
+                // dd($perubahan_kontrak);
+                if ($perubahan_kontrak->save()) {
+                    Alert::success("Success", "Perubahan Kontrak berhasil ditambahkan");
+                    return redirect()->back();
+                }
+                Alert::error("Erorr", "Perubahan Kontrak gagal ditambahkan");
+                return Redirect::back()->with("modal", $data["modal-name"]);
+            }else{
+                $perubahan_kontrak = new PerubahanKontrak();
+                $perubahan_kontrak->kode_proyek = $data["kode-proyek"];
+                $perubahan_kontrak->id_contract = $contract->id_contract;
+                $perubahan_kontrak->jenis_perubahan = $data["jenis-perubahan"];
+                $perubahan_kontrak->tanggal_perubahan = $data["tanggal-perubahan"];
+                $perubahan_kontrak->uraian_perubahan = $data["uraian-perubahan"];
+                // $perubahan_kontrak->jenis_dokumen = $data["jenis-dokumen"];
+                // $perubahan_kontrak->instruksi_owner = $data["instruksi-owner"];
+                $perubahan_kontrak->proposal_klaim = $data["proposal-klaim"];
+                $perubahan_kontrak->tanggal_pengajuan = $data["tanggal-pengajuan"];
+                $perubahan_kontrak->biaya_pengajuan = str_replace(".", "", $data["biaya-pengajuan"]);
+                $perubahan_kontrak->waktu_pengajuan = $data["waktu-pengajuan"];
+                $perubahan_kontrak->stage = 1;
+                // dd($perubahan_kontrak);
+                if ($perubahan_kontrak->save()) {
+                    Alert::success("Success", "Perubahan Kontrak berhasil ditambahkan");
+                    return redirect()->back();
+                }
+                Alert::error("Erorr", "Perubahan Kontrak gagal ditambahkan");
+                return Redirect::back()->with("modal", $data["modal-name"]);
             }
-            Alert::error("Erorr", "Perubahan Kontrak gagal ditambahkan");
-            return Redirect::back()->with("modal", $data["modal-name"]);
         // }
     }
 

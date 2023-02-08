@@ -324,8 +324,8 @@
                         <!--Begin :: Filter-->
                         <div class="card">
                             <div class="card-body">
-                                <div class="d-flex flex-row">
-                                    <div class="mr-2" id="filterDOP">
+                                <div class="row">
+                                    <div class="col-2" id="filterDOP">
                                         <select onchange="selectFilter(this)" id="dop" name="dop"
                                                 style="margin-right: 2rem;"
                                                 class="form-select form-select-solid w-auto" data-control="select2" data-hide-search="true"
@@ -338,7 +338,7 @@
                                         </select>
                                     </div>
 
-                                    <div class="mr-2" id="filterUK">
+                                    <div class="col-3" id="filterUK">
                                         <select onchange="selectFilter(this)" id="unit-kerja" name="unit-kerja"
                                                 class="form-select form-select-solid w-auto"
                                                 style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
@@ -365,20 +365,20 @@
                                         </select>
                                     </div> --}}
 
-                                    <div class="mr-2" id="filterTahun">
+                                    <div class="col-2" id="filterTahun">
                                         <select id="tahun" name="tahun"
                                                 class="form-select form-select-solid w-auto"
                                                 style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
                                                 data-placeholder="Tahun" data-select2-id="select2-data-tahun" tabindex="-1"
                                                 aria-hidden="true">
-                                                <option></option>
+                                                <option>{{ date("Y") }}</option>
                                                 @foreach ($tahun as $t)
                                                     <option value="{{$t}}" {{ $tahun_get == $t ? 'selected' : '' }}>{{$t}}</option>
                                                 @endforeach 
                                         </select>
                                     </div>
                                     
-                                    <div class="mr-2">
+                                    <div class="col-2">
                                         <form action="" method="GET">
                                             <button type="submit" class="btn btn-secondary">Reset</button>
                                         </form>
@@ -1735,7 +1735,7 @@
     </script>
 
     <!--begin::Data Tables-->
-    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    {{-- <script src="https://code.jquery.com/jquery-3.5.1.js"></script> --}}
     <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script> 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script> 

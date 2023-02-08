@@ -61,7 +61,7 @@
 
                 <!--begin::Content-->
                 <div class="container mx-3 mt-0">
-                    <h1>Add Tinjauan Dokumen Kontrak - {{ $contract->stages == 1 ? "Perolehan" : "Pelaksanaan" }}</h1>
+                    <h1>Add Tinjauan Dokumen Kontrak - {{ $stage == 1 ? "Perolehan" : "Pelaksanaan" }}</h1>
                 </div>
                 
 
