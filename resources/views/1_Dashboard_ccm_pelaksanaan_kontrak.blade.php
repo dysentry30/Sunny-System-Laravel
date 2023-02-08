@@ -416,6 +416,7 @@
                         <!--begin::Table Body-->
                         {{-- @foreach ($nilai_perubahan_table as $table) --}}
                         @foreach ($kategori_kontrak as $table)
+                        {{-- @dump($table) --}}
                         <div class="row mb-4 mx-3">
                             <div class="col-3">
                                 <!--begin::Title body-->

@@ -2271,8 +2271,8 @@
                                 <thead>
                                     <!--begin::Table row-->
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                        <th class="min-w-125px">Periode</th>
                                         <th class="min-w-125px">File</th>
+                                        <th class="min-w-125px">Tanggal</th>
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>
@@ -2285,14 +2285,17 @@
                                     @forelse ($uploadResikoPelaksanaan as $inputRisk)
                                         <tr>
                                             <!--begin::Column-->
-                                            <td>
+                                            {{-- <td>
                                                 <p class="text-gray-600 mb-1">{{ Carbon\Carbon::createFromFormat("m-Y", $inputRisk->periode)->translatedFormat("F Y") }}</p>
-                                            </td>
+                                            </td> --}}
                                             <td>
                                                 <!--End:Table: Review-->
                                                 <a target="_blank" href="{!! asset('words/'.$inputRisk->id_document) !!}" class="text-hover-primary">
                                                 <p>{{ $inputRisk->nama_document }}</p>
                                                 </a>
+                                            </td>
+                                            <td>
+                                                <p class="text-gray-600 mb-1">{{ Carbon\Carbon::createFromTimeString($uploadResikoPelaksanaan->created_at)->translatedFormat("d F Y") }}</p>
                                             </td>
                                         </tr>
                                     @empty
@@ -2503,6 +2506,7 @@
                                 @php
                                     $contracts = $contract->PendingIssue->where("stage", "=", 2);
                                 @endphp
+                                {{-- @dump($contracts) --}}
                                 <tbody class="fw-bold text-gray-400">
                                     @if ($contracts)
     
@@ -2529,19 +2533,19 @@
                                                     <p class="text-gray-600">{{ Carbon\Carbon::create($pending_issue->target_waktu_penyelesaian)->translatedFormat("d F Y") }}</p>
                                                 </td>
                                                 
-                                                @if ($pending_issue->status == false)
-                                                    <!--begin::Column-->
-                                                    <td>
-                                                        <p class="text-gray-600">Open</p>
-                                                    </td>
-                                                    <!--end::Column-->
-                                                @else
-                                                    <!--begin::Column-->
-                                                    <td>
-                                                        <p class="text-gray-600">Closed</p>
-                                                    </td>
-                                                    <!--end::Column-->
-                                                @endif
+                                                @if ($pending_issue->status == true)
+                                                <!--begin::Column-->
+                                                <td>
+                                                    <p class="badge badge-light-success">Open</p>
+                                                </td>
+                                                <!--end::Column-->
+                                            @else
+                                                <!--begin::Column-->
+                                                <td>
+                                                    <p class="badge badge-light-success">Closed</p>
+                                                </td>
+                                                <!--end::Column-->
+                                            @endif
                                             </tr>
                                         @endforeach
                                     @else
@@ -3704,9 +3708,9 @@
                                                     <!--end::Table row-->
                                                 </thead>
                                                 <!--end::Table head-->
-                                                @php
-                                                    $no = 1;
-                                                @endphp
+                                                {{-- @php
+                                                    // $no = 1;
+                                                @endphp --}}
                                                 <!--begin::Table body-->
                                                 <tbody class="fw-bold text-gray-400">
                                                     @foreach ($contract->ContractBast as $dokumen)
@@ -3714,7 +3718,7 @@
                                                         <tr>
                                                             <!--begin::Nomor-->
                                                             <td class="text-center">
-                                                                {{ $no++ }}
+                                                                {{ $dokumen->nomor_dokumen }}
                                                             </td>
                                                             <!--end::Nomor-->
                                                             <!--begin::Column-->
@@ -3780,9 +3784,9 @@
                                                     <!--end::Table row-->
                                                 </thead>
                                                 <!--end::Table head-->
-                                                @php
+                                                {{-- @php
                                                     $no = 1;
-                                                @endphp
+                                                @endphp --}}
                                                 <!--begin::Table body-->
                                                 <tbody class="fw-bold text-gray-400">
                                                         @foreach ($contract->ContractBast as $dokumen)
@@ -3790,7 +3794,7 @@
                                                             <tr>
                                                                 <!--begin::Nomor-->
                                                                 <td class="text-center">
-                                                                    {{ $no++ }}
+                                                                    {{ $dokumen->nomor_dokumen }}
                                                                 </td>
                                                                 <!--end::Nomor-->
                                                                 <!--begin::Column-->
@@ -4115,7 +4119,7 @@
                                                 <p class="text-gray-600">{{ Carbon\Carbon::create($pending_issue->target_waktu_penyelesaian)->translatedFormat("d F Y") }}</p>
                                             </td>
                                             
-                                            @if ($pending_issue->status == false)
+                                            @if ($pending_issue->status == true)
                                                 <!--begin::Column-->
                                                 <td>
                                                     <p class="badge badge-light-success">Open</p>
@@ -6344,11 +6348,11 @@
                 <!--begin::Modal body-->
                 <div class="modal-body py-lg-6 px-lg-6">
 
-                    <form action="/contract-management/final-dokumen/upload" method="POST" enctype="multipart/form-data">
+                    {{-- <form action="/contract-management/final-dokumen/upload" method="POST" enctype="multipart/form-data">
                         @csrf
                         <input type="hidden" class="modal-name" name="modal-name">
                         <input type="hidden" value="resiko-pelaksanaan" name="kategori">
-                        <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" name="id-contract">
+                        <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" name="id-contract"> --}}
         
                         {{-- @php
                             $month = (int) date("m") - 1 == 0 ? 12 : (int) date("m") - 1;
@@ -6404,7 +6408,7 @@
                                 </select>
                             </div>
                         </div> --}}
-                        <br>
+                        {{-- <br>
                         <div class="row">
                             <div class="col">
                                 <label for="resiko-file">Upload File</label>
@@ -6416,12 +6420,38 @@
                         
                         <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
         
-                        {{-- end::Read File --}}
                         <div class="modal-footer">
                             <button type="submit" id="save-risk" class="btn btn-sm btn-primary"
                                 data-bs-dismiss="modal">Save</button>
                         </div>
         
+                    </form> --}}
+
+                    <form action="/contract-management/final-dokumen/upload" method="POST"
+                        enctype="multipart/form-data">
+                        <div class="row">
+                            @csrf
+                            <div class="col mt-4">
+                                <!--begin::Label-->
+                                <label for="ketentuan-rencana-kerja" class="fs-6 fw-bold form-label">
+                                    <span style="font-weight: normal">Upload Dokumen</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="hidden" name="kategori" value="resiko-pelaksanaan">
+                                <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".xlsx">
+                                <!--end::Input-->
+                            </div>
+                                <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                    name="id-contract">
+                                <input type="hidden" class="modal-name" name="modal-name">
+                            </div>
+                        </div>
+                        <!--end::Input group-->
+                        <div class="modal-footer mt-4">
+                            <button type="submit" id="save-question-tender-menang"
+                                class="btn btn-sm btn-primary">Save</button>
+                        </div>
                     </form>
                 </div>
                 <!--end::Input group-->
@@ -7329,7 +7359,7 @@
                                     <span style="font-weight: normal">Resiko Biaya (Rp.)</span>
                                 </label>
                                 <!--end::Label-->
-                                <input type="text" name="resiko-biaya" value="{{ number_format($pending_issue->biaya, 0, ".", ".    ") }}" class="form-control form-control-solid reformat">
+                                <input type="text" name="resiko-biaya" value="{{ number_format($pending_issue->biaya, 0, ".", ".") }}" class="form-control form-control-solid reformat">
                             </div>
                             <div class="col">
                                 <!--begin::Label-->
@@ -8683,7 +8713,6 @@
                             @php
                                 $detail_history = $contract->Jaminan->where("kategori_jaminan", "=", $history->kategori_jaminan);
                             @endphp
-                            @dump($detail_history)
                             @if (!empty($detail_history))
                             @forelse ($detail_history as $jaminan )
                             <tr>

@@ -69,8 +69,8 @@ class ContractManagementsController extends Controller
     {
 
         // $column = $request->get("column");
-        $filterUnit = $request->query("filter-unit");
-        $filterJenis = $request->query("filter-jenis");
+        $filterUnit = $request->query("unit-kerja");
+        $filterJenis = $request->query("jenis-proyek");
         $filterTahun = $request->query("tahun-proyek") ?? (int) date("Y");
         // dd($filterTahun);
 
@@ -94,28 +94,39 @@ class ContractManagementsController extends Controller
             // $proyeks_pelaksanaan_closing_proyek = DB::table("proyeks as p")->select(["p.*", "c.stages"])->join("contract_managements as c", "c.project_id", "=", "p.kode_proyek")->where("c.stages", 5)->get()->map(function ($data) {
             //     return self::stdClassToModel($data, Proyek::class);
             // });
-            $unitkerjas = UnitKerja::get()->whereNotIn("divcode", ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "8"]);
             $tahun_proyeks = Proyek::get()->groupBy("tahun_perolehan")->keys();
-            if (!empty($filterUnit)) {
-                $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("unit_kerja", "=", $filterUnit)->get();
-            } else if (!empty($filterJenis)) {
-                $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("jenis_proyek", "=", $filterJenis)->get();
-            } else if(!empty($filterTahun)){
-                $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $filterTahun)->get();
+            // $unitkerjas = UnitKerja::get()->whereNotIn("divcode", ["1", "2", "3", "4", "5", "6", "7", "8"]);
+            // dd($unitkerjas);
+            if ($filterTahun < 2023) {
+                $unit_kerja_code =  ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "N", "P", "J"];
+                $unitkerjas = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->get();
+                $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $filterTahun)->whereNotIn("unit_kerja", $unit_kerja_code)->get();
+                // $unit_kerjas = UnitKerja::whereNotIn("divcode",  $unit_kerja_code)->get();
+                // $proyeks = Proyek::join("contract_managements", "proyeks.kode_proyek", "=", "contract_managements.project_id")->whereNotIn("unit_kerja", $unit_kerja_code)->whereIn("stage", [6, 8, 9])->where("stages", "=", 3)->get();
             } else {
-                $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $year)->get();
+                $unit_kerja_code =   ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "N", "L", "F", "U", "O"];
+                $unitkerjas = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->get();
+                $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $filterTahun)->whereNotIn("unit_kerja", $unit_kerja_code)->get();
+                // $unit_kerjas = UnitKerja::whereNotIn("divcode",   $unit_kerja_code)->get();
+                // $proyeks = Proyek::join("contract_managements", "proyeks.kode_proyek", "=", "contract_managements.project_id")->whereNotIn("unit_kerja", $unit_kerja_code)->whereIn("stage", [6, 8, 9])->where("stages", "=", 3)->get();
+            }
+            // $filter_unit = $unitkerjas->groupBy("divcode")->keys();
+            // dd($filterJenis);
+            if (!empty($filterUnit)) {
+                $proyeks = $proyeks_all->where("unit_kerja", "=", $filterUnit);
+            } else if (!empty($filterJenis)) {
+                $proyeks = $proyeks_all->where("jenis_proyek", "=", $filterJenis);
+            } else if(!empty($filterTahun)){
+                $proyeks = $proyeks_all->where("tahun_perolehan", "=", $filterTahun);
+            } else {
+                $proyeks = $proyeks_all;
                 // $proyeks_all = Proyek::all();
             }
             // dd($proyeks_all);
-            $proyeks_perolehan = $proyeks_all->whereIn("stage", [2, 3, 4, 5, 6])->where("is_cancel", "!=", true)->where("is_tidak_lulus_pq", "!=", true)->where("stages", "=", 1);
-            // dd($proyeks_perolehan);
-
-            $proyeks_pelaksanaan = $proyeks_all->where("stage", "=", 8)->where("is_cancel", "!=", true)->filter(function ($p) {
-                return !empty($p->ContractManagements) && $p->ContractManagements->stages == 2;
-            });
-            $proyeks_pemeliharaan = $proyeks_all->where("is_cancel", "!=", true)->filter(function ($p) {
-                return !empty($p->ContractManagements) && $p->ContractManagements->stages == 3;
-            });
+            $proyeks_perolehan = $proyeks->whereIn("stage", [2, 3, 4, 5, 6])->where("is_cancel", "!=", true)->where("is_tidak_lulus_pq", "!=", true)->where("stages", "=", 1);
+            $proyeks_pelaksanaan = $proyeks->where("stage", "=", 8)->where("is_cancel", "!=", true)->where("stages", "=", 2);
+            $proyeks_pemeliharaan = $proyeks->where("is_cancel", "!=", true)->where("stages", "=", 3);
+            // dd($proyeks_pemeliharaan);
         } else {
             // $proyeks = Proyek::join()where("unit_kerja", "=", Auth::user()->unit_kerja)->where("stage", ">", 7)->where("nomor_terkontrak", "!=", "")->get()->sortBy("kode_proyek");
             // $proyeks = DB::table("proyeks as p")->join("contract_managements as c", "c.project_id", "=", "p.kode_proyek")->where("p.unit_kerja", "=", Auth::user()->unit_kerja)->where("stage", ">", 7)->where("p.nomor_terkontrak", "!=", "")->where("c.stages", "<", 3)->get()->sortBy("kode_proyek");
@@ -685,68 +696,126 @@ class ContractManagementsController extends Controller
         // dd($data_update);
         // dd($kategori, $sub_pasal, $uraian, $pic, $catatan);
 
-        $is_data_exist = ReviewContracts::where("id_contract", $data["id-contract"])->where("stage", "=", 2)->get();
+        // $is_data_exist = ReviewContracts::where("id_contract", $data["id-contract"])->where("stage", "=", 2)->get();
         // dd($is_data_exist);
-        if($is_data_exist->isEmpty()){
-            $kategori->each(function($item, $key) use($sub_pasal, $uraian, $pic, $catatan, $data){
-                // $tes = ReviewContracts::where("stage", "=", 1)->get();
-                // dd($tes);
-                if($data["stage"] == 1){
-                    $review_kontrak = new ReviewContracts();
-                    $review_kontrak->id_contract = $data["id-contract"];
-                    $review_kontrak->stage = $data["stage"];
-                    $review_kontrak->kategori = $item;
-                    $review_kontrak->sub_pasal = $sub_pasal[$key];
-                    $review_kontrak->uraian = $uraian[$key];
-                    $review_kontrak->pic = $pic[$key];
-                    $review_kontrak->catatan = $catatan[$key];
+        // if($is_data_exist->isEmpty()){
+        //     $kategori->each(function($item, $key) use($sub_pasal, $uraian, $pic, $catatan, $data){
+        //         // $tes = ReviewContracts::where("stage", "=", 1)->get();
+        //         // dd($tes);
+        //         if($data["stage"] == 1){
+        //             $review_kontrak = new ReviewContracts();
+        //             $review_kontrak->id_contract = $data["id-contract"];
+        //             $review_kontrak->stage = $data["stage"];
+        //             $review_kontrak->kategori = $item;
+        //             $review_kontrak->sub_pasal = $sub_pasal[$key];
+        //             $review_kontrak->uraian = $uraian[$key];
+        //             $review_kontrak->pic = $pic[$key];
+        //             $review_kontrak->catatan = $catatan[$key];
 
-                    $duplicate_review = new ReviewContracts();
-                    $duplicate_review->id_contract = $data["id-contract"];
-                    $duplicate_review->stage = 2;
-                    $duplicate_review->kategori = $item;
-                    $duplicate_review->sub_pasal = $sub_pasal[$key];
-                    $duplicate_review->uraian = $uraian[$key];
-                    $duplicate_review->pic = $pic[$key];
-                    $duplicate_review->catatan = $catatan[$key];
+        //             $duplicate_review = new ReviewContracts();
+        //             $duplicate_review->id_contract = $data["id-contract"];
+        //             $duplicate_review->stage = 2;
+        //             $duplicate_review->kategori = $item;
+        //             $duplicate_review->sub_pasal = $sub_pasal[$key];
+        //             $duplicate_review->uraian = $uraian[$key];
+        //             $duplicate_review->pic = $pic[$key];
+        //             $duplicate_review->catatan = $catatan[$key];
 
-                    $review_kontrak->save();
-                    $duplicate_review->save();
+        //             $review_kontrak->save();
+        //             $duplicate_review->save();
 
-                    // $budi = $review_kontrak->replicate()->fill(["stage" => 2]);
-                    // dd($budi);
-                }else{
-                    $review_kontrak = new ReviewContracts();
-                    $review_kontrak->id_contract = $data["id-contract"];
-                    $review_kontrak->stage = $data["stage"];
-                    $review_kontrak->kategori = $item;
-                    $review_kontrak->sub_pasal = $sub_pasal[$key];
-                    $review_kontrak->uraian = $uraian[$key];
-                    $review_kontrak->pic = $pic[$key];
-                    $review_kontrak->catatan = $catatan[$key];
+        //             // $budi = $review_kontrak->replicate()->fill(["stage" => 2]);
+        //             // dd($budi);
+        //         }else{
+        //             $review_kontrak = new ReviewContracts();
+        //             $review_kontrak->id_contract = $data["id-contract"];
+        //             $review_kontrak->stage = $data["stage"];
+        //             $review_kontrak->kategori = $item;
+        //             $review_kontrak->sub_pasal = $sub_pasal[$key];
+        //             $review_kontrak->uraian = $uraian[$key];
+        //             $review_kontrak->pic = $pic[$key];
+        //             $review_kontrak->catatan = $catatan[$key];
 
-                    $review_kontrak->save();
-                }
+        //             $review_kontrak->save();
+        //         }
                 
-            });
-            Alert::success('Success', "Tinjauan Kontrak berhasil ditambahkan");
-            return redirect()->back();
-        }else{
-            $is_data_exist->each(function($item, $key) use($data_update, $data){
-                $item->id_contract = $data["id-contract"];
-                $item->stage = $data["stage"];
-                $item->kategori = $data_update[$key]->kategori;
-                $item->sub_pasal = $data_update[$key]->sub_pasal;
-                $item->uraian = $data_update[$key]->uraian;
-                $item->pic = $data_update[$key]->pic;
-                $item->catatan = $data_update[$key]->catatan;
-                $item->save();
-            });
-            Alert::success('Success', "Tinjauan Kontrak berhasil ditambahkan");
-            return redirect()->back();
-        }
+        //     });
+        //     Alert::success('Success', "Tinjauan Kontrak berhasil ditambahkan");
+        //     return redirect()->back();
+        // }else{
+        //     $is_data_exist->each(function($item, $key) use($data_update, $data){
+        //         $item->id_contract = $data["id-contract"];
+        //         $item->stage = $data["stage"];
+        //         $item->kategori = $data_update[$key]->kategori;
+        //         $item->sub_pasal = $data_update[$key]->sub_pasal;
+        //         $item->uraian = $data_update[$key]->uraian;
+        //         $item->pic = $data_update[$key]->pic;
+        //         $item->catatan = $data_update[$key]->catatan;
+        //         $item->save();
+        //     });
+        //     Alert::success('Success', "Tinjauan Kontrak berhasil ditambahkan");
+        //     return redirect()->back();
+        // }
         // $data["kategori"]->each(function($item, $key){
         // });
+
+        $is_data_exist = ReviewContracts::where("id_contract", $data["id-contract"])->get();
+        if($is_data_exist->isEmpty()){
+            $kategori->each(function($item, $key) use($sub_pasal, $uraian, $pic, $catatan, $data){
+                    if($data["stage"] == 1){
+                        $review_kontrak = new ReviewContracts();
+                        $review_kontrak->id_contract = $data["id-contract"];
+                        $review_kontrak->stage = $data["stage"];
+                        $review_kontrak->kategori = $item;
+                        $review_kontrak->sub_pasal = $sub_pasal[$key];
+                        $review_kontrak->uraian = $uraian[$key];
+                        $review_kontrak->pic = $pic[$key];
+                        $review_kontrak->catatan = $catatan[$key];
+
+                        // $duplicate_review = new ReviewContracts();
+                        // $duplicate_review->id_contract = $data["id-contract"];
+                        // $duplicate_review->stage = 2;
+                        // $duplicate_review->kategori = $item;
+                        // $duplicate_review->sub_pasal = $sub_pasal[$key];
+                        // $duplicate_review->uraian = $uraian[$key];
+                        // $duplicate_review->pic = $pic[$key];
+                        // $duplicate_review->catatan = $catatan[$key];
+
+                        $review_kontrak->save();
+                        // $duplicate_review->save();
+
+                        // $budi = $review_kontrak->replicate()->fill(["stage" => 2]);
+                        // dd($budi);
+                    }else{
+                        $review_kontrak = new ReviewContracts();
+                        $review_kontrak->id_contract = $data["id-contract"];
+                        $review_kontrak->stage = $data["stage"];
+                        $review_kontrak->kategori = $item;
+                        $review_kontrak->sub_pasal = $sub_pasal[$key];
+                        $review_kontrak->uraian = $uraian[$key];
+                        $review_kontrak->pic = $pic[$key];
+                        $review_kontrak->catatan = $catatan[$key];
+
+                        $review_kontrak->save();
+                    }
+                    Alert::success('Success', "Tinjauan Kontrak berhasil ditambahkan");
+                    return redirect()->back();
+                
+                });
+            }else{
+                $is_data_exist->each(function($item, $key) use($data_update, $data){
+                            $item->id_contract = $data["id-contract"];
+                            $item->stage = $data["stage"];
+                            $item->kategori = $data_update[$key]->kategori;
+                            $item->sub_pasal = $data_update[$key]->sub_pasal;
+                            $item->uraian = $data_update[$key]->uraian;
+                            $item->pic = $data_update[$key]->pic;
+                            $item->catatan = $data_update[$key]->catatan;
+                            $item->save();
+                        });
+                        Alert::success('Success', "Tinjauan Kontrak berhasil ditambahkan");
+                        return redirect()->back();
+            }
     }
 
     // Upload Issue Project of Contract to server or database
@@ -3305,11 +3374,12 @@ class ContractManagementsController extends Controller
         
         // $projects = Proyek::all();
         $review_contracts = ReviewContracts::where("id_contract", "=", $id_contract)->get();
-        if($stage == 1){
-            $review =  $review_contracts->where("stage", "=", 1)->where("uraian", "!=", null);
-        }else{
-            $review = $review_contracts->where("stage", "=", 2);
-        };
+        $review = $review_contracts->where("stage", "=", 1);
+        // if($stage == 1){
+        //     $review =  $review_contracts->where("stage", "=", 1)->where("uraian", "!=", null);
+        // }else{
+        //     $review = $review_contracts->where("stage", "=", 2);
+        // };
         
         // dd($review);
         // $ccmNew = $ccm->reviewProjects->groupBy('stage');

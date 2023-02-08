@@ -18,12 +18,12 @@
                 <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
 
                     <!--begin::Toolbar-->
-                    @if (empty($perubahan_kontrak))
+                    {{-- @if (empty($perubahan_kontrak))
                         <form action="/addendum-contract/upload" method="post" enctype="multipart/form-data">
-                        @else
-                            <form action="/perubahan-kontrak/update" method="post" enctype="multipart/form-data">
+                        @else --}}
+                            {{-- <form action="/perubahan-kontrak/upload" method="post" enctype="multipart/form-data"> --}}
                                 <input type="hidden" value="{{ $perubahan_kontrak->id_perubahan_kontrak ?? old('id-perubahan-kontrak') }}" name="id-perubahan-kontrak">
-                    @endif
+                    {{-- @endif --}}
                     @csrf
                     {{-- begin::input --}}
                     <input type="hidden" value="{{ $perubahan_kontrak->id_contract ?? 0 }}" id="id-contract" name="id-contract">
@@ -44,8 +44,8 @@
                             <div class="d-flex align-items-center py-1">
 
                                 <!--begin::Button-->
-                                <button type="submit" class="btn btn-sm btn-primary" id="kt_toolbar_primary_button" style="background-color:#008CB4;">
-                                    Save</button>
+                                {{-- <button type="submit" class="btn btn-sm btn-primary" id="kt_toolbar_primary_button" style="background-color:#008CB4;">
+                                    Save</button> --}}
                                 <!--end::Button-->
 
                                 <!--begin::Button-->
@@ -348,14 +348,10 @@
                                                                 </div>
                                                             </div>
                                                             <br>
-                                                            <div class="row">
+                                                            {{-- <div class="row">
                                                                 <div class="col">
                                                                     <label class="fs-6 fw-bold form-label">
                                                                         <span style="font-weight: normal">Status</span>
-                                                                        {{-- <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)"
-                                                                            id="start-date-modal">
-                                                                            <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
-                                                                        </a> --}}
                                                                     </label><br>
                                                                     <!--begin::Input-->
                                                                     <select name="status-perubahan-kontrak" id="status-perubahan-kontrak" class="form-select form-select-solid"
@@ -367,7 +363,7 @@
                                                                     </select>
                                                                     <!--end::Input-->
                                                                 </div>
-                                                            </div>
+                                                            </div> --}}
                                                             <!--end::Input group-->
                                                         </div>
 
@@ -558,7 +554,7 @@
 
                         </div>
                     </div>
-                    </form>
+                    {{-- </form> --}}
                 </div>
                 <!--end::Card body-->
             </div>

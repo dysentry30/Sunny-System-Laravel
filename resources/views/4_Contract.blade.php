@@ -105,7 +105,7 @@
 
                                      <!--begin::Select Options-->
                                      <div style="" id="filterTahun" class="d-flex align-items-center position-relative me-3">
-                                        <select id="tahun-proyek" name="tahun-proyek" onchange="this.form.submit()"
+                                        <select id="tahun-proyek" name="tahun-proyek" onchange="selectFilter(this)"
                                             class="form-select form-select-solid select2-hidden-accessible mx-3"
                                             data-control="select2" data-hide-search="true" data-placeholder="Tahun"
                                             tabindex="-1" aria-hidden="true">
@@ -119,7 +119,7 @@
 
                                     <!--begin:: Input Filter-->
                                     <div id="filterUnit" class="d-flex align-items-center position-relative">
-                                        <select onchange="this.form.submit()" name="filter-unit" class="form-select form-select-solid w-200px ms-2"
+                                        <select id="unit-kerja" onchange="selectFilter(this)" name="filter-unit" class="form-select form-select-solid w-200px ms-2"
                                             data-control="select2" data-hide-search="true" data-placeholder="Unit Kerja">
                                             <option></option>
                                             @foreach ($unitkerjas as $unitkerja)
@@ -131,7 +131,7 @@
                                     </div>
 
                                     <div id="filterJenis" class="d-flex align-items-center position-relative">
-                                        <select onchange="this.form.submit()" name="filter-jenis"
+                                        <select id="jenis-proyek" onchange="selectFilter(this)" name="filter-jenis"
                                             class="form-select form-select-solid select2-hidden-accessible w-auto ms-2"
                                             data-control="select2" data-hide-search="true" data-placeholder="Jenis Proyek"
                                             tabindex="-1" aria-hidden="true">
@@ -575,6 +575,23 @@
 @endsection
 
 @section('js-script')
+
+<script>
+    function selectFilter(e) {
+        const value = e.value;
+        const type = e.getAttribute("id");
+        let url = "";
+        if(type == "tahun-proyek") {
+            url = `/contract-management?tahun-proyek=${value}`;
+        } else if(type == "unit-kerja") {
+            url = `/contract-management?unit-kerja=${value}`;
+        } else {
+            url = `/contract-management?jenis-proyek=${value}`;
+        }
+        window.location.href = url;
+        return;
+    }
+</script>
     <!--begin::Data Tables-->
     <script src="/datatables/jquery.dataTables.min.js"></script>
     <script src="/datatables/dataTables.buttons.min.js"></script>
