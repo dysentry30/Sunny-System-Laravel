@@ -89,7 +89,6 @@
                 @include('template.header')
                 <!--end::Header-->
 
-
                 <!--begin::Content-->
                 <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
                     <!--begin::Toolbar-->
@@ -121,7 +120,7 @@
                                             <!--end:::Tab Item Tab Pane-->
                                             <!--begin:::Tab Item Tab Pane-->
                                             <li class="nav-item">
-                                                <a class="nav-link text-active-primary pb-4"
+                                                <a class="nav-link text-active-primary pb-4 "
                                                     href="/dashboard-ccm/pemeliharaan-kontrak" style="font-size:14px;">Pemeliharaan Kontrak</a>
                                             </li>
                                             <!--end:::Tab Item Tab Pane-->
@@ -142,7 +141,7 @@
                         <!--Begin :: Filter-->
                         <div class="card">
                             <div class="card-body">
-                                <div class="row">
+                                {{-- <div class="row">
                                     <div class="col-3">
                                         <select onchange="selectFilter(this)" id="dop" name="dop"
                                                 class="form-select form-select-solid w-auto"
@@ -169,17 +168,16 @@
                                         </select>
                                     </div>
 
+                                    
                                     <div class="col-3">
                                         <select onchange="selectFilter(this)" id="proyek" name="proyek"
                                                 class="form-select form-select-solid w-auto"
                                                 style="margin-right: 2rem;" data-control="select2" data-hide-search="false"
                                                 data-placeholder="Proyek" data-select2-id="select2-data-proyek" tabindex="-1"
                                                 aria-hidden="true">
-                                                {{-- <option value="" {{$dop_get == "" ? "selected" : ""}}></option> --}}
                                                 <option value="" selected></option>
-                                                @foreach ($proyeks as $p)
-                                                    {{-- <option value="{{ $p->divcode }}" {{ $p_get == $p->divcode ? 'selected' : '' }} >{{ $p->unit_kerja }}</option> --}}
-                                                    <option value="{{ $p->kode_proyek }}" {{ $proyek_get == $p->kode_proyek ? 'selected' : '' }} >{{ $p->nama_proyek }} ({{$p->kode_proyek}})</option>
+                                                @foreach ($contracts_pelaksanaan as $p)
+                                                    <option value="{{ $p->project_id }}" {{ $proyek_get == $p->project_id ? 'selected' : '' }} >{{ $p->nama_proyek }} ({{$p->project_id}})</option>
                                                 @endforeach
                                         </select>
                                     </div>
@@ -188,7 +186,96 @@
                                             <button type="submit" class="btn btn-secondary">Reset</button>
                                         </form>
                                     </div>
-                                </div>
+                                </div> --}}
+                                <form action="" method="GET">
+                                        <div class="row">
+                                            <div class="col-2">                                        
+                                                <select onchange="this.form.submit()" id="dop" name="dop"
+                                                        class="form-select form-select-solid w-auto"
+                                                        style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
+                                                        data-placeholder="Direktorat" data-select2-id="select2-data-dop" tabindex="-1"
+                                                        aria-hidden="true">
+                                                        <option value="" selected></option>
+                                                        @foreach ($dops as $dop)
+                                                            <option value="{{ $dop->dop }}" {{ $dop_get == $dop->dop ? 'selected' : '' }} >{{ $dop->dop }}</option>
+                                                        @endforeach
+                                                </select>
+                                            </div>
+
+                                            <div class="col-2">
+                                                <select onchange="this.form.submit()" id="unit-kerja" name="unit-kerja"
+                                                        class="form-select form-select-solid w-auto"
+                                                        style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
+                                                        data-placeholder="Unit Kerja" data-select2-id="select2-data-unit-kerja" tabindex="-1"
+                                                        aria-hidden="true">
+                                                        <option value="" selected></option>
+                                                        @foreach ($unit_kerjas as $unit_kerjas)
+                                                            <option value="{{ $unit_kerjas->divcode }}" {{ $unit_kerja_get == $unit_kerjas->divcode ? 'selected' : '' }} >{{ $unit_kerjas->unit_kerja }}</option>
+                                                        @endforeach
+                                                </select>
+                                            </div>
+
+                                            <div class="col-2">
+                                                <select onchange="selectFilter(this)" id="kode-proyek" name="proyek"
+                                                        class="form-select form-select-solid w-auto"
+                                                        style="margin-right: 2rem;" data-control="select2" data-hide-search="false"
+                                                        data-placeholder="Proyek" data-select2-id="select2-data-proyek" tabindex="-1"
+                                                        aria-hidden="true">
+                                                        <option value="" selected></option>
+                                                        @foreach ($contracts_pelaksanaan as $kontrak)
+                                                            <option value="{{ $kontrak->project_id }}" {{ $proyek_get == $kontrak->project_id ? 'selected' : '' }} >{{ $kontrak->project->nama_proyek }} ({{ $kontrak->project_id }})</option>
+                                                            {{-- <option value="{{ $proyek->kode_proyek }}" >{{ $proyek->nama_proyek }} ({{$proyek->kode_proyek}})</option> --}}
+                                                        @endforeach
+                                                </select>
+                                            </div>
+
+                                            <div class="col-2">
+                                                <select id="bulan" name="bulan"
+                                                        class="form-select form-select-solid w-auto"
+                                                        style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
+                                                        data-placeholder="Bulan" data-select2-id="select2-data-bulan" tabindex="-1"
+                                                        aria-hidden="true">
+                                                        <option {{ $month == '' ? 'selected' : '' }}></option>
+                                                        <option value="1" {{ $bulan_get == 1 ? 'selected' : '' }}>Januari</option>
+                                                        <option value="2" {{ $bulan_get == 2 ? 'selected' : '' }}>Februari</option>
+                                                        <option value="3" {{ $bulan_get == 3 ? 'selected' : '' }}>Maret</option>
+                                                        <option value="4" {{ $bulan_get == 4 ? 'selected' : '' }}>April</option>
+                                                        <option value="5" {{ $bulan_get == 5 ? 'selected' : '' }}>Mei</option>
+                                                        <option value="6" {{ $bulan_get == 6 ? 'selected' : '' }}>Juni</option>
+                                                        <option value="7" {{ $bulan_get == 7 ? 'selected' : '' }}>Juli</option>
+                                                        <option value="8" {{ $bulan_get == 8 ? 'selected' : '' }}>Agustus</option>
+                                                        <option value="9" {{ $bulan_get == 9 ? 'selected' : '' }}>September</option>
+                                                        <option value="10" {{ $bulan_get == 10 ? 'selected' : '' }}>Oktober</option>
+                                                        <option value="11" {{ $bulan_get == 11 ? 'selected' : '' }}>November</option>
+                                                        <option value="12" {{ $bulan_get == 12 ? 'selected' : '' }}>Desember</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-2">
+                                                <select id="tahun" name="tahun"
+                                                        class="form-select form-select-solid w-auto"
+                                                        style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
+                                                        data-placeholder="Tahun" data-select2-id="select2-data-tahun" tabindex="-1"
+                                                        aria-hidden="true">
+                                                        <option value="" selected></option>
+                                                        @foreach ($tahun as $t)
+                                                            <option value="{{$t}}" {{ $tahun_get == $t ? 'selected' : '' }}>{{$t}}</option>
+                                                        @endforeach 
+                                                </select>
+                                            </div>
+                                            
+                                            <div class="col-2" data-control="select-2" data-select2-id="select-data-submit">
+                                                    <button type="submit" class="btn btn-light btn-active-primary">Filter</button>
+                                                    <button type="button" onclick="resetFilter()" class="btn btn-light btn-active-primary">Reset</button>
+                                                    <script>
+                                                        function resetFilter() {
+                                                            window.location.href = "/dashboard-ccm/pelaksanaan-kontrak";
+                                                        }
+                                                    </script>
+                                            </div>
+
+                                    </div>
+                                </form>
                             </div>
                         </div>
                         <!--End :: Filter-->
@@ -198,9 +285,10 @@
                         <!--begin::Title-->
                         <div class="mb-4">
                             <div class="col-12">
+                                {{-- @dd($proyek) --}}
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-secondary">
-                                    <h2 class="m-0 text-center">{{ "SP00".sprintf("%02d", mt_rand(0, 99)) }}- {{ $proyek->UnitKerja->unit_kerja }} &nbsp; - &nbsp; {{ $proyek->nama_proyek }}</h2>
+                                    <h2 class="m-0 text-center">{{ "SP00".sprintf("%02d", mt_rand(0, 99)) }} &nbsp; - &nbsp; {{ $proyek->UnitKerja->unit_kerja }} &nbsp; - &nbsp; {{ $proyek->nama_proyek }}</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
@@ -217,6 +305,20 @@
                             </div>
                         </div>
                         <!--end::Title-->
+
+                        @php
+                        if (!empty($proyek->ContractManagements->ContractBast)) {
+                            $bast_1 = $proyek->ContractManagements->ContractBast->filter(function($item){
+                                return $item->bast == 1;
+                            })->first();
+                            $bast_2 = $proyek->ContractManagements->ContractBast->filter(function($item){
+                                return $item->bast == 2;
+                            })->first();
+                        }else {
+                            $bast_1 = "-";
+                            $bast_2 = "-";
+                        };
+                        @endphp
 
                         <!--begin::Row-->
                         <div class="row mb-0">
@@ -312,7 +414,7 @@
                                             <span class="fs-2 opacity-75 fw-bold text-white me-2 lh-1 ls-n2" id="data-items">RA BAST 1</span>
                                             <!--end::Amount-->
                                             <!--begin::Subtitle-->
-                                            <span class="text-white pt-1 fs-3">{{ $proyek->tanggal_selesai_pho }}</span>
+                                            <span class="text-white pt-1 fs-3">{{ $proyek->tanggal_selesai_pho ?? "-" }}</span>
                                             <!--end::Subtitle-->
                                         </div>  
                                         <!--end::Title-->
@@ -330,7 +432,7 @@
                                             <span class="fs-2 opacity-75 fw-bold text-white me-2 lh-1 ls-n2" id="data-items">RI BAST 1</span>
                                             <!--end::Amount-->
                                             <!--begin::Subtitle-->
-                                            <span class="text-white pt-1 fs-3">{{ $proyek->tanggal_selesai_pho }}</span>
+                                            <span class="text-white pt-1 fs-3">{{ !empty($bast_1) ? $bast_1->tanggal_dokumen : "-" }}</span>
                                             <!--end::Subtitle-->
                                         </div>  
                                         <!--end::Title-->
@@ -352,7 +454,7 @@
                                             <span class="fs-2 opacity-75 fw-bold text-white me-2 lh-1 ls-n2" id="data-items">RA BAST 2</span>
                                             <!--end::Amount-->
                                             <!--begin::Subtitle-->
-                                            <span class="text-white pt-1 fs-3">{{ $proyek->tanggal_selesai_fho }}</span>
+                                            <span class="text-white pt-1 fs-3">{{ $proyek->tanggal_selesai_fho ?? "-" }}</span>
                                             <!--end::Subtitle-->
                                         </div>  
                                         <!--end::Title-->
@@ -370,7 +472,7 @@
                                             <span class="fs-2 opacity-75 fw-bold text-white me-2 lh-1 ls-n2" id="data-items">RI BAST 2</span>
                                             <!--end::Amount-->
                                             <!--begin::Subtitle-->
-                                            <span class="text-white pt-1 fs-3">{{ $proyek->tanggal_selesai_fho }}</span>
+                                            <span class="text-white pt-1 fs-3">{{ !empty($bast_2) ? $bast_2->tanggal_dokumen : "-" }}</span>
                                             <!--end::Subtitle-->
                                         </div>  
                                         <!--end::Title-->
@@ -837,9 +939,9 @@
                             </div>
                         </div>
                         <!--end::Tabel Header-->
-
+                        {{-- @dd($proyek) --}}
                         <!--begin::Table Body-->
-                        @foreach ($kategori_kontrak as $table)
+                        @foreach ($detail_perubahan_kontrak as $table)
                         {{-- @dd($table) --}}
                         <div class="row mb-4 mx-3">
                             <div class="col-2">
@@ -851,7 +953,7 @@
                             </div>
                             <div class="col">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->id_contract }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
                                         <h2 class="m-0 text-center">{{ $table[4] ?? 0 }}</h2>
@@ -862,7 +964,7 @@
                             </div>
                             <div class="col">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->id_contract }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
                                         <h2 class="m-0 text-center">{{ $table[5] ?? 0 }}</h2>
@@ -873,7 +975,7 @@
                             </div>
                             <div class="col-1">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->id_contract }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
                                         <h2 class="m-0 text-center">{{ $table[6] ?? 0 }}</h2>
@@ -884,7 +986,7 @@
                             </div>
                             <div class="col-1">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->id_contract }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
                                         <h2 class="m-0 text-center">{{ $table[7] ?? 0 }}</h2>
@@ -895,7 +997,7 @@
                             </div>
                             <div class="col-1">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->id_contract }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
                                         <h2 class="m-0 text-center">{{ $table[8] ?? 0 }}</h2>
@@ -906,7 +1008,7 @@
                             </div>
                             <div class="col-1">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->id_contract }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
                                         <h2 class="m-0 text-center">{{ $table[9] ?? 0 }}</h2>
@@ -917,7 +1019,7 @@
                             </div>
                             <div class="col">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->id_contract }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
                                         <h2 class="m-0 text-center">{{ $table[10] ?? 0 }}</h2>
@@ -944,7 +1046,7 @@
                             <div class="col-3">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-warning">
-                                    <h2 class="m-0 text-center"><i class="bi bi-percent text-dark fs-3"></i> PERUBAHAN</h2>
+                                    <h2 class="m-0 text-center"><i class="bi bi-percent text-dark fs-3"></i> PERUBAHAN VS KONTRAK</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
@@ -952,7 +1054,7 @@
                         <!--end::Tabel Header-->
 
                         <!--begin::Table Body-->
-                        @foreach ($kategori_kontrak as $table)
+                        @foreach ($detail_perubahan_kontrak as $table)
                         {{-- @dd($table) --}}
                         <div class="row mb-4 mx-3">
                             <div class="col-3">
@@ -992,14 +1094,14 @@
                             <div class="col-9">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-warning">
-                                    <h2 class="m-0 text-center">TOTAL NILAI PERUBAHAN : Rp {{ number_format($totalKontrak, 0, ".", ".") }}</h2>
+                                    <h2 class="m-0 text-center">TOTAL NILAI PERUBAHAN : Rp {{ number_format($total_pengajuan, 0, ".", ".") }}</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
                             <div class="col-3">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-warning">
-                                    <h2 class="m-0 text-center">{{ $totalPersen }} %</h2>
+                                    <h2 class="m-0 text-center">{{ $persentasePerubahan }}</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
@@ -1148,9 +1250,9 @@
                                 </div>
                                 <!--end::Title body-->
                                <!--begin::Title body-->
-                               @if (!empty($proyek->ContractManagements->Asuransi))
+                               @if (!empty($proyek->Asuransi))
                                @php
-                                   $asuransiTableView = $proyek->ContractManagements->Asuransi->groupBy("kategori_asuransi")->map(function($item, $key){
+                                   $asuransiTableView = $proyek->Asuransi->groupBy("kategori_asuransi")->map(function($item, $key){
                                        return $item->sortByDesc("created_at")->first();    
                                    })->values();
                                @endphp
@@ -1223,9 +1325,9 @@
                                 </div>
                                 <!--end::Title body-->
                                <!--end::Title body-->
-                               @if (!empty($proyek->ContractManagements->Jaminan))
+                               @if (!empty($proyek->Jaminan))
                                @php
-                                   $jaminanTableView = $proyek->ContractManagements->Jaminan->groupBy("kategori_jaminan")->map(function($item, $key){
+                                   $jaminanTableView = $proyek->Jaminan->groupBy("kategori_jaminan")->map(function($item, $key){
                                        return $item->sortByDesc("created_at")->first();    
                                    })->values();
                                @endphp
@@ -1309,10 +1411,74 @@
 @section('js-script')
 
     <!--begin::Highchart Donut Changes Overview-->
-    <script>
+    {{-- <script>
         const changesOverview = JSON.parse('{!! json_encode($kategori_kontrak) !!}');
         Highcharts.chart('contract-divisi', {
             chart: {
+                type: 'pie',
+                options3d: {
+                    enabled: true,
+                    alpha: 5
+                }
+            },
+            title: {
+                text: 'Changes Overview',
+                style: {
+                    fontWeight: 'bold',
+                    fontSize: '20px'
+                }
+            },
+            subtitle: {
+                // text: '3D donut in Highcharts'
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:15px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>&nbsp;{point.y}</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                pie: {
+                    innerSize: 0,
+                    depth: 5,
+                    showInLegend: false,
+                    dataLabels: {
+                        enabled: true,
+                    }
+                }
+            },
+            legend: {
+                layout: 'horizontal',
+                align: 'center',
+                verticalAlign: 'bottom',
+                format : '<b>{point.key}</b><br>',
+                itemStyle: {
+                    fontSize:'15px',
+                },
+            },
+            credits: {
+                enabled: false
+            },
+            exporting: {
+                showTable: false,
+                allowHTML: true
+            },
+            series: [{
+                name: 'Kontrak',
+                data: changesOverview
+            }]
+        });
+    </script> --}}
+    <!--end::Highchart Donut Changes Overview-->
+
+    <!--begin::Highchart Donut Changes Overview-->
+    <script>
+        const changesOverview = JSON.parse('{!! $changes_overview->toJson() !!}');
+        Highcharts.chart('contract-divisi', {
+            chart: {
+                // height: 250,
                 type: 'pie',
                 options3d: {
                     enabled: true,
@@ -1373,6 +1539,7 @@
 
     <!--begin::Highchart Donut Changes Status -->
     <script>
+        const changeStatus = JSON.parse('{!! $change_status_out->toJson() !!}');
         Highcharts.chart('changes-status', {
             chart: {
                 type: 'pie',
@@ -1427,12 +1594,7 @@
             },
             series: [{
                 name: 'Kontrak',
-                data: [
-                    ['Dispute', 8],
-                    ['Revision', 16],
-                    ['Reject', 2],
-                    ['Approve', 10],
-                ]
+                data: changeStatus
             }]
         });
     </script>
@@ -1692,7 +1854,7 @@
     </script>
     <!-- End :: Animation Counter Number -->
 
-    <!-- Begin :: Select Filter Dropdown -->
+    {{-- <!-- Begin :: Select Filter Dropdown -->
     <script>
         function selectFilter(e) {
             const value = e.value;
@@ -1704,6 +1866,28 @@
                 url = `/dashboard-ccm/pelaksanaan-kontrak?unit-kerja=${value}`;
             } else {
                 url = `/dashboard-ccm/pelaksanaan-kontrak?kode-proyek=${value}`;
+            }
+            window.location.href = url;
+            return;
+        }
+    </script>
+    <!-- End :: Select Filter Dropdown --> --}}
+    <!-- Begin :: Select Filter Dropdown -->
+    <script>
+        function selectFilter(e) {
+            const value = e.value;
+            const type = e.getAttribute("id");
+            let url = "";
+            if(type == "dop") {
+                url = `/dashboard-ccm/pelaksanaan-kontrak?dop=${value}`;
+            } else if(type == "unit-kerja") {
+                url = `/dashboard-ccm/pelaksanaan-kontrak?unit-kerja=${value}`;
+            } else if(type == "kode-proyek") {
+                url = `/dashboard-ccm/pelaksanaan-kontrak?kode-proyek=${value}`;
+            } else if(type == "tahun"){
+                url = `/dashboard-ccm/pelaksanaan-kontrak?tahun=${value}`;
+            }else{
+                url = `/dashboard-ccm/pelaksanaan-kontrak?bulan=${value}`;
             }
             window.location.href = url;
             return;

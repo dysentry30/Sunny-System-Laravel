@@ -156,4 +156,9 @@ class Proyek extends Model
     {
         return $this->hasOne(Provinsi::class, "province_id", "provinsi");
     }
+
+    public function PerubahanKontrak()
+    {
+        return $this->hasMany(PerubahanKontrak::class, "kode_proyek");
+    }
 }

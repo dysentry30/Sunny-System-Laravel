@@ -105,7 +105,7 @@
 
                                      <!--begin::Select Options-->
                                      <div style="" id="filterTahun" class="d-flex align-items-center position-relative me-3">
-                                        <select id="tahun-proyek" name="tahun-proyek" onchange="selectFilter(this)"
+                                        <select id="tahun-proyek" name="tahun-proyek"
                                             class="form-select form-select-solid select2-hidden-accessible mx-3"
                                             data-control="select2" data-hide-search="true" data-placeholder="Tahun"
                                             tabindex="-1" aria-hidden="true">
@@ -116,13 +116,36 @@
                                         </select>
                                     </div>
                                     <!--end::Select Options-->
+                                     
+                                    <!--begin::Select Options-->
+                                     <div style="" id="filterBulan" class="d-flex align-items-center position-relative me-3">
+                                        <select id="bulan-proyek" name="bulan-proyek"
+                                            class="form-select form-select-solid select2-hidden-accessible mx-3"
+                                            data-control="select2" data-hide-search="true" data-placeholder="Bulan"
+                                            tabindex="-1" aria-hidden="true">
+                                            <option {{ $month == '' ? 'selected' : '' }}></option>
+                                            <option value="1" {{ $filterBulan == 1 ? 'selected' : '' }}>Januari</option>
+                                            <option value="2" {{ $filterBulan == 2 ? 'selected' : '' }}>Februari</option>
+                                            <option value="3" {{ $filterBulan == 3 ? 'selected' : '' }}>Maret</option>
+                                            <option value="4" {{ $filterBulan == 4 ? 'selected' : '' }}>April</option>
+                                            <option value="5" {{ $filterBulan == 5 ? 'selected' : '' }}>Mei</option>
+                                            <option value="6" {{ $filterBulan == 6 ? 'selected' : '' }}>Juni</option>
+                                            <option value="7" {{ $filterBulan == 7 ? 'selected' : '' }}>Juli</option>
+                                            <option value="8" {{ $filterBulan == 8 ? 'selected' : '' }}>Agustus</option>
+                                            <option value="9" {{ $filterBulan == 9 ? 'selected' : '' }}>September</option>
+                                            <option value="10" {{ $filterBulan == 10 ? 'selected' : '' }}>Oktober</option>
+                                            <option value="11" {{ $filterBulan == 11 ? 'selected' : '' }}>November</option>
+                                            <option value="12" {{ $filterBulan == 12 ? 'selected' : '' }}>Desember</option>
+                                        </select>
+                                    </div>
+                                    <!--end::Select Options-->
 
                                     <!--begin:: Input Filter-->
                                     <div id="filterUnit" class="d-flex align-items-center position-relative">
-                                        <select id="unit-kerja" onchange="selectFilter(this)" name="filter-unit" class="form-select form-select-solid w-200px ms-2"
+                                        <select id="unit-kerja" onchange="this.form.submit()" name="filter-unit" class="form-select form-select-solid w-200px ms-2"
                                             data-control="select2" data-hide-search="true" data-placeholder="Unit Kerja">
                                             <option></option>
-                                            @foreach ($unitkerjas as $unitkerja)
+                                            @foreach ($unit_kerjas_select as $unitkerja)
                                                 <option value="{{ $unitkerja->divcode }}"
                                                     {{ $filterUnit == $unitkerja->divcode ? 'selected' : '' }}>
                                                     {{ $unitkerja->unit_kerja }}</option>
@@ -131,7 +154,7 @@
                                     </div>
 
                                     <div id="filterJenis" class="d-flex align-items-center position-relative">
-                                        <select id="jenis-proyek" onchange="selectFilter(this)" name="filter-jenis"
+                                        <select id="jenis-proyek" onchange="this.form.submit()" name="filter-jenis"
                                             class="form-select form-select-solid select2-hidden-accessible w-auto ms-2"
                                             data-control="select2" data-hide-search="true" data-placeholder="Jenis Proyek"
                                             tabindex="-1" aria-hidden="true">
