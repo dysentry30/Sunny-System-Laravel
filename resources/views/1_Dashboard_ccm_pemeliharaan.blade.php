@@ -115,13 +115,13 @@
                                             <!--end:::Tab Item Tab Pane-->
                                             <!--begin:::Tab Item Tab Pane-->
                                             <li class="nav-item">
-                                                <a class="nav-link text-active-primary pb-4 active"
+                                                <a class="nav-link text-active-primary pb-4"
                                                     href="/dashboard-ccm/pelaksanaan-kontrak" style="font-size:14px;">Pelaksanaan Kontrak</a>
                                             </li>
                                             <!--end:::Tab Item Tab Pane-->
                                             <!--begin:::Tab Item Tab Pane-->
                                             <li class="nav-item">
-                                                <a class="nav-link text-active-primary pb-4"
+                                                <a class="nav-link text-active-primary pb-4 active"
                                                     href="/dashboard-ccm/pemeliharaan-kontrak" style="font-size:14px;">Pemeliharaan Kontrak</a>
                                             </li>
                                             <!--end:::Tab Item Tab Pane-->
@@ -249,14 +249,7 @@
                                                     @endforeach
                                             </select>
                                         </div>
-                                        {{-- @dump($proyeks) --}}
-                                        @php
-                                            $proyek_select = $proyeks->map(function($filter){
-                                                return $filter->ContractManagements;
-                                            });
-                                            $proyek_select_2 = $proyek_select->where("stages", "=", 2);
-                                        @endphp
-                                            {{-- @dump($proyek_select) --}}
+    
                                         <div class="col-2">
                                             <select onchange="selectFilter(this)" id="kode-proyek" name="proyek"
                                                     class="form-select form-select-solid w-auto"
@@ -264,9 +257,8 @@
                                                     data-placeholder="Proyek" data-select2-id="select2-data-proyek" tabindex="-1"
                                                     aria-hidden="true">
                                                     <option value="" selected></option>
-                                                    @foreach ($proyek_select_2 as $proyek)
+                                                    @foreach ($contracts_pemeliharaan as $proyek)
                                                         <option value="{{ $proyek->project_id }}" {{ $proyek_get == $proyek->project_id ? 'selected' : '' }} >{{ $proyek->project->nama_proyek }}</option>
-                                                        {{-- <option value="{{ $proyek->kode_proyek }}" >{{ $proyek->nama_proyek }} ({{$proyek->kode_proyek}})</option> --}}
                                                     @endforeach
                                             </select>
                                         </div>
@@ -1167,15 +1159,15 @@
             const type = e.getAttribute("id");
             let url = "";
             if(type == "dop") {
-                url = `/dashboard-ccm/pelaksanaan-kontrak?dop=${value}`;
+                url = `/dashboard-ccm/pemeliharaan-kontrak?dop=${value}`;
             } else if(type == "unit-kerja") {
-                url = `/dashboard-ccm/pelaksanaan-kontrak?unit-kerja=${value}`;
+                url = `/dashboard-ccm/pemeliharaan-kontrak?unit-kerja=${value}`;
             } else if(type == "kode-proyek") {
-                url = `/dashboard-ccm/pelaksanaan-kontrak?kode-proyek=${value}`;
+                url = `/dashboard-ccm/pemeliharaan-kontrak?kode-proyek=${value}`;
             } else if(type == "tahun"){
-                url = `/dashboard-ccm/pelaksanaan-kontrak?tahun=${value}`;
+                url = `/dashboard-ccm/pemeliharaan-kontrak?tahun=${value}`;
             }else{
-                url = `/dashboard-ccm/pelaksanaan-kontrak?bulan=${value}`;
+                url = `/dashboard-ccm/pemeliharaan-kontrak?bulan=${value}`;
             }
             window.location.href = url;
             return;
