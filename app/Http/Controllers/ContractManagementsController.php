@@ -73,7 +73,7 @@ class ContractManagementsController extends Controller
         $filterUnit = $request->query("filter-unit");
         $filterJenis = $request->query("filter-jenis");
         $filterTahun = $request->query("tahun-proyek") ?? (int) date("Y");
-        $filterBulan = $request->query("bulan-proyek") ?? (int) date("m");
+        $filterBulan = $request->query("bulan-proyek") ?? "";
         // dd($filterBulan);
 
         $year = (int) date("Y");
@@ -122,7 +122,19 @@ class ContractManagementsController extends Controller
             $jenis_proyek_get = !empty($request->query("filter-jenis")) ? [$request->query("filter-jenis")] : $jenis_proyeks->toArray();
             $unit_kerja_get = !empty($request->query("filter-unit")) ? [$request->query("filter-unit")] : $unitkerjas->toArray();
 
-            $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $filterTahun)->where("bulan_pelaksanaan", "=", $filterBulan)->whereIn("unit_kerja", $unit_kerja_get)->whereIn("jenis_proyek", $jenis_proyek_get)->get();
+            if(!empty($filterBulan) && $filterTahun == 2023){
+                $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $filterTahun)->where("bulan_pelaksanaan", "<=", $filterBulan)->whereIn("unit_kerja", $unit_kerja_get)->whereIn("jenis_proyek", $jenis_proyek_get)->get();
+            }else{
+                if($filterTahun < 2023 && !empty($filterBulan)){
+                    $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $filterTahun)->where("bulan_pelaksanaan", "<=", $filterBulan)->whereIn("unit_kerja", $unit_kerja_get)->whereIn("jenis_proyek", $jenis_proyek_get)->get();
+                }elseif($filterTahun < 2023 && empty($filterBulan)){
+                    $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $filterTahun)->where("bulan_pelaksanaan", "<=", 12)->whereIn("unit_kerja", $unit_kerja_get)->whereIn("jenis_proyek", $jenis_proyek_get)->get();
+                }else{
+                    $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $filterTahun)->where("bulan_pelaksanaan", "<=", $month)->whereIn("unit_kerja", $unit_kerja_get)->whereIn("jenis_proyek", $jenis_proyek_get)->get();
+                }
+                
+            }
+
             // $filter_unit = $unitkerjas->groupBy("divcode")->keys();
             // dd($proyeks_all);
             // if (!empty($filterUnit)) {

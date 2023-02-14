@@ -334,12 +334,12 @@ a{{-- Begin::Extend Header --}}
                                 <div class="fv-row mb-7">
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Name</span>
+                                        <span class="">Name</span>
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
                                     <input type="text" id="name-user" name="name-user" class="form-control form-control-solid" 
-                                    value="{{ old('name-user') }}" placeholder="Name" />
+                                    value="{{ old('name-user') }}" placeholder="Name" readonly style="cursor: context-menu"/>
                                     @error('name-user')
                                     <h6 class="text-danger fw-normal">{{ $message }}</h6>
                                     @enderror
@@ -353,12 +353,12 @@ a{{-- Begin::Extend Header --}}
                                 <div class="fv-row mb-7">
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Email</span>
+                                        <span class="">Email</span>
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
                                     <input type="email" class="form-control form-control-solid" 
-                                    id="email" name="email" value="{{ old('email') }}" placeholder="Email" />
+                                    id="email" name="email" value="{{ old('email') }}" placeholder="Email" readonly style="cursor: context-menu"/>
                                     @error('email')
                                     <h6 class="text-danger fw-normal">{{ $message }}</h6>
                                     @enderror
@@ -378,12 +378,12 @@ a{{-- Begin::Extend Header --}}
                                 <div class="fv-row mb-7">
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Phone Number</span>
+                                        <span class="">Phone Number</span>
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
                                     <input type="text" class="form-control form-control-solid" 
-                                    id="phone-number" name="phone-number" value="{{ old('phone-number') }}" placeholder="Phone Number" />
+                                    id="phone-number" name="phone-number" value="{{ old('phone-number') }}" placeholder="Phone Number" readonly style="cursor: context-menu"/>
                                     @error('phone-number')
                                     <h6 class="text-danger fw-normal">{{ $message }}</h6>
                                     @enderror
@@ -403,7 +403,7 @@ a{{-- Begin::Extend Header --}}
                                     <!--end::Label-->
                                     <!--begin::Input-->
                                     <input type="text" class="form-control form-control-solid" 
-                                    id="nip" name="nip" value="{{ old("nip") }}" placeholder="Website" />
+                                    id="nip" name="nip" value="{{ old("nip") }}" placeholder="NIP" onfocusout="getNip(this)"/>
                                     <!--end::Input-->
                                 </div>
                                 @error('nip')
@@ -576,6 +576,33 @@ a{{-- Begin::Extend Header --}}
         } );
     </script>
     <!--end::Data Tables-->
+
+    <script>
+        async function getNip(e){
+            const data = e.value;
+            let namaElt = document.getElementById("name-user")
+            let emailElt = document.getElementById("email")
+            let phoneElt = document.getElementById("phone-number")
+            await fetch(`/testing-user/${data}`, {
+                method: 'GET',
+            }).then((result)=>{
+                return result.json();
+            }).then((data)=>{
+                if(data.status == true){
+                    document.getElementById("name-user").value = data.data.name
+                    document.getElementById("email").value = data.data.email
+                    document.getElementById("phone-number").value = data.data.phone
+                }else{
+                    document.getElementById("name-user").value = ""
+                    document.getElementById("email").value = ""
+                    document.getElementById("phone-number").value = ""
+                }
+            }).catch((err)=>{
+                console.log(err)
+            })
+            // console.log(data, namaElt, emailElt, phoneElt)
+        }
+    </script>
     
     <script>
         function copyPassword(elt) {
