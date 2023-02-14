@@ -16,5 +16,9 @@ class Csi extends Model
         return $this->hasOne(Proyek::class, "kode_proyek", "kode_proyek");
     }
 
+    public function UnitKerja()
+    {
+        return $this->hasOne(UnitKerja::class, "divcode", "divisi");
+    }
 
 }

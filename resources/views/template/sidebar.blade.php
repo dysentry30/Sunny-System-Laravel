@@ -207,6 +207,8 @@
                             str_contains(Request::Path(), 'industry-sector') ||
                             str_contains(Request::Path(), 'kriteria-green-line') ||
                             str_contains(Request::Path(), 'kriteria-assessment') ||
+                            str_contains(Request::Path(), 'jabatan') ||
+                            str_contains(Request::Path(), 'matriks-approval-rekomendasi') ||
                             str_contains(Request::Path(), 'team-proyek') ? 'background-color:#008CB4' : '' }}">
 
                                     <a class="menu-link" id="collapse-button" style="color:white; padding-left:20px;"

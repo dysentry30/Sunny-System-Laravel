@@ -564,6 +564,31 @@ Route::middleware(["web"])->group(function () {
     });
     // End - Industry Owner ke SAP
 
+    // Begin - POST Profit Center dan SPK Internal dari PIS
+    Route::post('/send-data-proyek', function (Request $request) {
+        $data = $request->all();
+        setLogging("api", "UPDATE DATA PROYEK => ", $data);
+        $proyek = Proyek::find($data["kode_crm"]);
+        if(!empty($proyek)) {
+            $proyek->kode_spk = $data["kode_spk"];
+            $proyek->profit_center = $data["profit_center"];
+            if($proyek->save()) {
+                return response()->json([
+                    "status" => 200,
+                    "msg" => "Data Proyek berhasil diterima!",
+                ], 200);
+            }
+        }
+
+        return response()->json([
+            "status" => 404,
+            "msg" => "Proyek tidak ditemukan!",
+        ], 404);
+        dd($data);
+    })->middleware("userAuth");
+    // End - POST Profit Center dan SPK Internal dari PIS
+
+
     // get periode year and month
     // function getPeriode($periode)
     // {

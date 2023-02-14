@@ -874,7 +874,7 @@
                                                                         </label>
                                                                         <!--end::Label-->
                                                                         <!--begin::Input-->
-                                                                        <input type="text" class="form-control form-control-solid char-counter" data-max-char="15" name="npwp-company" value="{{ $customer->npwp_company }}"
+                                                                        <input type="text" class="form-control form-control-solid char-counter" onkeyup="removeSymbol(this)" data-max-char="15" name="npwp-company" value="{{ $customer->npwp_company }}"
                                                                             placeholder="NPWP" />
                                                                         <div class="d-flex flex-row justify-content-end">
                                                                             <small class="">0/40</small>
@@ -7275,6 +7275,14 @@
             }
         }
         // END :: GET KODE NASABAH
+
+        // BEGIN :: REMOVE SYMBOL CHAR
+        function removeSymbol(e) {
+            const valueFiltered = e.value.replaceAll(/[^0-9]/gi, "");
+            e.value = valueFiltered;
+        }
+        // END :: REMOVE SYMBOL CHAR
+
     </script>
     {{-- END :: CONVERT DATA TO TABLE --}}
 

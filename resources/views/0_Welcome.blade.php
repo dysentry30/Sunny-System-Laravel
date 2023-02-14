@@ -46,6 +46,7 @@
             <div class="login-form">
                 <form action="/login" method="post" class="form px-10" id="kt_sign_in_form" action="#">
                     @csrf
+                    <input type="hidden" name="redirect-to" value="{{Request::query("redirectTo")}}">
                     <!--begin::Heading-->
                     {{-- <div class="text-center mb-10">
                         <!--begin::Title-->

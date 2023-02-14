@@ -7,6 +7,7 @@
     "require": {
         "php": "^8.0.2",
         "beyondcode/laravel-websockets": "^1.13",
+        "dompdf/dompdf": "^2.0",
         "google/apiclient": "2.12.1",
         "guzzlehttp/guzzle": "^7.2",
         "itsgoingd/clockwork": "^5.1",
@@ -15,6 +16,7 @@
         "laravel/sanctum": "^2.14.1",
         "laravel/tinker": "^2.7",
         "league/flysystem-aws-s3-v3": "^3.0",
+        "mpdf/mpdf": "^6.1",
         "phpoffice/phpspreadsheet": "dev-NumberFormatMask-Helpers",
         "phpoffice/phpword": "^0.18.3",
         "realrashid/sweet-alert": "^5.1",

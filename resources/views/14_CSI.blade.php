@@ -71,15 +71,15 @@
                                     @foreach ($csi as $c)
                                         <tr>
                                             <td>{{$c->no_spk}}</td>
-                                            <td>{{$c->Proyek->nama_proyek}}</td>
-                                            <td>{{$c->Proyek->UnitKerja->unit_kerja}}</td>
+                                            <td>{{$c->nama_proyek}}</td>
+                                            <td>{{$c->UnitKerja->unit_kerja}}</td>
                                             <td>{{$c->progress}}</td>
                                             <td>{{$c->status}}</td>
                                             <td>
                                                 <form action="#" method="post">
                                                     @csrf
                                                     <input type="hidden" value="{{ $c->no_spk }}" name="no-spk">
-                                                    <input type="submit" value="send" name="send-btn">
+                                                    <input type="submit" class="btn btn-sm btn-primary" value="send" name="send-btn">
                                                 </form>
                                             </td>
                                         </tr>

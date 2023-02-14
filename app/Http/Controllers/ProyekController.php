@@ -438,6 +438,15 @@ class ProyekController extends Controller
             $newProyek->jenis_jo = null;
         }
         if(isset($dataProyek["proyek-rekomendasi"])) {
+            $url = $request->schemeAndHttpHost() . "?redirectTo=/rekomendasi?open=kt_modal_view_proyek_$newProyek->kode_proyek";
+            $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
+                "api_key" => "c15978155a6b4656c4c0276c5adbb5917eb033d5",
+                "sender" => "62811881227",
+                "number" => "085156341949",
+                "message" => "*$newProyek->nama_proyek* mengajukan rekomendasi.\nSilahkan tekan link di bawah ini untuk menyetujui atau tidak.\n\n$url",
+                // "url" => $url
+            ]);
+            // dd($send_msg_to_wa, "send");
             $newProyek->is_request_rekomendasi  = true;
         }
         // $newProyek->nama_pendek_proyek = $dataProyek["short-name"];

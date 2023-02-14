@@ -48,6 +48,7 @@ use App\Models\ContractChangeNotice;
 use App\Models\ContractChangeOrder;
 use App\Models\ContractChangeProposal;
 use App\Models\ContractManagements;
+use App\Models\Dop;
 use App\Models\FieldChange;
 use App\Models\IndustrySector;
 use App\Models\Jabatan;
@@ -1355,8 +1356,45 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         return view("/MasterData/IndustryOwner", compact(["industryOwners"]));
     });
 
+    Route::post('/industry-attractiveness/save', function (Request $request) {
+        $data = $request->all();
+        $rules = [
+            "kode-attractiveness" => "required",
+            "owner-attractiveness" => "required",
+            "deskripsi-attractiveness" => "required",
+            "periode.*" => "required",
+        ];
+        // dd($data);
+        $is_invalid = validateInput($data, $rules);
+        if(!empty($is_invalid)) {
+            Alert::html("Error", "Field <b>$is_invalid</b> harus terisi!", "error");
+            return redirect()->back()->withInput()->with("modal", $data["modal"]);
+        }
+
+        // Check if code already exist
+        $is_code_exist = IndustryOwner::find($data["kode-attractiveness"]);
+        if(!empty($is_code_exist)) {
+            Alert::html("Error", "Industry Attractiveness dengan kode <b>$is_code_exist->code_owner</b> sudah ada!", "error");
+            return redirect()->back()->withInput()->with("modal", $data["modal"]);
+        }
+
+        $new_industry_attractiveness = new IndustryOwner();
+        $new_industry_attractiveness->code_owner = $data["kode-attractiveness"];
+        $new_industry_attractiveness->owner_attractiveness = $data["owner-attractiveness"];
+        $new_industry_attractiveness->owner_description = $data["deskripsi-attractiveness"];
+        $new_industry_attractiveness->periode = $data["periode"]["bulan"] . "-" . $data["periode"]["tahun"];
+
+        if($new_industry_attractiveness->save()) {
+            Alert::html("Success", "Industry Attractiveness dengan kode <b>" . $data["kode-attractiveness"] . "</b> berhasil ditambahkan", "success");
+            return redirect()->back();
+        }
+        Alert::html("Error", "Industry Attractiveness dengan kode <b>" . $data["kode-attractiveness"] . "</b> gagal ditambahkan", "error");
+        return redirect()->back();
+
+    });
+
     // Master Data Provinsi
-    Route::get('/provinsi', function (Request $request) {
+    Route::get('/provinsi', function (Request $request) {   
         $provinsi = Provinsi::all();
         return view("/MasterData/Provinsi", compact(["provinsi"]));
     });
@@ -1658,7 +1696,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                 return $sd = $sd->sumber_dana_id;
             })->unique()->sort()->values();
         } else if($item == "APBD" || $item == "Pemerintah Provinsi") {
-            $data = Provinsi::all();
+            $data = Provinsi::where("country_id", "=", "ID");
         } else {
             $data = collect();
         }
@@ -1691,11 +1729,23 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $new_kriteria->item = $data["item"];
         $new_kriteria->isi = $data["isi"];
         $new_kriteria->sub_isi = $data["sub-isi"];
+        $new_kriteria->tahun = $data["tahun"];
         if($new_kriteria->save()) {
             Alert::success('Success', "Kriteria Green Line berhasil ditambahkan");
             return redirect()->back();
         }
         Alert::error('Error', "Kriteria Green Line gagal ditambahkan");
+        return redirect()->back();
+    });
+
+    Route::post('/kriteria-green-line/delete', function (Request $request) {
+        $data = $request->all();
+        $delete_kriteria_green_line = KriteriaGreenLine::find($data["id-kriteria"]);
+        if($delete_kriteria_green_line->delete()) {
+            Alert::success('Success', "Kriteria Green Line berhasil dihapus");
+            return redirect()->back();
+        }
+        Alert::error('Error', "Kriteria Green Line gagal dihapus");
         return redirect()->back();
     });
     
@@ -1747,7 +1797,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::get('/matriks-approval-rekomendasi', function () {
         $approval_rekomendasi = MatriksApprovalRekomendasi::where("tahun", "=", (int) date("Y"))->get();
         $jabatans = Jabatan::where("tahun", "=", (int) date("Y"))->get();
-        $unit_kerjas = UnitKerja::all();
+        $unit_kerjas = UnitKerja::whereNotIn("divcode", ["B", "C", "D", "O", "U", "F", "L"])->get();
         return view("MasterData/MatriksApprovalRekomendasi", compact(["approval_rekomendasi", "jabatans", "unit_kerjas"]));
     });
 
@@ -1785,11 +1835,46 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     Route::get('/jabatan', function () {
         $jabatans = Jabatan::where("tahun", "=", (int) date("Y"))->get();
-        return view("MasterData/Jabatan", compact(["jabatans"]));
+        $dops = Dop::all();
+        return view("MasterData/Jabatan", compact(["jabatans", "dops"]));
+    });
+
+    Route::post('/jabatan/save', function (Request $request) {
+        $data = $request->collect();
+        // dd($data);
+        $rules = [
+            "tahun" => "required|numeric",
+            "nama-jabatan" => "required",
+            "unit-kerja" => "required",
+        ];
+        $is_invalid = validateInput($data->toArray(), $rules);
+
+        if(!empty($is_invalid)) {
+            Alert::html("Error", "Field <b>$is_invalid</b> harus terisi!", "error");
+            return redirect()->back()->with("modal", $data["modal"]);
+        }
+        $data = $data->map(function($d) {
+            if(is_array($d)) {
+                return collect($d)->join(",");
+            }
+            return $d;
+        });
+        
+        $update_jabatan = Jabatan::find($data["id-jabatan"]);
+        $update_jabatan->nama_jabatan = $data["nama-jabatan"];
+        $update_jabatan->unit_kerja = $data["unit-kerja"];
+        $update_jabatan->tahun = $data["tahun"];
+
+        if($update_jabatan->save()) {
+            Alert::success('Success', "Jabatan berhasil diperbarui");
+            return redirect()->back();
+        }
+        Alert::error('Error', "Jabatan gagal diperbarui");
+        return redirect()->back();
     });
 
     Route::get('/get-jabatans', function () {
-        $jabatans = HTTP::get("https://jsonplaceholder.typicode.com/users");
+        $jabatans = HTTP::get("https://hcis.wika.co.id/services/rest/?format=json&wsc_id=WSC-000010&method=jabportal&pin=p0rt4lJ&is_active=1");
         $status = 0;
         $reason = "";
         $jabatans->onError(function($item) use(&$status, &$reason) {
@@ -1804,20 +1889,20 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                 "msg" => $reason
             ]);
         }
-        // $new_jabatan = new Jabatan();
-        // $new_jabatan->nama_jabatan = "";
-        // $new_jabatan->unit_kerja = "";
-        // $new_jabatan->tahun = "";
-        // if($new_jabatan->save()) {
-        //     Alert::success('Success', "Jabatan berhasil ditambahkan");
-        //     return response()->json($jabatans);
-        // }
-        // Alert::error('Error', "Jabatan gagal ditambahkan");
+        $jabatans = collect($jabatans->json()["data"]);
+        $jabatans->each(function($jabatan) {
+            $new_jabatan = new Jabatan();
+            $new_jabatan->kode_jabatan = (int) $jabatan["kd_jabatan_str"];
+            $new_jabatan->kode_jabatan_sap = (int) $jabatan["kd_jabatan_str_sap"];
+            $new_jabatan->nama_jabatan = $jabatan["nm_jabatan_str"];
+            $new_jabatan->tahun = (int) date("Y");
+            $new_jabatan->save();
+        });
+
         // return response()->json([
         //     "status" => 400,
         //     "msg" => "Gagal menambahkan Jabatan"
         // ]);
-
         return response()->json($jabatans->json());
     });
 
@@ -2924,6 +3009,28 @@ Route::get('/get-jenis-dokumen/{jenis_dokumen}', function ($jenis_dokumen) {
     }
 });
 // End Get Jenis Dokumen
+
+Route::get('/testing-user/{nip}', function($nip){
+    $data = new stdClass();
+    $data->name = "Erik";
+    $data->phone = +628123456789;
+    $data->email = "erik@gmail.com";
+    $data->nip = 123456;
+    // dd($data);
+    if($nip == $data->nip){
+        return response()->json([
+            "status" => true,
+            "message" => "Success",
+            "data" => $data,
+        ],200);
+    }else{
+        return response()->json([
+            "status" => false,
+            "message" => "Failed",
+            "data" => [],
+        ], 400);
+    }
+});
 
 Route::get('/abort/{code}/{msg}', function ($code, $msg) {
     return abort($code, $msg);

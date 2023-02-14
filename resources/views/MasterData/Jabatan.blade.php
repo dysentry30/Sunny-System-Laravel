@@ -159,6 +159,7 @@
                                         <th class="min-w-auto">Nama Jabatan</th>
                                         <th class="min-w-auto">Unit Kerja</th>
                                         <th class="min-w-auto">Tahun</th>
+                                        <th class="min-w-auto">Action</th>
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>
@@ -170,11 +171,24 @@
                                 @endphp
                                 <tbody class="fw-bold text-gray-600">
                                     @foreach ($jabatans as $no => $jabatan)
+                                        @php
+                                            if($jabatan->unit_kerja) {
+                                                $unit_kerjas = collect(explode(",", $jabatan->unit_kerja));
+                                                $unit_kerjas = $unit_kerjas->map(function($unit_kerja) {
+                                                    return "<b>" . App\Models\UnitKerja::find($unit_kerja)->unit_kerja . "</b>";
+                                                })->join(", ", " dan ");
+                                            } else {
+                                                $unit_kerjas = "-";
+                                            }
+                                        @endphp
                                         <tr>
                                             <td>{{ $no + 1 }}</td>
                                             <td>{{ $jabatan->nama_jabatan }}</td>
-                                            <td>{{ $jabatan->UnitKerja->unit_kerja }}</td>
+                                            <td>{!! $unit_kerjas !!}</td>
                                             <td>{{ $jabatan->tahun }}</td>
+                                            <td>
+                                                <a href="#kt_modal_edit_{{$jabatan->id_jabatans}}" class="btn btn-sm btn-secondary" data-bs-toggle="modal">Edit</a>
+                                            </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -199,6 +213,105 @@
                 <!--end::Footer-->
             </div>
             <!--end::Wrapper-->
+            
+            <!--begin::Modal-->
+            @foreach ($jabatans as $no => $jabatan)
+            <div class="modal fade" id="kt_modal_edit_{{$jabatan->id_jabatans}}" tabindex="-1" aria-labelledby="kt_modal_edit_{{$jabatan->id_jabatans}}" aria-hidden="true">
+                <form action="/jabatan/save" method="POST">
+                    @csrf
+                    <input type="hidden" value="{{$jabatan->id_jabatans}}" name="id-jabatan">
+                    <input type="hidden" value="kt_modal_edit_{{$jabatan->id_jabatans}}" name="modal">
+                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h1 class="modal-title fs-5" id="kt_modal_edit_{{$jabatan->id_jabatans}}">Edit Jabatan</h1>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col">
+                                    <label for="nama-jabatan" class="required">Nama Jabatan</label>
+                                    <input type="text" name="nama-jabatan" class="form-control form-control-solid" id="nama-jabatan" value="{{$jabatan->nama_jabatan}}" placeholder="E.g Direksi">
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col" id="list-dop">
+                                    @php
+                                        $list_unit_kerja = str_contains($jabatan->unit_kerja, ',') ? collect(explode(',', $jabatan->unit_kerja)) : $jabatan->unit_kerja;
+                                        // dd($list_unit_kerja);
+                                    @endphp
+                                    @foreach ($dops as $dop)
+                                        <div
+                                            class="d-flex justify-content-between align-items-center">
+                                            <p><b>{{ $dop->dop }}</b></p>
+                                            <button type="button"
+                                                onclick="selectAllUnitKerja(this)"
+                                                data-dop="{{ $dop->dop }}"
+                                                class="btn btn-link btn-sm">Select
+                                                all</button>
+                                        </div>
+                                        <div class=""
+                                            style="display: grid; grid-template-rows: repeat(1, 1fr); grid-template-columns: repeat(5, 1fr); row-gap: 1rem;">
+                                            @php
+                                                $dop->UnitKerjas = $dop->UnitKerjas->whereNotIn('divcode', ['B', 'C', 'D', '8']);
+                                            @endphp
+                                            @foreach ($dop->UnitKerjas as $unit_kerja)
+                                                <div
+                                                    class="form-check me-3 d-flex align-items-center">
+                                                    @php
+                                                        // dd($list_unit_kerja);
+                                                        $is_unit_kerja_choosen = $list_unit_kerja instanceof \Illuminate\Support\Collection ? $list_unit_kerja->contains($unit_kerja->divcode) : $list_unit_kerja == $unit_kerja->divcode;
+                                                        // dd($is_unit_kerja_choosen);
+                                                    @endphp
+                                                    @if ($is_unit_kerja_choosen)
+                                                        <input
+                                                            class="form-check-input me-2"
+                                                            style="width: 1.5rem;height: 1.5rem;border-radius:3px;"
+                                                            type="checkbox"
+                                                            data-dop="{{ $dop->dop }}"
+                                                            value="{{ $unit_kerja->divcode }}"
+                                                            checked name="unit-kerja[]"
+                                                            id="{{ $unit_kerja->divcode }}">
+                                                    @else
+                                                        <input
+                                                            class="form-check-input me-2"
+                                                            style="width: 1.5rem;height: 1.5rem;border-radius:3px;"
+                                                            type="checkbox"
+                                                            data-dop="{{ $dop->dop }}"
+                                                            value="{{ $unit_kerja->divcode }}"
+                                                            name="unit-kerja[]"
+                                                            id="{{ $unit_kerja->divcode }}">
+                                                    @endif
+                                                    <label class="form-check-label"
+                                                        for="{{ $unit_kerja->divcode }}">
+                                                        <small>{{ $unit_kerja->unit_kerja }}</small>
+                                                    </label>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                        <br>
+                                    @endforeach
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col">
+                                    <label for="tahun" class="required">Tahun</label>
+                                    <input type="text" name="tahun" class="form-control form-control-solid" id="tahun" value="{{$jabatan->tahun}}" placeholder="E.g 2023">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="submit" class="btn btn-sm btn-primary">Save</button>
+                        </div>
+                      </div>
+                    </div>
+                </form>
+            </div>
+            @endforeach
+            <!--end::Modal-->
+
         </div>
         <!--end::Page-->
     </div>
@@ -259,6 +372,14 @@
         datatable.draw(false);
         loadingElt.style.display = "none";
         e.classList.remove("disabled");
+    }
+
+    function selectAllUnitKerja(e) {
+        const dop = e.getAttribute("data-dop");
+        const inputCheckUnitKerjas = document.querySelectorAll(`input[data-dop="${dop}"]`);
+        inputCheckUnitKerjas.forEach(input => {
+            input.checked = true;
+        });
     }
 </script>
 @endsection
