@@ -1982,6 +1982,43 @@
                                                     <!--divRkapAwal-->
 
 
+                                                    <!--Begin::Rekomendasi-->
+                                                    @if (!(bool)$check_green_line)
+                                                    <br>
+
+                                                    <div class="fv-row mb-7">
+                                                        <!--Begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--Begin::Label-->
+                                                            <label class="fs-6 form-label mt-3">
+                                                                <span> Hasil Nota Rekomendasi<i class="bi bi-lock"></i></span>
+                                                            </label>
+                                                            <!--End::Label-->
+                                                            <!--begin::Input-->
+                                                            <input type="text"
+                                                            class="form-control form-control-solid "
+                                                            id="nota-rekomendasi" name="nota-rekomendasi" placeholder="Hasil Nota Rekomendasi" style="cursor: default" readonly />
+                                                         <!--end::Input-->
+                                                        </div>
+                                                        <!--End::Col-->
+                                                    </div>
+                                                    <br>
+                                                    <!--Begin::Col-->
+                                                    <div class="fv-row mb-7">
+                                                        <div class="col-6">
+                                                            <label class="fs-6 form-label mt-3">
+                                                                <span>Catatan Nota Rekomendasi<i class="bi bi-lock"></i></span>
+                                                            </label>
+                                                            <div class="form-group">
+                                                                <textarea id="catatan-nota-rekomendasi" name="catatan-nota-rekomendasi" class="form-control" rows="4" style="cursor: default" readonly></textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!--End::Col-->
+                                                    @endif
+                                                    <!--End::Rekomendasi-->
+
+
                                                     <!--Begin::Title Biru Form: Laporan Kualitatif-->
                                                     <br>
                                                     <h3 class="fw-bolder m-0 required" id="HeadDetail"
@@ -2128,7 +2165,38 @@
                                                                     id="status-pasar" name="status-pasar"
                                                                     value="{{ $statusPasar }}" readonly />
                                                                 <!--end::Input-->
+                                                            </div>
+                                                            <!--end::Input group-->
+                                                        </div>
+                                                        <!--begin::Label-->
+                                                        <!--Begin ::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
                                                                 <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>Klasifikasi <i class="bi bi-lock"></i></span>
+                                                                </label>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                <input type="text"
+                                                                    class="form-control form-control-solid"
+                                                                    id="klasifikasi" name="klasifikasi"
+                                                                    value="{{ $proyek->klasifikasi }}"
+                                                                    placeholder="Klasifikasi" readonly />
+                                                                <!--end::Input-->
+                                                            </div>
+                                                            <!--end::Input group-->
+                                                        </div>
+                                                        <!--End ::Col-->
+                                                        
+                                                    </div>
+                                                    <!--End begin::Row-->
+
+                                                    <!-- begin::row -->
+                                                    <div class="row fv-row">
+                                                        <div class="col-6">
+                                                            <div class="fv-row mb-7">
                                                                 <label class="fs-6 fw-bold form-label mt-3">
                                                                     <span>Provinsi</span>
                                                                 </label>
@@ -2159,30 +2227,25 @@
                                                                 </select>
                                                                 <!--end::Input-->
                                                             </div>
-                                                            <!--end::Input group-->
                                                         </div>
                                                         <!--End begin::Col-->
                                                         <div class="col-6">
-                                                            <!--begin::Input group Website-->
                                                             <div class="fv-row mb-7">
                                                                 <!--begin::Label-->
                                                                 <label class="fs-6 fw-bold form-label mt-3">
-                                                                    <span>Klasifikasi <i class="bi bi-lock"></i></span>
+                                                                    <span>MPA <i class="bi bi-lock"></i></span>
                                                                 </label>
                                                                 <!--end::Label-->
                                                                 <!--begin::Input-->
                                                                 <input type="text"
                                                                     class="form-control form-control-solid"
-                                                                    id="klasifikasi" name="klasifikasi"
-                                                                    value="{{ $proyek->klasifikasi }}"
-                                                                    placeholder="Klasifikasi" readonly />
+                                                                    id="mpa" name="mpa" value=""
+                                                                    placeholder="MPA" readonly />
                                                                 <!--end::Input-->
                                                             </div>
-                                                            <!--end::Input group-->
                                                         </div>
-                                                        <!--End begin::Col-->
                                                     </div>
-                                                    <!--End begin::Row-->
+                                                    <!-- begin::row -->
 
                                                     <!--begin::Row-->
                                                     <div class="row fv-row">
@@ -2255,6 +2318,26 @@
                                                                     @endif
                                                                     @endforeach --}}
                                                                 </select>
+                                                                <!--end::Input-->
+                                                            </div>
+                                                            <!--end::Input group-->
+                                                        </div>
+                                                        <!--End begin::Col-->
+                                                        <!--begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>Ketua Tim Tander <i class="bi bi-lock"></i>
+                                                                    </span>
+                                                                </label>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                <input type="text"
+                                                                    class="form-control form-control-solid"
+                                                                    id="ketua-tim-tender" name="ketua-tim-tender" value=""
+                                                                    placeholder="Ketua Tim Tender" readonly />
                                                                 <!--end::Input-->
                                                             </div>
                                                             <!--end::Input group-->
@@ -8693,5 +8776,31 @@
         }
     </script>
     {{-- End :: JO Detail Save --}}
+
+    {{-- Begin::Get Data MPA and Ketua Tim Tender --}}
+    <script>
+        async function getDataMPAKetuaTender(e){
+            const data = e.value;
+            // let namaElt = document.getElementById("name-user")
+            // let emailElt = document.getElementById("email")
+            // let phoneElt = document.getElementById("phone-number")
+            await fetch(`/testing-user/${data}`, {
+                method: 'GET',
+            }).then((result)=>{
+                return result.json();
+            }).then((data)=>{
+                if(data.status == true){
+                    document.getElementById("mpa").value = data.data.mpa
+                    document.getElementById("ketua-tim-tender").value = data.data.ketua
+                }else{
+                    document.getElementById("mpa").value = ""
+                    document.getElementById("ketua-tim-tender").value = ""
+                }
+            }).catch((err)=>{
+                console.log(err)
+            })
+        }
+    </script>
+    {{-- End::Get Data MPA and Ketua Tim Tender --}}
 
 @endsection

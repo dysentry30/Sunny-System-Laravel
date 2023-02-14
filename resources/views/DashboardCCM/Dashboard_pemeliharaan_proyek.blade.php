@@ -332,7 +332,7 @@
                                             <span class="fs-2 opacity-75 fw-bold text-white me-2 lh-1 ls-n2" id="data-items">RA START</span>
                                             <!--end::Amount-->
                                             <!--begin::Subtitle-->
-                                            <span class="text-white pt-1 fs-3">{!! $proyek->tanggal_terkontrak !!}</span>
+                                            <span class="text-white pt-1 fs-3">{{ Carbon\Carbon::create($proyek->tanggal_mulai_terkontrak)->translatedFormat("d M Y") ?? "-" }}</span>
                                             <!--end::Subtitle-->
                                         </div>
                                         <!--end::Title-->
@@ -350,7 +350,7 @@
                                             <span class="fs-2 opacity-75 fw-bold text-white me-2 lh-1 ls-n2" id="data-items">RI KONTRAK</span>
                                             <!--end::Amount-->
                                             <!--begin::Subtitle-->
-                                            <span class="text-white pt-1 fs-3">{!! $proyek->tanggal_mulai_terkontrak !!}</span>
+                                            <span class="text-white pt-1 fs-3">{{ Carbon\Carbon::create($proyek->tanggal_akhir_terkontrak)->translatedFormat("d M Y") ?? "-" }}</span>
                                             <!--end::Subtitle-->
                                         </div>
                                         <!--end::Title-->
@@ -372,7 +372,7 @@
                                             <span class="fs-2 opacity-75 fw-bold text-white me-2 lh-1 ls-n2" id="data-items">RA EFEKTIF </span>
                                             <!--end::Amount-->
                                             <!--begin::Subtitle-->
-                                            <span class="text-white pt-1 fs-3">{{ $proyek->tanggal_akhir_terkontrak }}</span>
+                                            <span class="text-white pt-1 fs-3">{{ Carbon\Carbon::create($proyek->tanggal_akhir_terkontrak)->translatedFormat("d M Y") ?? "-" }}</span>
                                             <!--end::Subtitle-->
                                         </div>  
                                         <!--end::Title-->
@@ -390,7 +390,7 @@
                                             <span class="fs-2 opacity-75 fw-bold text-white me-2 lh-1 ls-n2" id="data-items">RI EFEKTIF</span>
                                             <!--end::Amount-->
                                             <!--begin::Subtitle-->
-                                            <span class="text-white pt-1 fs-3">{{ $proyek->tanggal_akhir_terkontrak }}</span>
+                                            <span class="text-white pt-1 fs-3">{{ Carbon\Carbon::create($proyek->tanggal_akhir_terkontrak)->translatedFormat("d M Y") ?? "-" }}</span>
                                             <!--end::Subtitle-->
                                         </div>  
                                         <!--end::Title-->
@@ -412,7 +412,7 @@
                                             <span class="fs-2 opacity-75 fw-bold text-white me-2 lh-1 ls-n2" id="data-items">RA BAST 1</span>
                                             <!--end::Amount-->
                                             <!--begin::Subtitle-->
-                                            <span class="text-white pt-1 fs-3">{{ $proyek->tanggal_selesai_fho ?? "-" }}</span>
+                                            <span class="text-white pt-1 fs-3">{{ Carbon\Carbon::create($proyek->tanggal_selesai_fho)->translatedFormat("d M Y") ?? "-" }}</span>
                                             <!--end::Subtitle-->
                                         </div>  
                                         <!--end::Title-->
@@ -430,7 +430,7 @@
                                             <span class="fs-2 opacity-75 fw-bold text-white me-2 lh-1 ls-n2" id="data-items">RI BAST 1</span>
                                             <!--end::Amount-->
                                             <!--begin::Subtitle-->
-                                            <span class="text-white pt-1 fs-3">{{ !empty($bast_1) ? $bast_1->tanggal_dokumen : "-"  }}</span>
+                                            <span class="text-white pt-1 fs-3">{{ !empty($bast_1) ? Carbon\Carbon::create($bast_1->tanggal_dokumen)->translatedFormat("d M Y") : "-"  }}</span>
                                             <!--end::Subtitle-->
                                         </div>  
                                         <!--end::Title-->
@@ -452,7 +452,7 @@
                                             <span class="fs-2 opacity-75 fw-bold text-white me-2 lh-1 ls-n2" id="data-items">RA BAST 2</span>
                                             <!--end::Amount-->
                                             <!--begin::Subtitle-->
-                                            <span class="text-white pt-1 fs-3">{{ $proyek->tanggal_selesai_fho ?? "-" }}</span>
+                                            <span class="text-white pt-1 fs-3">{{ Carbon\Carbon::create($proyek->tanggal_selesai_fho)->translatedFormat("d M Y") ?? "-" }}</span>
                                             <!--end::Subtitle-->
                                         </div>  
                                         <!--end::Title-->
@@ -470,7 +470,7 @@
                                             <span class="fs-2 opacity-75 fw-bold text-white me-2 lh-1 ls-n2" id="data-items">RI BAST 2</span>
                                             <!--end::Amount-->
                                             <!--begin::Subtitle-->
-                                            <span class="text-white pt-1 fs-3">{{ !empty($bast_2) ? $bast_2->tanggal_dokumen : "-" }}</span>
+                                            <span class="text-white pt-1 fs-3">{{ !empty($bast_2) ? Carbon\Carbon::create($bast_2->tanggal_dokumen)->translatedFormat("d M Y") : "-"  }}</span>
                                             <!--end::Subtitle-->
                                         </div>  
                                         <!--end::Title-->

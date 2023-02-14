@@ -250,6 +250,13 @@
                                             </select>
                                         </div>
     
+                                        @php
+                                            $proyek_select = $proyeks->map(function($filter){
+                                                return $filter->ContractManagements;
+                                            });
+                                            $proyek_select_2 = $proyek_select->where("stages", "=", 3);
+                                        @endphp
+                                            {{-- @dump($proyek_select_2) --}}
                                         <div class="col-2">
                                             <select onchange="selectFilter(this)" id="kode-proyek" name="proyek"
                                                     class="form-select form-select-solid w-auto"
@@ -257,8 +264,9 @@
                                                     data-placeholder="Proyek" data-select2-id="select2-data-proyek" tabindex="-1"
                                                     aria-hidden="true">
                                                     <option value="" selected></option>
-                                                    @foreach ($contracts_pemeliharaan as $proyek)
+                                                    @foreach ($proyek_select_2 as $proyek)
                                                         <option value="{{ $proyek->project_id }}" {{ $proyek_get == $proyek->project_id ? 'selected' : '' }} >{{ $proyek->project->nama_proyek }}</option>
+                                                        {{-- <option value="{{ $proyek->kode_proyek }}" >{{ $proyek->nama_proyek }} ({{$proyek->kode_proyek}})</option> --}}
                                                     @endforeach
                                             </select>
                                         </div>
