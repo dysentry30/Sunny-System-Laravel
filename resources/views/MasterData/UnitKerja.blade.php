@@ -773,8 +773,8 @@
                                         <select id="is-active-update-{{$unitKerja->divcode}}" name="is-active" class="form-select form-select-solid"
                                             data-control="select2" data-hide-search="true" data-placeholder="Yes / No">
                                             <option></option>
-                                            <option value="1">Yes</option>
-                                            <option value="0">No</option>
+                                            <option value="1" {{$unitKerja->is_active ? "selected" : ""}}>Yes</option>
+                                            <option value="0" {{!$unitKerja->is_active ? "selected" : ""}}>No</option>
                                         </select>
                                         <!--end::Input-->
                                     </div>

@@ -11,37 +11,42 @@ use RealRashid\SweetAlert\Facades\Alert;
 class RekomendasiController extends Controller
 {
     public function index(Request $request){
-        $all_super_user_counter = User::all()->filter(function($u) {
-            return str_contains($u->name, "PIC") || $u->check_administrator;
-        })->count() - 2;
+        // $all_super_user_counter = User::all()->filter(function($u) {
+        //     return str_contains($u->name, "PIC") || $u->check_administrator;
+        // })->count() - 2;
+        $all_super_user_counter = 1;
+        $rekomendasi_open = $request->query("open") ?? "";
         // Begin Prosess Approval
         if(!empty($request->setuju)) {
             $proyek = Proyek::find($request->get("kode-proyek"));
             // $proyek->is_request_rekomendasi = false;
             $data = collect(json_decode($proyek->approved_rekomendasi));
-            $is_user_id_exist = $data->filter(function($d) {
-                if(is_array($d)) {
-                    return in_array(Auth::user()->id, $d);
-                }
-                return $d->user_id == Auth::user()->id;
-            })->count() > 0;
-            $check_user_approval_counter = is_array(collect($data->first())->values()->first()) ? collect($data->first())->values()->count() == $all_super_user_counter : $data->count() == $all_super_user_counter;
             $data = $data->mergeRecursive([
                 [
                     "user_id" => Auth::user()->id,
                     "status" => "approved",
                 ]
             ]);
-            if(!$is_user_id_exist) {
-                if($check_user_approval_counter) {
-                    $proyek->is_request_rekomendasi = false;
+            $check_user_approval_counter = is_array(collect($data->first())->values()->first()) ? collect($data->first())->values()->count() == $all_super_user_counter : $data->count() == $all_super_user_counter;
+            $is_user_id_exist = $data->filter(function($d) {
+                if(is_array($d)) {
+                    return in_array(Auth::user()->id, $d);
                 }
-                $proyek->approved_rekomendasi = $data->toJson();
-                if($proyek->save()) {
-                    Alert::html("Success", "Rekomendasi dengan nama proyek <b>$proyek->nama_proyek</b> berhasil disetujui", "success");
-                    return redirect()->back();
-                }
+                return $d->user_id == Auth::user()->id;
+            })->count() > 0;
+            // dd($data, $check_user_approval_counter);
+            if($check_user_approval_counter) {
+                $is_proyek_mega = (str_contains($proyek->klasifikasi_pasdin, "Besar") || str_contains($proyek->klasifikasi_pasdin, "Mega")) ? true : false;
+                createWord($proyek, $is_proyek_mega);
+                $proyek->is_request_rekomendasi = false;
             }
+            $proyek->approved_rekomendasi = $data->toJson();
+            if($proyek->save()) {
+                Alert::html("Success", "Rekomendasi dengan nama proyek <b>$proyek->nama_proyek</b> berhasil disetujui", "success");
+                return redirect()->back();
+            }
+            // if(!$is_user_id_exist) {
+            // }
             Alert::html("Failed", "Rekomendasi dengan nama proyek <b>$proyek->nama_proyek</b> gagal disetujui", "error");
             return redirect()->back();
         } else if(!empty($request->tolak)) {
@@ -91,7 +96,9 @@ class RekomendasiController extends Controller
             });
             $proyeks_persetujuan = Proyek::where("approved_rekomendasi", "=", null)->get();
         }
-
+        if(!empty($rekomendasi_open)) {
+            return view('13_Rekomendasi', compact(['proyeks_pengajuan', "proyeks_persetujuan", "all_super_user_counter", "rekomendasi_open"]));
+        }
         return view('13_Rekomendasi', compact(['proyeks_pengajuan', "proyeks_persetujuan", "all_super_user_counter"]));
     }
 }

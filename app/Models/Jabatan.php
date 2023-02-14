@@ -11,7 +11,4 @@ class Jabatan extends Model
     protected $table = "jabatans";
     protected $primaryKey = "id_jabatans";
 
-    public function UnitKerja() {
-        return $this->hasOne(UnitKerja::class, "divcode", "unit_kerja");
-    }
 }

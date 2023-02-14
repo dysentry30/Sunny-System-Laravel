@@ -148,6 +148,8 @@
                                         <th class="min-w-auto">Item</th>
                                         <th class="min-w-auto">Isi Item</th>
                                         <th class="min-w-auto">Sub Item</th>
+                                        <th class="min-w-auto">Tahun</th>
+                                        <th class="min-w-auto">Action</th>
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>
@@ -170,6 +172,17 @@
                                             <td>{{$kriteria->item}}</td>
                                             <td>{{$kriteria->isi}}</td>
                                             <td>{{$sub_isi}}</td>
+                                            <td>{{$kriteria->tahun}}</td>
+                                            <td>
+                                                <div class="d-flex">
+                                                    <a href="#kt_modal_edit_{{$kriteria->id_kriteria_green_line }}" data-bs-toggle="modal" class="btn btn-sm btn-primary text-white" style="background-color: #008CB4;">Edit</a>
+                                                    <form action="/kriteria-green-line/delete" class="ms-3" method="post">
+                                                        @csrf
+                                                        <input type="hidden" name="id-kriteria" value="{{$kriteria->id_kriteria_green_line }}">
+                                                        <button type="submit" class="btn btn-sm btn-danger text-white">Delete</button>
+                                                    </form>
+                                                </div>
+                                            </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -231,6 +244,22 @@
     
                         <!--begin::Row Kanan+Kiri-->
                         <div class="row fv-row">
+                            <!--begin::Col-->
+                            <div class="">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span class="required">Tahun</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text" name="tahun" id="tahun" class="form-control form-controlsol" placeholder="Tahun">
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End begin::Col-->
                             <!--begin::Col-->
                             <div class="">
                                 <!--begin::Input group Website-->
@@ -354,6 +383,208 @@
         <!--end::Modal dialog-->
     </div>
     <!--end::Modal Tambah Kriteria Green Line-->
+
+    @foreach ($kriteria_green_line_all as $kriteria)
+        <!--begin::Modal Edit Kriteria Green Line-->
+        <div class="modal fade" id="kt_modal_edit_{{$kriteria->id_kriteria_green_line }}" tabindex="-1" aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-800px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header">
+                        <!--begin::Modal title-->
+                        <h2>Edit Kriteria Green Line</h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <i class="bi bi-x-lg"></i>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
+                    </div>
+                    <!--end::Modal header-->
+
+                    <form action="/kriteria-green-line/update" method="POST">
+                        @csrf
+                        <input type="hidden" name="modal" value="kt_modal_input_kriteria_green_line">
+                        <input type="hidden" name="id-kriteria" value="{{$kriteria->id_kriteria_green_line }}">
+                        <!--begin::Modal body-->
+                        <div class="modal-body py-lg-6 px-lg-6">
+        
+        
+                            <!--begin::Row Kanan+Kiri-->
+                            <div class="row fv-row">
+                                <!--begin::Col-->
+                                <div class="">
+                                    <!--begin::Input group Website-->
+                                    <div class="fv-row mb-7">
+                                        <!--begin::Label-->
+                                        <label class="fs-6 fw-bold form-label mt-3">
+                                            <span class="required">Tahun</span>
+                                        </label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <input type="text" name="tahun" id="tahun_{{$kriteria->id_kriteria_green_line }}" value="{{$kriteria->tahun}}" class="form-control form-control-solid" placeholder="Tahun">
+                                        <!--end::Input-->
+                                    </div>
+                                    <!--end::Input group-->
+                                </div>
+                                <!--End begin::Col-->
+                                <!--begin::Col-->
+                                <div class="">
+                                    <!--begin::Input group Website-->
+                                    <div class="fv-row mb-7">
+                                        <!--begin::Label-->
+                                        <label class="fs-6 fw-bold form-label mt-3">
+                                            <span class="required">Item</span>
+                                        </label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <select id="Item" name="item"
+                                            class="form-select form-select-solid select2-hidden-accessible"
+                                            data-control="select2" onchange="getData(this, '#isi_{{$kriteria->id_kriteria_green_line }}')" data-hide-search="false" data-placeholder="Pilh Item..."
+                                            data-select2-id="select2-item_{{$kriteria->id_kriteria_green_line }}" tabindex="-1" aria-hidden="true">
+                                            <option value=""></option>
+                                            <option value="Instansi" {{$kriteria->item == "Instansi" ? "selected" : ""}}>Instansi</option>
+                                            <option value="Sumber Dana" {{$kriteria->item == "Sumber Dana" ? "selected" : ""}}>Sumber Dana</option>
+                                            <option value="Proyek Luar Negeri" {{$kriteria->item == "Proyek Luar Negeri" ? "selected" : ""}}>Proyek Luar Negeri</option>
+                                            
+                                        </select>
+                                    <!--end::Input-->
+                                    </div>
+                                    <!--end::Input group-->
+                                </div>
+                                <!--End begin::Col-->
+                                <div class="">
+                                    <!--begin::Input group Website-->
+                                    <div class="fv-row mb-7">
+                                        <!--begin::Label-->
+                                        <label class="fs-6 fw-bold form-label mt-3">
+                                            <span class="required">Isi</span>
+                                        </label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                            
+                                        <select id="isi_{{$kriteria->id_kriteria_green_line }}" name="isi"
+                                            class="form-select form-select-solid select2-hidden-accessible"
+                                            data-control="select2" onchange="getData(this, '#provisi_{{$kriteria->id_kriteria_green_line }}', true)" data-hide-search="false" data-placeholder="Pilih Isi..."
+                                            data-select2-id="select2-isi_{{$kriteria->id_kriteria_green_line }}" tabindex="-1" aria-hidden="true">
+                                            <option value=""></option>
+                                            @if (!empty($kriteria->isi))
+                                                <option value="{{$kriteria->isi}}" selected>{{$kriteria->isi}}</option>
+                                            @endif
+                                            
+                                            {{-- @foreach ($instansi as $ins)
+                                                <option value="{{$ins->instansi}}">{{$ins->instansi}}</option>
+                                            @endforeach --}}
+                                            {{-- @foreach ($sumber_danas as $sd)
+                                                <option value="{{$sd->kode}}">{{$sd->kode}}</option>
+                                            @endforeach --}}
+                                        </select>
+                                        <!--end::Input-->
+                                    </div>
+                                    <!--end::Input group-->
+                                </div>
+                                <!--End begin::Col-->
+        
+                                <div class="row">
+                                    <div class="col">
+                                        @php
+                                            $tier_hidden = "hidden";
+                                            if (!empty($kriteria->sub_isi) && !str_contains($kriteria->sub_isi, "-")){
+                                                $tier_hidden = "";
+                                            } 
+                                        @endphp
+                                        <div id="tier_{{$kriteria->id_kriteria_green_line }}" {{$tier_hidden}}>
+                                            <!--begin::Label-->
+                                            <label class="fs-6 fw-bold form-label mt-3">
+                                                <span class="">Sub Isi</span>
+                                            </label>
+                                            <!--end::Label-->
+        
+                                            <!--begin::Input-->
+                                            <select id="tier-select" name="sub-isi[]"
+                                                class="form-select form-select-solid select2-hidden-accessible"
+                                                data-control="select2" data-hide-search="false" data-placeholder="Pilih Tier..."
+                                                data-select2-id="select2-tier_{{$kriteria->id_kriteria_green_line }}" tabindex="-1" aria-hidden="true">
+                                                <option value=""></option>
+                                                <option value="Tier A" {{$kriteria->sub_isi == "Tier A" ? "selected" : ""}}>Tier A</option>
+                                                <option value="Tier B" {{$kriteria->sub_isi == "Tier B" ? "selected" : ""}}>Tier B</option>
+                                                <option value="Tier C" {{$kriteria->sub_isi == "Tier C" ? "selected" : ""}}>Tier C</option>
+                                                {{-- @foreach ($instansi as $ins)
+                                                    <option value="{{$ins->instansi}}">{{$ins->instansi}}</option>
+                                                @endforeach --}}
+                                                {{-- @foreach ($sumber_danas as $sd)
+                                                    <option value="{{$sd->kode}}">{{$sd->kode}}</option>
+                                                @endforeach --}}
+                                            </select>
+                                            <!--end::Input-->
+                                        </div>
+
+                                        @php
+                                            $provinsi_hidden = "hidden";
+                                            $provinsi = [];
+                                            if (!empty($kriteria->sub_isi) && str_contains($kriteria->sub_isi, "-")){
+                                                $provinsi_hidden = "";
+                                                $provinsi = App\Models\Provinsi::where("country_id", "=", "ID")->get();
+                                            }
+                                        @endphp
+                                        <div id="provinsi_{{$kriteria->id_kriteria_green_line }}" {{$provinsi_hidden}}>
+                                            <!--begin::Label-->
+                                            <label class="fs-6 fw-bold form-label mt-3">
+                                                <span class="">Sub Isi</span>
+                                            </label>
+                                            <!--end::Label-->
+        
+                                            <!--begin::Input-->
+                                            <select id="provinsi-select" name="sub-isi[]"
+                                                class="form-select form-select-solid select2-hidden-accessible"
+                                                data-control="select2" data-hide-search="false" data-placeholder="Pilih Provinsi..."
+                                                data-select2-id="select2-provinsi_{{$kriteria->id_kriteria_green_line }}" tabindex="-1" aria-hidden="true">
+                                                <option value=""></option>
+                                                @forelse ($provinsi as $p)
+                                                    @if ($p->province_id == $kriteria->sub_isi)
+                                                        <option value="{{$p->province_id}}" selected>{{ $p->province_name }}</option>
+                                                    @else    
+                                                        <option value="{{$p->province_id}}">{{ $p->province_name }}</option>
+                                                    @endif
+                                                @empty
+                                                @endforelse
+                                                {{-- @foreach ($instansi as $ins)
+                                                    <option value="{{$ins->instansi}}">{{$ins->instansi}}</option>
+                                                @endforeach --}}
+                                                {{-- @foreach ($sumber_danas as $sd)
+                                                    <option value="{{$sd->kode}}">{{$sd->kode}}</option>
+                                                @endforeach --}}
+                                            </select>
+                                            <!--end::Input-->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--End::Row Kanan+Kiri-->
+        
+        
+        
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white" id="new_save"
+                                style="background-color:#008CB4">Save</button>
+        
+                        </div>
+                        <!--end::Modal body-->
+                    </form>
+                </div>
+                <!--end::Modal content-->
+            </div>
+            <!--end::Modal dialog-->
+        </div>
+        <!--end::Modal Edit Kriteria Green Line-->
+    @endforeach
 
     <!--begin::Modal-->
     {{-- <form action="/jenis-proyek/save" method="post" enctype="multipart/form-data">

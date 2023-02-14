@@ -24,7 +24,7 @@ class UserAuthenticatedMiddleware
                 "status_code" => 401,
                 "msg" => "Tidak terautentikasi"
             ];
-            return response($resp, 401);
+            return response()->json($resp, 401);
         }
 
         if(auth()->user() != null) {
