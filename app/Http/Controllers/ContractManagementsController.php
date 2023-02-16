@@ -858,10 +858,11 @@ class ContractManagementsController extends Controller
                         $review_kontrak->pic = $pic[$key];
                         $review_kontrak->catatan = $catatan[$key];
 
-                        if($review_kontrak->save()){
-                            Alert::success('Success', "Tinjauan Kontrak berhasil ditambahkan");
-                            return redirect()->back();
-                        }
+                        // dump($review_kontrak);
+
+                        $review_kontrak->save();
+                        Alert::success('Success', "Tinjauan Kontrak berhasil ditambahkan");
+                        return Redirect::back();
                     // }
                 
                 });
@@ -877,7 +878,7 @@ class ContractManagementsController extends Controller
                             $item->save();
                 });
                 Alert::success('Success', "Tinjauan Kontrak berhasil ditambahkan");
-                return redirect()->back();
+                return Redirect::back();
             }
     }
 
