@@ -4181,8 +4181,15 @@
                         </table>
                         @php
                             $uploadFilePendingPemeliharaan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "pending-issue-pemeliharaan")->first();
+                            $uploadFilePendingPelaksanaan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "pending-issue-pelaksanaan")->first();
                             @endphp
                             <!--End:Table: Review-->
+                            @if (!empty($uploadFilePendingPelaksanaan))
+                                <a target="_blank" href="{{ asset('words/'.$uploadFilePendingPelaksanaan->id_document) }}" class="text-hover-primary">
+                                <small><b>File Pending Issue Pelaksanaan :</b> {{ $uploadFilePendingPelaksanaan->nama_document }}</small>
+                                </a>
+                            @endif
+                            <br>
                             @if (!empty($uploadFilePendingPemeliharaan))
                                 <a target="_blank" href="{{ asset('words/'.$uploadFilePendingPemeliharaan->id_document) }}" class="text-hover-primary">
                                 <small><b>Download File :</b> {{ $uploadFilePendingPemeliharaan->nama_document }}</small>
