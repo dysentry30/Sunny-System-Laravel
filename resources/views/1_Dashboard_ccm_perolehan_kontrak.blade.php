@@ -74,6 +74,19 @@
             transition: width 1s ease-in-out;
         }
 
+        
+        .buttons-html5 {
+            border-radius: 5px !important;
+            border: none !important;
+            font-weight: normal !important;
+            padding: 8px 20px 8px 20px !important;
+            margin-top: 10px !important;
+        }
+        .buttons-colvis {
+            border: none !important;
+            border-radius: 5px !important;
+        }
+
     </style>
 
     <div class="background-blur"></div>
@@ -372,7 +385,7 @@
                                                     style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
                                                     data-placeholder="Tahun" data-select2-id="select2-data-tahun" tabindex="-1"
                                                     aria-hidden="true">
-                                                    <option>{{ date("Y") }}</option>
+                                                    <option></option>
                                                     @foreach ($tahun as $t)
                                                         <option value="{{$t}}" {{ $tahun_get == $t ? 'selected' : '' }}>{{$t}}</option>
                                                     @endforeach 
@@ -490,7 +503,7 @@
                             <div class="col-2 ms-10 me-0">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 5px;" class="card-body bg-secondary">
-                                    <h2 class="m-0 ms-8 text-center">Classification</h2>
+                                    <h2 class="m-0 text-center">Classification</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
@@ -1780,8 +1793,8 @@
                     right: 0
                 },
                 buttons: [
-                    'excel', 'print'
-                    // 'copy', 'csv', 'excel', 'pdf', 'print'
+                    // 'excel', 'print'
+                    'copy', 'csv', 'excel', 'pdf', 'print'
                 ]
             } );
         } );

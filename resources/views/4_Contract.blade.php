@@ -558,12 +558,12 @@
                                                     <!--end::Nilai OK=-->
                                                     <!--begin::Tanggal Mulai=-->
                                                     <td>
-                                                        {{ $proyek->tanggal_mulai_terkontrak }}
+                                                        {{ Carbon\Carbon::create($proyek->tanggal_mulai_terkontrak)->translatedFormat("d F Y") ?? "-" }}
                                                     </td>
                                                     <!--end::Tanggal Mulai=-->
                                                     <!--begin::Tanggal Selesai=-->
                                                     <td>
-                                                        {{ $proyek->tanggal_akhir_terkontrak }}
+                                                        {{ Carbon\Carbon::create($proyek->tanggal_akhir_terkontrak)->translatedFormat("d F Y") ?? "-" }}
                                                     </td>
                                                     <!--end::Tanggal Selesai=-->
                                                 </tr>

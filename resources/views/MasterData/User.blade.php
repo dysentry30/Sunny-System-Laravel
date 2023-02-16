@@ -339,7 +339,7 @@ a{{-- Begin::Extend Header --}}
                                     <!--end::Label-->
                                     <!--begin::Input-->
                                     <input type="text" id="name-user" name="name-user" class="form-control form-control-solid" 
-                                    value="{{ old('name-user') }}" placeholder="Name" readonly style="cursor: context-menu"/>
+                                    value="{{ old('name-user') }}" placeholder="Name" style="cursor: context-menu"/>
                                     @error('name-user')
                                     <h6 class="text-danger fw-normal">{{ $message }}</h6>
                                     @enderror
@@ -358,7 +358,7 @@ a{{-- Begin::Extend Header --}}
                                     <!--end::Label-->
                                     <!--begin::Input-->
                                     <input type="email" class="form-control form-control-solid" 
-                                    id="email" name="email" value="{{ old('email') }}" placeholder="Email" readonly style="cursor: context-menu"/>
+                                    id="email" name="email" value="{{ old('email') }}" placeholder="Email" style="cursor: context-menu"/>
                                     @error('email')
                                     <h6 class="text-danger fw-normal">{{ $message }}</h6>
                                     @enderror
@@ -383,7 +383,7 @@ a{{-- Begin::Extend Header --}}
                                     <!--end::Label-->
                                     <!--begin::Input-->
                                     <input type="text" class="form-control form-control-solid" 
-                                    id="phone-number" name="phone-number" value="{{ old('phone-number') }}" placeholder="Phone Number" readonly style="cursor: context-menu"/>
+                                    id="phone-number" name="phone-number" value="{{ old('phone-number') }}" placeholder="Phone Number" style="cursor: context-menu"/>
                                     @error('phone-number')
                                     <h6 class="text-danger fw-normal">{{ $message }}</h6>
                                     @enderror

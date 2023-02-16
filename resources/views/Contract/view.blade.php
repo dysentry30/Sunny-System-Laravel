@@ -2240,9 +2240,15 @@
                                     <select name="scope-of-work" class="form-select form-select-solid"
                                         data-control="select2" data-hide-search="true" data-placeholder="Pilih kategori"
                                         tabindex="-1" aria-hidden="true" required>
+                                        @if (!empty($contract->jo_scope_of_work))
+                                        <option value="Job Allocation" {{ $contract->jo_scope_of_work == "Job Allocation" ? 'selected' : '' }}>Job Allocation</option>
+                                        <option value="Full Integrated" {{ $contract->jo_scope_of_work == "Full Integrated" ? 'selected' : '' }}>Full Integrated</option>
+                                        {{-- <option value="Full Integrated">Full Integrated</option> --}}
+                                        @else
                                         <option value=""></option>
                                         <option value="Job Allocation">Job Allocation</option>
                                         <option value="Full Integrated">Full Integrated</option>
+                                        @endif
                                     </select>
                                     <input type="hidden" name="is-jo" value="1">
                                 </div>

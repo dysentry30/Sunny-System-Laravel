@@ -284,7 +284,7 @@ function createWord(App\Models\Proyek $proyek, $is_proyek_mega) {
 
     $xmlWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'PDF');
 
-    $is_saved = $xmlWriter->save(public_path($target_path. "\\". $file_name));
+    $is_saved = $xmlWriter->save(public_path($target_path. "/". $file_name));
     $proyek->file_rekomendasi = $file_name;
     $proyek->save();
     // $is_saved = $phpWord->save(public_path($target_path. "\\". $file_name));
