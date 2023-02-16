@@ -861,11 +861,11 @@ class ContractManagementsController extends Controller
                         // dump($review_kontrak);
 
                         $review_kontrak->save();
-                        Alert::success('Success', "Tinjauan Kontrak berhasil ditambahkan");
-                        return Redirect::back();
-                    // }
-                
-                });
+                        // }
+                        
+                    });
+                    Alert::success('Success', "Tinjauan Kontrak berhasil ditambahkan");
+                    return Redirect::back();
             }else{
                 $is_data_exist->each(function($item, $key) use($data_update, $data){
                             $item->id_contract = $data["id-contract"];
