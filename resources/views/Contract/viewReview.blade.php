@@ -249,10 +249,13 @@
                     <!--begin:::Isi Data-->
                     <!--begin::Table-->
                     <div class="d-flex flex-column bg-white px-15 py-8 mx-7">
+                        <span class="mb-4 fw-bold fs-4">
+                            <a href="#" onclick="exportToExcel(this, '#tinjauan-kontrak')" class="">(Klik di sini untuk Export ke Excel)</a>
+                        </span>
                         <form action="/review-contract/upload" method="POST" class="card card-flush">
                             @csrf
                             <input type="hidden" class="form-control form-control-solid" name="id-contract" value="{{ $contract->id_contract }}">
-                            <input type="hidden" class="form-control form-control-solid" name="stage" value="{{ $stage }}">
+                            {{-- <input type="hidden" class="form-control form-control-solid" name="stage" value="{{ $stage }}"> --}}
                             
                             <table class="table align-middle table-row-dashed fs-6 gy-2 card-body" id="tinjauan-kontrak">
                                 <!--begin::Table head-->
@@ -1190,6 +1193,25 @@
 @section('js-script')
 <!--begin::Data Tables-->
 
+<script>
+    function exportToExcel(e, tableElt) {
+        // console.log(e.parentElement);
+        document.querySelector(`${tableElt}_wrapper .buttons-excel`).click();
+        return;
+    }
+</script>
+
+<script>
+    window.addEventListener("DOMContentLoaded", () => {
+        setTimeout(() => {
+            const exportBtn = document.querySelectorAll(".buttons-excel");
+            exportBtn.forEach(item => {
+                item.style.display = "none";
+            }); 
+        }, 1000);
+    });
+</script>
+
 <script src="{{ asset('/datatables/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset("/datatables/dataTables.buttons.min.js") }}"></script>
 <script src="{{ asset("/datatables/buttons.html5.min.js") }}"></script>
@@ -1211,7 +1233,7 @@
                         extend: 'excelHtml5',
                         title: 'Data Tinjauan Dokumen Kontrak'
                     },
-                        'copy', 'pdf', 'print'
+                    
                     ]
             } );
         });

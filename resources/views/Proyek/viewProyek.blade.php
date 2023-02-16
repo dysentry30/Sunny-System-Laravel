@@ -1023,7 +1023,7 @@
                                                             <div class="form-check">
                                                                 <input class="form-check-input" name="is-green-line" disabled type="checkbox" {{(bool) $check_green_line ? "checked" : ""}} disabled id="flexCheckDefault">
                                                                 <label class="form-check-label" for="flexCheckDefault">
-                                                                  Green Line
+                                                                  Green Lane
                                                                 </label>
                                                             </div><br>
                                                             <div class="form-check">
@@ -1438,7 +1438,7 @@
                                                                 <!--begin::Input-->
                                                                 <select id="sumber-dana" name="sumber-dana"
                                                                     class="form-select form-select-solid"
-                                                                    data-control="select2" data-hide-search="true"
+                                                                    data-control="select2" data-hide-search="false"
                                                                     data-placeholder="Pilih Sumber Dana">
                                                                     <option></option>
                                                                     @foreach ($sumberdanas as $sumberdana)

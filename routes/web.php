@@ -205,7 +205,9 @@ Route::get('/generate-kode-proyek/{kode_proyek}', function ($kode_proyek) {
 });
 
 
-
+// Begin Rekomendasi
+Route::get('/rekomendasi', [RekomendasiController::class, "index"]);
+// End Rekomendasi
 
 Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
@@ -406,9 +408,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     // customer dashboard all database
     // Route::get('/customer', [CustomerController::class, 'index']);
 
-    // Begin Rekomendasi
-    Route::get('/rekomendasi', [RekomendasiController::class, "index"]);
-    // End Rekomendasi
+    
 
     // Begin Rekomendasi
     Route::get('/csi', [CSIController::class, "index"]);
@@ -856,15 +856,15 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                     "FISCAL_PERIOD" => $data["periode_prognosa"],
                     "FISCALYEAR_VARIANT " => "K4",
                     "FISCAL_YEAR" => $tahun,
-                    "COMP_CODE" => "",
+                    "COMP_CODE" => "AC00000000",
                     "AUDITTRAIL" => "INPUT_PROG",
                     "CATEGORY" => "PROG",
-                    "PROFIT_CENTER_DIV" => "",
-                    "KODE_PROYEK" => "",
-                    "VERSION " => "PROG_" . $data["periode_prognosa"],
+                    "PROFIT_CENTER_DIV" => "AC00000000",
+                    "KODE_PROYEK" => $h->kode_proyek,
+                    "VERSION " => "PROG_" . $h->month_forecast,
                     "KEY_FIGURE " => "10000",
-                    "AMOUNT" => "",
-                    "DESCRIPTION " => "MONTH_" . $data["periode_prognosa"],
+                    "AMOUNT" => (int) $h->nilai_forecast,
+                    "DESCRIPTION " => "MONTH_" . $h->month_forecast,
                 ]);
                 // FIRST STEP SEND DATA TO BW
                 $csrf_token = "";
@@ -896,7 +896,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                 
                 // FOURTH STEP SEND DATA TO BW
                 $closed_request = Http::withBasicAuth("WIKA_API", "WikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie])->post("https://wtappbw-dev.wika.co.id:44340/sap/bw4/v1/push/dataStores/zosbpc004/requests/$content_location/close");
-                dd($closed_request);
+                dd($closed_request, $fill_data);
                 return response()->json($customers_attractivness);
             }
         // End :: Kirim data Forecast ke SAP
@@ -1735,6 +1735,46 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             return redirect()->back();
         }
         Alert::error('Error', "Kriteria Green Line gagal ditambahkan");
+        return redirect()->back();
+    });
+
+    Route::post('/kriteria-green-line/update', function (Request $request) {
+        $data = $request->collect();
+        $data = $data->map(function($d, $key) use($data) {
+            // $new_class->item = $data["Item"];
+            // $new_class->isi = $data["isi"];
+            if(is_array($d)) {
+                 $d = !empty($data["sub-isi"][0]) ? $data["sub-isi"][0] : $data["sub-isi"][1];
+            }
+            return $d;
+        })->toArray();
+
+        $rules = [
+            "item" => "required",
+            "isi" => "required",
+        ];
+
+        $is_invalid = validateInput($data, $rules);
+        if(!empty($is_invalid)) {
+            Alert::html("Error", "Field <b>$is_invalid</b> harus terisi!", "error");
+            return redirect()->back()->with("modal", $data["modal"]);
+        }
+
+        $update_kriteria = KriteriaGreenLine::find($data["id-kriteria"]);
+        if(empty($update_kriteria)) {
+            Alert::html("Error", "Kriteria Green Lane tidak ditemukan!", "error");
+            return redirect()->back()->with("modal", $data["modal"]);
+        }
+        $update_kriteria->item = $data["item"];
+        $update_kriteria->isi = $data["isi"];
+        $update_kriteria->sub_isi = $data["sub-isi"];
+        $update_kriteria->tahun = $data["tahun"];
+        // dd($update_kriteria, $data);
+        if($update_kriteria->save()) {
+            Alert::success('Success', "Kriteria Green Lane berhasil diperbarui");
+            return redirect()->back();
+        }
+        Alert::error('Error', "Kriteria Green Lane gagal diperbarui");
         return redirect()->back();
     });
 
@@ -2909,12 +2949,13 @@ Route::get('/send-data-claim-management', function () {
         return $item->jenis_perubahan == "Klaim";
     });
     $data_claims = $filter->map(function($item, $key)use($filter){
-        $profit_center = $item->Proyek->UnitKerja->id_profit_center;
+        $profit_center = $item->Proyek->profit_center;
 
         $newClass = new stdClass();
-        $newClass->TANGGAL = date("Ymd");
+        $newClass->TANGGAL = (int) date("Ymd");
         $newClass->PROFIT_CTR = "$profit_center";
         $newClass->PROJECT_DEF = "$profit_center";
+        // $newClass->PROJECT_DEF = "AB00000";
         $newClass->COMP_CODE = "A000";
         $newClass->ITEM_CLAIM = "$item->uraian_perubahan";
         if($item->stage == 2){
@@ -2930,7 +2971,7 @@ Route::get('/send-data-claim-management', function () {
     })->values();
 
     // return response()->json($data_claims, 200);
-    // dd("success");
+    // dd($data_claims->toJson());
 
     // FIRST STEP SEND DATA TO BW
     $csrf_token = "";
@@ -2955,7 +2996,8 @@ Route::get('/send-data-claim-management', function () {
     
     // FOURTH STEP SEND DATA TO BW
     $closed_request = Http::withBasicAuth("WIKA_API", "WikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie])->post("https://wtappbw-dev.wika.co.id:44340/sap/bw4/v1/push/dataStores/zosbi006/requests/$content_location/close");
-    dd($closed_request);
+    dd($closed_request, $data_claims, $fill_data);
+
     // return response()->json($data_claims);
 });
 // End Send Data Claim ke BW SAP
