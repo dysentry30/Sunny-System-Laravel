@@ -185,7 +185,19 @@
                                         </span>
                                         <!--end::Svg Icon-->
                                     </span>
-                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Rekomendasi</span>
+                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Nota Rekomendasi</span>
+                                </a>
+                            </div>
+                        @endif
+
+                        @if (auth()->user()->check_administrator || $adminPIC || auth()->user()->check_user_sales )
+                            <div class="menu-item">
+                                <a class="menu-link " href="/piutang"
+                                    style="color:white; padding-left:25px; {{ str_contains(Request::Path(), 'piutang') ? 'background-color:#008CB4' : '' }}">
+                                    <span class="menu-icon">
+                                        <i class="bi bi-wallet-fill text-white" style="font-size: 20px"></i>
+                                    </span>
+                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Piutang</span>
                                 </a>
                             </div>
                         @endif

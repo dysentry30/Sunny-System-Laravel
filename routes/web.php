@@ -41,6 +41,7 @@ use App\Http\Controllers\ContractManagementsController;
 use App\Http\Controllers\CSIController;
 use App\Http\Controllers\JenisProyekController;
 use App\Http\Controllers\MataUangController;
+use App\Http\Controllers\PiutangController;
 use App\Http\Controllers\RekomendasiController;
 use App\Http\Controllers\TipeProyekController;
 use App\Models\ClaimManagements;
@@ -1245,6 +1246,10 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     // end :: Set lock / unlock data month forecast
     //End :: Forecast
 
+    // Begin :: Piutang
+    Route::get("/piutang", [PiutangController::class, "index"]);
+    // End :: Piutang
+
 
 
     // Begin :: Master Data
@@ -1352,8 +1357,9 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     // Master Data Industry Owner
     Route::get('/industry-attractivness', function (Request $request) {
-        $industryOwners = IndustryOwner::all();
-        return view("/MasterData/IndustryOwner", compact(["industryOwners"]));
+        $industryOwners = IndustryOwner::all()->groupBy("periode")->sortKeysDesc()->first();
+        $industrySector = IndustrySector::all()->groupBy("periode")->sortKeysDesc()->first();
+        return view("/MasterData/IndustryOwner", compact(["industryOwners", "industrySector"]));
     });
 
     Route::post('/industry-attractiveness/save', function (Request $request) {
@@ -1829,6 +1835,50 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         return redirect()->back();
     });
 
+    Route::post('/kriteria-assessment/update', function (Request $request) {
+        $data = $request->collect();
+        $data = $data->map(function($d, $key) use($data) {
+            if(is_array($d)) {
+                $d = collect($d)->filter(function($d_item) {
+                    return $d_item != null;
+                })->first();
+            }
+            return $d;
+        })->toArray();
+        $rules = [
+            "tahun" => "required",
+            "kategori" => "required",
+            "kriteria-penilaian" => "required",
+            "nilai" => "required",
+            "isi" => "required",
+        ];
+
+        $is_invalid = validateInput($data, $rules);
+        if(!empty($is_invalid)) {
+            Alert::html("Error", "Field <b>$is_invalid</b> harus terisi!", "error");
+            return redirect()->back()->with("modal", $data["modal"]);
+        }
+
+        $new_kriteria = KriteriaAssessment::find($data["id-kriteria"]);
+        if(empty($new_kriteria)) {
+            Alert::html("Error", "Kriteria Assessment tidak ditemukan!", "error");
+            return redirect()->back()->with("modal", $data["modal"]);
+        }
+        $new_kriteria->tahun = $data["tahun"];
+        $new_kriteria->kategori = $data["kategori"];
+        $new_kriteria->kriteria_penilaian = $data["kriteria-penilaian"];
+        $new_kriteria->klasifikasi = $data["klasifikasi"];
+        $new_kriteria->nilai = $data["nilai"];
+        $new_kriteria->isi = $data["isi"];
+
+        if($new_kriteria->save()) {
+            Alert::success('Success', "Kriteria Assessment berhasil diperbarui");
+            return redirect()->back();
+        }
+        Alert::error('Error', "Kriteria Assessment gagal diperbarui");
+        return redirect()->back();
+    });
+
     Route::get('/kriteria-assessment', function (Request $request) {
         $kriteria_assessments = KriteriaAssessment::all();
         return view("MasterData/KriteriaAssessment", compact(["kriteria_assessments"]));
@@ -1847,6 +1897,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             "tahun" => "required|numeric",
             "jabatan" => "required",
             "unit-kerja" => "required",
+            "klasifikasi-proyek" => "required",
+            "kategori" => "required",
         ];
         // $is_validate = $request->validateWithBag("post", [
         //     "tahun" => "required|numeric",
@@ -1864,6 +1916,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $approval_rekomendasi->tahun = $data["tahun"];
         $approval_rekomendasi->jabatan = $data["jabatan"];
         $approval_rekomendasi->unit_kerja = $data["unit-kerja"];
+        $approval_rekomendasi->klasifikasi_proyek = $data["klasifikasi-proyek"];
+        $approval_rekomendasi->kategori = $data["kategori"];
         
         if($approval_rekomendasi->save()) {
             Alert::success('Success', "Kriteria Assessment berhasil ditambahkan");
@@ -1929,14 +1983,23 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                 "msg" => $reason
             ]);
         }
-        $jabatans = collect($jabatans->json()["data"]);
-        $jabatans->each(function($jabatan) {
-            $new_jabatan = new Jabatan();
-            $new_jabatan->kode_jabatan = (int) $jabatan["kd_jabatan_str"];
-            $new_jabatan->kode_jabatan_sap = (int) $jabatan["kd_jabatan_str_sap"];
-            $new_jabatan->nama_jabatan = $jabatan["nm_jabatan_str"];
-            $new_jabatan->tahun = (int) date("Y");
-            $new_jabatan->save();
+        $jabatans_data = collect($jabatans->json()["data"]);
+        $jabatans_data->each(function($jabatan) {
+            $is_jabatan_exist = Jabatan::find($jabatan["kd_jabatan_str"]);
+            if(!empty($is_jabatan_exist)) {
+                $is_jabatan_exist->kode_jabatan = (int) $jabatan["kd_jabatan_str"];
+                $is_jabatan_exist->kode_jabatan_sap = (int) $jabatan["kd_jabatan_str_sap"];
+                $is_jabatan_exist->nama_jabatan = $jabatan["nm_jabatan_str"];
+                $is_jabatan_exist->tahun = (int) date("Y");
+                $is_jabatan_exist->save();
+            } else {
+                $new_jabatan = new Jabatan();
+                $new_jabatan->kode_jabatan = (int) $jabatan["kd_jabatan_str"];
+                $new_jabatan->kode_jabatan_sap = (int) $jabatan["kd_jabatan_str_sap"];
+                $new_jabatan->nama_jabatan = $jabatan["nm_jabatan_str"];
+                $new_jabatan->tahun = (int) date("Y");
+                $new_jabatan->save();
+            }
         });
 
         // return response()->json([
@@ -2890,7 +2953,7 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
 // Begin Send Data Industry Attractivness ke SAP
 Route::get('/send-data-industry-attractivness', function (Request $request) {
     // $customers_attractivness = Customer::with(["IndustryOwner"])->get();
-    $customers_attractivness = IndustryOwner::all();
+    $customers_attractivness = IndustryOwner::all()->groupBy("periode")->sortKeysDesc()->first();
     $customers_attractivness = $customers_attractivness->map(function($ca) {
         // dd($ca);
         $new_ca = new stdClass();

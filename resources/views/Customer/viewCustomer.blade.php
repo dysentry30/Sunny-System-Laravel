@@ -286,6 +286,21 @@
                                                     </div>
                                                     <!--end::Input group-->
 
+                                                    <!--begin::Row-->
+                                                    <div class="row">
+                                                        <!--begin::Col-->
+                                                            <div class="col">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="checkbox" value="1" name="key-client" id="key-client" {{ $customer->key_client == true ? "checked" : "" }}>
+                                                                    <label class="form-check-label" for="key-client">
+                                                                    Key Client
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        <!--end::Col-->
+                                                    </div>
+                                                    <!--end::Row-->
+
                                                     <!--begin::Input group Kode Pos-->
                                                     {{-- <div class="fv-row mb-7">
                                                         <!--begin::Label-->
@@ -389,7 +404,7 @@
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
-                                                                    <select name="jenis-instansi" class="form-select form-select-solid" data-control="select2" data-hide-search="true"
+                                                                    <select name="jenis-instansi" onchange="getValueInstansi(this)" class="form-select form-select-solid" data-control="select2" data-hide-search="true"
                                                                         data-placeholder="Pilih Instansi">
                                                                         <option></option>
                                                                         @foreach ($sumberdanas as $sumberdana)
@@ -531,20 +546,20 @@
                                                                 @php
                                                                     $is_instansi_BUMN = $customer->jenis_instansi == "BUMN";
                                                                     $is_user_pic = str_contains(Auth::user()->name, "PIC") || Auth::user()->check_administrator;
-                                                                    $title_tooltip = collect('Hanya bisa diinput');
-                                                                    if(!$is_user_pic) {
-                                                                        $title_tooltip->push("oleh <b>DMROP</b>");
-                                                                    }
-                                                                    if(!$is_instansi_BUMN) {
-                                                                        $title_tooltip->push("jika instansi <b>BUMN</b> atau <b>Anak dan Turunan BUMN</b>");
-                                                                    }
-                                                                    if($title_tooltip->count() > 1) {
-                                                                        $title_tooltip = ($title_tooltip->count() < 2) ? $title_tooltip->join(" ") : $title_tooltip->join(" ", " dan ");
-                                                                    } else {
-                                                                        $title_tooltip = null;
-                                                                    }
+                                                                    // $title_tooltip = collect('Hanya bisa diinput');
+                                                                    // if(!$is_user_pic) {
+                                                                    //     $title_tooltip->push("oleh <b>DMROP</b>");
+                                                                    // }
+                                                                    // if(!$is_instansi_BUMN) {
+                                                                    //     $title_tooltip->push("jika instansi <b>BUMN</b> atau <b>Anak dan Turunan BUMN</b>");
+                                                                    // }
+                                                                    // if($title_tooltip->count() > 1) {
+                                                                    //     $title_tooltip = ($title_tooltip->count() < 2) ? $title_tooltip->join(" ") : $title_tooltip->join(" ", " dan ");
+                                                                    // } else {
+                                                                    //     $title_tooltip = null;
+                                                                    // }
                                                                 @endphp
-                                                                <div class="col-6">
+                                                                <div class="col-6" id="group-tier-div" style="{{$is_instansi_BUMN ? "" : "display: none;"}}">
                                                                     <!--begin::Input group Website-->
                                                                     <div class="fv-row mb-7">
                                                                         <!--begin::Label-->
@@ -553,20 +568,14 @@
                                                                         </label>
                                                                         <!--end::Label-->
                                                                         <!--begin::Input-->
-                                                                        @if (!empty($title_tooltip))
-                                                                        <div class="" data-bs-toggle="tooltip" data-bs-html="true" data-bs-title="{!! $title_tooltip !!}">
-                                                                        @else
-                                                                        <div class="">
-                                                                        @endif
-                                                                            <select name="group-tier" id="group-tier" {{!empty($title_tooltip) ? "readonly" : ""}} class="form-select form-select-solid" data-control="select2" data-hide-search="true"
-                                                                                {{-- onchange="selectNegara(this)" --}}
-                                                                                data-placeholder="Pilih Group Tier">
-                                                                                <option value="" selected></option>
-                                                                                <option value="Tier A" {{$customer->group_tier == "Tier A" ? "selected" : ""}}>Tier A</option>
-                                                                                <option value="Tier B" {{$customer->group_tier == "Tier B" ? "selected" : ""}}>Tier B</option>
-                                                                                <option value="Tier C" {{$customer->group_tier == "Tier C" ? "selected" : ""}}>Tier C</option>
-                                                                            </select>
-                                                                        </div>
+                                                                        <select name="group-tier" id="group-tier" {{!empty($title_tooltip) ? "readonly" : ""}} class="form-select form-select-solid" data-control="select2" data-hide-search="true"
+                                                                            {{-- onchange="selectNegara(this)" --}}
+                                                                            data-placeholder="Pilih Group Tier">
+                                                                            <option value=""></option>
+                                                                            <option value="Tier A" {{$customer->group_tier && $is_instansi_BUMN == "Tier A" ? "selected" : ""}}>Tier A</option>
+                                                                            <option value="Tier B" {{$customer->group_tier && $is_instansi_BUMN == "Tier B" ? "selected" : ""}}>Tier B</option>
+                                                                            <option value="Tier C" {{$customer->group_tier && $is_instansi_BUMN == "Tier C" ? "selected" : ""}}>Tier C</option>
+                                                                        </select>
                                                                         <!--end::Input-->
                                                                         
                                                                     </div>
@@ -996,26 +1005,12 @@
                                                         </h3>
                                                         <br>
                                                         <div id="divMANRISK" style="display:none">
-                                                            <!--begin::Row-->
-                                                            <div class="row">
-                                                                <!--begin::Col-->
-                                                                    <div class="col">
-                                                                        <div class="form-check">
-                                                                            <input class="form-check-input" type="checkbox" value="1" name="key-client" id="key-client" {{ $customer->key_client == true ? "checked" : "" }}>
-                                                                            <label class="form-check-label" for="key-client">
-                                                                            Key Client
-                                                                            </label>
-                                                                        </div>
-                                                                    </div>
-                                                                <!--end::Col-->
-                                                            </div>
-                                                            <!--end::Row-->
                                                             <!--Begin::Row-->
                                                             <div class="row fv-row my-7">
                                                                 <!--Begin::Coloumn-->
                                                                 <div class="col-6">
                                                                     <label class="fs-6 fw-bold form-label mt-3 required">
-                                                                        <span class="">Forbes Rank</span>
+                                                                        <span class="">Fortune Rank</span>
                                                                     </label>
                                                                     <!--Begin::Select-->
                                                                     <div id="div-forbes">
@@ -1871,7 +1866,7 @@
                                                         </div>
 
                                                         <br>
-                                                        <div class="ms-3 col-6">
+                                                        <div class="ms-3 col">
                                                             <table class="table align-middle table-row-dashed fs-6" id="kt_customers_table">
                                                                 <!--begin::Table head-->
                                                                 <thead>
@@ -1887,7 +1882,7 @@
                                                                 <!--end::Table head-->
                                                                 <!--begin::Table body-->
                                                                 <tbody class="fw-bold text-gray-600">
-                                                                    {{-- @foreach ($strukturAtttachment as $strAttachments)
+                                                                    @foreach ($strukturAtttachment as $strAttachments)
                                                                         <tr>
                                                                             <!--begin::Name-->
                                                                             <td>
@@ -1902,7 +1897,7 @@
                                                                             <!--end::Name-->
                                                                             <!--begin::Time-->
                                                                             <td>
-                                                                                <a>{{ $strAttachments->created_at }}</a>
+                                                                                <a>{{ Carbon\Carbon::create($strAttachments->created_at)->translatedFormat("d F Y") }}</a>
                                                                             </td>
                                                                             <!--end::Time-->
                                                                             <!--begin::Action-->
@@ -1918,7 +1913,7 @@
                                                                             </td>
                                                                             <!--end::Action-->
                                                                         </tr>
-                                                                    @endforeach --}}
+                                                                    @endforeach
 
                                                                 </tbody>
                                                                 <!--end::Table body-->
@@ -7068,7 +7063,7 @@
         const pic = JSON.parse(`{!! $customer->pic->takeWhile(function ($item) {
                                     return !empty($item);
                                 })->toJson() !!}`)[0];
-        console.log(pic);
+        // console.log(pic);
         const now = new Date();
         // BEGIN :: GET KODE NASABAH
         async function getKodeNasabah(e) {
@@ -7152,7 +7147,7 @@
                                         "TITLELETTER": "{{$customer->name ?? ""}}",
                                         "SEARCHTERM1": "",
                                         "SEARCHTERM2": "",
-                                        "STREET": "{{$customer->address_1}}",
+                                        "STREET": `{{$customer->address_1}}`,
                                         "HOUSE_NO": "",
                                         "POSTL_COD1": "{{$customer->kode_pos}}",
                                         "CITY": "",
@@ -7343,6 +7338,23 @@
     // end select kabupaten
 </script>
     <!--end::MAP Leaflet-->
+
+<!--begin::Show/Hide Group Tier When Instansi is BUMN-->
+<script>
+    function getValueInstansi(e) {
+        const value = e.value;
+        console.log(value);
+        if(value.includes("BUMN")) {
+            document.querySelector("#group-tier-div").style.display = "";
+        } else {
+            document.querySelector("#group-tier-div").style.display = "none";
+            $("#group-tier").select2({
+                minimumResultsForSearch: -1
+            }).val("").trigger("change");
+        }
+    }
+</script>
+<!--end::Show/Hide Group Tier When Instansi is BUMN-->
 
 <!--begin::Enable Search Bar Select2-->
 <script>

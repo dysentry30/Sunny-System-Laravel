@@ -3,7 +3,7 @@
 {{-- End::Extend Header --}}
 
 {{-- Begin::Title --}}
-@section('title', 'Kriteria Green Line')
+@section('title', 'Kriteria Green Lane')
 {{-- End::Title --}}
 
 <!--begin::Main-->
@@ -41,7 +41,7 @@
                                 data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                                 class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
                                 <!--begin::Title-->
-                                <h1 class="d-flex align-items-center fs-3 my-1">Kriteria Green Line
+                                <h1 class="d-flex align-items-center fs-3 my-1">Kriteria Green Lane
                                 </h1>
                                 <!--end::Title-->
                             </div>
@@ -54,7 +54,7 @@
                                     <!--begin::Button-->
                                     <a href="#kt_modal_input_kriteria_green_line" data-bs-toggle="modal" class="btn btn-sm btn-primary py-3"
                                         style="background-color:#008CB4; padding: 6px">
-                                        Tambah Kriteria Green Line</a>
+                                        Tambah Kriteria Green Lane</a>
 
                                 </div>
                                 <!--end::Actions-->
@@ -160,7 +160,7 @@
                                     $no = 1;
                                 @endphp
                                 <tbody class="fw-bold text-gray-600">
-                                    @foreach ($kriteria_green_line_all as $kriteria)
+                                    @foreach ($kriteria_green_line_all->sortBy("id_kriteria_green_line") as $kriteria)
                                         @php
                                             try {
                                                 $sub_isi = App\Models\Provinsi::where("province_id", "=" , $kriteria->sub_isi)->firstOrFail()->province_name;
@@ -252,9 +252,23 @@
                                     <label class="fs-6 fw-bold form-label mt-3">
                                         <span class="required">Tahun</span>
                                     </label>
+                                    @php
+                                        $tahun = (int) date("Y");
+                                    @endphp
                                     <!--end::Label-->
                                     <!--begin::Input-->
-                                    <input type="text" name="tahun" id="tahun" class="form-control form-controlsol" placeholder="Tahun">
+                                    <select id="tahun" name="tahun"
+                                        class="form-select form-select-solid select2-hidden-accessible"
+                                        data-control="select2" data-hide-search="true" data-placeholder="Pilh Tahun..."
+                                        data-select2-id="select2-tahun" tabindex="-1" aria-hidden="true">
+                                        <option value="" selected></option>
+                                        @foreach (range(1, 2) as $item)
+                                            <option value="{{$tahun}}">{{$tahun}}</option>
+                                            @php
+                                                $tahun++;
+                                            @endphp
+                                        @endforeach
+                                    </select>
                                     <!--end::Input-->
                                 </div>
                                 <!--end::Input group-->
@@ -426,9 +440,23 @@
                                         <label class="fs-6 fw-bold form-label mt-3">
                                             <span class="required">Tahun</span>
                                         </label>
+                                        @php
+                                            $tahun = (int) date("Y");
+                                        @endphp
                                         <!--end::Label-->
                                         <!--begin::Input-->
-                                        <input type="text" name="tahun" id="tahun_{{$kriteria->id_kriteria_green_line }}" value="{{$kriteria->tahun}}" class="form-control form-control-solid" placeholder="Tahun">
+                                        <select id="tahun_{{$kriteria->id_kriteria_green_line }}" name="tahun"
+                                            class="form-select form-select-solid select2-hidden-accessible"
+                                            data-control="select2" data-hide-search="true" data-placeholder="Pilh Tahun..."
+                                            data-select2-id="select2-tahun_{{$kriteria->id_kriteria_green_line }}" tabindex="-1" aria-hidden="true">
+                                            <option value="" selected></option>
+                                            @foreach (range(1, 2) as $item)
+                                                <option value="{{$tahun}}" {{$kriteria->tahun == $tahun ? "selected" : "" }}>{{$tahun}}</option>
+                                                @php
+                                                    $tahun++;
+                                                @endphp
+                                            @endforeach
+                                        </select>
                                         <!--end::Input-->
                                     </div>
                                     <!--end::Input group-->
@@ -444,7 +472,7 @@
                                         </label>
                                         <!--end::Label-->
                                         <!--begin::Input-->
-                                        <select id="Item" name="item"
+                                        <select id="Item_{{$kriteria->id_kriteria_green_line }}" name="item"
                                             class="form-select form-select-solid select2-hidden-accessible"
                                             data-control="select2" onchange="getData(this, '#isi_{{$kriteria->id_kriteria_green_line }}')" data-hide-search="false" data-placeholder="Pilh Item..."
                                             data-select2-id="select2-item_{{$kriteria->id_kriteria_green_line }}" tabindex="-1" aria-hidden="true">
@@ -507,7 +535,7 @@
                                             <!--end::Label-->
         
                                             <!--begin::Input-->
-                                            <select id="tier-select" name="sub-isi[]"
+                                            <select id="tier-select_{{$kriteria->id_kriteria_green_line }}" name="sub-isi[]"
                                                 class="form-select form-select-solid select2-hidden-accessible"
                                                 data-control="select2" data-hide-search="false" data-placeholder="Pilih Tier..."
                                                 data-select2-id="select2-tier_{{$kriteria->id_kriteria_green_line }}" tabindex="-1" aria-hidden="true">
@@ -541,7 +569,7 @@
                                             <!--end::Label-->
         
                                             <!--begin::Input-->
-                                            <select id="provinsi-select" name="sub-isi[]"
+                                            <select id="provinsi-select_{{$kriteria->id_kriteria_green_line }}" name="sub-isi[]"
                                                 class="form-select form-select-solid select2-hidden-accessible"
                                                 data-control="select2" data-hide-search="false" data-placeholder="Pilih Provinsi..."
                                                 data-select2-id="select2-provinsi_{{$kriteria->id_kriteria_green_line }}" tabindex="-1" aria-hidden="true">
@@ -808,6 +836,7 @@
     <script>
         $('#example').DataTable({
             stateSave: true,
+            ordering: false
         });
     </script>
     <!--end::Javascript-->
@@ -816,6 +845,7 @@
 @section('js-script')
 <script>
     async function getData(e, dropdownElt, isShow = false) {
+        const index = e.getAttribute("id").split("_")[1];
         const value = e.value;
         let html = '<option value="" selected></option>';
         const getDataKategoriRes = await fetch(`/kriteria/${value}`).then(res => res.json());
@@ -826,28 +856,60 @@
                 html += `<option value="${item}">${item}</option>`
             }
         }) 
+        // $("#tier-select_" + index).select2("destroy");
         if(isShow) {
             if(value.includes("BUMN")) {
-                document.querySelector("#tier").removeAttribute("hidden");
-                document.querySelector("#provinsi").setAttribute("hidden", true);
-                $('#tier-select').select2({
-                    dropdownParent: $('#kt_modal_input_kriteria_green_line'),
-                    // minimumResultsForSearch: Infinity,
-                });
-                $('#provinsi-select').select2("destroy");
+                if(index) {
+                    document.querySelector("#tier_" + index).removeAttribute("hidden");
+                    document.querySelector("#provinsi_" + index).setAttribute("hidden", true);
+                    $('#tier-select_' + index).select2({
+                        dropdownParent: $('#kt_modal_edit_' + index),
+                        // minimumResultsForSearch: Infinity,
+                    });
+                    $('#provinsi-select_' + index).select2("destroy");
+                } else {
+                    document.querySelector("#tier").removeAttribute("hidden");
+                    document.querySelector("#provinsi").setAttribute("hidden", true);
+                    $('#tier-select').select2({
+                        dropdownParent: $('#kt_modal_input_kriteria_green_line'),
+                        // minimumResultsForSearch: Infinity,
+                    });
+                    $('#provinsi-select').select2("destroy");
+                }
             } else if(value.includes("APBD") || value.includes("Provinsi")) {
-                document.querySelector("#tier").setAttribute("hidden", true);
-                document.querySelector("#provinsi").removeAttribute("hidden");
-                document.querySelector("#provinsi-select").innerHTML = html;
-                $('#tier-select').select2("destroy");
-                $('#provinsi-select').select2({
-                    dropdownParent: $('#kt_modal_input_kriteria_green_line'),
-                    // minimumResultsForSearch: Infinity,
-                });
+                if(index) {
+                    document.querySelector("#tier_"  + index).setAttribute("hidden", true);
+                    document.querySelector("#provinsi_"  + index).removeAttribute("hidden");
+                    document.querySelector("#provinsi-select_"  + index).innerHTML = html;
+                    $('#tier-select_'  + index).select2("destroy");
+                    $('#provinsi-select_'  + index).select2({
+                        dropdownParent: $('#kt_modal_edit_' + index),
+                        // minimumResultsForSearch: Infinity,
+                    });
+                } else {
+                    document.querySelector("#tier").setAttribute("hidden", true);
+                    document.querySelector("#provinsi").removeAttribute("hidden");
+                    document.querySelector("#provinsi-select").innerHTML = html;
+                    $('#tier-select').select2("destroy");
+                    $('#provinsi-select').select2({
+                        dropdownParent: $('#kt_modal_input_kriteria_green_line'),
+                        // minimumResultsForSearch: Infinity,
+                    });
+                }
             } else {
+                if(index) {
+                    document.querySelector("#tier_"  + index).setAttribute("hidden", true);
+                    document.querySelector("#provinsi_"  + index).setAttribute("hidden", true);
+                    // document.querySelector("#provinsi-select_"  + index).innerHTML = html;
+                    $("#tier-select_" + index).val("").trigger("change");
+                    $("#provinsi-select_"  + index).val("").trigger("change");
+                    // $('#tier-select_'  + index).select2("destroy");
+                    // $('#provinsi-select_'  + index).select2("destroy");
+                }
                 document.querySelector("#tier").setAttribute("hidden", true);
                 document.querySelector("#provinsi").setAttribute("hidden", true);
             }
+            
         } else {
             document.querySelector(dropdownElt).innerHTML = html;
         }

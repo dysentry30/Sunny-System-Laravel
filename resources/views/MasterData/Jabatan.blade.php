@@ -157,9 +157,9 @@
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                         <th class="min-w-auto">No</th>
                                         <th class="min-w-auto">Nama Jabatan</th>
-                                        <th class="min-w-auto">Unit Kerja</th>
+                                        {{-- <th class="min-w-auto">Unit Kerja</th> --}}
                                         <th class="min-w-auto">Tahun</th>
-                                        <th class="min-w-auto">Action</th>
+                                        {{-- <th class="min-w-auto">Action</th> --}}
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>
@@ -171,24 +171,13 @@
                                 @endphp
                                 <tbody class="fw-bold text-gray-600">
                                     @foreach ($jabatans as $no => $jabatan)
-                                        @php
-                                            if($jabatan->unit_kerja) {
-                                                $unit_kerjas = collect(explode(",", $jabatan->unit_kerja));
-                                                $unit_kerjas = $unit_kerjas->map(function($unit_kerja) {
-                                                    return "<b>" . App\Models\UnitKerja::find($unit_kerja)->unit_kerja . "</b>";
-                                                })->join(", ", " dan ");
-                                            } else {
-                                                $unit_kerjas = "-";
-                                            }
-                                        @endphp
                                         <tr>
                                             <td>{{ $no + 1 }}</td>
                                             <td>{{ $jabatan->nama_jabatan }}</td>
-                                            <td>{!! $unit_kerjas !!}</td>
                                             <td>{{ $jabatan->tahun }}</td>
-                                            <td>
+                                            {{-- <td>
                                                 <a href="#kt_modal_edit_{{$jabatan->id_jabatans}}" class="btn btn-sm btn-secondary" data-bs-toggle="modal">Edit</a>
-                                            </td>
+                                            </td> --}}
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -215,7 +204,7 @@
             <!--end::Wrapper-->
             
             <!--begin::Modal-->
-            @foreach ($jabatans as $no => $jabatan)
+            {{-- @foreach ($jabatans as $no => $jabatan)
             <div class="modal fade" id="kt_modal_edit_{{$jabatan->id_jabatans}}" tabindex="-1" aria-labelledby="kt_modal_edit_{{$jabatan->id_jabatans}}" aria-hidden="true">
                 <form action="/jabatan/save" method="POST">
                     @csrf
@@ -309,7 +298,7 @@
                     </div>
                 </form>
             </div>
-            @endforeach
+            @endforeach --}}
             <!--end::Modal-->
 
         </div>
@@ -342,7 +331,7 @@
         const loadingElt = document.querySelector("#loading");
         loadingElt.style.display = "";
         const getJabatanRes = await fetch("/get-jabatans").then(res => res.json());
-        if(getJabatanRes.status) {
+        if(getJabatanRes.status != 200) {
             Toast.fire({
                 html: getJabatanRes.status+ " " + getJabatanRes.msg,
                 icon: "error",
@@ -353,7 +342,8 @@
         }
         let html = '';
         datatable.rows().remove().draw();
-        getJabatanRes.forEach((data, i) => {
+        const now = new Date();
+        getJabatanRes.data.forEach((data, i) => {
             // let oddOrEven = (i + 1) % 2 == 0 ? "even" : "odd";
             // html += `
             //     <td class="sorting_1 dtfc-fixed-left">${data.name}</td>
@@ -364,9 +354,9 @@
                 // </tr>
                 // document.querySelector("#example tbody").innerHTML = html;
             datatable.row.add([
-                data.name,
-                data.username,
-                data.email,
+                data.kd_jabatan_str,
+                data.nm_jabatan_str,
+                now.getFullYear(),
             ]);
         });
         datatable.draw(false);
