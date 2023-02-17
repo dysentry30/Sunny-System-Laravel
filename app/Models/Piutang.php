@@ -5,10 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Jabatan extends Model
+class Piutang extends Model
 {
     use HasFactory;
-    protected $table = "jabatans";
-    protected $primaryKey = "kode_jabatan";
-
 }

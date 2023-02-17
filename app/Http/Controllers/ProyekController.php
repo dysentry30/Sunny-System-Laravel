@@ -280,14 +280,14 @@ class ProyekController extends Controller
             }   
 
             if ($idCustomer != null) {
-                $customerHistory = ProyekBerjalans::where('kode_proyek', "=", $kode_proyek)->get()->first();
+                $customerHistory = ProyekBerjalans::where('kode_proyek', "=", $newProyek->kode_proyek)->get()->first();
                 // dd($customerHistory);
                 $customerHistory = new ProyekBerjalans();
                 $customerHistory->id_customer = $idCustomer;
                 $nameCustomer = Customer::find($idCustomer);
                 $customerHistory->name_customer = $nameCustomer->name;
                 $customerHistory->nama_proyek = $newProyek->nama_proyek;
-                $customerHistory->kode_proyek = $kode_proyek;
+                $customerHistory->kode_proyek = $newProyek->kode_proyek;
                 $customerHistory->pic_proyek = $newProyek->ketua_tender;
                 $customerHistory->unit_kerja = $newProyek->unit_kerja;
                 $customerHistory->jenis_proyek = $newProyek->jenis_proyek;
@@ -295,7 +295,7 @@ class ProyekController extends Controller
                 $customerHistory->stage = $newProyek->stage;
                 $customerHistory->save();
             }
-            return redirect("/proyek/view/$kode_proyek")->with("success", ($dataProyek["nama-proyek"] . ", Berhasil dibuat"));
+            return redirect("/proyek/view/$newProyek->kode_proyek")->with("success", ($dataProyek["nama-proyek"] . ", Berhasil dibuat"));
         }
         // return redirect("/proyek")->with("failed", ($dataProyek["nama-proyek"].", Gagal Dibuat"));
     }
@@ -442,10 +442,24 @@ class ProyekController extends Controller
             $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
                 "api_key" => "c15978155a6b4656c4c0276c5adbb5917eb033d5",
                 "sender" => "62811881227",
-                "number" => "085156341949",
+                "number" => "085157875773",
                 "message" => "*$newProyek->nama_proyek* mengajukan rekomendasi.\nSilahkan tekan link di bawah ini untuk menyetujui atau tidak.\n\n$url",
                 // "url" => $url
             ]);
+            // $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
+            //     "api_key" => "c15978155a6b4656c4c0276c5adbb5917eb033d5",
+            //     "sender" => "62811881227",
+            //     "number" => "081319736111",
+            //     "message" => "*$newProyek->nama_proyek* mengajukan rekomendasi.\nSilahkan tekan link di bawah ini untuk menyetujui atau tidak.\n\n$url",
+            //     // "url" => $url
+            // ]);
+            // $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
+            //     "api_key" => "c15978155a6b4656c4c0276c5adbb5917eb033d5",
+            //     "sender" => "62811881227",
+            //     "number" => "082125416666",
+            //     "message" => "*$newProyek->nama_proyek* mengajukan rekomendasi.\nSilahkan tekan link di bawah ini untuk menyetujui atau tidak.\n\n$url",
+            //     // "url" => $url
+            // ]);
             // dd($send_msg_to_wa, "send");
             $newProyek->is_request_rekomendasi  = true;
         }

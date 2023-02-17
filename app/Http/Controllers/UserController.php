@@ -80,10 +80,6 @@ class UserController extends Controller
                 // dd(Auth::user());
                 $request->session()->regenerate();
                 if (Auth::user()->is_active) {
-                    $redirect = $request->schemeAndHttpHost() . $request->get("redirect-to");
-                    if(!empty($redirect)) {
-                        return redirect()->intended( $redirect );
-                    }
                     return redirect()->intended("/dashboard");
                 }else{
                     Auth::logout();

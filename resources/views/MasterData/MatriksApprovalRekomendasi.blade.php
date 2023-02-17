@@ -317,6 +317,60 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div id="tier">
+                                        <!--begin::Label-->
+                                        <label class="fs-6 fw-bold form-label mt-3">
+                                            <span class="required">Klasifikasi Proyek</span>
+                                        </label>
+                                        <!--end::Label-->
+    
+                                        <!--begin::Input-->
+                                        <select id="klasifikasi-proyek" name="klasifikasi-proyek"
+                                            class="form-select form-select-solid select2-hidden-accessible"
+                                            data-control="select2" data-hide-search="false" data-placeholder="Pilih Klasifikasi Proyek..."
+                                            data-select2-id="select2-klasifikasi-proyek" tabindex="-1" aria-hidden="true">
+                                            <option value="" selected></option>
+                                            <option value="Proyek Kecil">Proyek Kecil</option>
+                                            <option value="Proyek Menengah">Proyek Menengah</option>
+                                            <option value="Proyek Besar">Proyek Besar</option>
+                                            <option value="Proyek Mega">Proyek Mega</option>
+
+                                            {{-- @foreach ($sumber_danas as $sd)
+                                                <option value="{{$sd->kode}}">{{$sd->kode}}</option>
+                                            @endforeach --}}
+                                        </select>
+                                        <!--end::Input-->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div id="tier">
+                                        <!--begin::Label-->
+                                        <label class="fs-6 fw-bold form-label mt-3">
+                                            <span class="required">Kategori</span>
+                                        </label>
+                                        <!--end::Label-->
+    
+                                        <!--begin::Input-->
+                                        <select id="kategori" name="kategori"
+                                            class="form-select form-select-solid select2-hidden-accessible"
+                                            data-control="select2" data-hide-search="false" data-placeholder="Pilih Kategori..."
+                                            data-select2-id="select2-kategori" tabindex="-1" aria-hidden="true">
+                                            <option value="" selected></option>
+                                            <option value="Penyusun">Penyusun</option>
+                                            <option value="Rekomendasi">Rekomendasi</option>
+                                            <option value="Persetujuan">Persetujuan</option>
+                                            {{-- @foreach ($sumber_danas as $sd)
+                                                <option value="{{$sd->kode}}">{{$sd->kode}}</option>
+                                            @endforeach --}}
+                                        </select>
+                                        <!--end::Input-->
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <!--End::Row Kanan+Kiri-->
     

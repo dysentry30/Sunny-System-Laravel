@@ -14,7 +14,7 @@ class RekomendasiController extends Controller
         // $all_super_user_counter = User::all()->filter(function($u) {
         //     return str_contains($u->name, "PIC") || $u->check_administrator;
         // })->count() - 2;
-        $all_super_user_counter = 1;
+        $all_super_user_counter = 2;
         $rekomendasi_open = $request->query("open") ?? "";
         // Begin Prosess Approval
         if(!empty($request->setuju)) {
@@ -84,21 +84,31 @@ class RekomendasiController extends Controller
 
         $is_super_user = str_contains(Auth::user()->name, "PIC") || Auth::user()->check_administrator;
         $unit_kerjas = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja);
-        
         if($is_super_user) {
-            $proyeks_pengajuan = Proyek::where("is_request_rekomendasi", "=", true)->where("stage", "=", 1)->get();
-            $proyeks_persetujuan = Proyek::all()->filter(function($p) {
-                return $p->is_request_rekomendasi || !is_null($p->approved_rekomendasi);
+            $proyeks_pengajuan = Proyek::where("stage", "=", 1)->get()->filter(function($p) {
+                return $p->is_request_rekomendasi || !empty($p->approved_rekomendasi);
             });
+            $proyeks_rekomendasi = Proyek::where("stage", "=", 1)->get()->filter(function($p) use($all_super_user_counter) {
+                $approved_rekomendasi = collect(json_decode($p->approved_rekomendasi));
+                return !empty($approved_rekomendasi) && $approved_rekomendasi->every("status", "=", "approved") && $approved_rekomendasi->count() == $all_super_user_counter && !$p->review_assessment;
+            });
+            // $proyeks_persetujuan = Proyek::all()->filter(function($p) {
+            //     return $p->is_request_rekomendasi || !is_null($p->approved_rekomendasi);
+            // });
+            $proyeks_persetujuan = [];
         } else {
             $proyeks_pengajuan = Proyek::where("stage", "=", 1)->whereIn('unit_kerja', $unit_kerjas->toArray())->get()->filter(function($p) {
                 return $p->is_request_rekomendasi || !is_null($p->approved_rekomendasi);
             });
+            $proyeks_rekomendasi = Proyek::where("stage", "=", 1)->whereIn('unit_kerja', $unit_kerjas->toArray())->get()->filter(function($p) use($all_super_user_counter) {
+                $approved_rekomendasi = collect(json_decode($p->approved_rekomendasi));
+                return !empty($approved_rekomendasi) && $approved_rekomendasi->every("status", "=", "approved") && $approved_rekomendasi->count();
+            });
             $proyeks_persetujuan = Proyek::where("approved_rekomendasi", "=", null)->get();
         }
         if(!empty($rekomendasi_open)) {
-            return view('13_Rekomendasi', compact(['proyeks_pengajuan', "proyeks_persetujuan", "all_super_user_counter", "rekomendasi_open"]));
+            return view('13_Rekomendasi', compact(['proyeks_pengajuan', "proyeks_persetujuan", "all_super_user_counter", "rekomendasi_open", "proyeks_rekomendasi"]));
         }
-        return view('13_Rekomendasi', compact(['proyeks_pengajuan', "proyeks_persetujuan", "all_super_user_counter"]));
+        return view('13_Rekomendasi', compact(['proyeks_pengajuan', "proyeks_persetujuan", "all_super_user_counter", "proyeks_rekomendasi"]));
     }
 }

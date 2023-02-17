@@ -170,7 +170,7 @@
                                         <!--end::Table head-->
                                         <!--begin::Table body-->
                                         <tbody class="fw-bold text-gray-600 fs-6">
-                                            @if (!empty($proyeks_pengajuan) && !$is_super_user)
+                                            @if (!empty($proyeks_pengajuan))
                                                 @forelse ($proyeks_pengajuan as $proyek)
                                                     @php
                                                         // $customer = $proyek->proyekBerjalan->Customer;
@@ -179,8 +179,9 @@
                                                             return !empty($item) && $item->status == "approved";
                                                         }) && ($approved_data->count() == $all_super_user_counter);
                                                         // dd($approved_data);
+                                                        $is_review_assessment = false;
                                                         if($is_approved) {
-                                                            // $approved_data_first = $approved_data;
+                                                            $is_review_assessment = $is_approved && empty($proyek->review_assessment);
                                                         } else {
                                                             $is_user_id_exist = $approved_data->filter(function($d) {
                                                                 return !empty($d->user_id) && $d->user_id == Auth::user()->id;
@@ -190,8 +191,11 @@
                                                     @endphp
                                                     <tr>
                                                         <td>
-                                                            {{-- <a href="#kt_modal_view_proyek_{{$proyek->kode_proyek}}" target="_blank" data-bs-toggle="modal" class="text-hover-primary">{{ $proyek->nama_proyek }}</a> --}}
-                                                            <a href="/proyek/view/{{$proyek->kode_proyek}}" target="_blank" class="text-hover-primary">{{ $proyek->nama_proyek }}</a>
+                                                            @if ($is_super_user)
+                                                                <a href="#kt_modal_view_proyek_{{$proyek->kode_proyek}}" data-bs-toggle="modal" class="text-hover-primary">{{ $proyek->nama_proyek }}</a>
+                                                            @else
+                                                                <a href="/proyek/view/{{$proyek->kode_proyek}}" target="_blank" class="text-hover-primary">{{ $proyek->nama_proyek }}</a>
+                                                            @endif
                                                         </td>
                                                         <td>
                                                             @php
@@ -237,10 +241,12 @@
                                                             </small>
                                                         </td>
                                                         <td>
-                                                            @if ($is_approved)
+                                                            @if ($is_approved && !$is_review_assessment)
                                                                 <small class="badge badge-light-success">Disetujui</small>
-                                                            @elseif($is_pending)
-                                                                <small class="badge badge-light-primary">Proses Pengajuan</small>
+                                                            @elseif($is_pending && !$is_review_assessment)
+                                                                <small class="badge badge-light-info">Proses Pengajuan</small>
+                                                            @elseif($is_review_assessment)
+                                                                <small class="badge badge-light-primary">Review Assessment</small>
                                                             @else
                                                                 <small class="badge badge-light-danger">Ditolak</small>
                                                             @endif
@@ -258,6 +264,164 @@
                                     <!--end::Table -->
                                 </div>
                                 {{-- End :: Tab Content Proyek Pengajuan Rekomendasi --}}
+                                
+                                {{-- Begin :: Tab Content Proyek Tabs Rekomendasi --}}
+                                <div class="tab-pane fade" id="kt_user_view_rekomendasi" role="tabpanel">
+                                    <!--begin::Table Claim-->
+                                    <table class="table align-middle table-row-dashed fs-6" id="rekomendasi-persetujuan">
+                                        <!--begin::Table head-->
+                                        <thead class="">
+                                            <!--begin::Table row-->
+                                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                <th class="min-w-auto">Nama Proyek</th>
+                                                <th class="min-w-auto">Lokasi</th>
+                                                <th class="min-w-auto">Pemberi Kerja</th>
+                                                <th class="min-w-auto">Instansi</th>
+                                                <th class="min-w-auto">Sumber Dana</th>
+                                                <th class="min-w-auto">Nilai OK</th>
+                                                <th class="min-w-auto">Kategori Proyek</th>
+                                                <th class="min-w-auto">Mengusulkan</th>
+                                                <th class="min-w-auto">Status</th>
+                                                {{-- <th class="min-w-auto">ID Contract</th> --}}
+                                            </tr>
+                                            <!--end::Table row-->
+                                        </thead>
+                                        <!--end::Table head-->
+                                        <!--begin::Table body-->
+                                        <tbody class="fw-bold text-gray-600 fs-6">
+                                            @if (!empty($proyeks_rekomendasi) &&  $is_super_user)
+                                                @forelse ($proyeks_rekomendasi as $proyek)
+                                                    @php
+                                                        // $customer = $proyek->proyekBerjalan->Customer;
+                                                        $approved_data = collect([json_decode($proyek->approved_rekomendasi)])->flatten();
+                                                        $is_approved = $approved_data->every(function($item) {
+                                                            return !empty($item) && $item->status == "approved";
+                                                        });
+                                                        $is_data_null = $approved_data->every(function($d) {
+                                                            return $d == null;
+                                                        });
+
+                                                        if($is_data_null) {
+                                                            $approved_data = collect();
+                                                        }
+                                                        
+                                                        // dd($approved_data);
+                                                        if($is_approved) {
+                                                            // $approved_data_first = $approved_data;
+                                                        } else {
+                                                            $is_user_id_exist = $approved_data->filter(function($d) {
+                                                                return !empty($d->user_id) && $d->user_id == Auth::user()->id;
+                                                            });
+                                                        }
+                                                        $is_pending = $proyek->is_request_rekomendasi;
+                                                        // dump($all_super_user_counter);
+                                                        // dump($approved_data->count(), $all_super_user_counter);
+                                                    @endphp
+                                                    <tr>
+                                                        <td>
+                                                            <a href="#kt_modal_view_proyek_{{$proyek->kode_proyek}}" target="_blank" data-bs-toggle="modal" class="text-hover-primary">{{ $proyek->nama_proyek }}</a>
+                                                        </td>
+                                                        <td>
+                                                            @php
+                                                                try {
+                                                                    $provinsi = App\Models\Provinsi::find($proyek->provinsi)->first()->province_name;
+                                                                } catch (\Throwable $th) {
+                                                                    $provinsi = $proyek->provinsi;
+                                                                }
+                                                            @endphp
+                                                            <small>{{ $provinsi ?? "-" }}</small>
+                                                        </td>
+                                                        <td>
+                                                            <small>{{ $customer->name ?? "-" }}</small>
+                                                        </td>
+                                                        <td>
+                                                            <small>{{ $customer->jenis_instansi ?? "-" }}</small>
+                                                        </td>
+                                                        <td>
+                                                            @php
+                                                                try {
+                                                                    $sumber_dana = App\Models\SumberDana::where("nama_sumber", "=", $customer->sumber_dana)->first()->nama_sumber;
+                                                                } catch (\Throwable $th) {
+                                                                    $sumber_dana = $proyek->sumber_dana;
+                                                                }
+                                                            @endphp
+                                                            <small>{{ $sumber_dana ?? "-" }}</small>
+                                                        </td>
+                                                        <td>
+                                                            <small>{{ number_format((int)$proyek->nilaiok_awal, 0, '.', '.' ?? '0'); }}</small>
+                                                        </td>
+                                                        <td>
+                                                            <small>
+                                                                {{$proyek->klasifikasi_pasdin ?? "-"}}
+                                                            </small>
+                                                        </td>
+                                                        <td>
+                                                            <small>
+                                                                @if ($proyek->klasifikasi_pasdin == "Proyek Kecil" || $proyek->klasifikasi_pasdin == "Proyek Menengah")
+                                                                    GM Pemasaran Operasi
+                                                                @else 
+                                                                    Kepala Divisi Operasi
+                                                                @endif
+                                                            </small>
+                                                        </td>
+                                                        <td>
+                                                            @php
+                                                                $msg = "";
+                                                                $is_approved = $approved_data->every(function($item) {
+                                                                    return !empty($item) && $item->status == "approved";
+                                                                }) && ($approved_data->count() == $all_super_user_counter);
+                                                                $is_pending = !$is_approved && ($approved_data->count() < $all_super_user_counter);
+                                                                if(!$is_approved) {
+                                                                    if(!empty($approved_data) && !$is_approved) {
+                                                                        $nama_user = collect();
+                                                                        foreach ($approved_data as $item) {
+                                                                            if(!empty($item) && $item->status == "rejected") {
+                                                                                try {
+                                                                                    $user = App\Models\User::find($item->user_id)->name;
+                                                                                    if(!empty($user)) $nama_user->push($user);
+                                                                                } catch (\Throwable $th) {
+                                                                                    //throw $th;
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                        $nama_user = $nama_user->join(", ", " dan ");
+                                                                        if(!empty($nama_user)) {
+                                                                            $msg = "Rekomendasi ini ditolak oleh <b>$nama_user</b>";
+                                                                        }
+                                                                    }
+                                                                }   
+                                                            @endphp
+                                                            @if ($is_approved)
+                                                                @if ($is_approved)
+                                                                    <small class="badge badge-light-success">Disetujui</small>
+                                                                @elseif($is_pending)
+                                                                    <small class="badge badge-light-primary">Proses Pengajuan</small>
+                                                                @else
+                                                                    <small class="badge badge-light-danger" data-bs-toggle="tooltip" data-bs-html="true" data-bs-title="{{ $msg }}">Ditolak</small>
+                                                                @endif
+                                                            @else
+                                                                @if(!$is_pending && !$is_approved)
+                                                                    <small class="badge badge-light-danger"  data-bs-toggle="tooltip" data-bs-html="true" data-bs-title="{{ $msg }}">Ditolak</small>
+                                                                @elseif(!$is_pending && $is_approved)        
+                                                                    <small class="badge badge-light-success">Disetujui</small>
+                                                                @else
+                                                                    <small class="badge badge-light-primary">Proses Pengajuan</small>
+                                                                @endif
+                                                            @endif
+                                                        </td>
+                                                    </tr>
+                                                @empty
+                                                    {{-- <td><p>There is no data</p></td> --}}
+                                                @endforelse
+                                            @else
+                                            {{-- <td><p>There is no data</p></td> --}}
+                                            @endif
+                                            
+                                        </tbody>
+                                    </table>
+                                    <!--end::Table -->
+                                </div>
+                                {{-- End :: Tab Content Proyek Tabs Rekomendasi --}}
                                 
                                 {{-- Begin :: Tab Content Proyek Persetujuan Rekomendasi --}}
                                 <div class="tab-pane fade" id="kt_user_view_persetujuan" role="tabpanel">
@@ -439,7 +603,7 @@
     @php
         $proyeks = $is_super_user ? $proyeks_persetujuan : $proyeks_pengajuan;
     @endphp
-    @foreach ($proyeks as $proyek)
+    @foreach ($proyeks_pengajuan as $proyek)
         <div class="modal fade" id="kt_modal_view_proyek_{{$proyek->kode_proyek}}" tabindex="-1" aria-labelledby="kt_modal_view_proyek_{{$proyek->kode_proyek}}" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
             <div class="modal-content">
@@ -525,7 +689,7 @@
                         }
                         // dump($is_user_id_exist, $is_data_null, $approved_data->count() != $all_super_user_counter);
                     @endphp
-                    @if ($is_super_user && empty($is_user_id_exist) && $is_data_null && $approved_data->count() != $all_super_user_counter)
+                    @if ($is_super_user && empty($is_user_id_exist) && ($is_data_null || $approved_data->count() != $all_super_user_counter))
                         <form action="" method="GET">
                             @csrf
                             <input type="hidden" name="kode-proyek" value="{{$proyek->kode_proyek}}">

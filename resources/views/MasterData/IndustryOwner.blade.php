@@ -124,7 +124,7 @@
                                         data-placeholder="Column" data-select2-id="select2-data-bulan" tabindex="-1"
                                         aria-hidden="true">
                                         <option {{ $column == '' ? 'selected' : '' }}></option>
-                                        <option value="mata_uang" {{ $column == 'mata_uang' ? 'selected' : '' }}>Industry Owner</option>
+                                        <option value="mata_uang" {{ $column == 'mata_uang' ? 'selected' : '' }}>Industry Attractiveness</option>
 
                                     </select>
                                     <!--End:: Select Options-->
@@ -185,7 +185,7 @@
                                     <!--begin::Table row-->
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                         <th class="min-w-auto">Kode Attractiveness</th>
-                                        {{-- <th class="min-w-auto">@sortablelink('mata_uang', 'Industry Owner ')</th> --}}
+                                        {{-- <th class="min-w-auto">@sortablelink('mata_uang', 'Industry Attractiveness ')</th> --}}
                                         <th class="min-w-auto">Deskripsi Attractiveness</th>
                                         <th class="min-w-auto ">Owner Attractiveness</th>
                                         <th class="min-w-auto ">Periode</th>
@@ -286,7 +286,7 @@
                     <!--begin::Modal header-->
                     <div class="modal-header">
                         <!--begin::Modal title-->
-                        <h2>New Industry Owner</h2>
+                        <h2>New Industry Attractiveness</h2>
                         <!--end::Modal title-->
                         <!--begin::Close-->
                         <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
@@ -312,12 +312,12 @@
                                 <div class="fv-row mb-7">
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Industry Owner</span>
+                                        <span class="required">Industry Attractiveness</span>
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
                                     <input type="text" class="form-control form-control-solid" id="mata-uang"
-                                        name="mata-uang" value="" placeholder="Industry Owner" />
+                                        name="mata-uang" value="" placeholder="Industry Attractiveness" />
                                     <!--end::Input-->
                                 </div>
                                 <!--end::Input group-->
@@ -370,7 +370,7 @@
                     <!--begin::Modal header-->
                     <div class="modal-header">
                         <!--begin::Modal title-->
-                        <h2>New Industry Owner</h2>
+                        <h2>New Industry Attractiveness</h2>
                         <!--end::Modal title-->
                         <!--begin::Close-->
                         <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
@@ -416,8 +416,21 @@
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
-                                    <input type="text" class="form-control form-control-solid" id="mata-uang"
-                                        name="owner-attractiveness" value="{{old("owner-attractiveness")}}" placeholder="Owner Attractiveness" />
+
+                                    <select name="owner-attractiveness" id="owner-attractiveness"
+                                        class="form-select form-select-solid select2-hidden-accessible"
+                                        data-control="select2" data-hide-search="true" data-placeholder="Pilh Owner Attractiveness..."
+                                        data-select2-id="select2-owner-attractiveness" tabindex="-1" aria-hidden="true">
+                                            <option value=""></option>
+                                            <option value="Menarik">Menarik</option>
+                                            <option value="Cenderung Menarik">Cenderung Menarik</option>
+                                            <option value="Netral">Netral</option>
+                                            <option value="Cenderung Waspada">Cenderung Waspada</option>
+                                            <option value="Waspada">Waspada</option>
+                                    </select>
+
+                                    {{-- <input type="text" class="form-control form-control-solid" id="mata-uang"
+                                        name="owner-attractiveness" value="{{old("owner-attractiveness")}}" placeholder="Owner Attractiveness" /> --}}
                                     <!--end::Input-->
                                 </div>
                                 <!--end::Input group-->
@@ -432,8 +445,19 @@
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
-                                    <input type="text" class="form-control form-control-solid" id="mata-uang"
-                                        name="deskripsi-attractiveness" value="{{old("deskripsi-attractiveness")}}" placeholder="Deskripsi Attractiveness" />
+
+                                    <select name="deskripsi-attractiveness" id="deskripsi-attractiveness"
+                                        class="form-select form-select-solid select2-hidden-accessible"
+                                        data-control="select2" data-hide-search="false" data-placeholder="Pilh Deskripsi Attractiveness..."
+                                        data-select2-id="select2-deskripsi-attractiveness" tabindex="-1" aria-hidden="true">
+                                            <option value=""></option>
+                                            @foreach ($industrySector as $sector)
+                                                <option value="{{$sector->id_industry_sector}}">{{$sector->description}}</option>
+                                            @endforeach
+                                    </select>
+
+                                    {{-- <input type="text" class="form-control form-control-solid" id="mata-uang"
+                                        name="deskripsi-attractiveness" value="{{old("deskripsi-attractiveness")}}" placeholder="Deskripsi Attractiveness" /> --}}
                                     <!--end::Input-->
                                 </div>
                                 <!--end::Input group-->
@@ -452,7 +476,7 @@
                                         <!--begin::Input-->
                                         <select name="periode[bulan]" id="bulan"
                                         class="form-select form-select-solid select2-hidden-accessible"
-                                        data-control="select2" data-hide-search="true" data-placeholder="Pilh Bulan..."
+                                        data-control="select2" data-hide-search="false" data-placeholder="Pilh Bulan..."
                                         data-select2-id="select2-bulan" tabindex="-1" aria-hidden="true">
                                             <option value=""></option>
                                             @foreach (range(1,12) as $bulan)
