@@ -165,4 +165,8 @@ class Proyek extends Model
     public function Piutang() {
         return $this->hasMany(Piutang::class, "profit_center", "profit_center");
     }
+
+    public function ProyekProgress(){
+        return $this->hasMany(ProyekProgress::class, "kode_proyek");
+    }
 }
