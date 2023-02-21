@@ -232,7 +232,7 @@
                                                     aria-hidden="true">
                                                     <option value="" selected></option>
                                                     @foreach ($dops as $dop)
-                                                        <option value="{{ $dop->dop }}" {{ $dop_get == $dop->dop ? 'selected' : '' }} >{{ $dop->dop }}</option>
+                                                        <option value="{{ $dop->dop }}" {{ $dop_select == $dop->dop ? 'selected' : '' }} >{{ $dop->dop }}</option>
                                                     @endforeach
                                             </select>
                                         </div>
@@ -245,17 +245,17 @@
                                                     aria-hidden="true">
                                                     <option value="" selected></option>
                                                     @foreach ($unit_kerjas as $unit_kerjas)
-                                                        <option value="{{ $unit_kerjas->divcode }}" {{ $unit_kerja_get == $unit_kerjas->divcode ? 'selected' : '' }} >{{ $unit_kerjas->unit_kerja }}</option>
+                                                        <option value="{{ $unit_kerjas->divcode }}" {{ $unit_kerja_select == $unit_kerjas->divcode ? 'selected' : '' }} >{{ $unit_kerjas->unit_kerja }}</option>
                                                     @endforeach
                                             </select>
                                         </div>
                                         {{-- @dump($proyeks) --}}
-                                        @php
+                                        {{-- @php
                                             $proyek_select = $proyeks->map(function($filter){
                                                 return $filter->ContractManagements;
                                             });
                                             $proyek_select_2 = $proyek_select->where("stages", "=", 2);
-                                        @endphp
+                                        @endphp --}}
                                             {{-- @dump($proyek_select) --}}
                                         <div class="col-2">
                                             <select onchange="selectFilter(this)" id="kode-proyek" name="proyek"
@@ -264,8 +264,8 @@
                                                     data-placeholder="Proyek" data-select2-id="select2-data-proyek" tabindex="-1"
                                                     aria-hidden="true">
                                                     <option value="" selected></option>
-                                                    @foreach ($proyek_select_2 as $proyek)
-                                                        <option value="{{ $proyek->project_id }}" {{ $proyek_get == $proyek->project_id ? 'selected' : '' }} >{{ $proyek->project->nama_proyek }}</option>
+                                                    @foreach ($proyeks as $proyek)
+                                                        <option value="{{ $proyek->project_id }}" {{ $proyek_get == $proyek->project_id ? 'selected' : '' }} >{{ $proyek->nama_proyek }}</option>
                                                         {{-- <option value="{{ $proyek->kode_proyek }}" >{{ $proyek->nama_proyek }} ({{$proyek->kode_proyek}})</option> --}}
                                                     @endforeach
                                             </select>

@@ -232,7 +232,7 @@
                                                     aria-hidden="true">
                                                     <option value="" selected></option>
                                                     @foreach ($dops as $dop)
-                                                        <option value="{{ $dop->dop }}" {{ $dop_get == $dop->dop ? 'selected' : '' }} >{{ $dop->dop }}</option>
+                                                        <option value="{{ $dop->dop }}" {{ $dop_select == $dop->dop ? 'selected' : '' }} >{{ $dop->dop }}</option>
                                                     @endforeach
                                             </select>
                                         </div>
@@ -245,7 +245,7 @@
                                                     aria-hidden="true">
                                                     <option value="" selected></option>
                                                     @foreach ($unit_kerjas as $unit_kerjas)
-                                                        <option value="{{ $unit_kerjas->divcode }}" {{ $unit_kerja_get == $unit_kerjas->divcode ? 'selected' : '' }} >{{ $unit_kerjas->unit_kerja }}</option>
+                                                        <option value="{{ $unit_kerjas->divcode }}" {{ $unit_kerja_select == $unit_kerjas->divcode ? 'selected' : '' }} >{{ $unit_kerjas->unit_kerja }}</option>
                                                     @endforeach
                                             </select>
                                         </div>

@@ -212,6 +212,10 @@
                                                 <th class="min-w-auto">@sortablelink('kode_proyek','Kode Proyek')</th>
                                                 <th class="min-w-auto">Nama Proyek</th>
                                                 <th class="min-w-auto">Unit Kerja</th>
+                                                {{-- <th class="min-w-auto">VO</th>
+                                                <th class="min-w-auto">Klaim</th>
+                                                <th class="min-w-auto">Anti Klaim</th>
+                                                <th class="min-w-auto">Klaim Asuransi</th> --}}
                                                 <th class="min-w-auto">@sortablelink('id_contract','ID Contract')</th>
                                             </tr>
                                             <!--end::Table row-->
@@ -254,6 +258,10 @@
                                                         </td>
                                                         <td>{{ $claim->nama_proyek }}</td>
                                                         <td>{{ $claim->UnitKerja->unit_kerja }}</td>
+                                                        {{-- <td>{{ $claim->jenis_perubahan->count() }}</td>
+                                                        <td>{{ $claim->UnitKerja->unit_kerja }}</td>
+                                                        <td>{{ $claim->UnitKerja->unit_kerja }}</td>
+                                                        <td>{{ $claim->UnitKerja->unit_kerja }}</td> --}}
                                                         <td>
                                                             <a href="/contract-management/view/{{ $claim->id_contract }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $claim->id_contract }}</a>
                                                         </td>

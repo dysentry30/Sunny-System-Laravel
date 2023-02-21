@@ -288,6 +288,33 @@ class ClaimController extends Controller
         return redirect("/claim-management");
     }
 
+    public function perubahanKontrakEdit(Request $request){
+        $data = $request->all();
+        $file = $request->file("dokumen-approve");
+        $id_document = date("His_") . $file->getClientOriginalName();
+        $nama_file = $file->getClientOriginalName();
+
+        $perubahan_kontrak = PerubahanKontrak::find($data["id-perubahan-kontrak"]);
+        // dd($perubahan_kontrak->DokumenPendukungs);
+
+        if($perubahan_kontrak->DokumenPendukungs->isEmpty()){
+            Alert::error("Erorr", "Input Dokumen Pendukung terlebih dahulu");
+            return redirect()->back();
+        }
+
+        $perubahan_kontrak->stage = $data["stage"];
+        $perubahan_kontrak->nilai_disetujui = str_replace(".", "", $data["nilai-disetujui"]);
+        $perubahan_kontrak->tanggal_disetujui = $data["tanggal-disetujui"];
+        $perubahan_kontrak->waktu_disetujui = $data["waktu-disetujui"];
+        $perubahan_kontrak->id_dokumen = $id_document;
+        $perubahan_kontrak->dokumen_approve = $nama_file;
+
+        $perubahan_kontrak->save();
+        moveFileTemp($file, explode(".", $id_document)[0]);
+        Alert::success("Success", "Perubahan Kontrak berhasil ditambahkan");
+        return redirect()->back();
+    }
+
     /**
      * Show the form for creating a new resource.
      *
