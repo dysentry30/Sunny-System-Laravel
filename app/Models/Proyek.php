@@ -161,4 +161,8 @@ class Proyek extends Model
     {
         return $this->hasMany(PerubahanKontrak::class, "kode_proyek");
     }
+
+    public function Piutang() {
+        return $this->hasMany(Piutang::class, "profit_center", "profit_center");
+    }
 }

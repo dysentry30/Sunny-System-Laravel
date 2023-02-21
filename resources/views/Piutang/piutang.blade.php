@@ -138,6 +138,8 @@
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                         <th class="min-w-auto">Kode Customer</th>
                                         <th class="min-w-auto">Nama Customer</th>
+                                        <th class="min-w-auto">Kode Proyek</th>
+                                        <th class="min-w-auto">Nama Proyek</th>
                                         <th class="min-w-auto">Piutang 1-30 Hari</th>
                                         <th class="min-w-auto">Piutang 31-60 Hari</th>
                                         <th class="min-w-auto">Piutang 61-90 Hari</th>
@@ -153,15 +155,23 @@
                                     $no = 1;
                                 @endphp
                                 <tbody class="fw-bold text-gray-600">
-                                    <tr>
-                                        <td>Testing Data</td>
-                                        <td>Testing Data</td>
-                                        <td>Testing Data</td>
-                                        <td>Testing Data</td>
-                                        <td>Testing Data</td>
-                                        <td>Testing Data</td>
-                                        <td>Testing Data</td>
-                                    </tr>
+                                    @foreach ($piutangs as $piutang)
+                                        @php
+                                            $proyek = $piutang->Proyek;
+                                            $customer = $piutang->Customer;
+                                        @endphp
+                                        <tr>
+                                            <td>{{ $piutang->debitor }}</td>
+                                            <td>{{ $customer->name ?? "-" }}</td>
+                                            <td>{{ $piutang->profit_center }}</td>
+                                            <td>{{ $proyek->nama_proyek ?? "-" }}</td>
+                                            <td>{{ number_format($piutang->day_30, 0, ".", ".") }}</td>
+                                            <td>{{ number_format($piutang->day_60, 0, ".", ".")  }}</td>
+                                            <td>{{ number_format($piutang->day_90, 0, ".", ".")  }}</td>
+                                            <td>{{ number_format($piutang->day_91, 0, ".", ".")  }}</td>
+                                            <td>{{ Carbon\Carbon::create($piutang->updated_at)->translatedFormat("d F Y") }}</td>
+                                        </tr>
+                                    @endforeach
                                 </tbody>
                                 <!--end::Table body-->
                             </table>
