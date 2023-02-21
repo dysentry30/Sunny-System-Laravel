@@ -49,6 +49,7 @@ use App\Models\ContractLaw;
 use App\Models\ContractLD;
 use App\Models\JenisProyek;
 use App\Models\KlarifikasiNegosiasiCda;
+use App\Models\ProyekProgress;
 use App\Models\ReviewPembatalanKontrak;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Session;
@@ -61,6 +62,8 @@ use App\Models\UploadFinalDocument;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Collection as SupportCollection;
+use Illuminate\Support\Facades\Http;
+use SebastianBergmann\CodeCoverage\Util\Percentage;
 use stdClass;
 
 class ContractManagementsController extends Controller
@@ -501,6 +504,11 @@ class ContractManagementsController extends Controller
         $perubahan_anti_klaim = array_key_exists("Anti Klaim", $perubahan_group);       
         $perubahan_klaim_asuransi = array_key_exists("Klaim Asuransi", $perubahan_group);
 
+        $progress = $contract->project->ProyekProgress->sortByDesc("created_at")->first();
+        $progress_fisik_ri = $progress->progress_fisik_ri ?? 0;
+        $ok_review = $progress->ok_review;
+        $progress_now = Percentage::fromFractionAndTotal((int)$progress_fisik_ri, (int)$ok_review)->asString();
+
         // $asuransis = ContractAsuransi::where("id_contract", "=", $id_contract)->get();
         // $asuransi_group = $asuransis->groupBy("kategori_asuransi");
         // $asuransi  = $asuransi_group->map(function($item, $key){
@@ -519,6 +527,7 @@ class ContractManagementsController extends Controller
             "perubahan_klaim" => $perubahan_klaim,
             "perubahan_anti_klaim" => $perubahan_anti_klaim,
             "perubahan_klaim_asuransi" => $perubahan_klaim_asuransi,
+            "progress_now" => $progress_now
             // "asuransi_group" => $asuransi_group
         ]);
     }
@@ -3453,5 +3462,49 @@ class ContractManagementsController extends Controller
         // dd($ccmNew);
         
         return view("Contract/viewReview", ["contract" => ContractManagements::find(urldecode(urldecode($id_contract))), "review" => $review, "stage" => $stage]);
+    }
+
+    public function getDataProgressPIS($id_contract){
+        // dd($id_contract);
+
+        $contract = ContractManagements::where("id_contract", "=", $id_contract)->first();
+        $kode_spk = $contract->project->kode_spk;
+        // $kode_spk = "MJBG08";
+        $current = new DateTime();
+        $str_current = $current->format('Ym');
+        // dd($str_current, $kode_spk);
+        
+        if($kode_spk){
+            $response = Http::post('http://pis.wika.co.id/wpapi/files/getAPIQISList',[
+                "kdspk" => $kode_spk,
+                "period" => "$str_current"
+            ]);
+
+            if($response->successful()){
+                $data_response = $response->collect($key = "data")->first();
+                $data = new ProyekProgress();
+                $data->kode_proyek = $contract->project->kode_proyek;
+                $data->kode_spk = $kode_spk;
+                $data->ok_review = $data_response["ok_review"];
+                $data->progress_fisik_ri = $data_response["progress_fisik_ri"];
+                $data->lama_proyek = $data_response["lamaproyek"];
+                $data->laba_kotor_ri = $data_response["laba_kotor_ri"];
+                $data->periode = $str_current;
+                if($data->save()){
+                // Alert::success
+                toast("Data berhasil disimpan", "success")->autoClose(3000);
+                return redirect()->back();
+                // dd("success");
+                }
+                toast("Data gagal disimpan", "error")->autoClose(3000);
+                return redirect()->back();
+                
+                // dd($data);
+            }
+
+            // return response()->json($response->json(), 200);
+        }
+        toast("Kode SPK belum ada", "error")->autoClose(3000);
+        return redirect()->back();
     }
 }

@@ -1123,6 +1123,15 @@ class DashboardController extends Controller
             $percen_during_claim = Percentage::fromFractionAndTotal($total_approve_reject, $total_sub)->asString();
             $percen_post_claim = Percentage::fromFractionAndTotal($total_approve_value, $total_sub_value)->asString();
 
+            $proyek_progress =$proyek->ProyekProgress->sortByDesc("created_at")->first();
+            if($proyek_progress){
+                $total_ok_review = $proyek_progress->ok_review ?? 0;
+                $total_progress_fisik_ri = $proyek_progress->progress_fisik_ri ?? 0;
+                $percen_progress_status = Percentage::fromFractionAndTotal((int)$total_progress_fisik_ri, (int)$total_ok_review)->asString();
+            }else{
+                $percen_progress_status = "0%";
+            }
+
             // dd($percen_pre_claim);
 
             // $insurance = [
@@ -1152,7 +1161,7 @@ class DashboardController extends Controller
             // $bond = collect($bond);
             // dd($proyek->ContractManagements);
 
-            return view("/DashboardCCM/Dashboard_pelaksanaan_proyek", compact(["bulan_get", "change_status_out", "unit_kerjas_all", "tahun_get", "tahun", "jumlahKontrak", "totalKontrak", "totalPersen", "detail_perubahan_kontrak", "proyek_get", "unit_kerja_get", "dop_get", "proyek", "proyeks", "dops", "unit_kerjas", "changes_overview", "total_pengajuan", "persentasePerubahan", "contract_pelaksanaan_new", "month", "time_status", "percen_pre_claim", "percen_during_claim", "percen_post_claim", "unit_kerja_select", "dop_select"]));
+            return view("/DashboardCCM/Dashboard_pelaksanaan_proyek", compact(["bulan_get", "change_status_out", "unit_kerjas_all", "tahun_get", "tahun", "jumlahKontrak", "totalKontrak", "totalPersen", "detail_perubahan_kontrak", "proyek_get", "unit_kerja_get", "dop_get", "proyek", "proyeks", "dops", "unit_kerjas", "changes_overview", "total_pengajuan", "persentasePerubahan", "contract_pelaksanaan_new", "month", "time_status", "percen_pre_claim", "percen_during_claim", "percen_post_claim", "unit_kerja_select", "dop_select", "percen_progress_status"]));
         }
         // dd($proyeks);
         // $claims = PerubahanKontrak::all()->filter(function($cl) use($proyeks) {
@@ -1722,6 +1731,16 @@ class DashboardController extends Controller
             $percen_pre_claim = Percentage::fromFractionAndTotal($total_sub, $total_potensial)->asString();
             $percen_during_claim = Percentage::fromFractionAndTotal($total_approve_reject, $total_sub)->asString();
             $percen_post_claim = Percentage::fromFractionAndTotal($total_approve_value, $total_sub_value)->asString();
+            
+            $proyek_progress =$proyek->ProyekProgress->sortByDesc("created_at")->first();
+            if($proyek_progress){
+                $total_ok_review = $proyek_progress->ok_review ?? 0;
+                $total_progress_fisik_ri = $proyek_progress->progress_fisik_ri ?? 0;
+                $percen_progress_status = Percentage::fromFractionAndTotal((int)$total_progress_fisik_ri, (int)$total_ok_review)->asString();
+            }else{
+                $percen_progress_status = "0%";
+            }
+            // dd($percen_progress_status);
 
             // $insurance = [
             //     [
@@ -1749,7 +1768,7 @@ class DashboardController extends Controller
             // ];
             // $bond = collect($bond);
 
-            return view("/DashboardCCM/Dashboard_pemeliharaan_proyek", compact(["bulan_get", "change_status_out", "unit_kerjas_all", "tahun_get", "tahun", "jumlahKontrak", "totalKontrak", "totalPersen", "detail_perubahan_kontrak", "proyek_get", "unit_kerja_get", "dop_get", "proyek", "proyeks", "dops", "unit_kerjas", "changes_overview", "total_pengajuan", "persentasePerubahan", "contracts_pemeliharaan", "month", "time_status", "percen_pre_claim", "percen_during_claim", "percen_post_claim", "unit_kerja_select", "dop_select"]));
+            return view("/DashboardCCM/Dashboard_pemeliharaan_proyek", compact(["bulan_get", "change_status_out", "unit_kerjas_all", "tahun_get", "tahun", "jumlahKontrak", "totalKontrak", "totalPersen", "detail_perubahan_kontrak", "proyek_get", "unit_kerja_get", "dop_get", "proyek", "proyeks", "dops", "unit_kerjas", "changes_overview", "total_pengajuan", "persentasePerubahan", "contracts_pemeliharaan", "month", "time_status", "percen_pre_claim", "percen_during_claim", "percen_post_claim", "unit_kerja_select", "dop_select", "percen_progress_status"]));
         }
         // dd($proyeks);
         // $claims = PerubahanKontrak::all()->filter(function($cl) use($proyeks) {

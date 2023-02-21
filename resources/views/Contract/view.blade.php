@@ -90,6 +90,12 @@
                                     <!--end::Button-->
 
                                     <!--begin::Button-->
+                                    <a class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_tes" id="kt_toolbar_primary_button"
+                                    style="background-color: #008CB4;margin-left:10px;">
+                                    Get Progress</a>
+                                <!--end::Button-->
+
+                                    <!--begin::Button-->
                                     <a href="/contract-management" class="btn btn-sm btn-primary" id="cloedButton"
                                         style="background-color:#f3f6f9;margin-left:10px;color: black;">
                                         Close</a>
@@ -370,6 +376,30 @@
                     <!--end::Button-->
 
                     <!--begin::Button-->
+                    {{-- <a class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_tes" id="kt_toolbar_primary_button"
+                        style="background-color: #008CB4;margin-left:10px;"> --}}
+                    <a href="/get-progress/{{ $contract->id_contract }}" class="btn btn-sm btn-primary" id="get_progress"  
+                    style="background-color: #008CB4;margin-left:10px;">
+                    Get Progress</a>
+                    <!--end::Button-->
+
+                    {{-- <script>
+                        async function getData(){
+                            const formData = new FormData();
+                            formData.append("_token", "{{ csrf_token() }}");
+                            // console.log(formData.get("_token"))
+                            const setData = await fetch("/get-progress/{{ $contract->id_contract }}",{
+                                method: "POST",
+                                body: formData
+                            }).then(res => res.json());
+                            if($setData.isSuccess){
+                                window.location.reload();
+                            }
+                        }
+
+                    </script> --}}
+
+                    <!--begin::Button-->
                     <a href="/contract-management" class="btn btn-sm btn-primary" id="cloedButton"
                         style="background-color:#f3f6f9;margin-left:10px;color: black;">
                         Close</a>
@@ -580,7 +610,7 @@
                                                     <span class="">No. SPK: </span>
                                                 </div>
                                                 <div class="text-dark text-start">
-                                                    <b>{{ $contract->project->nospk_external ?? 0 }}</b>
+                                                    <b>{{ $contract->project->kode_spk ?? "-" }}</b>
                                                 </div>
                                             </div>
                                             <!--end::Input group Name-->
@@ -634,6 +664,39 @@
                                             <!--begin::Input group Name-->
                                             <!--end::Input group Name-->
                                         </div>
+                                    </div>
+                                </div>
+                                <div class="fv-row mt-5">
+                                    <div class="d-flex align-items-center">
+                                        <!--begin::Col-->
+                                        <div class="col-6">
+                                            <!--begin::Input group Website-->
+
+                                            <!--begin::Input group Name-->
+                                            <div class="d-flex align-items-center">
+                                                <div class="col-5 text-end me-5">
+                                                    <span class="">Progress Saat Ini: </span>
+                                                </div>
+                                                <div class="text-dark text-start">
+                                                    <b>{{ $progress_now ?? "-" }}</b>
+                                                </div>
+                                            </div>
+                                            <!--end::Input group Name-->
+                                        </div>
+                                        <!--begin::Col-->
+                                        {{-- <div class="col-6">
+                                            <div class="d-flex align-items-center">
+                                                <div class="col-5 text-end me-5">
+                                                    <span class="">Nilai Kontrak Review: </span>
+                                                </div>
+                                                <div class="text-dark text-start">
+                                                    <b>{{ number_format($contract->project->nilaiok_review ?? 0, 0, '.', '.') }}</b>
+                                                </div>
+                                            </div>
+                                            <!--begin::Input group Website-->
+                                            <!--begin::Input group Name-->
+                                            <!--end::Input group Name-->
+                                        </div> --}}
                                     </div>
                                 </div>
                                 <br>
@@ -12802,6 +12865,52 @@
     <!--end::Modal dialog-->
 </div>
 <!--end::Modal - Upload Final Pending Issue-->
+
+<!--begin::Modal - Hasil Klarifikasi dan Negosiasi CDA-->
+<div class="modal fade" id="kt_modal_tes" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog modal-dialog-centered mw-900px">
+        <!--begin::Modal content-->
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header">
+                <!--begin::Modal title-->
+                <h2>Add Attachment | Test </h2>
+                <!--end::Modal title-->
+                <!--begin::Close-->
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                        <i class="bi bi-x-lg"></i>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--end::Modal header-->
+            <!--begin::Modal body-->
+            <div class="modal-body py-lg-6 px-lg-6">
+
+                <!--begin::Input group Website-->
+                <div class="fv-row mb-5">
+                    <form action="/get-progress/{{ $contract->id_contract }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <!--end::Input group-->
+                        
+                        <button type="submit" id="save-review-klarifikasi-negosiasi" class="btn btn-sm btn-primary"
+                        data-bs-dismiss="modal">Save</button>
+                    </form>
+                </div>
+
+
+            </div>
+            <!--end::Modal body-->
+        </div>
+        <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+</div>
+<!--end::Modal - Hasil Klarifikasi dan Negosiasi CDA-->
 
 <!--begin::Modal - Upload Final Resiko Pelaksanaan-->
 <div class="modal fade" id="kt_modal_upload_resiko_pelaksanaan" tabindex="-1" aria-hidden="true">

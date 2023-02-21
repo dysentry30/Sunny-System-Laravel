@@ -342,6 +342,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post("/addendum-contract/draft/update", [AddendumContractController::class, "draftUpdate"]);
 
     Route::get('change-request', [AddendumContractController::class, 'changeRequest']);
+
+    Route::get("/get-progress/{id_contract}", [ContractManagementsController::class, "getDataProgressPIS"]);
     // end :: contract management
 
 

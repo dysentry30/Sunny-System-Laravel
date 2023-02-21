@@ -212,11 +212,11 @@
                                                 <th class="min-w-auto">@sortablelink('kode_proyek','Kode Proyek')</th>
                                                 <th class="min-w-auto">Nama Proyek</th>
                                                 <th class="min-w-auto">Unit Kerja</th>
-                                                {{-- <th class="min-w-auto">VO</th>
-                                                <th class="min-w-auto">Klaim</th>
-                                                <th class="min-w-auto">Anti Klaim</th>
-                                                <th class="min-w-auto">Klaim Asuransi</th> --}}
-                                                <th class="min-w-auto">@sortablelink('id_contract','ID Contract')</th>
+                                                <th class="min-w-auto text-center">VO</th>
+                                                <th class="min-w-auto text-center">Klaim</th>
+                                                <th class="min-w-auto text-center">Anti Klaim</th>
+                                                <th class="min-w-auto text-center">Klaim Asuransi</th>
+                                                {{-- <th class="min-w-auto">@sortablelink('id_contract','ID Contract')</th> --}}
                                             </tr>
                                             <!--end::Table row-->
                                         </thead>
@@ -252,19 +252,34 @@
                                                         </td>
                                                         <!--end::Action-->
                                                     </tr> --}}
+                                                    @php
+                                                        $total_vo = $claim->PerubahanKontrak->filter(function($item){
+                                                            return $item->jenis_perubahan == "VO";
+                                                        })->count();
+                                                        $total_klaim = $claim->PerubahanKontrak->filter(function($item){
+                                                            return $item->jenis_perubahan == "Klaim";
+                                                        })->count();
+                                                        $total_anti_klaim = $claim->PerubahanKontrak->filter(function($item){
+                                                            return $item->jenis_perubahan == "Anti Klaim";
+                                                        })->count();
+                                                        $total_klaim_asuransi = $claim->PerubahanKontrak->filter(function($item){
+                                                            return $item->jenis_perubahan == "Klaim Asuransi";
+                                                        })->count();
+                                                    @endphp
+                                                    {{-- @dump($total_vo, $total_klaim, $total_anti_klaim, $total_klaim_asuransi) --}}
                                                     <tr>
                                                         <td>
                                                             <a href="/claim-management/proyek/{{ $claim->kode_proyek }}/{{ $claim->id_contract }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $claim->kode_proyek }}</a>
                                                         </td>
                                                         <td>{{ $claim->nama_proyek }}</td>
                                                         <td>{{ $claim->UnitKerja->unit_kerja }}</td>
-                                                        {{-- <td>{{ $claim->jenis_perubahan->count() }}</td>
-                                                        <td>{{ $claim->UnitKerja->unit_kerja }}</td>
-                                                        <td>{{ $claim->UnitKerja->unit_kerja }}</td>
-                                                        <td>{{ $claim->UnitKerja->unit_kerja }}</td> --}}
-                                                        <td>
+                                                        <td class="text-center">{{ $total_vo }}</td>
+                                                        <td class="text-center">{{ $total_klaim }}</td>
+                                                        <td class="text-center">{{ $total_anti_klaim }}</td>
+                                                        <td class="text-center">{{ $total_klaim_asuransi }}</td>
+                                                        {{-- <td>
                                                             <a href="/contract-management/view/{{ $claim->id_contract }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $claim->id_contract }}</a>
-                                                        </td>
+                                                        </td> --}}
                                                     </tr>
                                             @empty
                                                 <tr class="bg-gray-100 text-center">
