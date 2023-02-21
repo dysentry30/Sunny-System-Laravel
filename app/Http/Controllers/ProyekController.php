@@ -442,7 +442,8 @@ class ProyekController extends Controller
             $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
                 "api_key" => "c15978155a6b4656c4c0276c5adbb5917eb033d5",
                 "sender" => "62811881227",
-                "number" => "085157875773",
+                // "number" => "085157875773",
+                "number" => "085156341949",
                 "message" => "*$newProyek->nama_proyek* mengajukan rekomendasi.\nSilahkan tekan link di bawah ini untuk menyetujui atau tidak.\n\n$url",
                 // "url" => $url
             ]);

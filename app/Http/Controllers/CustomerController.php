@@ -1043,19 +1043,19 @@ class CustomerController extends Controller
     public function saveMasalahHukum(Request $request)
     {
         $data = $request->all();
-        $editMasalahHukum = MasalahHukum::where("id_customer", "=", $data["id-customer"])->first();
-        if(!empty($editMasalahHukum)) {
-            $editMasalahHukum->id_customer = $data["id-customer"];
-            $editMasalahHukum->kode_proyek = $data["kode-proyek-hukum"];
-            $editMasalahHukum->bentuk_masalah = $data["bentuk_masalah_hukum"];
-            $editMasalahHukum->status = $data["status_hukum"];
-        } else {
-            $editMasalahHukum = new MasalahHukum();
-            $editMasalahHukum->id_customer = $data["id-customer"];
-            $editMasalahHukum->kode_proyek = $data["kode-proyek-hukum"];
-            $editMasalahHukum->bentuk_masalah = $data["bentuk_masalah_hukum"];
-            $editMasalahHukum->status = $data["status_hukum"];
-        }
+        $editMasalahHukum = new MasalahHukum();
+        $editMasalahHukum->id_customer = $data["id-customer"];
+        $editMasalahHukum->kode_proyek = $data["kode-proyek-hukum"];
+        $editMasalahHukum->bentuk_masalah = $data["bentuk_masalah_hukum"];
+        $editMasalahHukum->status = $data["status_hukum"];
+        // $editMasalahHukum = MasalahHukum::where("id_customer", "=", $data["id-customer"])->first();
+        // if(!empty($editMasalahHukum)) {
+        //     $editMasalahHukum->id_customer = $data["id-customer"];
+        //     $editMasalahHukum->kode_proyek = $data["kode-proyek-hukum"];
+        //     $editMasalahHukum->bentuk_masalah = $data["bentuk_masalah_hukum"];
+        //     $editMasalahHukum->status = $data["status_hukum"];
+        // } else {
+        // }
         if ($data["kode-proyek-hukum"] && $data["bentuk_masalah_hukum"] && $data["status_hukum"] !== null) {
             if($editMasalahHukum->save()) {
                 Alert::success("Success", "Masalah Hukum Berhasil Ditambahkan");

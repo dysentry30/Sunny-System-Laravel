@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Piutang;
 use Illuminate\Http\Request;
 
 class PiutangController extends Controller
@@ -13,6 +14,7 @@ class PiutangController extends Controller
      * @return [type]
      */
     public function index(Request $request){
-        return view("/Piutang/piutang", compact([]));
+        $piutangs = Piutang::all();
+        return view("/Piutang/piutang", compact(["piutangs"]));
     }
 }

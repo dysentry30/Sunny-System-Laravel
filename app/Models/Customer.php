@@ -94,5 +94,9 @@ class Customer extends Model
     {
         return $this->hasMany(KaryaInovasi::class, "id_customer", "id_customer");
     }
+    
+    public function Piutang() {
+        return $this->hasMany(Piutang::class, "debitor", "kode_nasabah");
+    }
 
 }

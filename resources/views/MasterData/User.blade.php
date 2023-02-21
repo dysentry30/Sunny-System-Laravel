@@ -3,7 +3,7 @@ a{{-- Begin::Extend Header --}}
 {{-- End::Extend Header --}}
 
 {{-- Begin::Title --}}
-@section('title', 'Users')
+@section('title', 'Users Management')
 {{-- End::Title --}}
 
 <!--begin::Main-->
@@ -39,7 +39,7 @@ a{{-- Begin::Extend Header --}}
                                 data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                                 class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
                                 <!--begin::Title-->
-                                <h1 class="d-flex align-items-center fs-3 my-1">Users
+                                <h1 class="d-flex align-items-center fs-3 my-1">Users Management
                                 </h1>
                                 <!--end::Title-->
                             </div>

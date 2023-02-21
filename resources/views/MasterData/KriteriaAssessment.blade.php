@@ -464,9 +464,11 @@
                                             data-control="select2" data-hide-search="false" data-placeholder="Pilih Isi..."
                                             data-select2-id="select2-industry-attractive" tabindex="-1" aria-hidden="true">
                                             <option value="" selected></option>
-                                            <option value="Industri Menarik dan Cenderung Menarik">Industri Menarik dan Cenderung Menarik</option>
-                                            <option value="Industri Netral dan Cenderung Waspada">Industri Netral dan Cenderung Waspada</option>
-                                            <option value="Industri Waspada">Industri Waspada</option>
+                                            <option value="Menarik">Menarik</option>
+                                            <option value="Cenderung Menarik">Cenderung Menarik</option>
+                                            <option value="Netral">Netral</option>
+                                            <option value="Cenderung Waspada">Cenderung Waspada</option>
+                                            <option value="Waspada">Waspada</option>
                                             
                                             {{-- @foreach ($instansi as $ins)
                                                 <option value="{{$ins->instansi}}">{{$ins->instansi}}</option>
@@ -822,10 +824,14 @@
                                                 data-control="select2" data-hide-search="false" data-placeholder="Pilih Isi..."
                                                 data-select2-id="select2-industry-attractive_{{ $kriteria->id_kriteria_assessment }}" tabindex="-1" aria-hidden="true">
                                                 <option value=""></option>
-                                                <option value="Industri Menarik dan Cenderung Menarik" {{ empty($is_kriteria_industry_attractive) && $kriteria->isi == "Industri Menarik dan Cenderung Menarik" ? "selected" : "" }}>Industri Menarik dan Cenderung Menarik</option>
+                                                {{-- <option value="Industri Menarik dan Cenderung Menarik" {{ empty($is_kriteria_industry_attractive) && $kriteria->isi == "Industri Menarik dan Cenderung Menarik" ? "selected" : "" }}>Industri Menarik dan Cenderung Menarik</option>
                                                 <option value="Industri Netral dan Cenderung Waspada" {{ empty($is_kriteria_industry_attractive) && $kriteria->isi == "Industri Netral dan Cenderung Waspada" ? "selected" : "" }}>Industri Netral dan Cenderung Waspada</option>
-                                                <option value="Industri Waspada" {{ empty($is_kriteria_industry_attractive) && $kriteria->isi == "Industri Waspada" ? "selected" : "" }}>Industri Waspada</option>
-                                                
+                                                <option value="Industri Waspada" {{ empty($is_kriteria_industry_attractive) && $kriteria->isi == "Industri Waspada" ? "selected" : "" }}>Industri Waspada</option> --}}
+                                                <option value="Menarik" {{ empty($is_kriteria_industry_attractive) && $kriteria->isi == "Menarik" ? "selected" : "" }}>Menarik</option>
+                                                <option value="Cenderung Menarik" {{ empty($is_kriteria_industry_attractive) && $kriteria->isi == "Cenderung Menarik" ? "selected" : "" }}>Cenderung Menarik</option>
+                                                <option value="Netral" {{ empty($is_kriteria_industry_attractive) && $kriteria->isi == "Netral" ? "selected" : "" }}>Netral</option>
+                                                <option value="Cenderung Waspada" {{ empty($is_kriteria_industry_attractive) && $kriteria->isi == "Cenderung Waspada" ? "selected" : "" }}>Cenderung Waspada</option>
+                                                <option value="Waspada" {{ empty($is_kriteria_industry_attractive) && $kriteria->isi == "Waspada" ? "selected" : "" }}>Waspada</option>
                                                 {{-- @foreach ($instansi as $ins)
                                                     <option value="{{$ins->instansi}}">{{$ins->instansi}}</option>
                                                 @endforeach --}}
