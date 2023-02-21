@@ -347,7 +347,7 @@
                                                     aria-hidden="true">
                                                     <option></option>
                                                     @foreach ($dops as $dop)
-                                                        <option value="{{ $dop->dop }}" {{ $dop_get == $dop->dop ? 'selected' : '' }} >{{ $dop->dop }}</option>
+                                                        <option value="{{ $dop->dop }}" {{ $dop_select == $dop->dop ? 'selected' : '' }} >{{ $dop->dop }}</option>
                                                     @endforeach
                                             </select>
                                         </div>
@@ -360,7 +360,7 @@
                                                     aria-hidden="true">
                                                     <option></option>
                                                     @foreach ($unit_kerjas as $unit_kerjas)
-                                                        <option value="{{ $unit_kerjas->divcode }}" {{ $unit_kerja_get == $unit_kerjas->divcode ? 'selected' : '' }} >{{ $unit_kerjas->unit_kerja }}</option>
+                                                        <option value="{{ $unit_kerjas->divcode }}" {{ $unit_kerja_select == $unit_kerjas->divcode ? 'selected' : '' }} >{{ $unit_kerjas->unit_kerja }}</option>
                                                     @endforeach
                                             </select>
                                         </div>
@@ -650,7 +650,7 @@
                                                                         }
                                                                     }
                                                                 @endphp --}}
-                                                                <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2 tender-review-text" id="id-tender-review">0</span>
+                                                                <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2" id="id-tender-review">{{ $tender_review }}</span>
                                                                 <!--end::Amount-->
                                                                 <!--begin::Subtitle-->
                                                                 <span class="text-white opacity-75 pt-1 fw-semibold fs-3">Tender Review</span>
@@ -1131,8 +1131,15 @@
                                             <!--end::ITB-->
                                             <!--begin::TENDER-->
                                             <td class="text-center">
-                                                @if (!empty($contract))
-                                                    @if ($contract->reviewProjects->isNotEmpty())
+                                                <small class="{{ $contract->UploadFinal->where("category", "=", "tinjauan-perolehan")->isNotEmpty() ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
+                                                    @if ($contract->UploadFinal->where("category", "=", "tinjauan-perolehan")->isNotEmpty())
+                                                    Yes
+                                                    @else
+                                                    No
+                                                    @endif
+                                                </small>
+                                                {{-- @if (!empty($contract))
+                                                    @if ($contract->UploadFinal->where("category", "=", "tinjauan-perolehan")->isNotEmpty())
                                                         <small class="badge badge-light-success">
                                                             Yes
                                                         </small>
@@ -1141,12 +1148,19 @@
                                                     <small class="badge badge-light-danger">
                                                         No
                                                     </small>
-                                                @endif
+                                                @endif --}}
                                             </td>
                                             <!--end::TENDER-->
                                             <!--begin::RISK-->
                                             <td class="text-center">
-                                                @if (!empty($contract))
+                                                <small class="{{ $contract->UploadFinal->where("category", "=", "resiko-perolehan")->isNotEmpty() ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
+                                                    @if ($contract->UploadFinal->where("category", "=", "resiko-perolehan")->isNotEmpty())
+                                                    Yes
+                                                    @else
+                                                    No
+                                                    @endif
+                                                </small>
+                                                {{-- @if (!empty($contract))
                                                     @if ($contract->inputRisks->isNotEmpty())
                                                         <small class="badge badge-light-success">
                                                             Yes
@@ -1156,7 +1170,7 @@
                                                     <small class="badge badge-light-danger">
                                                         No
                                                     </small>
-                                                @endif
+                                                @endif --}}
                                             </td>
                                             <!--end::RISK-->
                                             <!--begin::DAFTAR-->
@@ -1747,7 +1761,7 @@
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const counterTenderReview = document.querySelectorAll(".tender-review");
-            // console.log(document.querySelector(".tender-review-text"));
+            console.log(document.querySelector(".tender-review-text"));
             let tenderCount = 0;
             counterTenderReview.forEach(tender => {
                 if(tender.innerHTML == "Closed") {

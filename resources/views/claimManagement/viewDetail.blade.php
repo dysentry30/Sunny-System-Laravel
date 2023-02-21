@@ -212,7 +212,7 @@
                                             @endphp
                                             <!--End:Table: Review-->
                                             @if (!empty($uploadFilePerubahan))
-                                            <div class="d-flex me-5 container">
+                                            <div class="d-flex justify-content-end">
                                             <p><b>Download File :</b> 
                                             <a target="_blank" href="{{ asset('words/'.$uploadFilePerubahan->id_document) }}" class="text-hover-primary">
                                             {{ $uploadFilePerubahan->nama_document }}

@@ -250,12 +250,14 @@
                     <!--begin::Table-->
                     <div class="d-flex flex-column bg-white px-15 py-8 mx-7">
                         <span class="mb-4 fw-bold fs-4">
+                            @if (!empty($review))
                             <a href="#" onclick="exportToExcel(this, '#tinjauan-kontrak')" class="">(Klik di sini untuk Export ke Excel)</a>
+                            @endif
                         </span>
                         <form action="/review-contract/upload" method="POST" class="card card-flush">
                             @csrf
                             <input type="hidden" class="form-control form-control-solid" name="id-contract" value="{{ $contract->id_contract }}">
-                            {{-- <input type="hidden" class="form-control form-control-solid" name="stage" value="{{ $stage }}"> --}}
+                            <input type="hidden" class="form-control form-control-solid" name="stage" value="{{ $stage }}">
                             
                             <table class="table align-middle table-row-dashed fs-6 gy-2 card-body" id="tinjauan-kontrak">
                                 <!--begin::Table head-->

@@ -2301,7 +2301,7 @@
                                                 </a>
                                             </td>
                                             <td>
-                                                <p class="text-gray-600 mb-1">{{ Carbon\Carbon::createFromTimeString($uploadResikoPelaksanaan->created_at)->translatedFormat("d F Y") }}</p>
+                                                <p class="text-gray-600 mb-1">{{ Carbon\Carbon::createFromTimeString($inputRisk->created_at)->translatedFormat("d F Y") }}</p>
                                             </td>
                                         </tr>
                                     @empty
@@ -2382,12 +2382,12 @@
                             <br>
                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Tinjauan Dokumen Kontrak - Pelaksanaan
-                                @if ($contract->reviewProjects->isEmpty())
-                                    <a href="/review-contract/view/{{ $contract->id_contract }}/2" target="_blank" Id="Plus">+</a>    
-                                    @else
-                                    <a href="/review-contract/view/{{ $contract->id_contract }}/2" target="_blank" class="btn btn-primary btn-sm p-2 px-3 mx-3">Lanjutkan isi</a>    
+                                @if ($contract->reviewProjects->where("stage", "=", 1)->isNotEmpty())
+                                    <a Id="Plus" href="/review-contract/view/{{ $contract->id_contract }}/2">+</a>
                                 @endif
                             </h3>
+
+                            {{-- @dump($contract->reviewProjects->where("stage", "=", 1)->isNotEmpty()) --}}
 
                             <br><br><br>
                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
@@ -3705,7 +3705,7 @@
                                                 <thead>
                                                     <!--begin::Table row-->
                                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                        <th class="w-50px text-center">No.</th>
+                                                        <th class="w-50px">No.</th>
                                                         <th class="w-auto">Jenis Dokumen</th>
                                                         <th class="w-auto">File</th>
                                                         <th class="w-auto">Tanggal</th>
@@ -3761,7 +3761,7 @@
                                                         </tr>
                                                         @endif
                                                     @endforeach
-                                                    @if ($contract->ContractBast->count() == 0)
+                                                    @if ($contract->ContractBast->where("bast", "=", 1)->isEmpty())
                                                     <tr>
                                                         <td colspan="3" class="text-center">
                                                             <h6><b>There is no data</b></h6>
@@ -3781,8 +3781,8 @@
                                                 <thead>
                                                     <!--begin::Table row-->
                                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                        <th class="w-50px text-center">No.</th>
-                                                        <th class="w-auto">Jenis Dokumen</th>
+                                                        <th class="w-50px">No.</th>
+                                                        {{-- <th class="w-auto">Jenis Dokumen</th> --}}
                                                         <th class="w-auto">File</th>
                                                         <th class="w-auto">Tanggal</th>
                                                         {{-- <th class="w-auto text-center"></th> --}}
@@ -3804,9 +3804,9 @@
                                                                 </td>
                                                                 <!--end::Nomor-->
                                                                 <!--begin::Column-->
-                                                                <td>
+                                                                {{-- <td>
                                                                     {{ $dokumen->jenis_dokumen }}
-                                                                </td>
+                                                                </td> --}}
                                                                 <!--end::Column-->
                                                                 <!--begin::Name-->
                                                                 <td>
@@ -3837,7 +3837,7 @@
                                                             </tr>
                                                             @endif
                                                         @endforeach
-                                                        @if ($contract->ContractBast->count() == 0)
+                                                        @if ($contract->ContractBast->where("bast", "=", 2)->isEmpty())
                                                         <tr>
                                                             <td colspan="3" class="text-center">
                                                                 <h6><b>There is no data</b></h6>
@@ -4134,7 +4134,7 @@
                                             @else
                                                 <!--begin::Column-->
                                                 <td>
-                                                    <p class="badge badge-light-success">Closed</p>
+                                                    <p class="badge badge-light-danger">Closed</p>
                                                 </td>
                                                 <!--end::Column-->
                                             @endif
@@ -6725,7 +6725,7 @@
                         <input type="text" class="form-control form-control-solid mb-3" name="nomor-dokumen"
                         id="nomor_dokumen" value="" placeholder="Nomor Dokumen" style="font-weight: normal" />
 
-                        <!--begin::Label-->
+                        {{-- <!--begin::Label-->
                         <label class="fs-6 fw-bold form-label mt-3">
                             <span class="">Jenis Dokumen</span>
                         </label>
@@ -6741,7 +6741,7 @@
                             <option value="Performance Test">Performance Test</option>
                             <option value="BAST 1 / PHO">BAST 1 / PHO</option>
                         </select>
-                        <!--end::Input-->
+                        <!--end::Input--> --}}
                         <br>
                         <!--begin::Label-->
                         <label class="fs-6 fw-bold form-label mt-3">
@@ -6958,7 +6958,7 @@
                         </div>
                         <br>
                         <div class="row">
-                            <div class="col">
+                            {{-- <div class="col">
                                 <!--begin::Label-->
                                 <label class="fs-6 fw-bold form-label mt-3">
                                     <span style="font-weight: normal">Status</span>
@@ -6967,11 +6967,11 @@
                                 <select name="status" id="status-pelaksanaan" class="form-select form-select-solid"
                                     data-control="select2" data-hide-search="true" data-placeholder="Pilih Status"
                                     data-select2-id="select2-data-project-id" tabindex="-1" aria-hidden="true">
-                                    <option value=""></option>
-                                    <option value="1">Open</option>
-                                    <option value="0">Close</option>
+                                    <option value="1" selected>Open</option>
                                 </select>
-                            </div>
+
+                                <input type="text" name="status" class="form-control form-control-solid" value="Open" readonly>
+                            </div> --}}
                             <div class="col">
                                 <!--begin::Label-->
                                 <label class="fs-6 fw-bold form-label mt-3">
@@ -7434,15 +7434,9 @@
                                 <select name="status" id="status" class="form-select form-select-solid"
                                     data-control="select2" data-hide-search="true" data-placeholder="Pilih Status"
                                     data-select2-id="select2-data-project-id" tabindex="-1" aria-hidden="true">
-                                    @if (!empty($pending_issue->status))
-                                    <option value="{{ $pending_issue->status }}" selected>{{ $pending_issue->status == true ? "Open" : "Close" }}</option>
-                                    <option value="1">Open</option>
-                                    <option value="0">Close</option>
-                                    @else
-                                    <option value=""></option>
-                                    <option value="1">Open</option>
-                                    <option value="0">Close</option>
-                                    @endif
+                                    {{-- <option value="{{ $pending_issue->status }}" selected>{{ $pending_issue->status == true ? "Open" : "Close" }}</option> --}}
+                                    <option value="Open" {{ $pending_issue->status == true ? 'selected' : '' }}>Open</option>
+                                    <option value="Close" {{ $pending_issue->status == false ? 'selected' : '' }}>Close</option>
                                 </select>
                             </div>
                             <div class="col">

@@ -30,7 +30,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\ForecastController;
 use App\Http\Controllers\DashboardController;
-
+use App\Http\Controllers\PegawaiController;
 use App\Http\Controllers\UnitKerjaController;
 use App\Http\Controllers\SumberDanaController;
 use App\Http\Controllers\TeamProyekController;
@@ -1967,6 +1967,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         return redirect()->back();
     });
 
+    Route::get("/pegawai", [PegawaiController::class, "index"]);
+
     Route::get('/get-jabatans', function () {
         $jabatans = HTTP::get("https://hcis.wika.co.id/services/rest/?format=json&wsc_id=WSC-000010&method=jabportal&pin=p0rt4lJ&is_active=1");
         $status = 0;
@@ -2106,6 +2108,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post("/mom-meeting/upload", [ContractManagementsController::class, "momMeeting"]);
 
     Route::post("/perubahan-kontrak/upload", [ClaimController::class, "newClaim"]);
+
+    Route::post("/perubahan-kontrak/edit", [ClaimController::class, "perubahanKontrakEdit"]);
 
     Route::post("/perubahan-kontrak/update", [ContractManagementsController::class, "uploadPerubahanKontrak"]);
 
@@ -3001,7 +3005,8 @@ Route::get('/send-data-industry-attractivness', function (Request $request) {
 // Begin Send Data Claim ke BW SAP
 Route::get('/send-data-claim-management', function () {
 
-    $claims_all = PerubahanKontrak::all();
+    // $claims_all = PerubahanKontrak::all();
+    $claims_all = PerubahanKontrak::whereIn("jenis_perubahan", ["VO", "Klaim"])->get();
     // $claims_map = $claims_all->map(function($claim){
     //     return $claim->Proyek->UnitKerja->id_profit_center;
     // });
@@ -3009,7 +3014,8 @@ Route::get('/send-data-claim-management', function () {
     // $profit_center = $contract->project->UnitKerja->id_profit_center;
     // $claims = $contract->PerubahanKontrak;
     $filter = $claims_all->filter(function($item){
-        return $item->jenis_perubahan == "Klaim";
+        return $item->Proyek->profit_center != "";
+        // return $item;
     });
     $data_claims = $filter->map(function($item, $key)use($filter){
         $profit_center = $item->Proyek->profit_center;
@@ -3029,6 +3035,7 @@ Route::get('/send-data-claim-management', function () {
             $newClass->CLAIM_CAT = "ITEM DISETUJUI";
         };
         $newClass->CLAIM_VAL = $filter->count();
+        $newClass->CATEGORY = "$item->jenis_perubahan";
 
         return $newClass;
     })->values();

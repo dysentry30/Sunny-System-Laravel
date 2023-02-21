@@ -223,7 +223,7 @@
                                                     aria-hidden="true">
                                                     <option value="" selected></option>
                                                     @foreach ($contracts_pemeliharaan as $kontrak)
-                                                        <option value="{{ $kontrak->project_id }}" {{ $proyek_get == $kontrak->project_id ? 'selected' : '' }} >{{ $kontrak->project->nama_proyek }} ({{ $kontrak->project_id }})</option>
+                                                        <option value="{{ $kontrak->project_id }}" {{ $proyek_get == $kontrak->project_id ? 'selected' : '' }} >{{ $kontrak->nama_proyek }} ({{ $kontrak->project_id }})</option>
                                                         {{-- <option value="{{ $proyek->kode_proyek }}" >{{ $proyek->nama_proyek }} ({{$proyek->kode_proyek}})</option> --}}
                                                     @endforeach
                                             </select>
@@ -529,7 +529,7 @@
                                                 $timePending = 100 - (int) $timeStatus;
                                             @endphp
                                             <!--begin::Amount-->
-                                            <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2">{{ $timeStatus }} %</span>
+                                            <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2">{{ !empty($time_status) ? $time_status : "0%" }}</span>
                                             <!--end::Amount-->
                                             <!--begin::Subtitle-->
                                             <span class="text-white opacity-75 pt-1 fw-semibold fs-6">TIME STATUS</span>
@@ -543,11 +543,11 @@
                                         <!--begin::Progress-->
                                         <div class="d-flex align-items-center flex-column mt-3 w-100">
                                             <div class="d-flex justify-content-between fw-bold fs-6 text-white opacity-75 w-100 mt-auto mb-2">
-                                                <span>{{ $timeStatus }}%</span>
+                                                <span>{{ !empty($time_status) ? $time_status : "0%" }}</span>
                                                 {{-- <span>-{{ $timePending }}%</span> --}}
                                             </div>
                                             <div class="h-8px mx-3 w-100 bg-white bg-opacity-50 rounded">
-                                                <div class="bg-white rounded h-8px" role="progressbar" style="width: {{ (int) $timeStatus }}%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                                <div class="bg-white rounded h-8px" role="progressbar" style="width: {{ (int) $time_status }};" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
                                             </div>
                                         </div>
                                         <!--end::Progress-->
@@ -1134,7 +1134,7 @@
                                             <span class="text-white fs-3 ms-6">Proses Pre-Claim : </span>
                                             <!--end::Amount-->
                                             <!--begin::Subtitle-->
-                                            <span class="text-white fs-3 ms-12 fw-bolder">{{ mt_rand(10, 95) }} %</span>
+                                            <span class="text-white fs-3 ms-12 fw-bolder">{{ $percen_pre_claim }}</span>
                                             <!--end::Subtitle-->
                                         </div>
                                         <!--end::Title-->
@@ -1156,7 +1156,7 @@
                                             <span class="text-white fs-3 ms-6">Proses During-Claim : </span>
                                             <!--end::Amount-->
                                             <!--begin::Subtitle-->
-                                            <span class="text-white fs-3 ms-12 fw-bolder">{{ mt_rand(10, 95) }} %</span>
+                                            <span class="text-white fs-3 ms-12 fw-bolder">{{ $percen_during_claim }}</span>
                                             <!--end::Subtitle-->
                                         </div>
                                         <!--end::Title-->
@@ -1178,7 +1178,7 @@
                                             <span class="text-white fs-3 ms-6">Proses Post-Claim : </span>
                                             <!--end::Amount-->
                                             <!--begin::Subtitle-->
-                                            <span class="text-white fs-3 ms-12 fw-bolder">{{ mt_rand(10, 95) }} %</span>
+                                            <span class="text-white fs-3 ms-12 fw-bolder">{{ $percen_post_claim }}</span>
                                             <!--end::Subtitle-->
                                         </div>
                                         <!--end::Title-->
