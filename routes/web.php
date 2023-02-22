@@ -39,6 +39,8 @@ use App\Http\Controllers\KriteriaPasarController;
 use App\Http\Controllers\AddendumContractController;
 use App\Http\Controllers\ContractManagementsController;
 use App\Http\Controllers\CSIController;
+use App\Http\Controllers\DirektoratController;
+use App\Http\Controllers\DivisiController;
 use App\Http\Controllers\JenisProyekController;
 use App\Http\Controllers\MataUangController;
 use App\Http\Controllers\PiutangController;
@@ -1677,6 +1679,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         // return view("/MasterData/IndustrySectors", compact(["industrySector"]));
     });
 
+    // Begin :: Master Data Kriteria Green Line
     Route::get('/kriteria-green-line', function () {
         $instansi = SumberDana::all()->map(function($sd) {
             $new_class = new stdClass();
@@ -1796,7 +1799,9 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         Alert::error('Error', "Kriteria Green Line gagal dihapus");
         return redirect()->back();
     });
+    // End :: Master Data Kriteria Green Line
     
+    // Begin :: Master Data Kriteria Assessment
     Route::post('/kriteria-assessment/save', function (Request $request) {
         $data = $request->collect();
         $data = $data->map(function($d, $key) use($data) {
@@ -1885,6 +1890,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $kriteria_assessments = KriteriaAssessment::all();
         return view("MasterData/KriteriaAssessment", compact(["kriteria_assessments"]));
     });
+    // End :: Master Data Kriteria Assessment
 
     Route::get('/matriks-approval-rekomendasi', function () {
         $approval_rekomendasi = MatriksApprovalRekomendasi::where("tahun", "=", (int) date("Y"))->get();
@@ -1929,6 +1935,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         return redirect()->back();
     });
 
+    // Begin :: Master Data Jabatan
     Route::get('/jabatan', function () {
         $jabatans = Jabatan::where("tahun", "=", (int) date("Y"))->get();
         $dops = Dop::all();
@@ -1968,8 +1975,6 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         Alert::error('Error', "Jabatan gagal diperbarui");
         return redirect()->back();
     });
-
-    Route::get("/pegawai", [PegawaiController::class, "index"]);
 
     Route::get('/get-jabatans', function () {
         $jabatans = HTTP::get("https://hcis.wika.co.id/services/rest/?format=json&wsc_id=WSC-000010&method=jabportal&pin=p0rt4lJ&is_active=1");
@@ -2012,6 +2017,25 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         // ]);
         return response()->json($jabatans->json());
     });
+    // End :: Master Data Jabatan
+    
+    // Begin :: Master Data Pegawai
+    Route::get("/pegawai", [PegawaiController::class, "index"]);
+    // End :: Master Data Pegawai
+    
+    // Begin :: Master Data Divisi
+    Route::get("/divisi", [DivisiController::class, "index"]);
+    Route::post("/divisi/save", [DivisiController::class, "save"]);
+    Route::post("/divisi/{divisi}/save", [DivisiController::class, "edit"]);
+    Route::post("/divisi/{divisi}/delete", [DivisiController::class, "delete"]);
+    // End :: Master Data Divisi
+    
+    // Begin :: Master Data Direktorat
+    Route::get("/direktorat", [DirektoratController::class, "index"]);
+    Route::post("/direktorat/save", [DirektoratController::class, "save"]);
+    Route::post("/direktorat/{direktorat}/save", [DirektoratController::class, "edit"]);
+    Route::post("/direktorat/{direktorat}/delete", [DirektoratController::class, "delete"]);
+    // End :: Master Data Direktorat
 
 
 

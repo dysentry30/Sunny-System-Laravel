@@ -148,6 +148,9 @@
                                         <th class="min-w-auto">Tahun</th>
                                         <th class="min-w-auto">Jabatan</th>
                                         <th class="min-w-auto">Unit Kerja</th>
+                                        <th class="min-w-auto">Klasifikasi Proyek</th>
+                                        <th class="min-w-auto">Kategori</th>
+                                        <th class="min-w-auto">Action</th>
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>
@@ -168,8 +171,16 @@
                                             @endphp --}}
                                         <tr>
                                             <td>{{$approval->tahun}}</td>
-                                            <td>{{$approval->jabatan}}</td>
-                                            <td>{{$approval->unit_kerja}}</td>
+                                            <td>{{$approval->Jabatan->nama_jabatan}}</td>
+                                            <td>{{$approval->UnitKerja->unit_kerja}}</td>
+                                            <td>{{$approval->klasifikasi_proyek}}</td>
+                                            <td>{{$approval->kategori}}</td>
+                                            <td>
+                                                <form action="" method="POST">
+                                                    @csrf
+                                                    <input type="hidden" type="text" value="{{ $approval}}">
+                                                </form>
+                                            </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -277,7 +288,7 @@
                                         data-select2-id="select2-jabatan" tabindex="-1" aria-hidden="true">
                                         <option value="" selected></option>
                                         @foreach ($jabatans as $jabatan)
-                                            <option value="{{$jabatan->instansi}}">{{$jabatan->instansi}}</option>
+                                            <option value="{{$jabatan->kode_jabatan}}">{{$jabatan->nama_jabatan}}</option>
                                         @endforeach
                                         {{-- @foreach ($sumber_danas as $sd)
                                             <option value="{{$sd->kode}}">{{$sd->kode}}</option>
@@ -720,12 +731,11 @@
             document.querySelector("#rating select").removeAttribute("disabled");
         }
     }
-    // $(document).ready(function() {
-    //     $('#provinsi-select', "#tier-select").select2({
-    //         dropdownParent: $('#kt_modal_input_kriteria_green_line'),
-    //         // minimumResultsForSearch: Infinity,
-    //     });
-    // });
+    $(document).ready(function() {
+        $("#jabatan, #unit-kerja, #klasifikasi-proyek, #kategori").select2({
+            dropdownParent: $('#kt_modal_input_kriteria_green_line'),
+        });
+    });
 </script>
 @endsection
 
