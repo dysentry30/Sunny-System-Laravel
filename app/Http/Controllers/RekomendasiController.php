@@ -14,7 +14,7 @@ class RekomendasiController extends Controller
         // $all_super_user_counter = User::all()->filter(function($u) {
         //     return str_contains($u->name, "PIC") || $u->check_administrator;
         // })->count() - 2;
-        $all_super_user_counter = 2;
+        $all_super_user_counter = 1;
         $rekomendasi_open = $request->query("open") ?? "";
         // Begin Prosess Approval
         if(!empty($request->setuju)) {
@@ -25,6 +25,7 @@ class RekomendasiController extends Controller
                 [
                     "user_id" => Auth::user()->id,
                     "status" => "approved",
+                    "tanggal" => \Carbon\Carbon::now(),
                 ]
             ]);
             $check_user_approval_counter = is_array(collect($data->first())->values()->first()) ? collect($data->first())->values()->count() == $all_super_user_counter : $data->count() == $all_super_user_counter;
@@ -69,10 +70,12 @@ class RekomendasiController extends Controller
                     [
                         "user_id" => Auth::user()->id,
                         "status" => "rejected",
+                        "tanggal" => \Carbon\Carbon::now(),
                     ]
                 ]
             );
             if($check_user_approval_counter) {
+                $proyek->is_recommended = false;
                 $proyek->is_request_rekomendasi = false;
             }
             $proyek->approved_rekomendasi = $data->toJson();
@@ -87,13 +90,40 @@ class RekomendasiController extends Controller
             $data = $request->all();
             // dd($data);
             // $proyek->is_request_rekomendasi = true;
+            $is_proyek_mega = str_contains($proyek->klasifikasi_pasdin, "Mega") ? true : false;
+            $is_proyek_besar = str_contains($proyek->klasifikasi_pasdin, "Besar") ? true : false;
+            $hasil_assessment = collect(json_decode($proyek->hasil_assessment));
+            
+            if($data["kategori-rekomendasi"] == "Direkomendasikan dengan catatan") {
+                $proyek->is_recommended_with_note = true;
+                $proyek->is_recommended = true;
+            } else if($data["kategori-rekomendasi"] == "Rekomendasi Ditolak") {
+                $proyek->is_recommended = false;
+            } else {
+                $proyek->is_recommended = true;
+            }
+
+            $proyek->recommended_with_note = $data["note-rekomendasi"] ?? "";
+            if($proyek->save()) {
+                createWordPersetujuan($proyek, $hasil_assessment, $is_proyek_besar, $is_proyek_mega);
+                // createWordPersetujuan($proyek, $hasil_assessment, $is_proyek_besar, $is_proyek_mega);
+                Alert::html("Success", "Rekomendasi dengan nama proyek <b>$proyek->nama_proyek</b> ditolak", "success");
+                return redirect()->back();
+            }
+            Alert::html("Failed", "Rekomendasi dengan nama proyek <b>$proyek->nama_proyek</b> gagal ditolak", "error");
+            return redirect()->back();
+        } else if(!empty($request["rekomendasi-ditolak"])) {
+            $proyek = Proyek::find($request->get("kode-proyek"));
+            $data = $request->all();
+            dd($data, "ditolak");
+            // $proyek->is_request_rekomendasi = true;
             $is_proyek_mega = (str_contains($proyek->klasifikasi_pasdin, "Besar") || str_contains($proyek->klasifikasi_pasdin, "Mega")) ? true : false;
             $hasil_assessment = collect(json_decode($proyek->hasil_assessment));
             
-            $proyek->is_recommended = true;
-            $proyek->recommended_with_note = $data["note-rekomendasi"];
+            $proyek->is_recommended = false;
+            // $proyek->recommended_with_note = $data["note-rekomendasi"];
             if($proyek->save()) {
-                createWordPersetujuan($proyek, $hasil_assessment, $is_proyek_mega);
+                // createWordPersetujuan($proyek, $hasil_assessment, $is_proyek_mega);
                 Alert::html("Success", "Rekomendasi dengan nama proyek <b>$proyek->nama_proyek</b> ditolak", "success");
                 return redirect()->back();
             }
@@ -104,39 +134,25 @@ class RekomendasiController extends Controller
 
         $is_super_user = str_contains(Auth::user()->name, "PIC") || Auth::user()->check_administrator;
         $unit_kerjas = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja);
-        // if($is_super_user) {
-        //     $proyeks_pengajuan = Proyek::where("stage", "=", 1)->get()->filter(function($p) {
-        //         return $p->is_request_rekomendasi || !empty($p->approved_rekomendasi) && !$p->review_assessment;
-        //     });
-        //     $proyeks_rekomendasi = Proyek::where("stage", "=", 1)->get()->filter(function($p) use($all_super_user_counter) {
-        //         $approved_rekomendasi = collect(json_decode($p->approved_rekomendasi));
-        //         return !empty($approved_rekomendasi) && $approved_rekomendasi->every("status", "=", "approved") && $approved_rekomendasi->count() == $all_super_user_counter && $p->review_assessment;
-        //     });
-        //     // $proyeks_persetujuan = Proyek::all()->filter(function($p) {
-        //     //     return $p->is_request_rekomendasi || !is_null($p->approved_rekomendasi);
-        //     // });
-        //     $proyeks_persetujuan = [];
-        // } else {
-        //     $proyeks_pengajuan = Proyek::where("stage", "=", 1)->whereIn('unit_kerja', $unit_kerjas->toArray())->get()->filter(function($p) {
-        //         return $p->is_request_rekomendasi || !is_null($p->approved_rekomendasi);
-        //     });
-        //     $proyeks_rekomendasi = Proyek::where("stage", "=", 1)->whereIn('unit_kerja', $unit_kerjas->toArray())->get()->filter(function($p) use($all_super_user_counter) {
-        //         $approved_rekomendasi = collect(json_decode($p->approved_rekomendasi));
-        //         return !empty($approved_rekomendasi) && $approved_rekomendasi->every("status", "=", "approved") && $approved_rekomendasi->count();
-        //     });
-        //     $proyeks_persetujuan = Proyek::where("approved_rekomendasi", "=", null)->get();
-        // }
-        $proyeks_pengajuan = Proyek::where("stage", "=", 1)->get()->filter(function($p) {
-            return ($p->is_request_rekomendasi || !empty($p->approved_rekomendasi)) && !$p->review_assessment;
-        });
-        $proyeks_rekomendasi = Proyek::where("stage", "=", 1)->get()->filter(function($p) use($all_super_user_counter) {
-            $approved_rekomendasi = collect(json_decode($p->approved_rekomendasi));
-            return !empty($approved_rekomendasi) && $approved_rekomendasi->every("status", "=", "approved") && $approved_rekomendasi->count() == $all_super_user_counter && $p->review_assessment && empty($p->is_recommended);
-        });
-        $proyeks_persetujuan = Proyek::all()->filter(function($p) {
-            return $p->is_recommended;
-        });
-        // $proyeks_persetujuan = [];
+        if($is_super_user) {
+            $proyeks_pengajuan = Proyek::where("stage", "=", 1)->get()->filter(function($p) {
+                return ($p->is_request_rekomendasi || !empty($p->approved_rekomendasi)) && !$p->review_assessment;
+            });
+            $proyeks_rekomendasi = Proyek::where("stage", "=", 1)->get()->filter(function($p) use($all_super_user_counter) {
+                // $approved_rekomendasi = collect(json_decode($p->approved_rekomendasi));
+                return $p->review_assessment && empty($p->is_recommended);
+            });
+            $proyeks_persetujuan = Proyek::all()->filter(function($p) {
+                return $p->is_recommended;
+            });
+        } else {
+            // $proyeks_pengajuan = Proyek::where("stage", "=", 1)->whereIn('unit_kerja', $unit_kerjas->toArray())->get()->filter(function($p) {
+            $proyeks_pengajuan = Proyek::where("stage", "=", 1)->get()->filter(function($p) {
+                return $p->is_request_rekomendasi || $p->review_assessment || !empty($p->hasil_assessment) || !empty($p->approved_rekomendasi);
+            });
+            $proyeks_rekomendasi = [];
+            $proyeks_persetujuan = [];
+        }
         if(!empty($rekomendasi_open)) {
             return view('13_Rekomendasi', compact(['proyeks_pengajuan', "proyeks_persetujuan", "all_super_user_counter", "rekomendasi_open", "proyeks_rekomendasi"]));
         }

@@ -188,7 +188,7 @@
                                                                 return !empty($d->user_id) && $d->user_id == Auth::user()->id;
                                                             });
                                                         }
-                                                        $is_pending = !$is_approved && ($approved_data->count() < $all_super_user_counter);
+                                                        $is_pending = !$is_approved && ($approved_data->count() <= $all_super_user_counter);
                                                     @endphp
                                                     <tr>
                                                         <td>
@@ -325,7 +325,7 @@
                                                                 return !empty($d->user_id) && $d->user_id == Auth::user()->id;
                                                             });
                                                         }
-                                                        $is_pending = !$is_approved && ($approved_data->count() < $all_super_user_counter);
+                                                        $is_pending = !$is_approved && ($approved_data->count() < $all_super_user_counter) && !$proyek->is_recommended;
                                                     @endphp
                                                     <tr>
                                                         <td>
@@ -395,27 +395,27 @@
                                                             @endif
                                                         </td>
                                                         <td>
-                                                            @if ($is_approved && !$is_review_assessment && empty($proyek->recommended_with_note))
+                                                            @if ($is_approved && !$is_review_assessment && is_null($proyek->is_recommended))
                                                                 <small class="badge badge-light-success">Pengajuan Disetujui</small>
-                                                            @elseif($is_pending && !$is_review_assessment)
+                                                            @elseif($is_pending && !$is_review_assessment && !$proyek->is_recommended)
                                                                 <small class="badge badge-light-info">Proses Pengajuan</small>
                                                             @elseif($is_review_assessment)
                                                                 <small class="badge badge-light-primary">Review Assessment</small>
-                                                            @elseif($is_approved && $proyek->is_recommended && empty($proyek->recommended_with_note))
+                                                            @elseif($is_approved && $proyek->is_recommended && empty($proyek->is_recommended_with_note))
                                                                 <small class="badge badge-light-success">Direkomendasikan</small>
-                                                            @elseif($is_approved && $proyek->is_recommended && !empty($proyek->recommended_with_note))
+                                                            @elseif($is_approved && $proyek->is_recommended && $proyek->is_recommended_with_note)
                                                                 <small class="badge badge-light-success">Direkomendasikan dengan catatan</small>
-                                                            @elseif(!$proyek->is_recommended || !$is_approved)
+                                                            @elseif((!$proyek->is_recommended || !$is_approved) && !$is_pending)
                                                                 <small class="badge badge-light-danger">Tidak Direkomendasikan</small>
                                                             @endif
                                                         </td>
                                                         <td>
                                                             @if ($proyek->is_recommended && !$is_pending && $is_approved)
                                                                 <small class="badge badge-light-success">Disetujui</small>
-                                                            @elseif(($proyek->is_recommended == false && $proyek->is_recommended != null && !$is_pending) || (!$is_pending && !$is_approved))
-                                                                <small class="badge badge-light-danger">Ditolak</small>
-                                                            @elseif(!$proyek->is_recommended && $is_pending || $proyek->review_assessment)
+                                                            @elseif(is_null($proyek->is_recommended) || $is_pending)
                                                                 <small class="badge badge-light-primary">Request</small>
+                                                            @elseif($proyek->is_recommended == false && !is_null($proyek->is_recommended))
+                                                                <small class="badge badge-light-danger">Ditolak</small>
                                                             @endif
                                                         </td>
                                                     </tr>
@@ -833,13 +833,32 @@
                             @endif
                         </div>
                         <div class="modal-footer row">
-                            <label for="note-rekomendasi" class="text-start">Catatan Rekomendasi: </label>
-                            <textarea class="form-control" id="note-rekomendasi" name="note-rekomendasi"></textarea>
-                            <br>
-                            @if (empty($proyek->is_recommended))
+                            
+                            @if (is_null($proyek->is_recommended))
+                                <label for="kategori-rekomendasi" class="text-start">Kategori Rekomendasi: </label>
+                                <select onchange="disableEnableTextArea(this)" id="kategori-rekomendasi" name="kategori-rekomendasi"
+                                    class="form-select form-select-solid w-auto"
+                                    style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
+                                    data-placeholder="Direktorat" data-select2-id="select2-data-kategori-rekomendasi" tabindex="-1"
+                                    aria-hidden="true">
+                                    <option value=""></option>
+                                    <option value="Direkomendasikan" selected>Direkomendasikan</option>
+                                    <option value="Direkomendasikan dengan catatan">Direkomendasikan dengan catatan</option>
+                                    <option value="Rekomendasi Ditolak">Rekomendasi Ditolak</option>
+                                </select>
+                                
+                                <label for="note-rekomendasi" class="text-start">Catatan Rekomendasi: </label>
+                                <textarea class="form-control form-control-solid" disabled id="note-rekomendasi" name="note-rekomendasi"></textarea>
+                                <br>
                                 @csrf
                                 <input type="hidden" name="kode-proyek" value="{{$proyek->kode_proyek}}">
                                 <input type="submit" name="input-rekomendasi-with-note" value="Submit" class="btn btn-sm btn-success">
+                            @elseif(!$proyek->is_recommended)
+                                <span class="badge badge-light-danger">Ditolak</span>
+                            @elseif($proyek->is_recommended)
+                                <span class="badge badge-light-success">Direkomendasikan</span>
+                            @elseif($proyek->is_recommended_with_note)
+                                <span class="badge badge-light-success">Direkomendasikan dengan catatan</span>
                             @endif
                         </div>
                     </form>
@@ -938,12 +957,11 @@
                             </table>
                             <hr>
                             
-                            {{-- <textarea name="note-rekomendasi" id="note-rekomendasi" rows="4" class="form-control form-control-solid"></textarea> --}}
-                            @if (!empty($proyek->file_rekomendasi))
+                            @if (!empty($proyek->file_persetujuan))
                                 <hr>
-                                <h5>File Preview: </h5>
+                                <h5>Hasil Rekomendasi: </h5>
                                 <div class="text-center">
-                                    <iframe src="{{asset("file-rekomendasi" . "\\" . $proyek->file_rekomendasi)}}" width="800px" height="600px" ></iframe>
+                                    <iframe src="{{asset("file-persetujuan" . "\\" . $proyek->file_persetujuan)}}" width="800px" height="600px" ></iframe>
                                 </div>
                             @endif
                         </div>
@@ -1028,5 +1046,20 @@
         }
     </script>
     {{-- End :: Export To Excel Data --}}
+
+    <script>
+        function disableEnableTextArea(e) {
+            const value = e.value;
+            if(value == "Direkomendasikan" || value == "Rekomendasi Ditolak") {
+                // e.parentElement.querySelector("#note-rekomendasi").setAttribute("readonly", true);
+                if(!e.parentElement.querySelector("#note-rekomendasi").hasAttribute("disabled")) {
+                    e.parentElement.querySelector("#note-rekomendasi").setAttribute("disabled", true);
+                }
+            } else {
+                // e.parentElement.querySelector("#note-rekomendasi").removeAttribute("readonly");
+                e.parentElement.querySelector("#note-rekomendasi").removeAttribute("disabled");
+            }
+        }
+    </script>
 @endsection
 
