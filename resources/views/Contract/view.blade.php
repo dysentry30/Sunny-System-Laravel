@@ -347,7 +347,7 @@
 </form>
 @else
 <!--begin::Content-->
-<form action="/contract-management/update" method="post">
+<form action="/contract-management/update" method="post" id="form-1"></form>
     <div class="content d-flex flex-column flex-column-fluid" id="kt_content" style="padding: 0 !important;">
         @csrf
         <!--begin::Toolbar-->
@@ -369,7 +369,7 @@
 
                     <!--begin::Button-->
                     @if ($contract->where("id_contract", "=", $contract->id_contract)->where("stages", "!=", 1)->get()->isNotEmpty())
-                    <button type="submit" class="btn btn-sm btn-primary" id="kt_toolbar_primary_button"
+                    <button type="submit" form="form-1" class="btn btn-sm btn-primary" id="kt_toolbar_primary_button"
                         style="background-color:#008CB4;">
                         Save</button>
                     @endif
@@ -678,7 +678,7 @@
                                                     <span class="">Progress Saat Ini: </span>
                                                 </div>
                                                 <div class="text-dark text-start">
-                                                    <b>{{ $progress_now ?? "-" }}</b>
+                                                    <b>{{ $progress_now != "" ? $progress_now : "0%" }}</b>
                                                 </div>
                                             </div>
                                             <!--end::Input group Name-->
@@ -739,7 +739,7 @@
         </div>
     </div>
 
-<!--end::Header Contract-->
+    <!--end::Header Contract-->
     <!--begin::Content-->
     <div class="col-xl-15 mx-6">
         <!--begin::Contacts-->
@@ -2219,7 +2219,7 @@
                                     <div class="col-6 mr-3">
                                         <!--begin::Input-->
                                         <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
-                                        name="id-contract">
+                                        name="id-contract" form="form-1">
                                     <input type="hidden" class="modal-name" name="modal-name">
     
                                     <!--begin::Label-->
@@ -2229,7 +2229,7 @@
                                     <!--end::Label-->
                                     <!--begin::Input-->
                                     <input type="text" id="governing-law" name="governing-law" class="form-control form-control-solid" 
-                                    value="{{ !empty($contract->law_governing) ? $contract->law_governing : "" }}">
+                                    value="{{ !empty($contract->law_governing) ? $contract->law_governing : "" }}" form="form-1">
                                     <!--end::Input-->
     
                                     <br>
@@ -2241,7 +2241,7 @@
                                     <!--end::Label-->
                                     <!--begin::Input-->
                                     <input type="text" id="dispute-resolution" name="dispute-resolution" class="form-control form-control-solid"
-                                    value="{{ !empty($contract->law_dispute_resolution) ? $contract->law_dispute_resolution : "" }}">
+                                    value="{{ !empty($contract->law_dispute_resolution) ? $contract->law_dispute_resolution : "" }}" form="form-1">
                                     <!--end::Input-->
                                     
                                     <br>
@@ -2253,13 +2253,13 @@
                                     <!--end::Label-->
                                     <!--begin::Input-->
                                     <input type="text" id="prevailing-language" name="prevailing-language" class="form-control form-control-solid"
-                                    value="{{ !empty($contract->law_prevailing_language) ? $contract->law_prevailing_language : "" }}">
+                                    value="{{ !empty($contract->law_prevailing_language) ? $contract->law_prevailing_language : "" }}" form="form-1">
                                     <!--end::Input-->
                                     </div>
                                     <div class="col-6">
                                         <!--begin::Input-->
                                         <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
-                                            name="id-contract">
+                                            name="id-contract" form="form-1">
                                         <input type="hidden" class="modal-name" name="modal-name">
         
                                         <!--begin::Label-->
@@ -2269,7 +2269,7 @@
                                         <!--end::Label-->
                                         <!--begin::Input-->
                                         <input type="text" id="delay" name="delay" class="form-control form-control-solid"
-                                        value="{{ !empty($contract->ld_delay) ? $contract->ld_delay : "" }}">
+                                        value="{{ !empty($contract->ld_delay) ? $contract->ld_delay : "" }}" form="form-1">
                                         <!--end::Input-->
         
                                         <br>
@@ -2281,11 +2281,11 @@
                                         <!--end::Label-->
                                         <!--begin::Input-->
                                         <input type="text" id="performance" name="performance" class="form-control form-control-solid"
-                                        value="{{ !empty($contract->ld_performance) ? $contract->ld_performance : "" }}">
+                                        value="{{ !empty($contract->ld_performance) ? $contract->ld_performance : "" }}" form="form-1">
                                         <!--end::Input-->
                                     </div>
                                 </div>
-{{-- 
+                            {{-- 
                                 <div class="d-flex justify-content-end">
                                     <button type="submit" id="save-question" class="btn btn-sm btn-primary"
                                         data-bs-dismiss="modal">Save</button>
@@ -4361,7 +4361,6 @@
 
             </div>
             <!--end:::Tab content-->
-</form>
         </div>
         <!--end::Card body-->
     </div>

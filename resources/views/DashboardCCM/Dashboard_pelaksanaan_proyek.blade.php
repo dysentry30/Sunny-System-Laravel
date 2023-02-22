@@ -223,7 +223,7 @@
                                                         aria-hidden="true">
                                                         <option value="" selected></option>
                                                         @foreach ($contract_pelaksanaan_new as $kontrak)
-                                                            <option value="{{ $kontrak->project_id }}" {{ $proyek_get == $kontrak->project_id ? 'selected' : '' }} >{{ $kontrak->nama_proyek }} ({{ $kontrak->project_id }})</option>
+                                                            <option value="{{ $kontrak->project_id }}" {{ $proyek_get == $kontrak->project_id ? 'selected' : '' }} >{{ $kontrak->project->nama_proyek }} ({{ $kontrak->project_id }})</option>
                                                             {{-- <option value="{{ $proyek->kode_proyek }}" >{{ $proyek->nama_proyek }} ({{$proyek->kode_proyek}})</option> --}}
                                                         @endforeach
                                                 </select>
@@ -549,7 +549,7 @@
                                                 {{-- <span>-{{ $timePending }}%</span> --}}
                                             </div>
                                             <div class="h-8px mx-3 w-100 bg-white bg-opacity-50 rounded">
-                                                <div class="bg-white rounded h-8px" role="progressbar" style="width: {{ (int) $time_status }};" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                                <div class="bg-white rounded h-8px" role="progressbar" style="width: {{ $time_status }};" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
                                             </div>
                                         </div>
                                         <!--end::Progress-->
@@ -1081,7 +1081,7 @@
                             <div class="col-3">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-secondary">
-                                    <h2 class="m-0 text-center">{{ $table[3] }} %</h2>
+                                    <h2 class="m-0 text-center">{{ $table[3] }}</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
