@@ -168,6 +168,10 @@ class ContractManagements extends Model
         return $this->hasMany(ContractJaminan::class, "id_contract");
     }
 
+    public function ContractApproval(){
+        return $this->hasMany(ContractApproval::class, "id_contract");
+    }
+
     public function getAll()
     {
         $data = [];
