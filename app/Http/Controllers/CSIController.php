@@ -77,7 +77,8 @@ class CSIController extends Controller
         // dd($user);
 
 
-        $url = "https://crm.wika.co.id/customer/view/". $data['id-pemberi-kerja']."/". str_replace(" ", "%20", $data['pemberi-kerja']);
+        // $url = "https://crm-dev.wika.co.id/customer/view/". $data['id-pemberi-kerja']."/". str_replace(" ", "%20", $data['pemberi-kerja']);
+        $url = "https://crm-dev.wika.co.id/csi-login";
         $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
             "api_key" => "c15978155a6b4656c4c0276c5adbb5917eb033d5",
             "sender" => "62811881227",
