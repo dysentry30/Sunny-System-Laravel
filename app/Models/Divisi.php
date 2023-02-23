@@ -8,10 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Divisi extends Model
 {
     use HasFactory;
-    protected $table = "divisi";
+    // protected $table = "divisi";
+    protected $table = "divisi_new";
     protected $primaryKey = "id_divisi";
 
-    public function UnitKerja() {
-        return $this->hasOne(UnitKerja::class, "divcode", "unit_kerja");
-    }
+    // public function UnitKerja() {
+    //     return $this->hasOne(UnitKerja::class, "divcode", "unit_kerja");
+    // }
 }

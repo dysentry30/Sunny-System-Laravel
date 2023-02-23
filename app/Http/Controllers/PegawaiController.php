@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Pegawai;
 use Illuminate\Http\Request;
 
 class PegawaiController extends Controller
@@ -13,6 +14,7 @@ class PegawaiController extends Controller
      * @return View
      */
     public function index(Request $request){
-        return view("MasterData/Pegawai", compact([]));
+        $pegawai_all = Pegawai::all();
+        return view("MasterData/Pegawai", compact(["pegawai_all"]));
     }
 }
