@@ -50,13 +50,9 @@ a{{-- Begin::Extend Header --}}
                                 <div class="d-flex align-items-center py-1">
 
                                     <!--begin::Button-->
-                                    {{-- <a href="/user/new" class="btn btn-sm btn-primary w-80px"
-                                        style="background-color:#008CB4; padding: 7px 30px 7px 30px">
-                                        New</a> --}}
-                                    <button class="btn btn-sm btn-primary w-80px" data-bs-toggle="modal"
-                                        data-bs-target="#kt_modal_create_user" id="kt_toolbar_primary_button"
-                                        id="kt_toolbar_primary_button" style="background-color:#008CB4; padding: 6px">
-                                        New</button>
+                                    {{-- <button class="btn btn-sm btn-primary p-3" onclick="getDataPegawai()" data-bs-toggle="modal"
+                                     style="background-color:#008CB4; padding: 6px">
+                                        Get Data Pegawai</button> --}}
 
                                     <!--begin::Wrapper-->
                                     {{-- <div class="me-4" style="margin-left:10px;">
@@ -146,19 +142,19 @@ a{{-- Begin::Extend Header --}}
                                 <thead>
                                     <!--begin::Table row-->
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                        <th class="min-w-auto px-4">No.</th>
+                                        <th class="min-w-auto px-4">NIP</th>
                                         {{-- <th class="min-w-auto">Nip</th> --}}
-                                        <th class="min-w-auto">Name</th>
-                                        <th class="min-w-auto">Username</th>
-                                        <th class="min-w-auto">Unit Kerja</th>
-                                        <th class="min-w-auto">Role</th>
-                                        <th class="min-w-auto text-center">Is Active</th>
-                                        <th class="min-w-auto">Nomor Kontak</th>
-                                        @if (auth()->user()->check_administrator)
+                                        <th class="min-w-auto">Nama Pegawai</th>
+                                        <th class="min-w-auto">Handphone</th>
+                                        <th class="min-w-auto">Email</th>
+                                        <th class="min-w-auto">Jabatan</th>
+                                        <th class="min-w-auto text-center">Nama Fungsi</th>
+                                        <th class="min-w-auto">Nama Kantor</th>
+                                        {{-- @if (auth()->user()->check_administrator)
                                             <th class="text-center">
                                                 Action
                                             </th>
-                                        @endif
+                                        @endif --}}
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>
@@ -169,6 +165,20 @@ a{{-- Begin::Extend Header --}}
                                     $no = 1;
                                 @endphp
                                 <tbody class="fw-bold text-gray-600">
+                                    @foreach ($pegawai_all as $pegawai)
+                                        <tr>
+                                            <td>{{$pegawai->nip}}</td>
+                                            <td>{{$pegawai->nama_pegawai}}</td>
+                                            <td>{{$pegawai->handphone}}</td>
+                                            <td>{{$pegawai->email}}</td>
+                                            <td>{{$pegawai->Jabatan->nama_jabatan ?? "-"}}</td>
+                                            <td>{{$pegawai->nama_fungsi_bidang}}</td>
+                                            <td>{{$pegawai->nama_kantor}}</td>
+                                            {{-- <td>
+                                                <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#kt_modal_delete_{{$pegawai->nip}}">Delete</button>
+                                            </td> --}}
+                                        </tr>
+                                    @endforeach
                                 </tbody>
                                 <!--end::Table body-->
                             </table>
@@ -200,11 +210,11 @@ a{{-- Begin::Extend Header --}}
     <!--end::Modal New User-->
 
     {{-- begin::modal DELETE --}}
-    {{-- @foreach ($users as $user)
-        <form action="/user/delete/{{ $user->id }}" method="post" enctype="multipart/form-data">
+    {{-- @foreach ($pegawai_all as $pegawai)
+        <form action="/pegawai/delete/{{ $pegawai->nip }}" method="post" enctype="multipart/form-data">
             @method('delete')
             @csrf
-            <div class="modal fade" id="kt_modal_delete{{ $user->id }}" tabindex="-1" aria-hidden="true">
+            <div class="modal fade" id="kt_modal_delete_{{ $pegawai->nip }}" tabindex="-1" aria-hidden="true">
                 <!--begin::Modal dialog-->
                 <div class="modal-dialog modal-dialog-centered mw-800px">
                     <!--begin::Modal content-->
@@ -212,7 +222,7 @@ a{{-- Begin::Extend Header --}}
                         <!--begin::Modal header-->
                         <div class="modal-header">
                             <!--begin::Modal title-->
-                            <h2>Hapus : {{ $user->name }}</h2>
+                            <h2>Hapus : {{ $pegawai->nama_jabatan }}</h2>
                             <!--end::Modal title-->
                             <!--begin::Close-->
                             <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
