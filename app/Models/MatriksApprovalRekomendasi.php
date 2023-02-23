@@ -14,7 +14,7 @@ class MatriksApprovalRekomendasi extends Model
     public function Jabatan() {
         return $this->hasOne(Jabatan::class, "kode_jabatan", "jabatan");
     }
-    public function UnitKerja() {
-        return $this->hasOne(UnitKerja::class, "divcode", "unit_kerja");
+    public function Divisi() {
+        return $this->hasOne(Divisi::class, "id_divisi", "unit_kerja");
     }
 }

@@ -171,15 +171,19 @@
                                             @endphp --}}
                                         <tr>
                                             <td>{{$approval->tahun}}</td>
-                                            <td>{{$approval->Jabatan->nama_jabatan}}</td>
-                                            <td>{{$approval->UnitKerja->unit_kerja}}</td>
+                                            <td>
+                                                <a href="#" class="text-hover-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_matriks_update_{{$approval->id_matriks_approval_rekomendasi}}">{{$approval->Jabatan->nama_jabatan}}</a>
+                                            </td>
+                                            <td>{{$approval->Divisi->nama_kantor}}</td>
                                             <td>{{$approval->klasifikasi_proyek}}</td>
                                             <td>{{$approval->kategori}}</td>
                                             <td>
-                                                <form action="" method="POST">
+                                                <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#kt_modal_matriks_delete_{{$approval->id_matriks_approval_rekomendasi}}">Delete</button>
+                                                {{-- <form action="/matriks-approval-rekomendasi/delete" method="POST">
                                                     @csrf
-                                                    <input type="hidden" type="text" value="{{ $approval}}">
-                                                </form>
+                                                    <input type="hidden" type="text" value="{{$approval}}">
+                                                    <input type="submit" class="">
+                                                </form> --}}
                                             </td>
                                         </tr>
                                     @endforeach
@@ -316,8 +320,8 @@
                                                 data-control="select2" data-hide-search="false" data-placeholder="Pilih Unit Kerja..."
                                                 data-select2-id="select2-unit-kerja" tabindex="-1" aria-hidden="true">
                                                 <option value="" selected></option>
-                                                @foreach ($unit_kerjas as $unit_kerja)
-                                                    <option value="{{$unit_kerja->divcode}}">{{$unit_kerja->unit_kerja}}</option>
+                                                @foreach ($divisi_all as $divisi)
+                                                    <option value="{{$divisi->id_divisi}}">{{$divisi->nama_kantor}}</option>
                                                 @endforeach
                                                 {{-- @foreach ($sumber_danas as $sd)
                                                     <option value="{{$sd->kode}}">{{$sd->kode}}</option>
@@ -371,6 +375,8 @@
                                             data-control="select2" data-hide-search="false" data-placeholder="Pilih Kategori..."
                                             data-select2-id="select2-kategori" tabindex="-1" aria-hidden="true">
                                             <option value="" selected></option>
+                                            <option value="Penyusun">Pengajuan</option>
+                                            <option value="Rekomendasi">Verifikasi</option>
                                             <option value="Penyusun">Penyusun</option>
                                             <option value="Rekomendasi">Rekomendasi</option>
                                             <option value="Persetujuan">Persetujuan</option>
@@ -401,94 +407,6 @@
         <!--end::Modal dialog-->
     </div>
     <!--end::Modal Tambah Kriteria Green Line-->
-
-    <!--begin::Modal-->
-    {{-- <form action="/jenis-proyek/save" method="post" enctype="multipart/form-data">
-        @csrf
-
-
-        <!--begin::Modal - Create Proyek-->
-        <div class="modal fade" id="kt_modal_create" tabindex="-1" aria-hidden="true">
-            <!--begin::Modal dialog-->
-            <div class="modal-dialog modal-dialog-centered mw-800px">
-                <!--begin::Modal content-->
-                <div class="modal-content">
-                    <!--begin::Modal header-->
-                    <div class="modal-header">
-                        <!--begin::Modal title-->
-                        <h2>New Jenis Proyek</h2>
-                        <!--end::Modal title-->
-                        <!--begin::Close-->
-                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                            <span class="svg-icon svg-icon-1">
-                                <i class="bi bi-x-lg"></i>
-                            </span>
-                            <!--end::Svg Icon-->
-                        </div>
-                        <!--end::Close-->
-                    </div>
-                    <!--end::Modal header-->
-
-                    <!--begin::Modal body-->
-                    <div class="modal-body py-lg-6 px-lg-6">
-
-
-                        <!--begin::Row Kanan+Kiri-->
-                        <div class="row fv-row">
-                            <!--begin::Col-->
-                            <div class="">
-                                <!--begin::Input group Website-->
-                                <div class="fv-row mb-7">
-                                    <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Jenis Proyek</span>
-                                    </label>
-                                    <!--end::Label-->
-                                    <!--begin::Input-->
-                                    <input type="text" class="form-control form-control-solid" id="jenis-proyek"
-                                        name="jenis-proyek" value="" placeholder="Jenis Proyek" />
-                                    <!--end::Input-->
-                                </div>
-                                <!--end::Input group-->
-                            </div>
-                            <!--End begin::Col-->
-                            <div class="">
-                                <!--begin::Input group Website-->
-                                <div class="fv-row mb-7">
-                                    <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Jenis Kode</span>
-                                    </label>
-                                    <!--end::Label-->
-                                    <!--begin::Input-->
-                                    <input type="text" class="form-control form-control-solid" id="jenis-proyek"
-                                        name="jenis-kode" value="" placeholder="jenis-kode" />
-                                    <!--end::Input-->
-                                </div>
-                                <!--end::Input group-->
-                            </div>
-                            <!--End begin::Col-->
-                        </div>
-                        <!--End::Row Kanan+Kiri-->
-
-
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white" id="new_save"
-                            style="background-color:#008CB4">Save</button>
-
-                    </div>
-                    <!--end::Modal body-->
-                </div>
-                <!--end::Modal content-->
-            </div>
-            <!--end::Modal dialog-->
-        </div>
-        <!--end::Modal - Create App-->
-    </form> --}}
-    <!--end::Modals-->
     
     {{-- <!--begin::Modal EDIT-->
     @foreach ($js as $j)
@@ -562,12 +480,21 @@
     @endforeach
     <!--end::Modal EDIT--> --}}
 
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script> 
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script> 
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.colVis.min.js"></script> 
+
     <!--begin::modal DELETE-->
-    {{-- @foreach ($industrySector as $j)
-        <form action="/jenis-proyek/delete/{{ $j->id_industry_sector  }}" method="post" enctype="multipart/form-data">
-            @method('delete')
+    @foreach ($approval_rekomendasi as $approval)
+        <form action="/matriks-approval-rekomendasi/delete" method="post" enctype="multipart/form-data">
             @csrf
-            <div class="modal fade" id="kt_modal_delete{{ $j->id_industry_sector  }}" tabindex="-1" aria-hidden="true">
+            <input type="hidden" name="id-matriks-approval" value="{{$approval->id_matriks_approval_rekomendasi}}">
+            <div class="modal fade" id="kt_modal_matriks_delete_{{ $approval->id_matriks_approval_rekomendasi  }}" tabindex="-1" aria-hidden="true">
                 <!--begin::Modal dialog-->
                 <div class="modal-dialog modal-dialog-centered mw-750px">
                     <!--begin::Modal content-->
@@ -575,7 +502,7 @@
                         <!--begin::Modal header-->
                         <div class="modal-header">
                             <!--begin::Modal title-->
-                            <h2>Hapus : {{ $j->description }}</h2>
+                            <h2>Hapus : {{ $approval->Jabatan->nama_jabatan }}</h2>
                             <!--end::Modal title-->
                             <!--begin::Close-->
                             <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
@@ -594,7 +521,7 @@
                             <br>
                         </div>
                         <div class="modal-footer">
-                            <button class="btn btn-sm btn-light btn-active-primary min-w-100px fs-6">Delete</button>
+                            <button class="btn btn-sm btn-light btn-active-danger min-w-100px fs-6">Delete</button>
                         </div>
                         <!--end::Input group-->
 
@@ -606,20 +533,208 @@
             <!--end::Modal dialog-->
             </div>
         </form>
-    @endforeach --}}
+
+        <form action="/matriks-approval-rekomendasi/update" method="post" enctype="multipart/form-data">
+            @csrf
+            <input type="hidden" name="id-matriks-approval" value="{{$approval->id_matriks_approval_rekomendasi}}">
+            <div class="modal fade" id="kt_modal_matriks_update_{{ $approval->id_matriks_approval_rekomendasi  }}" tabindex="-1" aria-hidden="true">
+                <!--begin::Modal dialog-->
+                <div class="modal-dialog modal-dialog-centered mw-750px">
+                    <!--begin::Modal content-->
+                    <div class="modal-content">
+                        <!--begin::Modal header-->
+                        <div class="modal-header">
+                            <!--begin::Modal title-->
+                            <h2>Edit Matriks Approval Rekomendasi</h2>
+                            <!--end::Modal title-->
+                            <!--begin::Close-->
+                            <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                                <span class="svg-icon svg-icon-1">
+                                    <i class="bi bi-x-lg"></i>
+                                </span>
+                                <!--end::Svg Icon-->
+                            </div>
+                            <!--end::Close-->
+                        </div>
+                        <!--end::Modal header-->
+                        <!--begin::Modal body-->
+                        <div class="modal-body py-lg-6 px-lg-6">
+    
+                            <!--begin::Row Kanan+Kiri-->
+                            <div class="row fv-row">
+                                <!--begin::Col-->
+                                <div class="">
+                                    <!--begin::Input group Website-->
+                                    <div class="fv-row mb-7">
+                                        <!--begin::Label-->
+                                        <label class="fs-6 fw-bold form-label mt-3">
+                                            <span class="required">Tahun</span>
+                                        </label>
+                                        @php
+                                            $tahun = (int) date("Y");
+                                        @endphp
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <select id="tahun_{{$approval->id_matriks_approval_rekomendasi}}" name="tahun"
+                                            class="form-select form-select-solid select2-hidden-accessible"
+                                            data-control="select2" data-hide-search="true" data-placeholder="Pilh Tahun..."
+                                            data-select2-id="select2-tahun_{{$approval->id_matriks_approval_rekomendasi}}" tabindex="-1" aria-hidden="true">
+                                            <option value="" selected></option>
+                                            @foreach (range(1, 2) as $item)
+                                                <option value="{{$tahun}}" {{$tahun == $approval->tahun ? "selected" : ""}}>{{$tahun}}</option>
+                                                @php
+                                                    $tahun++;
+                                                @endphp
+                                            @endforeach
+                                        </select>
+                                    <!--end::Input-->
+                                    </div>
+                                    <!--end::Input group-->
+                                </div>
+                                <!--End begin::Col-->
+                                <div class="">
+                                    <!--begin::Input group Website-->
+                                    <div class="fv-row mb-7">
+                                        <!--begin::Label-->
+                                        <label class="fs-6 fw-bold form-label mt-3">
+                                            <span class="required">Jabatan</span>
+                                        </label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                            
+                                        <select id="jabatan_{{$approval->id_matriks_approval_rekomendasi}}" name="jabatan"
+                                            class="form-select form-select-solid select2-hidden-accessible"
+                                            data-control="select2" data-hide-search="false" data-placeholder="Pilih Jabatan..."
+                                            data-select2-id="select2-jabatan_{{$approval->id_matriks_approval_rekomendasi}}" tabindex="-1" aria-hidden="true">
+                                            <option value="" selected></option>
+                                            @foreach ($jabatans as $jabatan)
+                                                <option value="{{$jabatan->kode_jabatan}}" {{$jabatan->kode_jabatan == $approval->jabatan ? "selected" : ""}}>{{$jabatan->nama_jabatan}}</option>
+                                            @endforeach
+                                            {{-- @foreach ($sumber_danas as $sd)
+                                                <option value="{{$sd->kode}}">{{$sd->kode}}</option>
+                                            @endforeach --}}
+                                        </select>
+                                        <!--end::Input-->
+                                    </div>
+                                    <!--end::Input group-->
+                                </div>
+                                <!--End begin::Col-->
+        
+                                <div class="row">
+                                    <div class="col">
+                                        <div id="tier">
+                                            <!--begin::Label-->
+                                            <label class="fs-6 fw-bold form-label mt-3">
+                                                <span class="required">Unit Kerja</span>
+                                            </label>
+                                            <!--end::Label-->
+        
+                                            <!--begin::Input-->
+                                            <div id="kriteria-penilaian-internal">
+                                                <select id="unit-kerja_{{$approval->id_matriks_approval_rekomendasi}}" name="unit-kerja"
+                                                    class="form-select form-select-solid select2-hidden-accessible"
+                                                    data-control="select2" data-hide-search="false" data-placeholder="Pilih Unit Kerja..."
+                                                    data-select2-id="select2-unit-kerja_{{$approval->id_matriks_approval_rekomendasi}}" tabindex="-1" aria-hidden="true">
+                                                    <option value="" selected></option>
+                                                    @foreach ($divisi_all as $divisi)
+                                                        <option value="{{$divisi->id_divisi}}" {{$divisi->id_divisi == $approval->unit_kerja ? "selected" : ""}}>{{$divisi->nama_kantor}}</option>
+                                                    @endforeach
+                                                    {{-- @foreach ($sumber_danas as $sd)
+                                                        <option value="{{$sd->kode}}">{{$sd->kode}}</option>
+                                                    @endforeach --}}
+                                                </select>
+                                            </div>
+                                            <!--end::Input-->
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div id="tier">
+                                            <!--begin::Label-->
+                                            <label class="fs-6 fw-bold form-label mt-3">
+                                                <span class="required">Klasifikasi Proyek</span>
+                                            </label>
+                                            <!--end::Label-->
+        
+                                            <!--begin::Input-->
+                                            <select id="klasifikasi-proyek_{{$approval->id_matriks_approval_rekomendasi}}" name="klasifikasi-proyek"
+                                                class="form-select form-select-solid select2-hidden-accessible"
+                                                data-control="select2" data-hide-search="false" data-placeholder="Pilih Klasifikasi Proyek..."
+                                                data-select2-id="select2-klasifikasi-proyek_{{$approval->id_matriks_approval_rekomendasi}}" tabindex="-1" aria-hidden="true">
+                                                <option value="" selected></option>
+                                                <option value="Proyek Kecil" {{"Proyek Kecil" == $approval->klasifikasi_proyek ? "selected" : ""}}>Proyek Kecil</option>
+                                                <option value="Proyek Menengah" {{"Proyek Menengah" == $approval->klasifikasi_proyek ? "selected" : ""}}>Proyek Menengah</option>
+                                                <option value="Proyek Besar" {{"Proyek Besar" == $approval->klasifikasi_proyek ? "selected" : ""}}>Proyek Besar</option>
+                                                <option value="Proyek Mega" {{"Proyek Mega" == $approval->klasifikasi_proyek ? "selected" : ""}}>Proyek Mega</option>
+    
+                                                {{-- @foreach ($sumber_danas as $sd)
+                                                    <option value="{{$sd->kode}}">{{$sd->kode}}</option>
+                                                @endforeach --}}
+                                            </select>
+                                            <!--end::Input-->
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div id="tier">
+                                            <!--begin::Label-->
+                                            <label class="fs-6 fw-bold form-label mt-3">
+                                                <span class="required">Kategori</span>
+                                            </label>
+                                            <!--end::Label-->
+        
+                                            <!--begin::Input-->
+                                            <select id="kategori_{{$approval->id_matriks_approval_rekomendasi}}" name="kategori"
+                                                class="form-select form-select-solid select2-hidden-accessible"
+                                                data-control="select2" data-hide-search="false" data-placeholder="Pilih Kategori..."
+                                                data-select2-id="select2-kategori_{{$approval->id_matriks_approval_rekomendasi}}" tabindex="-1" aria-hidden="true">
+                                                <option value="" selected></option>
+                                                <option value="Pengajuan" {{"Pengajuan" == $approval->kategori ? "selected" : ""}}>Pengajuan</option>
+                                                <option value="Verifikasi" {{"Verifikasi" == $approval->kategori ? "selected" : ""}}>Verifikasi</option>
+                                                <option value="Penyusun" {{"Penyusun" == $approval->kategori ? "selected" : ""}}>Penyusun</option>
+                                                <option value="Rekomendasi" {{"Rekomendasi" == $approval->kategori ? "selected" : ""}}>Rekomendasi</option>
+                                                <option value="Persetujuan" {{"Persetujuan" == $approval->kategori ? "selected" : ""}}>Persetujuan</option>
+                                                {{-- @foreach ($sumber_danas as $sd)
+                                                    <option value="{{$sd->kode}}">{{$sd->kode}}</option>
+                                                @endforeach --}}
+                                            </select>
+                                            <!--end::Input-->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--End::Row Kanan+Kiri-->
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-sm btn-light btn-active-primary min-w-100px fs-6">Save</button>
+                        </div>
+                        <!--end::Input group-->
+
+                    </div>
+                    <!--end::Modal body-->
+                </div>
+                <!--end::Modal content-->
+            </div>
+            <!--end::Modal dialog-->
+            </div>
+        </form>
+        <script>
+            $(document).ready(function() {
+                $("#kt_modal_matriks_update_{{ $approval->id_matriks_approval_rekomendasi  }} select").select2({
+                    dropdownParent: $('#kt_modal_matriks_update_{{ $approval->id_matriks_approval_rekomendasi  }}'),
+                });
+            });
+        </script>
+    @endforeach
     <!--end::modal DELETE-->
     
     {{-- <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script> --}}
-    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script> 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script> 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script> 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script> 
-    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script> 
-    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.colVis.min.js"></script> 
+    
     
     <script>
         $('#example').DataTable({
@@ -732,6 +847,8 @@
         }
     }
     $(document).ready(function() {
+        // $.fn.modal.Constructor.prototype.enforceFocus = function() {};
+
         $("#jabatan, #unit-kerja, #klasifikasi-proyek, #kategori").select2({
             dropdownParent: $('#kt_modal_input_kriteria_green_line'),
         });
