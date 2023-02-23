@@ -251,7 +251,7 @@ class CustomerController extends Controller
         
         // $pic = CustomerPic::where("id_customer", "=", $id_customer)->get();
         // dd($pic);
-        // $struktur = StrukturCustomer::where("id_customer", "=", $id_customer)->get();
+        $struktur = StrukturCustomer::where("id_customer", "=", $id_customer)->get();
         $proyeks = ProyekBerjalans::where("id_customer", "=", $id_customer)->get();
         $area_proyeks = collect();
         $per = 1000000;
@@ -429,7 +429,7 @@ class CustomerController extends Controller
             // "proyekberjalan6" => $customer->proyekBerjalans->where('stage', ">", 6),
             "proyeks" => $proyeks,
             // "pics" => $pic,
-            // "strukturs" => $struktur,
+            "strukturs" => $struktur,
             "data_provinsi" => $data_provinsi,
             "data_kabupaten" => $data_kabupaten ?? null,
             "data_negara" => $data_negara,
