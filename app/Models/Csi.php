@@ -13,7 +13,7 @@ class Csi extends Model
 
     public function Proyek()
     {
-        return $this->hasOne(Proyek::class, "kode_proyek", "kode_proyek");
+        return $this->hasOne(Proyek::class, "kode_proyek", "no_spk");
     }
 
     public function UnitKerja()

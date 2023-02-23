@@ -812,6 +812,25 @@ class CustomerController extends Controller
         $newStruktur->proyek_struktur = $data["proyek-struktur"];
         $newStruktur->role_struktur = $data["role-struktur"];
 
+        $newCsi = new Csi();
+        $newCsi->id_customer = $data["id-customer"];
+        $newCsi->id_struktur_organisasi = $newStruktur->id_customer;
+        $newCsi->no_spk = $data["proyek-struktur"];
+        $newCsi->tanggal = now();
+        $newCsi->status = "Not Sent";
+        $newCsi->save();
+        // $newCsi->score = $data["score_csi"];
+        // if ($data["kode-proyek-csi"] && $data["csi_date"] && $data["score_csi"] !== null) {
+        //     if ($newCsi->save()) {
+        //         Alert::success("Success", "CSI Berhasil Ditambahkan");
+        //         return redirect()->back();
+        //     }
+        //     Alert::error("Error", "CSI Gagal Ditambahkan!");
+        //     return redirect()->back();
+        // }
+        // Alert::error("Error", "Pastikan field-field CSI terisi!");
+        // return redirect()->back();
+
         Alert::success("Success", $data["jabatan-struktur"] . ": " . $data["name-struktur"] . ", Struktur Berhasil Ditambahkan");
 
         $newStruktur->save();
@@ -846,6 +865,18 @@ class CustomerController extends Controller
         $editStruktur->ultah_struktur = $data["ultah-struktur"];
         $editStruktur->proyek_struktur = $data["proyek-struktur"];
         $editStruktur->role_struktur = $data["role-struktur"];
+
+        $Csi = Csi::where("id_customer", "=", $editStruktur->id_customer)->where("id_struktur_organisasi", "=", $id)->where("no_spk", "=", $editStruktur->proyek_struktur)->first();
+        if (empty($Csi)) {
+            $newCsi = new Csi();
+            $newCsi->id_customer = $editStruktur->id_customer;
+            $newCsi->id_struktur_organisasi = $id;
+            $newCsi->no_spk = $editStruktur->proyek_struktur;
+            $newCsi->tanggal = now();
+            $newCsi->status = "Not Sent";
+            $newCsi->save();
+        }
+        
 
         Alert::success("Success", $data["jabatan-struktur"] . ": " . $data["name-struktur"] . ", Struktur Berhasil Ditambahkan");
 
@@ -1071,15 +1102,15 @@ class CustomerController extends Controller
     public function saveCSI(Request $request)
     {
         $data = $request->all();
-        $editCSI = Csi::where("id_customer", "=", $data["id-customer"])->where("kode_proyek", "=", $data["kode-proyek-csi"])->first();
+        $editCSI = Csi::where("id_customer", "=", $data["id-customer"])->where("no_spk", "=", $data["kode-proyek-csi"])->first();
         // dd($editCSI);
         // $is_exist_code_proyek = Csi::where("kode_proyek", "=", $data["kode-proyek-csi"])->first();
         // dd($is_exist_code_proyek);
         if(!empty($editCSI)) {
             $editCSI->id_customer = $data["id-customer"];
-            $editCSI->kode_proyek = $data["kode-proyek-csi"];
+            $editCSI->no_spk = $data["kode-proyek-csi"];
             $editCSI->tanggal = $data["csi_date"];
-            $editCSI->score = $data["score_csi"];
+            // $editCSI->score = $data["score_csi"];
             if ($data["kode-proyek-csi"] && $data["csi_date"] && $data["score_csi"] !== null) {
                 if($editCSI->save()) {
                     Alert::success("Success", "CSI Berhasil Diperbaharui");
@@ -1093,9 +1124,9 @@ class CustomerController extends Controller
         } else {
             $newCSI = new Csi();
             $newCSI->id_customer = $data["id-customer"];
-            $newCSI->kode_proyek = $data["kode-proyek-csi"];
+            $newCSI->no_spk = $data["kode-proyek-csi"];
             $newCSI->tanggal = $data["csi_date"];
-            $newCSI->score = $data["score_csi"];
+            // $newCSI->score = $data["score_csi"];
             if ($data["kode-proyek-csi"] && $data["csi_date"] && $data["score_csi"] !== null) {
                 if($newCSI->save()) {
                     Alert::success("Success", "CSI Berhasil Ditambahkan");

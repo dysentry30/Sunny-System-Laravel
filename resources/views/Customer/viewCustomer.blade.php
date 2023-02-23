@@ -1955,7 +1955,7 @@
                                                                 $no = 1;
                                                             @endphp
                                                             <tbody class="fw-bold text-gray-600">
-                                                                {{-- @foreach ($strukturs as $struktur)
+                                                                @foreach ($strukturs as $struktur)
                                                                     <tr>
                                                                         <!--begin::Name-->
                                                                         <td class="text-center">
@@ -1990,11 +1990,10 @@
                                                                         <!--end::Column-->
                                                                         <!--begin::Column-->
                                                                         <td>
+                                                                            {{-- {{ $struktur->proyek_struktur ?? '-' }} --}}
                                                                             @foreach ($proyeks as $proyek)
                                                                                 @if ($struktur->proyek_struktur == $proyek->kode_proyek)
                                                                                     {{ $proyek->nama_proyek ?? '-' }}
-                                                                                @else
-                                                                                    -
                                                                                 @endif
                                                                             @endforeach
                                                                         </td>
@@ -2015,7 +2014,7 @@
                                                                         </td>
                                                                         <!--end::Action-->
                                                                     </tr>
-                                                                @endforeach --}}
+                                                                @endforeach
                                                             </tbody>
                                                             <!--end::Table body-->
                                                         </table>
@@ -2607,7 +2606,7 @@
                                                                     @foreach ($customer->Csi as $item)
                                                                     <tr>                                                                                    
                                                                         <td>
-                                                                            <a target="_blank" href="/proyek/view/{{ $item->kode_proyek }}" class="text-gray-800 text-hover-primary mb-1">
+                                                                            <a target="_blank" href="/proyek/view/{{ $item->Proyek->kode_proyek }}" class="text-gray-800 text-hover-primary mb-1">
                                                                                 {{ $item->Proyek->nama_proyek }}                                                                                                
                                                                             </a>
                                                                         </td>
@@ -4200,7 +4199,7 @@
     <!--end::modal Struktur Organisasi-->
 
     <!--begin::modal EDIT Struktur Organisasi-->
-    {{-- @foreach ($strukturs as $struktur)
+    @foreach ($strukturs as $struktur)
         <form action="/customer/struktur/{{ $struktur->id }}/edit" method="post" enctype="multipart/form-data">
             @csrf
 
@@ -4410,7 +4409,7 @@
             </div>
             <!--end::Modal - Create App-->
         </form>
-    @endforeach --}}
+    @endforeach
     <!--end::modal EDIT Struktur Organisasi-->
 
     <!--begin::DELETE STRUKTUR-->

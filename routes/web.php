@@ -413,11 +413,19 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     // customer dashboard all database
     // Route::get('/customer', [CustomerController::class, 'index']);
 
-    
 
-    // Begin Rekomendasi
+
+    // Begin CSI
+
     Route::get('/csi', [CSIController::class, "index"]);
-    // End Rekomendasi
+
+    Route::get('/csi/customer-survey', [CSIController::class, "indexCustomer"]);
+
+    Route::post('/csi/send/{id}', [CSIController::class, "sendCsi"]);
+
+    Route::post('/csi/survey-save', [CSIController::class, "saveSurvey"]);
+
+    // End CSI
 
 
     // DELETE data customer pada dasboard customer by ID 

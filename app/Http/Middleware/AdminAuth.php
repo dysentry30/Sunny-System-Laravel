@@ -38,7 +38,11 @@ class AdminAuth
             $concat_allowed_url .= $allowed_url_admin_kontrak;
         }
         if (auth()->user()->check_user_sales) {
-            $concat_allowed_url .= $allowed_url_user_sales;
+            if (!str_contains(Auth::user()->email, "@wika-customer")) {
+                $concat_allowed_url .= $allowed_url_user_sales;
+            } else {
+                $concat_allowed_url .= join(" ", ["/csi/customer-survey"]);;
+            }
 
         }
         if (auth()->user()->check_team_proyek) {
