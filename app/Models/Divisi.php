@@ -12,6 +12,10 @@ class Divisi extends Model
     protected $table = "divisi_new";
     protected $primaryKey = "id_divisi";
 
+    public function Direktorat() {
+        return $this->hasOne(Direktorat::class, "kode_direktorat", "kode_direktorat");
+    }
+
     // public function UnitKerja() {
     //     return $this->hasOne(UnitKerja::class, "divcode", "unit_kerja");
     // }

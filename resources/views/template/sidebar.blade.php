@@ -209,6 +209,7 @@
                             str_contains(Request::Path(), 'jabatan') ||
                             str_contains(Request::Path(), 'piutang') ||
                             str_contains(Request::Path(), 'divisi') ||
+                            str_contains(Request::Path(), 'pegawai') ||
                             str_contains(Request::Path(), 'direktorat') ||
                             str_contains(Request::Path(), 'matriks-approval-rekomendasi') ||
                             str_contains(Request::Path(), 'team-proyek') ? 'background-color:#008CB4' : '' }}">

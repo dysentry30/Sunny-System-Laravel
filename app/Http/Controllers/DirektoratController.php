@@ -18,6 +18,7 @@ class DirektoratController extends Controller
     public function save(Request $request) {
         $data = $request->all();
         $rules = [
+            "kode-direktorat" => "required",
             "direktorat" => "required"
         ];
         $is_invalid = validateInput($data, $rules);
@@ -29,6 +30,7 @@ class DirektoratController extends Controller
         
         $new_direktorat = new Direktorat();
         $new_direktorat->dop = $data["direktorat"];
+        $new_direktorat->kode_direktorat = $data["kode-direktorat"];
         if($new_direktorat->save()) {
             Alert::success("Success", "Data Direktorat berhasil ditambahkan");
             return redirect()->back();
@@ -40,6 +42,7 @@ class DirektoratController extends Controller
     public function edit(Request $request, Direktorat $direktorat) {
         $data = $request->all();
         $rules = [
+            "kode-direktorat" => "required",
             "direktorat" => "required"
         ];
         $is_invalid = validateInput($data, $rules);
@@ -50,6 +53,7 @@ class DirektoratController extends Controller
         }
         
         $direktorat->dop = $data["direktorat"];
+        $direktorat->kode_direktorat = $data["kode-direktorat"];
         if($direktorat->save()) {
             Alert::success("Success", "Data Direktorat berhasil diperbarui");
             return redirect()->back();

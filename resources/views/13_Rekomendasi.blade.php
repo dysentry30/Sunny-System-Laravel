@@ -124,13 +124,13 @@
 
                                         <!--begin:::Tab item -->
                                         <li class="nav-item">
-                                            <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab" href="#kt_user_view_rekomendasi" style="font-size:14px;">Rekomendasi</a>
+                                            <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab" href="#kt_user_view_rekomendasi" style="font-size:14px;">Verifikasi Assessment</a>
                                         </li>
                                         <!--end:::Tab item -->
 
                                         <!--begin:::Tab item -->
                                         <li class="nav-item">
-                                            <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab" href="#kt_user_view_persetujuan" style="font-size:14px;">Persetujuan</a>
+                                            <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab" href="#kt_user_view_persetujuan" style="font-size:14px;">Persetujuan Nota Rekomendasi 1</a>
                                         </li>
                                         <!--end:::Tab item -->
                                     </ul>

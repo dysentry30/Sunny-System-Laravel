@@ -63,7 +63,8 @@
                                     <!--begin::Table row-->
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                         <th class="w-60px text-center">@sortablelink('nomor_unit', 'Kode SAP')</th>
-                                        <th class="min-w-auto">@sortablelink('unit_kerja', 'Nama Unit')</th>
+                                        <th class="min-w-auto">@sortablelink('unit_kerja', 'Nama Divisi')</th>
+                                        <th class="min-w-auto">@sortablelink('unit_kerja', 'Direktorat')</th>
                                         <th class="min-w-auto">@sortablelink('divcode', 'Divcode')</th>
                                         {{-- <th class="min-w-auto">@sortablelink('dop', 'DOP')</th> --}}
                                         {{-- <th class="min-w-auto">@sortablelink('company', 'Company')</th>
@@ -88,7 +89,7 @@
                                         <tr>
                                             <!--begin::Name=-->
                                             <td class="text-center">
-                                                {{ $divisi->kode_sap }}
+                                                {{ $divisi->kode_sap ?? "-" }}
                                             </td>
                                             <!--end::Name=-->
                                             <!--begin::Coloumn-->
@@ -99,7 +100,12 @@
                                             <!--end::Coloumn-->
                                             <!--begin::Coloumn-->
                                             <td>
-                                                {{ $divisi->kode_kantor }}
+                                                {{ $divisi->Direktorat->dop ?? "-" }}
+                                            </td>
+                                            <!--end::Coloumn-->
+                                            <!--begin::Coloumn-->
+                                            <td>
+                                                {{ $divisi->kode_kantor ?? "-" }}
                                             </td>
                                             <!--end::Coloumn-->
                                             <!--begin::Coloumn-->

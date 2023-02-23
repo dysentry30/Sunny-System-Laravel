@@ -128,8 +128,8 @@
                                 <thead>
                                     <!--begin::Table row-->
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                        <th class="min-w-auto">No.</th>
                                         <th class="min-w-auto">Direktorat</th>
+                                        <th class="min-w-auto">Kode Direktorat</th>
                                         @if (auth()->user()->check_administrator)
                                             <th class="text-center">
                                                 Action
@@ -148,20 +148,21 @@
                                     @forelse ($direktorat_all as $direktorat)
                                         <tr>
 
-                                            <!--begin::No=-->
-                                            <td>
-                                                {{ $no++ }}
-                                            </td>
-                                            <!--end::No=-->
-
                                             <!--begin::Nama Company=-->
                                             <td>
                                                 <a type="button" data-bs-toggle="modal"
                                                     data-bs-target="#kt_edit_{{ $direktorat->id_direktorat }}"
-                                                    class="text-gray-600 text-gray text-hover-primary">{{ $direktorat->DOP->dop }}</a>
+                                                    class="text-gray-600 text-gray text-hover-primary">{{ $direktorat->dop }}</a>
                                                 </a>
                                             </td>
                                             <!--end::Nama Company=-->
+                                            
+                                            <!--begin::Kode Direktorat=-->
+                                            <td>
+                                                {{$direktorat->kode_direktorat}}
+                                            </td>
+                                            <!--end::Kode Direktorat=-->
+                                            
 
                                             @if (auth()->user()->check_administrator)
                                                 <!--begin::Action=-->
@@ -247,11 +248,13 @@
                                 <div class="fv-row mb-7">
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Direktorat</span>
+                                        <span class="required">Kode Direktorat</span>
                                     </label>
                                     <!--end::Label-->
+                                    <input type="text" class="form-control form-control-solid" value="" name="kode-direktorat" id="kode-direktorat">
+
                                     <!--Begin:: Select Options-->
-                                    <select id="direktorat" name="direktorat"
+                                    {{-- <select id="direktorat" name="direktorat"
                                         class="form-select form-select-solid"
                                         data-control="select2" data-hide-search="true"
                                         data-placeholder="Direktorat" data-select2-id="select2-data-direktorat-new">
@@ -259,7 +262,30 @@
                                         @foreach ($dops as $dop)
                                             <option value="{{$dop->id}}">{{$dop->dop}}</option>
                                         @endforeach
-                                    </select>
+                                    </select> --}}
+                                    <!--End:: Select Options-->
+                                </div>
+                                <!--end::Input group-->
+
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span class="required">Direktorat</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <input type="text" class="form-control form-control-solid" value="" name="direktorat" id="direktorat">
+
+                                    <!--Begin:: Select Options-->
+                                    {{-- <select id="direktorat" name="direktorat"
+                                        class="form-select form-select-solid"
+                                        data-control="select2" data-hide-search="true"
+                                        data-placeholder="Direktorat" data-select2-id="select2-data-direktorat-new">
+                                        <option value=""></option>
+                                        @foreach ($dops as $dop)
+                                            <option value="{{$dop->id}}">{{$dop->dop}}</option>
+                                        @endforeach
+                                    </select> --}}
                                     <!--End:: Select Options-->
                                 </div>
                                 <!--end::Input group-->
@@ -321,6 +347,30 @@
                             <div class="row fv-row">
                                 <!--begin::Col-->
                                 <div class="">
+
+                                    <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span class="required">Kode Direktorat</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <input type="text" class="form-control form-control-solid" value="{{$direktorat->kode_direktorat}}" name="kode-direktorat" id="kode-direktorat">
+
+                                    <!--Begin:: Select Options-->
+                                    {{-- <select id="direktorat" name="direktorat"
+                                        class="form-select form-select-solid"
+                                        data-control="select2" data-hide-search="true"
+                                        data-placeholder="Direktorat" data-select2-id="select2-data-direktorat-new">
+                                        <option value=""></option>
+                                        @foreach ($dops as $dop)
+                                            <option value="{{$dop->id}}">{{$dop->dop}}</option>
+                                        @endforeach
+                                    </select> --}}
+                                    <!--End:: Select Options-->
+                                </div>
+                                <!--end::Input group-->
+
                                     <!--begin::Input group Website-->
                                     <div class="fv-row mb-7">
                                         <!--begin::Label-->
@@ -329,7 +379,8 @@
                                         </label>
                                         <!--end::Label-->
                                         <!--Begin:: Select Options-->
-                                        <select id="direktorat" name="direktorat"
+                                        <input type="text" class="form-control form-control-solid" value="{{$direktorat->dop}}" name="direktorat" id="direktorat">
+                                        {{-- <select id="direktorat" name="direktorat"
                                             class="form-select form-select-solid"
                                             data-control="select2" data-hide-search="true"
                                             data-placeholder="Direktorat" data-select2-id="select2-data-direktorat-new">
@@ -337,7 +388,7 @@
                                             @foreach ($dops as $dop)
                                                 <option value="{{$dop->id}}" {{$direktorat->dop == $dop->id ? "selected" : ""}}>{{$dop->dop}}</option>
                                             @endforeach
-                                        </select>
+                                        </select> --}}
                                         <!--End:: Select Options-->
                                     </div>
                                     <!--end::Input group-->
@@ -377,7 +428,7 @@
                         <!--begin::Modal header-->
                         <div class="modal-header">
                             <!--begin::Modal title-->
-                            <h2>Hapus : {{ $direktorat->DOP->dop }}</h2>
+                            <h2>Hapus : {{ $direktorat->dop }}</h2>
                             <!--end::Modal title-->
                             <!--begin::Close-->
                             <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
