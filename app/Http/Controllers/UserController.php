@@ -79,12 +79,21 @@ class UserController extends Controller
             if (Auth::attempt($credentials) && Auth::check()) {
                 // dd(Auth::user());
                 $request->session()->regenerate();
-                if (Auth::user()->is_active) {
-                    return redirect()->intended("/dashboard");
-                }else{
-                    Auth::logout();
-                    Alert::error("USER NON ACTIVE", "Hubungi Admin (PIC)");
-                    return redirect()->intended("/");
+                if (!str_contains(Auth::user()->email, "@wika-customer")) {
+                    if (Auth::user()->is_active) {
+                        $redirect = $request->schemeAndHttpHost() . $request->get("redirect-to");
+                        if(!empty($redirect)) {
+                            return redirect()->intended( $redirect );
+                        }
+                        return redirect()->intended("/dashboard");
+                    }else{
+                        Auth::logout();
+                        Alert::error("USER NON ACTIVE", "Hubungi Admin (PIC)");
+                        return redirect()->intended("/");
+                    }
+                } else {
+                    Alert::success('Selamat Datang', "Silahkan Mengisi Survey Berikut");
+                    return redirect()->intended("/csi/customer-survey");
                 }
             }
         }
