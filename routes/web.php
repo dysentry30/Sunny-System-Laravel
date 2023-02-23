@@ -61,6 +61,7 @@ use App\Models\KriteriaAssessment;
 use App\Models\KriteriaGreenLine;
 use App\Models\MataUang;
 use App\Models\MatriksApprovalRekomendasi;
+use App\Models\Pegawai;
 use App\Models\PerubahanKontrak;
 use App\Models\Provinsi;
 use App\Models\ProyekBerjalans;
@@ -1903,18 +1904,20 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     // End :: Master Data Kriteria Assessment
 
     Route::get('/matriks-approval-rekomendasi', function () {
-        $approval_rekomendasi = MatriksApprovalRekomendasi::where("tahun", "=", (int) date("Y"))->get();
-        $jabatans = Jabatan::where("tahun", "=", (int) date("Y"))->get();
+        $approval_rekomendasi = MatriksApprovalRekomendasi::with(["Pegawai", "Divisi"])->where("tahun", "=", (int) date("Y"))->get();
+        // $jabatans = Jabatan::where("tahun", "=", (int) date("Y"))->get();
         // $unit_kerjas = UnitKerja::whereNotIn("divcode", ["B", "C", "D", "O", "U", "F", "L"])->get();
         $divisi_all = Divisi::all();
-        return view("MasterData/MatriksApprovalRekomendasi", compact(["approval_rekomendasi", "jabatans", "divisi_all"]));
+        $pegawai_all = Pegawai::all();
+        // dd($approval_rekomendasi);
+        return view("MasterData/MatriksApprovalRekomendasi", compact(["approval_rekomendasi", "divisi_all", "pegawai_all"]));
     });
 
     Route::post('/matriks-approval-rekomendasi/save', function (Request $request) {
         $data = $request->all();
         $rules = [
             "tahun" => "required|numeric",
-            "jabatan" => "required",
+            "nama-pegawai" => "required",
             "unit-kerja" => "required",
             "klasifikasi-proyek" => "required",
             "kategori" => "required",
@@ -1933,7 +1936,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
         $approval_rekomendasi = new MatriksApprovalRekomendasi();
         $approval_rekomendasi->tahun = $data["tahun"];
-        $approval_rekomendasi->jabatan = $data["jabatan"];
+        // $approval_rekomendasi->jabatan = $data["jabatan"];
+        $approval_rekomendasi->nama_pegawai = $data["nama-pegawai"];
         $approval_rekomendasi->unit_kerja = $data["unit-kerja"];
         $approval_rekomendasi->klasifikasi_proyek = $data["klasifikasi-proyek"];
         $approval_rekomendasi->kategori = $data["kategori"];
@@ -1950,7 +1954,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $data = $request->all();
         $rules = [
             "tahun" => "required|numeric",
-            "jabatan" => "required",
+            "nama-pegawai" => "required",
             "unit-kerja" => "required",
             "klasifikasi-proyek" => "required",
             "kategori" => "required",
@@ -1969,7 +1973,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
         $approval_rekomendasi = MatriksApprovalRekomendasi::find($data["id-matriks-approval"]);
         $approval_rekomendasi->tahun = $data["tahun"];
-        $approval_rekomendasi->jabatan = $data["jabatan"];
+        // $approval_rekomendasi->jabatan = $data["jabatan"];
+        $approval_rekomendasi->nama_pegawai = $data["nama-pegawai"];
         $approval_rekomendasi->unit_kerja = $data["unit-kerja"];
         $approval_rekomendasi->klasifikasi_proyek = $data["klasifikasi-proyek"];
         $approval_rekomendasi->kategori = $data["kategori"];

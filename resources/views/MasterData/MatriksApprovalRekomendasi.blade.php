@@ -146,7 +146,7 @@
                                     <!--begin::Table row-->
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                         <th class="min-w-auto">Tahun</th>
-                                        <th class="min-w-auto">Jabatan</th>
+                                        <th class="min-w-auto">Nama Pegawai</th>
                                         <th class="min-w-auto">Unit Kerja</th>
                                         <th class="min-w-auto">Klasifikasi Proyek</th>
                                         <th class="min-w-auto">Kategori</th>
@@ -162,28 +162,16 @@
                                 @endphp
                                 <tbody class="fw-bold text-gray-600">
                                     @foreach ($approval_rekomendasi as $approval)
-                                        {{-- @php
-                                            try {
-                                                $sub_isi = App\Models\Provinsi::where("province_id", "=" , $approval->sub_isi)->firstOrFail()->province_name;
-                                            } catch (\Throwable $th) {
-                                                $sub_isi = $approval->sub_isi;
-                                            }
-                                            @endphp --}}
                                         <tr>
                                             <td>{{$approval->tahun}}</td>
                                             <td>
-                                                <a href="#" class="text-hover-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_matriks_update_{{$approval->id_matriks_approval_rekomendasi}}">{{$approval->Jabatan->nama_jabatan}}</a>
+                                                <a href="#" class="text-hover-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_matriks_update_{{$approval->id_matriks_approval_rekomendasi}}">{{$approval->Pegawai->nama_pegawai}}</a>
                                             </td>
                                             <td>{{$approval->Divisi->nama_kantor}}</td>
                                             <td>{{$approval->klasifikasi_proyek}}</td>
                                             <td>{{$approval->kategori}}</td>
                                             <td>
                                                 <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#kt_modal_matriks_delete_{{$approval->id_matriks_approval_rekomendasi}}">Delete</button>
-                                                {{-- <form action="/matriks-approval-rekomendasi/delete" method="POST">
-                                                    @csrf
-                                                    <input type="hidden" type="text" value="{{$approval}}">
-                                                    <input type="submit" class="">
-                                                </form> --}}
                                             </td>
                                         </tr>
                                     @endforeach
@@ -281,6 +269,25 @@
                                 <div class="fv-row mb-7">
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
+                                        <span class="required">Nama Pegawai</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                        
+                                    <select id="nama-pegawai" name="nama-pegawai"
+                                        class="form-select form-select-solid select2-hidden-accessible"
+                                        data-control="select2" data-hide-search="false" data-placeholder="Pilih Nama Pegawai..."
+                                        data-select2-id="select2-nama-pegawai" tabindex="-1" aria-hidden="true">
+                                        <option value="" selected></option>
+                                        @foreach ($pegawai_all as $pegawai)
+                                            <option value="{{$pegawai->nip}}">{{$pegawai->nama_pegawai}}</option>
+                                        @endforeach
+                                    </select>
+                                    <!--end::Input-->
+                                </div>
+                                {{-- <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
                                         <span class="required">Jabatan</span>
                                     </label>
                                     <!--end::Label-->
@@ -294,12 +301,12 @@
                                         @foreach ($jabatans as $jabatan)
                                             <option value="{{$jabatan->kode_jabatan}}">{{$jabatan->nama_jabatan}}</option>
                                         @endforeach
-                                        {{-- @foreach ($sumber_danas as $sd)
+                                        @foreach ($sumber_danas as $sd)
                                             <option value="{{$sd->kode}}">{{$sd->kode}}</option>
-                                        @endforeach --}}
+                                        @endforeach
                                     </select>
                                     <!--end::Input-->
-                                </div>
+                                </div> --}}
                                 <!--end::Input group-->
                             </div>
                             <!--End begin::Col-->
@@ -408,78 +415,6 @@
     </div>
     <!--end::Modal Tambah Kriteria Green Line-->
     
-    {{-- <!--begin::Modal EDIT-->
-    @foreach ($js as $j)
-    <form action="/dop/{{ $j->id }}/save" method="post" enctype="multipart/form-data">
-        @csrf
-        <!--begin::Modal - Create Proyek-->
-        <div class="modal fade" id="kt_edit_{{ $j->id }}" tabindex="-1" aria-hidden="true">
-            <!--begin::Modal dialog-->
-            <div class="modal-dialog modal-dialog-centered mw-800px">
-                <!--begin::Modal content-->
-                <div class="modal-content">
-                    <!--begin::Modal header-->
-                    <div class="modal-header">
-                        <!--begin::Modal title-->
-                        <h2>New DOP</h2>
-                        <!--end::Modal title-->
-                        <!--begin::Close-->
-                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                            <span class="svg-icon svg-icon-1">
-                                <i class="bi bi-x-lg"></i>
-                            </span>
-                            <!--end::Svg Icon-->
-                        </div>
-                        <!--end::Close-->
-                    </div>
-                    <!--end::Modal header-->
-
-                    <!--begin::Modal body-->
-                    <div class="modal-body py-lg-6 px-lg-6">
-
-
-                        <!--begin::Row Kanan+Kiri-->
-                        <div class="row fv-row">
-                            <!--begin::Col-->
-                            <div class="">
-                                <!--begin::Input group Website-->
-                                <div class="fv-row mb-7">
-                                    <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">DOP</span>
-                                    </label>
-                                    <!--end::Label-->
-                                    <!--begin::Input-->
-                                    <input type="text" class="form-control form-control-solid" id="dop"
-                                        name="dop" value="{{ $j->dop }}" placeholder="DOP" />
-                                    <!--end::Input-->
-                                </div>
-                                <!--end::Input group-->
-                            </div>
-                            <!--End begin::Col-->
-                        </div>
-                        <!--End::Row Kanan+Kiri-->
-
-
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white" id="new_save"
-                            style="background-color:#008CB4">Save</button>
-
-                    </div>
-                    <!--end::Modal body-->
-                </div>
-                <!--end::Modal content-->
-            </div>
-            <!--end::Modal dialog-->
-        </div>
-        <!--end::Modal - Create App-->
-    </form>
-    @endforeach
-    <!--end::Modal EDIT--> --}}
-
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script> 
@@ -502,7 +437,7 @@
                         <!--begin::Modal header-->
                         <div class="modal-header">
                             <!--begin::Modal title-->
-                            <h2>Hapus : {{ $approval->Jabatan->nama_jabatan }}</h2>
+                            <h2>Hapus : {{ $approval->Pegawai->nama_pegawai }}</h2>
                             <!--end::Modal title-->
                             <!--begin::Close-->
                             <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
@@ -595,21 +530,23 @@
                                 <!--End begin::Col-->
                                 <div class="">
                                     <!--begin::Input group Website-->
+                                    <!--end::Input group-->
+                                    <!--begin::Input group Website-->
                                     <div class="fv-row mb-7">
                                         <!--begin::Label-->
                                         <label class="fs-6 fw-bold form-label mt-3">
-                                            <span class="required">Jabatan</span>
+                                            <span class="required">Nama Pegawai</span>
                                         </label>
                                         <!--end::Label-->
                                         <!--begin::Input-->
-                                            
-                                        <select id="jabatan_{{$approval->id_matriks_approval_rekomendasi}}" name="jabatan"
+                                        
+                                        <select id="nama-pegawai_{{$approval->id_matriks_approval_rekomendasi}}" name="nama-pegawai"
                                             class="form-select form-select-solid select2-hidden-accessible"
-                                            data-control="select2" data-hide-search="false" data-placeholder="Pilih Jabatan..."
-                                            data-select2-id="select2-jabatan_{{$approval->id_matriks_approval_rekomendasi}}" tabindex="-1" aria-hidden="true">
+                                            data-control="select2" data-hide-search="false" data-placeholder="Pilih Nama Pegawai..."
+                                            data-select2-id="select2-nama-pegawai_{{$approval->id_matriks_approval_rekomendasi}}" tabindex="-1" aria-hidden="true">
                                             <option value="" selected></option>
-                                            @foreach ($jabatans as $jabatan)
-                                                <option value="{{$jabatan->kode_jabatan}}" {{$jabatan->kode_jabatan == $approval->jabatan ? "selected" : ""}}>{{$jabatan->nama_jabatan}}</option>
+                                            @foreach ($pegawai_all as $pegawai)
+                                                <option value="{{$pegawai->nip}}" {{$pegawai->nip == $approval->nama_pegawai ? "selected" : ""}}>{{$pegawai->nama_pegawai}}</option>
                                             @endforeach
                                             {{-- @foreach ($sumber_danas as $sd)
                                                 <option value="{{$sd->kode}}">{{$sd->kode}}</option>
