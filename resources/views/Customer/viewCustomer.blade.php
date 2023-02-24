@@ -5387,17 +5387,19 @@
     $nilai_cli = 0;
     $nilai_csi = 0;
     $nilai_nps = 0;
-    $countItem = $customer->Csi->where("status", "=", "Done")->count();
-    foreach ($customer->Csi as $item) {
-        if($item->status == "Done"){
-            $nilai_cli += $item->score_cli;
-            $nilai_csi += $item->score_csi;
-            $nilai_nps += $item->score_nps;
+    if (!empty($customer->Csi->where("status", "=", "Done"))) {
+        $countItem = $customer->Csi->where("status", "=", "Done")->count();
+        foreach ($customer->Csi as $item) {
+            if($item->status == "Done"){
+                $nilai_cli += $item->score_cli;
+                $nilai_csi += $item->score_csi;
+                $nilai_nps += $item->score_nps;
+            }
         }
+        $nilai_cli = (int) $nilai_cli / $countItem;
+        $nilai_csi = (int) $nilai_csi / $countItem;
+        $nilai_nps = (int) $nilai_nps / $countItem;
     }
-    $nilai_cli = (int) $nilai_cli / $countItem;
-    $nilai_csi = (int) $nilai_csi / $countItem;
-    $nilai_nps = (int) $nilai_nps / $countItem;
     // dump($nilai_cli, $nilai_csi, $nilai_nps, $countItem )
 @endphp
 
