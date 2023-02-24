@@ -1955,66 +1955,68 @@
                                                                 $no = 1;
                                                             @endphp
                                                             <tbody class="fw-bold text-gray-600">
-                                                                @foreach ($strukturs as $struktur)
-                                                                    <tr>
-                                                                        <!--begin::Name-->
-                                                                        <td class="text-center">
-                                                                            {{ $no++ }}
-                                                                        </td>
-                                                                        <!--end::Name-->
-                                                                        <!--begin::Name-->
-                                                                        <td>
-                                                                            <a href="#" class="text-gray-800 text-hover-primary" data-bs-toggle="modal"
-                                                                                data-bs-target="#kt_modal_edit_struktur_{{ $struktur->id }}">{{ $struktur->nama_struktur }}</a>
-                                                                        </td>
-                                                                        <!--end::Name-->
-                                                                        <!--begin::Email-->
-                                                                        <td>
-                                                                            {{ $struktur->email_struktur ?? '-' }}
-                                                                        </td>
-                                                                        <!--end::Email-->
-                                                                        <!--begin::Jabatan-->
-                                                                        <td>
-                                                                            {{ $struktur->jabatan_struktur ?? '-' }}
-                                                                        </td>
-                                                                        <!--end::Jabatan-->
-                                                                        <!--begin::Phone-->
-                                                                        <td>
-                                                                            {{ $struktur->phone_struktur ?? '-' }}
-                                                                        </td>
-                                                                        <!--end::Phone-->
-                                                                        <!--begin::Column-->
-                                                                        <td>
-                                                                            {{ $struktur->ultah_struktur ?? '-' }}
-                                                                        </td>
-                                                                        <!--end::Column-->
-                                                                        <!--begin::Column-->
-                                                                        <td>
-                                                                            {{-- {{ $struktur->proyek_struktur ?? '-' }} --}}
-                                                                            @foreach ($proyeks as $proyek)
-                                                                                @if ($struktur->proyek_struktur == $proyek->kode_proyek)
-                                                                                    {{ $proyek->nama_proyek ?? '-' }}
-                                                                                @endif
-                                                                            @endforeach
-                                                                        </td>
-                                                                        <!--end::Column-->
-                                                                        <!--begin::Column-->
-                                                                        <td>
-                                                                            {{ $struktur->role_struktur ?? '-' }}
-                                                                        </td>
-                                                                        <!--end::Column-->
-                                                                        <!--begin::Action-->
-                                                                        <td class="text-center">
-                                                                            <small>
-                                                                                <p data-bs-toggle="modal" data-bs-target="#kt_struktur_delete_{{ $struktur->id }}" id="modal-delete"
-                                                                                    class="btn btn-sm btn-light btn-active-primary">
-                                                                                    Delete
-                                                                                </p>
-                                                                            </small>
-                                                                        </td>
-                                                                        <!--end::Action-->
-                                                                    </tr>
-                                                                @endforeach
+                                                                @if (!empty($strukturs))
+                                                                    @foreach ($strukturs as $struktur)
+                                                                        <tr>
+                                                                            <!--begin::Name-->
+                                                                            <td class="text-center">
+                                                                                {{ $no++ }}
+                                                                            </td>
+                                                                            <!--end::Name-->
+                                                                            <!--begin::Name-->
+                                                                            <td>
+                                                                                <a href="#" class="text-gray-800 text-hover-primary" data-bs-toggle="modal"
+                                                                                    data-bs-target="#kt_modal_edit_struktur_{{ $struktur->id }}">{{ $struktur->nama_struktur }}</a>
+                                                                            </td>
+                                                                            <!--end::Name-->
+                                                                            <!--begin::Email-->
+                                                                            <td>
+                                                                                {{ $struktur->email_struktur ?? '-' }}
+                                                                            </td>
+                                                                            <!--end::Email-->
+                                                                            <!--begin::Jabatan-->
+                                                                            <td>
+                                                                                {{ $struktur->jabatan_struktur ?? '-' }}
+                                                                            </td>
+                                                                            <!--end::Jabatan-->
+                                                                            <!--begin::Phone-->
+                                                                            <td>
+                                                                                {{ $struktur->phone_struktur ?? '-' }}
+                                                                            </td>
+                                                                            <!--end::Phone-->
+                                                                            <!--begin::Column-->
+                                                                            <td>
+                                                                                {{ $struktur->ultah_struktur ?? '-' }}
+                                                                            </td>
+                                                                            <!--end::Column-->
+                                                                            <!--begin::Column-->
+                                                                            <td>
+                                                                                {{-- {{ $struktur->proyek_struktur ?? '-' }} --}}
+                                                                                @foreach ($proyeks as $proyek)
+                                                                                    @if ($struktur->proyek_struktur == $proyek->kode_proyek)
+                                                                                        {{ $proyek->nama_proyek ?? '-' }}
+                                                                                    @endif
+                                                                                @endforeach
+                                                                            </td>
+                                                                            <!--end::Column-->
+                                                                            <!--begin::Column-->
+                                                                            <td>
+                                                                                {{ $struktur->role_struktur ?? '-' }}
+                                                                            </td>
+                                                                            <!--end::Column-->
+                                                                            <!--begin::Action-->
+                                                                            <td class="text-center">
+                                                                                <small>
+                                                                                    <p data-bs-toggle="modal" data-bs-target="#kt_struktur_delete_{{ $struktur->id }}" id="modal-delete"
+                                                                                        class="btn btn-sm btn-light btn-active-primary">
+                                                                                        Delete
+                                                                                    </p>
+                                                                                </small>
+                                                                            </td>
+                                                                            <!--end::Action-->
+                                                                        </tr>
+                                                                    @endforeach
+                                                                @endif
                                                             </tbody>
                                                             <!--end::Table body-->
                                                         </table>
@@ -4227,7 +4229,8 @@
     <!--end::modal Struktur Organisasi-->
 
     <!--begin::modal EDIT Struktur Organisasi-->
-    {{-- @foreach ($strukturs as $struktur)
+    @if (!empty($strukturs))
+    @foreach ($strukturs as $struktur)
         <form action="/customer/struktur/{{ $struktur->id }}/edit" method="post" enctype="multipart/form-data">
             @csrf
 
@@ -4437,7 +4440,8 @@
             </div>
             <!--end::Modal - Create App-->
         </form>
-    @endforeach --}}
+    @endforeach
+    @endif
     <!--end::modal EDIT Struktur Organisasi-->
 
     <!--begin::DELETE STRUKTUR-->
