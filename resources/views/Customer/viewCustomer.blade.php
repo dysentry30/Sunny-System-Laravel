@@ -5847,7 +5847,7 @@
         } else if (nilaiClr >= 4.2 && nilaiClr <= 5) {
             bgColorClr = "#004D70";
         } else {
-            bgColorClr = "#8A0000";
+            bgColorClr = "#55C8FE";
         }
         Highcharts.chart('score-clr', {
 
@@ -6025,7 +6025,7 @@
         } else if (nilaiNps >= 4.2 && nilaiNps <= 5) {
             bgColorNps = "#1F8A85";
         } else {
-            bgColorNps = "#8A0000";
+            bgColorNps = "#A2EAE6";
         }
         Highcharts.chart('score-nps', {
 
@@ -6202,7 +6202,7 @@
         } else if (nilaiCsi >= 4.2 && nilaiCsi <= 5) {
             bgColorCsi = "#DB9407";
         } else {
-            bgColorCsi = "#8A0000";
+            bgColorCsi = "#FDEBC8";
         }
         Highcharts.chart('score-csi', {
 
