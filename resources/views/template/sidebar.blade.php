@@ -11,7 +11,7 @@
             data-kt-drawer-width="{default:'200px', '300px': '250px'}" data-kt-drawer-direction="start"
             data-kt-drawer-toggle="#kt_aside_mobile_toggle" style="background-color:#0db0d9; z-index: 300">
             <!--begin::Brand-->
-            <div class="aside-logo flex-column-auto" id="kt_aside_logo" style="background-color:#0db0d9;">
+            <div class="aside-logo flex-column-auto" id="kt_aside_logo" style="height: auto; background-color:#0db0d9;">
                 <!--begin::Logo-->
                 @if (auth()->user()->check_admin_kontrak)
                     <a style="background-color:#0db0d9;">
@@ -20,8 +20,8 @@
                     </a>
                 @else
                     <a style="background-color:#0db0d9;">
-                        <img alt="Logo" src="/media/logos/Logo2.png" class="h-60px logo"
-                            style="margin-top:30px;margin-left:-10px;" />
+                        <img alt="Logo" src="/media/logos/Logo2.png" class="h-100px logo"
+                            style="margin-top:30px;margin-left:20px;" />
                     </a>
                 @endif
                 <!--end::Logo-->
