@@ -16,4 +16,8 @@ class Pegawai extends Model
     public function Jabatan() {
         return $this->hasOne(Jabatan::class, "kode_jabatan", "kode_jabatan");
     }
+
+    public function MatriksApproval() {
+        return $this->hasMany(MatriksApprovalRekomendasi::class, "nama_pegawai", "nip");
+    }
 }

@@ -357,7 +357,7 @@
                                             <option value="Proyek Kecil">Proyek Kecil</option>
                                             <option value="Proyek Menengah">Proyek Menengah</option>
                                             <option value="Proyek Besar">Proyek Besar</option>
-                                            <option value="Proyek Mega">Proyek Mega</option>
+                                            <option value="Mega Proyek">Mega Proyek</option>
 
                                             {{-- @foreach ($sumber_danas as $sd)
                                                 <option value="{{$sd->kode}}">{{$sd->kode}}</option>
@@ -382,8 +382,8 @@
                                             data-control="select2" data-hide-search="false" data-placeholder="Pilih Kategori..."
                                             data-select2-id="select2-kategori" tabindex="-1" aria-hidden="true">
                                             <option value="" selected></option>
-                                            <option value="Penyusun">Pengajuan</option>
-                                            <option value="Rekomendasi">Verifikasi</option>
+                                            <option value="Pengajuan">Pengajuan</option>
+                                            <option value="Verifikasi">Verifikasi</option>
                                             <option value="Penyusun">Penyusun</option>
                                             <option value="Rekomendasi">Rekomendasi</option>
                                             <option value="Persetujuan">Persetujuan</option>
@@ -604,7 +604,7 @@
                                                 <option value="Proyek Kecil" {{"Proyek Kecil" == $approval->klasifikasi_proyek ? "selected" : ""}}>Proyek Kecil</option>
                                                 <option value="Proyek Menengah" {{"Proyek Menengah" == $approval->klasifikasi_proyek ? "selected" : ""}}>Proyek Menengah</option>
                                                 <option value="Proyek Besar" {{"Proyek Besar" == $approval->klasifikasi_proyek ? "selected" : ""}}>Proyek Besar</option>
-                                                <option value="Proyek Mega" {{"Proyek Mega" == $approval->klasifikasi_proyek ? "selected" : ""}}>Proyek Mega</option>
+                                                <option value="Mega Proyek" {{"Mega Proyek" == $approval->klasifikasi_proyek ? "selected" : ""}}>Mega Proyek</option>
     
                                                 {{-- @foreach ($sumber_danas as $sd)
                                                     <option value="{{$sd->kode}}">{{$sd->kode}}</option>
@@ -786,7 +786,7 @@
     $(document).ready(function() {
         // $.fn.modal.Constructor.prototype.enforceFocus = function() {};
 
-        $("#jabatan, #unit-kerja, #klasifikasi-proyek, #kategori").select2({
+        $("#nama-pegawai, #unit-kerja, #klasifikasi-proyek, #kategori").select2({
             dropdownParent: $('#kt_modal_input_kriteria_green_line'),
         });
     });

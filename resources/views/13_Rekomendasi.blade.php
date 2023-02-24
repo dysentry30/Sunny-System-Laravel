@@ -192,7 +192,7 @@
                                                     @endphp
                                                     <tr>
                                                         <td>
-                                                            @if ($is_super_user)
+                                                            @if ($is_user_exist_in_matriks_approval)
                                                                 <a href="#kt_modal_view_proyek_{{$proyek->kode_proyek}}" data-bs-toggle="modal" class="text-hover-primary">{{ $proyek->nama_proyek }}</a>
                                                             @else
                                                                 <a href="/proyek/view/{{$proyek->kode_proyek}}" target="_blank" class="text-hover-primary">{{ $proyek->nama_proyek }}</a>
@@ -242,26 +242,26 @@
                                                             </small>
                                                         </td>
                                                         <td>
-                                                            @if ($is_approved && !$is_review_assessment && empty($proyek->recommended_with_note))
+                                                            @if ($proyek->review_assessment && $proyek->review_assessment && !$proyek->is_recommended && !$proyek->is_recommended_with_note)
                                                                 <small class="badge badge-light-success">Pengajuan Disetujui</small>
-                                                            @elseif($is_pending && !$is_review_assessment)
+                                                            @elseif($is_pending && $proyek->review_assessment)
                                                                 <small class="badge badge-light-info">Proses Pengajuan</small>
                                                             @elseif($is_review_assessment)
                                                                 <small class="badge badge-light-primary">Review Assessment</small>
-                                                            @elseif($is_approved && $proyek->is_recommended && empty($proyek->recommended_with_note))
+                                                            @elseif($proyek->is_recommended && empty($proyek->recommended_with_note))
                                                                 <small class="badge badge-light-success">Direkomendasikan</small>
-                                                            @elseif($is_approved && $proyek->is_recommended && !empty($proyek->recommended_with_note))
+                                                            @elseif($proyek->is_recommended && !empty($proyek->recommended_with_note))
                                                                 <small class="badge badge-light-success">Direkomendasikan dengan catatan</small>
-                                                            @elseif(!$proyek->is_recommended || !$is_approved)
+                                                            @elseif(!$proyek->is_recommended || !$proyek->review_assessment)
                                                                 <small class="badge badge-light-danger">Tidak Direkomendasikan</small>
                                                             @endif
                                                         </td>
                                                         <td>
-                                                            @if ($proyek->is_recommended && !$is_pending && $is_approved)
+                                                            @if ($proyek->is_disetujui)
                                                                 <small class="badge badge-light-success">Disetujui</small>
-                                                            @elseif(($proyek->is_recommended == false && $proyek->is_recommended != null && !$is_pending) || (!$is_pending && !$is_approved))
+                                                            @elseif(!is_null($proyek->is_disetujui) && ($proyek->is_recommended || $proyek->is_recommended_with_note))
                                                                 <small class="badge badge-light-danger">Ditolak</small>
-                                                            @elseif(!$proyek->is_recommended && $is_pending || $is_review_assessment)
+                                                            @elseif(!$proyek->is_recommended && $is_pending || $proyek->review_assessment)
                                                                 <small class="badge badge-light-primary">Request</small>
                                                             @endif
                                                         </td>
@@ -306,7 +306,7 @@
                                         <!--end::Table head-->
                                         <!--begin::Table body-->
                                         <tbody class="fw-bold text-gray-600 fs-6">
-                                            @if (!empty($proyeks_rekomendasi) &&  $is_super_user)
+                                            @if (!empty($proyeks_rekomendasi))
                                                 @forelse ($proyeks_rekomendasi as $proyek)
                                                     @php
                                                         $customer = $proyek->proyekBerjalan->Customer;
@@ -395,27 +395,28 @@
                                                             @endif
                                                         </td>
                                                         <td>
-                                                            @if ($is_approved && !$is_review_assessment && is_null($proyek->is_recommended))
+                                                            {{-- @dump(!$proyek->is_recommended || !$proyek->is_recommended_with_note) --}}
+                                                            @if ($proyek->review_assessment && !$proyek->is_recommended && !$proyek->is_recommended_with_note)
                                                                 <small class="badge badge-light-success">Pengajuan Disetujui</small>
-                                                            @elseif($is_pending && !$is_review_assessment && !$proyek->is_recommended)
+                                                            @elseif($is_pending && $proyek->review_assessment && (!$proyek->is_recommended || !$proyek->is_recommended_with_note))
                                                                 <small class="badge badge-light-info">Proses Pengajuan</small>
                                                             @elseif($is_review_assessment)
                                                                 <small class="badge badge-light-primary">Review Assessment</small>
-                                                            @elseif($is_approved && $proyek->is_recommended && empty($proyek->is_recommended_with_note))
+                                                            @elseif($proyek->is_recommended)
                                                                 <small class="badge badge-light-success">Direkomendasikan</small>
-                                                            @elseif($is_approved && $proyek->is_recommended && $proyek->is_recommended_with_note)
+                                                            @elseif($proyek->is_recommended_with_note)
                                                                 <small class="badge badge-light-success">Direkomendasikan dengan catatan</small>
-                                                            @elseif((!$proyek->is_recommended || !$is_approved) && !$is_pending)
+                                                            @elseif(!$proyek->is_recommended || !$is_approved)
                                                                 <small class="badge badge-light-danger">Tidak Direkomendasikan</small>
                                                             @endif
                                                         </td>
                                                         <td>
-                                                            @if ($proyek->is_recommended && !$is_pending && $is_approved)
+                                                            @if ($proyek->is_disetujui)
                                                                 <small class="badge badge-light-success">Disetujui</small>
-                                                            @elseif(is_null($proyek->is_recommended) || $is_pending)
-                                                                <small class="badge badge-light-primary">Request</small>
-                                                            @elseif($proyek->is_recommended == false && !is_null($proyek->is_recommended))
+                                                            @elseif(!is_null($proyek->is_disetujui) && ($proyek->is_recommended || $proyek->is_recommended_with_note))
                                                                 <small class="badge badge-light-danger">Ditolak</small>
+                                                            @elseif(!$proyek->is_recommended && $is_pending || $proyek->review_assessment)
+                                                                <small class="badge badge-light-primary">Request</small>
                                                             @endif
                                                         </td>
                                                     </tr>
@@ -456,7 +457,7 @@
                                         <!--end::Table head-->
                                         <!--begin::Table body-->
                                         <tbody class="fw-bold text-gray-600 fs-6">
-                                            @if (!empty($proyeks_persetujuan) &&  $is_super_user)
+                                            @if (!empty($proyeks_persetujuan))
                                                 @forelse ($proyeks_persetujuan as $proyek)
                                                     @php
                                                         // $customer = $proyek->proyekBerjalan->Customer;
@@ -532,56 +533,13 @@
                                                             </small>
                                                         </td>
                                                         <td>
-                                                            @php
-                                                                $msg = "";
-                                                                $is_approved = $approved_data->every(function($item) {
-                                                                    return !empty($item) && $item->status == "approved";
-                                                                }) && ($approved_data->count() == $all_super_user_counter);
-                                                                $is_pending = !$is_approved && ($approved_data->count() < $all_super_user_counter);
-                                                                if(!$is_approved) {
-                                                                    if(!empty($approved_data) && !$is_approved) {
-                                                                        $nama_user = collect();
-                                                                        foreach ($approved_data as $item) {
-                                                                            if(!empty($item) && $item->status == "rejected") {
-                                                                                try {
-                                                                                    $user = App\Models\User::find($item->user_id)->name;
-                                                                                    if(!empty($user)) $nama_user->push($user);
-                                                                                } catch (\Throwable $th) {
-                                                                                    //throw $th;
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                        $nama_user = $nama_user->join(", ", " dan ");
-                                                                        if(!empty($nama_user)) {
-                                                                            $msg = "Rekomendasi ini ditolak oleh <b>$nama_user</b>";
-                                                                        }
-                                                                    }
-                                                                }   
-                                                            @endphp
-                                                            @if ($proyek->is_recommended && $proyek->recommended_with_note)
-                                                                <small class="badge badge-light-success">Disetujui dengan catatan</small>
-                                                            @elseif($proyek->is_recommended)
-                                                                <small class="badge badge-light-success">Disetujui dengan catatan</small>
-                                                            @else
+                                                            @if ($proyek->is_disetujui)
+                                                                <small class="badge badge-light-success">Disetujui</small>
+                                                            @elseif(!$proyek->is_recommended && $is_pending || $proyek->review_assessment)
+                                                                <small class="badge badge-light-primary">Request</small>
+                                                            @elseif((!is_null($proyek->is_disetujui) && !is_null($proyek->is_penyusun_approved) && !is_null($proyek->is_recommended)) || ($proyek->is_disetujui == false && $proyek->is_penyusun_approved == false && $proyek->is_recommended == false))
                                                                 <small class="badge badge-light-danger">Ditolak</small>
                                                             @endif
-                                                            {{-- @if ($is_approved)
-                                                                @if ($is_approved)
-                                                                    <small class="badge badge-light-success">Disetujui</small>
-                                                                @elseif($is_pending)
-                                                                    <small class="badge badge-light-primary">Proses Pengajuan</small>
-                                                                @else
-                                                                    <small class="badge badge-light-danger" data-bs-toggle="tooltip" data-bs-html="true" data-bs-title="{{ $msg }}">Ditolak</small>
-                                                                @endif
-                                                            @else
-                                                                @if(!$is_pending && !$is_approved)
-                                                                    <small class="badge badge-light-danger"  data-bs-toggle="tooltip" data-bs-html="true" data-bs-title="{{ $msg }}">Ditolak</small>
-                                                                @elseif(!$is_pending && $is_approved)        
-                                                                    <small class="badge badge-light-success">Disetujui</small>
-                                                                @else
-                                                                    <small class="badge badge-light-primary">Proses Pengajuan</small>
-                                                                @endif
-                                                            @endif --}}
                                                         </td>
                                                     </tr>
                                                 @empty
@@ -681,6 +639,13 @@
                             <iframe src="{{asset("file-rekomendasi" . "\\" . $proyek->file_rekomendasi)}}" width="800px" height="600px" ></iframe>
                         </div>
                     @endif --}}
+                    @if (!empty($proyek->file_pengajuan))
+                        <hr>    
+                        <h5>File Preview: </h5>
+                        <div class="text-center">
+                            <iframe src="{{asset("file-pengajuan" . "\\" . $proyek->file_pengajuan)}}" width="800px" height="600px" ></iframe>
+                        </div>
+                    @endif
                 </div>
                 <div class="modal-footer">
                     @php
@@ -705,7 +670,7 @@
                         }
                         // dump($is_user_id_exist, $is_data_null, $approved_data->count() != $all_super_user_counter);
                     @endphp
-                    @if ($is_super_user && empty($is_user_id_exist) && ($is_data_null || $approved_data->count() != $all_super_user_counter))
+                    @if ($is_user_exist_in_matriks_approval && empty($is_user_id_exist) && ($is_data_null || $approved_data->count() != $all_super_user_counter))
                         <form action="" method="GET">
                             @csrf
                             <input type="hidden" name="kode-proyek" value="{{$proyek->kode_proyek}}">
@@ -824,9 +789,15 @@
                             <hr>
                             
                             {{-- <textarea name="note-rekomendasi" id="note-rekomendasi" rows="4" class="form-control form-control-solid"></textarea> --}}
+                            @if (!empty($proyek->file_pengajuan))
+                                <h5>Form Pengajuan Rekomendasi: </h5>
+                                <div class="text-center">
+                                    <iframe src="{{asset("file-pengajuan" . "\\" . $proyek->file_pengajuan)}}" width="800px" height="600px" ></iframe>
+                                </div>
+                            @endif
                             @if (!empty($proyek->file_rekomendasi))
                                 <hr>
-                                <h5>File Preview: </h5>
+                                <h5>Hasil Assessment: </h5>
                                 <div class="text-center">
                                     <iframe src="{{asset("file-rekomendasi" . "\\" . $proyek->file_rekomendasi)}}" width="800px" height="600px" ></iframe>
                                 </div>
@@ -835,20 +806,8 @@
                         <div class="modal-footer row">
                             
                             @if (is_null($proyek->is_recommended))
-                                <label for="kategori-rekomendasi" class="text-start">Kategori Rekomendasi: </label>
-                                <select onchange="disableEnableTextArea(this)" id="kategori-rekomendasi" name="kategori-rekomendasi"
-                                    class="form-select form-select-solid w-auto"
-                                    style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
-                                    data-placeholder="Direktorat" data-select2-id="select2-data-kategori-rekomendasi" tabindex="-1"
-                                    aria-hidden="true">
-                                    <option value=""></option>
-                                    <option value="Direkomendasikan" selected>Direkomendasikan</option>
-                                    <option value="Direkomendasikan dengan catatan">Direkomendasikan dengan catatan</option>
-                                    <option value="Rekomendasi Ditolak">Rekomendasi Ditolak</option>
-                                </select>
-                                
                                 <label for="note-rekomendasi" class="text-start">Catatan Rekomendasi: </label>
-                                <textarea class="form-control form-control-solid" disabled id="note-rekomendasi" name="note-rekomendasi"></textarea>
+                                <textarea class="form-control form-control-solid" id="note-rekomendasi" name="note-rekomendasi">{{$proyek->recommended_with_note}}</textarea>
                                 <br>
                                 @csrf
                                 <input type="hidden" name="kode-proyek" value="{{$proyek->kode_proyek}}">
@@ -970,10 +929,48 @@
                             {{-- <label for="note-rekomendasi" class="text-start">Catatan Rekomendasi: </label>
                             <textarea class="form-control" id="note-rekomendasi" name="note-rekomendasi"></textarea>
                             <br> --}}
-                            @if (empty($proyek->is_recommended))
-                                <small class="badge badge-light-danger">Ditolak</small>
+                            @if (is_null($proyek->is_penyusun_approved) && $matriks_user->contains("kategori", "Penyusun"))
+                                <form action="" method="get">
+                                    @csrf
+                                    <input type="hidden" value="{{$proyek->kode_proyek}}" name="kode-proyek" id="kode-proyek">
+                                    
+                                    <input type="submit" name="penyusun-setujui" value="Disetujui" class="btn btn-sm btn-success">
+                                    <input type="submit" name="penyusun-tolak" value="Ditolak" class="btn btn-sm btn-danger">
+                                </form>
+                            @elseif ((is_null($proyek->is_recommended)) && $matriks_user->contains("kategori", "Rekomendasi") && $proyek->is_penyusun_approved)
+                                <form action="" method="get">
+                                    @csrf
+                                    <input type="hidden" value="{{$proyek->kode_proyek}}" name="kode-proyek" id="kode-proyek">
+                                    <label for="kategori-rekomendasi" class="text-start">Kategori Rekomendasi: </label>
+                                    {{-- <select onchange="disableEnableTextArea(this)" id="kategori-rekomendasi" name="kategori-rekomendasi" --}}
+                                    <select id="kategori-rekomendasi" name="kategori-rekomendasi"
+                                        class="form-select form-select-solid w-auto"
+                                        style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
+                                        data-placeholder="Direktorat" data-select2-id="select2-data-kategori-rekomendasi" tabindex="-1"
+                                        aria-hidden="true">
+                                        <option value=""></option>
+                                        <option value="Direkomendasikan" selected>Direkomendasikan</option>
+                                        <option value="Direkomendasikan dengan catatan">Direkomendasikan dengan catatan</option>
+                                        <option value="Rekomendasi Ditolak">Rekomendasi Ditolak</option>
+                                    </select>
+                                    <input type="submit" class="btn btn-sm btn-success" name="input-rekomendasi-with-note" value="Submit">
+                                </form>
+                            @elseif (is_null($proyek->is_disetujui) && $matriks_user->contains("kategori", "Persetujuan") && $proyek->is_recommended)
+                                <form action="" method="get">
+                                    @csrf
+                                    <input type="hidden" value="{{$proyek->kode_proyek}}" name="kode-proyek" id="kode-proyek">
+                                    
+                                    <input type="submit" name="persetujuan-setujui" value="Disetujui" class="btn btn-sm btn-success">
+                                    <input type="submit" name="persetujuan-tolak" value="Ditolak" class="btn btn-sm btn-danger">
+                                </form>
                             @else 
-                                <small class="badge badge-light-success">Disetujui</small>
+                                @if ($proyek->is_disetujui)
+                                    <small class="badge badge-light-success">Disetujui</small>
+                                @elseif ($proyek->review_assessment)
+                                    <small class="badge badge-light-primary">Request</small>
+                                @elseif($proyek->is_disetujui == false || $proyek->is_penyusun_approved == false || $proyek->is_recommended == false)
+                                    <small class="badge badge-light-danger">Ditolak</small>
+                                @endif
                             @endif
 
                         </div>

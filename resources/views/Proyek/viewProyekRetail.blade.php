@@ -696,9 +696,9 @@
                                                                         <option value="N"
                                                                             {{ $proyek->jenis_proyek == 'N' ? 'selected' : '' }}>
                                                                             External</option>
-                                                                        {{-- <option value="J"
+                                                                        <option value="J"
                                                                             {{ $proyek->jenis_proyek == 'J' ? 'selected' : '' }}>
-                                                                            JO</option> --}}
+                                                                            JO</option>
                                                                     </select>
                                                                     {{-- <input type="hidden" name="jo-category" id="jo-category" value="">
                                                                     @php

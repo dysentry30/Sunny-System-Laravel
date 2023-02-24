@@ -54,4 +54,8 @@ class User extends Authenticatable
     public function Notifications() {
         return $this->hasMany(NotificationsModel::class, "to_user", "id");
     }
+
+    public function Pegawai() {
+        return $this->hasOne(Pegawai::class, "nip", "nip");
+    }
 }
