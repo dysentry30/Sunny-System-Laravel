@@ -88,7 +88,7 @@
                                                 <th class="min-w-auto">Unit Kerja</th>
                                                 <th class="min-w-auto">Progress</th>
                                                 <th class="min-w-auto text-center">Status</th>
-                                                <th class="min-w-auto">Action</th>
+                                                <th class="min-w-auto text-center" width="75px">Action</th>
                                                 {{-- <th class="min-w-auto">ID Contract</th> --}}
                                             </tr>
                                             <!--end::Table row-->
@@ -99,7 +99,9 @@
                                             @foreach ($csi as $proyek)
                                             @if ((int) $proyek->progress >= 20 && (int) $proyek->progress <= 40)
                                                 <tr>
-                                                    <td>{{$proyek->Proyek->proyekBerjalan->name_customer}}</td>
+                                                    <td>
+                                                        <a target="_blank" href="/customer/view/{{$proyek->Proyek->proyekBerjalan->id_customer}}/{{$proyek->Proyek->proyekBerjalan->name_customer}}" class="text-gray-800 text-hover-primary">{{$proyek->Proyek->proyekBerjalan->name_customer}}</a>
+                                                    </td>
                                                     <td>{{$proyek->no_spk}}</td>
                                                     <td>{{$proyek->Proyek->nama_proyek}}</td>
                                                     <td>{{$proyek->Proyek->UnitKerja->unit_kerja}}</td>
@@ -109,14 +111,12 @@
                                                             {{$proyek->status}}
                                                         </span>
                                                     </td>
-                                                    <td>
-                                                        {{-- <form action="#" method="post">
-                                                            @csrf --}}
-                                                            {{-- <input type="hidden" value="{{ $proyek->no_spk }}" name="no-spk"> --}}
-                                                            {{-- <input type="submit" class="btn btn-sm btn-light btn-active-primary" value="send" name="send-btn"> --}}
+                                                    <td class="text-center">
+                                                        @if ($proyek->status == "Done")
+                                                            <a target="_blank" href="/csi/customer-survey/{{ $proyek->id_csi }}" class="btn fs-8 btn-sm btn-light btn-active-primary text-hover-white" >Cek CSI &nbsp; <i class="bi bi-search"></i></a>
+                                                        @else
                                                             <button class="btn btn-sm btn-light btn-active-primary" data-bs-toggle="modal" data-bs-target="#modal-send-{{ $proyek->id_csi }}">Send</button>
-                                                            {{-- <a href="#" class="btn btn-sm btn-light btn-active-primary text-active-light" data-bs-toggle="modal" data-bs-target="#modal-send-{{ $proyek->id_csi }}" >Send</i></a> --}}
-                                                        {{-- </form> --}}
+                                                        @endif
                                                     </td>
                                                 </tr>
                                             @endif
@@ -140,7 +140,7 @@
                                                 <th class="min-w-auto">Unit Kerja</th>
                                                 <th class="min-w-auto">Progress</th>
                                                 <th class="min-w-auto text-center">Status</th>
-                                                <th class="min-w-auto">Action</th>
+                                                <th class="min-w-auto text-center" width="75px">Action</th>
                                                 {{-- <th class="min-w-auto">ID Contract</th> --}}
                                             </tr>
                                             <!--end::Table row-->
@@ -149,9 +149,12 @@
                                         <!--begin::Table body-->
                                         <tbody class="fw-bold text-gray-600 fs-6">
                                             @foreach ($csi as $proyek)
+                                            {{-- @dd($proyek) --}}
                                             @if ((int) $proyek->progress >= 90)
                                                 <tr>
-                                                    <td>{{$proyek->Proyek->proyekBerjalan->name_customer}}</td>
+                                                    <td>
+                                                        <a target="_blank" href="/customer/view/{{$proyek->Proyek->proyekBerjalan->id_customer}}/{{$proyek->Proyek->proyekBerjalan->name_customer}}" class="text-gray-800 text-hover-primary">{{$proyek->Proyek->proyekBerjalan->name_customer}}</a>
+                                                    </td>
                                                     <td>{{$proyek->no_spk}}</td>
                                                     <td>{{$proyek->Proyek->nama_proyek}}</td>
                                                     <td>{{$proyek->Proyek->UnitKerja->unit_kerja}}</td>
@@ -161,14 +164,12 @@
                                                             {{$proyek->status}}
                                                         </span>
                                                     </td>
-                                                    <td>
-                                                        {{-- <form action="#" method="post">
-                                                            @csrf --}}
-                                                            {{-- <input type="hidden" value="{{ $proyek->no_spk }}" name="no-spk"> --}}
-                                                            {{-- <input type="submit" class="btn btn-sm btn-light btn-active-primary" value="send" name="send-btn"> --}}
+                                                    <td class="text-center">
+                                                        @if ($proyek->status == "Done")
+                                                            <a target="_blank" href="/csi/customer-survey/{{ $proyek->id_csi }}" class="btn fs-8 btn-sm btn-light btn-active-primary text-hover-white" >Cek CSI &nbsp; <i class="bi bi-search"></i></a>
+                                                        @else
                                                             <button class="btn btn-sm btn-light btn-active-primary" data-bs-toggle="modal" data-bs-target="#modal-send-{{ $proyek->id_csi }}">Send</button>
-                                                            {{-- <a href="#" class="btn btn-sm btn-light btn-active-primary text-active-light" data-bs-toggle="modal" data-bs-target="#modal-send-{{ $proyek->id_csi }}" >Send</i></a> --}}
-                                                        {{-- </form> --}}
+                                                        @endif
                                                     </td>
                                                 </tr>
                                             @endif

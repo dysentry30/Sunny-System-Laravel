@@ -275,7 +275,12 @@ class UserController extends Controller
         $user->no_hp = $data["phone-number"];
         $user->is_active = $request->has("is-active");
         // if (!Auth::user()->check_administrator) {
-        $user->unit_kerja = count($data["unit-kerja"]) > 1 ? join(",", $data["unit-kerja"]) : $data["unit-kerja"][0];
+        if (str_contains($user->email, "@wika-customer")) {
+            $user->unit_kerja = null;
+        } else {
+            $user->unit_kerja = count($data["unit-kerja"]) > 1 ? join(",", $data["unit-kerja"]) : $data["unit-kerja"][0];
+        }
+        
         // }
         $user->check_administrator = $is_administrator;
         $user->check_admin_kontrak = $is_admin_kontrak;
