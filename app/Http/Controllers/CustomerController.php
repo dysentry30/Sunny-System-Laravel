@@ -814,10 +814,11 @@ class CustomerController extends Controller
 
         $newCsi = new Csi();
         $newCsi->id_customer = $data["id-customer"];
-        $newCsi->id_struktur_organisasi = $newStruktur->id_customer;
+        $newCsi->id_struktur_organisasi = null;
         $newCsi->no_spk = $data["proyek-struktur"];
         $newCsi->tanggal = now();
         $newCsi->status = "Not Sent";
+        $newCsi->progress = mt_rand(20, 100);
         $newCsi->save();
         // $newCsi->score = $data["score_csi"];
         // if ($data["kode-proyek-csi"] && $data["csi_date"] && $data["score_csi"] !== null) {

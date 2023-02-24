@@ -2582,66 +2582,94 @@
                                                             <!--begin::CSI-->
                                                             <h3 class="fw-bolder m-0 mb-3" id="HeadDetail" style="font-size:14px;">
                                                                 CSI
-                                                                <a href="#" Id="Plus" data-bs-toggle="modal"
-                                                                    data-bs-target="#kt_modal_input_csi">+</a>
+                                                                {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
+                                                                    data-bs-target="#kt_modal_input_csi">+</a> --}}
                                                             </h3>
 
                                                             <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
-                                                                <!--begin::Table head-->
-                                                                <thead>
-                                                                    <!--begin::Table row-->
-                                                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                        <th class="min-w-auto">Nama Proyek</th>
-                                                                        <th class="min-w-auto">Tanggal</th>
-                                                                        <th class="min-w-auto">Score</th>
-                                                                        <th class="min-w-auto">Action</th>
-                                                                    </tr>
-                                                                    <!--end::Table row-->
-                                                                </thead>
-                                                                <!--end::Table head-->
-                                                                <!--begin::Table body-->
-                                                                <tbody class="fw-bold text-gray-600">                                                                            
-                                                                    <!--begin::Nama Proyek-->
-                                                                    @if (!empty($csi))
-                                                                    @foreach ($customer->Csi as $item)
-                                                                    <tr>                                                                                    
-                                                                        <td>
-                                                                            <a target="_blank" href="/proyek/view/{{ $item->Proyek->kode_proyek }}" class="text-gray-800 text-hover-primary mb-1">
-                                                                                {{ $item->Proyek->nama_proyek }}                                                                                                
-                                                                            </a>
-                                                                        </td>
-                                                                        <!--end::Name-->
-                                                                    <!--begin::Tanggal CSI-->
-                                                                    <td>
-                                                                        {{  Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') }}
-                                                                    </td>
-                                                                    <!--end::Tanggal CSI-->
-                                                                    <!--begin::Score CSI-->
-                                                                    <td>
-                                                                        {{ $item->score }}
-                                                                    </td>
-                                                                    <!--end::Score CSI-->  
-                                                                    <td>
-                                                                        <a href="#" data-bs-target="#kt_modal_input_csi_{{ $item->kode_proyek }}" data-bs-toggle="modal" class="btn btn-sm btn-primary p-2 text-white">Edit</a>    
-                                                                    </td> 
-                                                                    @endforeach
-                                                                    </tr>
-                                                                    @else
-                                                                    <tr>
-                                                                        <td>
-                                                                            <p class="text-center">Belum ada data</p>
-                                                                        </td>
-                                                                    </tr>
-                                                                    @endif                                                                                    
-                                                                </tbody>
-                                                                <!--end::Table body-->
-                                                            </table>
+                                                                    <!--begin::Table head-->
+                                                                    <thead>
+                                                                        <!--begin::Table row-->
+                                                                        <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                            <th class="min-w-auto">Nama Proyek</th>
+                                                                            <th class="min-w-auto">Tanggal</th>
+                                                                            <th class="min-w-auto text-center">Score CSI</th>
+                                                                            <th class="min-w-auto text-center">Score CLI</th>
+                                                                            <th class="min-w-auto text-center">Score NPS</th>
+                                                                            <th class="min-w-auto text-center">Progress</th>
+                                                                            <th class="min-w-auto text-center">Status</th>
+                                                                            {{-- <th class="min-w-auto">Action</th> --}}
+                                                                        </tr>
+                                                                        <!--end::Table row-->
+                                                                    </thead>
+                                                                    <!--end::Table head-->
+                                                                    <!--begin::Table body-->
+                                                                    <tbody class="fw-bold text-gray-600">                                                                            
+                                                                        <!--begin::Nama Proyek-->
+                                                                        @foreach ($customer->Csi as $item)
+                                                                            @if ($item->status == "Done")
+                                                                                <tr>                                                                                    
+                                                                                    <td>
+                                                                                        <a target="_blank" href="/proyek/view/{{ $item->Proyek->kode_proyek }}" class="text-gray-800 text-hover-primary mb-1">
+                                                                                            {{ $item->Proyek->nama_proyek }}                                                                                                
+                                                                                        </a>
+                                                                                    </td>
+                                                                                    <!--end::Name-->
+                                                                                    <!--begin::Tanggal CSI-->
+                                                                                        <td>
+                                                                                        {{  Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') }}
+                                                                                    </td>
+                                                                                    <!--end::Tanggal CSI-->
+                                                                                    <!--begin::Score CSI-->
+                                                                                    <td class="text-center">
+                                                                                        {{ $item->score_csi }}
+                                                                                    </td>
+                                                                                    <!--end::Score CSI-->  
+                                                                                    <!--begin::Score CSI-->
+                                                                                    <td class="text-center">
+                                                                                        {{ $item->score_cli }}
+                                                                                    </td>
+                                                                                    <!--end::Score CSI-->  
+                                                                                    <!--begin::Score CSI-->
+                                                                                    <td class="text-center">
+                                                                                        {{ $item->score_nps }}
+                                                                                    </td>
+                                                                                    <!--end::Score CSI-->  
+                                                                                    <!--begin::Progress-->
+                                                                                    <td class="text-center">
+                                                                                        {{ $item->progress }} %
+                                                                                    </td>
+                                                                                    <!--end::Progress-->  
+                                                                                    <!--begin::Status-->
+                                                                                    <td class="text-center">
+                                                                                        <span class="px-4 fs-7 badge badge-light-success">
+                                                                                            {{$item->status}}
+                                                                                        </span>
+                                                                                    </td>
+                                                                                    <!--end::Status-->  
+                                                                                    {{-- <td>
+                                                                                        <a href="#" data-bs-target="#kt_modal_input_csi_{{ $item->kode_proyek }}" data-bs-toggle="modal" class="btn btn-sm btn-primary p-2 text-white">Edit</a>    
+                                                                                    </td>  --}}
+                                                                                </tr>
+                                                                                @else
+                                                                                {{-- <tr>
+                                                                                    <td colspan="7" class="text-center bg-secondary">
+                                                                                        <span class="px-4 fs-7 badge badge-danger">
+                                                                                            Belum ada data !
+                                                                                        </span>
+                                                                                    </td>
+                                                                                </tr> --}}
+                                                                                @endif     
+                                                                        @endforeach
+                                                                    </tbody>
+                                                                    <!--end::Table body-->
+                                                                </table>
                                                             <!--end::CSI-->
 
-                                                            <br><br>
+                                                            {{-- <br><br> --}}
 
                                                             <!--begin::CLI-->
-                                                            <h3 class="fw-bolder m-0 mb-3" id="HeadDetail" style="font-size:14px;">
+                                                            {{-- <h3 class="fw-bolder m-0 mb-3" id="HeadDetail" style="font-size:14px;">
                                                                 CLI
                                                                 <a href="#" Id="Plus" data-bs-toggle="modal"
                                                                 data-bs-target="#kt_modal_input_cli">+</a>
@@ -2696,13 +2724,13 @@
                                                                     @endif                                                                                    
                                                                 </tbody>
                                                                 <!--end::Table body-->
-                                                            </table>
+                                                            </table> --}}
                                                             <!--end::CLI-->
 
-                                                            <br><br>
+                                                            {{-- <br><br> --}}
 
                                                             <!--begin::NPS-->
-                                                            <h3 class="fw-bolder m-0 mb-3" id="HeadDetail" style="font-size:14px;">
+                                                            {{-- <h3 class="fw-bolder m-0 mb-3" id="HeadDetail" style="font-size:14px;">
                                                                 NPS
                                                                 <a href="#" Id="Plus" data-bs-toggle="modal"
                                                                     data-bs-target="#kt_modal_input_nps">+</a>
@@ -2758,7 +2786,7 @@
                                                                     @endif                                                                                    
                                                                 </tbody>
                                                                 <!--end::Table body-->
-                                                            </table>
+                                                            </table> --}}
                                                             <!--end::Table-->
 
                                                             <br><br>
@@ -4824,7 +4852,7 @@
                                 </label>
                                 <!--Begin::Select-->
                                 <div id="div-namaProyek">
-                                    <label class="fw-bold fs-6">{{ $nama_proyek->nama_proyek }}</label>
+                                    <label class="fw-bold fs-6">{{ $item->Proyek->nama_proyek }}</label>
                                     <input type="hidden" class="form-control form-control-solid" name="kode-proyek-csi" value="{{ $item->kode_proyek }}" readonly>
                                 </div>
 
@@ -5351,6 +5379,23 @@
 <!--End:: Modal Karya Inovasi-->
 <!--End::Modal-->
 
+@php
+    $nilai_cli = 0;
+    $nilai_csi = 0;
+    $nilai_nps = 0;
+    $countItem = $customer->Csi->where("status", "=", "Done")->count();
+    foreach ($customer->Csi as $item) {
+        if($item->status == "Done"){
+            $nilai_cli += $item->score_cli;
+            $nilai_csi += $item->score_csi;
+            $nilai_nps += $item->score_nps;
+        }
+    }
+    $nilai_cli = (int) $nilai_cli / $countItem;
+    $nilai_csi = (int) $nilai_csi / $countItem;
+    $nilai_nps = (int) $nilai_nps / $countItem;
+    // dump($nilai_cli, $nilai_csi, $nilai_nps, $countItem )
+@endphp
 
 
 @endsection
@@ -5779,20 +5824,22 @@
     <!--end::Laba Rugi Pelanggan-->
 
     <!--begin::Score Customer Loyalty Rate-->
+    
     <script>
-        let nilaiClr = Number("{{ $customer->customer_loyalty_rate == 0 || $customer->customer_loyalty_rate == null ? 1 : $customer->customer_loyalty_rate }}");
+        //let nilaiClr = Number("{{ $customer->customer_loyalty_rate == 0 || $customer->customer_loyalty_rate == null ? 1 : $customer->customer_loyalty_rate }}");
+        let nilaiClr = Number("{{ $nilai_cli }}");
         let bgColorClr = "";
         // nilaiClr >= 1 ? '#a9b8eb' : nilaiClr >= 1.8 ? '#8092cf' : nilaiClr >= 2.6 ? "#8092cf" : nilaiClr >= 3.4 ? "#2f448a" : nilaiClr >= 4.2 ? "#152866" : "" 
         if (nilaiClr >= 1 && nilaiClr < 1.8) {
-            bgColorClr = "#a9b8eb";
+            bgColorClr = "#1DB6FD";
         } else if (nilaiClr >= 1.8 && nilaiClr < 2.6) {
-            bgColorClr = "#8092cf";
+            bgColorClr = "#1DB6FD";
         } else if (nilaiClr >= 2.6 && nilaiClr < 3.4) {
-            bgColorClr = "#8092cf";
+            bgColorClr = "#019AE1";
         } else if (nilaiClr >= 3.4 && nilaiClr < 4.2) {
-            bgColorClr = "#2f448a";
+            bgColorClr = "#0073A9";
         } else if (nilaiClr >= 4.2 && nilaiClr <= 5) {
-            bgColorClr = "#152866";
+            bgColorClr = "#004D70";
         } else {
             bgColorClr = "#8A0000";
         }
@@ -5957,19 +6004,20 @@
 
     <!--begin::Score Net Promoter Score-->
     <script>
-        let nilaiNps = Number("{{ $customer->net_promoter_score == 0 || $customer->net_promoter_score == null ? 1 : $customer->net_promoter_score }}");
+        //let nilaiNps = Number("{{ $customer->net_promoter_score == 0 || $customer->net_promoter_score == null ? 1 : $customer->net_promoter_score }}");
+        let nilaiNps = Number("{{ $nilai_nps }}");
         let bgColorNps = "";
         // nilaiClr >= 1 ? '#a9b8eb' : nilaiClr >= 1.8 ? '#8092cf' : nilaiClr >= 2.6 ? "#8092cf" : nilaiClr >= 3.4 ? "#2f448a" : nilaiClr >= 4.2 ? "#152866" : "" 
         if (nilaiNps >= 1 && nilaiNps < 1.8) {
-            bgColorNps = "#Cff9b2";
+            bgColorNps = "#74DFDA";
         } else if (nilaiNps >= 1.8 && nilaiNps < 2.6) {
-            bgColorNps = "#A5DA81";
+            bgColorNps = "#74DFDA";
         } else if (nilaiNps >= 2.6 && nilaiNps < 3.4) {
-            bgColorNps = "#8ED260";
+            bgColorNps = "#45D5CE";
         } else if (nilaiNps >= 3.4 && nilaiNps < 4.2) {
-            bgColorNps = "#6FB73D";
+            bgColorNps = "#29B9B2";
         } else if (nilaiNps >= 4.2 && nilaiNps <= 5) {
-            bgColorNps = "#46831C";
+            bgColorNps = "#1F8A85";
         } else {
             bgColorNps = "#8A0000";
         }
@@ -6134,18 +6182,19 @@
 
     <!--begin::Score nps-->
     <script>
-        let nilaiCsi = Number("{{ $customer->customer_satisfaction_index == 0 || $customer->customer_satisfaction_index == null ? 1 : $customer->customer_satisfaction_index }}");
+        //let nilaiCsi = Number("{{ $customer->customer_satisfaction_index == 0 || $customer->customer_satisfaction_index == null ? 1 : $customer->customer_satisfaction_index }}");
+        let nilaiCsi = Number("{{ $nilai_csi }}");
         let bgColorCsi = "";
         if (nilaiCsi >= 1 && nilaiCsi < 1.8) {
-            bgColorCsi = "#F1E4A9";
+            bgColorCsi = "#FBD791";
         } else if (nilaiCsi >= 1.8 && nilaiCsi < 2.6) {
-            bgColorCsi = "#E8D373";
+            bgColorCsi = "#FBD791";
         } else if (nilaiCsi >= 2.6 && nilaiCsi < 3.4) {
-            bgColorCsi = "#CEB543";
+            bgColorCsi = "#F9C45A";
         } else if (nilaiCsi >= 3.4 && nilaiCsi < 4.2) {
-            bgColorCsi = "#B79D25";
+            bgColorCsi = "#F7B023";
         } else if (nilaiCsi >= 4.2 && nilaiCsi <= 5) {
-            bgColorCsi = "#967D0B";
+            bgColorCsi = "#DB9407";
         } else {
             bgColorCsi = "#8A0000";
         }
