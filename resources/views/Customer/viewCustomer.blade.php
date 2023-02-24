@@ -4227,7 +4227,7 @@
     <!--end::modal Struktur Organisasi-->
 
     <!--begin::modal EDIT Struktur Organisasi-->
-    @foreach ($strukturs as $struktur)
+    {{-- @foreach ($strukturs as $struktur)
         <form action="/customer/struktur/{{ $struktur->id }}/edit" method="post" enctype="multipart/form-data">
             @csrf
 
@@ -4437,7 +4437,7 @@
             </div>
             <!--end::Modal - Create App-->
         </form>
-    @endforeach
+    @endforeach --}}
     <!--end::modal EDIT Struktur Organisasi-->
 
     <!--begin::DELETE STRUKTUR-->
