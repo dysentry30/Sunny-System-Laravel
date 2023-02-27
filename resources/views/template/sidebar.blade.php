@@ -202,7 +202,7 @@
                                         </span>
                                         <!--end::Svg Icon-->
                                     </span>
-                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Nota Rekomendasi</span>
+                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Nota Rekomendasi 1</span>
                                 </a>
                             </div>
                         @endif

@@ -216,6 +216,18 @@ class ProyekController extends Controller
         $newProyek->porsi_jo = 100;
         $newProyek->is_cancel = false;
 
+        if ((int) $newProyek->nilaiok_awal <= 250000000000) {
+            $newProyek->klasifikasi_pasdin = "Proyek Kecil";
+        } else if ((int) $newProyek->nilaiok_awal > 2000000000000) {
+            $newProyek->klasifikasi_pasdin = "Mega Proyek";
+        } else if ((int) $newProyek->nilaiok_awal > 500000000000) {
+            $newProyek->klasifikasi_pasdin = "Proyek Besar";
+        } else if ((int) $newProyek->nilaiok_awal > 250000000000) {
+            $newProyek->klasifikasi_pasdin = "Proyek Menengah";
+        } else {
+            $newProyek->klasifikasi_pasdin = null;
+        }
+
         //begin::Generate Kode Proyek
         $generateProyek = Proyek::where("tahun_perolehan", "=", (int) date("Y"))->get()->sortBy("id");
 
@@ -273,7 +285,7 @@ class ProyekController extends Controller
 
         if (!empty($newProyek->kode_proyek)) {
 
-            if ($tipe_proyek == "P"){
+            if ($tipe_proyek == "P") {
                 $uuid = new Uuid();
                 $contractManagements = new ContractManagements();
                 // dd($contractManagements);
@@ -286,8 +298,9 @@ class ProyekController extends Controller
                 // $contractManagements->value_review = 0;
                 $contractManagements->contract_proceed = "Belum Selesai";
                 $contractManagements->stages = (int) 1;
-            }   
-            
+                $contractManagements->save();
+            }
+
             if ($idCustomer != null) {
                 $customerHistory = ProyekBerjalans::where('kode_proyek', "=", $newProyek->kode_proyek)->get()->first();
                 // dd($customerHistory);
@@ -302,12 +315,11 @@ class ProyekController extends Controller
                 $customerHistory->jenis_proyek = $newProyek->jenis_proyek;
                 $customerHistory->nilaiok_proyek = $newProyek->nilaiok_awal;
                 $customerHistory->stage = $newProyek->stage;
+                $customerHistory->save();
             }
             // dd($newProyek->kode_proyek, $customerHistory, $contractManagements);
-            $customerHistory->save();
             $newProyek->save();
-            $contractManagements->save();
-            return redirect("/proyek/view/$newProyek->kode_proyek")->with("success", ($dataProyek["nama-proyek"] . " (".$newProyek->kode_proyek. ") " . ", Berhasil dibuat"));
+            return redirect("/proyek/view/" . $newProyek->kode_proyek)->with("success", ($dataProyek["nama-proyek"] . " (" . $newProyek->kode_proyek . ") " . ", Berhasil dibuat"));
         }
         // return redirect("/proyek")->with("failed", ($dataProyek["nama-proyek"].", Gagal Dibuat"));
     }
@@ -341,7 +353,7 @@ class ProyekController extends Controller
         $provinsi = Provinsi::all();
         $pesertatender = PesertaTender::where("kode_proyek", "=", $kode_proyek)->get();
         $proyekberjalans = ProyekBerjalans::where("kode_proyek", "=", $kode_proyek)->get()->first();
-        $departemen = Departemen::all();
+        $departemen = Departemen::where("kode_divisi", "=", $proyek->UnitKerja->kode_sap)->get();
         // $historyForecast = $historyForecast;
         // $porsiJO = $porsiJO;
         // $data_negara = $data_negara;
@@ -477,7 +489,7 @@ class ProyekController extends Controller
                 "sender" => "62811881227",
                 "number" => "085157875773",
                 // "number" => "085156341949",
-                "message" => "*$newProyek->nama_proyek* mengajukan rekomendasi.\nSilahkan tekan link di bawah ini untuk menyetujui atau tidak.\n\n$url",
+                "message" => "Yth Bapak/Ibu .....\nDengan ini menyampaikan Pengajuan Nota Rekomendasi Tahap I untuk Proyek $newProyek->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
                 // "url" => $url
             ]);
             // $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
