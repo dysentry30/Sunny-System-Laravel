@@ -28,6 +28,7 @@ use App\Models\RiskTenderProyek;
 use Illuminate\Http\UploadedFile;
 use Illuminate\support\Facades\DB;
 use App\Models\ContractManagements;
+use App\Models\Departemen;
 use App\Models\DokumenDraft;
 use App\Models\DokumenEca;
 use App\Models\DokumenIca;
@@ -183,6 +184,7 @@ class ProyekController extends Controller
         $newProyek->unit_kerja = $dataProyek["unit-kerja"];
         $newProyek->jenis_proyek = $dataProyek["jenis-proyek"];
         $newProyek->tipe_proyek = $dataProyek["tipe-proyek"];
+        $newProyek->departemen_proyek = $dataProyek["departemen-proyek"] ?? null;
         // $newProyek->nilai_rkap = (int) str_replace('.', '', $dataProyek["nilai-rkap"]);
         // $newProyek->sumber_dana = $dataProyek["sumber-dana"];
         $newProyek->tahun_perolehan = $dataProyek["tahun-perolehan"];
@@ -339,6 +341,7 @@ class ProyekController extends Controller
         $provinsi = Provinsi::all();
         $pesertatender = PesertaTender::where("kode_proyek", "=", $kode_proyek)->get();
         $proyekberjalans = ProyekBerjalans::where("kode_proyek", "=", $kode_proyek)->get()->first();
+        $departemen = Departemen::all();
         // $historyForecast = $historyForecast;
         // $porsiJO = $porsiJO;
         // $data_negara = $data_negara;
@@ -347,7 +350,7 @@ class ProyekController extends Controller
             return view(
                 'Proyek/viewProyek',
                 ["proyek" => $proyek, "proyeks" => Proyek::all()],
-                compact(['companies', 'sumberdanas', 'dops', 'sbus', 'unitkerjas', 'customers', 'users', 'kriteriapasar', 'kriteriapasarproyek', 'teams', 'pesertatender', 'proyekberjalans', 'historyForecast', 'porsiJO', 'data_negara', 'mataUang', "provinsi"])
+                compact(['companies', 'sumberdanas', 'dops', 'sbus', 'unitkerjas', 'customers', 'users', 'kriteriapasar', 'kriteriapasarproyek', 'teams', 'pesertatender', 'proyekberjalans', 'historyForecast', 'porsiJO', 'data_negara', 'mataUang', "provinsi", "departemen"])
                 // [
                 //     'companies' => Company::all(),
                 //     'sumberdanas' => SumberDana::all(),
@@ -372,6 +375,25 @@ class ProyekController extends Controller
             $tabPane = "";
             return view('Proyek/viewProyekRetail', ["proyek" => $proyek, "proyeks" => Proyek::all()], compact(["periodePrognosa", 'companies', 'sumberdanas', 'dops', 'sbus', 'unitkerjas', 'customers', 'users', 'kriteriapasar', 'kriteriapasarproyek', 'teams', 'pesertatender', 'proyekberjalans', 'historyForecast', 'porsiJO', 'data_negara', 'tabPane', "provinsi"]));
             // return redirect()->back();
+        }
+    }
+
+    public function getDataDepartemen($divcode)
+    {
+        $unit_kerja = UnitKerja::where("divcode", "=", $divcode)->first();
+        // dd($unit_kerja);
+        $departemen = Departemen::where("kode_divisi", "=", $unit_kerja->kode_sap)->get();
+        // dd($departemen);
+        if($departemen->isNotEmpty()){
+            return response()->json([
+                "status" => "success",
+                "data" => $departemen
+            ], 200);
+        }else{
+            return response()->json([
+                "status" => "error",
+                "data" => []
+            ], 404);
         }
     }
 
@@ -416,6 +438,7 @@ class ProyekController extends Controller
         $newProyek->kode_proyek = $dataProyek["kode-proyek"];
         $newProyek->tahun_perolehan = $dataProyek["tahun-perolehan"];
         $newProyek->sumber_dana = $dataProyek["sumber-dana"];
+        $newProyek->departemen = $dataProyek["departemen"];
         $newProyek->jenis_proyek = $dataProyek["jenis-proyek"];
         $newProyek->tipe_proyek = $dataProyek["tipe-proyek"];
         if ($dataProyek["tipe-proyek"] == "R") {

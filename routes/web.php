@@ -732,6 +732,9 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         ]);
     });
 
+    //GET//Departemen
+    Route::get('/proyek/get-departemen/{divcode}', [ProyekController::class, "getDataDepartemen"]);
+
     // GET Kriteria 
     Route::post('/proyek/get-kriteria', [ProyekController::class, "getKriteria"]);
 

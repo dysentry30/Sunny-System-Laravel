@@ -702,7 +702,7 @@
                         <!--begin::Row Kanan+Kiri-->
                         <div class="row fv-row">
                             <!--begin::Col-->
-                            <div class="col-6">
+                            <div class="col-12">
                                 <!--begin::Input group Website-->
                                 <div class="fv-row mb-7">
                                     <!--begin::Label-->
@@ -724,6 +724,12 @@
                                 <!--end::Input group-->
                             </div>
                             <!--End begin::Col-->
+                            
+                        </div>
+                        <!--End::Row Kanan+Kiri-->
+
+                        <!--Begin::Row Kanan-->
+                        <div class="row fv-row">
                             <div class="col-6">
                                 <!--begin::Input group Website-->
                                 <div class="fv-row mb-7">
@@ -737,7 +743,7 @@
                                         $unit_kerja = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
                                     @endphp
                                     <select name="unit-kerja" class="form-select form-select-solid"
-                                        data-control="select2" data-hide-search="true" data-placeholder="Unit Kerja">
+                                        data-control="select2" data-hide-search="true" data-placeholder="Unit Kerja" onchange="setDepartemen(this)">
                                         <option></option>
                                         @foreach ($unitkerjas as $unitkerja)
                                             <option value="{{ $unitkerja->divcode }}"
@@ -753,8 +759,67 @@
                                 <!--end::Input group-->
                             </div>
                             <!--End::Col-->
+                            <div class="col-6" id="div-departemen" style="visibility: hidden">
+                                <div class="fv-row mb-7">
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span class="required">Departemen</span>
+                                    </label>
+                                    <select name="departemen-proyek" class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true" data-placeholder="Departemen Proyek" id="departemen-proyek">
+                                    <option></option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
-                        <!--End::Row Kanan+Kiri-->
+                        <script>
+                            async function setDepartemen(e){
+                                const data = e.value;
+                                let html = '<option value=""></option>'
+                                // console.log(data)
+                                if(data == "H" || data == "G" || data == "P" || data == "J"){
+                                    document.getElementById("div-departemen").style.visibility = ''
+                                    let departemenElt = document.getElementById("departemen-proyek");
+                                    const response = await fetch(`/proyek/get-departemen/${data}`, {
+                                        method: 'GET',
+                                    }).then(result => result.json())
+    
+                                    response.data.forEach(data => {
+                                        html += `<option value="${data.kode_departemen}">${data.nama_departemen}</option>`
+                                    });
+                                    
+                                    departemenElt.innerHTML = html;
+                                }else{
+                                    document.getElementById("div-departemen").style.visibility = "hidden";
+                                    document.getElementById("div-departemen").style.value = null;
+                                }
+
+                                // console.log(response)
+
+                                // then((data)=>{
+                                //     // console.log(data)
+                                //     if(data.status == "success"){
+                                //         const departemen = data.data
+                                //         // console.log(departemen)
+                                //         const departemenEach = departemen.forEach(function(item, key, arr)=>{
+                                //             // console.log()
+                                //             // return item
+                                //            arr[key] =  document.createElement("option");
+                                //            option[key].text = item.nama_departemen
+                                //            option[key].value = item.kode_departemen
+                                //            departemenElt.add(option)
+                                //         })
+                                //         console.log(departemenEach)
+                                //     }else{
+                                //         // departemenElt.innerHTML = ""
+                                //         // departemenElt.value = ""
+                                //     }
+                                // }).catch((err)=>{
+                                //     console.log(err)
+                                // })
+                                // console.log(departemenElt)
+                            }
+                        </script>
+                        <!--ENd::Row Kanan-->
 
                         <!--begin::Row Kanan+Kiri-->
                         <div class="row fv-row">
