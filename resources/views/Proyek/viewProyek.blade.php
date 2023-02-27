@@ -108,7 +108,7 @@
 
                                 <!--begin::Button-->    
                                 @if ($proyek->is_request_rekomendasi == false && !$check_green_line && $proyek->stage == 1)
-                                    <input type="submit" name="proyek-rekomendasi" value="Pengajuan Rekomendasi" class="btn btn-sm btn-success ms-2" id="proyek-rekomendasi"
+                                    <input type="button" name="proyek-rekomendasi" value="Pengajuan Rekomendasi" class="btn btn-sm btn-success ms-2" id="proyek-rekomendasi" data-bs-toggle="modal" data-bs-target="#modal-send-pengajuan"
                                         style="background-color:#00b48d">
                                 @elseif($proyek->stage > 1 && !$check_green_line)
                                     <div class="" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="left" data-bs-title="Proyek ini sudah melewati tahap <b>Rekomendasi</b>">
@@ -194,6 +194,50 @@
                         <!--end::Container-->
                     </div>
                     <!--end::Toolbar-->
+                    
+                    @if ($proyek->is_request_rekomendasi == false && !$check_green_line && $proyek->stage == 1)
+                    <!-- begin::modal confirm send wa-->
+                    <div class="modal fade w-100" style="margin-top: 120px" id="modal-send-pengajuan" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog mw-600px">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Ajukan Rekomendasi Proyek ?</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                            
+                                
+                            <input type="hidden"  name="proyek-rekomendasi" value="Pengajuan Rekomendasi"/>
+
+                            <p>Nama Proyek : <b>{{ $proyek->nama_proyek }}</b></p>
+                            <p>Nama Pemberi Kerja  : <b>{{ $proyek->proyekBerjalan->name_customer ?? "*Belum Ditentukan" }}</b></p>
+                            <p>RA Klasifikasi Proyek  : <b>{{ $proyek->klasifikasi_pasdin ?? "*Belum Ditentukan" }}</b></p>
+                            <p>Sumber Dana  : <b>{{ $proyek->SumberDana->nama_sumber ?? "*Belum Ditentukan" }}</b></p>
+
+                            @if (!empty($proyek->proyekBerjalan->name_customer) && !empty($proyek->klasifikasi_pasdin && !empty($proyek->SumberDana->nama_sumber)))
+                            <input class="form-check-input" name="confirm-send-wa" type="checkbox">
+                                <i class="fs-6 text-primary">
+                                    Saya Setuju Melakukan Pengajuan dan Data Sudah Sudah Terisi Dengan Benar
+                                </i>
+                            @else
+                            <i class="fs-6 text-danger">*Pastikan Data Sudah Sudah Terisi Dengan Benar Sebelum Melakukan Pegajuan</i>
+                            @endif
+                            </div>
+
+
+                            <div class="modal-footer">
+                                @if (!empty($proyek->proyekBerjalan->name_customer) && !empty($proyek->klasifikasi_pasdin && !empty($proyek->SumberDana->nama_sumber)))
+                                    <button type="submit" class="btn btn-success btn-sm">Send <i class="bi bi-send"></i></button>
+                                @else
+                                    <button type="submit" class="btn btn-success btn-sm" disabled>Send <i class="bi bi-send"></i></button>
+                                @endif
+                            </div>
+                        
+                        </div>
+                        </div>
+                    </div>
+                    <!-- end::modal confirm send wa-->
+                    @endif
 
 
 
@@ -1019,18 +1063,38 @@
                                                             <!--end::Input group-->
                                                         </div>
 
-                                                        <div class="col-6 mt-5 ms-5">
+                                                        <div class="col-6 mt-5">
                                                             <div class="form-check">
-                                                                <input class="form-check-input" name="is-green-line" disabled type="checkbox" {{(bool) $check_green_line ? "checked" : ""}} disabled id="flexCheckDefault">
+                                                                {{-- <input class="form-check-input" name="is-green-line" disabled type="checkbox" {{(bool) $check_green_line ? "checked" : ""}} disabled id="flexCheckDefault">
                                                                 <label class="form-check-label" for="flexCheckDefault">
                                                                   Green Lane
-                                                                </label>
+                                                                </label> --}}
+                                                                @if ((bool) $check_green_line)
+                                                                    <span class="px-4 fs-3 badge badge-light-success">
+                                                                        Green Lane
+                                                                    </span>
+                                                                @else
+                                                                    <span class="px-4 fs-3 badge badge-light-danger">
+                                                                        Non Green Lane
+                                                                    </span>
+                                                                    
+                                                                @endif
                                                             </div><br>
                                                             <div class="form-check">
-                                                                <input class="form-check-input" name="is-green-line" disabled type="checkbox" {{(bool) $proyek->is_rkap ? "checked" : ""}} disabled id="flexCheckDefault">
+                                                                {{-- <input class="form-check-input" name="is-green-line" disabled type="checkbox" {{(bool) $proyek->is_rkap ? "checked" : ""}} disabled id="flexCheckDefault">
                                                                 <label class="form-check-label" for="flexCheckDefault">
-                                                                  Proyek RKAP
-                                                                </label>
+                                                                    Proyek RKAP
+                                                                </label> --}}
+                                                                @if ((bool) $proyek->is_rkap)
+                                                                    <span class="px-4 fs-3 badge badge-light-success">
+                                                                        Proyek RKAP
+                                                                    </span>
+                                                                @else
+                                                                    <span class="px-4 fs-3 badge badge-light-danger">
+                                                                        Proyek Non RKAP
+                                                                    </span>
+                                                                    
+                                                                @endif
                                                             </div>
                                                         </div>
                                                         <!--End::Col-->

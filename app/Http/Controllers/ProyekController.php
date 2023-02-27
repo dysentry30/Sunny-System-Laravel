@@ -242,17 +242,25 @@ class ProyekController extends Controller
         $no_urut = str_pad(strval($no_urut), 3, 0, STR_PAD_LEFT);
         // dd($no_urut, $kode_proyek);
         // if (str_contains($generateProyek->last()->kode_proyek, "KD")) {
-        //     $no_urut = (int) $generateProyek->last()->id + 1;
-        // } else {
-        //     // $no_urut = count($generateProyek)+1;
-        //     $no_urut = (int) $generateProyek->last()->id + 1;
-        // }
-
-        $newProyek->kode_proyek = $kode_proyek . $no_urut;
+            //     $no_urut = (int) $generateProyek->last()->id + 1;
+            // } else {
+                //     // $no_urut = count($generateProyek)+1;
+                //     $no_urut = (int) $generateProyek->last()->id + 1;
+                // }
+                
+        $existProyek = Proyek::find($kode_proyek . $no_urut);
+        if (!empty($existProyek)) {
+            $number = (int) $no_urut++;
+            $no_urut = str_pad(strval($no_urut), 3, 0, STR_PAD_LEFT);
+            $newProyek->kode_proyek = $kode_proyek . $number;
+        } else {
+            $newProyek->kode_proyek = $kode_proyek . $no_urut;
+        }
         //end::Generate Kode Proyek
 
         // $newForecast = new Forecast;
         // $newForecast-
+
 
 
         //end::Generate Kode Proyek
@@ -261,13 +269,13 @@ class ProyekController extends Controller
         Alert::success('Success', $dataProyek["nama-proyek"] . ", Berhasil Ditambahkan");
         // dd($newProyek);
 
-        if ($newProyek->save()) {
+        if (!empty($newProyek->kode_proyek)) {
 
             if ($tipe_proyek == "P"){
                 $uuid = new Uuid();
                 $contractManagements = new ContractManagements();
                 // dd($contractManagements);
-                $contractManagements->project_id = $kode_proyek . $no_urut;
+                $contractManagements->project_id = $newProyek->kode_proyek;
                 $contractManagements->id_contract = $uuid->uuid3();
                 // $contractManagements->contract_in = $dataProyek["tanggal-mulai-kontrak"];
                 // $contractManagements->contract_out = $dataProyek["tanggal-akhir-kontrak"];
@@ -276,26 +284,28 @@ class ProyekController extends Controller
                 // $contractManagements->value_review = 0;
                 $contractManagements->contract_proceed = "Belum Selesai";
                 $contractManagements->stages = (int) 1;
-                $contractManagements->save();
             }   
-
+            
             if ($idCustomer != null) {
-                $customerHistory = ProyekBerjalans::where('kode_proyek', "=", $kode_proyek)->get()->first();
+                $customerHistory = ProyekBerjalans::where('kode_proyek', "=", $newProyek->kode_proyek)->get()->first();
                 // dd($customerHistory);
                 $customerHistory = new ProyekBerjalans();
                 $customerHistory->id_customer = $idCustomer;
                 $nameCustomer = Customer::find($idCustomer);
                 $customerHistory->name_customer = $nameCustomer->name;
                 $customerHistory->nama_proyek = $newProyek->nama_proyek;
-                $customerHistory->kode_proyek = $kode_proyek;
+                $customerHistory->kode_proyek = $newProyek->kode_proyek;
                 $customerHistory->pic_proyek = $newProyek->ketua_tender;
                 $customerHistory->unit_kerja = $newProyek->unit_kerja;
                 $customerHistory->jenis_proyek = $newProyek->jenis_proyek;
                 $customerHistory->nilaiok_proyek = $newProyek->nilaiok_awal;
                 $customerHistory->stage = $newProyek->stage;
-                $customerHistory->save();
             }
-            return redirect("/proyek/view/$kode_proyek")->with("success", ($dataProyek["nama-proyek"] . ", Berhasil dibuat"));
+            // dd($newProyek->kode_proyek, $customerHistory, $contractManagements);
+            $customerHistory->save();
+            $newProyek->save();
+            $contractManagements->save();
+            return redirect("/proyek/view/$newProyek->kode_proyek")->with("success", ($dataProyek["nama-proyek"] . " (".$newProyek->kode_proyek. ") " . ", Berhasil dibuat"));
         }
         // return redirect("/proyek")->with("failed", ($dataProyek["nama-proyek"].", Gagal Dibuat"));
     }
@@ -437,8 +447,34 @@ class ProyekController extends Controller
         // } else {
         //     $newProyek->jenis_jo = null;
         // }
-        if(isset($dataProyek["proyek-rekomendasi"])) {
+        if (isset($dataProyek["proyek-rekomendasi"]) && isset($dataProyek["confirm-send-wa"]) && isset($dataProyek["ra-klasifikasi-proyek"])&& isset($dataProyek["sumber-dana"]) ) {
+            $url = $request->schemeAndHttpHost() . "?redirectTo=/rekomendasi?open=kt_modal_view_proyek_$newProyek->kode_proyek";
+            $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
+                "api_key" => "c15978155a6b4656c4c0276c5adbb5917eb033d5",
+                "sender" => "62811881227",
+                "number" => "085157875773",
+                // "number" => "085156341949",
+                "message" => "*$newProyek->nama_proyek* mengajukan rekomendasi.\nSilahkan tekan link di bawah ini untuk menyetujui atau tidak.\n\n$url",
+                // "url" => $url
+            ]);
+            // $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
+            //     "api_key" => "c15978155a6b4656c4c0276c5adbb5917eb033d5",
+            //     "sender" => "62811881227",
+            //     "number" => "081319736111",
+            //     "message" => "$newProyek->nama_proyek mengajukan rekomendasi.\nSilahkan tekan link di bawah ini untuk menyetujui atau tidak.\n\n$url",
+            //     // "url" => $url
+            // ]);
+            // $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
+            //     "api_key" => "c15978155a6b4656c4c0276c5adbb5917eb033d5",
+            //     "sender" => "62811881227",
+            //     "number" => "082125416666",
+            //     "message" => "$newProyek->nama_proyek mengajukan rekomendasi.\nSilahkan tekan link di bawah ini untuk menyetujui atau tidak.\n\n$url",
+            //     // "url" => $url
+            // ]);
+            // dd($send_msg_to_wa, "send");
             $newProyek->is_request_rekomendasi  = true;
+
+            Alert::success('Success', "Proyek Berhasil Diajukan");
         }
         // $newProyek->nama_pendek_proyek = $dataProyek["short-name"];
 

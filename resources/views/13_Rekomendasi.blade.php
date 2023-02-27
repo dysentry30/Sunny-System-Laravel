@@ -244,7 +244,7 @@
                                                         <td>
                                                             @if ($proyek->review_assessment && $proyek->review_assessment && !$proyek->is_recommended && !$proyek->is_recommended_with_note)
                                                                 <small class="badge badge-light-success">Pengajuan Disetujui</small>
-                                                            @elseif($is_pending && $proyek->review_assessment)
+                                                            @elseif($is_pending)
                                                                 <small class="badge badge-light-info">Proses Pengajuan</small>
                                                             @elseif($is_review_assessment)
                                                                 <small class="badge badge-light-primary">Review Assessment</small>
@@ -252,7 +252,7 @@
                                                                 <small class="badge badge-light-success">Direkomendasikan</small>
                                                             @elseif($proyek->is_recommended && !empty($proyek->recommended_with_note))
                                                                 <small class="badge badge-light-success">Direkomendasikan dengan catatan</small>
-                                                            @elseif(!$proyek->is_recommended || !$proyek->review_assessment)
+                                                            @elseif(!$is_pending && !$proyek->is_recommended || !$proyek->review_assessment)
                                                                 <small class="badge badge-light-danger">Tidak Direkomendasikan</small>
                                                             @endif
                                                         </td>
@@ -415,6 +415,8 @@
                                                                 <small class="badge badge-light-success">Disetujui</small>
                                                             @elseif(!is_null($proyek->is_disetujui) && ($proyek->is_recommended || $proyek->is_recommended_with_note))
                                                                 <small class="badge badge-light-danger">Ditolak</small>
+                                                            @elseif(!$proyek->is_recommended && empty($proyek->recommended_with_note))
+                                                                <small class="badge badge-light-warning">Need Review</small>
                                                             @elseif(!$proyek->is_recommended && $is_pending || $proyek->review_assessment)
                                                                 <small class="badge badge-light-primary">Request</small>
                                                             @endif
@@ -535,8 +537,26 @@
                                                         <td>
                                                             @if ($proyek->is_disetujui)
                                                                 <small class="badge badge-light-success">Disetujui</small>
+                                                            @elseif(!$proyek->is_recommended && $proyek->is_penyusun_approved)
+                                                                @if (Auth::user()->Pegawai->MatriksApproval->contains("kategori", "Persetujuan"))
+                                                                    <small class="badge badge-light-info">Procces in Rekomendasi</small>
+                                                                @elseif (Auth::user()->Pegawai->MatriksApproval->contains("kategori", "Rekomendasi"))
+                                                                    <small class="badge badge-warning">Need Rekomendasi</small>
+                                                                @else
+                                                                    <small class="badge badge-light-primary">Request to Rekomendasi</small>
+                                                                @endif
                                                             @elseif(!$proyek->is_recommended && $is_pending || $proyek->review_assessment)
-                                                                <small class="badge badge-light-primary">Request</small>
+                                                                @if (Auth::user()->Pegawai->MatriksApproval->contains("kategori", "Persetujuan"))
+                                                                    <small class="badge badge-warning">Need Approval</small>
+                                                                @elseif (Auth::user()->Pegawai->MatriksApproval->contains("kategori", "Rekomendasi"))
+                                                                    <small class="badge badge-light-primary">Request Persetujuan</small>
+                                                                @else
+                                                                    @if ($proyek->is_penyusun_approved)
+                                                                        <small class="badge badge-light-primary">Request Persetujuan</small>
+                                                                    @else
+                                                                        <small class="badge badge-warning">Need Submit</small>
+                                                                    @endif
+                                                                @endif
                                                             @elseif((!is_null($proyek->is_disetujui) && !is_null($proyek->is_penyusun_approved) && !is_null($proyek->is_recommended)) || ($proyek->is_disetujui == false && $proyek->is_penyusun_approved == false && $proyek->is_recommended == false))
                                                                 <small class="badge badge-light-danger">Ditolak</small>
                                                             @endif
@@ -719,7 +739,9 @@
         <div class="modal fade" id="kt_modal_view_proyek_rekomendasi_{{$proyek->kode_proyek}}" tabindex="-1" aria-labelledby="kt_modal_view_proyek_rekomendasi_{{$proyek->kode_proyek}}" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-xl">
                 <div class="modal-content">
+                    @if (!$proyek->recommended_with_note)
                     <form action="" method="GET">
+                    @endif
                         <div class="modal-header">
                             <h5 class="modal-title">Detail Proyek (Readonly)</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -807,11 +829,13 @@
                             
                             @if (is_null($proyek->is_recommended))
                                 <label for="note-rekomendasi" class="text-start">Catatan Rekomendasi: </label>
-                                <textarea class="form-control form-control-solid" id="note-rekomendasi" name="note-rekomendasi">{{$proyek->recommended_with_note}}</textarea>
+                                <textarea class="form-control form-control-solid" id="note-rekomendasi" name="note-rekomendasi" {{$proyek->recommended_with_note ? 'readonly' : ''}} >{{$proyek->recommended_with_note}}</textarea>
                                 <br>
                                 @csrf
                                 <input type="hidden" name="kode-proyek" value="{{$proyek->kode_proyek}}">
+                                @if (!$proyek->recommended_with_note)
                                 <input type="submit" name="input-rekomendasi-with-note" value="Submit" class="btn btn-sm btn-success">
+                                @endif
                             @elseif(!$proyek->is_recommended)
                                 <span class="badge badge-light-danger">Ditolak</span>
                             @elseif($proyek->is_recommended)
@@ -820,7 +844,9 @@
                                 <span class="badge badge-light-success">Direkomendasikan dengan catatan</span>
                             @endif
                         </div>
+                    @if (!$proyek->recommended_with_note)
                     </form>
+                    @endif
                 </div>
             </div>
         </div>
@@ -953,7 +979,7 @@
                                         <option value="Direkomendasikan dengan catatan">Direkomendasikan dengan catatan</option>
                                         <option value="Rekomendasi Ditolak">Rekomendasi Ditolak</option>
                                     </select>
-                                    <input type="submit" class="btn btn-sm btn-success" name="input-rekomendasi-with-note" value="Submit">
+                                    <input type="submit" class="btn btn-sm btn-success" name="rekomendasi-setujui" value="Submit">
                                 </form>
                             @elseif (is_null($proyek->is_disetujui) && $matriks_user->contains("kategori", "Persetujuan") && $proyek->is_recommended)
                                 <form action="" method="get">
