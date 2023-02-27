@@ -14,4 +14,14 @@ class Departemen extends Model
     {
         return $this->belongsTo(Proyek::class, "departemen_proyek", "kode_departemen");
     }
+    
+    public function UnitKerja()
+    {
+        return $this->belongsTo(UnitKerja::class, "kode_divisi", "kode_sap");
+    }
+
+    public function MatriksApproval()
+    {
+        return $this->belongsTo(MatriksApprovalRekomendasi::class, "departemen", "kode_departemen");
+    }
 }

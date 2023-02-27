@@ -450,7 +450,7 @@ class ProyekController extends Controller
         $newProyek->kode_proyek = $dataProyek["kode-proyek"];
         $newProyek->tahun_perolehan = $dataProyek["tahun-perolehan"];
         $newProyek->sumber_dana = $dataProyek["sumber-dana"];
-        $newProyek->departemen = $dataProyek["departemen"];
+        $newProyek->departemen_proyek = $dataProyek["departemen-proyek"];
         $newProyek->jenis_proyek = $dataProyek["jenis-proyek"];
         $newProyek->tipe_proyek = $dataProyek["tipe-proyek"];
         if ($dataProyek["tipe-proyek"] == "R") {
