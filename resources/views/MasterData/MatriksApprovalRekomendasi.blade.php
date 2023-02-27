@@ -148,6 +148,7 @@
                                         <th class="min-w-auto">Tahun</th>
                                         <th class="min-w-auto">Nama Pegawai</th>
                                         <th class="min-w-auto">Unit Kerja</th>
+                                        <th class="min-w-auto">Departemen</th>
                                         <th class="min-w-auto">Klasifikasi Proyek</th>
                                         <th class="min-w-auto">Kategori</th>
                                         <th class="min-w-auto">Action</th>
@@ -163,11 +164,13 @@
                                 <tbody class="fw-bold text-gray-600">
                                     @foreach ($approval_rekomendasi as $approval)
                                         <tr>
+                                            {{-- @dump($approval->Departemen) --}}
                                             <td>{{$approval->tahun}}</td>
                                             <td>
                                                 <a href="#" class="text-hover-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_matriks_update_{{$approval->id_matriks_approval_rekomendasi}}">{{$approval->Pegawai->nama_pegawai}}</a>
                                             </td>
                                             <td>{{$approval->Divisi->nama_kantor}}</td>
+                                            <td>{{$approval->Departemen->nama_departemen ?? ""}}</td>
                                             <td>{{$approval->klasifikasi_proyek}}</td>
                                             <td>{{$approval->kategori}}</td>
                                             <td>
@@ -311,7 +314,7 @@
                             </div>
                             <!--End begin::Col-->
     
-                            <div class="row">
+                            <div class="row mb-7">
                                 <div class="col">
                                     <div id="tier">
                                         <!--begin::Label-->
@@ -325,7 +328,7 @@
                                             <select id="unit-kerja" name="unit-kerja"
                                                 class="form-select form-select-solid select2-hidden-accessible"
                                                 data-control="select2" data-hide-search="false" data-placeholder="Pilih Unit Kerja..."
-                                                data-select2-id="select2-unit-kerja" tabindex="-1" aria-hidden="true">
+                                                data-select2-id="select2-unit-kerja" tabindex="-1" aria-hidden="true" onchange="setDepartemen(this)">
                                                 <option value="" selected></option>
                                                 @foreach ($divisi_all as $divisi)
                                                     <option value="{{$divisi->id_divisi}}">{{$divisi->nama_kantor}}</option>
@@ -339,7 +342,33 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
+
+                            <div class="row mb-7" id="div-departemen">
+                                <div class="col">
+                                    <div id="tier">
+                                        <!--begin::Label-->
+                                        <label class="fs-6 fw-bold form-label mt-3">
+                                            <span class="required">Departemen</span>
+                                        </label>
+                                        <!--end::Label-->
+    
+                                        <!--begin::Input-->
+                                        <div id="kriteria-penilaian-internal">
+                                            <select id="departemen-proyek" name="departemen"
+                                                class="form-select form-select-solid select2-hidden-accessible"
+                                                data-control="select2" data-hide-search="false" data-placeholder="Pilih Departemen"
+                                                data-select2-id="select2-unit-kerja" tabindex="-1" aria-hidden="true">
+                                                <option value=""></option>
+                                                @foreach ($departemens as $departemen)
+                                                    <option value="{{$departemen->kode_departemen}}">{{$departemen->nama_departemen}} ({{ $departemen->UnitKerja->unit_kerja }})</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <!--end::Input-->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-7">
                                 <div class="col">
                                     <div id="tier">
                                         <!--begin::Label-->
@@ -367,7 +396,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
+                            <div class="row mb-7">
                                 <div class="col">
                                     <div id="tier">
                                         <!--begin::Label-->

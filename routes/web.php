@@ -53,6 +53,7 @@ use App\Models\ContractChangeNotice;
 use App\Models\ContractChangeOrder;
 use App\Models\ContractChangeProposal;
 use App\Models\ContractManagements;
+use App\Models\Departemen;
 use App\Models\Divisi;
 use App\Models\Dop;
 use App\Models\FieldChange;
@@ -1930,8 +1931,9 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         // $unit_kerjas = UnitKerja::whereNotIn("divcode", ["B", "C", "D", "O", "U", "F", "L"])->get();
         $divisi_all = Divisi::all();
         $pegawai_all = Pegawai::all();
+        $departemens = Departemen::all();
         // dd($approval_rekomendasi);
-        return view("MasterData/MatriksApprovalRekomendasi", compact(["approval_rekomendasi", "divisi_all", "pegawai_all"]));
+        return view("MasterData/MatriksApprovalRekomendasi", compact(["approval_rekomendasi", "divisi_all", "pegawai_all", "departemens"]));
     });
 
     Route::post('/matriks-approval-rekomendasi/save', function (Request $request) {
@@ -1941,6 +1943,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             "nama-pegawai" => "required",
             "unit-kerja" => "required",
             "klasifikasi-proyek" => "required",
+            "departemen" => "required",
             "kategori" => "required",
         ];
         // $is_validate = $request->validateWithBag("post", [
@@ -1962,6 +1965,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $approval_rekomendasi->unit_kerja = $data["unit-kerja"];
         $approval_rekomendasi->klasifikasi_proyek = $data["klasifikasi-proyek"];
         $approval_rekomendasi->kategori = $data["kategori"];
+        $approval_rekomendasi->departemen = $data["departemen"];
         
         if($approval_rekomendasi->save()) {
             Alert::success('Success', "Matriks Approval Rekomendasi berhasil ditambahkan");

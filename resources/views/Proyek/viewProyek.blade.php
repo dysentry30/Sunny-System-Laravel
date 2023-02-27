@@ -1556,14 +1556,11 @@
                                                                     class="form-select form-select-solid"
                                                                     data-control="select2" data-hide-search="false"
                                                                     data-placeholder="Pilih Departemen">
-                                                                    @if (!empty($proyek->departemen_proyek))
-                                                                        <option value="{{ $proyek->departemen_proyek }}">{{ $proyek->Departemen->nama_departemen }}</option>
-                                                                        @else
-                                                                        @foreach ($departemen as $depart)
-                                                                        <option></option>
-                                                                        <option value="{{ $depart->kode_departemen }}">{{ $depart->nama_departemen }} ({{ $depart->kode_divisi }})</option>
-                                                                        @endforeach
-                                                                    @endif
+                                                                    <option value=""></option>
+                                                                    @foreach ($departemen as $depart)
+                                                                    {{-- <option value="" selected></option> --}}
+                                                                    <option value="{{ $depart->kode_departemen }}" {{ $depart->kode_departemen == $proyek->departemen_proyek ? "selected" : "" }}>{{ $depart->nama_departemen }}</option>
+                                                                    @endforeach
                                                                 </select>
                                                                 <!--end::Input-->
                                                             </div>

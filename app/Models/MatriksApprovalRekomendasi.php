@@ -21,4 +21,9 @@ class MatriksApprovalRekomendasi extends Model
     public function Pegawai() {
         return $this->hasOne(Pegawai::class, "nip", "nama_pegawai");
     }
+
+    public function Departemen()
+    {
+        return $this->hasOne(Departemen::class, "kode_departemen", "departemen");
+    }
 }
