@@ -139,7 +139,7 @@
                             </div>
                         @endif
 
-                        @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak || auth()->user()->check_team_proyek)
+                        @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
                             <div class="menu-item">
                                 <a class="menu-link " href="/claim-management"
                                     style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'claim-management') ? 'background-color:#008CB4' : '' }}">
@@ -152,6 +152,23 @@
                                         <!--end::Svg Icon-->
                                     </span>
                                     <span class="menu-title" style="font-size: 16px; padding-left: 10px">Claim Management</span>
+                                </a>
+                            </div>
+                        @endif
+
+                        @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
+                            <div class="menu-item">
+                                <a class="menu-link " href="/history-approval"
+                                    style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'history-approval') ? 'background-color:#008CB4' : '' }}">
+                                    <span class="menu-icon">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                        <span class="svg-icon svg-icon-2">
+                                            <img alt="Logo" src="/media/icons/duotune/creatio/tranzaction.svg"
+                                                class="h-30px logo" />
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">History Approval</span>
                                 </a>
                             </div>
                         @endif
@@ -211,6 +228,7 @@
                             str_contains(Request::Path(), 'divisi') ||
                             str_contains(Request::Path(), 'pegawai') ||
                             str_contains(Request::Path(), 'direktorat') ||
+                            str_contains(Request::Path(), 'departemen') ||
                             str_contains(Request::Path(), 'matriks-approval-rekomendasi') ||
                             str_contains(Request::Path(), 'team-proyek') ? 'background-color:#008CB4' : '' }}">
 
@@ -585,6 +603,23 @@
                                                 <!--end::Svg Icon-->
                                             </span>
                                             <span class="menu-title" style="font-size: 16px; padding-left: 10px">Direktorat</span>
+                                        </a>
+                                    </div>
+                                    <!--end::Menu Colapse-->
+                                    @endif
+
+                                    @if (auth()->user()->check_administrator)
+                                    <!--begin::Menu Colapse-->
+                                    <div id="#kt_aside_menu" data-kt-menu="true"
+                                        style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'departemen' ? 'background-color:#008CB4' : '' }}">
+                                        <a class="menu-link " href="/departemen" style="color:white; padding-left:20px;">
+                                            <span class="menu-icon">
+                                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                                {{-- <i class="bi bi-buildings text-white"></i>                                                     --}}
+                                                <i class="bi bi-building-fill text-white" style="font-size: 20px"></i>
+                                                <!--end::Svg Icon-->
+                                            </span>
+                                            <span class="menu-title" style="font-size: 16px; padding-left: 10px">Departemen</span>
                                         </a>
                                     </div>
                                     <!--end::Menu Colapse-->

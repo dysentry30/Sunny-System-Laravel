@@ -86,7 +86,7 @@ class ContractManagementsController extends Controller
         // $contract_managements = ContractManagements::all();
         // $sorted_contracts = $contract_managements->sortBy("contract_in");
         // return view('4_Contract', ["contracts" => $sorted_contracts]);
-        if (Auth::user()->check_administrator) {
+        if (Auth::user()->check_administrator || Auth::user()->check_admin_kontrak) {
             // $proyeks = Proyek::all()->where("stage", ">", 7)->where("nomor_terkontrak", "!=", "");
             // $proyeks = DB::table("proyeks as p")->select("p.*")->join("contract_managements as c", "c.project_id", "=", "p.kode_proyek")->where("p.stage", ">", 7)->where("p.nomor_terkontrak", "!=", "")->where("c.stages", "<", 3)->get()->sortBy("p.kode_proyek");
             // $proyeks_terkontrak = DB::table("proyeks as p")->select(["p.*", "c.stages"])->join("contract_managements as c", "c.project_id", "=", "p.kode_proyek")->where("c.stages", "<", 3)->get()->sortBy("p.kode_proyek")->map(function ($data) {
@@ -3493,10 +3493,10 @@ class ContractManagementsController extends Controller
                 $data = new ProyekProgress();
                 $data->kode_proyek = $contract->project->kode_proyek;
                 $data->kode_spk = $kode_spk;
-                $data->ok_review = $data_response["ok_review"];
-                $data->progress_fisik_ri = $data_response["progress_fisik_ri"];
+                $data->ok_review = (int)$data_response["ok_review"];
+                $data->progress_fisik_ri = (int)$data_response["progress_fisik_ri"];
                 $data->lama_proyek = $data_response["lamaproyek"];
-                $data->laba_kotor_ri = $data_response["laba_kotor_ri"];
+                $data->laba_kotor_ri = (int)$data_response["laba_kotor_ri"];
                 $data->periode = $str_current;
                 if($data->save()){
                 // Alert::success
