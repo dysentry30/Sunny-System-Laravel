@@ -90,7 +90,7 @@
                             <!--begin::Card title-->
                             <div class="card-title">
                                 <!--Begin:: BUTTON FILTER-->
-                                <form action="" class="d-flex flex-row w-auto" method="get">
+                                <form action="" class="d-flex flex-row w-auto mt-6" method="get">
                                     <!--Begin:: Select Options-->
                                     {{-- <select style="display: none !important" id="column" name="column" onchange="changes(this)"
                                         class="form-select form-select-solid select2-hidden-accessible"

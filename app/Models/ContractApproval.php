@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class ContractApproval extends Model
 {
     use HasFactory;
-    protected $table = "history_approval_ccm";
+    protected $table = "contract_approval";
 
     public function ContractManagements(){
       return  $this->belongsTo(ContractManagements::class, "id_contract");

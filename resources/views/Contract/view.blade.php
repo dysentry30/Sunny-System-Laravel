@@ -347,9 +347,13 @@
 </form>
 @else
 <!--begin::Content-->
-<form action="/contract-management/update" method="post" id="form-1"></form>
+@php
+    $month = (int)date("m") == 12 ? 1 : (int)date("m")+1;
+    $is_approved = $contract->ContractApproval->where("periode", "=", $month)->where("is_locked", "=", true);
+@endphp
+{{-- @dump($is_approved) --}}
+<form action="/contract-management/update" method="post" id="form-1">@csrf</form>
     <div class="content d-flex flex-column flex-column-fluid" id="kt_content" style="padding: 0 !important;">
-        @csrf
         <!--begin::Toolbar-->
         <div class="toolbar" id="kt_toolbar">
             <!--begin::Container-->
@@ -367,10 +371,60 @@
                 <!--begin::Actions-->
                 <div class="d-flex align-items-center py-1">
 
+
                     <!--begin::Button-->
                     @if ($contract->where("id_contract", "=", $contract->id_contract)->where("stages", "!=", 1)->get()->isNotEmpty())
-                    <button type="submit" form="form-1" class="btn btn-sm btn-primary" id="kt_toolbar_primary_button"
+                    @if ($is_approved->isEmpty())
+                    <button type="button" class="btn btn-sm btn-primary" id="kt_toolbar_primary_button" onclick="lockBulananContract()"
                         style="background-color:#008CB4;">
+                        <span>Lock</span>
+                        <i class="bi bi-lock-fill text-white"></i>
+                    </button>
+                    @else
+                    <button type="button" class="btn btn-sm btn-primary disabled" id="kt_toolbar_primary_button"
+                        style="background-color:#008CB4;">
+                        <span>Unlock</span>
+                        <i class="bi bi-unlock-fill text-white"></i>
+                    </button>
+                    @endif
+                    @endif
+                    <!--end::Button-->
+
+                    <script>
+                        async function lockBulananContract() {
+                            Swal.fire({
+                                title: '',
+                                text: "Yakin Lock Bulan Ini?",
+                                icon: "warning",
+                                showCancelButton: true,
+                                confirmButtonColor: '#008CB4',
+                                cancelButtonColor: '#BABABA',
+                                confirmButtonText: 'Ya'
+                            }).then(async(result)=>{
+                                if(result.isConfirmed){
+                                    const formData = new FormData();
+                                    formData.append("_token", "{{ csrf_token() }}");
+                                    formData.append("id_contract", "{{ $contract->id_contract }}")
+                                    formData.append("kode_proyek", "{{ $contract->project_id }}")
+                                    formData.append("periode", "{{ (int)date("m")+1 }}")
+                                    formData.append("tahun", "{{ (int)date("Y") }}")
+                                    const sendData = await fetch("/contract-management/set-lock",{
+                                        method: "POST",
+                                        body: formData
+                                    }).then(res => res.json());
+                                    if(sendData.link){
+                                        window.location.reload();
+                                    }
+                                }
+
+                            })
+                        }
+                    </script>
+
+                    <!--begin::Button-->
+                    @if ($contract->where("id_contract", "=", $contract->id_contract)->where("stages", "!=", 1)->get()->isNotEmpty())
+                    <button type="submit" form="form-1" class="btn btn-sm btn-primary {{ $is_approved->isEmpty() ? "" : "disabled" }}" id="kt_toolbar_primary_button"
+                        style="background-color:#008CB4;margin-left:10px;">
                         Save</button>
                     @endif
                     <!--end::Button-->
@@ -379,7 +433,7 @@
                     {{-- <a class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_tes" id="kt_toolbar_primary_button"
                         style="background-color: #008CB4;margin-left:10px;"> --}}
                     <a href="/get-progress/{{ $contract->id_contract }}" class="btn btn-sm btn-primary" id="get_progress"  
-                    style="background-color: #008CB4;margin-left:10px;">
+                    style="background-color:#f3f6f9;margin-left:10px;color: black;">
                     Get Progress</a>
                     <!--end::Button-->
 
@@ -845,12 +899,16 @@
                                 @if (!empty($contract->questionsProjects->toArray()))
                                     <a href="#" onclick="exportToExcel(this, '#data-aanwitjzing')" class="">(Klik di sini untuk Export ke Excel)</a>
                                 @endif
+                                {{-- @if ($is_approved->isEmpty()) --}}
                                 <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_question_proyek">+</a>
-                                    @if (!empty($contract->questionsProjects->toArray()))
-                                        <a href="#" data-bs-toggle="modal"
-                                        data-bs-target="#kt_modal_upload_aanwitjzing" class="btn btn-primary btn-sm p-2 mx-3 text-end">Upload</a>
-                                    @endif
+                                {{-- @endif --}}
+                                @if (!empty($contract->questionsProjects->toArray()))
+                                {{-- @if ($is_approved->isEmpty()) --}}
+                                <a href="#" data-bs-toggle="modal"
+                                data-bs-target="#kt_modal_upload_aanwitjzing" class="btn btn-primary btn-sm p-2 mx-3 text-end">Upload</a>  
+                                {{-- @endif --}}
+                                @endif
                             </h3>
 
                             <!--begin:Table: Review-->
@@ -1009,18 +1067,22 @@
                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Tinjauan Dokumen Kontrak - Perolehan
                                 {{-- @dump($contract->reviewProjects) --}}
-                                @if (($contract->reviewProjects)->isEmpty())
-                                    <a href="/review-contract/view/{{ $contract->id_contract }}/1" target="_blank" Id="Plus">+</a>
-                                    @else
+                                @if ($contract->reviewProjects->isEmpty())
+                                {{-- @if ($is_approved->isEmpty()) --}}
+                                <a href="/review-contract/view/{{ $contract->id_contract }}/1" target="_blank" Id="Plus">+</a>
+                                {{-- @endif --}}
+                                @else
                                     <a class="btn btn-primary btn-sm p-2 gap-3" href="/review-contract/view/{{ $contract->id_contract }}/1" target="_blank">view</a>
                                     {{-- <a class="btn btn-primary btn-sm p-2 px-3 mx-3" data-kt-countup-tabs="true" data-bs-toggle="tab"
                                     href="#kt_user_view_overview_pelaksanaan">Lihat Pelaksanaan</a>     --}}
                                     {{-- <small>(Lanjutkan isi di Pelaksanaan)</small> --}}
                                 @endif
+                                {{-- @if ($is_approved->isEmpty()) --}}
                                 @if (!empty($contract->reviewProjects->toArray()))
                                         <a href="#" data-bs-toggle="modal"
                                         data-bs-target="#kt_modal_upload_tinjauan_perolehan" class="btn btn-primary btn-sm p-2 text-end me-3">Upload</a>
                                 @endif
+                                {{-- @endif --}}
                             </h3>
 
                             @php
@@ -1156,8 +1218,10 @@
                                                             Template Risk Tender </a></i>)
                             {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_input_resiko_perolehan">+</a> --}}
-                            <a href="#" Id="Plus" data-bs-toggle="modal"
-                            data-bs-target="#kt_modal_upload_resiko_perolehan">+</a>
+                                {{-- @if ($is_approved->isEmpty()) --}}
+                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                data-bs-target="#kt_modal_upload_resiko_perolehan">+</a>
+                                {{-- @endif --}}
                         </h3>
 
                         <!--begin:Table: Review-->
@@ -1213,12 +1277,16 @@
                                 @if (!empty($contract->UsulanPerubahanDraft->toArray()))
                                     <a href="#" onclick="exportToExcel(this, '#usulan-draft')" class="">(Klik di sini untuk Export ke Excel)</a>
                                 @endif
+                                {{-- @if ($is_approved->isEmpty()) --}}
                                 <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_usulan_perubahan_draft_kontrak">+</a>
-                                    @if (!empty($contract->UsulanPerubahanDraft->toArray()))
-                                        <a href="#" data-bs-toggle="modal"
-                                        data-bs-target="#kt_modal_upload_perubahan_kontrak" class="btn btn-primary btn-sm p-2 mx-3 text-end">Upload</a>
-                                    @endif
+                                {{-- @endif --}}
+                                {{-- @if ($is_approved->isEmpty()) --}}
+                                @if (!empty($contract->UsulanPerubahanDraft->toArray()))
+                                    <a href="#" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_upload_perubahan_kontrak" class="btn btn-primary btn-sm p-2 mx-3 text-end">Upload</a>
+                                @endif  
+                                {{-- @endif --}}
                             </h3>
 
                             <!--begin:Table: Review-->
@@ -1755,8 +1823,10 @@
 
                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Perjanjian KSO
+                                {{-- @if ($is_approved->isEmpty()) --}}
                                 <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_input_perjanjian_kso">+</a>
+                                {{-- @endif --}}
                             </h3>
 
                             <!--begin:Table: Review-->
@@ -2200,16 +2270,22 @@
                                 <!--end::Table body-->
                             </table>
                             <!--End:Table: Claim Contract--> --}}
-
+                            
                             <div class="row mb-5">
                                 <div class="col-6">
                                     <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                                        LAW
+                                        <span>LAW</span>
+                                        @if ($is_approved->isNotEmpty())
+                                            <i class="bi bi-lock-fill text-grey" data-bs-toggle="tooltip" data-bs-title="Contract sudah dilock, silahkan request unlock jika ingin mengubah"></i>
+                                        @endif
                                     </h3>
                                 </div>
                                 <div class="col-6">
                                     <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                                        LD
+                                        <span>LD</span>
+                                        @if ($is_approved->isNotEmpty())
+                                            <i class="bi bi-lock-fill text-grey" data-bs-toggle="tooltip" data-bs-title="Contract sudah dilock, silahkan request unlock jika ingin mengubah"></i>
+                                        @endif
                                     </h3>
                                 </div>
                             </div>
@@ -2220,7 +2296,7 @@
                                         <!--begin::Input-->
                                         <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
                                         name="id-contract" form="form-1">
-                                    <input type="hidden" class="modal-name" name="modal-name">
+                                    <input type="hidden" class="modal-name" name="modal-name" form="form-1">
     
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
@@ -2229,7 +2305,7 @@
                                     <!--end::Label-->
                                     <!--begin::Input-->
                                     <input type="text" id="governing-law" name="governing-law" class="form-control form-control-solid" 
-                                    value="{{ !empty($contract->law_governing) ? $contract->law_governing : "" }}" form="form-1">
+                                    value="{{ !empty($contract->law_governing) ? $contract->law_governing : "" }}" form="form-1" {{ $is_approved->isEmpty() ? "" : "readonly" }}>
                                     <!--end::Input-->
     
                                     <br>
@@ -2241,7 +2317,7 @@
                                     <!--end::Label-->
                                     <!--begin::Input-->
                                     <input type="text" id="dispute-resolution" name="dispute-resolution" class="form-control form-control-solid"
-                                    value="{{ !empty($contract->law_dispute_resolution) ? $contract->law_dispute_resolution : "" }}" form="form-1">
+                                    value="{{ !empty($contract->law_dispute_resolution) ? $contract->law_dispute_resolution : "" }}" form="form-1" {{ $is_approved->isEmpty() ? "" : "readonly" }}>
                                     <!--end::Input-->
                                     
                                     <br>
@@ -2253,14 +2329,14 @@
                                     <!--end::Label-->
                                     <!--begin::Input-->
                                     <input type="text" id="prevailing-language" name="prevailing-language" class="form-control form-control-solid"
-                                    value="{{ !empty($contract->law_prevailing_language) ? $contract->law_prevailing_language : "" }}" form="form-1">
+                                    value="{{ !empty($contract->law_prevailing_language) ? $contract->law_prevailing_language : "" }}" form="form-1" {{ $is_approved->isEmpty() ? "" : "readonly" }}>
                                     <!--end::Input-->
                                     </div>
                                     <div class="col-6">
                                         <!--begin::Input-->
                                         <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
                                             name="id-contract" form="form-1">
-                                        <input type="hidden" class="modal-name" name="modal-name">
+                                        <input type="hidden" class="modal-name" name="modal-name" form="form-1">
         
                                         <!--begin::Label-->
                                         <label class="fs-6 fw-bold form-label mt-3">
@@ -2269,7 +2345,7 @@
                                         <!--end::Label-->
                                         <!--begin::Input-->
                                         <input type="text" id="delay" name="delay" class="form-control form-control-solid"
-                                        value="{{ !empty($contract->ld_delay) ? $contract->ld_delay : "" }}" form="form-1">
+                                        value="{{ !empty($contract->ld_delay) ? $contract->ld_delay : "" }}" form="form-1" {{ $is_approved->isEmpty() ? "" : "readonly" }}>
                                         <!--end::Input-->
         
                                         <br>
@@ -2281,7 +2357,7 @@
                                         <!--end::Label-->
                                         <!--begin::Input-->
                                         <input type="text" id="performance" name="performance" class="form-control form-control-solid"
-                                        value="{{ !empty($contract->ld_performance) ? $contract->ld_performance : "" }}" form="form-1">
+                                        value="{{ !empty($contract->ld_performance) ? $contract->ld_performance : "" }}" form="form-1" {{ $is_approved->isEmpty() ? "" : "readonly" }}>
                                         <!--end::Input-->
                                     </div>
                                 </div>
@@ -2302,7 +2378,7 @@
                                     <br>
                                     <select name="scope-of-work" class="form-select form-select-solid"
                                         data-control="select2" data-hide-search="true" data-placeholder="Pilih kategori"
-                                        tabindex="-1" aria-hidden="true" required>
+                                        tabindex="-1" aria-hidden="true" {{ $is_approved->isEmpty() ? "" : "disabled" }}>
                                         @if (!empty($contract->jo_scope_of_work))
                                         <option value="Job Allocation" {{ $contract->jo_scope_of_work == "Job Allocation" ? 'selected' : '' }}>Job Allocation</option>
                                         <option value="Full Integrated" {{ $contract->jo_scope_of_work == "Full Integrated" ? 'selected' : '' }}>Full Integrated</option>
@@ -2330,8 +2406,10 @@
                                 Input Resiko - Pelaksanaan (<i class="text-hover-primary text-gray"><a 
                                     href="https://crm.wika.co.id/faqs/104625_RiskTender_Input-Kosong.rev.xlsx"> Download
                                     Template Risk Tender </a></i>)
+                                @if ($is_approved->isEmpty())
                                 <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_input_resiko_pelaksanaan">+</a>
+                                @endif
                             </h3>
 
                             <!--begin:Table: Review-->
@@ -2388,8 +2466,10 @@
 
                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Rencana Kerja Manajemen Kontrak (RKAP - BAB 12)
+                                @if ($is_approved->isEmpty())
                                 <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_input_rencana_kerja_kontrak">+</a>
+                                @endif
                             </h3>
 
                             <!--begin:Table: Review-->
@@ -2446,7 +2526,11 @@
                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Tinjauan Dokumen Kontrak - Pelaksanaan
                                 @if ($contract->reviewProjects->where("stage", "=", 1)->isNotEmpty())
-                                    <a Id="Plus" href="/review-contract/view/{{ $contract->id_contract }}/2">+</a>
+                                @if ($is_approved->isEmpty())
+                                <a Id="Plus" href="/review-contract/view/{{ $contract->id_contract }}/2">+</a>
+                                @else
+                                <a class="btn btn-primary btn-sm p-2 gap-3" href="/review-contract/view/{{ $contract->id_contract }}/2" target="_blank">view</a>
+                                @endif
                                 @endif
                             </h3>
 
@@ -2458,11 +2542,15 @@
                                 @if ($contract->PasalKontraktual->isNotEmpty())
                                 <a href="#" onclick="exportToExcel(this, '#table-pasal-kontraktual')" class="">(Klik di sini untuk Export ke Excel)</a>
                                 @endif
+                                @if ($is_approved->isEmpty())
                                 <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_input_pasal_kontraktual">+</a>
+                                @endif
                                 @if (!empty($contract->PasalKontraktual->toArray()))
-                                    <a href="#" data-bs-toggle="modal"
-                                    data-bs-target="#kt_modal_upload_pasal_kontraktual" class="btn btn-primary btn-sm p-2 mx-3 text-end">Upload</a>
+                                @if ($is_approved->isEmpty())
+                                <a href="#" data-bs-toggle="modal"
+                                data-bs-target="#kt_modal_upload_pasal_kontraktual" class="btn btn-primary btn-sm p-2 mx-3 text-end">Upload</a>
+                                @endif
                                 @endif
                             </h3>
 
@@ -2545,11 +2633,15 @@
                                 @if (!empty($contract->PendingIssue->toArray()))
                                     <a href="#" onclick="exportToExcel(this, '#pending-issue-pelaksanaan')" class="">(Klik di sini untuk Export ke Excel)</a>
                                 @endif
+                                @if ($is_approved->isEmpty())
                                 <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_pending_issue_pelaksanaan">+</a>
+                                @endif
                                 @if (!empty($contract->PendingIssue->toArray()))
-                                    <a href="#" data-bs-toggle="modal"
-                                    data-bs-target="#kt_modal_upload_pending_issue_pelaksanaan" class="btn btn-primary btn-sm p-2 mx-3 text-end">Upload</a>
+                                @if ($is_approved->isEmpty())
+                                <a href="#" data-bs-toggle="modal"
+                                data-bs-target="#kt_modal_upload_pending_issue_pelaksanaan" class="btn btn-primary btn-sm p-2 mx-3 text-end">Upload</a>
+                                @endif
                                 @endif
                             </h3><br>
     
@@ -2825,8 +2917,10 @@
                             <!--Begin::Klaim Jaminan-->
                             <h3 class="fw-bolder m-0 mb-3 " id="HeadDetail" style="font-size:14px;">
                                 Jaminan
+                                @if ($is_approved->isEmpty())
                                 <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_jaminan">+</a>
+                                @endif
                             </h3>
 
                             <!--Begin::Tabel-->
@@ -2902,7 +2996,7 @@
                                         </td>
                                         <td>
                                             <a href="#" data-bs-toggle="modal"
-                                            data-bs-target="#kt_modal_edit_jaminan_{{ $jaminan->id_jaminan }}" class="btn btn-sm btn-primary text-white">
+                                            data-bs-target="#kt_modal_edit_jaminan_{{ $jaminan->id_jaminan }}" class="btn btn-sm btn-primary text-white {{ $is_approved->isEmpty() ? "" : "disabled" }}">
                                             Edit
                                             </a>
                                         </td>
@@ -2934,8 +3028,10 @@
                         <!--Begin::Klaim Asuransi-->
                         <h3 class="fw-bolder m-0 mb-3 " id="HeadDetail" style="font-size:14px;">
                             Asuransi
+                            @if ($is_approved->isEmpty())
                             <a href="#" Id="Plus" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_asuransi">+</a>
+                            @endif
                         </h3>
 
                         <!--Begin::Tabel-->
@@ -3016,7 +3112,7 @@
                                      </td>
                                      <td>
                                          <a href="#" data-bs-toggle="modal"
-                                         data-bs-target="#kt_modal_edit_asuransi_{{ $asuransi->id_asuransi }}" class="btn btn-sm btn-primary text-white">
+                                         data-bs-target="#kt_modal_edit_asuransi_{{ $asuransi->id_asuransi }}" class="btn btn-sm btn-primary text-white {{ $is_approved->isEmpty() ? "" : "disabled" }}">
                                          Edit
                                          </a>
                                      </td>
@@ -3046,11 +3142,15 @@
 
                             <h3 class="fw-bolder m-0 mb-3 " id="HeadDetail" style="font-size:14px;">
                                 Checklist Manajemen Kontrak
+                                @if ($is_approved->isEmpty())
                                 <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_input_checklist_manajemen">+</a>
+                                @endif
                                 @if (!empty($contract->ChecklistManajemen->toArray()))
+                                @if ($is_approved->isEmpty())
                                 <a href="#" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_upload_checklist_manajemen" class="btn btn-primary btn-sm p-2 text-end ml-2">Upload</a>
+                                @endif
                                 @endif
                             </h3>
 
@@ -3100,8 +3200,10 @@
                             <!--Begin::Document Site Instruction-->
                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Dokumen Site Instruction
+                                @if ($is_approved->isEmpty())
                                 <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_dokumen_site_instruction">+</a>
+                                @endif
                             </h3>
                             <!--begin:Table:Dokumen Site Instruction-->
                             
@@ -3181,8 +3283,10 @@
                             <!--Begin::Document Technical Form-->
                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Dokumen Technical Form
+                                @if ($is_approved->isEmpty())
                                 <a target="_blank" href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_dokumen_technical_form">+</a>
+                                @endif
                             </h3>
                             
                             <!--begin:: Table Dokumen Technical Form-->
@@ -3261,8 +3365,10 @@
                             <!--Begin::Document Technical Query-->
                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Dokumen Technical Query
+                                @if ($is_approved->isEmpty())
                                 <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_dokumen_technical_query">+</a>
+                                @endif
                             </h3>
                             <!--begin:: Table Dokumen Technical Query-->
                             <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
@@ -3340,8 +3446,10 @@
                             <!--Begin::Document Field Design Change-->
                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Dokumen Field Design Change
+                                @if ($is_approved->isEmpty())
                                 <a target="_blank" href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_dokumen_field_design_change">+</a>
+                                @endif
                             </h3>
 
                             <!--begin:: Table Dokumen Field Design Change-->
@@ -3419,8 +3527,10 @@
                             <!--Begin::Document Contract Change Notice-->
                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Dokumen Contract Change Notice
+                                @if ($is_approved->isEmpty())
                                 <a target="_blank" href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_dokumen_contract_change_notice">+</a>
+                                @endif
                             </h3>
 
                             <!--begin:: Table Dokumen Contract Change Notice-->
@@ -3498,8 +3608,10 @@
                             <!--Begin::Document Contract Change Proposal-->
                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Dokumen Contract Change Proposal
+                                @if ($is_approved->isEmpty())
                                 <a target="_blank" href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_dokumen_contract_change_proposal">+</a>
+                                @endif
                             </h3>
 
                             <!--begin:: Table Dokumen Contract Change Proposal-->
@@ -3577,8 +3689,10 @@
                             <!--Begin::Document Contract Change Order-->
                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Dokumen Contract Change Order
+                                @if ($is_approved->isEmpty())
                                 <a target="_blank" href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_dokumen_contract_change_order">+</a>
+                                @endif
                             </h3>
 
                             <!--begin:: Table Dokumen Contract Change Order-->
@@ -3668,8 +3782,10 @@
                                         
                                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                             Daftar BA Defect
+                                            @if ($is_approved->isEmpty())
                                             <a href="#" Id="Plus" data-bs-toggle="modal"
                                                 data-bs-target="#kt_modal_defect_ba">+</a>
+                                            @endif
                                         </h3>
 
                                         <!--begin:Table: List Defect BA-->
@@ -3727,8 +3843,10 @@
                                         <div class="col">
                                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                                 Dokumen Bast 1
+                                                @if ($is_approved->isEmpty())
                                                 <a href="#" Id="Plus" data-bs-toggle="modal"
                                                     data-bs-target="#kt_modal_bast_1">+</a>
+                                                @endif
                                             </h3>
                                             {{-- <input type="file" name="dokumen-bast-1" accept=".docx"
                                                 class="form-control form-control-solid"> --}}
@@ -3745,8 +3863,10 @@
                                         <div class="col">
                                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                                 Dokumen Bast 2
+                                                @if ($is_approved->isEmpty())
                                                 <a href="#" Id="Plus" data-bs-toggle="modal"
                                                     data-bs-target="#kt_modal_bast_2">+</a>
+                                                @endif
                                             </h3>
                                             {{-- @if (!empty($contract->dokumen_bast_1))
                                                 <small>Lihat Dokumen Bast 2: 
@@ -4017,8 +4137,10 @@
                                         Input Resiko - Pemeliharaan (<i class="text-hover-primary text-gray"><a 
                                             href="https://crm.wika.co.id/faqs/104625_RiskTender_Input-Kosong.rev.xlsx"> Download
                                             Template Risk Tender </a></i>)
-                                        <a href="#" Id="Plus" data-bs-toggle="modal"
-                                            data-bs-target="#kt_modal_input_resiko_pemeliharaan">+</a>
+                                            @if ($is_approved->isEmpty())
+                                            <a href="#" Id="Plus" data-bs-toggle="modal"
+                                                data-bs-target="#kt_modal_input_resiko_pemeliharaan">+</a>
+                                            @endif
                                     </h3>
 
                                     <!--begin:Table: Review-->
@@ -4131,11 +4253,13 @@
                             @if (!empty($contract->PendingIssue->toArray()))
                                 <a href="#" onclick="exportToExcel(this, '#pending-issue-pemeliharaan')" class="">(Klik di sini untuk Export ke Excel)</a>
                             @endif
+                            @if ($is_approved->isEmpty())
                             <a href="#" Id="Plus" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_pending_issue_pemeliharaan">+</a>
                             @if (!empty($contract->PendingIssue->toArray()))
                                 <a href="#" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_upload_pending_issue_pemeliharaan" class="btn btn-primary btn-sm p-2 mx-3 text-end">Upload</a>
+                            @endif
                             @endif
                         </h3><br>
 
@@ -4204,7 +4328,7 @@
 
                                             <td>
                                                 <a href="#" data-bs-toggle="modal"
-                                                data-bs-target="#kt_modal_pending_issue_pemeliharaan_{{ $pending_issue->id_pending_issue }}" class="btn btn-primary p-2 text-white">Edit</a>
+                                                data-bs-target="#kt_modal_pending_issue_pemeliharaan_{{ $pending_issue->id_pending_issue }}" class="btn btn-primary p-2 text-white {{ $is_approved->isEmpty() ? "" : "disabled" }}">Edit</a>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -4263,8 +4387,10 @@
 
                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                             Dokumen Lainnya
+                            @if ($is_approved->isEmpty())
                             <a href="#" Id="Plus" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_dokumen_pendukung_serah_terima">+</a>
+                            @endif
                         </h3>
 
                         <!--begin:Table: List Defect BA-->
@@ -4328,10 +4454,10 @@
                                 @csrf
                                 <input type="hidden" value="{{ $contract->id_contract }}" name="id-contract">
                                 <input type="file" accept=".docx" multiple name="kontrak-dan-addendum-file[]"
-                                    class="form-control form-control-solid">
+                                    class="form-control form-control-solid" {{ $is_approved->isEmpty() ? "" : "disabled" }}>
                                 <small>* Support multiple file upload</small>
                                 <br><br>
-                                <button type="submit" class="btn btn-sm btn-active-primary text-white"
+                                <button type="submit" class="btn btn-sm btn-active-primary text-white {{ $is_approved->isEmpty() ? "" : "disabled" }}"
                                     style="background-color: #008CB4;">Save Dokumen</button>
                             </form>
                             <hr>
