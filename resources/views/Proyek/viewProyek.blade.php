@@ -1529,7 +1529,7 @@
                                                             <div class="fv-row mb-7">
                                                                 <!--begin::Label-->
                                                                 <label class="fs-6 fw-bold form-label mt-3">
-                                                                    <span>Nilai OK (Excludde Ppn) </span>
+                                                                    <span>Nilai OK (Exclude Ppn) </span>
                                                                 </label>
                                                                 <!--end::Label-->
                                                                 <!--begin::Input-->
@@ -1543,8 +1543,36 @@
                                                             <!--end::Input group-->
                                                         </div>
                                                         <!--End::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>Departemen </span>
+                                                                </label>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                <select id="departemen-proyek" name="departemen-proyek"
+                                                                    class="form-select form-select-solid"
+                                                                    data-control="select2" data-hide-search="false"
+                                                                    data-placeholder="Pilih Departemen">
+                                                                    @if (!empty($proyek->departemen_proyek))
+                                                                        <option value="{{ $proyek->departemen_proyek }}">{{ $proyek->Departemen->nama_departemen }}</option>
+                                                                        @else
+                                                                        @foreach ($departemen as $depart)
+                                                                        <option></option>
+                                                                        <option value="{{ $depart->kode_departemen }}">{{ $depart->nama_departemen }} ({{ $depart->kode_divisi }})</option>
+                                                                        @endforeach
+                                                                    @endif
+                                                                </select>
+                                                                <!--end::Input-->
+                                                            </div>
+                                                            <!--end::Input group-->
+                                                        </div>
+                                                        <!--End::Col-->
                                                     </div>
                                                     <!--End::Row Kanan+Kiri-->
+                                                    {{-- @dump($proyek->Departemen) --}}
 
                                                     <!--begin::Row Kanan+Kiri-->
                                                     <div class="row fv-row">

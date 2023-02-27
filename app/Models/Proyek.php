@@ -169,4 +169,9 @@ class Proyek extends Model
     public function ProyekProgress(){
         return $this->hasMany(ProyekProgress::class, "kode_proyek");
     }
+
+    public function Departemen()
+    {
+        return $this->hasOne(Departemen::class, "kode_departemen", "departemen_proyek");
+    }
 }

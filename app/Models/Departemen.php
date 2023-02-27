@@ -9,4 +9,9 @@ class Departemen extends Model
 {
     use HasFactory;
     protected $table = "departement";
+
+    public function Proyek()
+    {
+        return $this->belongsTo(Proyek::class, "departemen_proyek", "kode_departemen");
+    }
 }
