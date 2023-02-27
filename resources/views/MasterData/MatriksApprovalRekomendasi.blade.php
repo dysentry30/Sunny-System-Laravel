@@ -170,7 +170,14 @@
                                                 <a href="#" class="text-hover-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_matriks_update_{{$approval->id_matriks_approval_rekomendasi}}">{{$approval->Pegawai->nama_pegawai}}</a>
                                             </td>
                                             <td>{{$approval->Divisi->nama_kantor}}</td>
-                                            <td>{{$approval->Departemen->nama_departemen ?? ""}}</td>
+                                            <td>
+                                                @if (!empty($approval->Departemen->nama_departemen))
+                                                    <p>{{ $approval->Departemen->nama_departemen }} ({{ $approval->Departemen->UnitKerja->unit_kerja }})</p>
+                                                @else
+                                                    <p></p>
+                                                @endif
+                                                {{-- {{$approval->Departemen->nama_departemen ?? ""}} --}}
+                                            </td>
                                             <td>{{$approval->klasifikasi_proyek}}</td>
                                             <td>{{$approval->kategori}}</td>
                                             <td>
@@ -587,7 +594,7 @@
                                 </div>
                                 <!--End begin::Col-->
         
-                                <div class="row">
+                                <div class="row  mb-7">
                                     <div class="col">
                                         <div id="tier">
                                             <!--begin::Label-->
@@ -615,6 +622,33 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <div class="row mb-7">
+                                    <div class="col">
+                                        <div id="tier">
+                                            <!--begin::Label-->
+                                            <label class="fs-6 fw-bold form-label mt-3">
+                                                <span class="required">Departemen</span>
+                                            </label>
+                                            <!--end::Label-->
+        
+                                            <!--begin::Input-->
+                                            <div id="departemen">
+                                                <select id="departemen-proyek-{{ $approval->id_matriks_approval_rekomendasi }}" name="departemen"
+                                                    class="form-select form-select-solid select2-hidden-accessible"
+                                                    data-control="select2" data-hide-search="false" data-placeholder="Pilih Departemen"
+                                                    data-select2-id="select2-departemen" tabindex="-1" aria-hidden="true">
+                                                    <option value=""></option>
+                                                    @foreach ($departemens as $departemen)
+                                                        <option value="{{$departemen->kode_departemen}}" {{ $departemen->kode_departemen == $approval->departemen ? "selected" : "" }} >{{$departemen->nama_departemen}} ({{ $departemen->UnitKerja->unit_kerja }})</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <!--end::Input-->
+                                        </div>
+                                    </div>
+                                </div>
+                                
                                 <div class="row">
                                     <div class="col">
                                         <div id="tier">

@@ -1983,6 +1983,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             "unit-kerja" => "required",
             "klasifikasi-proyek" => "required",
             "kategori" => "required",
+            "departemen" => "required"
         ];
         // $is_validate = $request->validateWithBag("post", [
         //     "tahun" => "required|numeric",
@@ -2002,7 +2003,10 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $approval_rekomendasi->nama_pegawai = $data["nama-pegawai"];
         $approval_rekomendasi->unit_kerja = $data["unit-kerja"];
         $approval_rekomendasi->klasifikasi_proyek = $data["klasifikasi-proyek"];
+        $approval_rekomendasi->departemen = $data["departemen"];
         $approval_rekomendasi->kategori = $data["kategori"];
+
+        // dd($approval_rekomendasi);
         
         if($approval_rekomendasi->save()) {
             Alert::success('Success', "Matriks Approval Rekomendasi berhasil diperbarui");

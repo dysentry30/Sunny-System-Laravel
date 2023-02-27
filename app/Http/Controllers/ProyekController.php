@@ -489,7 +489,7 @@ class ProyekController extends Controller
                 "sender" => "62811881227",
                 "number" => "085157875773",
                 // "number" => "085156341949",
-                "message" => "Yth Bapak/Ibu .....\nDengan ini menyampaikan Pengajuan Nota Rekomendasi Tahap I untuk Proyek $newProyek->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
+                "message" => "Yth Bapak/Ibu .....\nDengan ini menyampaikan Pengajuan Nota Rekomendasi Tahap I untuk Proyek *$newProyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
                 // "url" => $url
             ]);
             // $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
@@ -507,6 +507,11 @@ class ProyekController extends Controller
             //     // "url" => $url
             // ]);
             // dd($send_msg_to_wa, "send");
+            $send_msg_to_wa->onError(function ($error) {
+                // dd($error);
+                Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
+                return redirect()->back();
+            });
             $newProyek->is_request_rekomendasi  = true;
 
             Alert::success('Success', "Proyek Berhasil Diajukan");
