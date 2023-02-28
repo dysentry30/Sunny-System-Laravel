@@ -110,6 +110,13 @@
                                 @if ($proyek->is_request_rekomendasi == false && !$check_green_line && $proyek->stage == 1)
                                     <input type="button" name="proyek-rekomendasi" value="Pengajuan Rekomendasi" class="btn btn-sm btn-success ms-2" id="proyek-rekomendasi" data-bs-toggle="modal" data-bs-target="#modal-send-pengajuan"
                                         style="background-color:#00b48d">
+                                @elseif($proyek->stage > 1 && $proyek->is_recommended == false || $proyek->is_disetujui == false )
+                                    <div class="" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="bottom" data-bs-title="<b>Rekomendasi Rejected</b>">
+                                        <p class="mt-4 btn btn-sm btn-danger ms-2">
+                                            Rekomendasi Rejected
+                                        </p>
+                                        {{-- <input type="submit" value="" class="btn btn-sm btn-danger ms-2" id="proyek-rekomendasi" disabled > --}}
+                                    </div>
                                 @elseif($proyek->stage > 1 && !$check_green_line)
                                     <div class="" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="left" data-bs-title="Proyek ini sudah melewati tahap <b>Rekomendasi</b>">
                                         <input type="submit" name="proyek-rekomendasi" value="Pengajuan Rekomendasi" class="btn btn-sm btn-secondary ms-2" id="proyek-rekomendasi" disabled >
@@ -199,41 +206,64 @@
                     <!-- begin::modal confirm send wa-->
                     <div class="modal fade w-100" style="margin-top: 120px" id="modal-send-pengajuan" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog mw-600px">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="exampleModalLabel">Ajukan Rekomendasi Proyek ?</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Ajukan Rekomendasi Proyek ?</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <input type="hidden"  name="proyek-rekomendasi" value="Pengajuan Rekomendasi"/>
+                                    @php
+                                        $name_customer = $proyek->proyekBerjalan->name_customer ?? null;
+                                        $jenis_instansi = $proyek->proyekBerjalan->customer->jenis_instansi ?? null;
+                                        $custNegara = $proyek->proyekBerjalan->customer->negara ?? null;
+                                        $custProvinsi = $proyek->proyekBerjalan->customer->provinsi ?? null;
+                                        $forbes_rank = $proyek->proyekBerjalan->customer->forbes_rank ?? null;
+                                        $lq_rank = $proyek->proyekBerjalan->customer->lq_rank ?? null;
+                                        $masalahHukum = $proyek->proyekBerjalan->customer->MasalahHukum ?? collect([]);
+                                    @endphp
+
+                                    <p>Nama Proyek : <b>{{ $proyek->nama_proyek }}</b></p>
+                                    <p>RA Klasifikasi Proyek  : <b class="{{ $proyek->klasifikasi_pasdin ?? "text-danger" }}">{{ $proyek->klasifikasi_pasdin ?? "*Belum Ditentukan" }}</b></p>
+                                    <p>Sumber Dana  : <b class="{{ $proyek->SumberDana->nama_sumber ?? "text-danger" }}">{{ $proyek->SumberDana->nama_sumber ?? "*Belum Ditentukan" }}</b></p>
+                                    <br>
+                                    <p>Nama Pemberi Kerja : <b class="{{ $name_customer ?? "text-danger" }}">{{ $name_customer ?? "*Belum Ditentukan" }}</b></p>
+                                    <p>Instansi : <b class="{{ $jenis_instansi ?? "text-danger" }}">{{ $jenis_instansi ?? "*Belum Ditentukan" }}</b></p>
+                                    <p>Negara : <b class="{{ $custNegara ?? "text-danger" }}">{{ $custNegara ?? "*Belum Ditentukan" }}</b></p>
+                                    <p>Provinsi : <b class="{{ $custProvinsi ?? "text-danger" }}">{{ $custProvinsi ?? "*Belum Ditentukan" }}</b></p>
+                                    <p>Fortune Rank  : <b class="{{ $forbes_rank ?? "text-danger" }}">{{ $forbes_rank ?? "*Belum Ditentukan" }}</b></p>
+                                    <p>LQ Rank  : <b class="{{ $lq_rank ?? "text-danger" }}">{{ $lq_rank ?? "*Belum Ditentukan" }}</b></p>
+                                    <p>Masalah Hukum  : <b class="{{ $masalahHukum->count() == 0 ? "text-success" : "text-danger" }}">{{ $masalahHukum->count() == 0 ? "0 Kasus" : $masalahHukum->count()." Kasus" }}</b></p>
+
+                                    <br>
+
+                                    @if (!empty($name_customer) && !empty($proyek->klasifikasi_pasdin) && !empty($proyek->SumberDana->nama_sumber) && !empty($jenis_instansi) && !empty($custNegara) && !empty($custProvinsi) && !empty($forbes_rank) && !empty($lq_rank))
+                                        <input class="form-check-input" onclick="sendWa(this)" id="confirm-send-wa" name="confirm-send-wa" type="checkbox">
+                                        <i class="fs-6 text-primary">
+                                            Saya Setuju Melakukan Pengajuan dan Data Sudah Sudah Terisi Dengan Benar
+                                        </i>
+                                    @else
+                                        <i class="fs-6 text-danger">*Pastikan Data Sudah Sudah Terisi Dengan Benar Sebelum Melakukan Pegajuan</i>
+                                    @endif
+                                </div>
+                                    
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-success btn-sm" id="button-send-wa" style="display: none">Send <i class="bi bi-send"></i></button>
+                                </div>
+
+                                <script>
+                                    function sendWa(e) {
+                                        const sendWa = e.checked;
+                                        console.log(sendWa);
+                                        if (sendWa == true) {
+                                            document.getElementById("button-send-wa").style.display = "";
+                                        } else {
+                                            document.getElementById("button-send-wa").style.display = "none";
+                                        }
+                                    }
+                                </script>
                             
-                                
-                            <input type="hidden"  name="proyek-rekomendasi" value="Pengajuan Rekomendasi"/>
-
-                            <p>Nama Proyek : <b>{{ $proyek->nama_proyek }}</b></p>
-                            <p>Nama Pemberi Kerja  : <b>{{ $proyek->proyekBerjalan->name_customer ?? "*Belum Ditentukan" }}</b></p>
-                            <p>RA Klasifikasi Proyek  : <b>{{ $proyek->klasifikasi_pasdin ?? "*Belum Ditentukan" }}</b></p>
-                            <p>Sumber Dana  : <b>{{ $proyek->SumberDana->nama_sumber ?? "*Belum Ditentukan" }}</b></p>
-
-                            @if (!empty($proyek->proyekBerjalan->name_customer) && !empty($proyek->klasifikasi_pasdin && !empty($proyek->SumberDana->nama_sumber)))
-                            <input class="form-check-input" name="confirm-send-wa" type="checkbox">
-                                <i class="fs-6 text-primary">
-                                    Saya Setuju Melakukan Pengajuan dan Data Sudah Sudah Terisi Dengan Benar
-                                </i>
-                            @else
-                            <i class="fs-6 text-danger">*Pastikan Data Sudah Sudah Terisi Dengan Benar Sebelum Melakukan Pegajuan</i>
-                            @endif
                             </div>
-
-
-                            <div class="modal-footer">
-                                @if (!empty($proyek->proyekBerjalan->name_customer) && !empty($proyek->klasifikasi_pasdin && !empty($proyek->SumberDana->nama_sumber)))
-                                    <button type="submit" class="btn btn-success btn-sm">Send <i class="bi bi-send"></i></button>
-                                @else
-                                    <button type="submit" class="btn btn-success btn-sm" disabled>Send <i class="bi bi-send"></i></button>
-                                @endif
-                            </div>
-                        
-                        </div>
                         </div>
                     </div>
                     <!-- end::modal confirm send wa-->
@@ -1070,11 +1100,11 @@
                                                                   Green Lane
                                                                 </label> --}}
                                                                 @if ((bool) $check_green_line)
-                                                                    <span class="px-4 fs-3 badge badge-light-success">
+                                                                    <span class="px-4 fs-4 badge badge-success">
                                                                         Green Lane
                                                                     </span>
                                                                 @else
-                                                                    <span class="px-4 fs-3 badge badge-light-danger">
+                                                                    <span class="px-4 fs-4 badge badge-danger">
                                                                         Non Green Lane
                                                                     </span>
                                                                     
@@ -1086,11 +1116,11 @@
                                                                     Proyek RKAP
                                                                 </label> --}}
                                                                 @if ((bool) $proyek->is_rkap)
-                                                                    <span class="px-4 fs-3 badge badge-light-success">
+                                                                    <span class="px-4 fs-4 badge badge-light-success">
                                                                         Proyek RKAP
                                                                     </span>
                                                                 @else
-                                                                    <span class="px-4 fs-3 badge badge-light-danger">
+                                                                    <span class="px-4 fs-4 badge badge-light-danger">
                                                                         Proyek Non RKAP
                                                                     </span>
                                                                     
@@ -2075,7 +2105,7 @@
                                                     @if (!(bool)$check_green_line)
                                                     <br>
 
-                                                    <div class="fv-row mb-7">
+                                                    {{-- <div class="fv-row mb-7">
                                                         <!--Begin::Col-->
                                                         <div class="col-6">
                                                             <!--Begin::Label-->
@@ -2091,7 +2121,7 @@
                                                         </div>
                                                         <!--End::Col-->
                                                     </div>
-                                                    <br>
+                                                    <br> --}}
                                                     <!--Begin::Col-->
                                                     <div class="fv-row mb-7">
                                                         <div class="col-6">
