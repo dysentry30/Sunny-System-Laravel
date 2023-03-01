@@ -40,4 +40,7 @@ class UnitKerja extends Model
     public function Departemen(){
         return $this->hasMany(Departemen::class, "kode_sap", "kode_divisi");
     }
+    public function Divisi() {
+        return $this->hasOne(Divisi::class, "kode_sap", "kode_sap");
+    }
 }

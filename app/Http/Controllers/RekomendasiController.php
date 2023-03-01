@@ -13,6 +13,7 @@ use App\Models\MatriksApprovalRekomendasi;
 class RekomendasiController extends Controller
 {
     public function index(Request $request){
+        $data = $request->all();
         $all_super_user_counter = MatriksApprovalRekomendasi::all()->filter(function($user) {
             return $user->Pegawai->nama_pegawai == Auth::user()->name;
         });
@@ -57,7 +58,7 @@ class RekomendasiController extends Controller
                     "sender" => "62811881227",
                     "number" => "085157875773",
                     // "number" => "085156341949",
-                    "message" => "Assessment untuk proyek *$proyek->nama_proyek* telah selesai.\nSilahkan tekan link di bawah ini untuk pengecekan lanjutan.\n\n$url",
+                    "message" => "Yth Bapak/Ibu .....\nDengan ini menyampaikan Hasil Assessment Nota Rekomendasi Tahap I untuk Proyek *$proyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
                     // "url" => $url
                 ]);
 
@@ -93,19 +94,21 @@ class RekomendasiController extends Controller
                 }
                 return $d->user_id == Auth::user()->id;
             })->count() > 0;
-            $check_user_approval_counter = is_array(collect($data->first())->values()->first()) ? collect($data->first())->values()->count() == $all_super_user_counter : $data->count() == $all_super_user_counter;
             $data = $data->mergeRecursive(
                 [
                     [
                         "user_id" => Auth::user()->id,
                         "status" => "rejected",
+                        "alasan" => $request->get("alasan-ditolak"),
                         "tanggal" => \Carbon\Carbon::now(),
                     ]
                 ]
             );
-            if($check_user_approval_counter) {
+            $is_checked = self::checkMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, $data, "Pengajuan");
+            if($is_checked) {
                 $proyek->is_recommended = false;
                 $proyek->is_request_rekomendasi = false;
+                $proyek->is_disetujui = false;
             }
             $proyek->approved_rekomendasi = $data->toJson();
             if($proyek->save()) {
@@ -144,7 +147,7 @@ class RekomendasiController extends Controller
                 "sender" => "62811881227",
                 "number" => "085157875773",
                 // "number" => "085156341949",
-                "message" => "Proyek *$proyek->nama_proyek* telah selesai di _Review_ oleh *Manrisk*.\nSilahkan tekan link di bawah ini untuk pengecekan lanjutan.\n\n$url",
+                "message" => "Yth Bapak/Ibu .....\nDengan ini menyampaikan Hasil Verifikasi Nota Rekomendasi Tahap I untuk Proyek *$proyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
                 // "url" => $url
             ]);
 
@@ -175,7 +178,7 @@ class RekomendasiController extends Controller
                 "sender" => "62811881227",
                 "number" => "085157875773",
                 // "number" => "085156341949",
-                "message" => "Proyek *$proyek->nama_proyek* telah selesai di _Submit_ oleh *Team Penyusun*.\nSilahkan tekan link di bawah ini untuk pengecekan lanjutan.\n\n$url",
+                "message" => "Yth Bapak/Ibu .....\nDengan ini menyampaikan menyampaikan permohonan tanda tangan rekomendasi untuk Nota Rekomendasi Tahap I Proyek *$proyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
                 // "url" => $url
             ]);
 
@@ -185,7 +188,19 @@ class RekomendasiController extends Controller
                 return redirect()->back();
             });
             
-            $proyek->is_penyusun_approved = true;
+            $approved_penyusun = collect(json_decode($proyek->approved_penyusun));
+            $approved_penyusun->push([
+                "user_id" => Auth::user()->id,
+                "status" => "approved",
+                "tanggal" => \Carbon\Carbon::now(),
+            ]);
+            $proyek->approved_penyusun = $approved_penyusun->toJson();
+            $is_checked = self::checkMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, $approved_penyusun, "Penyusun");
+
+            if($is_checked) {
+                $proyek->is_penyusun_approved = true;
+            }
+            
 
             // $proyek->recommended_with_note = $data["note-rekomendasi"];
             if($proyek->save()) {
@@ -197,7 +212,13 @@ class RekomendasiController extends Controller
             return redirect()->back();
         } else if(!empty($request["penyusun-tolak"])) {
             $proyek = Proyek::find($request->get("kode-proyek"));
-            
+            $approved_penyusun = collect(json_decode($proyek->approved_penyusun));
+            $approved_penyusun->push([
+                "user_id" => Auth::user()->id,
+                "status" => "rejected",
+                "tanggal" => \Carbon\Carbon::now(),
+            ]);
+            $proyek->approved_penyusun = $approved_penyusun->toJson();
             $proyek->is_penyusun_approved = false;
             // $proyek->recommended_with_note = $data["note-rekomendasi"];
             if($proyek->save()) {
@@ -209,23 +230,53 @@ class RekomendasiController extends Controller
             return redirect()->back();
         } else if(!empty($request["rekomendasi-setujui"])) {
             $proyek = Proyek::find($request->get("kode-proyek"));
-
             $is_proyek_mega = str_contains($proyek->klasifikasi_pasdin, "Mega") ? true : false;
             $is_proyek_besar = str_contains($proyek->klasifikasi_pasdin, "Besar") ? true : false;
             $hasil_assessment = collect(json_decode($proyek->hasil_assessment));
 
             if (isset($data["kategori-rekomendasi"]) && $data["kategori-rekomendasi"] == "Direkomendasikan dengan catatan") {
-                createWordPersetujuan($proyek, $hasil_assessment, $is_proyek_besar, $is_proyek_mega);
-                $proyek->is_recommended_with_note = true;
-                $proyek->is_recommended = true;
+                $approved_penyusun = collect(json_decode($proyek->approved_rekomendasi_final));
+                $approved_penyusun->push([
+                    "user_id" => Auth::user()->id,
+                    "status" => "approved",
+                    "tanggal" => \Carbon\Carbon::now(),
+                ]);
+                $proyek->approved_rekomendasi_final = $approved_penyusun->toJson();
+
+                $is_checked = self::checkMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, $approved_penyusun, "Rekomendasi");
+                if($is_checked) {
+                    // createWordPersetujuan($proyek, $hasil_assessment, $is_proyek_besar, $is_proyek_mega);
+                    $proyek->is_recommended_with_note = true;
+                    $proyek->is_recommended = true;
+                }
                 Alert::html("Success", "Rekomendasi dengan nama proyek <b>$proyek->nama_proyek</b> disetujui oleh tim Rekomendasi dengan catatan", "success");
             } else if (isset($data["kategori-rekomendasi"]) && $data["kategori-rekomendasi"] == "Rekomendasi Ditolak") {
-                createWordPersetujuan($proyek, $hasil_assessment, $is_proyek_besar, $is_proyek_mega);
+                $approved_penyusun = collect(json_decode($proyek->approved_rekomendasi_final));
+                $approved_penyusun->push([
+                    "user_id" => Auth::user()->id,
+                    "status" => "rejected",
+                    "tanggal" => \Carbon\Carbon::now(),
+                ]);
+                $proyek->approved_rekomendasi_final = $approved_penyusun->toJson();
+
                 $proyek->is_recommended = false;
-                Alert::html("Success", "Rekomendasi dengan nama proyek <b>$proyek->nama_proyek</b> disetujui oleh tim Rekomendasi", "success");
-            } else if (isset($data["kategori-rekomendasi"])) {
-                $proyek->is_recommended = true;
-                createWordPersetujuan($proyek, $hasil_assessment, $is_proyek_besar, $is_proyek_mega);
+                $proyek->is_disetujui = false;
+                Alert::html("Success", "Rekomendasi dengan nama proyek <b>$proyek->nama_proyek</b> ditolak oleh tim Rekomendasi", "success");
+            } else if (isset($data["kategori-rekomendasi"]) && $data["kategori-rekomendasi"] == "Direkomendasikan") {
+                $approved_penyusun = collect(json_decode($proyek->approved_rekomendasi_final));
+                $approved_penyusun->push([
+                    "user_id" => Auth::user()->id,
+                    "status" => "approved",
+                    "tanggal" => \Carbon\Carbon::now(),
+                ]);
+                $proyek->approved_rekomendasi_final = $approved_penyusun->toJson();
+
+                $is_checked = self::checkMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, $approved_penyusun, "Rekomendasi");
+                // dd($is_checked);
+                if($is_checked) {
+                    // createWordPersetujuan($proyek, $hasil_assessment, $is_proyek_besar, $is_proyek_mega);
+                    $proyek->is_recommended = true;
+                }
                 Alert::html("Success", "Rekomendasi dengan nama proyek <b>$proyek->nama_proyek</b> disetujui oleh tim Rekomendasi", "success");
             }
 
@@ -236,7 +287,7 @@ class RekomendasiController extends Controller
                 "sender" => "62811881227",
                 "number" => "085157875773",
                 // "number" => "085156341949",
-                "message" => "Proyek *$proyek->nama_proyek* telah mendapatkan *Rekomendasi*.\nSilahkan tekan link di bawah ini untuk pengecekan lanjutan.\n\n$url",
+                "message" => "Yth Bapak/Ibu .....\nDengan ini menyampaikan Persetujuan Nota Rekomendasi Tahap I untuk Proyek *$proyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
                 // "url" => $url
             ]);
 
@@ -245,8 +296,14 @@ class RekomendasiController extends Controller
                 Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
                 return redirect()->back();
             });
-            
-            $proyek->is_recommended = true;
+
+            // $send_msg_to_wa->onError(function ($error) {
+            //     // dd($error);
+            //     Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
+            //     return redirect()->back();
+            // });
+
+            // $proyek->is_recommended = true;
             
             // $proyek->recommended_with_note = $data["note-rekomendasi"];
             if($proyek->save()) {
@@ -258,7 +315,14 @@ class RekomendasiController extends Controller
             return redirect()->back();
         } else if(!empty($request["rekomendasi-tolak"])) {
             $proyek = Proyek::find($request->get("kode-proyek"));
-            
+            $approved_penyusun = collect(json_decode($proyek->approved_rekomendasi_final));
+            $approved_penyusun->push([
+                "user_id" => Auth::user()->id,
+                "status" => "rejected",
+                "tanggal" => \Carbon\Carbon::now(),
+            ]);
+            $proyek->approved_rekomendasi_final = $approved_penyusun->toJson();
+
             $proyek->is_recommended = false;
             // $proyek->recommended_with_note = $data["note-rekomendasi"];
             if($proyek->save()) {
@@ -271,8 +335,23 @@ class RekomendasiController extends Controller
 
         } else if(!empty($request["persetujuan-setujui"])) {
             $proyek = Proyek::find($request->get("kode-proyek"));
-            
-            $proyek->is_disetujui = true;
+            $approved_penyusun = collect(json_decode($proyek->approved_persetujuan));
+            $approved_penyusun->push([
+                "user_id" => Auth::user()->id,
+                "status" => "approved",
+                "tanggal" => \Carbon\Carbon::now(),
+            ]);
+            $proyek->approved_persetujuan = $approved_penyusun->toJson();
+
+            $is_checked = self::checkMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, $approved_penyusun, "Persetujuan");
+            // dd($is_checked);
+            if($is_checked) {
+                $is_proyek_mega = str_contains($proyek->klasifikasi_pasdin, "Mega") ? true : false;
+                $is_proyek_besar = str_contains($proyek->klasifikasi_pasdin, "Besar") ? true : false;
+                $hasil_assessment = collect(json_decode($proyek->hasil_assessment));
+                createWordPersetujuan($proyek, $hasil_assessment, $is_proyek_besar, $is_proyek_mega);
+                $proyek->is_disetujui = true;
+            }
             // $proyek->recommended_with_note = $data["note-rekomendasi"];
             if($proyek->save()) {
                 // createWordPersetujuan($proyek, $hasil_assessment, $is_proyek_mega);
@@ -283,8 +362,23 @@ class RekomendasiController extends Controller
             return redirect()->back();
         } else if(!empty($request["persetujuan-tolak"])) {
             $proyek = Proyek::find($request->get("kode-proyek"));
-            
+            $approved_penyusun = collect(json_decode($proyek->approved_persetujuan));
+            $approved_penyusun->push([
+                "user_id" => Auth::user()->id,
+                "status" => "rejected",
+                "tanggal" => \Carbon\Carbon::now(),
+            ]);
+            $proyek->approved_persetujuan = $approved_penyusun->toJson();
+
+            $is_checked = self::checkMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, $approved_penyusun, "Persetujuan");
+            // dd($is_checked);
             $proyek->is_disetujui = false;
+            // if($is_checked) {
+            //     $is_proyek_mega = str_contains($proyek->klasifikasi_pasdin, "Mega") ? true : false;
+            //     $is_proyek_besar = str_contains($proyek->klasifikasi_pasdin, "Besar") ? true : false;
+            //     $hasil_assessment = collect(json_decode($proyek->hasil_assessment));
+            //     createWordPersetujuan($proyek, $hasil_assessment, $is_proyek_besar, $is_proyek_mega);
+            // }
             // $proyek->recommended_with_note = $data["note-rekomendasi"];
             if($proyek->save()) {
                 // createWordPersetujuan($proyek, $hasil_assessment, $is_proyek_mega);
@@ -344,5 +438,13 @@ class RekomendasiController extends Controller
             return view('13_Rekomendasi', compact(['proyeks_pengajuan', "proyeks_persetujuan", "all_super_user_counter", "rekomendasi_open", "proyeks_rekomendasi", "is_user_exist_in_matriks_approval", "matriks_user"]));
         }
         return view('13_Rekomendasi', compact(['proyeks_pengajuan', "proyeks_persetujuan", "all_super_user_counter", "proyeks_rekomendasi", "is_user_exist_in_matriks_approval", "matriks_user"]));
+    }
+
+    private function checkMatriksApproval($unit_kerja, $klasifikasi_proyek, $approved_data, $kategori): bool {
+        $matriks_approval = MatriksApprovalRekomendasi::where("tahun", "=", (int) date("Y"))->get();
+        if($kategori == "Rekomendasi") {
+            return $matriks_approval->where("klasifikasi_proyek", "=", $klasifikasi_proyek)->where("kategori", "=", $kategori)->count() == $approved_data->count();
+        }
+        return $matriks_approval->where("unit_kerja", "=", $unit_kerja)->where("klasifikasi_proyek", "=", $klasifikasi_proyek)->where("kategori", "=", $kategori)->count() == $approved_data->count();
     }
 }

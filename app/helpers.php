@@ -7,6 +7,7 @@ use App\Models\IndustryOwner;
 use App\Models\KriteriaAssessment;
 use App\Models\Provinsi;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -497,22 +498,45 @@ function createWordPengajuan(App\Models\Proyek $proyek, \Illuminate\Support\Coll
     // $section->addTextBreak();
 
     // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
-    $section_2 = $phpWord->addSection(["alignment" => "right", "width" => 200]);
-    $section_2->addTextBreak(3);
-    if(str_contains($proyek->UnitKerja->unit_kerja, "Infra")) {
-        $section_2->addText("___________________, " . $now->translatedFormat("Y"), ["bold" => true], ["align" => "center"]);
-        $section_2->addTextBreak(3);
-        $section_2->addText("(..................................................................................)", ["bold" => true, "size" => 7], ["align" => "center"]);
-        $section_2->addText("SM Operational Infrastructure / EPCC, Building and Overseas Risk Management", ["bold" => true], ["align" => "center"]);
-    } else {
-        $section_2->addTextBreak(5);
-        $section_2->addText("(.......................................................)", ["bold" => true], ["align" => "center"]);
-        $section_2->addText("GM Operation Marketing", ["bold" => true], ["align" => "center"]);
-        $section_2->addText("Tanggal: ___________________" . $now->translatedFormat("Y"), ["bold" => true, "size" => 7], ["align" => "textAlignment"]);
-    }
-    $section_2->addTextBreak(5);
-    $section_2->addText("Catatan :");
-    $section_2->addText("Dokumen Pemilihan atau dokumen pendukung lainnya harap di upload dalam aplikasi CRM.");
+    $section->addTextBreak(2);
+    // $textBox = $section->addTextBox(['width' => 200, 'height' => 150, "alignment" => "right", "borderSize" => 0, "borderColor" => "#FFFFFF"]);
+    $section->addText("Jakarta, " . $now->translatedFormat("d F Y"), ["bold" => true], ["align" => "right"]);
+    $section->addTextBreak(1);
+    $section->addText("Approved", ["bold" => true, "size" => 12], ["align" => "right"]);
+    $section->addTextBreak(1);
+    $section->addText("(". Auth::user()->name .")", ["bold" => true, "size" => 10], ["align" => "right"]);
+    $section->addText(Auth::user()->Pegawai->Jabatan->nama_jabatan. " " . Auth::user()->Pegawai->Jabatan->nama_kantor, ["bold" => true], ["align" => "right"]);
+    // if(str_contains($proyek->UnitKerja->unit_kerja, "Infra")) {
+    //     // $section->addText("SM Operational Infrastructure / EPCC,", ["bold" => true], ["align" => "right"]);
+    //     // $section->addText("Building and Overseas Risk Management", ["bold" => true], ["align" => "right"]);
+    // } else {
+    //     $section->addText("Jakarta, " . $now->translatedFormat("d F Y"), ["bold" => true], ["align" => "right"]);
+    //     $section->addTextBreak(3);
+    //     $section->addText("(". Auth::user()->name .")", ["bold" => true, "size" => 10], ["align" => "right"]);
+    //     $section->addText("GM Operation Marketing            ", ["bold" => true], ["align" => "right"]);
+    // }
+
+    // $tableStyle = ['borderSize' => 0, 'borderColor' => 'FFFFFF'];
+    // $phpWord->addTableStyle("Table Style", $tableStyle);
+    // $table = $section->addTable($tableStyle);
+    // $table->addRow(null, ["borderSize" => 0]);
+    // $table->addCell(2500 * 3, ["borderSize" => 0])->addText(str_repeat("a ", 100), ["color" => "FFFFFF"]);
+    // $cell = $table->addCell(2500);
+    // // $textBox = $section->addTextBox(['width' => 200, 'height' => 150, "alignment" => "right", "borderSize" => 0, "borderColor" => "#FFFFFF"]);
+    // if(str_contains($proyek->UnitKerja->unit_kerja, "Infra")) {
+    //     $cell->addText("___________________, " . $now->translatedFormat("Y"), ["bold" => true], ["align" => "center"]);
+    //     $cell->addTextBreak(3);
+    //     $cell->addText("(..................................................................................)", ["bold" => true, "size" => 7], ["align" => "center"]);
+    //     $cell->addText("SM Operational Infrastructure / EPCC, Building and Overseas Risk Management", ["bold" => true], ["align" => "center"]);
+    // } else {
+    //     $cell->addTextBreak(5);
+    //     $cell->addText("(.......................................................)", ["bold" => true], ["align" => "center"]);
+    //     $cell->addText("GM Operation Marketing", ["bold" => true], ["align" => "center"]);
+    //     $cell->addText("Tanggal: ___________________" . $now->translatedFormat("Y"), ["bold" => true, "size" => 7], ["align" => "textAlignment"]);
+    // }
+    $section->addTextBreak(5);
+    $section->addText("Catatan :");
+    $section->addText("Dokumen Pemilihan atau dokumen pendukung lainnya harap di upload dalam aplikasi CRM.");
     
     // End :: Footer
 
@@ -526,6 +550,7 @@ function createWordPengajuan(App\Models\Proyek $proyek, \Illuminate\Support\Coll
 
     $xmlWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'PDF');
     $is_saved = $xmlWriter->save(public_path($target_path. "/". $file_name));
+    // $is_saved = $phpWord->save(public_path($target_path. "/". $file_name));
     // dd("saved");
     $proyek->file_pengajuan = $file_name;
     $proyek->hasil_assessment = $hasil_assessment->toJson();
@@ -615,7 +640,7 @@ function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Co
 
     $section->addText("Berdasarkan informasi di atas, mengajukan untuk mengikuti aktifitas Perolehan Kontrak (tender) tersebut di atas.");
 
-    $section->addTextBreak(23);
+    $section->addTextBreak(22);
 
     $table_ttd = $section->addTable('ttd_table',array('borderSize' => 1, 'borderColor' => '999999', 'afterSpacing' => 0, 'Spacing'=> 0, 'cellMargin'=>0  ));
     $table_ttd->addRow();

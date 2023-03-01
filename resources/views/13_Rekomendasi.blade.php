@@ -244,7 +244,7 @@
                                                         <td>
                                                             @if ($proyek->review_assessment && $proyek->review_assessment && !$proyek->is_recommended && !$proyek->is_recommended_with_note)
                                                                 <small class="badge badge-light-success">Pengajuan Disetujui</small>
-                                                            @elseif($is_pending)
+                                                            @elseif($is_pending && $proyek->is_disetujui == null)
                                                                 <small class="badge badge-light-info">Proses Pengajuan</small>
                                                             @elseif($is_review_assessment)
                                                                 <small class="badge badge-light-primary">Review Assessment</small>
@@ -259,7 +259,7 @@
                                                         <td>
                                                             @if ($proyek->is_disetujui)
                                                                 <small class="badge badge-light-success">Disetujui</small>
-                                                            @elseif(!is_null($proyek->is_disetujui) && ($proyek->is_recommended || $proyek->is_recommended_with_note))
+                                                            @elseif($proyek->is_disetujui == false)
                                                                 <small class="badge badge-light-danger">Ditolak</small>
                                                             @elseif(!$proyek->is_recommended && $is_pending || $proyek->review_assessment)
                                                                 <small class="badge badge-light-primary">Request</small>
@@ -537,7 +537,9 @@
                                                         <td>
                                                             @if ($proyek->is_disetujui)
                                                                 <small class="badge badge-light-success">Disetujui</small>
-                                                            @elseif(!$proyek->is_recommended && $proyek->is_penyusun_approved)
+                                                            @elseif($proyek->is_disetujui == false)
+                                                                <small class="badge badge-light-danger">Ditolak</small>
+                                                            @elseif($proyek->is_recommended != null && $proyek->is_penyusun_approved && $proyek->is_disetujui == null)
                                                                 @if (Auth::user()->Pegawai->MatriksApproval->contains("kategori", "Persetujuan"))
                                                                     <small class="badge badge-light-info">Procces in Rekomendasi</small>
                                                                 @elseif (Auth::user()->Pegawai->MatriksApproval->contains("kategori", "Rekomendasi"))
@@ -545,7 +547,7 @@
                                                                 @else
                                                                     <small class="badge badge-light-primary">Request to Rekomendasi</small>
                                                                 @endif
-                                                            @elseif(!$proyek->is_recommended && $is_pending || $proyek->review_assessment)
+                                                            @elseif($proyek->is_recommended == true && $proyek->review_assessment && $proyek->is_disetujui == null)
                                                                 @if (Auth::user()->Pegawai->MatriksApproval->contains("kategori", "Persetujuan"))
                                                                     <small class="badge badge-warning">Need Approval</small>
                                                                 @elseif (Auth::user()->Pegawai->MatriksApproval->contains("kategori", "Rekomendasi"))
@@ -557,8 +559,6 @@
                                                                         <small class="badge badge-warning">Need Submit</small>
                                                                     @endif
                                                                 @endif
-                                                            @elseif((!is_null($proyek->is_disetujui) && !is_null($proyek->is_penyusun_approved) && !is_null($proyek->is_recommended)) || ($proyek->is_disetujui == false && $proyek->is_penyusun_approved == false && $proyek->is_recommended == false))
-                                                                <small class="badge badge-light-danger">Ditolak</small>
                                                             @endif
                                                         </td>
                                                     </tr>
@@ -600,120 +600,144 @@
     @foreach ($proyeks_pengajuan as $proyek)
         <div class="modal fade" id="kt_modal_view_proyek_{{$proyek->kode_proyek}}" tabindex="-1" aria-labelledby="kt_modal_view_proyek_{{$proyek->kode_proyek}}" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
-            <div class="modal-content">
-                <div class="modal-header">
-                <h5 class="modal-title">Detail Proyek (Readonly)</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr class="text-bg-dark">
-                                <th>No</th>
-                                <th>Item</th>
-                                <th>Uraian</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Nama Proyek</td>
-                                <td>{{ $proyek->nama_proyek }}</td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Lokasi Proyek</td>
-                                <td>{{ $proyek->Provinsi->province_name ?? "-" }}</td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>Nama Pemberi Kerja</td>
-                                <td>{{ $proyek->proyekBerjalan->name_customer ?? "-"}}</td>
-                            </tr>
-                            <tr>
-                                <td>4</td>
-                                <td>Instansi Pemberi Kerja</td>
-                                <td>{{ $proyek->proyekBerjalan->Customer->jenis_instansi ?? "-" }}</td>
-                            </tr>
-                            <tr>
-                                <td>5</td>
-                                <td>Sumber Pendanaan Proyek</td>
-                                <td>{{ $proyek->sumber_dana }}</td>
-                            </tr>
-                            <tr>
-                                <td>6</td>
-                                <td>Nilai Proyek</td>
-                                <td>Rp. {{ number_format($proyek->nilaiok_awal, 0, ".", ".") }}</td>
-                            </tr>
-                            <tr>
-                                <td>7</td>
-                                <td>Kategori Proyek</td>
-                                <td>{{ $proyek->klasifikasi_pasdin ?? "-" }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    {{-- @if (!empty($proyek->file_rekomendasi))
-                        <hr>
-                        <h5>File Preview: </h5>
-                        <div class="text-center">
-                            <iframe src="{{asset("file-rekomendasi" . "\\" . $proyek->file_rekomendasi)}}" width="800px" height="600px" ></iframe>
-                        </div>
-                    @endif --}}
-                    @if (!empty($proyek->file_pengajuan))
-                        <hr>    
-                        <h5>File Preview: </h5>
-                        <div class="text-center">
-                            <iframe src="{{asset("file-pengajuan" . "\\" . $proyek->file_pengajuan)}}" width="800px" height="600px" ></iframe>
-                        </div>
-                    @endif
-                </div>
-                <div class="modal-footer">
-                    @php
-                        $approved_data = collect([json_decode($proyek->approved_rekomendasi)])->flatten();
-                        $is_data_null = $approved_data->every(function($d) {
-                            return $d == null;
-                        });
-                        $is_user_id_exist = $approved_data->map(function($d) {
-                            if(!empty($d) && $d->user_id == Auth::user()->id) {
-                                $new_class = new stdClass();
-                                $new_class->user_id = $d->user_id;
-                                $new_class->status = $d->status;
-                                return $new_class;
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title">Detail Proyek (Readonly)</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr class="text-bg-dark">
+                                    <th>No</th>
+                                    <th>Item</th>
+                                    <th>Uraian</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Nama Proyek</td>
+                                    <td>{{ $proyek->nama_proyek }}</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>Lokasi Proyek</td>
+                                    <td>{{ $proyek->Provinsi->province_name ?? "-" }}</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>Nama Pemberi Kerja</td>
+                                    <td>{{ $proyek->proyekBerjalan->name_customer ?? "-"}}</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>Instansi Pemberi Kerja</td>
+                                    <td>{{ $proyek->proyekBerjalan->Customer->jenis_instansi ?? "-" }}</td>
+                                </tr>
+                                <tr>
+                                    <td>5</td>
+                                    <td>Sumber Pendanaan Proyek</td>
+                                    <td>{{ $proyek->sumber_dana }}</td>
+                                </tr>
+                                <tr>
+                                    <td>6</td>
+                                    <td>Nilai Proyek</td>
+                                    <td>Rp. {{ number_format($proyek->nilaiok_awal, 0, ".", ".") }}</td>
+                                </tr>
+                                <tr>
+                                    <td>7</td>
+                                    <td>Kategori Proyek</td>
+                                    <td>{{ $proyek->klasifikasi_pasdin ?? "-" }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        {{-- @if (!empty($proyek->file_rekomendasi))
+                            <hr>
+                            <h5>File Preview: </h5>
+                            <div class="text-center">
+                                <iframe src="{{asset("file-rekomendasi" . "\\" . $proyek->file_rekomendasi)}}" width="800px" height="600px" ></iframe>
+                            </div>
+                        @endif --}}
+                        @if (!empty($proyek->file_pengajuan))
+                            <hr>    
+                            <h5>File Preview: </h5>
+                            <div class="text-center">
+                                <iframe src="{{asset("file-pengajuan" . "\\" . $proyek->file_pengajuan)}}" width="800px" height="600px" ></iframe>
+                            </div>
+                        @endif
+                    </div>
+                    <div class="modal-footer">
+                        @php
+                            $approved_data = collect([json_decode($proyek->approved_rekomendasi)])->flatten();
+                            $is_data_null = $approved_data->every(function($d) {
+                                return $d == null;
+                            });
+                            $is_user_id_exist = $approved_data->map(function($d) {
+                                if(!empty($d) && $d->user_id == Auth::user()->id) {
+                                    $new_class = new stdClass();
+                                    $new_class->user_id = $d->user_id;
+                                    $new_class->status = $d->status;
+                                    return $new_class;
+                                }
+                                // if(is_array($d->user_id)) {
+                                //     return in_array(Auth::user()->id, $d->user_id);
+                                // }
+                                // return !empty($d->user_id) && $d->user_id == Auth::user()->id;
+                            })->firstWhere("user_id", "!=", null);
+                            if($is_data_null) {
+                                $approved_data = collect();
                             }
-                            // if(is_array($d->user_id)) {
-                            //     return in_array(Auth::user()->id, $d->user_id);
-                            // }
-                            // return !empty($d->user_id) && $d->user_id == Auth::user()->id;
-                        })->firstWhere("user_id", "!=", null);
-                        if($is_data_null) {
-                            $approved_data = collect();
-                        }
-                        // dump($is_user_id_exist, $is_data_null, $approved_data->count() != $all_super_user_counter);
-                    @endphp
-                    @if ($is_user_exist_in_matriks_approval && empty($is_user_id_exist) && ($is_data_null || $approved_data->count() != $all_super_user_counter))
-                        <form action="" method="GET">
-                            @csrf
-                            <input type="hidden" name="kode-proyek" value="{{$proyek->kode_proyek}}">
-                            <input type="submit" name="tolak" value="Tolak" class="btn btn-sm btn-danger">
-                            <input type="submit" name="setuju" value="Setujui" class="btn btn-sm btn-success">
-                        </form>
-                    @elseif(!empty($is_user_id_exist))
-                        {{-- @php
-                            $status_approval = $is_user_id_exist->first();
-                        @endphp --}}
-                        @switch($is_user_id_exist->status)
-                            @case("approved")
-                                <small class="badge badge-light-success">Disetujui</small>
-                                @break
-                            @case("rejected")
-                                <small class="badge badge-light-danger">Ditolak</small>
-                                @break
-                            @default
-                                
-                        @endswitch
-                    @endif
+                            // dump($is_user_id_exist, $is_data_null, $approved_data->count() != $all_super_user_counter);
+                        @endphp
+                        @if ($is_user_exist_in_matriks_approval && empty($is_user_id_exist) && ($is_data_null || $approved_data->count() != $all_super_user_counter))
+                            <form action="" method="GET">
+                                @csrf
+                                <input type="hidden" name="kode-proyek" value="{{$proyek->kode_proyek}}">
+                                <input type="button" data-bs-toggle="modal" data-bs-target="#kt_modal_view_proyek_tolak_pengajuan_{{$proyek->kode_proyek}}" name="tolak" value="Tolak" class="btn btn-sm btn-danger">
+                                <input type="submit" name="setuju" value="Setujui" class="btn btn-sm btn-success">
+                            </form>
+                        @elseif(!empty($is_user_id_exist))
+                            {{-- @php
+                                $status_approval = $is_user_id_exist->first();
+                            @endphp --}}
+                            @switch($is_user_id_exist->status)
+                                @case("approved")
+                                    <small class="badge badge-light-success">Disetujui</small>
+                                    @break
+                                @case("rejected")
+                                    <small class="badge badge-light-danger">Ditolak</small>
+                                    @break
+                                @default
+                                    
+                            @endswitch
+                        @endif
+                    </div>
                 </div>
             </div>
+        </div>
+
+        <div class="modal fade" id="kt_modal_view_proyek_tolak_pengajuan_{{$proyek->kode_proyek}}" tabindex="-1" aria-labelledby="kt_modal_view_proyek_tolak_pengajuan_{{$proyek->kode_proyek}}" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+                <div class="modal-content">
+                    
+                    <form action="" method="get">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Alasan Ditolak</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                @csrf
+                                <input type="hidden" name="kode-proyek" value="{{$proyek->kode_proyek}}">
+                                <textarea name="alasan-ditolak" class="form-control form-control-solid" id="alasan-ditolak" cols="1" rows="5"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="submit" name="tolak" class="btn btn-sm btn-danger" value="Ditolak dengan alasan">
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     @endforeach
@@ -826,7 +850,11 @@
                             @endif
                         </div>
                         <div class="modal-footer row">
-                            
+                            {{-- @php
+                                $approved_penyusun = collect(json_decode($proyek->approved_penyusun));
+                                $is_user_exist = $approved_penyusun->contains("user_id", Auth::user()->id);
+                                dump($)
+                            @endphp --}}
                             @if (is_null($proyek->is_recommended))
                                 <label for="note-rekomendasi" class="text-start">Catatan Rekomendasi: </label>
                                 <textarea class="form-control form-control-solid" id="note-rekomendasi" name="note-rekomendasi" {{$proyek->recommended_with_note ? 'readonly' : ''}} >{{$proyek->recommended_with_note}}</textarea>
@@ -955,15 +983,25 @@
                             {{-- <label for="note-rekomendasi" class="text-start">Catatan Rekomendasi: </label>
                             <textarea class="form-control" id="note-rekomendasi" name="note-rekomendasi"></textarea>
                             <br> --}}
-                            @if (is_null($proyek->is_penyusun_approved) && $matriks_user->contains("kategori", "Penyusun"))
+                            @php
+                                $approved_penyusun = collect(json_decode($proyek->approved_penyusun));
+                                $is_user_exist_penyusun = $approved_penyusun->contains("user_id", Auth::user()->id);
+
+                                $approved_rekomendasi_final = collect(json_decode($proyek->approved_rekomendasi_final));
+                                $is_user_exist_rekomendasi = $approved_rekomendasi_final->contains("user_id", Auth::user()->id);
+
+                                $approved_persetujuan = collect(json_decode($proyek->approved_persetujuan));
+                                $is_user_exist_persetujuan = $approved_persetujuan->contains("user_id", Auth::user()->id);
+                            @endphp
+                            @if (is_null($proyek->is_penyusun_approved) && $matriks_user->contains("kategori", "Penyusun") && !$is_user_exist_penyusun)
                                 <form action="" method="get">
                                     @csrf
                                     <input type="hidden" value="{{$proyek->kode_proyek}}" name="kode-proyek" id="kode-proyek">
                                     
-                                    <input type="submit" name="penyusun-setujui" value="Disetujui" class="btn btn-sm btn-success">
-                                    <input type="submit" name="penyusun-tolak" value="Ditolak" class="btn btn-sm btn-danger">
+                                    <input type="submit" name="penyusun-setujui" value="Submit" class="btn btn-sm btn-success">
+                                    {{-- <input type="submit" name="penyusun-tolak" value="Ditolak" class="btn btn-sm btn-danger"> --}}
                                 </form>
-                            @elseif ((is_null($proyek->is_recommended)) && $matriks_user->contains("kategori", "Rekomendasi") && $proyek->is_penyusun_approved)
+                            @elseif ((is_null($proyek->is_recommended)) && $matriks_user->contains("kategori", "Rekomendasi") && $proyek->is_penyusun_approved && !$is_user_exist_rekomendasi)
                                 <form action="" method="get">
                                     @csrf
                                     <input type="hidden" value="{{$proyek->kode_proyek}}" name="kode-proyek" id="kode-proyek">
@@ -981,7 +1019,7 @@
                                     </select>
                                     <input type="submit" class="btn btn-sm btn-success" name="rekomendasi-setujui" value="Submit">
                                 </form>
-                            @elseif (is_null($proyek->is_disetujui) && $matriks_user->contains("kategori", "Persetujuan") && $proyek->is_recommended)
+                            @elseif (is_null($proyek->is_disetujui) && $matriks_user->contains("kategori", "Persetujuan") && $proyek->is_recommended && !$is_user_exist_persetujuan)
                                 <form action="" method="get">
                                     @csrf
                                     <input type="hidden" value="{{$proyek->kode_proyek}}" name="kode-proyek" id="kode-proyek">
@@ -1049,15 +1087,15 @@
     
 
     <script>
-        const modals = document.querySelectorAll(".modal");
-        setTimeout(() => {
-            modals.forEach(modal => {
-                const inputs = modal.querySelectorAll(".modal-dialog .modal-content .modal-body input, .modal-dialog .modal-content .modal-body select, .modal-dialog .modal-content .modal-body textarea");
-                inputs.forEach(input => {
-                    input.setAttribute("readonly", true);
-                })
-            });
-        }, 500);
+        // const modals = document.querySelectorAll(".modal");
+        // setTimeout(() => {
+        //     modals.forEach(modal => {
+        //         const inputs = modal.querySelectorAll(".modal-dialog .modal-content .modal-body input, .modal-dialog .modal-content .modal-body select, .modal-dialog .modal-content .modal-body textarea");
+        //         inputs.forEach(input => {
+        //             input.setAttribute("readonly", true);
+        //         })
+        //     });
+        // }, 500);
     </script>
 
     {{-- Begin :: Export To Excel Data --}}
