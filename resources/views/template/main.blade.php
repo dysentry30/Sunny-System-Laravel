@@ -1206,11 +1206,11 @@
         const charCounterElts = document.querySelectorAll(".char-counter");
         charCounterElts.forEach(item => {
             const textNumberElt = item.parentElement.querySelector(".d-flex small");
-            const maxChar = Number(item.getAttribute("data-max-char"));
+            const maxChar = Number(item.getAttribute("data-max-char")) - 2;
             if(maxChar && !item.value) {
                 item.addEventListener("input", e => {
                     let lengthChar = item.value.length;
-                    if(lengthChar > maxChar) {
+                    if(lengthChar >= maxChar) {
                         // console.log(item.value);
                         const newValue = item.value.split("");
                         newValue.pop();
@@ -1222,7 +1222,7 @@
             }else if(item.value) {
                 item.addEventListener("input", e => {
                     let lengthChar = item.value.length;
-                    if(lengthChar > maxChar) {
+                    if(lengthChar >= maxChar) {
                         // console.log(item.value);
                         const newValue = item.value.split("");
                         newValue.pop();
@@ -1232,7 +1232,7 @@
                     textNumberElt.innerText = `${lengthChar}/${maxChar}`;
                 });
                 let lengthChar = item.value.length;
-                if(lengthChar > maxChar) {
+                if(lengthChar >= maxChar) {
                     // console.log(item.value);
                     const newValue = item.value.split("");
                     newValue.pop();
