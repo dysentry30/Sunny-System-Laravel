@@ -54,6 +54,7 @@ use App\Models\ContractChangeOrder;
 use App\Models\ContractChangeProposal;
 use App\Models\ContractManagements;
 use App\Models\Departemen;
+use App\Http\Controllers\InstansiController;
 use App\Models\Divisi;
 use App\Models\Dop;
 use App\Models\FieldChange;
@@ -351,7 +352,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     Route::get('change-request', [AddendumContractController::class, 'changeRequest']);
 
-    Route::get("/get-progress/{id_contract}", [ContractManagementsController::class, "getDataProgressPIS"]);
+    Route::post("/get-progress", [ContractManagementsController::class, "getDataProgressPIS"]);
 
     Route::post("/contract-management/set-lock", [ContractApprovalController::class, "lockApproval"]);
     // end :: contract management
@@ -519,6 +520,13 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post('/customer/nps/save', [CustomerController::class, 'saveNPS']);
 
     Route::post('/customer/karya-inovasi/save', [CustomerController::class, 'saveInovasi']);
+
+    //Begin :: Instansi
+        // Route::get("/instansi", [InstansiController::class, 'index']);
+        // Route::post("/instansi/save", [InstansiController::class, "createInstansi"]);
+        // Route::post("/instansi/{id}/edit", [InstansiController::class, "editInstansi"]);
+        // Route::post("/instansi/{kode_departemen}/delete", [InstansiController::class, "deleteInstansi"]);
+    //End :: Instansi
 
 
     // Begin :: get Kabupaten

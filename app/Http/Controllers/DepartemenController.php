@@ -33,7 +33,7 @@ class DepartemenController extends Controller
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
             Alert::error('Error', "Departemen Gagal Ditambahkan");
-            return Redirect::back()->with("modal", $data["modal-name"]);
+            return Redirect::back()->with("modal", $data["modal"]);
             // return Redirect::back();
         }
         $validation->validate();

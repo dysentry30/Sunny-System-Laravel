@@ -3472,10 +3472,11 @@ class ContractManagementsController extends Controller
         return view("Contract/viewReview", ["contract" => ContractManagements::find(urldecode(urldecode($id_contract))), "review" => $review, "stage" => $stage]);
     }
 
-    public function getDataProgressPIS($id_contract){
-        // dd($id_contract);
+    public function getDataProgressPIS(Request $request){
+        $data = $request->all();
+        // dd($data);
 
-        $contract = ContractManagements::where("id_contract", "=", $id_contract)->first();
+        $contract = ContractManagements::where("id_contract", "=", $data["id_contract"])->first();
         $kode_spk = $contract->project->kode_spk;
         // $kode_spk = "MJBG08";
         $current = new DateTime();

@@ -47,12 +47,43 @@ class ContractApprovalController extends Controller
         // return response()->json($data_claims, 200);
         // dd($data_claims);
 
+        // SAP DEV
+        // // FIRST STEP SEND DATA TO BW
+        // $csrf_token = "";
+        // $content_location = "";
+        // // $response = getAPI("https://wtappbw-qas.wika.co.id:44350/sap/bw4/v1/push/dataStores/yodaltes4/requests", [], [], false);
+        // // $http = Http::withBasicAuth("WIKA_API", "WikaWika2022");
+        // $get_token = Http::withBasicAuth("WIKA_API", "WikaWika2022")->withHeaders(["x-csrf-token" => "Fetch"])->get("https://wtappbw-dev.wika.co.id:44340/sap/bw4/v1/push/dataStores/zosbi006/requests");
+        // $csrf_token = $get_token->header("x-csrf-token");
+        // $cookie = "";
+        // collect($get_token->cookies()->toArray())->each(function($c) use(&$cookie) {
+        //     $cookie .= $c["Name"] . "=" . $c["Value"] . ";"; 
+        // });
+
+        // // SECOND STEP SEND DATA TO BW
+        // $get_content_location = Http::withBasicAuth("WIKA_API", "WikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie])->post("https://wtappbw-dev.wika.co.id:44340/sap/bw4/v1/push/dataStores/zosbi006/requests");
+        // $content_location = $get_content_location->header("content-location");
+        
+
+        // // THIRD STEP SEND DATA TO BW
+        // // dd($new_class->toJson());
+        // $fill_data = Http::withBasicAuth("WIKA_API", "WikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie, "content-type" => "application/json"])->post("https://wtappbw-dev.wika.co.id:44340/sap/bw4/v1/push/dataStores/zosbi006/dataSend?request=$content_location&datapid=1", $data_claims->toArray());
+        
+        // // FOURTH STEP SEND DATA TO BW
+        // $closed_request = Http::withBasicAuth("WIKA_API", "WikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie])->post("https://wtappbw-dev.wika.co.id:44340/sap/bw4/v1/push/dataStores/zosbi006/requests/$content_location/close");
+        // // dd($closed_request, $data_claims, $fill_data);
+
+        //-------------------------------------------------------------------------------------//
+
+        
+        //SAP PRODUCTION
+
         // FIRST STEP SEND DATA TO BW
         $csrf_token = "";
         $content_location = "";
         // $response = getAPI("https://wtappbw-qas.wika.co.id:44350/sap/bw4/v1/push/dataStores/yodaltes4/requests", [], [], false);
         // $http = Http::withBasicAuth("WIKA_API", "WikaWika2022");
-        $get_token = Http::withBasicAuth("WIKA_API", "WikaWika2022")->withHeaders(["x-csrf-token" => "Fetch"])->get("https://wtappbw-dev.wika.co.id:44340/sap/bw4/v1/push/dataStores/zosbi006/requests");
+        $get_token = Http::withBasicAuth("WIKA_API", "WikaWika2022")->withHeaders(["x-csrf-token" => "Fetch"])->get("https://wtappbw-prd.wika.co.id:44360/sap/bw4/v1/push/dataStores/zosbi006/requests");
         $csrf_token = $get_token->header("x-csrf-token");
         $cookie = "";
         collect($get_token->cookies()->toArray())->each(function($c) use(&$cookie) {
@@ -60,23 +91,23 @@ class ContractApprovalController extends Controller
         });
 
         // SECOND STEP SEND DATA TO BW
-        $get_content_location = Http::withBasicAuth("WIKA_API", "WikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie])->post("https://wtappbw-dev.wika.co.id:44340/sap/bw4/v1/push/dataStores/zosbi006/requests");
+        $get_content_location = Http::withBasicAuth("WIKA_API", "WikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie])->post("https://wtappbw-prd.wika.co.id:44360/sap/bw4/v1/push/dataStores/zosbi006/requests");
         $content_location = $get_content_location->header("content-location");
         
 
         // THIRD STEP SEND DATA TO BW
         // dd($new_class->toJson());
-        $fill_data = Http::withBasicAuth("WIKA_API", "WikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie, "content-type" => "application/json"])->post("https://wtappbw-dev.wika.co.id:44340/sap/bw4/v1/push/dataStores/zosbi006/dataSend?request=$content_location&datapid=1", $data_claims->toArray());
+        $fill_data = Http::withBasicAuth("WIKA_API", "WikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie, "content-type" => "application/json"])->post("https://wtappbw-prd.wika.co.id:44360/sap/bw4/v1/push/dataStores/zosbi006/dataSend?request=$content_location&datapid=1", $data_claims->toArray());
         
         // FOURTH STEP SEND DATA TO BW
-        $closed_request = Http::withBasicAuth("WIKA_API", "WikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie])->post("https://wtappbw-dev.wika.co.id:44340/sap/bw4/v1/push/dataStores/zosbi006/requests/$content_location/close");
+        $closed_request = Http::withBasicAuth("WIKA_API", "WikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie])->post("https://wtappbw-prd.wika.co.id:44360/sap/bw4/v1/push/dataStores/zosbi006/requests/$content_location/close");
         // dd($closed_request, $data_claims, $fill_data);
 
         return response()->json($data_claims);
     }
 
     public function index(){
-        $month = (int)date("m") == 12 ? 1 : (int)date("m")+1;
+        $month = (int)date("m") == 12 ? 1 : (int)date("m")-1;
         $is_exist_history = ContractApproval::where("periode", $month)->where("is_locked", "!=", false)->get();
         // dd($is_exist_history);
         return view("15_CCM_Approval", compact("is_exist_history"));
@@ -86,7 +117,7 @@ class ContractApprovalController extends Controller
         $data = $request->all();
         // return response()->json($data, 200);
 
-        $month = (int)date("m") == 12 ? 1 : (int)date("m")+1;
+        $month = (int)date("m") == 1 ? 12 : (int)date("m")-1;
 
         $contract = ContractManagements::where("id_contract", "=", $data["id_contract"])->first();
 
@@ -126,7 +157,7 @@ class ContractApprovalController extends Controller
             $approval->id_contract = $data["id_contract"];
             $approval->kode_proyek = $data["kode_proyek"];
             $approval->nilai_kontrak = $progress->ok_review ?? 0;
-            $approval->periode = $data["periode"] > 12 ? 1 : $data["periode"];
+            $approval->periode = $data["periode"] == 1 ? 12 : $data["periode"];
             $approval->tahun = $data["tahun"];
             $approval->jumlah_vo = $jumlah_vo;
             $approval->total_vo = $item_vo;
@@ -161,7 +192,7 @@ class ContractApprovalController extends Controller
             $approve = new ContractApproval();
             $approve->id_contract = $data["id_contract"];
             $approve->kode_proyek = $data["kode_proyek"];
-            $approve->periode = $data["periode"] > 12 ? 1 : $data["periode"];
+            $approve->periode = $data["periode"] == 1 ? 12 : $data["periode"];
             $approve->tahun = $data["tahun"];
             $approve->jumlah_vo = $jumlah_vo ?? 0;
             $approve->total_vo = $item_vo;
@@ -171,8 +202,9 @@ class ContractApprovalController extends Controller
             $approve->total_anti_klaim = $item_anti_klaim;
             $approve->jumlah_klaim_asuransi = $jumlah_klaim_asuransi ?? 0;
             $approve->total_klaim_asuransi = $item_klaim_asuransi;
-            $approve->is_request_unlock = false;
-            $approve->is_approved = true;
+            $approve->is_locked= true;
+            // $approve->is_request_unlock = false;
+            // $approve->is_approved = true;
 
             // dd($approve);
 
@@ -199,7 +231,7 @@ class ContractApprovalController extends Controller
     public function setUnlock(Request $request){
         $data = $request->all();
 
-        $month = (int)date("m") == 12 ? 1 : (int)date("m")+1;
+        $month = (int)date("m") == 1 ? 12 : (int)date("m")-1;
 
         $approval = ContractApproval::where("id_contract", "=", $data["id_contract"])->where("periode", $month)->first();
 
@@ -219,7 +251,7 @@ class ContractApprovalController extends Controller
     public function requestUnlock(Request $request){
         $data = $request->all();
 
-        $month = (int)date("m") == 12 ? 1 : (int)date("m")+1;
+        $month = (int)date("m") == 1 ? 12 : (int)date("m")-1;
 
         $approval = ContractApproval::where("id_contract", "=", $data["id_contract"])->where("periode", $month)->first();
 
@@ -237,14 +269,14 @@ class ContractApprovalController extends Controller
     public function setApprove(Request $request, $id_contract){
         $data = $request->all();
 
-        $month = (int)date("m") == 12 ? 1 : (int)date("m")+1;
+        $month = (int)date("m") == 1 ? 12 : (int)date("m")-1;
 
         $approval = ContractApproval::where("id_contract", "=", $id_contract)->where("periode", $month)->first();
 
         $approval->is_approved = $data["approve"];
 
         if($approval->save()){
-            // $this->sendDataSAP($id_contract);
+            $this->sendDataSAP($id_contract);
             Alert::success("success", "Contract berhasil di Approve");
             return response()->json([
                 "status" => "success",
