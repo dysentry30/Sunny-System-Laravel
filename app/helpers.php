@@ -3,18 +3,21 @@
 // if(!function_exists("url_encode")) {
 // }
 
-use App\Models\IndustryOwner;
-use App\Models\KriteriaAssessment;
 use App\Models\Provinsi;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Validator;
-use Karriere\PdfMerge\PdfMerge;
-use PhpOffice\PhpWord\PhpWord;
-use RealRashid\SweetAlert\Facades\Alert;
-
 use function Aws\filter;
+use App\Models\IndustryOwner;
+use PhpOffice\PhpWord\PhpWord;
+use Karriere\PdfMerge\PdfMerge;
+use PhpOffice\PhpWord\IOFactory;
+use Illuminate\Http\UploadedFile;
+use App\Models\KriteriaAssessment;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+
+use Illuminate\Support\Facades\File;
+use PhpOffice\PhpWord\TemplateProcessor;
+use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Facades\Validator;
 
 function url_encode($url) {
     return urlencode(urlencode($url));
@@ -433,7 +436,8 @@ function createWordPengajuan(App\Models\Proyek $proyek, \Illuminate\Support\Coll
     $customer = $proyek->proyekBerjalan->Customer;
     $target_path = "file-pengajuan";
     $now = Carbon\Carbon::now();
-    $file_name = $now->format("dmYHis") . "_nota-pengajuan_$proyek->kode_proyek.pdf";
+    $file_name = $now->format("dmYHis") . "_nota-pengajuan_$proyek->kode_proyek";
+    // $file_name = $now->format("dmYHis") . "_nota-pengajuan_$proyek->kode_proyek.pdf";
 
     
     // $styleCell = array('borderTopSize'=>1 ,'borderTopColor' =>'black','borderLeftSize'=>1,'borderLeftColor' =>'black','borderRightSize'=>1,'borderRightColor'=>'black','borderBottomSize' =>1,'borderBottomColor'=>'black', 'textAlignment' => \PhpOffice\PhpWord\SimpleType\TextAlignment::CENTER);
@@ -496,40 +500,69 @@ function createWordPengajuan(App\Models\Proyek $proyek, \Illuminate\Support\Coll
 
     // $section->addTextBreak();
 
-    // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
-    $section_2 = $phpWord->addSection(["alignment" => "right", "width" => 200]);
-    $section_2->addTextBreak(3);
-    if(str_contains($proyek->UnitKerja->unit_kerja, "Infra")) {
-        $section_2->addText("___________________, " . $now->translatedFormat("Y"), ["bold" => true], ["align" => "center"]);
-        $section_2->addTextBreak(3);
-        $section_2->addText("(..................................................................................)", ["bold" => true, "size" => 7], ["align" => "center"]);
-        $section_2->addText("SM Operational Infrastructure / EPCC, Building and Overseas Risk Management", ["bold" => true], ["align" => "center"]);
-    } else {
-        $section_2->addTextBreak(5);
-        $section_2->addText("(.......................................................)", ["bold" => true], ["align" => "center"]);
-        $section_2->addText("GM Operation Marketing", ["bold" => true], ["align" => "center"]);
-        $section_2->addText("Tanggal: ___________________" . $now->translatedFormat("Y"), ["bold" => true, "size" => 7], ["align" => "textAlignment"]);
-    }
-    $section_2->addTextBreak(5);
-    $section_2->addText("Catatan :");
-    $section_2->addText("Dokumen Pemilihan atau dokumen pendukung lainnya harap di upload dalam aplikasi CRM.");
+    $section->addTextBreak(3);
+    $section->addText($now->translatedFormat("d F Y"), ["bold" => true], ["align" => "center"]);
+    $section->addTextBreak(1);
+    $section->addText("$" . "{tandaTangan}", ["bold" => false], ["align" => "center"]);
+    $section->addTextBreak(1);
+    $section->addText("( " . Auth::user()->Pegawai->nama_pegawai . " )", ["bold" => true, "size" => 7], ["align" => "center"]);
+    $section->addText(Auth::user()->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+    // $section->addText("SM Operational Infrastructure / EPCC, Building and Overseas Risk Management", ["bold" => true], ["align" => "center"]);
+    $section->addTextBreak(5);
+    $section->addText("Catatan :");
+    $section->addText("Dokumen Pemilihan atau dokumen pendukung lainnya harap di upload dalam aplikasi CRM.");
     
     // End :: Footer
-
+    
+    
+    // Begin :: Add Template docx withoutTTD
     $properties = $phpWord->getDocInfo();
     $properties->setTitle($file_name);
     $properties->setDescription('Nota Pengajuan Rekomendasi');
+    $phpWord->save(public_path($target_path . "/" . $file_name. ".docx"));
+    // end :: Add Template docx withoutTTD
+    
+    // Begin :: SIGNED Template docx
+    $templateProcessor = new TemplateProcessor($target_path . "/" .$file_name . ".docx");
+    $templateProcessor->setImageValue('tandaTangan', ["path" => "./media/logos/sign.jpg", "height" => 75, "ratio" => false]);
+    $ttdFileName = $now->format("dmYHis") . "_signed-nota-pengajuan_$proyek->kode_proyek";
+    $templateProcessor->saveAs(public_path($target_path . "/" .$ttdFileName . ".docx"));
+    // end :: SIGNED Template docx
+    
+    File::delete(public_path($target_path . "/" . $file_name . ".docx"));
+    // dd($files);
 
+    // Begin :: CONVERT Template docx to PDF
+    $templatePhpWord = \PhpOffice\PhpWord\IOFactory::load(public_path($target_path . "/" .$ttdFileName . ".docx"));
     $rendererName = \PhpOffice\PhpWord\Settings::PDF_RENDERER_DOMPDF;
     $rendererLibraryPath = realpath('../vendor/dompdf/dompdf');
     \PhpOffice\PhpWord\Settings::setPdfRenderer($rendererName, $rendererLibraryPath);
+    $xmlWriter = \PhpOffice\PhpWord\IOFactory::createWriter($templatePhpWord, 'PDF');
+    $xmlWriter->save(public_path($target_path ."/" . $file_name . ".pdf"));
+    // end :: CONVERT Template docx to PDF
 
+    File::delete(public_path($target_path . "/" . $ttdFileName . ".docx"));
+    
+    dd("saved");
+    // $proyek->file_pengajuan = $file_name . ".pdf";
+    // $proyek->hasil_assessment = $hasil_assessment->toJson();
+    // $proyek->save();
+}
+
+function addTTD($target_path, $file_name){
+    $templateProcessor = new TemplateProcessor($target_path . "/" . $file_name);
+    $templateProcessor->setImageValue('tandaTangan', ["path" => "./media/logos/sign.jpg", "width" => 120, "ratio" => false]);
+    $templateProcessor->saveAs(public_path($target_path . "/" . "withTTD-".$file_name));
+    $phpWord = \PhpOffice\PhpWord\IOFactory::load(public_path($target_path . "/" . "withTTD-" . $file_name));
+    $rendererName = \PhpOffice\PhpWord\Settings::PDF_RENDERER_DOMPDF;
+    $rendererLibraryPath = realpath('../vendor/dompdf/dompdf');
+    \PhpOffice\PhpWord\Settings::setPdfRenderer($rendererName, $rendererLibraryPath);
     $xmlWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'PDF');
-    $is_saved = $xmlWriter->save(public_path($target_path. "/". $file_name));
-    // dd("saved");
-    $proyek->file_pengajuan = $file_name;
-    $proyek->hasil_assessment = $hasil_assessment->toJson();
-    $proyek->save();
+    $xmlWriter->save(public_path($target_path. "/result.pdf"));
+    // dd($target_path, $file_name);
+
+    // $xmlWriter = \PhpOffice\PhpWord\IOFactory::createWriter($templateProcessor, 'PDF');
+    // $is_saved = $xmlWriter->save(public_path($target_path. "/". $file_name));
 }
 
 function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Collection $hasil_assessment = new \Illuminate\Support\Collection(), $is_proyek_besar, $is_proyek_mega) {

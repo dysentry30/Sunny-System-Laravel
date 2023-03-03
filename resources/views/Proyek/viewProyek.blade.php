@@ -110,19 +110,26 @@
                                 @if ($proyek->is_request_rekomendasi == false && !$check_green_line && $proyek->stage == 1)
                                     <input type="button" name="proyek-rekomendasi" value="Pengajuan Rekomendasi" class="btn btn-sm btn-success ms-2" id="proyek-rekomendasi" data-bs-toggle="modal" data-bs-target="#modal-send-pengajuan"
                                         style="background-color:#00b48d">
-                                @elseif($proyek->stage > 1 && $proyek->is_recommended == false || $proyek->is_disetujui == false )
-                                    <div class="" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="bottom" data-bs-title="<b>Rekomendasi Rejected</b>">
+                                @elseif($proyek->stage > 1 && $proyek->is_disetujui == true )
+                                    <div class="" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" data-bs-title="<b>Rekomendasi Aproved</b><br>Silahkan Lanjut Stage Selanjutnya">
+                                        <p class="mt-4 btn btn-sm btn-success ms-2">
+                                            Rekomendasi Approved
+                                        </p>
+                                    </div>
+                                @elseif($proyek->stage > 1 && $proyek->is_disetujui == false )
+                                    <div class="" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" data-bs-title="<b>Rekomendasi Rejected</b><br>Silahkan Lanjut Stage Selanjutnya">
                                         <p class="mt-4 btn btn-sm btn-danger ms-2">
                                             Rekomendasi Rejected
                                         </p>
-                                        {{-- <input type="submit" value="" class="btn btn-sm btn-danger ms-2" id="proyek-rekomendasi" disabled > --}}
                                     </div>
                                 @elseif($proyek->stage > 1 && !$check_green_line)
-                                    <div class="" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="left" data-bs-title="Proyek ini sudah melewati tahap <b>Rekomendasi</b>">
-                                        <input type="submit" name="proyek-rekomendasi" value="Pengajuan Rekomendasi" class="btn btn-sm btn-secondary ms-2" id="proyek-rekomendasi" disabled >
+                                    <div class="" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" data-bs-title="<b>Rekomendasi Aproved</b><br>Silahkan Lanjut Stage Selanjutnya">
+                                        <p class="mt-4 btn btn-sm btn-success ms-2">
+                                            Rekomendasi Approved
+                                        </p>
                                     </div>
                                 @elseif($proyek->stage == 1 && $check_green_line)
-                                    <div class="" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="left" data-bs-title="Proyek ini sudah termasuk ke dalam kategori <b>Green Line</b>">
+                                    <div class="" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" data-bs-title="Proyek ini termasuk ke dalam kategori<br><b>Green Lane</b>">
                                         <input type="submit" name="proyek-rekomendasi" value="Pengajuan Rekomendasi" class="btn btn-sm btn-secondary ms-2" id="proyek-rekomendasi" disabled >
                                     </div>
                                 @else 
@@ -224,7 +231,7 @@
                                     @endphp
 
                                     <p>Nama Proyek : <b>{{ $proyek->nama_proyek }}</b></p>
-                                    <p>RA Klasifikasi Proyek  : <b class="{{ $proyek->klasifikasi_pasdin ?? "text-danger" }}">{{ $proyek->klasifikasi_pasdin ?? "*Belum Ditentukan" }}</b></p>
+                                    <p>RA Klasifikasi Proyek  : <b class="{{ $proyek->klasifikasi_pasdin ?? "text-danger" }}">{{ $proyek->klasifikasi_pasdin ?? "*Belum Ditentukan" }}</br></p>
                                     <p>Sumber Dana  : <b class="{{ $proyek->SumberDana->nama_sumber ?? "text-danger" }}">{{ $proyek->SumberDana->nama_sumber ?? "*Belum Ditentukan" }}</b></p>
                                     <br>
                                     <p>Nama Pemberi Kerja : <b class="{{ $name_customer ?? "text-danger" }}">{{ $name_customer ?? "*Belum Ditentukan" }}</b></p>
