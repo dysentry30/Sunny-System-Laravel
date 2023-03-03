@@ -10,7 +10,7 @@ use PhpOffice\PhpWord\PhpWord;
 use Karriere\PdfMerge\PdfMerge;
 use PhpOffice\PhpWord\IOFactory;
 use Illuminate\Http\UploadedFile;
-use App\Models\KriteriaAssessment;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
@@ -500,17 +500,23 @@ function createWordPengajuan(App\Models\Proyek $proyek, \Illuminate\Support\Coll
 
     // $section->addTextBreak();
 
-    $section->addTextBreak(3);
-    $section->addText($now->translatedFormat("d F Y"), ["bold" => true], ["align" => "center"]);
-    $section->addTextBreak(1);
-    $section->addText("$" . "{tandaTangan}", ["bold" => false], ["align" => "center"]);
-    $section->addTextBreak(1);
-    $section->addText("( " . Auth::user()->Pegawai->nama_pegawai . " )", ["bold" => true, "size" => 7], ["align" => "center"]);
-    $section->addText(Auth::user()->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
-    // $section->addText("SM Operational Infrastructure / EPCC, Building and Overseas Risk Management", ["bold" => true], ["align" => "center"]);
-    $section->addTextBreak(5);
-    $section->addText("Catatan :");
-    $section->addText("Dokumen Pemilihan atau dokumen pendukung lainnya harap di upload dalam aplikasi CRM.");
+    // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
+    $section_2 = $phpWord->addSection(["alignment" => "right", "width" => 200]);
+    $section_2->addTextBreak(3);
+    if(str_contains($proyek->UnitKerja->unit_kerja, "Infra")) {
+        $section_2->addText("___________________, " . $now->translatedFormat("Y"), ["bold" => true], ["align" => "center"]);
+        $section_2->addTextBreak(3);
+        $section_2->addText("(..................................................................................)", ["bold" => true, "size" => 7], ["align" => "center"]);
+        $section_2->addText("SM Operational Infrastructure / EPCC, Building and Overseas Risk Management", ["bold" => true], ["align" => "center"]);
+    } else {
+        $section_2->addTextBreak(5);
+        $section_2->addText("(.......................................................)", ["bold" => true], ["align" => "center"]);
+        $section_2->addText("GM Operation Marketing", ["bold" => true], ["align" => "center"]);
+        $section_2->addText("Tanggal: ___________________" . $now->translatedFormat("Y"), ["bold" => true, "size" => 7], ["align" => "textAlignment"]);
+    }
+    $section_2->addTextBreak(5);
+    $section_2->addText("Catatan :");
+    $section_2->addText("Dokumen Pemilihan atau dokumen pendukung lainnya harap di upload dalam aplikasi CRM.");
     
     // End :: Footer
     
@@ -558,11 +564,11 @@ function addTTD($target_path, $file_name){
     $rendererLibraryPath = realpath('../vendor/dompdf/dompdf');
     \PhpOffice\PhpWord\Settings::setPdfRenderer($rendererName, $rendererLibraryPath);
     $xmlWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'PDF');
-    $xmlWriter->save(public_path($target_path. "/result.pdf"));
-    // dd($target_path, $file_name);
-
-    // $xmlWriter = \PhpOffice\PhpWord\IOFactory::createWriter($templateProcessor, 'PDF');
-    // $is_saved = $xmlWriter->save(public_path($target_path. "/". $file_name));
+    $is_saved = $xmlWriter->save(public_path($target_path. "/". $file_name));
+    // dd("saved");
+    $proyek->file_pengajuan = $file_name;
+    $proyek->hasil_assessment = $hasil_assessment->toJson();
+    $proyek->save();
 }
 
 function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Collection $hasil_assessment = new \Illuminate\Support\Collection(), $is_proyek_besar, $is_proyek_mega) {
@@ -648,7 +654,7 @@ function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Co
 
     $section->addText("Berdasarkan informasi di atas, mengajukan untuk mengikuti aktifitas Perolehan Kontrak (tender) tersebut di atas.");
 
-    $section->addTextBreak(23);
+    $section->addTextBreak(22);
 
     $table_ttd = $section->addTable('ttd_table',array('borderSize' => 1, 'borderColor' => '999999', 'afterSpacing' => 0, 'Spacing'=> 0, 'cellMargin'=>0  ));
     $table_ttd->addRow();

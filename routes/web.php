@@ -882,64 +882,69 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $tahun = (int) date("m") == 1 ? (int) date("Y") - 1 : (int) date("Y");
         $data = $request->all();
         $unit_kerja = UnitKerja::where("unit_kerja", "=", $data["unit_kerja"])->first();
-        $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->select(["history_forecast.*", "proyeks.unit_kerja"])->where("proyeks.unit_kerja", "=", $unit_kerja->divcode)->where("history_forecast.periode_prognosa", "=", $data["periode_prognosa"])->where("history_forecast.tahun", "=", $tahun)->get();
-        
-        $history_forecasts->each(function ($h) use ($data, $tahun) {
+        $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->select(["history_forecast.*", "proyeks.unit_kerja"])->where("proyeks.unit_kerja", "=", $unit_kerja->divcode)->where("proyeks.tahun_perolehan", "=", $tahun)->where("history_forecast.periode_prognosa", "=", $data["periode_prognosa"])->where("history_forecast.tahun", "=", $tahun)->get(); 
+        $result_all_data_send_to_sap = collect();
+        $history_forecasts->each(function ($h) use ($data, $tahun, &$result_all_data_send_to_sap) {
             $h->is_approved_1 = (bool) $data["is_approved"] ? "t" : "f";
             $customers_attractivness = IndustryOwner::all();
 
             // Begin :: Kirim data Forecast ke SAP
             if((bool) $data["is_approved"]) {
                 $data_send_to_sap = collect([
-                    "FISCAL_PERIOD" => $data["periode_prognosa"],
-                    "FISCALYEAR_VARIANT " => "K4",
+                    "FISCAL_PERIOD" => date("Y") . str_pad($data["periode_prognosa"], 3, 0, STR_PAD_LEFT),
+                    "FISCALYEAR_VARIANT" => "K4",
                     "FISCAL_YEAR" => $tahun,
-                    "COMP_CODE" => "AC00000000",
+                    "COMP_CODE" => (string) $h->Proyek->UnitKerja->company_code ?? "",
                     "AUDITTRAIL" => "INPUT_PROG",
                     "CATEGORY" => "PROG",
-                    "PROFIT_CENTER_DIV" => "AC00000000",
-                    "KODE_PROYEK" => $h->kode_proyek,
-                    "VERSION " => "PROG_" . $h->month_forecast,
-                    "KEY_FIGURE " => "10000",
+                    "PROFIT_CENTER_DIV" => (string) $h->Proyek->UnitKerja->id_profit_center ?? "",
+                    "KODE_PROYEK" => str_contains($h->kode_proyek, "KD") ? DB::table('proyek_code_crm')->where("kode_proyek", "=", $h->kode_proyek)->first()->kode_proyek_crm ?? $h->kode_proyek : $h->kode_proyek,
+                    "VERSION" => "PROG_" . str_pad($h->periode_prognosa, 3, 0, STR_PAD_LEFT),
+                    "KEY_FIGURE" => "10000",
                     "AMOUNT" => (int) $h->nilai_forecast,
-                    "DESCRIPTION " => "MONTH_" . $h->month_forecast,
+                    "DESCRIPTION" => "MONTH " . str_pad($h->month_forecast, 2, 0, STR_PAD_LEFT),
                 ]);
-                // FIRST STEP SEND DATA TO BW
-                $csrf_token = "";
-                $content_location = "";
-                // $response = getAPI("https://wtappbw-qas.wika.co.id:44350/sap/bw4/v1/push/dataStores/yodaltes4/requests", [], [], false);
-                // $http = Http::withBasicAuth("WIKA_API", "WikaWika2022");
-                $get_token = Http::withBasicAuth("WIKA_API", "WikaWika2022")->withHeaders(["x-csrf-token" => "Fetch"])->get("https://wtappbw-dev.wika.co.id:44340/sap/bw4/v1/push/dataStores/zosbpc004/requests");
-                $csrf_token = $get_token->header("x-csrf-token");
-                $cookie = "";
-                collect($get_token->cookies()->toArray())->each(function($c) use(&$cookie) {
-                    $cookie .= $c["Name"] . "=" . $c["Value"] . ";"; 
-                });
-
-                // SECOND STEP SEND DATA TO BW
-                $get_content_location = Http::withBasicAuth("WIKA_API", "WikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie])->post("https://wtappbw-dev.wika.co.id:44340/sap/bw4/v1/push/dataStores/zosbpc004/requests");
-                $content_location = $get_content_location->header("content-location");
-                // $industry_attractivness = IndustryOwner::all();
-                // $new_class = $industry_attractivness->map(function($ia) {
-                //     $new_ia = new stdClass();
-                //     $new_ia->PERIODE = date("Ymd");
-                //     $new_ia->INDUSTRY_CODE = $ia->code_owner ?? "";
-                //     $new_ia->ATTRACTIVENESS_STATUS = $ia->owner_attractiveness ?? "";
-                //     return $new_ia;
-                // });
-
-                // THIRD STEP SEND DATA TO BW
-                // dd($new_class->toJson());
-                $fill_data = Http::withBasicAuth("WIKA_API", "WikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie, "content-type" => "application/json"])->post("https://wtappbw-dev.wika.co.id:44340/sap/bw4/v1/push/dataStores/zosbpc004/dataSend?request=$content_location&datapid=1", $data_send_to_sap->toArray());
-                
-                // FOURTH STEP SEND DATA TO BW
-                $closed_request = Http::withBasicAuth("WIKA_API", "WikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie])->post("https://wtappbw-dev.wika.co.id:44340/sap/bw4/v1/push/dataStores/zosbpc004/requests/$content_location/close");
-                dd($closed_request, $fill_data);
-                return response()->json($customers_attractivness);
+                $result_all_data_send_to_sap->push($data_send_to_sap);
             }
-        // End :: Kirim data Forecast ke SAP
+            
             $h->save();
         });
+        if((bool) $data["is_approved"]) {
+            // FIRST STEP SEND DATA TO BW
+            $csrf_token = "";
+            $content_location = "";
+            // $response = getAPI("https://wtappbw-qas.wika.co.id:44350/sap/bw4/v1/push/dataStores/yodaltes4/requests", [], [], false);
+            // $http = Http::withBasicAuth("WIKA_API", "WikaWika2022");
+            $get_token = Http::withBasicAuth("WIKA_API", "WikaWika2022")->withHeaders(["x-csrf-token" => "Fetch"])->get("https://wtappbw-dev.wika.co.id:44340/sap/bw4/v1/push/dataStores/zosbpc004/requests");
+            $csrf_token = $get_token->header("x-csrf-token");
+            $cookie = "";
+            collect($get_token->cookies()->toArray())->each(function($c) use(&$cookie) {
+                $cookie .= $c["Name"] . "=" . $c["Value"] . ";"; 
+            });
+    
+            // SECOND STEP SEND DATA TO BW
+            $get_content_location = Http::withBasicAuth("WIKA_API", "WikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie])->post("https://wtappbw-dev.wika.co.id:44340/sap/bw4/v1/push/dataStores/zosbpc004/requests");
+            $content_location = $get_content_location->header("content-location");
+            // $industry_attractivness = IndustryOwner::all();
+            // $new_class = $industry_attractivness->map(function($ia) {
+            //     $new_ia = new stdClass();
+            //     $new_ia->PERIODE = date("Ymd");
+            //     $new_ia->INDUSTRY_CODE = $ia->code_owner ?? "";
+            //     $new_ia->ATTRACTIVENESS_STATUS = $ia->owner_attractiveness ?? "";
+            //     return $new_ia;
+            // });
+    
+            // THIRD STEP SEND DATA TO BW
+            // dd($new_class->toJson());
+            $fill_data = Http::withBasicAuth("WIKA_API", "WikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie, "content-type" => "application/json"])->post("https://wtappbw-dev.wika.co.id:44340/sap/bw4/v1/push/dataStores/zosbpc004/dataSend?request=$content_location&datapid=1", $result_all_data_send_to_sap->toArray());
+            
+            // FOURTH STEP SEND DATA TO BW
+            $closed_request = Http::withBasicAuth("WIKA_API", "WikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie])->post("https://wtappbw-dev.wika.co.id:44340/sap/bw4/v1/push/dataStores/zosbpc004/requests/$content_location/close");
+            // dd($closed_request, $fill_data, $result_all_data_send_to_sap);
+            // return response()->json($customers_attractivness);
+        }
+        // End :: Kirim data Forecast ke SAP
+
         return response()->json([
             "status" => "Success",
             "msg" => "<b>$unit_kerja->unit_kerja</b> berhasil di approved",
