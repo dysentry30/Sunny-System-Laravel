@@ -10,10 +10,11 @@ use PhpOffice\PhpWord\PhpWord;
 use Karriere\PdfMerge\PdfMerge;
 use PhpOffice\PhpWord\IOFactory;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\File;
+use App\Models\KriteriaAssessment;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use PhpOffice\PhpWord\TemplateProcessor;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -502,25 +503,17 @@ function createWordPengajuan(App\Models\Proyek $proyek, \Illuminate\Support\Coll
     // $section->addTextBreak();
 
     // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
-    $section_2 = $phpWord->addSection(["alignment" => "right", "width" => 200]);
-    $section_2->addTextBreak(3);
-    if (str_contains($proyek->UnitKerja->unit_kerja, "Infra")) {
-        $section_2->addText("___________________, " . $now->translatedFormat("Y"), ["bold" => true], ["align" => "center"]);
-        $section_2->addTextBreak(3);
-        $section_2->addText("(..................................................................................)", ["bold" => true, "size" => 7], ["align" => "center"]);
-        $section_2->addText("SM Operational Infrastructure / EPCC, Building and Overseas Risk Management", ["bold" => true], ["align" => "center"]);
-    } else {
-        $section_2->addTextBreak(5);
-        $section_2->addText("(.......................................................)", ["bold" => true], ["align" => "center"]);
-        $section_2->addText("GM Operation Marketing", ["bold" => true], ["align" => "center"]);
-        $section_2->addText("Tanggal: ___________________" . $now->translatedFormat("Y"), ["bold" => true, "size" => 7], ["align" => "textAlignment"]);
-    }
-    $section_2->addTextBreak(5);
-    $section_2->addText("Catatan :");
-    $section_2->addText("Dokumen Pemilihan atau dokumen pendukung lainnya harap di upload dalam aplikasi CRM.");
-
+    $section->addTextBreak(3);
+        $section->addText($now->translatedFormat("d F Y"), ["bold" => true], ["align" => "center"]);
+        $section->addTextBreak(1);
+        $section->addText("$". "{tandaTangan}", ["bold" => false], ["align" => "center"]);
+        $section->addTextBreak(1);
+        $section->addText("( ".Auth::user()->name." )", ["bold" => true, "size" => 7], ["align" => "center"]);
+        $section->addText(Auth::user()->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+    $section->addTextBreak(5);
+    $section->addText("Catatan :");
+    $section->addText("Dokumen Pemilihan atau dokumen pendukung lainnya harap di upload dalam aplikasi CRM.");
     // End :: Footer
-
 
     // Begin :: Add Template docx withoutTTD
     $properties = $phpWord->getDocInfo();
@@ -550,34 +543,18 @@ function createWordPengajuan(App\Models\Proyek $proyek, \Illuminate\Support\Coll
 
     File::delete(public_path($target_path . "/" . $ttdFileName . ".docx"));
 
-    dd("saved");
-    // $proyek->file_pengajuan = $file_name . ".pdf";
-    // $proyek->hasil_assessment = $hasil_assessment->toJson();
-    // $proyek->save();
-}
-
-function addTTD($target_path, $file_name)
-{
-    $templateProcessor = new TemplateProcessor($target_path . "/" . $file_name);
-    $templateProcessor->setImageValue('tandaTangan', ["path" => "./media/logos/sign.jpg", "width" => 120, "ratio" => false]);
-    $templateProcessor->saveAs(public_path($target_path . "/" . "withTTD-" . $file_name));
-    $phpWord = \PhpOffice\PhpWord\IOFactory::load(public_path($target_path . "/" . "withTTD-" . $file_name));
-    $rendererName = \PhpOffice\PhpWord\Settings::PDF_RENDERER_DOMPDF;
-    $rendererLibraryPath = realpath('../vendor/dompdf/dompdf');
-    \PhpOffice\PhpWord\Settings::setPdfRenderer($rendererName, $rendererLibraryPath);
-    $xmlWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'PDF');
-    $is_saved = $xmlWriter->save(public_path($target_path . "/" . $file_name));
     // dd("saved");
-    $proyek->file_pengajuan = $file_name;
+    $proyek->file_pengajuan = $file_name . ".pdf";
     $proyek->hasil_assessment = $hasil_assessment->toJson();
     $proyek->save();
 }
+
 
 function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Collection $hasil_assessment = new \Illuminate\Support\Collection(), $is_proyek_besar, $is_proyek_mega) {
     $phpWord = new \PhpOffice\PhpWord\PhpWord();
     $target_path = "file-persetujuan";
     $now = Carbon\Carbon::now();
-    $file_name = $now->format("dmYHis") . "_nota-persetujuan_$proyek->kode_proyek.pdf";
+    $file_name = $now->format("dmYHis") . "_nota-persetujuan_$proyek->kode_proyek";
     $internal_score = $hasil_assessment->sum(function($ra) {
         if($ra->kategori == "Internal") {
             return $ra->score;
@@ -589,13 +566,20 @@ function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Co
         }
     });
 
+    $penyusun = json_decode($proyek->approved_penyusun);
+    $rekomendator = json_decode($proyek->approved_rekomendasi_final);
+    $penyetuju = json_decode($proyek->approved_persetujuan);
+    // dd($penyetuju);
+
     $section = $phpWord->addSection();
-    $section_2 = $phpWord->addSection();
+    
     $section->addText("NOTA REKOMENDASI TAHAP I", ['size'=>12, "bold" => true], ['align' => "center"]);
     $section->addText("Seleksi Pengguna Jasa Non Green Lane", ['size'=>12, "bold" => true], ['align' => "center"]);
 
-    if($is_proyek_mega) {
+    if ($is_proyek_mega) {
         $section->addText("Proyek Mega", ['size'=>12, "bold" => true], ['align' => "center"]);
+    } else if ($is_proyek_besar) {
+        $section->addText("Proyek Besar", ['size'=>12, "bold" => true], ['align' => "center"]);
     } else {
         $section->addText("Proyek Kecil / Proyek Menengah", ['size'=>12, "bold" => true], ['align' => "center"]);
     }
@@ -657,65 +641,72 @@ function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Co
     $section->addText("Berdasarkan informasi di atas, mengajukan untuk mengikuti aktifitas Perolehan Kontrak (tender) tersebut di atas.");
 
     $section->addTextBreak(22);
+    $section2 = $phpWord->addSection();
 
-    $table_ttd = $section->addTable('ttd_table',array('borderSize' => 1, 'borderColor' => '999999', 'afterSpacing' => 0, 'Spacing'=> 0, 'cellMargin'=>0  ));
-    $table_ttd->addRow();
+    $table_ttd = $section2->addTable('ttd_table',array('borderSize' => 1, 'borderColor' => '999999', 'afterSpacing' => 0, 'Spacing'=> 0, 'cellMargin'=>0  ));
+    // $table_ttd->addRow();
     if($is_proyek_mega) {
         $table_ttd->addRow();
         $header_cell = $table_ttd->addCell(500, ["vMerge" => "restart", "gridSpan" => 3, "bgColor" => "F4B083"]);
         $header_cell->addText("Disusun oleh,", ["bold" => true], ["align" => "center"]);
-        $header_cell->addText(null, ["bold" => true]);
+        // $header_cell->addText(null, ["bold" => true]);
 
         $table_ttd->addRow();
         $cell_2_ttd = $table_ttd->addCell(500);
         // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addTextBreak(4);
-        $cell_2_ttd->addText("(.......................................................)", ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addText("SM Operational Infrastructure / EPCC, Building and Overseas Risk Management", ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addText("Tanggal: ___________________" . $now->translatedFormat("Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
+        $cell_2_ttd->addTextBreak(1);
+        $cell_2_ttd->addText("$" . "{ttdPenyusun1}", ["bold" => false], ["align" => "center"]);
+        $cell_2_ttd->addText(User::find($penyusun[0]->user_id)->name, ["bold" => true], ["align" => "center"]);
+        $cell_2_ttd->addText(User::find($penyusun[0]->user_id)->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+        $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
 
         $cell_2_ttd = $table_ttd->addCell(500);
         $cell_2_ttd = $table_ttd->addCell(500);
         // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addTextBreak(4);
-        $cell_2_ttd->addText("(.......................................................)", ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addText("GM Operation Marketing", ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addText("Tanggal: ___________________" . $now->translatedFormat("Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
+        $cell_2_ttd->addTextBreak(1);
+        $cell_2_ttd->addText("$" . "{ttdPenyusun2}", ["bold" => false], ["align" => "center"]);
+        $cell_2_ttd->addText(User::find($penyusun[0]->user_id)->name, ["bold" => true], ["align" => "center"]);
+        $cell_2_ttd->addText(User::find($penyusun[0]->user_id)->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+        $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
 
         $table_ttd->addRow();
         $header_cell = $table_ttd->addCell(500, ["vMerge" => "restart", "gridSpan" => 3, "bgColor" => "F4B083"]);
         $header_cell->addText("Direkomendasi oleh,", ["bold" => true], ["align" => "center"]);
-        $header_cell->addText(null, ["bold" => true]);
+        // $header_cell->addText(null, ["bold" => true]);
 
         $table_ttd->addRow();
         $cell_2_ttd = $table_ttd->addCell(500);
         // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addTextBreak(4);
-        $cell_2_ttd->addText("(.......................................................)", ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addText("SVP " . $proyek->UnitKerja->unit_kerja, ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addText("Tanggal: ___________________" . $now->translatedFormat("Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
+        $cell_2_ttd->addTextBreak(1);
+        $cell_2_ttd->addText("$" . "{ttdRekomendasi1}", ["bold" => false], ["align" => "center"]);
+        $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->name, ["bold" => true], ["align" => "center"]);
+        $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+        $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
 
         $cell_2_ttd = $table_ttd->addCell(500);
         // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addTextBreak(4);
-        $cell_2_ttd->addText("(.......................................................)", ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addText("SVP Risk Management", ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addText("Tanggal: ___________________" . $now->translatedFormat("Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
+        $cell_2_ttd->addTextBreak(1);
+        $cell_2_ttd->addText("$" . "{ttdRekomendasi2}", ["bold" => false], ["align" => "center"]);
+        $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->name, ["bold" => true], ["align" => "center"]);
+        $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+        $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
         
         $cell_2_ttd = $table_ttd->addCell(500);
         // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addTextBreak(4);
-        $cell_2_ttd->addText("(.......................................................)", ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addText("SVP Finance", ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addText("Tanggal: ___________________" . $now->translatedFormat("Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
+        $cell_2_ttd->addTextBreak(1);
+        $cell_2_ttd->addText("$" . "{ttdRekomendasi3}", ["bold" => false], ["align" => "center"]);
+        $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->name, ["bold" => true], ["align" => "center"]);
+        $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+        $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
         
         $table_ttd->addRow();
         $cell_2_ttd = $table_ttd->addCell(500);
         // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addTextBreak(4);
-        $cell_2_ttd->addText("(.......................................................)", ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addText("SVP Legal", ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addText("Tanggal: ___________________" . $now->translatedFormat("Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
+        $cell_2_ttd->addTextBreak(1);
+        $cell_2_ttd->addText("$" . "{ttdRekomendasi4}", ["bold" => false], ["align" => "center"]);
+        $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->name, ["bold" => true], ["align" => "center"]);
+        $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+        $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
 
         $cell_2_ttd = $table_ttd->addCell(500);
         // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
@@ -726,104 +717,119 @@ function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Co
         
         $cell_2_ttd = $table_ttd->addCell(500);
         // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addTextBreak(4);
-        $cell_2_ttd->addText("(.......................................................)", ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addText("SVP Strategic Marketing & Transformation", ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addText("Tanggal: ___________________" . $now->translatedFormat("Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
+        $cell_2_ttd->addTextBreak(1);
+        $cell_2_ttd->addText("$" . "{ttdRekomendasi5}", ["bold" => false], ["align" => "center"]);
+        $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->name, ["bold" => true], ["align" => "center"]);
+        $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+        $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
         
         $table_ttd->addRow();
         $header_cell = $table_ttd->addCell(500, ["vMerge" => "restart", "gridSpan" => 3, "bgColor" => "F4B083"]);
         $header_cell->addText("Persetujuan oleh,", ["bold" => true], ["align" => "center"]);
-        $header_cell->addText(null, ["bold" => true]);
+        // $header_cell->addText(null, ["bold" => true]);
 
         $unit_kerja = $proyek->UnitKerja;
         $table_ttd->addRow();
         $cell_2_ttd = $table_ttd->addCell(500);
         // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addTextBreak(3);
-        $cell_2_ttd->addText("(.......................................................)", ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addText("Direktur Operasi " . explode(" ", $unit_kerja->dop)[1], ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addText("Tanggal: ___________________" . $now->translatedFormat("Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
+        $cell_2_ttd->addTextBreak(1);
+        $cell_2_ttd->addText("$" . "{ttdPersetujuan1}", ["bold" => false], ["align" => "center"]);
+        $cell_2_ttd->addTextBreak(1);
+        $cell_2_ttd->addText(User::find($penyetuju[0]->user_id)->name ?? Auth::user()->name, ["bold" => true], ["align" => "center"]);
+        $cell_2_ttd->addText(User::find($penyetuju[0]->user_id)->Pegawai->Jabatan->nama_jabatan ?? Auth::user()->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+        $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
         
         $cell_2_ttd = $table_ttd->addCell(500);
         $cell_2_ttd = $table_ttd->addCell(500);
         // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addTextBreak(3);
-        $cell_2_ttd->addText("(.......................................................)", ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addText("Direktur Keuangan dan Manajemen Risiko", ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addText("Tanggal: ___________________" . $now->translatedFormat("Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
+        $cell_2_ttd->addTextBreak(1);
+        $cell_2_ttd->addText("$" . "{ttdPersetujuan2}", ["bold" => false], ["align" => "center"]);
+        $cell_2_ttd->addTextBreak(1);
+        $cell_2_ttd->addText(User::find($penyetuju[0]->user_id)->name ?? Auth::user()->name, ["bold" => true], ["align" => "center"]);
+        $cell_2_ttd->addText(User::find($penyetuju[0]->user_id)->Pegawai->Jabatan->nama_jabatan ?? Auth::user()->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+        $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
 
         $table_ttd->addRow();
         $cell_2_ttd = $table_ttd->addCell(500);
         // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addTextBreak(3);
-        $cell_2_ttd->addText("(.......................................................)", ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addText("Direktur Quality, Health, Safety and Environment", ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addText("Tanggal: ___________________" . $now->translatedFormat("Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
+        $cell_2_ttd->addTextBreak(1);
+        $cell_2_ttd->addText("$" . "{ttdPersetujuan3}", ["bold" => false], ["align" => "center"]);
+        $cell_2_ttd->addTextBreak(1);
+        $cell_2_ttd->addText(User::find($penyetuju[0]->user_id)->name ?? Auth::user()->name, ["bold" => true], ["align" => "center"]);
+        $cell_2_ttd->addText(User::find($penyetuju[0]->user_id)->Pegawai->Jabatan->nama_jabatan ?? Auth::user()->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+        $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
         
         $cell_2_ttd = $table_ttd->addCell(500);
         $cell_2_ttd = $table_ttd->addCell(500);
         // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addTextBreak(3);
-        $cell_2_ttd->addText("(.......................................................)", ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addText("Direktur Human Capital dan Pengembangan", ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addText("Tanggal: ___________________" . $now->translatedFormat("Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
+        $cell_2_ttd->addTextBreak(1);
+        $cell_2_ttd->addText("$" . "{ttdPersetujuan4}", ["bold" => false], ["align" => "center"]);
+        $cell_2_ttd->addTextBreak(1);
+        $cell_2_ttd->addText(User::find($penyetuju[0]->user_id)->name ?? Auth::user()->name, ["bold" => true], ["align" => "center"]);
+        $cell_2_ttd->addText(User::find($penyetuju[0]->user_id)->Pegawai->Jabatan->nama_jabatan ?? Auth::user()->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+        $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
     } else if($is_proyek_besar) {
         $table_ttd->addRow();
         $header_cell = $table_ttd->addCell(500, ["vMerge" => "restart", "gridSpan" => 3, "bgColor" => "F4B083"]);
         $header_cell->addText("Disusun oleh,", ["bold" => true], ["align" => "center"]);
-        $header_cell->addText(null, ["bold" => true]);
+        // $header_cell->addText(null, ["bold" => true]);
 
         $table_ttd->addRow();
         $cell_2_ttd = $table_ttd->addCell(500);
         // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addTextBreak(4);
-        $cell_2_ttd->addText("(.......................................................)", ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addText("SM Operational Infrastructure / EPCC, Building and Overseas Risk Management", ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addText("Tanggal: ___________________" . $now->translatedFormat("Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
+        $cell_2_ttd->addTextBreak(1);
+        $cell_2_ttd->addText("$" . "{ttdPenyusun1}", ["bold" => false], ["align" => "center"]);
+        $cell_2_ttd->addText(User::find($penyusun[0]->user_id)->name, ["bold" => true], ["align" => "center"]);
+        $cell_2_ttd->addText(User::find($penyusun[0]->user_id)->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+        $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
 
         $cell_2_ttd = $table_ttd->addCell(500);
         $cell_2_ttd = $table_ttd->addCell(500);
         // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addTextBreak(4);
-        $cell_2_ttd->addText("(.......................................................)", ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addText("GM Operation Marketing", ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addText("Tanggal: ___________________" . $now->translatedFormat("Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
+        $cell_2_ttd->addTextBreak(1);
+        $cell_2_ttd->addText("$" . "{ttdPenyusun2}", ["bold" => false], ["align" => "center"]);
+        $cell_2_ttd->addText(User::find($penyusun[0]->user_id)->name, ["bold" => true], ["align" => "center"]);
+        $cell_2_ttd->addText(User::find($penyusun[0]->user_id)->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+        $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
 
         $table_ttd->addRow();
         $header_cell = $table_ttd->addCell(500, ["vMerge" => "restart", "gridSpan" => 3, "bgColor" => "F4B083"]);
         $header_cell->addText("Direkomendasi oleh,", ["bold" => true], ["align" => "center"]);
-        $header_cell->addText(null, ["bold" => true]);
+        // $header_cell->addText(null, ["bold" => true]);
 
         $table_ttd->addRow();
         $cell_2_ttd = $table_ttd->addCell(500);
         // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addTextBreak(4);
-        $cell_2_ttd->addText("(.......................................................)", ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addText("SVP …… ( Divisi Operasi )", ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addText("Tanggal: ___________________" . $now->translatedFormat("Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
+        $cell_2_ttd->addTextBreak(1);
+        $cell_2_ttd->addText("$" . "{ttdRekomendasi1}", ["bold" => false], ["align" => "center"]);
+        $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->name, ["bold" => true], ["align" => "center"]);
+        $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+        $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
 
         $cell_2_ttd = $table_ttd->addCell(500);
         // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addTextBreak(4);
-        $cell_2_ttd->addText("(.......................................................)", ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addText("SVP Risk Management", ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addText("Tanggal: ___________________" . $now->translatedFormat("Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
+        $cell_2_ttd->addTextBreak(1);
+        $cell_2_ttd->addText("$" . "{ttdRekomendasi2}", ["bold" => false], ["align" => "center"]);
+        $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->name, ["bold" => true], ["align" => "center"]);
+        $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+        $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
         
         $cell_2_ttd = $table_ttd->addCell(500);
         // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addTextBreak(4);
-        $cell_2_ttd->addText("(.......................................................)", ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addText("SVP Finance", ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addText("Tanggal: ___________________" . $now->translatedFormat("Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
+        $cell_2_ttd->addTextBreak(1);
+        $cell_2_ttd->addText("$" . "{ttdRekomendasi3}", ["bold" => false], ["align" => "center"]);
+        $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->name, ["bold" => true], ["align" => "center"]);
+        $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+        $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
         
         $table_ttd->addRow();
         $cell_2_ttd = $table_ttd->addCell(500);
         // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addTextBreak(4);
-        $cell_2_ttd->addText("(.......................................................)", ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addText("SVP Legal", ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addText("Tanggal: ___________________" . $now->translatedFormat("Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
+        $cell_2_ttd->addTextBreak(1);
+        $cell_2_ttd->addText("$" . "{ttdRekomendasi4}", ["bold" => false], ["align" => "center"]);
+        $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->name, ["bold" => true], ["align" => "center"]);
+        $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+        $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
 
         $cell_2_ttd = $table_ttd->addCell(500);
         // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
@@ -834,32 +840,35 @@ function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Co
         
         $cell_2_ttd = $table_ttd->addCell(500);
         // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addTextBreak(4);
-        $cell_2_ttd->addText("(.......................................................)", ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addText("SVP Strategic Marketing & Transformation", ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addText("Tanggal: ___________________" . $now->translatedFormat("Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
+        $cell_2_ttd->addTextBreak(1);
+        $cell_2_ttd->addText("$" . "{ttdRekomendasi5}", ["bold" => false], ["align" => "center"]);
+        $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->name, ["bold" => true], ["align" => "center"]);
+        $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+        $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
         
         $table_ttd->addRow();
         $header_cell = $table_ttd->addCell(500, ["vMerge" => "restart", "gridSpan" => 3, "bgColor" => "F4B083"]);
         $header_cell->addText("Persetujuan oleh,", ["bold" => true], ["align" => "center"]);
-        $header_cell->addText(null, ["bold" => true]);
+        // $header_cell->addText(null, ["bold" => true]);
 
         $unit_kerja = $proyek->UnitKerja;
         $table_ttd->addRow();
         $cell_2_ttd = $table_ttd->addCell(500);
         // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addTextBreak(4);
-        $cell_2_ttd->addText("(.......................................................)", ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addText("Direktur Operasi " . explode(" ", $unit_kerja->dop)[1], ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addText("Tanggal: ___________________" . $now->translatedFormat("Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
+        $cell_2_ttd->addTextBreak(1);
+        $cell_2_ttd->addText("$" . "{ttdPersetujuan1}", ["bold" => false], ["align" => "center"]);
+        $cell_2_ttd->addText(User::find($penyetuju[0]->user_id)->name ?? Auth::user()->name, ["bold" => true], ["align" => "center"]);
+        $cell_2_ttd->addText(User::find($penyetuju[0]->user_id)->Pegawai->Jabatan->nama_jabatan ?? Auth::user()->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+        $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
         
         $cell_2_ttd = $table_ttd->addCell(500);
         $cell_2_ttd = $table_ttd->addCell(500);
         // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addTextBreak(4);
-        $cell_2_ttd->addText("(.......................................................)", ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addText("Direktur Keuangan dan Manajemen Risiko", ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addText("Tanggal: ___________________" . $now->translatedFormat("Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
+        $cell_2_ttd->addTextBreak(1);
+        $cell_2_ttd->addText("$" . "{ttdPersetujuan2}", ["bold" => false], ["align" => "center"]);
+        $cell_2_ttd->addText(User::find($penyetuju[0]->user_id)->name ?? Auth::user()->name, ["bold" => true], ["align" => "center"]);
+        $cell_2_ttd->addText(User::find($penyetuju[0]->user_id)->Pegawai->Jabatan->nama_jabatan ?? Auth::user()->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+        $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
     } else {
         $is_infra = false;
         $default_grid_span = 2;
@@ -869,103 +878,171 @@ function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Co
         }
 
         $table_ttd->addRow();
-        $header_cell = $table_ttd->addCell(500, ["vMerge" => "restart", "gridSpan" => $default_grid_span, "bgColor" => "F4B083"]);
+        $header_cell = $table_ttd->addCell(500, ["vMerge" => "restart", "gridSpan" => $default_grid_span,'borderSize' => 1, 'borderColor' => '999999', "bgColor" => "F4B083"]);
         $header_cell->addText("Disusun oleh,", ["bold" => true], ["align" => "center"]);
-        $header_cell->addText(null, ["bold" => true]);
+        // $header_cell->addText(null, ["bold" => true]);
 
         $table_ttd->addRow();
         $cell_2_ttd = $table_ttd->addCell(500);
         // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addTextBreak(4);
-        $cell_2_ttd->addText("(.......................................................)", ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addText("Team Operation Risk Management", ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addText("Tanggal: ___________________" . $now->translatedFormat("Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
+        $cell_2_ttd->addTextBreak(1);
+        $cell_2_ttd->addText("$" . "{ttdPenyusun1}", ["bold" => false], ["align" => "center"]);
+        $cell_2_ttd->addTextBreak(1);
+        $cell_2_ttd->addText( User::find($penyusun[0]->user_id)->name , ["bold" => true], ["align" => "center"]);
+        $cell_2_ttd->addText(User::find($penyusun[0]->user_id)->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+        $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
 
         if($is_infra) {
             $cell_2_ttd = $table_ttd->addCell(500);
         }
         $cell_2_ttd = $table_ttd->addCell(500);
-        // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addTextBreak(4);
-        $cell_2_ttd->addText("(.......................................................)", ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addText("Team Operation Marketing", ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addText("Tanggal: ___________________" . $now->translatedFormat("Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
+    // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
+        $cell_2_ttd->addTextBreak(1);
+        $cell_2_ttd->addText("$" . "{ttdPenyusun2}", ["bold" => false], ["align" => "center"]);
+        $cell_2_ttd->addText(User::find($penyusun[0]->user_id)->name, ["bold" => true], ["align" => "center"]);
+        $cell_2_ttd->addText(User::find($penyusun[0]->user_id)->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+        $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
 
         $table_ttd->addRow();
-        $header_cell = $table_ttd->addCell(500, ["vMerge" => "restart", "gridSpan" => $default_grid_span, "bgColor" => "F4B083"]);
+        $header_cell = $table_ttd->addCell(500, ["vMerge" => "restart", "gridSpan" => $default_grid_span, 'borderSize' => 1, 'borderColor' => '999999', "bgColor" => "F4B083"]);
         $header_cell->addText("Direkomendasi oleh,", ["bold" => true], ["align" => "center"]);
-        $header_cell->addText(null, ["bold" => true]);
+        // $header_cell->addText(null, ["bold" => true]);
 
         $table_ttd->addRow();
         $cell_2_ttd = $table_ttd->addCell(500);
-        // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addTextBreak(4);
-        $cell_2_ttd->addText("(.......................................................)", ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addText("SM Operation EPCC, Building and Overseas Risk Management", ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addText("Tanggal: ___________________" . $now->translatedFormat("Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
+    // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
+        $cell_2_ttd->addTextBreak(1);
+        $cell_2_ttd->addText("$" . "{ttdRekomendasi1}", ["bold" => false], ["align" => "center"]);
+        $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->name, ["bold" => true], ["align" => "center"]);
+        $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+        $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
         
         if($is_infra) {
             $cell_2_ttd = $table_ttd->addCell(500);
         }
         $cell_2_ttd = $table_ttd->addCell(500);
-        // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addTextBreak(4);
-        $cell_2_ttd->addText("(.......................................................)", ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addText("GM Operation", ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addText("Tanggal: ___________________" . $now->translatedFormat("Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
+    // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
+        $cell_2_ttd->addTextBreak(1);
+        $cell_2_ttd->addText("$" . "{ttdRekomendasi2}", ["bold" => false], ["align" => "center"]);
+        $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->name, ["bold" => true], ["align" => "center"]);
+        $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+        $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
         
         $table_ttd->addRow();
-        $header_cell = $table_ttd->addCell(500, ["vMerge" => "restart", "gridSpan" => $default_grid_span, "bgColor" => "F4B083"]);
+        $header_cell = $table_ttd->addCell(500, ["vMerge" => "restart", "gridSpan" => $default_grid_span, 'borderSize' => 1, 'borderColor' => '999999', "bgColor" => "F4B083"]);
         $header_cell->addText("Persetujuan oleh,", ["bold" => true], ["align" => "center"]);
-        $header_cell->addText(null, ["bold" => true]);
+        // $header_cell->addText(null, ["bold" => true]);
 
         $table_ttd->addRow();
         $cell_2_ttd = $table_ttd->addCell(500);
-        // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addTextBreak(4);
-        $cell_2_ttd->addText("(.......................................................)", ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addText("SVP …… (Divisi Operasi)", ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addText("Tanggal: ___________________" . $now->translatedFormat("Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
+    // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
+        $cell_2_ttd->addTextBreak(1);
+        $cell_2_ttd->addText("$" . "{ttdPersetujuan1}", ["bold" => false], ["align" => "center"]);
+        $cell_2_ttd->addText(User::find($penyetuju[0]->user_id)->name ?? Auth::user()->name, ["bold" => true], ["align" => "center"]);
+        $cell_2_ttd->addText(User::find($penyetuju[0]->user_id)->Pegawai->Jabatan->nama_jabatan ?? Auth::user()->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+        $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
         $cell_2_ttd = $table_ttd->addCell(500);
+        // $cell_2_ttd = $table_ttd->addCell(500);
         // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addTextBreak(4);
-        $cell_2_ttd->addText("(.......................................................)", ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addText("SVP Risk Management", ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addText("Tanggal: ___________________" . $now->translatedFormat("Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
+        $cell_2_ttd->addTextBreak(1);
+        $cell_2_ttd->addText("$" . "{ttdPersetujuan2}", ["bold" => false], ["align" => "center"]);
+        $cell_2_ttd->addText(User::find($penyetuju[0]->user_id)->name ?? Auth::user()->name, ["bold" => true], ["align" => "center"]);
+        $cell_2_ttd->addText(User::find($penyetuju[0]->user_id)->Pegawai->Jabatan->nama_jabatan ?? Auth::user()->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+        $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
         
         if(str_contains($proyek->UnitKerja->unit_kerja, "Infra")) {
+            // $table_ttd->addRow();
+            // $cell_2_ttd = $table_ttd->addCell(500);
             $cell_2_ttd = $table_ttd->addCell(500);
             // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
-            $cell_2_ttd->addTextBreak(4);
-            $cell_2_ttd->addText("(.......................................................)", ["bold" => true], ["align" => "center"]);
-            $cell_2_ttd->addText("SVP Infrastructure Marketing", ["bold" => true], ["align" => "center"]);
-            $cell_2_ttd->addText("Tanggal: ___________________" . $now->translatedFormat("Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
-
+            $cell_2_ttd->addTextBreak(1);
+            $cell_2_ttd->addText("$" . "{ttdPersetujuan3}", ["bold" => false], ["align" => "center"]);
+            $cell_2_ttd->addText(User::find($penyetuju[0]->user_id)->name ?? Auth::user()->name, ["bold" => true], ["align" => "center"]);
+            $cell_2_ttd->addText(User::find($penyetuju[0]->user_id)->Pegawai->Jabatan->nama_jabatan ?? Auth::user()->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+            $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
         }
     }
 
     // \PhpOffice\PhpWord\Settings::setPdfRendererPath("path/to/tcpdf");
     // \PhpOffice\PhpWord\Settings::setPdfRendererName('TCPDF');
-    $properties = $phpWord->getDocInfo();
-    $properties->setTitle($file_name);
-    $properties->setDescription('Nota Rekomendasi');
 
+    // Begin :: Add Template docx withoutTTD
+    $properties = $phpWord->getDocInfo();
+    $properties->setTitle($file_name . ".docx");
+    $properties->setDescription('Nota Pengajuan Persetujuan');
+    $phpWord->save(public_path($target_path . "/" . $file_name . ".docx"));
+    // end :: Add Template docx withoutTTD
+
+    // Begin :: SIGNED Template docx
+    $templateProcessor = new TemplateProcessor($target_path . "/" . $file_name . ".docx");
+    if($is_proyek_mega) {
+        $templateProcessor->setImageValue('ttdPenyusun1', ["path" => "./media/logos/sign.jpg", "width" => 75, "ratio" => true]);
+        $templateProcessor->setImageValue('ttdPenyusun2', ["path" => "./media/logos/sign.jpg", "width" => 75, "ratio" => true]);
+        $templateProcessor->setImageValue('ttdRekomendasi1', ["path" => "./media/logos/sign.jpg", "width" => 75, "ratio" => true]);
+        $templateProcessor->setImageValue('ttdRekomendasi2', ["path" => "./media/logos/sign.jpg", "width" => 75, "ratio" => true]);
+        $templateProcessor->setImageValue('ttdRekomendasi3', ["path" => "./media/logos/sign.jpg", "width" => 75, "ratio" => true]);
+        $templateProcessor->setImageValue('ttdRekomendasi4', ["path" => "./media/logos/sign.jpg", "width" => 75, "ratio" => true]);
+        $templateProcessor->setImageValue('ttdRekomendasi5', ["path" => "./media/logos/sign.jpg", "width" => 75, "ratio" => true]);
+        $templateProcessor->setImageValue('ttdPersetujuan1', ["path" => "./media/logos/sign.jpg", "width" => 75, "ratio" => true]);
+        $templateProcessor->setImageValue('ttdPersetujuan2', ["path" => "./media/logos/sign.jpg", "width" => 75, "ratio" => true]);
+        $templateProcessor->setImageValue('ttdPersetujuan3', ["path" => "./media/logos/sign.jpg", "width" => 75, "ratio" => true]);
+        $templateProcessor->setImageValue('ttdPersetujuan4', ["path" => "./media/logos/sign.jpg", "width" => 75, "ratio" => true]);
+    } else if($is_proyek_besar) {
+        $templateProcessor->setImageValue('ttdPenyusun1', ["path" => "./media/logos/sign.jpg", "width" => 75, "ratio" => true]);
+        $templateProcessor->setImageValue('ttdPenyusun2', ["path" => "./media/logos/sign.jpg", "width" => 75, "ratio" => true]);
+        $templateProcessor->setImageValue('ttdRekomendasi1', ["path" => "./media/logos/sign.jpg", "width" => 75, "ratio" => true]);
+        $templateProcessor->setImageValue('ttdRekomendasi2', ["path" => "./media/logos/sign.jpg", "width" => 75, "ratio" => true]);
+        $templateProcessor->setImageValue('ttdRekomendasi3', ["path" => "./media/logos/sign.jpg", "width" => 75, "ratio" => true]);
+        $templateProcessor->setImageValue('ttdRekomendasi4', ["path" => "./media/logos/sign.jpg", "width" => 75, "ratio" => true]);
+        $templateProcessor->setImageValue('ttdRekomendasi5', ["path" => "./media/logos/sign.jpg", "width" => 75, "ratio" => true]);
+        $templateProcessor->setImageValue('ttdPersetujuan1', ["path" => "./media/logos/sign.jpg", "width" => 75, "ratio" => true]);
+        $templateProcessor->setImageValue('ttdPersetujuan2', ["path" => "./media/logos/sign.jpg", "width" => 75, "ratio" => true]);
+    } else {
+        $templateProcessor->setImageValue('ttdPenyusun1', ["path" => "./media/logos/sign.jpg", "width" => 75, "ratio" => true]);
+        $templateProcessor->setImageValue('ttdPenyusun2', ["path" => "./media/logos/sign.jpg", "width" => 75, "ratio" => true]);
+        $templateProcessor->setImageValue('ttdRekomendasi1', ["path" => "./media/logos/sign.jpg", "width" => 75, "ratio" => true]);
+        $templateProcessor->setImageValue('ttdRekomendasi2', ["path" => "./media/logos/sign.jpg", "width" => 75, "ratio" => true]);
+        $templateProcessor->setImageValue('ttdPersetujuan1', ["path" => "./media/logos/sign.jpg", "width" => 75, "ratio" => true]);
+        $templateProcessor->setImageValue('ttdPersetujuan2', ["path" => "./media/logos/sign.jpg", "width" => 75, "ratio" => true]);
+        if(str_contains($proyek->UnitKerja->unit_kerja, "Infra")) {
+            $templateProcessor->setImageValue('ttdPersetujuan3', ["path" => "./media/logos/sign.jpg", "width" => 75, "ratio" => true]);
+        }
+    }
+    $ttdFileName = $now->format("dmYHis") . "_signed-nota-persetujuan_$proyek->kode_proyek";
+    $templateProcessor->saveAs(public_path($target_path . "/" . $ttdFileName . ".docx"));
+    // end :: SIGNED Template docx
+
+    File::delete(public_path($target_path . "/" . $file_name . ".docx"));
+    // dd($files);
+
+    // Begin :: CONVERT Template docx to PDF
+    $templatePhpWord = \PhpOffice\PhpWord\IOFactory::load(public_path($target_path . "/" . $ttdFileName . ".docx"));
     $rendererName = \PhpOffice\PhpWord\Settings::PDF_RENDERER_DOMPDF;
     $rendererLibraryPath = realpath('../vendor/dompdf/dompdf');
     \PhpOffice\PhpWord\Settings::setPdfRenderer($rendererName, $rendererLibraryPath);
+    $xmlWriter = \PhpOffice\PhpWord\IOFactory::createWriter($templatePhpWord, 'PDF');
+    $xmlWriter->save(public_path($target_path . "/" . $file_name . ".pdf"));
+    // end :: CONVERT Template docx to PDF
 
-    $xmlWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'PDF');
+    File::delete(public_path($target_path . "/" . $ttdFileName . ".docx"));
 
-    $is_saved = $xmlWriter->save(public_path($target_path. "/". $file_name));
+    // $properties = $phpWord->getDocInfo();
+    // $properties->setTitle($file_name.".pdf");
+    // $properties->setDescription('Nota Rekomendasi');
+    // $rendererName = \PhpOffice\PhpWord\Settings::PDF_RENDERER_DOMPDF;
+    // $rendererLibraryPath = realpath('../vendor/dompdf/dompdf');
+    // \PhpOffice\PhpWord\Settings::setPdfRenderer($rendererName, $rendererLibraryPath);
+    // $xmlWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'PDF');
+    // $is_saved = $xmlWriter->save(public_path($target_path. "/".$file_name . ".pdf"));
 
     // Begin :: Merge PDF
     $pdf_merger = new PdfMerge();
-    $pdf_merger->add(public_path($target_path. "/". $file_name));
+    $pdf_merger->add(public_path($target_path. "/". $file_name.".pdf"));
     $pdf_merger->add(public_path("file-rekomendasi". "/". $proyek->file_rekomendasi));
-    $pdf_merger->merge(public_path($target_path. "/". $file_name));
+    $pdf_merger->merge(public_path($target_path. "/". $file_name.".pdf"));
     // End :: Merge PDF
     // dd("saved");    
-    $proyek->file_persetujuan = $file_name;
+    $proyek->file_persetujuan = $file_name . ".pdf";
     $proyek->save();
     // $is_saved = $phpWord->save(public_path($target_path. "\\". $file_name));
 }
