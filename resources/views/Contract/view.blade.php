@@ -90,10 +90,12 @@
                                     <!--end::Button-->
 
                                     <!--begin::Button-->
-                                    <a class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_tes" id="kt_toolbar_primary_button"
+                                    {{-- <a class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_tes" id="kt_toolbar_primary_button"
                                     style="background-color: #008CB4;margin-left:10px;">
-                                    Get Progress</a>
-                                <!--end::Button-->
+                                    Get Progress</a> --}}
+                                    <button class="btn btn-sm btn-primary" style="background-color: #008CB4;margin-left:10px;" onclick="getProgress()">
+                                    Get Progress</button>
+                                    <!--end::Button-->
 
                                     <!--begin::Button-->
                                     <a href="/contract-management" class="btn btn-sm btn-primary" id="cloedButton"
@@ -348,7 +350,7 @@
 @else
 <!--begin::Content-->
 @php
-    $month = (int)date("m") == 12 ? 1 : (int)date("m")+1;
+    $month = (int)date("m") == 1 ? 12 : (int)date("m")-1;
     $is_approved = $contract->ContractApproval->where("periode", "=", $month)->where("is_locked", "=", true);
 @endphp
 {{-- @dump($is_approved) --}}
@@ -406,7 +408,7 @@
                                     formData.append("_token", "{{ csrf_token() }}");
                                     formData.append("id_contract", "{{ $contract->id_contract }}")
                                     formData.append("kode_proyek", "{{ $contract->project_id }}")
-                                    formData.append("periode", "{{ (int)date("m")+1 }}")
+                                    formData.append("periode", "{{ (int)date("m")-1 }}")
                                     formData.append("tahun", "{{ (int)date("Y") }}")
                                     const sendData = await fetch("/contract-management/set-lock",{
                                         method: "POST",
@@ -432,9 +434,11 @@
                     <!--begin::Button-->
                     {{-- <a class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_tes" id="kt_toolbar_primary_button"
                         style="background-color: #008CB4;margin-left:10px;"> --}}
-                    <a href="/get-progress/{{ $contract->id_contract }}" class="btn btn-sm btn-primary" id="get_progress"  
+                    {{-- <a href="/get-progress/{{ $contract->id_contract }}" class="btn btn-sm btn-primary" id="get_progress"  
                     style="background-color:#f3f6f9;margin-left:10px;color: black;">
-                    Get Progress</a>
+                    Get Progress</a> --}}
+                    <button class="btn btn-sm btn-primary" style="background-color: #008CB4;margin-left:10px;" onclick="getProgress()">
+                    Get Progress</button>
                     <!--end::Button-->
 
                     {{-- <script>
@@ -13447,6 +13451,34 @@ aria-hidden="true">
 @endsection
 @section('js-script')
 <script src="{{ asset('/js/custom/pages/contract/contract.js') }}"></script>
+
+<script>
+    async function getProgress() {
+        Swal.fire({
+            title: '',
+            text: "Apakah anda yakin?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: '#008CB4',
+            cancelButtonColor: '#BABABA',
+            confirmButtonText: 'Ya'
+        }).then(async(result)=>{
+            if(result.isConfirmed){
+                const formData = new FormData();
+                formData.append("_token", "{{ csrf_token() }}");
+                formData.append("id_contract", "{{ $contract->id_contract }}");
+                const sendData = await fetch("/get-progress",{
+                    method: "POST",
+                    body: formData
+                }).then(res => res.json());
+                if(sendData.link){
+                    window.location.reload();
+                }
+            }
+
+        })
+    }
+</script>
 
 <script>
     // const savePasalBtn = document.querySelector("#save-pasal");

@@ -193,7 +193,7 @@
                         @if (auth()->user()->check_administrator || $adminPIC || auth()->user()->check_user_sales )
                             <div class="menu-item">
                                 <a class="menu-link " href="/rekomendasi"
-                                    style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'rekomendasi') ? 'background-color:#008CB4' : '' }}">
+                                    style="color:white; padding-left:20px; {{ str_contains(Request::url(), '/rekomendasi') ? 'background-color:#008CB4' : '' }}">
                                     <span class="menu-icon">
                                         <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
                                         <span class="svg-icon svg-icon-2">
@@ -230,6 +230,7 @@
                             str_contains(Request::Path(), 'direktorat') ||
                             str_contains(Request::Path(), 'departemen') ||
                             str_contains(Request::Path(), 'matriks-approval-rekomendasi') ||
+                            // str_contains(Request::Path(), 'instansi') ||
                             str_contains(Request::Path(), 'team-proyek') ? 'background-color:#008CB4' : '' }}">
 
                                     <a class="menu-link" id="collapse-button" style="color:white; padding-left:20px;"
@@ -607,6 +608,20 @@
                                     </div>
                                     <!--end::Menu Colapse-->
                                     @endif
+
+                                    {{-- @if (auth()->user()->check_administrator)
+                                    <!--begin::Menu Colapse-->
+                                    <div id="#kt_aside_menu" data-kt-menu="true"
+                                        style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'instansi' ? 'background-color:#008CB4' : '' }}">
+                                        <a class="menu-link " href="/instansi" style="color:white; padding-left:20px;">
+                                            <span class="menu-icon">
+                                                <i class="bi bi-building-fill text-white" style="font-size: 20px"></i>
+                                            </span>
+                                            <span class="menu-title" style="font-size: 16px; padding-left: 10px">Instansi</span>
+                                        </a>
+                                    </div>
+                                    <!--end::Menu Colapse-->
+                                    @endif --}}
 
                                     @if (auth()->user()->check_administrator)
                                     <!--begin::Menu Colapse-->

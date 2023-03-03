@@ -220,6 +220,10 @@ class CustomerController extends Controller
         // $data_provinsi = Http::get("https://emsifa.github.io/api-wilayah-indonesia/api/provinces.json")->json();
         // $data = Http::get("http://maps.googleapis.com/maps/api/geocode/xml?address=". "Boston, USA" . "&sensor=false");
 
+        $proyeks = $customer->proyekBerjalans->map(function($pb){
+            return $pb->proyek;
+        });
+
         $data_provinsi = json_decode(Storage::get("/public/data/provinsi.json"));
         if (!empty($customer->provinsi) && str_contains($customer->provinsi, "-")) {
             $kode_provinsi = explode("-", $customer->provinsi)[1];
@@ -381,9 +385,16 @@ class CustomerController extends Controller
         foreach ($kategoriProyek as $kode_unit_kerja => $proyekBerjalans) {
             foreach ($proyekBerjalans as $proyekBerjalan) {
                 if(!empty($proyekBerjalan->proyek)) {
-                    $nilaiTotalLaba += $proyekBerjalan->proyek->laba / $per ?? 0;
-                    $nilaiTotalRugi += $proyekBerjalan->proyek->rugi / $per ?? 0;
-                    $nilaiTotalPiutang += $proyekBerjalan->proyek->piutang / $per ?? 0;
+                    $piutang = $proyekBerjalan->proyek->Piutang->sum(function($item){
+                        return $item->day_30 + $item->day_60 + $item->day_90 + $item->day_91; 
+                    });
+
+                    $laba_rugi = $proyekBerjalan->proyek->ProyekProgress->sum("laba_kotor_ri");
+                    // dump($piutang);
+
+                    $nilaiTotalLaba += $laba_rugi / $per ?? 0;
+                    // $nilaiTotalRugi += $proyekBerjalan->proyek->rugi / $per ?? 0;
+                    $nilaiTotalPiutang += $piutang ?? 0;
                 }
             }
             $unitKerja = UnitKerja::where("divcode", "=", $kode_unit_kerja)->first();
@@ -943,7 +954,7 @@ class CustomerController extends Controller
         
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->getStyle("A1:F1")->getFill()
+        $sheet->getStyle("A1:D1")->getFill()
             ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
             ->getStartColor()->setARGB('0db0d9');
         $sheet->setCellValue('A1', 'Nama Proyek');
@@ -969,6 +980,7 @@ class CustomerController extends Controller
         return response()->json(["href" => $file_name, "data" => $proyeks]);
     }
 
+    //Begin::Nilai Piutang
     public function getNilaiPiutangCustomer(Request $request) {
         $customer = Customer::find($request->id_customer);
         $unit_kerja = UnitKerja::where("unit_kerja", "=", $request->unit_kerja)->first();
@@ -977,9 +989,27 @@ class CustomerController extends Controller
         });
         $proyeks = $proyeks->where("unit_kerja", "=", $unit_kerja->divcode)->sortByDesc("piutang")->values();
         
+        $dataClass = $proyeks->map(function($proyek){
+
+            $piutang = $proyek->Piutang->flatten()->sum(function($piutang){
+                return $piutang->day_30 + $piutang->day_60 + $piutang->day_90 + $piutang->day_91;
+            });
+            
+            $data = new \StdClass();
+            $data->stage = $proyek->stage;
+            $data->kode_proyek = $proyek->kode_proyek;
+            $data->nama_proyek = $proyek->nama_proyek;
+            $data->status_pasdin = $proyek->status_pasdin;
+            $data->unit_kerja = $proyek->unit_kerja;
+            $data->piutang = $piutang;
+            return $data;          
+        });
+      
+
+        
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->getStyle("A1:F1")->getFill()
+        $sheet->getStyle("A1:D1")->getFill()
             ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
             ->getStartColor()->setARGB('0db0d9');
         $sheet->setCellValue('A1', 'Nama Proyek');
@@ -988,11 +1018,14 @@ class CustomerController extends Controller
         $sheet->setCellValue('D1', "Nilai Piutang");
         
         $row = 2;
-        $proyeks->each(function ($p) use (&$row, $sheet, $unit_kerja) {
+        $proyeks->map(function ($p) use (&$row, $sheet, $unit_kerja) {
+            $piutangProyek = (int)$p->Piutang->sum(function($item){
+                return (int)$item->day_30 + (int)$item->day_60 + (int)$item->day_90 + (int)$item->day_91; 
+            });
             $sheet->setCellValue('A' . $row, $p->nama_proyek);
             $sheet->setCellValue('B' . $row, $this->getProyekStage($p->stage));
             $sheet->setCellValue('C' . $row, $unit_kerja->unit_kerja);
-            $sheet->setCellValue('D' . $row, $p->piutang);
+            $sheet->setCellValue('D' . $row, $piutangProyek); 
             // $p->nilai_ok = $nilai_ok;
             $p->unit_kerja = $unit_kerja->unit_kerja;
             $row++;
@@ -1002,9 +1035,11 @@ class CustomerController extends Controller
         $file_name = "$unit_kerja_join-Nilai-Piutang-Pelanggan-" . date('dmYHis') . ".xlsx";
         $writer->save(public_path("excel/$file_name"));
 
-        return response()->json(["href" => $file_name, "data" => $proyeks]);
+        return response()->json(["href" => $file_name, "data" => $dataClass]);
     }
+    //End::Nilai Piutang
 
+    //Begin::Nilai Laba Rugi
     public function getNilaiLabaRugiCustomer(Request $request) {
         $customer = Customer::find($request->id_customer);
         $type = $request->type;
@@ -1014,12 +1049,23 @@ class CustomerController extends Controller
         });
         if($type == "Laba") {
             $proyeks = $proyeks->where("unit_kerja", "=", $unit_kerja->divcode)->sortByDesc("laba")->values();
+            $proyeks = $proyeks->map(function($proyek){
+                $laba = $proyek->ProyekProgress->sum("laba_kotor_ri");     
+                $data = new \StdClass();
+                $data->stage = $proyek->stage;
+                $data->kode_proyek = $proyek->kode_proyek;
+                $data->nama_proyek = $proyek->nama_proyek;
+                $data->status_pasdin = $proyek->status_pasdin;
+                $data->unit_kerja = $proyek->unit_kerja;
+                $data->laba = $laba;
+                return $data;          
+            });
         } else {
             $proyeks = $proyeks->where("unit_kerja", "=", $unit_kerja->divcode)->sortByDesc("rugi")->values();
         }
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->getStyle("A1:F1")->getFill()
+        $sheet->getStyle("A1:D1")->getFill()
             ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
             ->getStartColor()->setARGB('0db0d9');
         $sheet->setCellValue('A1', 'Nama Proyek');
@@ -1056,6 +1102,7 @@ class CustomerController extends Controller
 
         return response()->json(["href" => $file_name, "data" => $proyeks]);
     }
+    //End::Nilai Laba Rugi
 
     private function uploadStrukturOrganisasi(UploadedFile $uploadedFile, $id_customer)
     {

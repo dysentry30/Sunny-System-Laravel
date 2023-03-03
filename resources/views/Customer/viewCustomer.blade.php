@@ -401,6 +401,17 @@
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3 required">
                                                                         <span class="">Instansi</span>
+                                                                        {{-- @foreach ($instansis as $instansi)
+                                                                            @if ($instansi->nama_instansi == $customer->jenis_instansi)
+                                                                                <option value="{{ $instansi->nama_instansi }}" selected>
+                                                                                    {{ $instansi->nama_instansi }}
+                                                                                </option>
+                                                                            @else
+                                                                                <option value="{{ $instansi->nama_instansi }}">
+                                                                                    {{ $instansi->nama_instansi }}
+                                                                                </option>
+                                                                            @endif
+                                                                        @endforeach --}}
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
