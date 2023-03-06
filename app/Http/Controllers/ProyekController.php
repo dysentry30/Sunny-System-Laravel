@@ -1619,6 +1619,9 @@ class ProyekController extends Controller
                     if (empty($customer->syarat_pembayaran)) {
                         $error_msg->push("Term Payment");
                     }
+                    if (empty($proyekStage->Departemen)) {
+                        $error_msg->push("Departemen");
+                    }
                     if ($customer->tax == null) {
                         $error_msg->push("Tax");
                     }
@@ -1828,7 +1831,7 @@ class ProyekController extends Controller
         
                                     "SPART" => "",
         
-                                    "KDGRP" => "$kdgrp",
+                                    "KDGRP" => $kdgrp,
         
                                     "CUST_WAERS" => "IDR",
         

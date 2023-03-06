@@ -367,7 +367,7 @@
                                                 data-select2-id="select2-unit-kerja" tabindex="-1" aria-hidden="true">
                                                 <option value=""></option>
                                                 @foreach ($departemens as $departemen)
-                                                    <option value="{{$departemen->kode_departemen}}">{{$departemen->nama_departemen}} ({{ $departemen->UnitKerja->unit_kerja }})</option>
+                                                    <option value="{{$departemen->kode_departemen}}">{{$departemen->nama_departemen}} ({{ $departemen->UnitKerja->unit_kerja ?? "-" }})</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -640,7 +640,7 @@
                                                     data-select2-id="select2-departemen" tabindex="-1" aria-hidden="true">
                                                     <option value=""></option>
                                                     @foreach ($departemens as $departemen)
-                                                        <option value="{{$departemen->kode_departemen}}" {{ $departemen->kode_departemen == $approval->departemen ? "selected" : "" }} >{{$departemen->nama_departemen}} ({{ $departemen->UnitKerja->unit_kerja }})</option>
+                                                        <option value="{{$departemen->kode_departemen}}" {{ $departemen->kode_departemen == $approval->departemen ? "selected" : "" }} >{{$departemen->nama_departemen}} ({{ $departemen->UnitKerja->unit_kerja ?? "-" }})</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -738,6 +738,8 @@
     
     <script>
         $('#example').DataTable({
+            dom: '<"float-start"f><"#example"t>rtip',
+            pageLength : 50,
             stateSave: true,
         });
     </script>

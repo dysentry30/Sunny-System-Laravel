@@ -171,7 +171,11 @@ Route::middleware(["web"])->group(function () {
                         $p->spk_code = $p->kode_proyek;
                     }
                     // $p->spk_code = $p->kode_proyek.'tes-pis';
-                    $p->proyek_name = $p->nama_proyek;
+                    $departemen_kode = "";
+                    if(!empty($p->Proyek->departemen_proyek)) {
+                        $departemen_kode = str_replace("0", "", $p->Proyek->departemen_proyek) . " ";
+                    }
+                    $p->proyek_name = $departemen_kode . " " .$p->nama_proyek;
                     switch ($p->jenis_proyek) {
                         case "I":
                             $p->type_code = "INTERN";
@@ -206,7 +210,11 @@ Route::middleware(["web"])->group(function () {
                         $p->spk_code = $p->kode_proyek;
                     }
                     // $p->spk_code = $p->kode_proyek;
-                    $p->proyek_name = $p->nama_proyek;
+                    $departemen_kode = "";
+                    if(!empty($p->Proyek->departemen_proyek)) {
+                        $departemen_kode = str_replace("0", "", $p->Proyek->departemen_proyek) . " ";
+                    }
+                    $p->proyek_name = $departemen_kode . $p->nama_proyek;
                     switch ($p->jenis_proyek) {
                         case "I":
                             $p->type_code = "INTERN";
@@ -238,7 +246,7 @@ Route::middleware(["web"])->group(function () {
                 $p->header_id = 0;
                 $p->data_ok = $data_ok;
                 unset($p->kode_proyek, $p->nama_proyek, $p->jenis_proyek, $p->unit_kerja, $p->nilai_perolehan, $p->is_cancel, $p->stage, $p->tipe_proyek);
-                unset($p->month_forecast, $p->nilai_forecast, $p->periode_prognosa, $p->realisasi_forecast);
+                unset($p->month_forecast, $p->nilai_forecast, $p->periode_prognosa, $p->realisasi_forecast, $p->Proyek);
                 // $p->nilai_forecast = $p->forecasts->sum("nilai_forecast");
                 // $p->rkap_forecast = $p->forecasts->sum("rkap_forecast");
                 // $p->realisasi_forecast = $p->forecasts->sum("realisasi_forecast");

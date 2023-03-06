@@ -1206,7 +1206,7 @@
         const charCounterElts = document.querySelectorAll(".char-counter");
         charCounterElts.forEach(item => {
             const textNumberElt = item.parentElement.querySelector(".d-flex small");
-            const maxChar = Number(item.getAttribute("data-max-char")) - 2;
+            const maxChar = Number(item.getAttribute("data-max-char"));
             if(maxChar && !item.value) {
                 item.addEventListener("input", e => {
                     let lengthChar = item.value.length;
@@ -1235,7 +1235,9 @@
                 if(lengthChar >= maxChar) {
                     // console.log(item.value);
                     const newValue = item.value.split("");
-                    newValue.pop();
+                    for(let i = 1; i <= lengthChar - maxChar; i++) {
+                        newValue.pop();
+                    }
                     item.value = newValue.join("");
                     lengthChar = item.value.length;
                 }
