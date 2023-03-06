@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Mail;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Events\NotificationPasswordReset;
 use App\Models\Dop;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Validator;
 
 
@@ -221,6 +222,7 @@ class UserController extends Controller
     public function update(Request $request)
     {
         $data = $request->all();
+        // dd($data);
         $messages = [
             "required" => "This field is required",
         ];
@@ -229,6 +231,7 @@ class UserController extends Controller
             "name-user" => "required",
             "email" => "required",
             "phone-number" => "required",
+            "upload-ttd" => "required",
         ];
         $validation = Validator::make($data, $rules, $messages);
 
@@ -268,11 +271,32 @@ class UserController extends Controller
             $validation->validate();
         }
 
+        // // loading the source image
+        // // $src = imagecreatetruecolor(150, 150);
+        // // $color = imagecolorat($src, 0, 0);
+        // // $hex = dechex($color);
+        
+        // // dd($hex);
+        // $white = imagecolorallocatealpha($src, 255, 255, 255, 127);
+        // $_transColor = imagecolortransparent($src, $white);
+        // imagefill($src, 0, 0, $_transColor);
+        // // saving the image to public folder
+        // $file_name = "tanda-tangan-" . $data["nip"] . "." . "png";
+        // imagesavealpha($src, true);
+        
+        $file_name = "tanda-tangan-" . $data["nip"] . "." . $data["upload-ttd"]->clientExtension();
+        $src = imagecreatefromjpeg($data["upload-ttd"]);
+        $new = imagescale($src,100);
+
+        imagejpeg($new, public_path("/file-ttd/$file_name"), 100);
+        // $data["upload-ttd"]->storeAs("/", $file_name, ["disk" => "public/ttd"]);
+
         $user = User::find($data["user-id"]);
         $user->nip = $data["nip"];
         $user->name = $data["name-user"];
         $user->email = $data["email"];
         $user->no_hp = $data["phone-number"];
+        $user->file_ttd = $file_name;
         $user->is_active = $request->has("is-active");
         // if (!Auth::user()->check_administrator) {
         if (str_contains($user->email, "@wika-customer")) {

@@ -3,6 +3,264 @@
 <!--begin::Main-->
 @section('content')
 
+{{-- Begin :: css --}}
+<style>
+    .timeline-centered {
+    position: relative;
+    margin-bottom: 30px;
+}
+
+    .timeline-centered:before, .timeline-centered:after {
+        content: " ";
+        display: table;
+    }
+
+    .timeline-centered:after {
+        clear: both;
+    }
+
+    .timeline-centered:before, .timeline-centered:after {
+        content: " ";
+        display: table;
+    }
+
+    .timeline-centered:after {
+        clear: both;
+    }
+
+    .timeline-centered:before {
+        content: '';
+        position: absolute;
+        display: block;
+        width: 4px;
+        background: #f5f5f6;
+        left: 50%;
+        top: 20px;
+        bottom: 20px;
+        margin-left: -4px;
+    }
+
+    .timeline-centered .timeline-entry {
+        position: relative;
+        width: 50%;
+        float: right;
+        margin-bottom: 70px;
+        clear: both;
+    }
+
+        .timeline-centered .timeline-entry:before, .timeline-centered .timeline-entry:after {
+            content: " ";
+            display: table;
+        }
+
+        .timeline-centered .timeline-entry:after {
+            clear: both;
+        }
+
+        .timeline-centered .timeline-entry:before, .timeline-centered .timeline-entry:after {
+            content: " ";
+            display: table;
+        }
+
+        .timeline-centered .timeline-entry:after {
+            clear: both;
+        }
+
+        .timeline-centered .timeline-entry.begin {
+            margin-bottom: 0;
+        }
+
+        .timeline-centered .timeline-entry.left-aligned {
+            float: left;
+        }
+
+            .timeline-centered .timeline-entry.left-aligned .timeline-entry-inner {
+                margin-left: 0;
+                margin-right: -18px;
+            }
+
+                .timeline-centered .timeline-entry.left-aligned .timeline-entry-inner .timeline-time {
+                    left: auto;
+                    right: -100px;
+                    text-align: left;
+                }
+
+                .timeline-centered .timeline-entry.left-aligned .timeline-entry-inner .timeline-icon {
+                    float: right;
+                }
+
+                .timeline-centered .timeline-entry.left-aligned .timeline-entry-inner .timeline-content {
+                    margin-left: 0;
+                    margin-right: 70px;
+                }
+
+                    .timeline-centered .timeline-entry.left-aligned .timeline-entry-inner .timeline-content:after {
+                        left: auto;
+                        right: 0;
+                        margin-left: 0;
+                        margin-right: -9px;
+                        -moz-transform: rotate(180deg);
+                        -o-transform: rotate(180deg);
+                        -webkit-transform: rotate(180deg);
+                        -ms-transform: rotate(180deg);
+                        transform: rotate(180deg);
+                    }
+
+        .timeline-centered .timeline-entry .timeline-entry-inner {
+            position: relative;
+            margin-left: -22px;
+        }
+
+            .timeline-centered .timeline-entry .timeline-entry-inner:before, .timeline-centered .timeline-entry .timeline-entry-inner:after {
+                content: " ";
+                display: table;
+            }
+
+            .timeline-centered .timeline-entry .timeline-entry-inner:after {
+                clear: both;
+            }
+
+            .timeline-centered .timeline-entry .timeline-entry-inner:before, .timeline-centered .timeline-entry .timeline-entry-inner:after {
+                content: " ";
+                display: table;
+            }
+
+            .timeline-centered .timeline-entry .timeline-entry-inner:after {
+                clear: both;
+            }
+
+            .timeline-centered .timeline-entry .timeline-entry-inner .timeline-time {
+                position: absolute;
+                left: -100px;
+                text-align: right;
+                padding: 10px;
+                -webkit-box-sizing: border-box;
+                -moz-box-sizing: border-box;
+                box-sizing: border-box;
+            }
+
+                .timeline-centered .timeline-entry .timeline-entry-inner .timeline-time > span {
+                    display: block;
+                }
+
+                    .timeline-centered .timeline-entry .timeline-entry-inner .timeline-time > span:first-child {
+                        font-size: 15px;
+                        font-weight: bold;
+                    }
+
+                    .timeline-centered .timeline-entry .timeline-entry-inner .timeline-time > span:last-child {
+                        font-size: 12px;
+                    }
+
+            .timeline-centered .timeline-entry .timeline-entry-inner .timeline-icon {
+                background: #fff;
+                color: #737881;
+                display: block;
+                width: 40px;
+                height: 40px;
+                -webkit-background-clip: padding-box;
+                -moz-background-clip: padding;
+                background-clip: padding-box;
+                -webkit-border-radius: 20px;
+                -moz-border-radius: 20px;
+                border-radius: 20px;
+                text-align: center;
+                -moz-box-shadow: 0 0 0 5px #f5f5f6;
+                -webkit-box-shadow: 0 0 0 5px #f5f5f6;
+                box-shadow: 0 0 0 5px #f5f5f6;
+                line-height: 40px;
+                font-size: 15px;
+                float: left;
+            }
+
+                .timeline-centered .timeline-entry .timeline-entry-inner .timeline-icon.bg-primary {
+                    background-color: #303641;
+                    color: #fff;
+                }
+
+                .timeline-centered .timeline-entry .timeline-entry-inner .timeline-icon.bg-secondary {
+                    background-color: #ee4749;
+                    color: #fff;
+                }
+
+                .timeline-centered .timeline-entry .timeline-entry-inner .timeline-icon.bg-success {
+                    background-color: #00a651;
+                    color: #fff;
+                }
+
+                .timeline-centered .timeline-entry .timeline-entry-inner .timeline-icon.bg-info {
+                    background-color: #21a9e1;
+                    color: #fff;
+                }
+
+                .timeline-centered .timeline-entry .timeline-entry-inner .timeline-icon.bg-warning {
+                    background-color: #fad839;
+                    color: #fff;
+                }
+
+                .timeline-centered .timeline-entry .timeline-entry-inner .timeline-icon.bg-danger {
+                    background-color: #cc2424;
+                    color: #fff;
+                }
+
+            .timeline-centered .timeline-entry .timeline-entry-inner .timeline-content {
+                position: relative;
+                background: #f5f5f6;
+                padding: 1.7em;
+                margin-left: 70px;
+                -webkit-background-clip: padding-box;
+                -moz-background-clip: padding;
+                background-clip: padding-box;
+                -webkit-border-radius: 3px;
+                -moz-border-radius: 3px;
+                border-radius: 3px;
+            }
+
+                .timeline-centered .timeline-entry .timeline-entry-inner .timeline-content:after {
+                    content: '';
+                    display: block;
+                    position: absolute;
+                    width: 0;
+                    height: 0;
+                    border-style: solid;
+                    border-width: 9px 9px 9px 0;
+                    border-color: transparent #f5f5f6 transparent transparent;
+                    left: 0;
+                    top: 10px;
+                    margin-left: -9px;
+                }
+
+                .timeline-centered .timeline-entry .timeline-entry-inner .timeline-content h2, .timeline-centered .timeline-entry .timeline-entry-inner .timeline-content p {
+                    color: #737881;
+                    font-family: "Noto Sans",sans-serif;
+                    font-size: 12px;
+                    margin: 0;
+                    line-height: 1.428571429;
+                }
+
+                    .timeline-centered .timeline-entry .timeline-entry-inner .timeline-content p + p {
+                        margin-top: 15px;
+                    }
+
+                .timeline-centered .timeline-entry .timeline-entry-inner .timeline-content h2 {
+                    font-size: 16px;
+                    margin-bottom: 10px;
+                }
+
+                    .timeline-centered .timeline-entry .timeline-entry-inner .timeline-content h2 a {
+                        color: #303641;
+                    }
+
+                    .timeline-centered .timeline-entry .timeline-entry-inner .timeline-content h2 span {
+                        -webkit-opacity: .6;
+                        -moz-opacity: .6;
+                        opacity: .6;
+                        -ms-filter: alpha(opacity=60);
+                        filter: alpha(opacity=60);
+                    }
+</style>
+{{-- End :: css --}}
+
     @php
         $is_super_user = str_contains(Auth::user()->name, "PIC") || Auth::user()->check_administrator;
     @endphp
@@ -259,10 +517,28 @@
                                                         <td>
                                                             @if ($proyek->is_disetujui)
                                                                 <small class="badge badge-light-success">Disetujui</small>
-                                                            @elseif($proyek->is_disetujui == false)
+                                                            @elseif($proyek->is_disetujui == false && !is_null($proyek->is_disetujui))
                                                                 <small class="badge badge-light-danger">Ditolak</small>
-                                                            @elseif(!$proyek->is_recommended && $is_pending || $proyek->review_assessment)
-                                                                <small class="badge badge-light-primary">Request</small>
+                                                            @elseif($proyek->review_assessment == true && is_null($proyek->is_penyusun_approved))
+                                                                @if (Auth::user()->Pegawai->MatriksApproval->contains("kategori", "Penyusun"))
+                                                                    <small class="badge badge-light-warning">Request Penyusun</small>
+                                                                    
+                                                                @else
+                                                                    <small class="badge badge-light-primary">Proses Penyusun</small>
+                                                                @endif
+                                                            @elseif($proyek->is_penyusun_approved == true && is_null($proyek->is_recommended))
+                                                                @if (Auth::user()->Pegawai->MatriksApproval->contains("kategori", "Rekomendasi"))
+                                                                    <small class="badge badge-light-warning">Request Rekomendasi</small>
+                                                                    
+                                                                @else
+                                                                    <small class="badge badge-light-primary">Proses Rekomendasi</small>
+                                                                @endif
+                                                            @elseif($proyek->is_recommended == true && is_null($proyek->is_disetujui))
+                                                                @if (Auth::user()->Pegawai->MatriksApproval->contains("kategori", "Penyetujuan"))
+                                                                    <small class="badge badge-light-warning">Request Penyetujuan</small>
+                                                                @else
+                                                                    <small class="badge badge-light-primary">Proses Penyetujuan</small>
+                                                                @endif
                                                             @endif
                                                         </td>
                                                     </tr>
@@ -413,13 +689,38 @@
                                                         <td>
                                                             @if ($proyek->is_disetujui)
                                                                 <small class="badge badge-light-success">Disetujui</small>
+                                                            @elseif($proyek->is_disetujui == false && !is_null($proyek->is_disetujui))
+                                                                <small class="badge badge-light-danger">Ditolak</small>
+                                                            @elseif($proyek->review_assessment == true && is_null($proyek->is_penyusun_approved))
+                                                                @if (Auth::user()->Pegawai->MatriksApproval->contains("kategori", "Penyusun"))
+                                                                    <small class="badge badge-light-warning">Request Penyusun</small>
+                                                                    
+                                                                @else
+                                                                    <small class="badge badge-light-primary">Proses Penyusun</small>
+                                                                @endif
+                                                            @elseif($proyek->is_penyusun_approved == true && is_null($proyek->is_recommended))
+                                                                @if (Auth::user()->Pegawai->MatriksApproval->contains("kategori", "Rekomendasi"))
+                                                                    <small class="badge badge-light-warning">Request Rekomendasi</small>
+                                                                    
+                                                                @else
+                                                                    <small class="badge badge-light-primary">Proses Rekomendasi</small>
+                                                                @endif
+                                                            @elseif($proyek->is_recommended == true && is_null($proyek->is_disetujui))
+                                                                @if (Auth::user()->Pegawai->MatriksApproval->contains("kategori", "Penyetujuan"))
+                                                                    <small class="badge badge-light-warning">Request Penyetujuan</small>
+                                                                @else
+                                                                    <small class="badge badge-light-primary">Proses Penyetujuan</small>
+                                                                @endif
+                                                            @endif
+                                                            {{-- @if ($proyek->is_disetujui)
+                                                                <small class="badge badge-light-success">Disetujui</small>
                                                             @elseif(!is_null($proyek->is_disetujui) && ($proyek->is_recommended || $proyek->is_recommended_with_note))
                                                                 <small class="badge badge-light-danger">Ditolak</small>
                                                             @elseif(!$proyek->is_recommended && empty($proyek->recommended_with_note))
                                                                 <small class="badge badge-light-warning">Need Review</small>
                                                             @elseif(!$proyek->is_recommended && $is_pending || $proyek->review_assessment)
                                                                 <small class="badge badge-light-primary">Request</small>
-                                                            @endif
+                                                            @endif --}}
                                                         </td>
                                                     </tr>
                                                 @empty
@@ -462,7 +763,7 @@
                                             @if (!empty($proyeks_persetujuan))
                                                 @forelse ($proyeks_persetujuan as $proyek)
                                                     @php
-                                                        // $customer = $proyek->proyekBerjalan->Customer;
+                                                        $customer = $proyek->proyekBerjalan->Customer;
                                                         $approved_data = collect([json_decode($proyek->approved_rekomendasi)])->flatten();
                                                         $is_approved = $approved_data->every(function($item) {
                                                             return !empty($item) && $item->status == "approved";
@@ -537,9 +838,29 @@
                                                         <td>
                                                             @if ($proyek->is_disetujui)
                                                                 <small class="badge badge-light-success">Disetujui</small>
-                                                            @elseif($proyek->is_disetujui == false)
+                                                            @elseif($proyek->is_disetujui == false && !is_null($proyek->is_disetujui))
                                                                 <small class="badge badge-light-danger">Ditolak</small>
-                                                            @elseif($proyek->is_recommended != null && $proyek->is_penyusun_approved && $proyek->is_disetujui == null)
+                                                            @elseif($proyek->review_assessment == true && is_null($proyek->is_penyusun_approved))
+                                                                @if (Auth::user()->Pegawai->MatriksApproval->contains("kategori", "Penyusun"))
+                                                                    <small class="badge badge-light-warning">Request Penyusun</small>
+                                                                    
+                                                                @else
+                                                                    <small class="badge badge-light-primary">Proses Penyusun</small>
+                                                                @endif
+                                                            @elseif($proyek->is_penyusun_approved == true && is_null($proyek->is_recommended))
+                                                                @if (Auth::user()->Pegawai->MatriksApproval->contains("kategori", "Rekomendasi"))
+                                                                    <small class="badge badge-light-warning">Request Rekomendasi</small>
+                                                                    
+                                                                @else
+                                                                    <small class="badge badge-light-primary">Proses Rekomendasi</small>
+                                                                @endif
+                                                            @elseif($proyek->is_recommended == true && is_null($proyek->is_disetujui))
+                                                                @if (Auth::user()->Pegawai->MatriksApproval->contains("kategori", "Penyetujuan"))
+                                                                    <small class="badge badge-light-warning">Request Penyetujuan</small>
+                                                                @else
+                                                                    <small class="badge badge-light-primary">Proses Penyetujuan</small>
+                                                                @endif
+                                                            {{-- @elseif($proyek->is_recommended != null && $proyek->is_penyusun_approved && $proyek->is_disetujui == null)
                                                                 @if (Auth::user()->Pegawai->MatriksApproval->contains("kategori", "Persetujuan"))
                                                                     <small class="badge badge-light-info">Procces in Rekomendasi</small>
                                                                 @elseif (Auth::user()->Pegawai->MatriksApproval->contains("kategori", "Rekomendasi"))
@@ -558,7 +879,7 @@
                                                                     @else
                                                                         <small class="badge badge-warning">Need Submit</small>
                                                                     @endif
-                                                                @endif
+                                                                @endif --}}
                                                             @endif
                                                         </td>
                                                     </tr>
@@ -717,6 +1038,88 @@
             </div>
         </div>
 
+        <div class="modal fade" id="kt_modal_view_proyek_history_{{$proyek->kode_proyek}}" tabindex="-1" aria-labelledby="kt_modal_view_proyek_{{$proyek->kode_proyek}}" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title">Pengajuan Rekomendasi History</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        @php
+                            $approved_pengajuan = collect(json_decode($proyek->approved_rekomendasi));
+                            $approved_penyusun= collect(json_decode($proyek->approved_penyusun));
+                            $approved_rekomendasi = collect(json_decode($proyek->approved_rekomendasi_final));
+                            $approved_persetujuan = collect(json_decode($proyek->approved_persetujuan));
+                            $data_approved_merged = collect()->mergeRecursive(["Pengajuan" => $approved_pengajuan->flatten(), "Penyusun" => $approved_penyusun->flatten(), "Rekomendasi" => $approved_rekomendasi->flatten(), "Persetujuan" => $approved_persetujuan->flatten()]);
+                            // dump($approved_pengajuan, $approved_penyusun, $approved_rekomendasi, $approved_persetujuan);
+                        @endphp
+                        {{-- Begin :: History --}}
+                        <div class="row">
+                            @php
+                                $row = 1;
+                            @endphp
+                            <div class="timeline-centered">
+                                @forelse ($data_approved_merged as $key => $data)
+                                    @if(!empty($data))
+
+                                        {{-- @dd($data) --}}
+
+                                            <article class="timeline-entry {{$row % 2 == 0 ? "left-aligned" : ""}}">
+                                                
+                                                <div class="timeline-entry-inner">
+                                                    <time class="timeline-time"></time>
+                                                    @php
+                                                        $aksi = "";
+                                                    @endphp
+                                                    @if ($data->contains("status", "rejected"))
+                                                        @php
+                                                            $aksi = "ditolak";
+                                                        @endphp
+                                                        <div class="timeline-icon bg-danger">
+                                                            <i class="entypo-feather"></i>
+                                                        </div>
+                                                    @else
+                                                        @php
+                                                            $aksi = "disetujui";
+                                                        @endphp
+                                                        <div class="timeline-icon bg-success">
+                                                            <i class="entypo-feather"></i>
+                                                        </div>
+                                                    @endif
+                                                    
+                                                    <div class="timeline-content">
+                                                        <div class="row">
+                                                            <h5>{{$key}} {{$aksi}} oleh:</h5>
+                                                            @foreach ($data as $d)
+                                                                <small>
+                                                                    - <b>{{App\Models\User::find($d->user_id)->name}}</b>,
+                                                                    @if (!empty($d->tanggal))
+                                                                        {{Carbon\Carbon::create($d->tanggal)->translatedFormat("d F Y")}}
+                                                                    @endif
+                                                                </small>
+                                                            @endforeach
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </article>
+                                        @endif
+                                        @php
+                                            $row++;
+                                        @endphp
+                                    @empty
+                                @endforelse
+                            </div>
+                        </div>
+                        {{-- End :: History --}}
+                    </div>
+                    <div class="modal-footer">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="modal fade" id="kt_modal_view_proyek_tolak_pengajuan_{{$proyek->kode_proyek}}" tabindex="-1" aria-labelledby="kt_modal_view_proyek_tolak_pengajuan_{{$proyek->kode_proyek}}" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
                 <div class="modal-content">
@@ -862,7 +1265,7 @@
                                 @csrf
                                 <input type="hidden" name="kode-proyek" value="{{$proyek->kode_proyek}}">
                                 @if (!$proyek->recommended_with_note)
-                                <input type="submit" name="input-rekomendasi-with-note" value="Submit" class="btn btn-sm btn-success">
+                                    <input type="submit" name="input-rekomendasi-with-note" value="Submit" class="btn btn-sm btn-success">
                                 @endif
                             @elseif(!$proyek->is_recommended)
                                 <span class="badge badge-light-danger">Ditolak</span>
@@ -1005,9 +1408,10 @@
                                 <form action="" method="get">
                                     @csrf
                                     <input type="hidden" value="{{$proyek->kode_proyek}}" name="kode-proyek" id="kode-proyek">
+                                    <button type="button" data-bs-toggle="modal" id="show-modal-tolak" style="display: none" data-bs-target="#kt_modal_view_proyek_tolak_rekomendasi_{{$proyek->kode_proyek}}">clickhere</button>
                                     <label for="kategori-rekomendasi" class="text-start">Kategori Rekomendasi: </label>
                                     {{-- <select onchange="disableEnableTextArea(this)" id="kategori-rekomendasi" name="kategori-rekomendasi" --}}
-                                    <select id="kategori-rekomendasi" name="kategori-rekomendasi"
+                                    <select id="kategori-rekomendasi" onchange="showModalTolakRekomendasi(this, '{{$proyek->kode_proyek}}')" name="kategori-rekomendasi"
                                         class="form-select form-select-solid w-auto"
                                         style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
                                         data-placeholder="Direktorat" data-select2-id="select2-data-kategori-rekomendasi" tabindex="-1"
@@ -1025,7 +1429,7 @@
                                     <input type="hidden" value="{{$proyek->kode_proyek}}" name="kode-proyek" id="kode-proyek">
                                     
                                     <input type="submit" name="persetujuan-setujui" value="Disetujui" class="btn btn-sm btn-success">
-                                    <input type="submit" name="persetujuan-tolak" value="Ditolak" class="btn btn-sm btn-danger">
+                                    <input type="button" data-bs-toggle="modal" data-bs-target="#kt_modal_view_proyek_tolak_persetujuan_{{$proyek->kode_proyek}}" name="persetujuan-tolak" value="Ditolak" class="btn btn-sm btn-danger">
                                 </form>
                             @else 
                                 @if ($proyek->is_disetujui)
@@ -1037,6 +1441,55 @@
                                 @endif
                             @endif
 
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="kt_modal_view_proyek_tolak_rekomendasi_{{$proyek->kode_proyek}}" tabindex="-1" aria-labelledby="kt_modal_view_proyek_tolak_rekomendasi_{{$proyek->kode_proyek}}" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+                <div class="modal-content">
+                    
+                    <form action="" method="get">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Alasan Ditolak Rekomendasi</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                @csrf
+                                <input type="hidden" value="Rekomendasi Ditolak" name="kategori-rekomendasi" id="kategori-rekomendasi_{{$proyek->kode_proyek}}">
+                                <input type="hidden" name="kode-proyek" value="{{$proyek->kode_proyek}}">
+                                <textarea name="alasan-ditolak" class="form-control form-control-solid" id="alasan-ditolak_{{$proyek->kode_proyek}}" cols="1" rows="5"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="submit" name="rekomendasi-setujui" class="btn btn-sm btn-danger" value="Ditolak dengan alasan">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="kt_modal_view_proyek_tolak_persetujuan_{{$proyek->kode_proyek}}" tabindex="-1" aria-labelledby="kt_modal_view_proyek_tolak_persetujuan_{{$proyek->kode_proyek}}" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+                <div class="modal-content">
+                    
+                    <form action="" method="get">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Alasan Ditolak Persetujuan</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                @csrf
+                                <input type="hidden" name="kode-proyek" value="{{$proyek->kode_proyek}}">
+                                <textarea name="alasan-ditolak" class="form-control form-control-solid" id="alasan-ditolak" cols="1" rows="5"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="submit" name="persetujuan-tolak" class="btn btn-sm btn-danger" value="Ditolak dengan alasan">
                         </div>
                     </form>
                 </div>
@@ -1122,5 +1575,17 @@
             }
         }
     </script>
+
+    {{-- Begin :: show modal rekomendasi ketika pilih ditolak --}}
+    <script>
+        function showModalTolakRekomendasi(e, kodeProyek) {
+            const value = e.value;
+            if(value == "Rekomendasi Ditolak") {
+                const button = document.getElementById("show-modal-tolak");
+                button.click();
+            }
+        }
+    </script>
+    {{-- End :: show modal rekomendasi ketika pilih ditolak --}}
 @endsection
 

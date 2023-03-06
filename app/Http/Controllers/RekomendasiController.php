@@ -20,8 +20,8 @@ class RekomendasiController extends Controller
         $is_user_exist_in_matriks_approval = $all_super_user_counter->contains(function($user) {
             return $user->Pegawai->nama_pegawai == Auth::user()->name;
         });
-        // dd($all_super_user_counter);
         $all_super_user_counter = $all_super_user_counter->groupBy("Pegawai.nama_pegawai")->count();
+        // dd($all_super_user_counter);
         // $all_super_user_counter = 1;
         $rekomendasi_open = $request->query("open") ?? "";
         // Begin Prosess Approval
@@ -47,8 +47,6 @@ class RekomendasiController extends Controller
             if($check_user_approval_counter) {
                 $is_proyek_mega = (str_contains($proyek->klasifikasi_pasdin, "Besar") || str_contains($proyek->klasifikasi_pasdin, "Mega")) ? true : false;
                 $hasil_assessment = collect(performAssessment($proyek->proyekBerjalan->Customer, $proyek));
-                createWordPengajuan($proyek, $hasil_assessment, $is_proyek_mega);
-                createWordRekomendasi($proyek, $hasil_assessment, $is_proyek_mega);
                 // createWord($proyek, $hasil_assessment, $is_proyek_mega);
 
 
@@ -68,7 +66,8 @@ class RekomendasiController extends Controller
                     return redirect()->back();
                 });
 
-
+                createWordPengajuan($proyek, $hasil_assessment, $is_proyek_mega);
+                createWordRekomendasi($proyek, $hasil_assessment, $is_proyek_mega);
                 $proyek->review_assessment = true;
                 $proyek->is_request_rekomendasi = false;
 
@@ -256,6 +255,7 @@ class RekomendasiController extends Controller
                     "user_id" => Auth::user()->id,
                     "status" => "rejected",
                     "tanggal" => \Carbon\Carbon::now(),
+                    "alasan" => $request["alasan-ditolak"],
                 ]);
                 $proyek->approved_rekomendasi_final = $approved_penyusun->toJson();
 
@@ -320,10 +320,12 @@ class RekomendasiController extends Controller
                 "user_id" => Auth::user()->id,
                 "status" => "rejected",
                 "tanggal" => \Carbon\Carbon::now(),
+                "alasan" => $request["alasan-ditolak"],
             ]);
             $proyek->approved_rekomendasi_final = $approved_penyusun->toJson();
 
             $proyek->is_recommended = false;
+            $proyek->is_disetujui = false;
             // $proyek->recommended_with_note = $data["note-rekomendasi"];
             if($proyek->save()) {
                 // createWordPersetujuan($proyek, $hasil_assessment, $is_proyek_mega);
@@ -367,6 +369,7 @@ class RekomendasiController extends Controller
                 "user_id" => Auth::user()->id,
                 "status" => "rejected",
                 "tanggal" => \Carbon\Carbon::now(),
+                "alasan" => $request["alasan-ditolak"],
             ]);
             $proyek->approved_persetujuan = $approved_penyusun->toJson();
 
@@ -407,31 +410,41 @@ class RekomendasiController extends Controller
                 return $p->is_recommended;
             });
         } else {
-            if($matriks_user->contains("kategori", "Pengajuan")) {
+            if($all_super_user_counter < 1) {
                 $proyeks_pengajuan = Proyek::whereIn("unit_kerja", $unit_kerjas)->where("stage", "=", 1)->get()->filter(function($p) use($matriks_user) {
-                    return ($p->is_request_rekomendasi || $p->review_assessment || !empty($p->hasil_assessment) || !empty($p->approved_rekomendasi)) && $matriks_user->where("klasifikasi_proyek", $p->klasifikasi_pasdin)->count() > 0;
+                    return ($p->is_request_rekomendasi || $p->review_assessment || !empty($p->hasil_assessment) || !empty($p->approved_rekomendasi));
                 });
-            } else {
-                $proyeks_pengajuan = [];
-            }
-            
-            if($matriks_user->contains("kategori", "Verifikasi")) {
-                $proyeks_rekomendasi = Proyek::whereIn("unit_kerja", $unit_kerjas)->where("stage", "=", 1)->get()->filter(function($p) use($matriks_user) {
-                    return $p->review_assessment && $matriks_user->where("klasifikasi_proyek", $p->klasifikasi_pasdin)->count() > 0;
-                });
-            
-            } else {
+                
                 $proyeks_rekomendasi = [];
                 
-            }
-
-            if($matriks_user->contains("kategori", "Persetujuan") || $matriks_user->contains("kategori", "Rekomendasi") || $matriks_user->contains("kategori", "Penyusun")) {
-                $proyeks_persetujuan = Proyek::whereIn("unit_kerja", $unit_kerjas)->where("stage", "=", 1)->get()->filter(function($p) use($matriks_user) {
-                    return $p->review_assessment && $matriks_user->where("klasifikasi_proyek", $p->klasifikasi_pasdin)->count() > 0;
-                });
-            } else {
                 $proyeks_persetujuan = [];
-
+            } else {
+                if($matriks_user->contains("kategori", "Pengajuan")) {
+                    $proyeks_pengajuan = Proyek::whereIn("unit_kerja", $unit_kerjas)->where("stage", "=", 1)->get()->filter(function($p) use($matriks_user) {
+                        return ($p->is_request_rekomendasi || $p->review_assessment || !empty($p->hasil_assessment) || !empty($p->approved_rekomendasi)) && $matriks_user->where("klasifikasi_proyek", $p->klasifikasi_pasdin)->count() > 0;
+                    });
+                } else {
+                    $proyeks_pengajuan = [];
+                }
+                
+                if($matriks_user->contains("kategori", "Verifikasi")) {
+                    $proyeks_rekomendasi = Proyek::whereIn("unit_kerja", $unit_kerjas)->where("stage", "=", 1)->get()->filter(function($p) use($matriks_user) {
+                        return $p->review_assessment && $matriks_user->where("klasifikasi_proyek", $p->klasifikasi_pasdin)->count() > 0;
+                    });
+                
+                } else {
+                    $proyeks_rekomendasi = [];
+                    
+                }
+    
+                if($matriks_user->contains("kategori", "Persetujuan") || $matriks_user->contains("kategori", "Rekomendasi") || $matriks_user->contains("kategori", "Penyusun")) {
+                    $proyeks_persetujuan = Proyek::whereIn("unit_kerja", $unit_kerjas)->where("stage", "=", 1)->get()->filter(function($p) use($matriks_user) {
+                        return $p->review_assessment && $matriks_user->where("klasifikasi_proyek", $p->klasifikasi_pasdin)->count() > 0;
+                    });
+                } else {
+                    $proyeks_persetujuan = [];
+    
+                }
             }
         }
         if(!empty($rekomendasi_open)) {

@@ -64,7 +64,7 @@ class AdminAuth
             return redirect("/");
         }
         if($request->segment(1) == "user" && !str_contains(auth()->user()->name, "(PIC)")) {
-            if (str_contains($concat_allowed_url, $request->segment(1)) && ($request->segment(2) == "view" || $request->segment(2) == "password")) {
+            if (str_contains($concat_allowed_url, $request->segment(1)) && ($request->segment(2) == "view" || $request->segment(2) == "password" || $request->segment(2) == "update")) {
                 return $next($request);
             } else {
                 Alert::error('Error', 'Tidak bisa mengakses halaman ' . $path);

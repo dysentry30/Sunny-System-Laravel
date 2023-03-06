@@ -163,6 +163,24 @@
                                                     </div>
                                                     <!--end::Input group Phone-->
 
+                                                    <!--begin::Input group TTD-->
+                                                    <div class="fv-row mb-7">
+                                                        <!--begin::Label-->
+                                                        <label class="fs-6 fw-bold form-label mt-3">
+                                                            <span class="required">Upload Tanda Tangan</span>
+                                                        </label>
+                                                        <!--end::Label-->
+                                                        <!--begin::Input-->
+                                                        <input type="file" accept="image/jpg,image/jpeg" class="form-control form-control-solid"
+                                                            id="upload-ttd" name="upload-ttd" placeholder="Upload Tanda Tangan" />
+                                                        <!--end::Input-->
+                                                        @if (!empty($user->file_ttd))
+                                                            <small>File TTD view:</small><br>
+                                                            <img src="{{asset("/file-ttd/$user->file_ttd")}}" alt="File TTD" class="img-fluid img-thumbnail">
+                                                        @endif
+                                                    </div>
+                                                    <!--end::Input group TTD-->
+
                                                     <!--begin::Input group is Active-->
                                                     @if (Auth::user()->check_administrator || str_contains(Auth::user()->name, '(PIC)'))
                                                         <div class="form-check me-12">
@@ -575,6 +593,28 @@
             inputCheckUnitKerjas.forEach(input => {
                 input.checked = true;
             });
+        }
+
+        function highlight(e) {
+            const element = e.querySelector("border");
+            const elementI = e.querySelector("i");
+            const elementSmall = e.querySelector("small");
+            e.classList.add("border-primary");
+            elementI.classList.add("text-primary");
+            elementSmall.classList.add("text-primary");
+        }
+        function getImage(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            // console.log(e.dataTransfer.files);
+        }
+        function cancelImage(e) {
+            const element = e;
+            const elementI = e.querySelector("i");
+            const elementSmall = e.querySelector("small");
+            e.classList.remove("border-primary");
+            elementI.classList.remove("text-primary");
+            elementSmall.classList.remove("text-primary");
         }
     </script>
 @endsection
