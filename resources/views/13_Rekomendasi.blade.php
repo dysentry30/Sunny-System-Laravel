@@ -500,7 +500,20 @@
                                                             </small>
                                                         </td>
                                                         <td>
-                                                            @if ($proyek->review_assessment && $proyek->review_assessment && !$proyek->is_recommended && !$proyek->is_recommended_with_note)
+                                                            @if ($proyek->is_request_rekomendasi && !$proyek->review_assessment)
+                                                                @if (!empty(Auth::user()->Pegawai->MatriksApproval) && Auth::user()->Pegawai->MatriksApproval->contains("kategori", "Pengajuan"))
+                                                                    <small class="badge badge-light-warning">Request Pengajuan</small>
+                                                                @else
+                                                                    <small class="badge badge-light-primary">Proses Pengajuan</small>
+                                                                @endif
+                                                            @elseif ($proyek->review_assessment && is_null($proyek->recommended_with_note))
+                                                                <small class="badge badge-light-primary">Proses Verifikasi</small>
+                                                            @elseif ($proyek->review_assessment && !is_null($proyek->recommended_with_note))
+                                                                <small class="badge badge-light-success">Pengajuan Disetujui</small>
+                                                            @elseif ($proyek->review_assessment == false && $proyek->is_recommended == false && $proyek->is_disetujui == false)
+                                                                <small class="badge badge-light-danger">Pengajuan Ditolak</small>
+                                                            @endif
+                                                            {{-- @if ($proyek->review_assessment && $proyek->review_assessment && !$proyek->is_recommended && !$proyek->is_recommended_with_note)
                                                                 <small class="badge badge-light-success">Pengajuan Disetujui</small>
                                                             @elseif($is_pending && $proyek->is_disetujui == null)
                                                                 <small class="badge badge-light-info">Proses Pengajuan</small>
@@ -512,33 +525,25 @@
                                                                 <small class="badge badge-light-success">Direkomendasikan dengan catatan</small>
                                                             @elseif(!$is_pending && !$proyek->is_recommended || !$proyek->review_assessment)
                                                                 <small class="badge badge-light-danger">Tidak Direkomendasikan</small>
-                                                            @endif
+                                                            @endif --}}
                                                         </td>
                                                         <td>
                                                             @if ($proyek->is_disetujui)
-                                                                <small class="badge badge-light-success">Disetujui</small>
+                                                                <small class="badge badge-light-success">
+                                                                    <a href="#kt_modal_view_proyek_history_{{$proyek->kode_proyek}}" data-bs-toggle="modal" class="text-success">Disetujui</a>
+                                                                </small>
                                                             @elseif($proyek->is_disetujui == false && !is_null($proyek->is_disetujui))
-                                                                <small class="badge badge-light-danger">Ditolak</small>
+                                                                <small class="badge badge-light-danger">
+                                                                    <a href="#kt_modal_view_proyek_history_{{$proyek->kode_proyek}}" data-bs-toggle="modal" class="text-danger">Ditolak</a>
+                                                                </small>
+                                                            @elseif($proyek->is_request_rekomendasi && !$proyek->review_assessment)
+                                                                <small class="badge badge-light-primary">Proses Pengajuan</small>
                                                             @elseif($proyek->review_assessment == true && is_null($proyek->is_penyusun_approved))
-                                                                @if (Auth::user()->Pegawai->MatriksApproval->contains("kategori", "Penyusun"))
-                                                                    <small class="badge badge-light-warning">Request Penyusun</small>
-                                                                    
-                                                                @else
-                                                                    <small class="badge badge-light-primary">Proses Penyusun</small>
-                                                                @endif
+                                                                <small class="badge badge-light-primary">Proses Penyusun</small>
                                                             @elseif($proyek->is_penyusun_approved == true && is_null($proyek->is_recommended))
-                                                                @if (Auth::user()->Pegawai->MatriksApproval->contains("kategori", "Rekomendasi"))
-                                                                    <small class="badge badge-light-warning">Request Rekomendasi</small>
-                                                                    
-                                                                @else
-                                                                    <small class="badge badge-light-primary">Proses Rekomendasi</small>
-                                                                @endif
+                                                                <small class="badge badge-light-primary">Proses Rekomendasi</small>
                                                             @elseif($proyek->is_recommended == true && is_null($proyek->is_disetujui))
-                                                                @if (Auth::user()->Pegawai->MatriksApproval->contains("kategori", "Penyetujuan"))
-                                                                    <small class="badge badge-light-warning">Request Penyetujuan</small>
-                                                                @else
-                                                                    <small class="badge badge-light-primary">Proses Penyetujuan</small>
-                                                                @endif
+                                                                <small class="badge badge-light-primary">Proses Penyetujuan</small>
                                                             @endif
                                                         </td>
                                                     </tr>
@@ -671,8 +676,24 @@
                                                             @endif
                                                         </td>
                                                         <td>
+                                                            @if ($proyek->is_request_rekomendasi && !$proyek->review_assessment)
+                                                                @if (!empty(Auth::user()->Pegawai->MatriksApproval) && Auth::user()->Pegawai->MatriksApproval->contains("kategori", "Pengajuan"))
+                                                                    
+                                                                    <small class="badge badge-light-warning">Request Pengajuan</small>
+                                                                @else
+                                                                    <small class="badge badge-light-primary">Proses Pengajuan</small>
+                                                                @endif
+                                                            @elseif ($proyek->review_assessment && is_null($proyek->recommended_with_note))
+                                                                @if (!empty(Auth::user()->Pegawai->MatriksApproval) && Auth::user()->Pegawai->MatriksApproval->contains("kategori", "Verifikasi"))
+                                                                    <small class="badge badge-light-warning">Request Verifikasi</small>
+                                                                @else
+                                                                    <small class="badge badge-light-primary">Proses Verifikasi</small>
+                                                                @endif
+                                                            @elseif ($proyek->review_assessment && !is_null($proyek->recommended_with_note))
+                                                                <small class="badge badge-light-success">Pengajuan Disetujui</small>
+                                                            @endif
                                                             {{-- @dump(!$proyek->is_recommended || !$proyek->is_recommended_with_note) --}}
-                                                            @if ($proyek->review_assessment && !$proyek->is_recommended && !$proyek->is_recommended_with_note)
+                                                            {{-- @if ($proyek->review_assessment && !$proyek->is_recommended && !$proyek->is_recommended_with_note)
                                                                 <small class="badge badge-light-success">Pengajuan Disetujui</small>
                                                             @elseif($is_pending && $proyek->review_assessment && (!$proyek->is_recommended || !$proyek->is_recommended_with_note))
                                                                 <small class="badge badge-light-info">Proses Pengajuan</small>
@@ -684,7 +705,7 @@
                                                                 <small class="badge badge-light-success">Direkomendasikan dengan catatan</small>
                                                             @elseif(!$proyek->is_recommended || !$is_approved)
                                                                 <small class="badge badge-light-danger">Tidak Direkomendasikan</small>
-                                                            @endif
+                                                            @endif --}}
                                                         </td>
                                                         <td>
                                                             @if ($proyek->is_disetujui)
@@ -692,21 +713,21 @@
                                                             @elseif($proyek->is_disetujui == false && !is_null($proyek->is_disetujui))
                                                                 <small class="badge badge-light-danger">Ditolak</small>
                                                             @elseif($proyek->review_assessment == true && is_null($proyek->is_penyusun_approved))
-                                                                @if (Auth::user()->Pegawai->MatriksApproval->contains("kategori", "Penyusun"))
+                                                                @if (!empty(Auth::user()->Pegawai->MatriksApproval) && Auth::user()->Pegawai->MatriksApproval->contains("kategori", "Penyusun"))
                                                                     <small class="badge badge-light-warning">Request Penyusun</small>
                                                                     
                                                                 @else
                                                                     <small class="badge badge-light-primary">Proses Penyusun</small>
                                                                 @endif
                                                             @elseif($proyek->is_penyusun_approved == true && is_null($proyek->is_recommended))
-                                                                @if (Auth::user()->Pegawai->MatriksApproval->contains("kategori", "Rekomendasi"))
+                                                                @if (!empty(Auth::user()->Pegawai->MatriksApproval) && Auth::user()->Pegawai->MatriksApproval->contains("kategori", "Rekomendasi"))
                                                                     <small class="badge badge-light-warning">Request Rekomendasi</small>
                                                                     
                                                                 @else
                                                                     <small class="badge badge-light-primary">Proses Rekomendasi</small>
                                                                 @endif
                                                             @elseif($proyek->is_recommended == true && is_null($proyek->is_disetujui))
-                                                                @if (Auth::user()->Pegawai->MatriksApproval->contains("kategori", "Penyetujuan"))
+                                                                @if (!empty(Auth::user()->Pegawai->MatriksApproval) && Auth::user()->Pegawai->MatriksApproval->contains("kategori", "Penyetujuan"))
                                                                     <small class="badge badge-light-warning">Request Penyetujuan</small>
                                                                 @else
                                                                     <small class="badge badge-light-primary">Proses Penyetujuan</small>
@@ -841,21 +862,21 @@
                                                             @elseif($proyek->is_disetujui == false && !is_null($proyek->is_disetujui))
                                                                 <small class="badge badge-light-danger">Ditolak</small>
                                                             @elseif($proyek->review_assessment == true && is_null($proyek->is_penyusun_approved))
-                                                                @if (Auth::user()->Pegawai->MatriksApproval->contains("kategori", "Penyusun"))
+                                                                @if (!empty(Auth::user()->Pegawai->MatriksApproval) && Auth::user()->Pegawai->MatriksApproval->contains("kategori", "Penyusun"))
                                                                     <small class="badge badge-light-warning">Request Penyusun</small>
                                                                     
                                                                 @else
                                                                     <small class="badge badge-light-primary">Proses Penyusun</small>
                                                                 @endif
                                                             @elseif($proyek->is_penyusun_approved == true && is_null($proyek->is_recommended))
-                                                                @if (Auth::user()->Pegawai->MatriksApproval->contains("kategori", "Rekomendasi"))
+                                                                @if (!empty(Auth::user()->Pegawai->MatriksApproval) && Auth::user()->Pegawai->MatriksApproval->contains("kategori", "Rekomendasi"))
                                                                     <small class="badge badge-light-warning">Request Rekomendasi</small>
                                                                     
                                                                 @else
                                                                     <small class="badge badge-light-primary">Proses Rekomendasi</small>
                                                                 @endif
                                                             @elseif($proyek->is_recommended == true && is_null($proyek->is_disetujui))
-                                                                @if (Auth::user()->Pegawai->MatriksApproval->contains("kategori", "Penyetujuan"))
+                                                                @if (!empty(Auth::user()->Pegawai->MatriksApproval) && Auth::user()->Pegawai->MatriksApproval->contains("kategori", "Penyetujuan"))
                                                                     <small class="badge badge-light-warning">Request Penyetujuan</small>
                                                                 @else
                                                                     <small class="badge badge-light-primary">Proses Penyetujuan</small>
@@ -1051,7 +1072,7 @@
                             $approved_penyusun= collect(json_decode($proyek->approved_penyusun));
                             $approved_rekomendasi = collect(json_decode($proyek->approved_rekomendasi_final));
                             $approved_persetujuan = collect(json_decode($proyek->approved_persetujuan));
-                            $data_approved_merged = collect()->mergeRecursive(["Pengajuan" => $approved_pengajuan->flatten(), "Penyusun" => $approved_penyusun->flatten(), "Rekomendasi" => $approved_rekomendasi->flatten(), "Persetujuan" => $approved_persetujuan->flatten()]);
+                            $data_approved_merged = collect()->mergeRecursive(["Pengajuan" => $approved_pengajuan->flatten(), "Penyusunan" => $approved_penyusun->flatten(), "Rekomendasi" => $approved_rekomendasi->flatten(), "Persetujuan" => $approved_persetujuan->flatten()]);
                             // dump($approved_pengajuan, $approved_penyusun, $approved_rekomendasi, $approved_persetujuan);
                         @endphp
                         {{-- Begin :: History --}}
@@ -1061,7 +1082,7 @@
                             @endphp
                             <div class="timeline-centered">
                                 @forelse ($data_approved_merged as $key => $data)
-                                    @if(!empty($data))
+                                    @if($data->isNotEmpty())
 
                                         {{-- @dd($data) --}}
 
@@ -1069,20 +1090,11 @@
                                                 
                                                 <div class="timeline-entry-inner">
                                                     <time class="timeline-time"></time>
-                                                    @php
-                                                        $aksi = "";
-                                                    @endphp
                                                     @if ($data->contains("status", "rejected"))
-                                                        @php
-                                                            $aksi = "ditolak";
-                                                        @endphp
                                                         <div class="timeline-icon bg-danger">
                                                             <i class="entypo-feather"></i>
                                                         </div>
                                                     @else
-                                                        @php
-                                                            $aksi = "disetujui";
-                                                        @endphp
                                                         <div class="timeline-icon bg-success">
                                                             <i class="entypo-feather"></i>
                                                         </div>
@@ -1090,14 +1102,31 @@
                                                     
                                                     <div class="timeline-content">
                                                         <div class="row">
-                                                            <h5>{{$key}} {{$aksi}} oleh:</h5>
+                                                            <h5>Tanggung jawab {{$key}} diberikan oleh:</h5>
                                                             @foreach ($data as $d)
-                                                                <small>
-                                                                    - <b>{{App\Models\User::find($d->user_id)->name}}</b>,
-                                                                    @if (!empty($d->tanggal))
-                                                                        {{Carbon\Carbon::create($d->tanggal)->translatedFormat("d F Y")}}
-                                                                    @endif
-                                                                </small>
+                                                                <div class="card text-bg-light my-3">
+                                                                    <div class="card-body">
+                                                                        <small>
+                                                                            Nama: <b>{{App\Models\User::find($d->user_id)->name}}</b><br>
+                                                                            Status Approval: 
+                                                                            @if ($d->status == "approved")
+                                                                                <span><b class="text-success">Menyetujui</b></span>
+                                                                            @else
+                                                                                <span><b class="text-danger">Menolak</b></span>
+                                                                            @endif
+                                                                            <br>
+
+                                                                            @if (!empty($d->tanggal))
+                                                                                Tanggal: 
+                                                                                <b>{{Carbon\Carbon::create($d->tanggal)->translatedFormat("d F Y H:i:s")}}</b> <br>
+                                                                            @endif
+                                                                            @if (!empty($d->alasan))
+                                                                                Alasan:
+                                                                                <b>{!! $d->alasan !!}</b><br>
+                                                                            @endif
+                                                                        </small>
+                                                                    </div>
+                                                                </div>
                                                             @endforeach
                                                         </div>
                                                     </div>
