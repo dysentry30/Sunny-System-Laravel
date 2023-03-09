@@ -6,9 +6,9 @@
 {{-- Begin :: css --}}
 <style>
     .timeline-centered {
-    position: relative;
-    margin-bottom: 30px;
-}
+        position: relative;
+        margin-bottom: 30px;
+    }
 
     .timeline-centered:before, .timeline-centered:after {
         content: " ";
@@ -1455,6 +1455,9 @@
                             @elseif (is_null($proyek->is_disetujui) && $matriks_user->contains("kategori", "Persetujuan") && $proyek->is_recommended && !$is_user_exist_persetujuan)
                                 <form action="" method="get">
                                     @csrf
+                                    @if (!empty($nip))
+                                        <input type="hidden" value="{{$nip}}" name="user" id="user">
+                                    @endif
                                     <input type="hidden" value="{{$proyek->kode_proyek}}" name="kode-proyek" id="kode-proyek">
                                     
                                     <input type="submit" name="persetujuan-setujui" value="Disetujui" class="btn btn-sm btn-success">

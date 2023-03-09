@@ -224,23 +224,23 @@
                                         $name_customer = $proyek->proyekBerjalan->name_customer ?? null;
                                         $jenis_instansi = $proyek->proyekBerjalan->customer->jenis_instansi ?? null;
                                         $custNegara = $proyek->proyekBerjalan->customer->negara ?? null;
-                                        $custProvinsi = $proyek->proyekBerjalan->customer->provinsi ?? null;
+                                        $custProvinsi = $proyek->proyekBerjalan->customer->Provinsi->province_name ?? null;
                                         $forbes_rank = $proyek->proyekBerjalan->customer->forbes_rank ?? null;
                                         $lq_rank = $proyek->proyekBerjalan->customer->lq_rank ?? null;
                                         $masalahHukum = $proyek->proyekBerjalan->customer->MasalahHukum ?? collect([]);
                                     @endphp
 
                                     <p>Nama Proyek : <b>{{ $proyek->nama_proyek }}</b></p>
-                                    <p>RA Klasifikasi Proyek  : <b class="{{ $proyek->klasifikasi_pasdin ?? "text-danger" }}">{{ $proyek->klasifikasi_pasdin ?? "*Belum Ditentukan" }}</br></p>
+                                    <p>RA Klasifikasi Proyek  : <b class="{{ $proyek->klasifikasi_pasdin ?? "text-danger" }}">{{ $proyek->klasifikasi_pasdin ?? "*Belum Ditentukan" }}</b></p>
                                     <p>Sumber Dana  : <b class="{{ $proyek->SumberDana->nama_sumber ?? "text-danger" }}">{{ $proyek->SumberDana->nama_sumber ?? "*Belum Ditentukan" }}</b></p>
                                     <br>
                                     <p>Nama Pemberi Kerja : <b class="{{ $name_customer ?? "text-danger" }}">{{ $name_customer ?? "*Belum Ditentukan" }}</b></p>
-                                    <p>Instansi : <b class="{{ $jenis_instansi ?? "text-danger" }}">{{ $jenis_instansi ?? "*Belum Ditentukan" }}</b></p>
-                                    <p>Negara : <b class="{{ $custNegara ?? "text-danger" }}">{{ $custNegara ?? "*Belum Ditentukan" }}</b></p>
-                                    <p>Provinsi : <b class="{{ $custProvinsi ?? "text-danger" }}">{{ $custProvinsi ?? "*Belum Ditentukan" }}</b></p>
-                                    <p>Fortune Rank  : <b class="{{ $forbes_rank ?? "text-danger" }}">{{ $forbes_rank ?? "*Belum Ditentukan" }}</b></p>
-                                    <p>LQ Rank  : <b class="{{ $lq_rank ?? "text-danger" }}">{{ $lq_rank ?? "*Belum Ditentukan" }}</b></p>
-                                    <p>Masalah Hukum  : <b class="{{ $masalahHukum->count() == 0 ? "text-success" : "text-danger" }}">{{ $masalahHukum->count() == 0 ? "0 Kasus" : $masalahHukum->count()." Kasus" }}</b></p>
+                                    <p>Instansi Pemberi Kerja : <b class="{{ $jenis_instansi ?? "text-danger" }}">{{ $jenis_instansi ?? "*Belum Ditentukan" }}</b></p>
+                                    <p>ID Negara Pemberi Kerja : <b class="{{ $custNegara ?? "text-danger" }}">{{ $custNegara ?? "*Belum Ditentukan" }}</b></p>
+                                    <p>Provinsi Pemberi Kerja : <b class="{{ $custProvinsi ?? "text-danger" }}">{{ $custProvinsi ?? "*Belum Ditentukan" }}</b></p>
+                                    <p>Fortune Rank Pemberi Kerja : <b class="{{ $forbes_rank ?? "text-danger" }}">{{ $forbes_rank ?? "*Belum Ditentukan" }}</b></p>
+                                    <p>LQ Rank Pemberi Kerja : <b class="{{ $lq_rank ?? "text-danger" }}">{{ $lq_rank ?? "*Belum Ditentukan" }}</b></p>
+                                    <p>Masalah Hukum Pemberi Kerja : <b class="{{ $masalahHukum->count() == 0 ? "text-success" : "text-danger" }}">{{ $masalahHukum->count() == 0 ? "0 Kasus" : $masalahHukum->count()." Kasus" }}</b></p>
 
                                     <br>
 

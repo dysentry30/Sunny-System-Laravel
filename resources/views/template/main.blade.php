@@ -214,14 +214,21 @@
                                 <div class="calendar__date {{ $day == 26 ? 'calendar__date--selected calendar__date--range-end calendar__date--first-date' : '' }}"><span>26</span></div>
                                 <div class="calendar__date {{ $day == 27 ? 'calendar__date--selected calendar__date--range-end calendar__date--first-date' : '' }}"><span>27</span></div>
                                 <div class="calendar__date {{ $day == 28 ? 'calendar__date--selected calendar__date--range-end calendar__date--first-date' : '' }}"><span>28</span></div>
-                                <div class="calendar__date {{ $day == 29 ? 'calendar__date--selected calendar__date--range-end calendar__date--first-date' : '' }}"><span>29</span></div>
+                                @php
+                                    $is_leap_year = (bool) date("L");
+                                @endphp
                                 @if (str_contains($mytime, 'Feb'))
+                                    @if ($is_leap_year)
+                                        <div id="tgl-29" class="calendar__date {{ $day == 29 ? 'calendar__date--selected calendar__date--range-end calendar__date--first-date' : '' }}"><span>29</span></div>
+                                    @endif
                                 <div id="tgl-30" style="display: none" class="calendar__date {{ $day == 30 ? 'calendar__date--selected calendar__date--range-end calendar__date--first-date' : '' }}"><span>30</span></div>
                                 <div id="tgl-31" style="display: none" class="calendar__date {{ $day == 31 ? 'calendar__date--selected calendar__date--range-end calendar__date--first-date' : '' }}"><span>31</span></div>
                                 @elseif (str_contains($mytime, 'Apr') || str_contains($mytime, 'Jun') || str_contains($mytime, 'Sep') || str_contains($mytime, 'Nov'))
+                                <div id="tgl-29" class="calendar__date {{ $day == 29 ? 'calendar__date--selected calendar__date--range-end calendar__date--first-date' : '' }}"><span>29</span></div>
                                 <div id="tgl-30" class="calendar__date {{ $day == 30 ? 'calendar__date--selected calendar__date--range-end calendar__date--first-date' : '' }}"><span>30</span></div>
                                 <div id="tgl-31" style="display: none" class="calendar__date {{ $day == 31 ? 'calendar__date--selected calendar__date--range-end calendar__date--first-date' : '' }}"><span>31</span></div>
                                 @else
+                                <div id="tgl-29" class="calendar__date {{ $day == 29 ? 'calendar__date--selected calendar__date--range-end calendar__date--first-date' : '' }}"><span>29</span></div>
                                 <div id="tgl-30" class="calendar__date {{ $day == 30 ? 'calendar__date--selected calendar__date--range-end calendar__date--first-date' : '' }}"><span>30</span></div>
                                 <div id="tgl-31" class="calendar__date {{ $day == 31 ? 'calendar__date--selected calendar__date--range-end calendar__date--first-date' : '' }}"><span>31</span></div>
                                 @endif
@@ -934,13 +941,19 @@
         if(calendarElt) {
             //begin:: onChange Month //pada element select Month tambahkan fungsi onchange="monthCalendar(this)" && tambahkan id="tgl-30"; id="tgl-31"
             function monthCalendar(e) {
+                const isLeapYear = Boolean("{{$is_leap_year}}");
                 if (e.value == "2"){
+                    if(!isLeapYear) {
+                        document.getElementById("tgl-29").style.display = "none";
+                    }
                     document.getElementById("tgl-30").style.display = "none";
                     document.getElementById("tgl-31").style.display = "none";
                 }else if (e.value == "4" || e.value == "6" || e.value == "9" || e.value == "11"){
+                    document.getElementById("tgl-29").style.display = "";
                     document.getElementById("tgl-30").style.display = "";
                     document.getElementById("tgl-31").style.display = "none";
                 }else{
+                    document.getElementById("tgl-29").style.display = "";
                     document.getElementById("tgl-30").style.display = "";
                     document.getElementById("tgl-31").style.display = "";
                 }

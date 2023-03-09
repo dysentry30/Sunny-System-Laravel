@@ -99,4 +99,9 @@ class Customer extends Model
         return $this->hasMany(Piutang::class, "debitor", "kode_nasabah");
     }
 
+    public function Provinsi()
+    {
+        return $this->hasOne(Provinsi::class, "province_id", "provinsi");
+    }
+
 }

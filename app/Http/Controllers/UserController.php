@@ -16,14 +16,30 @@ use Illuminate\Support\Facades\Mail;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Events\NotificationPasswordReset;
 use App\Models\Dop;
+use Exception;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Validator;
 
 
 class UserController extends Controller
 {
-    public function welcome()
+    public function welcome(Request $request)
     {
+        $data = $request->all();
+        if(!empty($data["redirectTo"]) && !empty($data["token"])) {
+            try{
+                $credentials = (array) json_decode(decrypt($data["token"]));
+                $user = User::where("email", $credentials["email"])->first();
+                if(Auth::loginUsingId($user->id)) {
+                    return redirect($data["redirectTo"]);
+                }
+                Alert::error("Error", "User Tidak Ditemukan!");
+                return redirect("/");
+            }catch(Exception $e) {
+                Alert::error("Error", "User Tidak Ditemukan!");
+                return redirect("/");
+            }
+        }
         return view('0_Welcome');
     }
 

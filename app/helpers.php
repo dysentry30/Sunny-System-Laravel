@@ -1218,4 +1218,17 @@ function performAssessment(App\Models\Customer $customer, App\Models\Proyek $pro
     
     return $result_assessments;
 }
+
+/**
+ * Display Error Page
+ * @param int $status_code
+ * @param mixed $title
+ * @param mixed $headline
+ * @param string $sub_headline
+ * 
+ * @return \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory
+ */
+function errorPage($status_code = 404, $title, $headline, $sub_headline = "") {
+    return view("errorPage/error", ["status_code" => $status_code, "title" => $title, "headline" => $headline, "sub_headline" => $sub_headline]);
+}
 ?>
