@@ -214,13 +214,12 @@ Route::get('/generate-kode-proyek/{kode_proyek}', function ($kode_proyek) {
     //end::Generate Kode Proyek
 });
 
-
 // Begin Rekomendasi
-Route::get('/rekomendasi', [RekomendasiController::class, "index"]);
+Route::get('/rekomendasi', [RekomendasiController::class, "index"])->name("rekomendasi");
 // End Rekomendasi
 
 Route::group(['middleware' => ["userAuth", "admin"]], function () {
-
+    
     // Route::middleware(["admin", "adminKontrak", "userSales"])->group(function () {
     // });
 

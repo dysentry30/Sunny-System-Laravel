@@ -2038,7 +2038,10 @@
 
                                                     </div>
                                                     <!--end:::Tab pane Struktur Organisasi-->
-
+                                                    {{-- @foreach ($proyekberjalan as $item)
+                                                        @dump($item->proyek)
+                                                    @endforeach
+                                                    @dd() --}}
 
                                                     <!--begin:::Tab pane History-->
                                                     <div class="tab-pane fade" id="kt_user_view_history" role="tabpanel">
@@ -2120,8 +2123,8 @@
                                                                                         <!--begin::Durasi-->
                                                                                         <td>
                                                                                             @php
-                                                                                                $tglakhir = new DateTime($proyekberjalan0->proyek->tanggal_akhir_terkontrak ?? date('now'));
-                                                                                                $tglawal = new DateTime($proyekberjalan0->proyek->tanggal_mulai_terkontrak ?? date('now'));
+                                                                                                $tglakhir = Carbon\Carbon::create($proyekberjalan0->proyek->tanggal_akhir_terkontrak);
+                                                                                                $tglawal = Carbon\Carbon::create($proyekberjalan0->proyek->tanggal_mulai_terkontrak);
                                                                                                 $durasi = $tglakhir->diff($tglawal);
                                                                                             @endphp
                                                                                             {{ $durasi->y }} Tahun,
@@ -2213,8 +2216,8 @@
                                                                                         <!--begin::Durasi-->
                                                                                         <td>
                                                                                             @php
-                                                                                                $tglakhir = new DateTime($proyekberjalan0->proyek->tanggal_akhir_terkontrak ?? date('now'));
-                                                                                                $tglawal = new DateTime($proyekberjalan0->proyek->tanggal_mulai_terkontrak ?? date('now'));
+                                                                                                $tglakhir = Carbon\Carbon::create($proyekberjalan0->proyek->tanggal_akhir_terkontrak);
+                                                                                                $tglawal = Carbon\Carbon::create($proyekberjalan0->proyek->tanggal_mulai_terkontrak);
                                                                                                 $durasi = $tglakhir->diff($tglawal);
                                                                                             @endphp
                                                                                             {{ $durasi->y }} Tahun,
@@ -4584,8 +4587,8 @@
                                     <span class="">Durasi Proyek: </span>
                                 </div>
                                 @php
-                                    $tglakhir = new DateTime($proyek->proyek->tanggal_akhir_terkontrak ?? date('now'));
-                                    $tglawal = new DateTime($proyek->proyek->tanggal_mulai_terkontrak ?? date('now'));
+                                    $tglakhir = Carbon\Carbon::create($proyek->proyek->tanggal_akhir_terkontrak);
+                                    $tglawal = Carbon\Carbon::create($proyek->proyek->tanggal_mulai_terkontrak);
                                     $durasi = $tglakhir->diff($tglawal);
                                 @endphp
                                 <div class="col text-dark text-start">
@@ -6585,7 +6588,7 @@
                     for (let filter in proyek) {
                         filter = proyek[filter];
                         let stage = "";
-                        totalForecast += Number(filter.nilai_rkap);
+                        totalForecast += Number(filter.ok_review);
                         switch (Number(filter.stage)) {
                             case 1:
                                 stage = "Pasar Dini";
@@ -6692,7 +6695,7 @@
 
                             <!--begin::Nilai Forecast-->
                             <td class="text-end">
-                                ${Intl.NumberFormat((["id"])).format(filter.nilai_rkap)}
+                                ${Intl.NumberFormat((["id"])).format(filter.ok_review)}
                             </td>
                             <!--end::Nilai Forecast-->
                             </tr>`;
