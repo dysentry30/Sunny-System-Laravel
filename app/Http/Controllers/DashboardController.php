@@ -654,20 +654,40 @@ class DashboardController extends Controller
         $year = date("Y");
         $month = date("m");
 
-        $unit_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",",Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja);
+        $tahun = Proyek::get()->groupBy("tahun_perolehan")->keys();
+        
+        if(Auth::user()->check_administrator){
+            // $unit_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",",Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja);
+        // dd($mounth);
         // $unit_kerjas_all = UnitKerja::whereNotIn("divcode", ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "N"])->get();
         // $proyeks = Proyek::whereNotIn("unit_kerja", ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "N"])->get();
         
-        $tahun = Proyek::get()->groupBy("tahun_perolehan")->keys();
         
         if($tahun_get < 2023) {
             $unit_kerja_code =  ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "N", "P", "J"];
-            $unit_kerjas_all = UnitKerja::whereNotIn("divcode",$unit_kerja_code)->whereIn("divcode", $unit_user->toArray())->get("divcode");
-            $unit_kerjas = UnitKerja::whereNotIn("divcode",  $unit_kerja_code)->whereIn("divcode", $unit_user->toArray())->get();
+            $unit_kerjas_all = UnitKerja::whereNotIn("divcode",$unit_kerja_code)->get("divcode");
+            $unit_kerjas = UnitKerja::whereNotIn("divcode",  $unit_kerja_code)->get();
         } else {
             $unit_kerja_code =   ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "N", "L", "F", "U", "O"];
-            $unit_kerjas_all = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->whereIn("divcode", $unit_user->toArray())->get("divcode");
-            $unit_kerjas = UnitKerja::whereNotIn("divcode",   $unit_kerja_code)->whereIn("divcode", $unit_user->toArray())->get();
+            $unit_kerjas_all = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->get("divcode");
+            $unit_kerjas = UnitKerja::whereNotIn("divcode",   $unit_kerja_code)->get();
+        }
+        }else{
+            $unit_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",",Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja);
+            // dd($mounth);
+            // $unit_kerjas_all = UnitKerja::whereNotIn("divcode", ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "N"])->get();
+            // $proyeks = Proyek::whereNotIn("unit_kerja", ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "N"])->get();
+            
+            
+            if($tahun_get < 2023) {
+                $unit_kerja_code =  ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "N", "P", "J"];
+                $unit_kerjas_all = UnitKerja::whereNotIn("divcode",$unit_kerja_code)->whereIn("divcode", $unit_user->toArray())->get("divcode");
+                $unit_kerjas = UnitKerja::whereNotIn("divcode",  $unit_kerja_code)->whereIn("divcode", $unit_user->toArray())->get();
+            } else {
+                $unit_kerja_code =   ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "N", "L", "F", "U", "O"];
+                $unit_kerjas_all = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->whereIn("divcode", $unit_user->toArray())->get("divcode");
+                $unit_kerjas = UnitKerja::whereNotIn("divcode",   $unit_kerja_code)->whereIn("divcode", $unit_user->toArray())->get();
+            }
         }
         // dd($unit_kerjas_all);
         // $unit_kerja_get = !empty($request->query("unit-kerja")) ? [$request->query("unit-kerja")] : $unit_kerjas_all->toArray();
@@ -916,7 +936,8 @@ class DashboardController extends Controller
         $year = date("Y");
         $month = date("m");
 
-        $unit_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",",Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja);
+        if(Auth::user()->check_administrator){
+            // $unit_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",",Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja);
         // dd($mounth);
         // $unit_kerjas_all = UnitKerja::whereNotIn("divcode", ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "N"])->get();
         // $proyeks = Proyek::whereNotIn("unit_kerja", ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "N"])->get();
@@ -924,13 +945,31 @@ class DashboardController extends Controller
         
         if($tahun_get < 2023) {
             $unit_kerja_code =  ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "N", "P", "J"];
-            $unit_kerjas_all = UnitKerja::whereNotIn("divcode",$unit_kerja_code)->whereIn("divcode", $unit_user->toArray())->get("divcode");
-            $unit_kerjas = UnitKerja::whereNotIn("divcode",  $unit_kerja_code)->whereIn("divcode", $unit_user->toArray())->get();
+            $unit_kerjas_all = UnitKerja::whereNotIn("divcode",$unit_kerja_code)->get("divcode");
+            $unit_kerjas = UnitKerja::whereNotIn("divcode",  $unit_kerja_code)->get();
         } else {
             $unit_kerja_code =   ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "N", "L", "F", "U", "O"];
-            $unit_kerjas_all = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->whereIn("divcode", $unit_user->toArray())->get("divcode");
-            $unit_kerjas = UnitKerja::whereNotIn("divcode",   $unit_kerja_code)->whereIn("divcode", $unit_user->toArray())->get();
+            $unit_kerjas_all = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->get("divcode");
+            $unit_kerjas = UnitKerja::whereNotIn("divcode",   $unit_kerja_code)->get();
         }
+        }else{
+            $unit_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",",Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja);
+            // dd($mounth);
+            // $unit_kerjas_all = UnitKerja::whereNotIn("divcode", ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "N"])->get();
+            // $proyeks = Proyek::whereNotIn("unit_kerja", ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "N"])->get();
+            
+            
+            if($tahun_get < 2023) {
+                $unit_kerja_code =  ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "N", "P", "J"];
+                $unit_kerjas_all = UnitKerja::whereNotIn("divcode",$unit_kerja_code)->whereIn("divcode", $unit_user->toArray())->get("divcode");
+                $unit_kerjas = UnitKerja::whereNotIn("divcode",  $unit_kerja_code)->whereIn("divcode", $unit_user->toArray())->get();
+            } else {
+                $unit_kerja_code =   ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "N", "L", "F", "U", "O"];
+                $unit_kerjas_all = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->whereIn("divcode", $unit_user->toArray())->get("divcode");
+                $unit_kerjas = UnitKerja::whereNotIn("divcode",   $unit_kerja_code)->whereIn("divcode", $unit_user->toArray())->get();
+            }
+        }
+
         // dd($unit_kerjas_all);
         // $unit_kerja_get = !empty($request->query("unit-kerja")) ? [$request->query("unit-kerja")] : $unit_kerjas_all->toArray();
         // $dop_get = !empty( $request->query("dop")) ? [ $request->query("dop") ] : $dops->toArray();
@@ -1823,8 +1862,8 @@ class DashboardController extends Controller
         $year = date("Y");
         $month = date("m");
 
-        $unit_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",",Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja);
-
+        if(Auth::user()->check_administrator){
+            // $unit_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",",Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja);
         // dd($mounth);
         // $unit_kerjas_all = UnitKerja::whereNotIn("divcode", ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "N"])->get();
         // $proyeks = Proyek::whereNotIn("unit_kerja", ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "N"])->get();
@@ -1832,12 +1871,29 @@ class DashboardController extends Controller
         
         if($tahun_get < 2023) {
             $unit_kerja_code =  ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "N", "P", "J"];
-            $unit_kerjas_all = UnitKerja::whereNotIn("divcode",$unit_kerja_code)->whereIn("divcode", $unit_user->toArray())->get("divcode");
-            $unit_kerjas = UnitKerja::whereNotIn("divcode",  $unit_kerja_code)->whereIn("divcode", $unit_user->toArray())->get();
+            $unit_kerjas_all = UnitKerja::whereNotIn("divcode",$unit_kerja_code)->get("divcode");
+            $unit_kerjas = UnitKerja::whereNotIn("divcode",  $unit_kerja_code)->get();
         } else {
             $unit_kerja_code =   ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "N", "L", "F", "U", "O"];
-            $unit_kerjas_all = UnitKerja::whereNotIn("divcode",$unit_kerja_code)->whereIn("divcode", $unit_user->toArray())->get("divcode");
-            $unit_kerjas = UnitKerja::whereNotIn("divcode",  $unit_kerja_code)->whereIn("divcode", $unit_user->toArray())->get();
+            $unit_kerjas_all = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->get("divcode");
+            $unit_kerjas = UnitKerja::whereNotIn("divcode",   $unit_kerja_code)->get();
+        }
+        }else{
+            $unit_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",",Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja);
+            // dd($mounth);
+            // $unit_kerjas_all = UnitKerja::whereNotIn("divcode", ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "N"])->get();
+            // $proyeks = Proyek::whereNotIn("unit_kerja", ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "N"])->get();
+            
+            
+            if($tahun_get < 2023) {
+                $unit_kerja_code =  ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "N", "P", "J"];
+                $unit_kerjas_all = UnitKerja::whereNotIn("divcode",$unit_kerja_code)->whereIn("divcode", $unit_user->toArray())->get("divcode");
+                $unit_kerjas = UnitKerja::whereNotIn("divcode",  $unit_kerja_code)->whereIn("divcode", $unit_user->toArray())->get();
+            } else {
+                $unit_kerja_code =   ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "N", "L", "F", "U", "O"];
+                $unit_kerjas_all = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->whereIn("divcode", $unit_user->toArray())->get("divcode");
+                $unit_kerjas = UnitKerja::whereNotIn("divcode",   $unit_kerja_code)->whereIn("divcode", $unit_user->toArray())->get();
+            }
         }
         // dd($proyeks);
         // $unit_kerja_get = !empty($request->query("unit-kerja")) ? [$request->query("unit-kerja")] : $unit_kerjas_all->toArray();
