@@ -372,8 +372,7 @@
                 <!--end::Page title-->
                 <!--begin::Actions-->
                 <div class="d-flex align-items-center py-1">
-
-
+                    @if (auth()->user()->is_pic != true)
                     <!--begin::Button-->
                     @if ($contract->where("id_contract", "=", $contract->id_contract)->where("stages", "!=", 1)->get()->isNotEmpty())
                     @if ($is_approved->isEmpty())
@@ -422,6 +421,7 @@
                             })
                         }
                     </script>
+                    @endif
 
                     <!--begin::Button-->
                     @if ($contract->where("id_contract", "=", $contract->id_contract)->where("stages", "!=", 1)->get()->isNotEmpty())
@@ -512,10 +512,17 @@
                                             style="outline: 0px; cursor: pointer;">
                                             Serah Terima Pekerjaan
                                         </a> --}}
+                                        @if ($is_approved->isEmpty())
                                         <a href="#" role="link" class="stage-button color-is-default"
                                             style="outline: 0px;">
                                             Pemeliharaan
                                         </a>
+                                        @else
+                                        <a href="#" role="link" class="stage-button color-is-default" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-bs-title="Tidak dapat pindah stage <b>Pemeliharaan</b> saat ini karena kontrak sedang di <b>Lock</b>"
+                                            style="outline: 0px; cursor: not-allowed;">
+                                            Pemeliharaan
+                                        </a>
+                                        @endif
 
                                     </div>
 
@@ -2825,7 +2832,7 @@
                                         </td>
                                         <td>
                                             <small>
-                                                <a class="badge badge-light-primary" href="/claim-management/proyek/{{ $contract->project->kode_proyek }}/{{ $contract->id_contract }}">Lihat Detail</a>
+                                                <a class="badge badge-light-primary" href="/claim-management/proyek/{{ $contract->project->kode_proyek }}/{{ $contract->id_contract }}?link=kt_user_view_claim_VO" target="_blank">Lihat Detail</a>
                                             </small>
                                         </td>
                                     </tr>
@@ -2849,7 +2856,7 @@
                                         </td>
                                         <td>
                                             <small>
-                                                <a class="badge badge-light-primary" href="/claim-management/proyek/{{ $contract->project->kode_proyek }}/{{ $contract->id_contract }}">Lihat Detail</a>
+                                                <a class="badge badge-light-primary" href="/claim-management/proyek/{{ $contract->project->kode_proyek }}/{{ $contract->id_contract }}?link=kt_user_view_claim" target="_blank">Lihat Detail</a>
                                             </small>
                                         </td>
                                     </tr>
@@ -2873,7 +2880,7 @@
                                         </td>
                                         <td>
                                             <small>
-                                                <a class="badge badge-light-primary" href="/claim-management/proyek/{{ $contract->project->kode_proyek }}/{{ $contract->id_contract }}">Lihat Detail</a>
+                                                <a class="badge badge-light-primary" href="/claim-management/proyek/{{ $contract->project->kode_proyek }}/{{ $contract->id_contract }}?link=kt_user_view_overview_anticlaim" target="_blank">Lihat Detail</a>
                                             </small>
                                         </td>
                                     </tr>
@@ -2897,7 +2904,7 @@
                                         </td>
                                         <td>
                                             <small>
-                                                <a class="badge badge-light-primary" href="/claim-management/proyek/{{ $contract->project->kode_proyek }}/{{ $contract->id_contract }}">Lihat Detail</a>
+                                                <a class="badge badge-light-primary" href="/claim-management/proyek/{{ $contract->project->kode_proyek }}/{{ $contract->id_contract }}?link=kt_user_view_overview_asuransi" target="_blank">Lihat Detail</a>
                                             </small>
                                         </td>
                                     </tr>

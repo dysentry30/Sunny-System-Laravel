@@ -197,7 +197,7 @@
                                                         aria-hidden="true">
                                                         <option value="" selected></option>
                                                         @foreach ($dops as $dop)
-                                                            <option value="{{ $dop->dop }}" {{ $dop_get == $dop->dop ? 'selected' : '' }} >{{ $dop->dop }}</option>
+                                                            <option value="{{ $dop->dop }}" {{ $dop_get == $dop->dop || $proyek->dop == $dop->dop ? 'selected' : '' }} >{{ $dop->dop }}</option>
                                                         @endforeach
                                                 </select>
                                             </div>
@@ -210,7 +210,7 @@
                                                         aria-hidden="true">
                                                         <option value="" selected></option>
                                                         @foreach ($unit_kerjas as $unit_kerjas)
-                                                            <option value="{{ $unit_kerjas->divcode }}" {{ $unit_kerja_get == $unit_kerjas->divcode ? 'selected' : '' }} >{{ $unit_kerjas->unit_kerja }}</option>
+                                                            <option value="{{ $unit_kerjas->divcode }}" {{ $unit_kerja_get == $unit_kerjas->divcode || $proyek->unit_kerja == $unit_kerjas->divcode ? 'selected' : '' }} >{{ $unit_kerjas->unit_kerja }}</option>
                                                         @endforeach
                                                 </select>
                                             </div>
@@ -236,18 +236,18 @@
                                                         data-placeholder="Bulan" data-select2-id="select2-data-bulan" tabindex="-1"
                                                         aria-hidden="true">
                                                         <option {{ $month == '' ? 'selected' : '' }}></option>
-                                                        <option value="1" {{ $bulan_get == 1 ? 'selected' : '' }}>Januari</option>
-                                                        <option value="2" {{ $bulan_get == 2 ? 'selected' : '' }}>Februari</option>
-                                                        <option value="3" {{ $bulan_get == 3 ? 'selected' : '' }}>Maret</option>
-                                                        <option value="4" {{ $bulan_get == 4 ? 'selected' : '' }}>April</option>
-                                                        <option value="5" {{ $bulan_get == 5 ? 'selected' : '' }}>Mei</option>
-                                                        <option value="6" {{ $bulan_get == 6 ? 'selected' : '' }}>Juni</option>
-                                                        <option value="7" {{ $bulan_get == 7 ? 'selected' : '' }}>Juli</option>
-                                                        <option value="8" {{ $bulan_get == 8 ? 'selected' : '' }}>Agustus</option>
-                                                        <option value="9" {{ $bulan_get == 9 ? 'selected' : '' }}>September</option>
-                                                        <option value="10" {{ $bulan_get == 10 ? 'selected' : '' }}>Oktober</option>
-                                                        <option value="11" {{ $bulan_get == 11 ? 'selected' : '' }}>November</option>
-                                                        <option value="12" {{ $bulan_get == 12 ? 'selected' : '' }}>Desember</option>
+                                                        <option value="1" {{ $bulan_get == 1 || $proyek->bulan_pelaksanaan == 1 ? 'selected' : '' }}>Januari</option>
+                                                        <option value="2" {{ $bulan_get == 2 || $proyek->bulan_pelaksanaan == 2 ? 'selected' : '' }}>Februari</option>
+                                                        <option value="3" {{ $bulan_get == 3 || $proyek->bulan_pelaksanaan == 3 ? 'selected' : '' }}>Maret</option>
+                                                        <option value="4" {{ $bulan_get == 4 || $proyek->bulan_pelaksanaan == 4 ? 'selected' : '' }}>April</option>
+                                                        <option value="5" {{ $bulan_get == 5 || $proyek->bulan_pelaksanaan == 5 ? 'selected' : '' }}>Mei</option>
+                                                        <option value="6" {{ $bulan_get == 6 || $proyek->bulan_pelaksanaan == 6 ? 'selected' : '' }}>Juni</option>
+                                                        <option value="7" {{ $bulan_get == 7 || $proyek->bulan_pelaksanaan == 7 ? 'selected' : '' }}>Juli</option>
+                                                        <option value="8" {{ $bulan_get == 8 || $proyek->bulan_pelaksanaan == 8 ? 'selected' : '' }}>Agustus</option>
+                                                        <option value="9" {{ $bulan_get == 9 || $proyek->bulan_pelaksanaan == 9 ? 'selected' : '' }}>September</option>
+                                                        <option value="10" {{ $bulan_get == 10 || $proyek->bulan_pelaksanaan == 10 ? 'selected' : '' }}>Oktober</option>
+                                                        <option value="11" {{ $bulan_get == 11 || $proyek->bulan_pelaksanaan == 11 ? 'selected' : '' }}>November</option>
+                                                        <option value="12" {{ $bulan_get == 12 || $proyek->bulan_pelaksanaan == 12 ? 'selected' : '' }}>Desember</option>
                                                 </select>
                                             </div>
 
@@ -549,7 +549,7 @@
                                                 {{-- <span>-{{ $timePending }}%</span> --}}
                                             </div>
                                             <div class="h-8px mx-3 w-100 bg-white bg-opacity-50 rounded">
-                                                <div class="bg-white rounded h-8px" role="progressbar" style="width: {{ $time_status }};" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                                <div class="bg-white rounded h-8px" role="progressbar" style="width: {{ (int)$time_status }};" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
                                             </div>
                                         </div>
                                         <!--end::Progress-->
@@ -808,7 +808,7 @@
                                 <!--end::Title-->
 
                                 <!--begin::Row-->
-                                <div class="row">
+                                <div class="row align-items-center justify-content-center">
                                     <!--begin::Card column-->
                                     <div class="col-6">
                                             <!--begin::COLUMN CHART-->
@@ -819,10 +819,10 @@
                                     <!--end-begin::Card column-->
                                     <div class="col-6">
                                             <!--begin::PIE CHART-->
-                                            <figure class="highcharts-figure">
+                                            {{-- <figure class="highcharts-figure"> --}}
                                                 <div id="changes-status"></div>
                                                 <!-- data table is inserted here -->
-                                            </figure>
+                                            {{-- </figure> --}}
                                             <!--end::PIE CHART-->
                                     </div>
                                     <!--end::Card column-->
@@ -941,13 +941,13 @@
                         <!--end::Tabel Header-->
                         {{-- @dd($proyek) --}}
                         <!--begin::Table Body-->
-                        @foreach ($detail_perubahan_kontrak as $table)
+                        @foreach ($cat_kontrak as $table)
                         {{-- @dd($table) --}}
                         <div class="row mb-4 mx-3">
                             <div class="col-2">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-success">
-                                    <h2 class="m-0 text-center">{{ $table[0] }}</h2>
+                                    <h2 class="m-0 text-center">{{ $table["jenis_perubahan"] }}</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
@@ -956,7 +956,7 @@
                                 <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
-                                        <h2 class="m-0 text-center">{{ $table[4] ?? 0 }}</h2>
+                                        <h2 class="m-0 text-center">{{ $table["potensial"] ?? 0 }}</h2>
                                     </div>
                                     <!--end::Title body-->
                                 </a>
@@ -967,7 +967,7 @@
                                 <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
-                                        <h2 class="m-0 text-center">{{ $table[5] ?? 0 }}</h2>
+                                        <h2 class="m-0 text-center">{{ $table["subs"] ?? 0 }}</h2>
                                     </div>
                                     <!--end::Title body-->
                                 </a>
@@ -978,7 +978,7 @@
                                 <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
-                                        <h2 class="m-0 text-center">{{ $table[6] ?? 0 }}</h2>
+                                        <h2 class="m-0 text-center">{{ $table["revisi"] ?? 0 }}</h2>
                                     </div>
                                     <!--end::Title body-->
                                 </a>
@@ -989,7 +989,7 @@
                                 <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
-                                        <h2 class="m-0 text-center">{{ $table[7] ?? 0 }}</h2>
+                                        <h2 class="m-0 text-center">{{ $table["nego"] ?? 0 }}</h2>
                                     </div>
                                     <!--end::Title body-->
                                 </a>
@@ -1000,7 +1000,7 @@
                                 <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
-                                        <h2 class="m-0 text-center">{{ $table[8] ?? 0 }}</h2>
+                                        <h2 class="m-0 text-center">{{ $table["setuju"] ?? 0 }}</h2>
                                     </div>
                                     <!--end::Title body-->
                                 </a>
@@ -1011,7 +1011,7 @@
                                 <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
-                                        <h2 class="m-0 text-center">{{ $table[9] ?? 0 }}</h2>
+                                        <h2 class="m-0 text-center">{{ $table["tolak"] ?? 0 }}</h2>
                                     </div>
                                     <!--end::Title body-->
                                 </a>
@@ -1022,7 +1022,7 @@
                                 <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
-                                        <h2 class="m-0 text-center">{{ $table[10] ?? 0 }}</h2>
+                                        <h2 class="m-0 text-center">{{ $table["dispute"] ?? 0 }}</h2>
                                     </div>
                                     <!--end::Title body-->
                                 </a>
@@ -1054,34 +1054,34 @@
                         <!--end::Tabel Header-->
 
                         <!--begin::Table Body-->
-                        @foreach ($detail_perubahan_kontrak as $table)
+                        @foreach ($cat_kontrak as $table)
                         {{-- @dd($table) --}}
                         <div class="row mb-4 mx-3">
                             <div class="col-3">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-warning">
-                                    <h2 class="m-0 text-center">{{ $table[0] }}</h2>
+                                    <h2 class="m-0 text-center">{{ $table["jenis_perubahan"] }}</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
                             <div class="col-1">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-secondary">
-                                    <h2 class="m-0 text-center">{{ $table[1] }}</h2>
+                                    <h2 class="m-0 text-center">{{ $table["total_item"] }}</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
                             <div class="col-5">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-secondary">
-                                    <h2 class="m-0 text-center">Rp {{ number_format($table[2], 0, ".", ".") }}</h2>
+                                    <h2 class="m-0 text-center">Rp {{ number_format($table["total_nilai"], 0, ".", ".") }}</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
                             <div class="col-3">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-secondary">
-                                    <h2 class="m-0 text-center">{{ $table[3] }}</h2>
+                                    <h2 class="m-0 text-center">{{ $table["persen"] }}</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
@@ -1094,7 +1094,7 @@
                             <div class="col-9">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-warning">
-                                    <h2 class="m-0 text-center">TOTAL NILAI PERUBAHAN : Rp {{ number_format($total_pengajuan, 0, ".", ".") }}</h2>
+                                    <h2 class="m-0 text-center">TOTAL NILAI PERUBAHAN : Rp {{ number_format($perubahan_total, 0, ".", ".") }}</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
@@ -1250,45 +1250,47 @@
                                 </div>
                                 <!--end::Title body-->
                                <!--begin::Title body-->
-                               @if (!empty($proyek->Asuransi))
-                               @php
-                                   $asuransiTableView = $proyek->Asuransi->groupBy("kategori_asuransi")->map(function($item, $key){
+                               {{-- @if (!empty($proyek->ContractManagements->Asuransi)) --}}
+                               {{-- @php
+                                   $asuransiTableView = $proyek->ContractManagements->Asuransi->groupBy("kategori_asuransi")->map(function($item, $key){
                                        return $item->sortByDesc("created_at")->first();    
                                    })->values();
-                               @endphp
-                           @foreach ($asuransiTableView as $asuransi)
-                           <div class="row mb-4 ms-3">
+                               @endphp --}}
+                           @foreach ($asuransi_proyek as $asuransi)
+                           <div class="row mb-4 ms-3 align-items-center">
                                <div class="col-3">
                                    <!--begin::Title body-->
                                    <div style="border-radius: 0px" class="card-body bg-secondary">
-                                       <p class="fw-bolder m-0 text-center">{{ $asuransi->kategori_asuransi }}</p>
+                                       <p class="fw-bolder m-0 text-center">{{ $asuransi["kategori"] }}</p>
                                    </div>
                                    <!--end::Title body-->
                                </div>
                                <div class="col-3">
                                    <!--begin::Title body-->
                                    <div style="border-radius: 0px" class="card-body bg-secondary">
-                                       <p class="fw-bolder m-0 text-center">{{ Carbon\Carbon::create($asuransi->tanggal_penerbitan)->translatedFormat("d/m/Y") }}</p>
+                                       {{-- <p class="fw-bolder m-0 text-center">{{ Carbon\Carbon::createFromFormat('Y-m-d', $asuransi["tgl_penerbitan"])->translatedFormat("d/m/Y") }}</p> --}}
+                                       <p class="fw-bolder m-0 text-center">{{ $asuransi["tgl_penerbitan"] == null ? "-" : Carbon\Carbon::create($asuransi["tgl_penerbitan"])->translatedFormat("d F Y") }}</p>
                                    </div>
                                    <!--end::Title body-->
                                </div>
                                <div class="col-3">
                                    <!--begin::Title body-->
                                    <div style="border-radius: 0px" class="card-body bg-secondary">
-                                       <p class="fw-bolder m-0 text-center">{{ Carbon\Carbon::create($asuransi->tanggal_berakhir)->translatedFormat("d/m/Y") }}</p>
+                                       {{-- <p class="fw-bolder m-0 text-center">{{ Carbon\Carbon::createFromFormat('Y-m-d', $asuransi["tgl_berakhir"])->translatedFormat("d/m/Y") }}</p> --}}
+                                       <p class="fw-bolder m-0 text-center">{{ $asuransi["tgl_berakhir"] == null ? "-" : Carbon\Carbon::create($asuransi["tgl_berakhir"])->translatedFormat("d F Y") }}</p>
                                    </div>
                                    <!--end::Title body-->
                                </div>
                                <div class="col-3">
                                    <!--begin::Title body-->
                                    <div style="border-radius: 0px" class="card-body bg-secondary">
-                                       <p class="fw-bolder m-0 text-center">{{ $asuransi->is_expired == 0 ? "VALID" : "EXPIRED" }}</p>
+                                       <p class="fw-bolder m-0 text-center">{{ $asuransi["status"] == null ? "-" : $asuransi["status"] }}</p>
                                    </div>
                                    <!--end::Title body-->
                                </div>
                            </div>
                            @endforeach
-                           @endif
+                           {{-- @endif --}}
                            <!--end::Title body-->
                             </div>
                             <div class="col-6">
@@ -1325,47 +1327,49 @@
                                 </div>
                                 <!--end::Title body-->
                                <!--end::Title body-->
-                               @if (!empty($proyek->Jaminan))
-                               @php
-                                   $jaminanTableView = $proyek->Jaminan->groupBy("kategori_jaminan")->map(function($item, $key){
+                               {{-- @if (!empty($proyek->ContractManagements->Jaminan)) --}}
+                               {{-- @php
+                                   $jaminanTableView = $proyek->ContractManagements->Jaminan->groupBy("kategori_jaminan")->map(function($item, $key){
                                        return $item->sortByDesc("created_at")->first();    
                                    })->values();
-                               @endphp
+                               @endphp --}}
                                    <!--begin::Title body-->
-                                   @foreach ($jaminanTableView as $jaminan)
+                                   @foreach ($jaminan_proyek as $jaminan)
                                    <div class="row mb-4 me-3">
-                                       <div class="col-3">
-                                           <!--begin::Title body-->
-                                           <div style="border-radius: 0px" class="card-body bg-secondary">
-                                               <p class="fw-bolder m-0 text-center">{{ $jaminan->kategori_jaminan }}</p>
-                                           </div>
-                                           <!--end::Title body-->
-                                       </div>
-                                       <div class="col-3">
-                                           <!--begin::Title body-->
-                                           <div style="border-radius: 0px" class="card-body bg-secondary">
-                                               <p class="fw-bolder m-0 text-center">{{ Carbon\Carbon::create($jaminan->tanggal_penerbitan)->translatedFormat("d/m/Y") }}</p>
-                                           </div>
-                                           <!--end::Title body-->
-                                       </div>
-                                       <div class="col-3">
-                                           <!--begin::Title body-->
-                                           <div style="border-radius: 0px" class="card-body bg-secondary">
-                                               <p class="fw-bolder m-0 text-center">{{ Carbon\Carbon::create($jaminan->tanggal_berakhir)->translatedFormat("d/m/Y") }}</p>
-                                           </div>
-                                           <!--end::Title body-->
-                                       </div>
-                                       <div class="col-3">
-                                           <!--begin::Title body-->
-                                           <div style="border-radius: 0px" class="card-body bg-secondary">
-                                               <p class="fw-bolder m-0 text-center">{{ $jaminan->is_expired == 0 ? "VALID" : "EXPIRED" }}</p>
-                                           </div>
-                                           <!--end::Title body-->
-                                       </div>
+                                    <div class="col-3">
+                                        <!--begin::Title body-->
+                                        <div style="border-radius: 0px" class="card-body bg-secondary">
+                                            <p class="fw-bolder m-0 text-center">{{ $jaminan["kategori"] }}</p>
+                                        </div>
+                                        <!--end::Title body-->
+                                    </div>
+                                    <div class="col-3">
+                                        <!--begin::Title body-->
+                                        <div style="border-radius: 0px" class="card-body bg-secondary">
+                                            {{-- <p class="fw-bolder m-0 text-center">{{ Carbon\Carbon::createFromFormat('Y-m-d', $jaminan["tgl_penerbitan"])->translatedFormat("d/m/Y") }}</p> --}}
+                                            <p class="fw-bolder m-0 text-center">{{ $jaminan["tgl_penerbitan"] == null ? "-" : Carbon\Carbon::create($jaminan["tgl_penerbitan"])->translatedFormat("d F Y") }}</p>
+                                        </div>
+                                        <!--end::Title body-->
+                                    </div>
+                                    <div class="col-3">
+                                        <!--begin::Title body-->
+                                        <div style="border-radius: 0px" class="card-body bg-secondary">
+                                            {{-- <p class="fw-bolder m-0 text-center">{{ Carbon\Carbon::createFromFormat('Y-m-d', $jaminan["tgl_berakhir"])->translatedFormat("d/m/Y") }}</p> --}}
+                                            <p class="fw-bolder m-0 text-center">{{ $jaminan["tgl_berakhir"] == null ? "-" : Carbon\Carbon::create($jaminan["tgl_berakhir"])->translatedFormat("d F Y") }}</p>
+                                        </div>
+                                        <!--end::Title body-->
+                                    </div>
+                                    <div class="col-3">
+                                        <!--begin::Title body-->
+                                        <div style="border-radius: 0px" class="card-body bg-secondary">
+                                            <p class="fw-bolder m-0 text-center">{{ $jaminan["status"] == null ? "-" : $jaminan["status"] }}</p>
+                                        </div>
+                                        <!--end::Title body-->
+                                    </div>
                                    </div>
                                    @endforeach
                                    <!--end::Title body-->
-                               @endif
+                               {{-- @endif --}}
                             </div>
                         </div>
                         <!--end::Title-->

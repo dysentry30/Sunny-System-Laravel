@@ -101,19 +101,20 @@ class ContractManagementsController extends Controller
             //     return self::stdClassToModel($data, Proyek::class);
             // });
             $tahun_proyeks = Proyek::get()->groupBy("tahun_perolehan")->keys();
+            $unit_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",",Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja);
             // $unitkerjas = UnitKerja::get()->whereNotIn("divcode", ["1", "2", "3", "4", "5", "6", "7", "8"]);
             // dd($unitkerjas);
             if ($filterTahun < 2023) {
                 $unit_kerja_code =  ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "N", "P", "J"];
-                $unitkerjas = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->get("divcode");
-                $unit_kerjas_select = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->get();
+                $unitkerjas = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->whereIn("divcode", $unit_user->toArray())->get("divcode");
+                $unit_kerjas_select = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->whereIn("divcode", $unit_user->toArray())->get();
                 // $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $filterTahun)->whereNotIn("unit_kerja", $unit_kerja_code)->get();
                 // $unit_kerjas = UnitKerja::whereNotIn("divcode",  $unit_kerja_code)->get();
                 // $proyeks = Proyek::join("contract_managements", "proyeks.kode_proyek", "=", "contract_managements.project_id")->whereNotIn("unit_kerja", $unit_kerja_code)->whereIn("stage", [6, 8, 9])->where("stages", "=", 3)->get();
             } else {
                 $unit_kerja_code =   ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "N", "L", "F", "U", "O"];
-                $unitkerjas = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->get("divcode");
-                $unit_kerjas_select = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->get();
+                $unitkerjas = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->whereIn("divcode", $unit_user->toArray())->get("divcode");
+                $unit_kerjas_select = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->whereIn("divcode", $unit_user->toArray())->get();
                 // $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $filterTahun)->whereNotIn("unit_kerja", $unit_kerja_code)->get();
                 // $unit_kerjas = UnitKerja::whereNotIn("divcode",   $unit_kerja_code)->get();
                 // $proyeks = Proyek::join("contract_managements", "proyeks.kode_proyek", "=", "contract_managements.project_id")->whereNotIn("unit_kerja", $unit_kerja_code)->whereIn("stage", [6, 8, 9])->where("stages", "=", 3)->get();
@@ -3477,11 +3478,12 @@ class ContractManagementsController extends Controller
         // dd($data);
 
         $contract = ContractManagements::where("id_contract", "=", $data["id_contract"])->first();
-        $kode_spk = $contract->project->kode_spk;
-        // $kode_spk = "MJBG08";
+        // $kode_spk = $contract->project->kode_spk;
+        $kode_spk = "MJBG08";
         $current = new DateTime();
         $str_current = $current->format('Ym');
-        // dd($str_current, $kode_spk);
+        $is_exist_progress_period = ProyekProgress::where("kode_spk", "=", $kode_spk)->where("periode", "=", $str_current)->first();
+        // dd($is_exist_progress_period);
         
         if($kode_spk){
             $response = Http::post('http://pis.wika.co.id/wpapi/files/getAPIQISList',[
@@ -3491,29 +3493,49 @@ class ContractManagementsController extends Controller
 
             if($response->successful()){
                 $data_response = $response->collect($key = "data")->first();
-                $data = new ProyekProgress();
-                $data->kode_proyek = $contract->project->kode_proyek;
-                $data->kode_spk = $kode_spk;
-                $data->ok_review = (int)$data_response["ok_review"];
-                $data->progress_fisik_ri = (int)$data_response["progress_fisik_ri"];
-                $data->lama_proyek = $data_response["lamaproyek"];
-                $data->laba_kotor_ri = (int)$data_response["laba_kotor_ri"];
-                $data->periode = $str_current;
+                if($is_exist_progress_period){
+                    $data = $is_exist_progress_period;
+                    $data->kode_proyek = $contract->project->kode_proyek;
+                    $data->kode_spk = $kode_spk;
+                    $data->ok_review = (int)$data_response["ok_review"];
+                    $data->progress_fisik_ri = (int)$data_response["progress_fisik_ri"];
+                    $data->lama_proyek = $data_response["lamaproyek"];
+                    $data->laba_kotor_ri = (int)$data_response["laba_kotor_ri"];
+                    $data->periode = $str_current;
+                }else{
+                    $data = new ProyekProgress();
+                    $data->kode_proyek = $contract->project->kode_proyek;
+                    $data->kode_spk = $kode_spk;
+                    $data->ok_review = (int)$data_response["ok_review"];
+                    $data->progress_fisik_ri = (int)$data_response["progress_fisik_ri"];
+                    $data->lama_proyek = $data_response["lamaproyek"];
+                    $data->laba_kotor_ri = (int)$data_response["laba_kotor_ri"];
+                    $data->periode = $str_current;
+                }
                 if($data->save()){
                 // Alert::success
                 toast("Data berhasil disimpan", "success")->autoClose(3000);
-                return redirect()->back();
+                return response()->json([
+                    "status" => "success",
+                    "link" => true
+                ], 200);
                 // dd("success");
-                }
-                toast("Data gagal disimpan", "error")->autoClose(3000);
-                return redirect()->back();
-                
-                // dd($data);
             }
+            toast("Data gagal disimpan", "error")->autoClose(3000);
+            return response()->json([
+                "status" => "success",
+                "link" => true
+            ], 500);
+            
+            // dd($data);
+        }
+        // return response()->json($response->json(["link" => true]), 200);
 
-            // return response()->json($response->json(), 200);
         }
         toast("Kode SPK belum ada", "error")->autoClose(3000);
-        return redirect()->back();
+        return response()->json([
+            "status" => "success",
+            "link" => true
+        ], 200);
     }
 }

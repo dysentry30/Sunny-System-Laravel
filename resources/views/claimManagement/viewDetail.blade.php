@@ -178,21 +178,21 @@
                                             class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-0 p-0 mt-7">
                                             <!--begin:::Tab item Claim-->
                                                 <li class="nav-item">
-                                                    <a class="nav-link text-active-primary active" data-bs-toggle="tab" data-kt-countup-tabs="true"
+                                                    <a class="nav-link text-active-primary {{ $link == "kt_user_view_claim_VO" ? "active" : "" }}" data-bs-toggle="tab" data-kt-countup-tabs="true"
                                                         href="#kt_user_view_claim_VO" style="font-size:14px;">VO</a>
                                                 </li>
                                                 <!--end:::Tab item Claim-->
                 
                                                 <!--begin:::Tab item Claim-->
                                                 <li class="nav-item">
-                                                    <a class="nav-link text-active-primary" data-bs-toggle="tab" data-kt-countup-tabs="true"
+                                                    <a class="nav-link text-active-primary {{ $link == "kt_user_view_claim" ? "active" : "" }}" data-bs-toggle="tab" data-kt-countup-tabs="true"
                                                         href="#kt_user_view_claim" style="font-size:14px;">Claim</a>
                                                 </li>
                                                 <!--end:::Tab item Claim-->
                 
                                                 <!--begin:::Tab item Anti Claim-->
                                                 <li class="nav-item">
-                                                    <a class="nav-link text-active-primary" data-kt-countup-tabs="true"
+                                                    <a class="nav-link text-active-primary {{ $link == "kt_user_view_overview_anticlaim" ? "active" : "" }}" data-kt-countup-tabs="true"
                                                         data-bs-toggle="tab" href="#kt_user_view_overview_anticlaim"
                                                         style="font-size:14px;">Anti Claim</a>
                                                 </li>
@@ -200,7 +200,7 @@
                 
                                                 <!--begin:::Tab item -->
                                                 <li class="nav-item">
-                                                    <a class="nav-link text-active-primary" data-kt-countup-tabs="true"
+                                                    <a class="nav-link text-active-primary {{ $link == "kt_user_view_overview_asuransi" ? "active" : "" }}" data-kt-countup-tabs="true"
                                                         data-bs-toggle="tab" href="#kt_user_view_overview_asuransi"
                                                         style="font-size:14px;">Claim Asuransi</a>
                                                 </li>
@@ -222,7 +222,7 @@
                                             
                                             <div class="tab-content mt-5" id="myTabContent">
                                                 <!--Begin::Tab Panel VO-->
-                                                    <div class="tab-pane fade show active" id="kt_user_view_claim_VO" role="tabpanel">
+                                                    <div class="tab-pane fade {{ $link == "kt_user_view_claim_VO" ? "show active" : "" }}" id="kt_user_view_claim_VO" role="tabpanel">
                                                         <table class="table align-middle table-row-dashed fs-6 gy-2 card-body" id="view_VO">
                                                             <thead>
                                                                 <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
@@ -320,7 +320,7 @@
                                                 <!--End::Tab Pan VO-->
                         
                                                 <!--Begin::Tab Panel Klaim-->
-                                                    <div class="tab-pane fade" id="kt_user_view_claim" role="tabpanel">
+                                                    <div class="tab-pane fade {{ $link == "kt_user_view_claim" ? "show active" : "" }}" id="kt_user_view_claim" role="tabpanel">
                                                         <table class="table align-middle table-row-dashed fs-6 gy-2 card-body" id="view_Klaim">
                                                             <thead>
                                                                 <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
@@ -418,7 +418,7 @@
                                                 <!--End::Tab Pan Klaim-->
                         
                                                 <!--Begin::Tab Panel Anti Klaim-->
-                                                    <div class="tab-pane fade" id="kt_user_view_overview_anticlaim" role="tabpanel">
+                                                    <div class="tab-pane fade {{ $link == "kt_user_view_overview_anticlaim" ? "show active" : "" }}" id="kt_user_view_overview_anticlaim" role="tabpanel">
                                                         <table class="table align-middle table-row-dashed fs-6 gy-2 card-body" id="view_AntiKlaim">
                                                             <thead>
                                                                 <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
@@ -516,7 +516,7 @@
                                                 <!--End::Tab Pan Anti Klaim-->
                         
                                                 <!--Begin::Tab Panel Klaim Asuransi-->
-                                                    <div class="tab-pane fade" id="kt_user_view_overview_asuransi" role="tabpanel">
+                                                    <div class="tab-pane fade {{ $link == "kt_user_view_overview_asuransi" ? "show active" : "" }}" id="kt_user_view_overview_asuransi" role="tabpanel">
                                                         <table class="table align-middle table-row-dashed fs-6 gy-2 card-body" id="view_KlaimAsuransi">
                                                             <thead>
                                                                 <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
