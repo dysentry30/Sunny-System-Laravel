@@ -296,7 +296,7 @@
 
 
                                                 <div class="col-2 ps-2">
-                                                    @if (Auth::user()->check_administrator)
+                                                    @if (Auth::user()->check_administrator || (Auth::user()->check_admin_kontrak && Auth::user()->is_pic))
                                                         <div class="d-flex flex-column flex-md-row gap-4 justify-content-center">
                                                             @if ($history->is_approved == "t")
                                                                     <a class="btn btn-success btn-sm disabled">Approved</a>

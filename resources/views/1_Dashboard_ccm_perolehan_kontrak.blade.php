@@ -529,11 +529,11 @@
                                             <!--begin::Card column-->
                                             <div class="row">
                                                 <!--begin::Card body-->
-                                                <div class="">
+                                                <div class="pt-0">
                                                     <!--begin::Card widget 20-->
                                                     <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #F7AD1A;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
                                                         <!--begin::Header-->
-                                                        <div class="card-header py-3">
+                                                        <div class="card-header">
                                                             <!--begin::Title-->
                                                             <div class="card-title d-flex flex-column">
                                                                 <!--begin::Amount-->
@@ -558,7 +558,7 @@
                                                     <!--begin::Card widget 20-->
                                                     <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #28B3AC;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
                                                         <!--begin::Header-->
-                                                        <div class="card-header py-3">
+                                                        <div class="card-header">
                                                             <!--begin Items::Title-->
                                                             <div class="card-title d-flex flex-column">
                                                                 <!--begin::Amount-->
@@ -583,7 +583,7 @@
                                                     <!--begin::Card widget 20-->
                                                     <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #F7AD1A;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
                                                         <!--begin::Header-->
-                                                        <div class="card-header py-3">
+                                                        <div class="card-header">
                                                             <!--begin::Title-->
                                                             <div class="card-title d-flex flex-column">
                                                                 <!--begin::Amount-->
@@ -604,11 +604,36 @@
                                             <!--end-begin::Card column-->
                                             <div class="row">
                                                 <!--begin::Card body-->
-                                                <div class="mb-6 pt-0">
+                                                <div class="mb-0 pt-0">
                                                     <!--begin::Card widget 20-->
                                                     <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #28B3AC;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
                                                         <!--begin::Header-->
-                                                        <div class="card-header py-3">
+                                                        <div class="card-header">
+                                                            <!--begin::Title-->
+                                                            <div class="card-title d-flex flex-column">
+                                                                <!--begin::Amount-->
+                                                                <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2" id="data-items">{{ $naTender }}</span>
+                                                                <!--end::Amount-->
+                                                                <!--begin::Subtitle-->
+                                                                <span class="text-white opacity-75 pt-1 fw-semibold fs-3">N/A</span>
+                                                                <!--end::Subtitle-->
+                                                            </div>
+                                                            <!--end::Title-->
+                                                        </div>
+                                                        <!--end::Header-->
+                                                    </div>
+                                                    <!--end::Card widget 20-->
+                                                </div>
+                                                <!--end::Card body-->
+                                            </div>
+                                            <!--end-begin::Card column-->
+                                            <div class="row">
+                                                <!--begin::Card body-->
+                                                <div class="mb-6 pt-0">
+                                                    <!--begin::Card widget 20-->
+                                                    <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #F7AD1A ;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                                        <!--begin::Header-->
+                                                        <div class="card-header">
                                                             <!--begin::Title-->
                                                             <div class="card-title d-flex flex-column">
                                                                 <!--begin::Amount-->
@@ -979,7 +1004,7 @@
                                     {{-- <tr>
                                         <td colspan="19" class="ps-3" style="border: white 1px solid; background-color: #F7DFAE">Sasaran</td>
                                     </tr> --}}
-                                    @foreach ($proyeks as $proyek)
+                                    @foreach ($contract_proyeks as $proyek)
                                     <tr>
                                             <!--begin::NIP-->
                                             <td>
@@ -1514,7 +1539,7 @@
     <script>
         const nilaiTender = JSON.parse('{!! $nilai_tender_proyeks->toJson() !!}');
         const sumTender = nilaiTender.reduce((a, b) => a + Number(b.y), 0);
-        // console.log(nilaiTender, sumTender);
+        console.log(nilaiTender, sumTender);
 
         Highcharts.chart('chart-line', {
             chart: {

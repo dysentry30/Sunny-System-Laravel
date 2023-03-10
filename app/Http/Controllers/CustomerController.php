@@ -311,7 +311,11 @@ class CustomerController extends Controller
                 if (!empty($proyekBerjalans)) {
                     foreach ($proyekBerjalans as $proyekBerjalan) {
                         // dd($proyekBerjalan, $proyekBerjalan->proyek);
-                        $totalNilaiOKPerUnit += $proyekBerjalan->proyek->nilai_rkap ?? 0;
+                        if(!empty($proyekBerjalan->proyek->ProyekProgress)){
+                            $totalNilaiOKPerUnit += $proyekBerjalan->proyek->ProyekProgress->sortByDesc("created_at")->first()->ok_review ?? 0;
+                        }else{
+                            $totalNilaiOKPerUnit += 0;
+                        }
                         
                         $proyek = $proyekBerjalan->proyek;
                         if(!empty($proyek)) {
@@ -950,7 +954,22 @@ class CustomerController extends Controller
         $proyeks = $customer->proyekBerjalans->map(function($pb) {
             return $pb->proyek;
         });
-        $proyeks = $proyeks->where("unit_kerja", "=", $unit_kerja->divcode)->sortByDesc("nilai_rkap")->values();
+        $proyeks = $proyeks->where("unit_kerja", "=", $unit_kerja->divcode)->sortByDesc("stage")->values();
+        $proyeks = $proyeks->map(function($proyek){
+            if (!empty($proyek->ProyekProgress)) {
+                $ok_review = $proyek->ProyekProgress->sortByDesc("updated_at")->first()->ok_review ?? 0;     
+            }else{
+                $ok_review = 0;
+            }
+            $data = new \StdClass();
+            $data->stage = $proyek->stage;
+            $data->kode_proyek = $proyek->kode_proyek;
+            $data->nama_proyek = $proyek->nama_proyek;
+            $data->status_pasdin = $proyek->status_pasdin;
+            $data->unit_kerja = $proyek->unit_kerja;
+            $data->ok_review = $ok_review;
+            return $data;          
+        });
         
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
@@ -967,7 +986,7 @@ class CustomerController extends Controller
             $sheet->setCellValue('A' . $row, $p->nama_proyek);
             $sheet->setCellValue('B' . $row, $this->getProyekStage($p->stage));
             $sheet->setCellValue('C' . $row, $unit_kerja->unit_kerja);
-            $sheet->setCellValue('D' . $row, $p->nilai_rkap);
+            $sheet->setCellValue('D' . $row, $p->ok_review);
             // $p->nilai_ok = $nilai_ok;
             $p->unit_kerja = $unit_kerja->unit_kerja;
             $row++;

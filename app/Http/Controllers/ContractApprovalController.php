@@ -39,7 +39,11 @@ class ContractApprovalController extends Controller
                 $newClass->CLAIM_CAT = "ITEM DISETUJUI";
             };
             $newClass->CLAIM_VAL = $claims_all->count();
-            $newClass->CATEGORY = "$item->jenis_perubahan";
+            if ($item->jenis_perubahan == "Klaim") {
+                $newClass->CATEGORY = "CLAIM";
+            }else{
+                $newClass->CATEGORY = "$item->jenis_perubahan";
+            }
 
             return $newClass;
         })->values();

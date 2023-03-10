@@ -653,7 +653,8 @@ class DashboardController extends Controller
         $dops = Dop::whereNotIn("dop", ["EA", "PUSAT"])->get("dop");
         $year = date("Y");
         $month = date("m");
-        // dd($mounth);
+
+        $unit_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",",Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja);
         // $unit_kerjas_all = UnitKerja::whereNotIn("divcode", ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "N"])->get();
         // $proyeks = Proyek::whereNotIn("unit_kerja", ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "N"])->get();
         
@@ -661,14 +662,14 @@ class DashboardController extends Controller
         
         if($tahun_get < 2023) {
             $unit_kerja_code =  ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "N", "P", "J"];
-            $unit_kerjas_all = UnitKerja::whereNotIn("divcode",$unit_kerja_code)->get("divcode");
-            $unit_kerjas = UnitKerja::whereNotIn("divcode",  $unit_kerja_code)->get();
+            $unit_kerjas_all = UnitKerja::whereNotIn("divcode",$unit_kerja_code)->whereIn("divcode", $unit_user->toArray())->get("divcode");
+            $unit_kerjas = UnitKerja::whereNotIn("divcode",  $unit_kerja_code)->whereIn("divcode", $unit_user->toArray())->get();
         } else {
             $unit_kerja_code =   ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "N", "L", "F", "U", "O"];
-            $unit_kerjas_all = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->get("divcode");
-            $unit_kerjas = UnitKerja::whereNotIn("divcode",   $unit_kerja_code)->get();
+            $unit_kerjas_all = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->whereIn("divcode", $unit_user->toArray())->get("divcode");
+            $unit_kerjas = UnitKerja::whereNotIn("divcode",   $unit_kerja_code)->whereIn("divcode", $unit_user->toArray())->get();
         }
-        // dd($proyeks);
+        // dd($unit_kerjas_all);
         // $unit_kerja_get = !empty($request->query("unit-kerja")) ? [$request->query("unit-kerja")] : $unit_kerjas_all->toArray();
         // $dop_get = !empty( $request->query("dop")) ? [ $request->query("dop") ] : $dops->toArray();
         // dd($dop_get);
@@ -687,19 +688,23 @@ class DashboardController extends Controller
         $unit_kerja_get = !empty($request->query("unit-kerja")) ? [$request->query("unit-kerja")] : $unit_kerjas_all->toArray();
 
         if(!empty($bulan_get) && $tahun_get == 2023){
-            $proyeks = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $tahun_get)->whereIn("stage", [2,3,4,5,6,7,8])->whereIn("unit_kerja", $unit_kerja_get)->whereIn("dop", $dop_get)->where("bulan_pelaksanaan", "<=", $bulan_get)->where("tipe_proyek", "=", "P")->get();
+            $proyeks = Proyek::where("tahun_perolehan", "=", $tahun_get)->whereIn("stage", [2,3,4,5,6,7,8,9])->whereIn("unit_kerja", $unit_kerja_get)->whereIn("dop", $dop_get)->where("bulan_pelaksanaan", "<=", $bulan_get)->where("tipe_proyek", "=", "P")->get();
+            $contract_proyeks = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $tahun_get)->whereIn("stage", [2,3,4,5,6,7,8,9])->whereIn("unit_kerja", $unit_kerja_get)->whereIn("dop", $dop_get)->where("bulan_pelaksanaan", "<=", $bulan_get)->where("tipe_proyek", "=", "P")->where("is_cancel", "!=", true)->where("is_tidak_lulus_pq", "!=", true)->get();
         }else{
             if($tahun_get < 2023 && $bulan_get){
-                $proyeks = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $tahun_get)->whereIn("stage", [2,3,4,5,6,7,8,9])->whereIn("unit_kerja", $unit_kerja_get)->whereIn("dop", $dop_get)->where("bulan_pelaksanaan", "<=", $bulan_get)->where("tipe_proyek", "=", "P")->get();
+                $proyeks = Proyek::where("tahun_perolehan", "=", $tahun_get)->whereIn("stage", [2,3,4,5,6,7,8,9])->whereIn("unit_kerja", $unit_kerja_get)->whereIn("dop", $dop_get)->where("bulan_pelaksanaan", "<=", $bulan_get)->where("tipe_proyek", "=", "P")->get();
+                $contract_proyeks = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $tahun_get)->whereIn("stage", [2,3,4,5,6,7,8,9])->whereIn("unit_kerja", $unit_kerja_get)->whereIn("dop", $dop_get)->where("bulan_pelaksanaan", "<=", $bulan_get)->where("tipe_proyek", "=", "P")->where("is_cancel", "!=", true)->where("is_tidak_lulus_pq", "!=", true)->get();
             }elseif($tahun_get < 2023 && empty($bulan_get)){
-                $proyeks = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $tahun_get)->whereIn("stage", [2,3,4,5,6,7,8,9])->whereIn("unit_kerja", $unit_kerja_get)->whereIn("dop", $dop_get)->where("bulan_pelaksanaan", "<=", 12)->where("tipe_proyek", "=", "P")->get();
+                $proyeks = Proyek::where("tahun_perolehan", "=", $tahun_get)->whereIn("stage", [2,3,4,5,6,7,8,9])->whereIn("unit_kerja", $unit_kerja_get)->whereIn("dop", $dop_get)->where("bulan_pelaksanaan", "<=", 12)->where("tipe_proyek", "=", "P")->get();
+                $contract_proyeks = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $tahun_get)->whereIn("stage", [2,3,4,5,6,7,8,9])->whereIn("unit_kerja", $unit_kerja_get)->whereIn("dop", $dop_get)->where("bulan_pelaksanaan", "<=", 12)->where("tipe_proyek", "=", "P")->where("is_cancel", "!=", true)->where("is_tidak_lulus_pq", "!=", true)->get();
             }else{
-                $proyeks = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $tahun_get)->whereIn("stage", [2,3,4,5,6,7,8,9])->whereIn("unit_kerja", $unit_kerja_get)->whereIn("dop", $dop_get)->where("bulan_pelaksanaan", "<=", 12)->where("tipe_proyek", "=", "P")->get();
+                $proyeks = Proyek::where("tahun_perolehan", "=", $tahun_get)->whereIn("stage", [2,3,4,5,6,7,8,9])->whereIn("unit_kerja", $unit_kerja_get)->whereIn("dop", $dop_get)->where("bulan_pelaksanaan", "<=", 12)->where("tipe_proyek", "=", "P")->get();
+                $contract_proyeks = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $tahun_get)->whereIn("stage", [2,3,4,5,6,7,8,9])->whereIn("unit_kerja", $unit_kerja_get)->whereIn("dop", $dop_get)->where("bulan_pelaksanaan", "<=", 12)->where("tipe_proyek", "=", "P")->where("is_cancel", "!=", true)->where("is_tidak_lulus_pq", "!=", true)->get();
                 // dd("tess");
             }
         }
 
-        // dd($proyeks);
+        // dd($contract_proyeks);
 
 
         //2022 - 2023
@@ -749,11 +754,11 @@ class DashboardController extends Controller
         //     return ($p->stage == 8 && $p->stage == 6 ) && !$p->is_cancel && !$p->is_tidak_lulus_pq;
         //     // dd($p->ContractManagements);
         // })->count();
-        $win_counter = $proyeks->whereIn("stage", [6,8])->count();
+        $win_counter = $proyeks->where("is_cancel", "!=", true)->whereIn("stage", [6,8,9])->count();
         // dd($proyeks);
         $lose_counter = $proyeks->where(function ($p) {
             // return !empty($p->ContractManagements) && $p->ContractManagements->stage < 3;
-            return $p->stage == 7;
+            return $p->stage == 7 && !$p->is_cancel;
             // dd($p->ContractManagements);
         })->count();
         $cancel_counter = $proyeks->where(function ($p) {
@@ -801,14 +806,50 @@ class DashboardController extends Controller
         // End :: Kontrak Berdasarkan JO dan Non-JO Chart
 
         // Begin :: Nilai Tender Chart
-        $nilai_tender_proyeks = $proyeks->groupBy("unit_kerja");
-        $nilai_tender_proyeks = $nilai_tender_proyeks->map(function ($p, $key) use($proyeks) {
-            $nilai_tender = $p->sum(function ($s) {
-                return (int) $s->nilai_perolehan;
-            });
-            return ["name" => UnitKerja::find($key)->unit_kerja, "y" => $nilai_tender];
-            // return ["name" => UnitKerja::find($key)->unit_kerja." "."<b>" . Percentage::fromFractionAndTotal($nilai_tender, $proyeks->count())->asString() . "</b>", "y" => $nilai_tender];
-        })->values();
+        // $nilai_tender_proyeks = $contract_proyeks->groupBy("unit_kerja");
+        // $nilai_tender_proyeks = $nilai_tender_proyeks->map(function ($p, $key) use($proyeks) {
+        //     $nilai_tender = $p->sum(function ($s) {
+        //         return (int) $s->nilai_perolehan;
+        //     });
+        //     return ["name" => UnitKerja::find($key)->unit_kerja, "y" => $nilai_tender];
+        //     // return ["name" => UnitKerja::find($key)->unit_kerja." "."<b>" . Percentage::fromFractionAndTotal($nilai_tender, $proyeks->count())->asString() . "</b>", "y" => $nilai_tender];
+        // })->values();
+
+        $unit_kerja_tender = $unit_kerjas_all->groupBy("divcode")->keys();
+        // dd($unit_kerja_tender);
+        $nilai_tender_proyeks = $contract_proyeks->groupBy("unit_kerja");
+        // dd($nilai_tender_proyeks, $proyeks);
+        $nilai_tender_proyeks = $unit_kerja_tender->map(function ($p) use($nilai_tender_proyeks) {
+            // dump($p);
+            $result = collect();
+            foreach($nilai_tender_proyeks as $key => $ukt){
+                // dump($key);
+                // $nilai_tender = $ukt->sum(function($s){
+                //     return (int) $s->nilai_perolehan;
+                // });
+                $sum = 0;
+                if($p == $key){
+                    $result[$p] = ["name" => UnitKerja::find($p)->unit_kerja, "y" => $sum += $ukt->flatten()->sum("nilai_perolehan"), "urut" => UnitKerja::find($p)->nomor_unit];
+                    // dd($p == $ukt);
+                }else{
+                    if(!empty($result[$p])){
+                        $data = $result[$p];
+                        $data["name"] = $data["name"];
+                        $data["y"] = $data["y"];
+                        $data["urut"] = $data["urut"];
+                        // dump("tes");
+                    }else{
+                        $result[$p] = ["name" => UnitKerja::find($p)->unit_kerja, "y" => 0, "urut" => UnitKerja::find($p)->nomor_unit];
+                    }
+                }
+            }
+
+            return $result;
+            // $nilai_tender = $p->sum(function ($s) {
+            //     return (int) $s->nilai_perolehan;
+            // });
+            // return ["name" => UnitKerja::find($key)->unit_kerja, "y" => $nilai_tender];
+        })->flatten(1)->sortBy("urut")->values();
         // End :: Nilai Tender Chart
 
         // Begin :: Success Rate
@@ -842,8 +883,8 @@ class DashboardController extends Controller
         // Begin :: Tender Status Column
         // End :: Tender Status Column
 
-        $jumlahKontrak = $proyeks->count();
-        $contract_proyeks = $proyeks->map(function($proyek){
+        $jumlahKontrak = $contract_proyeks->count();
+        $contract_proyeks_all = $contract_proyeks->map(function($proyek){
             return $proyek->ContractManagements;
         });
         // $tender_review = $contract_proyeks->map(function($contract){
@@ -855,13 +896,13 @@ class DashboardController extends Controller
         // $tender_review = $contract_proyeks->map(function($contract){
         //     return $contract->reviewProjects;
         // })->groupBy("id_contract")->count();
-        $tender_review = $contract_proyeks->map(function($contract){
+        $tender_review = $contract_proyeks_all->map(function($contract){
             return $contract->uploadFinal->where("category", "=", "tinjauan-perolehan");
         })->flatten()->count();
 
         // dd($tender_review);
 
-        return view("1_Dashboard_ccm_perolehan_kontrak", compact(["klasifikasi_tender","bulan_get", "unit_kerjas_all", "tahun_get", "tahun", "jumlahKontrak", "cadangan", "sasaran", "potensial", "cancel_counter","lose_counter", "win_counter", "on_going_counter", "proyeks", "dops", "unit_kerjas", "dop_get", "unit_kerja_get", "kontrak_by_stage", "divisi", "JO_Non_JO_counter", "nilai_tender_proyeks", "success_rate", "tender_review", "dop_select", "unit_kerja_select"]));
+        return view("1_Dashboard_ccm_perolehan_kontrak", compact(["klasifikasi_tender","bulan_get", "unit_kerjas_all", "tahun_get", "tahun", "jumlahKontrak", "cadangan", "sasaran", "naTender", "potensial", "cancel_counter","lose_counter", "win_counter", "on_going_counter", "proyeks", "dops", "unit_kerjas", "dop_get", "unit_kerja_get", "kontrak_by_stage", "divisi", "JO_Non_JO_counter", "nilai_tender_proyeks", "success_rate", "tender_review", "dop_select", "unit_kerja_select", "contract_proyeks"]));
     }
 
     public function dashboard_pelaksanaan_kontrak(Request $request)
@@ -874,6 +915,8 @@ class DashboardController extends Controller
         $dops = Dop::whereNotIn("dop", ["EA", "PUSAT"])->get("dop");
         $year = date("Y");
         $month = date("m");
+
+        $unit_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",",Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja);
         // dd($mounth);
         // $unit_kerjas_all = UnitKerja::whereNotIn("divcode", ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "N"])->get();
         // $proyeks = Proyek::whereNotIn("unit_kerja", ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "N"])->get();
@@ -881,12 +924,12 @@ class DashboardController extends Controller
         
         if($tahun_get < 2023) {
             $unit_kerja_code =  ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "N", "P", "J"];
-            $unit_kerjas_all = UnitKerja::whereNotIn("divcode",$unit_kerja_code)->get("divcode");
-            $unit_kerjas = UnitKerja::whereNotIn("divcode",  $unit_kerja_code)->get();
+            $unit_kerjas_all = UnitKerja::whereNotIn("divcode",$unit_kerja_code)->whereIn("divcode", $unit_user->toArray())->get("divcode");
+            $unit_kerjas = UnitKerja::whereNotIn("divcode",  $unit_kerja_code)->whereIn("divcode", $unit_user->toArray())->get();
         } else {
             $unit_kerja_code =   ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "N", "L", "F", "U", "O"];
-            $unit_kerjas_all = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->get("divcode");
-            $unit_kerjas = UnitKerja::whereNotIn("divcode",   $unit_kerja_code)->get();
+            $unit_kerjas_all = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->whereIn("divcode", $unit_user->toArray())->get("divcode");
+            $unit_kerjas = UnitKerja::whereNotIn("divcode",   $unit_kerja_code)->whereIn("divcode", $unit_user->toArray())->get();
         }
         // dd($unit_kerjas_all);
         // $unit_kerja_get = !empty($request->query("unit-kerja")) ? [$request->query("unit-kerja")] : $unit_kerjas_all->toArray();
@@ -1076,6 +1119,162 @@ class DashboardController extends Controller
             }
             // dd($persentasePerubahan);
             // End :: Changes Overview
+
+            //Begin::CCM STATUS
+            $kategori = collect(["VO", "Klaim", "Anti Klaim", "Klaim Asuransi"]);
+            // dd($contract_pelaksanaan_new->map(function($item){return $item->PerubahanKontrak;}));
+            $contracts_perubahan = $kategori_kontrak;
+            // dd($contracts_perubahan);
+            if(!empty($contracts_perubahan->toArray())){
+                $perubahan = $kategori->map(function($p) use($contracts_perubahan) {
+                    $result = collect();
+                    $counter = 0;
+                    $potensial = 0;
+                    $subs = 0;
+                    $revisi = 0;
+                    $nego = 0;
+                    $setuju = 0;
+                    $tolak = 0;
+                    $dispute = 0;
+                    $nilai = 0;
+                    foreach($contracts_perubahan as $cp) {
+                        // dump($cp);
+                        // $qualified_kontrak = collect();
+                        if(!empty($cp->jenis_perubahan)){
+                            // dd($result);
+                            if($cp->jenis_perubahan == $p) {
+                                // dd("true");
+                                if(!empty($result[$p])) {
+                                    $data = $result[$p];
+                                    // dump($setuju);
+                                    $data["jenis_perubahan"] = $data["jenis_perubahan"];
+                                    $data["total_item"] = $data["total_item"] + 1;
+                                    $data["total_nilai"] = $data["total_nilai"] + $cp->biaya_pengajuan;
+                                    if($cp->stage == 1){
+                                        $data["potensial"] = $data["potensial"] + 1;
+                                    }elseif($cp->stage == 2){
+                                        $data["subs"] = $data["subs"] + 1;
+                                    }elseif($cp->stage == 3){
+                                        $data["revisi"] = $data["revisi"] + 1;
+                                    }elseif($cp->stage == 4){
+                                        $data["nego"] = $data["nego"] + 1;
+                                    }elseif($cp->stage == 5){
+                                        $data["setuju"] = $data["setuju"] + 1;
+                                    }elseif($cp->stage == 6 && $cp->is_dispute == false){
+                                        $data["tolak"] = $data["tolak"] + 1;
+                                    }else{
+                                        $data["dispute"] = $data["dispute"] + 1;
+                                    }
+                                    // dump($data);
+                                    $result[$p] = $data ;
+                                    // dump($potensial);
+                                } else {
+                                    if($cp->stage == 1){
+                                        $potensial += 1;
+                                    }elseif($cp->stage == 2){
+                                        $subs += 1;
+                                    }elseif($cp->stage == 3){
+                                        $revisi += 1;
+                                    }elseif($cp->stage == 4){
+                                        $nego += 1;
+                                    }elseif($cp->stage == 5){
+                                        $setuju += 1;
+                                    }elseif($cp->stage == 6 && $cp->is_dispute == false){
+                                        $tolak += 1;
+                                    }else{
+                                        $dispute += 1;
+                                    }
+                                    $result[$p] = ["jenis_perubahan" => $p, "total_item" => ++$counter, "total_nilai" => $nilai += $cp->biaya_pengajuan, "potensial"=>$potensial, "subs" => $subs, "revisi" => $revisi, "nego" => $nego, "setuju" => $setuju, "tolak" => $tolak, "dispute" => $dispute];
+                                }
+                            } else {
+                                if(!empty($result[$p])) {
+                                    $data = $result[$p];
+                                    $data["jenis_perubahan"] = $data["jenis_perubahan"];
+                                    $data["total_item"] = $data["total_item"] + 1;
+                                    $data["total_nilai"] = $data["total_nilai"];
+                                    // dump($data);
+                                } else {
+                                    $result[$p] = ["jenis_perubahan" => $p, "total_item" => 0, "total_nilai" => 0, "potensial" => 0, "subs" => 0, "revisi" => 0, "nego" => 0, "setuju" => 0, "tolak" => 0, "dispute" => 0];
+                                }
+                            }
+                            // foreach($cp->PerubahanKontrak as $pk) {
+                            //     if($pk->jenis_perubahan == $p) {
+                            //         $result[$p] = ["jenis_perubahan" => $p, "total_item" => ++$counter, "total_nilai" => $nilai += $pk->biaya_pengajuan];
+                            //     } else {
+                            //         if(!empty($result[$p])) {
+                            //             $data = $result[$p];
+                            //             $data["jenis_perubahan"] = $data["jenis_perubahan"];
+                            //             $data["total_item"] = $data["total_item"];
+                            //             $data["total_nilai"] = $data["total_nilai"];
+                            //         } else {
+                            //             $result[$p] = ["jenis_perubahan" => $p, "total_item" => 0, "total_nilai" => 0];
+                            //         }
+                            //     }
+                            //     // dump($pk->jenis_perubahan == $p);
+                            // }
+                            // dump($result);
+                        }else{
+                            $result[$p] = ["jenis_perubahan" => $p, "total_item" => 0, "total_nilai" => 0, "potensial" => 0, "subs" => 0, "revisi" => 0, "nego" => 0, "setuju" => 0, "tolak" => 0, "dispute" => 0];
+                        }
+                    }
+                    return $result;
+                });
+                // dd($perubahan);
+                $cat_kontrak = $perubahan->map(function($p, $key) use($perubahan, $totalKontrakFull) {
+                    $data = $perubahan[$key]->first();
+                    // $data["persen"] = ($data["total_nilai"] / $totalKontrakFull) * 100;
+                    $data["persen"] = $data["total_nilai"] != 0 ? Percentage::fromFractionAndTotal($data["total_nilai"], $totalKontrakFull)->asString() : "0%";
+                    return $data;
+                })->values();
+                // dd($cat_kontrak);
+                $perubahan_total = $cat_kontrak->sum('total_nilai');
+                // $kategori_kontrak = $perubahan->groupBy("jenis_perubahan")->map(function($item, $key) use ($totalKontrakFull){
+                //     $biaya_total = (int) $item->sum('biaya_pengajuan');
+                //     $persentase_kategori = (float) $biaya_total * 100 / (float) $totalKontrakFull;
+                //     return[$key, $item->count(), $biaya_total, number_format($persentase_kategori, 2)];
+                // })->values();
+                // dd($kategori_kontrak);
+            }else{
+                $perubahan_total = 0;
+                $perubahan = $kategori->map(function($item) use($contract_pelaksanaan_new) {
+                    $result = collect();
+                    $counter = 0;
+                    $nilai = 0;
+                    // foreach($contracts_pelaksanaan as $cp) {
+                    //     // $qualified_kontrak = collect();
+                        
+                    //     foreach($cp->PerubahanKontrak as $pk) {
+                    //         if($pk->jenis_perubahan == $item) {
+                    //             $result[$item] = ["jenis_perubahan" => $item, "total_item" => ++$counter, "total_nilai" => $nilai += $pk->biaya_pengajuan];
+                    //         } else {
+                    //             if(!empty($result[$item])) {
+                    //                 $data = $result[$item];
+                    //                 $data["jenis_perubahan"] = $data["jenis_perubahan"];
+                    //                 $data["total_item"] = $data["total_item"];
+                    //                 $data["total_nilai"] = $data["total_nilai"];
+                    //             } else {
+                    //             }
+                    //         }
+                    //     }
+                    // }
+                    $result[$item] = ["jenis_perubahan" => $item, "total_item" => 0, "total_nilai" => 0];
+                    return $result;
+                });
+                $cat_kontrak = $perubahan->map(function($p, $key) use($perubahan, $totalKontrakFull) {
+                    $data = $perubahan[$key]->first();
+                    // $data["persen"] = ($data["total_nilai"] / $totalKontrakFull) * 100;
+                    $data["persen"] = $data["total_nilai"] != 0 ? Percentage::fromFractionAndTotal($data["total_nilai"], $totalKontrakFull)->asString() : "0%";
+                    return $data;
+                })->values();
+                $perubahan_total = $cat_kontrak->sum('total_nilai');
+            }
+            // dd($cat_kontrak);
+            if (!empty($totalKontrakFull)) {
+                $persentasePerubahan = Percentage::fromFractionAndTotal($perubahan_total, $totalKontrakFull)->asString();
+            } else {
+                $persentasePerubahan = 0;
+            }
+            //End::CCM STATUS
             
             $jumlahKontrak = 0;
             $totalKontrak = 0;
@@ -1154,6 +1353,90 @@ class DashboardController extends Controller
                 $percen_progress_status = "0%";
             }
 
+            
+            //Begin::Asuransi
+            $kategori_asuransi = collect(["CAR/EAR", "Third Party Liability", "Professional Indemnity", "Heavy Equipment"]);
+            $contract_asuransi = $proyek->ContractManagements->Asuransi->groupBy("kategori_asuransi")->sortByDesc("created_at");
+            // dd($contract_asuransi);
+            if(!empty($contract_asuransi->toArray())){
+                $asuransi_proyek = $kategori_asuransi->map(function($ka) use($contract_asuransi){
+                    $result = collect();
+                    $id = 0;
+                    foreach($contract_asuransi as $key => $ca){
+                        if($ka == $key){
+                            if(!empty($result[$key])){
+                                $data = $result[$key];
+                                $data["kategori"] = $data["kategori"];
+                                $data["tgl_penerbitan"] = $data["tgl_penerbitan"];
+                                $data["tgl_berakhir"] = $data["tgl_berakhir"];
+                                $data["status"] = $data["status"];
+                                $data["id"] = $data["id"] + 1;
+                                // dump($data);
+                                $result[$key] = $data;
+                            }else{
+                                $result[$key] = ["kategori" => $ka, "tgl_penerbitan" => $ca->first()->tanggal_penerbitan, "tgl_berakhir" => $ca->first()->tanggal_berakhir, "status" => $ca->first()->is_expired == false ? "VALID" : "EXPIRED", "id" => ++$id];
+                                // dump($result[$key]);
+                            }
+                        }else{
+                            $result[$key] = ["kategori" => $ka, "tgl_penerbitan" => null, "tgl_berakhir" => null, "status" => null];
+                        }
+                    }
+                    return $result;
+                })->flatten(1)->sortByDesc("id")->unique("kategori")->values();
+            }else{
+                $result = collect();
+                $asuransi_proyek = $kategori_asuransi->map(function($item){
+                    $result[$item] = ["kategori" => $item, "tgl_penerbitan" => null, "tgl_berakhir" => null, "status" => null];
+                    return $result;
+                })->flatten(1);
+            }
+
+            // dd($asuransi_proyek);
+            //End::Asuransi
+            
+            
+            //Begin::Janminan
+            $kategori_jaminan = $proyek->jenis_proyek == "J" ? collect(["Advance Payment", "Performance", "Warranty", "Partner"]) : collect(["Advance Payment", "Performance", "Warranty"]);
+            $contract_jaminan = $proyek->ContractManagements->Jaminan->groupBy("kategori_jaminan")->sortByDesc("created_at");
+            // dd($contract_asuransi);
+            if(!empty($contract_jaminan->toArray())){
+                $jaminan_proyek = $kategori_jaminan->map(function($ka) use($contract_jaminan){
+                    $result = collect();
+                    $id = 0;
+                    foreach($contract_jaminan as $key => $cj){
+                        if($ka == $key){
+                            if(!empty($result[$key])){
+                                $data = $result[$key];
+                                $data["kategori"] = $data["kategori"];
+                                $data["tgl_penerbitan"] = $data["tgl_penerbitan"];
+                                $data["tgl_berakhir"] = $data["tgl_berakhir"];
+                                $data["status"] = $data["status"];
+                                $data["id"] = $data["id"] + 1;
+                                // dump($data);
+                                $result[$key] = $data;
+                            }else{
+                                $result[$key] = ["kategori" => $ka, "tgl_penerbitan" => $cj->first()->tanggal_penerbitan, "tgl_berakhir" => $cj->first()->tanggal_berakhir, "status" => $cj->first()->is_expired == false ? "VALID" : "EXPIRED", "id" => ++$id];
+                                // dump($result[$key]);
+                            }
+                        }else{
+                            $result[$key] = ["kategori" => $ka, "tgl_penerbitan" => null, "tgl_berakhir" => null, "status" => null];
+                        }
+                    }
+                    return $result;
+                })->flatten(1)->sortByDesc("id")->unique("kategori")->values();
+            }else{
+                $result = collect();
+                $jaminan_proyek = $kategori_jaminan->map(function($item){
+                    $result[$item] = ["kategori" => $item, "tgl_penerbitan" => null, "tgl_berakhir" => null, "status" => null];
+                    return $result;
+                })->flatten(1);
+            }
+            
+            // dd($asuransi_proyek);
+            //End::Asuransi
+
+
+
             // dd($percen_pre_claim);
 
             // $insurance = [
@@ -1183,7 +1466,7 @@ class DashboardController extends Controller
             // $bond = collect($bond);
             // dd($proyek->ContractManagements);
 
-            return view("/DashboardCCM/Dashboard_pelaksanaan_proyek", compact(["bulan_get", "change_status_out", "unit_kerjas_all", "tahun_get", "tahun", "jumlahKontrak", "totalKontrak", "totalPersen", "detail_perubahan_kontrak", "proyek_get", "unit_kerja_get", "dop_get", "proyek", "proyeks", "dops", "unit_kerjas", "changes_overview", "total_pengajuan", "persentasePerubahan", "contract_pelaksanaan_new", "month", "time_status", "percen_pre_claim", "percen_during_claim", "percen_post_claim", "unit_kerja_select", "dop_select", "percen_progress_status"]));
+            return view("/DashboardCCM/Dashboard_pelaksanaan_proyek", compact(["bulan_get", "change_status_out", "unit_kerjas_all", "tahun_get", "tahun", "jumlahKontrak", "totalKontrak", "totalPersen", "detail_perubahan_kontrak", "proyek_get", "unit_kerja_get", "dop_get", "proyek", "proyeks", "dops", "unit_kerjas", "changes_overview", "total_pengajuan", "persentasePerubahan", "contract_pelaksanaan_new", "month", "time_status", "percen_pre_claim", "percen_during_claim", "percen_post_claim", "unit_kerja_select", "dop_select", "percen_progress_status", "cat_kontrak", "persentasePerubahan", "perubahan_total", "asuransi_proyek", "jaminan_proyek"]));
         }
         // dd($proyeks);
         // $claims = PerubahanKontrak::all()->filter(function($cl) use($proyeks) {
@@ -1539,6 +1822,9 @@ class DashboardController extends Controller
         $dops = Dop::whereNotIn("dop", ["EA", "PUSAT"])->get("dop");
         $year = date("Y");
         $month = date("m");
+
+        $unit_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",",Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja);
+
         // dd($mounth);
         // $unit_kerjas_all = UnitKerja::whereNotIn("divcode", ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "N"])->get();
         // $proyeks = Proyek::whereNotIn("unit_kerja", ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "N"])->get();
@@ -1546,12 +1832,12 @@ class DashboardController extends Controller
         
         if($tahun_get < 2023) {
             $unit_kerja_code =  ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "N", "P", "J"];
-            $unit_kerjas_all = UnitKerja::whereNotIn("divcode",$unit_kerja_code)->get("divcode");
-            $unit_kerjas = UnitKerja::whereNotIn("divcode",  $unit_kerja_code)->get();
+            $unit_kerjas_all = UnitKerja::whereNotIn("divcode",$unit_kerja_code)->whereIn("divcode", $unit_user->toArray())->get("divcode");
+            $unit_kerjas = UnitKerja::whereNotIn("divcode",  $unit_kerja_code)->whereIn("divcode", $unit_user->toArray())->get();
         } else {
             $unit_kerja_code =   ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "N", "L", "F", "U", "O"];
-            $unit_kerjas_all = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->get("divcode");
-            $unit_kerjas = UnitKerja::whereNotIn("divcode",   $unit_kerja_code)->get();
+            $unit_kerjas_all = UnitKerja::whereNotIn("divcode",$unit_kerja_code)->whereIn("divcode", $unit_user->toArray())->get("divcode");
+            $unit_kerjas = UnitKerja::whereNotIn("divcode",  $unit_kerja_code)->whereIn("divcode", $unit_user->toArray())->get();
         }
         // dd($proyeks);
         // $unit_kerja_get = !empty($request->query("unit-kerja")) ? [$request->query("unit-kerja")] : $unit_kerjas_all->toArray();
@@ -1732,6 +2018,164 @@ class DashboardController extends Controller
                 $persentasePerubahan = 0;
             }
             // dd($proyeks);
+
+            //Begin::CCM STATUS
+            $kategori = collect(["VO", "Klaim", "Anti Klaim", "Klaim Asuransi"]);
+            // dd($contract_pelaksanaan_new->map(function($item){return $item->PerubahanKontrak;}));
+            $contracts_perubahan = $kategori_kontrak;
+            // dd($contracts_perubahan);
+            if(!empty($contracts_perubahan->toArray())){
+                $perubahan = $kategori->map(function($p) use($contracts_perubahan) {
+                    $result = collect();
+                    $counter = 0;
+                    $potensial = 0;
+                    $subs = 0;
+                    $revisi = 0;
+                    $nego = 0;
+                    $setuju = 0;
+                    $tolak = 0;
+                    $dispute = 0;
+                    $nilai = 0;
+                    foreach($contracts_perubahan as $cp) {
+                        // dump($cp);
+                        // $qualified_kontrak = collect();
+                        if(!empty($cp->jenis_perubahan)){
+                            // dd($result);
+                            if($cp->jenis_perubahan == $p) {
+                                // dd("true");
+                                if(!empty($result[$p])) {
+                                    $data = $result[$p];
+                                    // dump($setuju);
+                                    $data["jenis_perubahan"] = $data["jenis_perubahan"];
+                                    $data["total_item"] = $data["total_item"] + 1;
+                                    $data["total_nilai"] = $data["total_nilai"] + $cp->biaya_pengajuan;
+                                    if($cp->stage == 1){
+                                        $data["potensial"] = $data["potensial"] + 1;
+                                    }elseif($cp->stage == 2){
+                                        $data["subs"] = $data["subs"] + 1;
+                                    }elseif($cp->stage == 3){
+                                        $data["revisi"] = $data["revisi"] + 1;
+                                    }elseif($cp->stage == 4){
+                                        $data["nego"] = $data["nego"] + 1;
+                                    }elseif($cp->stage == 5){
+                                        $data["setuju"] = $data["setuju"] + 1;
+                                    }elseif($cp->stage == 6 && $cp->is_dispute == false){
+                                        $data["tolak"] = $data["tolak"] + 1;
+                                    }else{
+                                        $data["dispute"] = $data["dispute"] + 1;
+                                    }
+                                    // dump($data);
+                                    $result[$p] = $data ;
+                                    // dump($potensial);
+                                } else {
+                                    if($cp->stage == 1){
+                                        $potensial += 1;
+                                    }elseif($cp->stage == 2){
+                                        $subs += 1;
+                                    }elseif($cp->stage == 3){
+                                        $revisi += 1;
+                                    }elseif($cp->stage == 4){
+                                        $nego += 1;
+                                    }elseif($cp->stage == 5){
+                                        $setuju += 1;
+                                    }elseif($cp->stage == 6 && $cp->is_dispute == false){
+                                        $tolak += 1;
+                                    }else{
+                                        $dispute += 1;
+                                    }
+                                    $result[$p] = ["jenis_perubahan" => $p, "total_item" => ++$counter, "total_nilai" => $nilai += $cp->biaya_pengajuan, "potensial"=>$potensial, "subs" => $subs, "revisi" => $revisi, "nego" => $nego, "setuju" => $setuju, "tolak" => $tolak, "dispute" => $dispute];
+                                }
+                            } else {
+                                if(!empty($result[$p])) {
+                                    $data = $result[$p];
+                                    $data["jenis_perubahan"] = $data["jenis_perubahan"];
+                                    $data["total_item"] = $data["total_item"] + 1;
+                                    $data["total_nilai"] = $data["total_nilai"];
+                                    // dump($data);
+                                } else {
+                                    $result[$p] = ["jenis_perubahan" => $p, "total_item" => 0, "total_nilai" => 0, "potensial" => 0, "subs" => 0, "revisi" => 0, "nego" => 0, "setuju" => 0, "tolak" => 0, "dispute" => 0];
+                                }
+                            }
+                            // foreach($cp->PerubahanKontrak as $pk) {
+                            //     if($pk->jenis_perubahan == $p) {
+                            //         $result[$p] = ["jenis_perubahan" => $p, "total_item" => ++$counter, "total_nilai" => $nilai += $pk->biaya_pengajuan];
+                            //     } else {
+                            //         if(!empty($result[$p])) {
+                            //             $data = $result[$p];
+                            //             $data["jenis_perubahan"] = $data["jenis_perubahan"];
+                            //             $data["total_item"] = $data["total_item"];
+                            //             $data["total_nilai"] = $data["total_nilai"];
+                            //         } else {
+                            //             $result[$p] = ["jenis_perubahan" => $p, "total_item" => 0, "total_nilai" => 0];
+                            //         }
+                            //     }
+                            //     // dump($pk->jenis_perubahan == $p);
+                            // }
+                            // dump($result);
+                        }else{
+                            $result[$p] = ["jenis_perubahan" => $p, "total_item" => 0, "total_nilai" => 0, "potensial" => 0, "subs" => 0, "revisi" => 0, "nego" => 0, "setuju" => 0, "tolak" => 0, "dispute" => 0];
+                        }
+                    }
+                    return $result;
+                });
+                // dd($perubahan);
+                $cat_kontrak = $perubahan->map(function($p, $key) use($perubahan, $totalKontrakFull) {
+                    $data = $perubahan[$key]->first();
+                    // $data["persen"] = ($data["total_nilai"] / $totalKontrakFull) * 100;
+                    $data["persen"] = $data["total_nilai"] != 0 ? Percentage::fromFractionAndTotal($data["total_nilai"], $totalKontrakFull)->asString() : "0%";
+                    return $data;
+                })->values();
+                // dd($cat_kontrak);
+                $perubahan_total = $cat_kontrak->sum('total_nilai');
+                // $kategori_kontrak = $perubahan->groupBy("jenis_perubahan")->map(function($item, $key) use ($totalKontrakFull){
+                //     $biaya_total = (int) $item->sum('biaya_pengajuan');
+                //     $persentase_kategori = (float) $biaya_total * 100 / (float) $totalKontrakFull;
+                //     return[$key, $item->count(), $biaya_total, number_format($persentase_kategori, 2)];
+                // })->values();
+                // dd($kategori_kontrak);
+            }else{
+                $perubahan_total = 0;
+                $perubahan = $kategori->map(function($item) use($contracts_pemeliharaan) {
+                    $result = collect();
+                    $counter = 0;
+                    $nilai = 0;
+                    // foreach($contracts_pelaksanaan as $cp) {
+                    //     // $qualified_kontrak = collect();
+                        
+                    //     foreach($cp->PerubahanKontrak as $pk) {
+                    //         if($pk->jenis_perubahan == $item) {
+                    //             $result[$item] = ["jenis_perubahan" => $item, "total_item" => ++$counter, "total_nilai" => $nilai += $pk->biaya_pengajuan];
+                    //         } else {
+                    //             if(!empty($result[$item])) {
+                    //                 $data = $result[$item];
+                    //                 $data["jenis_perubahan"] = $data["jenis_perubahan"];
+                    //                 $data["total_item"] = $data["total_item"];
+                    //                 $data["total_nilai"] = $data["total_nilai"];
+                    //             } else {
+                    //             }
+                    //         }
+                    //     }
+                    // }
+                    $result[$item] = ["jenis_perubahan" => $item, "total_item" => 0, "total_nilai" => 0, "potensial" => 0, "subs" => 0, "revisi" => 0, "nego" => 0, "setuju" => 0, "tolak" => 0, "dispute" => 0];
+                    return $result;
+                });
+                $cat_kontrak = $perubahan->map(function($p, $key) use($perubahan, $totalKontrakFull) {
+                    $data = $perubahan[$key]->first();
+                    // $data["persen"] = ($data["total_nilai"] / $totalKontrakFull) * 100;
+                    $data["persen"] = $data["total_nilai"] != 0 ? Percentage::fromFractionAndTotal($data["total_nilai"], $totalKontrakFull)->asString() : "0%";
+                    return $data;
+                })->values();
+                $perubahan_total = $cat_kontrak->sum('total_nilai');
+            }
+            // dd($cat_kontrak);
+            if (!empty($totalKontrakFull)) {
+                $persentasePerubahan = Percentage::fromFractionAndTotal($perubahan_total, $totalKontrakFull)->asString();
+            } else {
+                $persentasePerubahan = 0;
+            }
+            //End::CCM STATUS
+            
+
             // End :: Changes Overview
             
             $jumlahKontrak = 0;
@@ -1776,6 +2220,91 @@ class DashboardController extends Controller
                         return $new_class;
             });
             // dd($change_status);
+
+            //Begin::Asuransi
+            $kategori_asuransi = collect(["CAR/EAR", "Third Party Liability", "Professional Indemnity", "Heavy Equipment"]);
+            $contract_asuransi = $proyek->ContractManagements->Asuransi->groupBy("kategori_asuransi")->sortByDesc("created_at");
+            // dd($contract_asuransi);
+
+            if(!empty($contract_asuransi->toArray())){
+                $asuransi_proyek = $kategori_asuransi->map(function($ka) use($contract_asuransi){
+                    $result = collect();
+                    $id = 0;
+                    foreach($contract_asuransi as $key => $ca){
+                        if($ka == $key){
+                            if(!empty($result[$key])){
+                                $data = $result[$key];
+                                $data["kategori"] = $data["kategori"];
+                                $data["tgl_penerbitan"] = $data["tgl_penerbitan"];
+                                $data["tgl_berakhir"] = $data["tgl_berakhir"];
+                                $data["status"] = $data["status"];
+                                $data["id"] = $data["id"] + 1;
+                                // dump($data);
+                                $result[$key] = $data;
+                            }else{
+                                $result[$key] = ["kategori" => $ka, "tgl_penerbitan" => $ca->first()->tanggal_penerbitan, "tgl_berakhir" => $ca->first()->tanggal_berakhir, "status" => $ca->first()->is_expired == false ? "VALID" : "EXPIRED", "id" => ++$id];
+                                // dump($result[$key]);
+                            }
+                        }else{
+                            $result[$key] = ["kategori" => $ka, "tgl_penerbitan" => null, "tgl_berakhir" => null, "status" => null];
+                        }
+                    }
+                    return $result;
+                })->flatten(1)->sortByDesc("id")->unique("kategori");
+            }else{
+                $result = collect();
+                $asuransi_proyek = $kategori_asuransi->map(function($item){
+                    $result[$item] = ["kategori" => $item, "tgl_penerbitan" => null, "tgl_berakhir" => null, "status" => null];
+                    return $result;
+                })->flatten(1);
+            }
+
+            // dd($asuransi_proyek);
+            //End::Asuransi
+            
+            
+            //Begin::Janminan
+            $kategori_jaminan = $proyek->jenis_proyek == "J" ? collect(["Advance Payment", "Performance", "Warranty", "Partner"]) : collect(["Advance Payment", "Performance", "Warranty"]);
+            $contract_jaminan = $proyek->ContractManagements->Jaminan->groupBy("kategori_jaminan")->sortByDesc("created_at");
+            // dd($contract_asuransi);
+
+            if(!empty($contract_jaminan->toArray())){
+                $jaminan_proyek = $kategori_jaminan->map(function($ka) use($contract_jaminan){
+                    $result = collect();
+                    $id = 0;
+                    foreach($contract_jaminan as $key => $cj){
+                        if($ka == $key){
+                            if(!empty($result[$key])){
+                                $data = $result[$key];
+                                $data["kategori"] = $data["kategori"];
+                                $data["tgl_penerbitan"] = $data["tgl_penerbitan"];
+                                $data["tgl_berakhir"] = $data["tgl_berakhir"];
+                                $data["status"] = $data["status"];
+                                $data["id"] = $data["id"] + 1;
+                                // dump($data);
+                                $result[$key] = $data;
+                            }else{
+                                $result[$key] = ["kategori" => $ka, "tgl_penerbitan" => $cj->first()->tanggal_penerbitan, "tgl_berakhir" => $cj->first()->tanggal_berakhir, "status" => $cj->first()->is_expired == false ? "VALID" : "EXPIRED", "id" => ++$id];
+                                // dump($result[$key]);
+                            }
+                        }else{
+                            $result[$key] = ["kategori" => $ka, "tgl_penerbitan" => null, "tgl_berakhir" => null, "status" => null];
+                        }
+                    }
+                    return $result;
+                })->flatten(1)->sortByDesc("id")->unique("kategori");
+            }else{
+                $result = collect();
+                $jaminan_proyek = $kategori_jaminan->map(function($item){
+                    $result[$item] = ["kategori" => $item, "tgl_penerbitan" => null, "tgl_berakhir" => null, "status" => null];
+                    return $result;
+                })->flatten(1);
+            }
+
+            // dd($asuransi_proyek);
+            //End::Asuransi
+
+
             $change_status_out = $change_status->groupBy("perubahan")->map(function ($p, $key) use ($change_status) {
                 // dump($p);
                 return [$key . " <b>" . Percentage::fromFractionAndTotal($p->count(), $change_status->count())->asString() . "</b>", $p->count()];
@@ -1838,7 +2367,7 @@ class DashboardController extends Controller
             // ];
             // $bond = collect($bond);
 
-            return view("/DashboardCCM/Dashboard_pemeliharaan_proyek", compact(["bulan_get", "change_status_out", "unit_kerjas_all", "tahun_get", "tahun", "jumlahKontrak", "totalKontrak", "totalPersen", "detail_perubahan_kontrak", "proyek_get", "unit_kerja_get", "dop_get", "proyek", "proyeks", "dops", "unit_kerjas", "changes_overview", "total_pengajuan", "persentasePerubahan", "contracts_pemeliharaan", "month", "time_status", "percen_pre_claim", "percen_during_claim", "percen_post_claim", "unit_kerja_select", "dop_select", "percen_progress_status"]));
+            return view("/DashboardCCM/Dashboard_pemeliharaan_proyek", compact(["bulan_get", "change_status_out", "unit_kerjas_all", "tahun_get", "tahun", "jumlahKontrak", "totalKontrak", "totalPersen", "detail_perubahan_kontrak", "proyek_get", "unit_kerja_get", "dop_get", "proyek", "proyeks", "dops", "unit_kerjas", "changes_overview", "total_pengajuan", "persentasePerubahan", "contracts_pemeliharaan", "month", "time_status", "percen_pre_claim", "percen_during_claim", "percen_post_claim", "unit_kerja_select", "dop_select", "percen_progress_status", "cat_kontrak", "persentasePerubahan", "perubahan_total", "asuransi_proyek", "jaminan_proyek"]));
         }
         // dd($proyeks);
         // $claims = PerubahanKontrak::all()->filter(function($cl) use($proyeks) {
@@ -3605,13 +4134,12 @@ class DashboardController extends Controller
                 $forecasts = Forecast::where("periode_prognosa", "=", $month - 1)->where("tahun", "=", $year)->get();
             }
             // dd($forecasts);
-            $forecasts->each(function ($f) use ($month, $year) {
+            $forecasts->each(function ($f) use ($month) {
                 $new_forecast = $f->replicate();
                 // dd($f);
                 $new_forecast->created_at = now();
                 $new_forecast->updated_at = now();
                 $new_forecast->periode_prognosa = $month;
-                $new_forecast->tahun = $year;
                 $new_forecast->save();
                 // dd($new_forecast);
             });

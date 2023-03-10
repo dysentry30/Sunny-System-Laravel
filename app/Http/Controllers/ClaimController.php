@@ -227,6 +227,9 @@ class ClaimController extends Controller
         $filterStatus = $request->query("stage");
         // dd($filterStatus);
         // $filterBulan = $data["bulan-perubahan"];
+        $data = $request->all();
+        $link = $data["link"] ?? "kt_user_view_VO";
+        // dd($link);
 
         // $monthNow = new DateTime("M");
         $contracts = ContractManagements::where("id_contract", "=", $id_contract)->first();
@@ -248,7 +251,7 @@ class ClaimController extends Controller
         $claims_klaim_asuransi = $claims->where("jenis_perubahan", "=", "Klaim Asuransi");
         // dd($claims_vo);
 
-        return view("claimManagement/viewDetail", compact(["contracts", "claims_vo", "claims_klaim", "claims_anti_klaim", "claims_klaim_asuransi", "proyek", "claim_all"]));
+        return view("claimManagement/viewDetail", compact(["contracts", "claims_vo", "claims_klaim", "claims_anti_klaim", "claims_klaim_asuransi", "proyek", "claim_all", "link"]));
     }
 
     // public function viewClaim($id_proyek, $jenis_claim)
