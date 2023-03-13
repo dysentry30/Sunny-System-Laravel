@@ -1228,7 +1228,7 @@ function performAssessment(App\Models\Customer $customer, App\Models\Proyek $pro
  * 
  * @return \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory
  */
-function errorPage($status_code = 404, $title, $headline, $sub_headline = "") {
-    return view("errorPage/error", ["status_code" => $status_code, "title" => $title, "headline" => $headline, "sub_headline" => $sub_headline]);
+function errorPage($status_code = 404, $title, $headline, $sub_headline = "", $is_add_link = false, $action_form = "", $button_value = "", $user = null) {
+    return view("errorPage/error", compact(["status_code", "title", "headline", "sub_headline", "is_add_link", "action_form", "button_value", "user"]));
 }
 ?>

@@ -74,7 +74,11 @@ Route::middleware(["web"])->group(function () {
                 } else {
                     $p->kode_crm = $p->kode_proyek;
                 }
-                $p->nama_proyek = $p->nama_proyek;
+                $departemen_kode = "";
+                if(!empty($p->Proyek->departemen_proyek)) {
+                    $departemen_kode = str_replace("0", "", $p->Proyek->departemen_proyek) . " ";
+                }
+                $p->proyek_name = $departemen_kode . " " .$p->nama_proyek;
                 $p->departemen_id = $p->unit_kerja;
                 $p->ap_id = "";
                 switch ($p->jenis_proyek) {

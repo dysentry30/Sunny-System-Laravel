@@ -258,7 +258,6 @@ class RekomendasiController extends Controller
                     $matriks_approval = MatriksApprovalRekomendasi::where("unit_kerja", "=", $proyek->UnitKerja->Divisi->id_divisi)->where("klasifikasi_proyek", "=", $proyek->klasifikasi_pasdin)->where("kategori", "=", "Persetujuan")->get();
                     foreach ($matriks_approval as $key => $user) {
                         $user = $user->Pegawai->User;
-                        $token = encrypt(json_encode(['email' => $user->email, 'password' => $user->password]));
                         $url = URL::temporarySignedRoute("rekomendasi", now()->addHours(3), ["open" => "kt_modal_view_proyek_persetujuan_" . $proyek->kode_proyek, "user" => $user->nip]);
                         // $url = $request->schemeAndHttpHost() . "?redirectTo=/rekomendasi?open=kt_user_view_persetujuan" . $proyek->kode_proyek . "&token=$token";
                         $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
@@ -309,7 +308,6 @@ class RekomendasiController extends Controller
                     $matriks_approval = MatriksApprovalRekomendasi::where("unit_kerja", "=", $proyek->UnitKerja->Divisi->id_divisi)->where("klasifikasi_proyek", "=", $proyek->klasifikasi_pasdin)->where("kategori", "=", "Persetujuan")->get();
                     foreach ($matriks_approval as $key => $user) {
                         $user = $user->Pegawai->User;
-                        $token = encrypt(json_encode(['email' => $user->email, 'password' => $user->password]));
                         $url = URL::temporarySignedRoute("rekomendasi", now()->addHours(3), ["open" => "kt_modal_view_proyek_persetujuan_" . $proyek->kode_proyek, "user" => $user->nip]);
                         // $url = $request->schemeAndHttpHost() . "?redirectTo=/rekomendasi?open=kt_user_view_persetujuan" . $proyek->kode_proyek . "&token=$token";
                         $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
@@ -395,10 +393,10 @@ class RekomendasiController extends Controller
             if($proyek->save()) {
                 // createWordPersetujuan($proyek, $hasil_assessment, $is_proyek_mega);
                 Alert::html("Success", "Rekomendasi dengan nama proyek <b>$proyek->nama_proyek</b> telah disetujui oleh tim Persetujuan melalui <b>Tahap Nota Rekomendasi 1</b>", "success");
-                return redirect()->back();
+                return redirect("/");
             }
             Alert::html("Failed", "Rekomendasi dengan nama proyek <b>$proyek->nama_proyek</b> gagal disetujui oleh tim Persetujuan melalui <b>Tahap Nota Rekomendasi 1</b>", "error");
-            return redirect()->back();
+            return redirect("/");
         } else if(!empty($request["persetujuan-tolak"])) {
             $proyek = Proyek::find($request->get("kode-proyek"));
             $approved_penyusun = collect(json_decode($proyek->approved_persetujuan));
@@ -429,6 +427,21 @@ class RekomendasiController extends Controller
             return redirect()->back();
         }
         // End Prosess Approval
+        if(!empty($data["verify-otp"]) || !empty(!empty($data["signature"]))) {
+            $otp_controller = new OTPController();
+            if(!empty($data["verify-otp"])) { 
+                $otp = collect($data["otp"])->join("");
+                $is_otp_validated = $otp_controller->validateOTP($otp, $user);
+                if(!$is_otp_validated) {
+                    Alert::error("OTP Invalid", "Oops! OTP is invalid. Please try again!");
+                    // return $otp_controller->index($request, $user);
+                    return redirect()->back();
+                    // return errorPage(403, "OTP Invalid", "Oops! OTP is invalid.", "");
+                }
+            } else {
+                return $otp_controller->index($request, $user);
+            }
+        }
 
         $is_super_user = str_contains(Auth::user()->name, "PIC") || Auth::user()->check_administrator;
         $unit_kerjas = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja);

@@ -55,6 +55,7 @@ use App\Models\ContractChangeProposal;
 use App\Models\ContractManagements;
 use App\Models\Departemen;
 use App\Http\Controllers\InstansiController;
+use App\Http\Controllers\OTPController;
 use App\Models\Divisi;
 use App\Models\Dop;
 use App\Models\FieldChange;
@@ -217,6 +218,11 @@ Route::get('/generate-kode-proyek/{kode_proyek}', function ($kode_proyek) {
 // Begin Rekomendasi
 Route::get('/rekomendasi', [RekomendasiController::class, "index"])->name("rekomendasi");
 // End Rekomendasi
+
+// Begin OTP
+Route::post('/send-otp', [OTPController::class, "send_otp"]);
+Route::post('/resend-otp', [OTPController::class, "resend_otp"]);
+// End OTP
 
 Route::group(['middleware' => ["userAuth", "admin"]], function () {
     
