@@ -285,7 +285,7 @@
                                 <!--begin::Table body-->
                                 <tbody class="fw-bold text-gray-600">
                                     <!--begin::Row Nama Proyek-->
-                                    {{-- @dd($review[0]) --}}
+                                    {{-- @dump($review) --}}
                                     {{-- @dd($review->isEmpty()) --}}
                                     @if ($review->isNotEmpty())
                                         @foreach ($review as $item)

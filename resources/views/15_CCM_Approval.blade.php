@@ -69,17 +69,6 @@
                         <div class="card-title">
                             <!--Begin:: BUTTON FILTER-->
                             <form action="" class="d-flex flex-row w-auto mt-6" method="get">
-                                <!--Begin:: Select Options-->
-                                {{-- <select style="display: none !important" id="column" name="column" onchange="changes(this)"
-                                    class="form-select form-select-solid select2-hidden-accessible"
-                                    style="margin-right: 2rem" data-control="select2" data-hide-search="true"
-                                    data-placeholder="Column" data-select2-id="select2-data-bulan" tabindex="-1"
-                                    aria-hidden="true">
-                                    <option value="unit_kerja" {{$column == "unit_kerja" ? "selected" : ""}}>Unit Kerja</option>
-                                    <option value="jenis_proyek" {{$column == "jenis_proyek" ? "selected" : ""}}>Jenis Proyek</option>
-
-                                </select> --}}
-                                <!--End:: Select Options-->
 
                                  <!--begin::Select Options-->
                                  <div style="" id="filterTahun" class="d-flex align-items-center position-relative me-3">
@@ -88,9 +77,9 @@
                                         data-control="select2" data-hide-search="true" data-placeholder="Tahun"
                                         tabindex="-1" aria-hidden="true">
                                         <option value="" selected>{{date("Y")}}</option>
-                                        {{-- @foreach ($tahun_proyeks as $tahun)
-                                                <option value="{{$tahun}}" {{$filterTahun == $tahun ? "selected" : ""}}>{{$tahun}}</option>
-                                            @endforeach --}}
+                                        @foreach ($tahun_proyeks as $tahun)
+                                            <option value="{{$tahun}}" {{$filterTahun == $tahun ? "selected" : ""}}>{{$tahun}}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 <!--end::Select Options-->
@@ -101,7 +90,7 @@
                                         class="form-select form-select-solid select2-hidden-accessible mx-3"
                                         data-control="select2" data-hide-search="true" data-placeholder="Bulan"
                                         tabindex="-1" aria-hidden="true">
-                                        {{-- <option {{ $month == '' ? 'selected' : '' }}></option>
+                                        <option {{ $month == '' ? 'selected' : '' }}></option>
                                         <option value="1" {{ $filterBulan == 1 ? 'selected' : '' }}>Januari</option>
                                         <option value="2" {{ $filterBulan == 2 ? 'selected' : '' }}>Februari</option>
                                         <option value="3" {{ $filterBulan == 3 ? 'selected' : '' }}>Maret</option>
@@ -113,7 +102,7 @@
                                         <option value="9" {{ $filterBulan == 9 ? 'selected' : '' }}>September</option>
                                         <option value="10" {{ $filterBulan == 10 ? 'selected' : '' }}>Oktober</option>
                                         <option value="11" {{ $filterBulan == 11 ? 'selected' : '' }}>November</option>
-                                        <option value="12" {{ $filterBulan == 12 ? 'selected' : '' }}>Desember</option> --}}
+                                        <option value="12" {{ $filterBulan == 12 ? 'selected' : '' }}>Desember</option>
                                     </select>
                                 </div>
                                 <!--end::Select Options-->
@@ -123,40 +112,14 @@
                                     <select id="unit-kerja" onchange="this.form.submit()" name="filter-unit" class="form-select form-select-solid w-200px ms-2"
                                         data-control="select2" data-hide-search="true" data-placeholder="Unit Kerja">
                                         <option></option>
-                                        {{-- @foreach ($unit_kerjas_select as $unitkerja)
+                                        @foreach ($unit_kerjas_select as $unitkerja)
                                             <option value="{{ $unitkerja->divcode }}"
                                                 {{ $filterUnit == $unitkerja->divcode ? 'selected' : '' }}>
                                                 {{ $unitkerja->unit_kerja }}</option>
-                                        @endforeach --}}
+                                        @endforeach
                                     </select>
                                 </div>
-{{-- 
-                                <div id="filterJenis" class="d-flex align-items-center position-relative">
-                                    <select id="jenis-proyek" onchange="this.form.submit()" name="filter-jenis"
-                                        class="form-select form-select-solid select2-hidden-accessible w-auto ms-2"
-                                        data-control="select2" data-hide-search="true" data-placeholder="Jenis Proyek"
-                                        tabindex="-1" aria-hidden="true">
-                                        <option></option>
-                                        <option value="I" {{ $filterJenis == 'I' ? 'selected' : '' }}>Internal</option>
-                                        <option value="N" {{ $filterJenis == 'N' ? 'selected' : '' }}>External</option>
-                                        <option value="J" {{ $filterJenis == 'J' ? 'selected' : '' }}>JO</option>
-                                    </select>
-                                </div> --}}
 
-
-                                {{-- <script>
-                                    function changes(e) {
-                                        if (e.value == "unit_kerja") {
-                                            document.getElementById("filterUnit").style.display = "";
-                                            document.getElementById("filterJenis").style.setProperty("display", "none", "important");
-                                            document.getElementById("filterJenis").value = "";
-                                        } else {
-                                            document.getElementById("filterJenis").style.display = "";
-                                            document.getElementById("filterUnit").style.setProperty("display", "none", "important");
-                                            document.getElementById("filterUnit").value = "";
-                                        } 
-                                    }
-                                </script> --}}
                                 <!--end:: Input Filter-->
 
                                 <!--begin:: Filter-->
@@ -181,15 +144,15 @@
                         <!--begin::Card title-->
 
 
-                        @if ($is_exist_history->isNotEmpty())
-                        @foreach ($is_exist_history as $history)
+                        @if ($contract_approval->isNotEmpty())
+                        @foreach ($contract_approval as $history)
                             <!--begin::Card body-->    
                             <div class="card-body pt-0">
                                 <div class="mt-6">
                                     <div class="card shadow-sm">
                                         <div class="card-body">
-                                            <div class="d-flex flex-row align-items-center w-100 px-7">
-                                                <div class="col-10">
+                                            <div class="d-flex flex-row align-items-center w-100 px-5">
+                                                <div class="col-9">
                                                     <!--Begin::Detail Contract-->
                                                     <div class="row">
                                                         <div class="col-3">
@@ -242,7 +205,7 @@
                                                         </div>
                                                         <div class="col-3">
                                                             <p class="m-0">Nilai Kontrak</p>
-                                                            <p><b>Rp.{{ $history->nilai_kontrak }}</b></p>
+                                                            <p><b>Rp.{{ number_format($history->nilai_kontrak, 0, ",", ".") }}</b></p>
                                                         </div>
                                                         <div class="col-3">
                                                             <p class="m-0">Unit Kerja</p>
@@ -295,42 +258,42 @@
                                                 </div>
 
 
-                                                <div class="col-2 ps-2">
+                                                <div class="col-3 ps-5">
                                                     @if (Auth::user()->check_administrator || (Auth::user()->check_admin_kontrak && Auth::user()->is_pic))
                                                         <div class="d-flex flex-column flex-md-row gap-4 justify-content-center">
                                                             @if ($history->is_approved == "t")
-                                                                    <a class="btn btn-success btn-sm disabled">Approved</a>
+                                                                    <a class="btn btn-success btn-sm disabled d-flex align-items-center">Approved</a>
                                                                     @if($history->is_request_unlock == "t")
                                                                         <form action="/history-approval/set-unlock" method="post">
                                                                             @csrf
                                                                             <input type="hidden" name="id_contract" value="{{ $history->id_contract }}">
-                                                                            <button type="submit" class="btn btn-secondary btn-sm">Unlock</button>
+                                                                            <button type="submit" class="btn btn-secondary btn-sm d-flex align-items-center">Unlock</button>
                                                                         </form>
                                                                     @endif
                                                             @elseif($history->is_approved == "f")
                                                                 <button class="btn btn-danger btn-sm disabled">Approval Ditolak</button>
                                                             @else
-                                                                <a class="btn btn-primary btn-sm" onclick="confirmAction(this, '{{ $history->id_contract }}')">Approve</a>
-                                                                <a class="btn btn-secondary btn-sm" onclick="confirmAction(this, '{{ $history->id_contract }}')">Cancel</a>
+                                                                <a class="btn btn-primary btn-sm d-flex align-items-center" onclick="confirmAction(this, '{{ $history->id_contract }}')">Approve</a>
+                                                                <a class="btn btn-secondary btn-sm d-flex align-items-center" onclick="confirmAction(this, '{{ $history->id_contract }}')">Cancel</a>
                                                             @endif
                                                         </div>
                                                     @else
                                                         <div class="d-flex flex-column flex-md-row gap-4 justify-content-center">
                                                             @if ($history->is_approved == "t")
-                                                                <a class="btn btn-success btn-sm disabled">Approved</a>
+                                                                <a class="btn btn-success btn-sm d-flex align-items-center disabled">Approved</a>
                                                                 @if($history->is_request_unlock == "t")
-                                                                <a class="btn btn-success btn-sm disabled">Menunggu Unlock...</a>
+                                                                <a class="btn btn-success btn-sm d-flex align-items-center disabled">Menunggu Unlock...</a>
                                                                 @else
                                                                 <form action="/history-approval/request-unlock" method="POST">
                                                                     @csrf
                                                                     <input type="hidden" name="id_contract" value="{{ $history->id_contract }}">
-                                                                    <button type="submit" class="btn btn-secondary btn-sm">Request Unlock</button>
+                                                                    <button type="submit" class="btn btn-secondary btn-sm d-flex align-items-center">Request Unlock</button>
                                                                 </form>
                                                                 @endif
                                                             @elseif($history->is_approved == "f")
-                                                                <a class="btn btn-danger btn-sm disabled">Approve Ditolak</a>
+                                                                <a class="btn btn-danger btn-sm d-flex align-items-center disabled">Approve Ditolak</a>
                                                             @else
-                                                                <a class="btn btn-success btn-sm disabled">Menunggu untuk approval...</a>
+                                                                <a class="btn btn-success btn-sm d-flex align-items-center disabled">Menunggu untuk approval...</a>
                                                             @endif
                                                         </div>
                                                     @endif

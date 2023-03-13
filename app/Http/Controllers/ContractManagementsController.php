@@ -817,10 +817,11 @@ class ContractManagementsController extends Controller
         // dd($data_update);
         // dd($kategori, $sub_pasal, $uraian, $pic, $catatan);
 
-        $is_data_exist = ReviewContracts::where("id_contract", $data["id-contract"])->where("stage", "=", 2)->get();
+        $is_data_exist_1 = ReviewContracts::where("id_contract", $data["id-contract"])->where("stage", "=", 1)->get();
+        $is_data_exist_2 = ReviewContracts::where("id_contract", $data["id-contract"])->where("stage", "=", 2)->get();
         // dd($is_data_exist);
-        if($is_data_exist->isEmpty()){
-            $kategori->each(function($item, $key) use($sub_pasal, $uraian, $pic, $catatan, $data){
+        if($is_data_exist_2->isEmpty()){
+            $kategori->each(function($item, $key) use($sub_pasal, $uraian, $pic, $catatan, $data, $is_data_exist_1){
                 // $tes = ReviewContracts::where("stage", "=", 1)->get();
                 // dd($tes);
                 if($data["stage"] == 1){
@@ -864,18 +865,45 @@ class ContractManagementsController extends Controller
             Alert::success('Success', "Tinjauan Kontrak berhasil ditambahkan");
             return redirect()->back();
         }else{
-            $is_data_exist->each(function($item, $key) use($data_update, $data){
-                $item->id_contract = $data["id-contract"];
-                $item->stage = $data["stage"];
-                $item->kategori = $data_update[$key]->kategori;
-                $item->sub_pasal = $data_update[$key]->sub_pasal;
-                $item->uraian = $data_update[$key]->uraian;
-                $item->pic = $data_update[$key]->pic;
-                $item->catatan = $data_update[$key]->catatan;
-                $item->save();
-            });
-            Alert::success('Success', "Tinjauan Kontrak berhasil ditambahkan");
-            return redirect()->back();
+            if($data["stage"] == 1){
+                $is_data_exist_1->each(function($item, $key) use($data_update, $data){
+                    $item->id_contract = $data["id-contract"];
+                    $item->stage = $data["stage"];
+                    $item->kategori = $data_update[$key]->kategori;
+                    $item->sub_pasal = $data_update[$key]->sub_pasal;
+                    $item->uraian = $data_update[$key]->uraian;
+                    $item->pic = $data_update[$key]->pic;
+                    $item->catatan = $data_update[$key]->catatan;
+                    $item->save();
+                });
+                $is_data_exist_2->each(function($item, $key) use($data_update, $data){
+                    $item->id_contract = $data["id-contract"];
+                    $item->stage = 2;
+                    $item->kategori = $data_update[$key]->kategori;
+                    $item->sub_pasal = $data_update[$key]->sub_pasal;
+                    $item->uraian = $data_update[$key]->uraian;
+                    $item->pic = $data_update[$key]->pic;
+                    $item->catatan = $data_update[$key]->catatan;
+                    $item->save();
+                });
+                Alert::success('Success', "Tinjauan Kontrak berhasil ditambahkan");
+                return redirect()->back();
+            }else{
+                $is_data_exist_2->each(function($item, $key) use($data_update, $data){
+                    $item->id_contract = $data["id-contract"];
+                    $item->stage = $data["stage"];
+                    $item->kategori = $data_update[$key]->kategori;
+                    $item->sub_pasal = $data_update[$key]->sub_pasal;
+                    $item->uraian = $data_update[$key]->uraian;
+                    $item->pic = $data_update[$key]->pic;
+                    $item->catatan = $data_update[$key]->catatan;
+                    $item->save();
+                });
+                Alert::success('Success', "Tinjauan Kontrak berhasil ditambahkan");
+                return redirect()->back();
+            }
+            // Alert::success('Success', "Tinjauan Kontrak berhasil ditambahkan");
+            // return redirect()->back();
         }
         // $data["kategori"]->each(function($item, $key){
         // });

@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\ContractApproval;
 use App\Models\ContractManagements;
 use App\Models\PerubahanKontrak;
+use App\Models\UnitKerja;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use stdClass;
 
@@ -23,7 +25,6 @@ class ContractApprovalController extends Controller
         // $claims = $contract->PerubahanKontrak;
         $data_claims = $claims_all->map(function($item, $key) use($claims_all){
             $profit_center = $item->Proyek->profit_center;
-
             $newClass = new stdClass();
             $newClass->TANGGAL = (int) date("Ymd");
             $newClass->PROFIT_CTR = "$profit_center";
@@ -38,7 +39,11 @@ class ContractApprovalController extends Controller
             }elseif($item->stage == 5){
                 $newClass->CLAIM_CAT = "ITEM DISETUJUI";
             };
-            $newClass->CLAIM_VAL = $claims_all->count();
+
+            $newClass->CLAIM_VAL = $claims_all->groupBy("jenis_perubahan")->map(function($i, $key) use($item){
+                return $key = $i->count();
+            })->get($item->jenis_perubahan);
+
             if ($item->jenis_perubahan == "Klaim") {
                 $newClass->CATEGORY = "CLAIM";
             }else{
@@ -49,7 +54,7 @@ class ContractApprovalController extends Controller
         })->values();
 
         // return response()->json($data_claims, 200);
-        // dd($data_claims);
+        dd($data_claims);
 
         // SAP DEV
         // // FIRST STEP SEND DATA TO BW
@@ -110,11 +115,89 @@ class ContractApprovalController extends Controller
         return response()->json($data_claims);
     }
 
-    public function index(){
-        $month = (int)date("m") == 12 ? 1 : (int)date("m")-1;
-        $is_exist_history = ContractApproval::where("periode", $month)->where("is_locked", "!=", false)->get();
-        // dd($is_exist_history);
-        return view("15_CCM_Approval", compact("is_exist_history"));
+    public function index(Request $request){
+
+        $filterUnit = $request->query("filter-unit");
+        $filterJenis = $request->query("filter-jenis");
+        $filterTahun = $request->query("tahun-proyek") ?? (int) date("Y");
+        $filterBulan = $request->query("bulan-proyek") ?? "";
+        // dd($filterBulan);
+
+        $year = (int) date("Y");
+        $month = (int) date("m") - 1;
+
+        $tahun_proyeks = ContractApproval::get()->sortByDesc("tahun")->groupBy("tahun")->keys();
+        $periode = (int)date("m") == 12 ? 1 : (int)date("m")-1;
+
+        if (Auth::user()->check_administrator) {
+            if ($filterTahun < 2023) {
+                $unit_kerja_code =  ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "N", "P", "J"];
+                $unitkerjas = UnitKerja::whereNoN("divcode", $unit_kerja_code)->get("divcode");
+                $unit_kerjas_select = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->get();
+                // $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $filterTahun)->whereNotIn("unit_kerja", $unit_kerja_code)->get();
+                // $unit_kerjas = UnitKerja::whereNotIn("divcode",  $unit_kerja_code)->get();
+                // $proyeks = Proyek::join("contract_managements", "proyeks.kode_proyek", "=", "contract_managements.project_id")->whereNotIn("unit_kerja", $unit_kerja_code)->whereIn("stage", [6, 8, 9])->where("stages", "=", 3)->get();
+            } else {
+                $unit_kerja_code =   ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "N", "L", "F", "U", "O"];
+                $unitkerjas = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->get("divcode");
+                $unit_kerjas_select = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->get();
+                // $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $filterTahun)->whereNotIn("unit_kerja", $unit_kerja_code)->get();
+                // $unit_kerjas = UnitKerja::whereNotIn("divcode",   $unit_kerja_code)->get();
+                // $proyeks = Proyek::join("contract_managements", "proyeks.kode_proyek", "=", "contract_managements.project_id")->whereNotIn("unit_kerja", $unit_kerja_code)->whereIn("stage", [6, 8, 9])->where("stages", "=", 3)->get();
+            }
+
+            $unit_kerja_get = !empty($request->query("filter-unit")) ? [$request->query("filter-unit")] : $unitkerjas->toArray();
+
+            if(!empty($filterBulan) && $filterTahun == 2023){
+                $contract_approval = ContractApproval::where("tahun", "=", $filterTahun)->where("periode", "=", $filterBulan)->whereIn("unit_kerja", $unit_kerja_get)->where("is_locked", "!=", false)->get();
+            }else{
+                if($filterTahun < 2023 && !empty($filterBulan)){
+                    $contract_approval = ContractApproval::where("tahun", "=", $filterTahun)->where("periode", "=", $filterBulan)->whereIn("unit_kerja", $unit_kerja_get)->where("is_locked", "!=", false)->get();
+                }elseif($filterTahun < 2023 && empty($filterBulan)){
+                    $contract_approval = ContractApproval::where("tahun", "=", $filterTahun)->where("periode", "<=", 12)->whereIn("unit_kerja", $unit_kerja_get)->where("is_locked", "!=", false)->get();
+                }else{
+                    $contract_approval = ContractApproval::where("tahun", "=", $filterTahun)->where("periode", "=", $month)->whereIn("unit_kerja", $unit_kerja_get)->where("is_locked", "!=", false)->get();
+                }    
+            }
+
+        }else{
+            
+            $unit_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",",Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja);
+
+            if ($filterTahun < 2023) {
+                $unit_kerja_code =  ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "N", "P", "J"];
+                $unitkerjas = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->whereIn("divcode", $unit_user->toArray())->get("divcode");
+                $unit_kerjas_select = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->whereIn("divcode", $unit_user->toArray())->get();
+                // $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $filterTahun)->whereNotIn("unit_kerja", $unit_kerja_code)->get();
+                // $unit_kerjas = UnitKerja::whereNotIn("divcode",  $unit_kerja_code)->get();
+                // $proyeks = Proyek::join("contract_managements", "proyeks.kode_proyek", "=", "contract_managements.project_id")->whereNotIn("unit_kerja", $unit_kerja_code)->whereIn("stage", [6, 8, 9])->where("stages", "=", 3)->get();
+            } else {
+                $unit_kerja_code =   ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "N", "L", "F", "U", "O"];
+                $unitkerjas = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->whereIn("divcode", $unit_user->toArray())->get("divcode");
+                $unit_kerjas_select = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->whereIn("divcode", $unit_user->toArray())->get();
+                // $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $filterTahun)->whereNotIn("unit_kerja", $unit_kerja_code)->get();
+                // $unit_kerjas = UnitKerja::whereNotIn("divcode",   $unit_kerja_code)->get();
+                // $proyeks = Proyek::join("contract_managements", "proyeks.kode_proyek", "=", "contract_managements.project_id")->whereNotIn("unit_kerja", $unit_kerja_code)->whereIn("stage", [6, 8, 9])->where("stages", "=", 3)->get();
+            }
+
+            $unit_kerja_get = !empty($request->query("filter-unit")) ? [$request->query("filter-unit")] : $unitkerjas->toArray();
+
+            if(!empty($filterBulan) && $filterTahun == 2023){
+                $contract_approval = ContractApproval::where("tahun", "=", $filterTahun)->where("periode", "=", $filterBulan)->whereIn("unit_kerja", $unit_kerja_get)->where("is_locked", "!=", false)->get();
+            }else{
+                if($filterTahun < 2023 && !empty($filterBulan)){
+                    $contract_approval = ContractApproval::where("tahun", "=", $filterTahun)->where("periode", "=", $filterBulan)->whereIn("unit_kerja", $unit_kerja_get)->where("is_locked", "!=", false)->get();
+                }elseif($filterTahun < 2023 && empty($filterBulan)){
+                    $contract_approval = ContractApproval::where("tahun", "=", $filterTahun)->where("periode", "<=", 12)->whereIn("unit_kerja", $unit_kerja_get)->where("is_locked", "!=", false)->get();
+                }else{
+                    $contract_approval = ContractApproval::where("tahun", "=", $filterTahun)->where("periode", "=", $month)->whereIn("unit_kerja", $unit_kerja_get)->where("is_locked", "!=", false)->get();
+                }    
+            }
+        }
+
+        // $is_exist_history = ContractApproval::where("periode", $periode)->where("is_locked", "!=", false)->get();
+        // dd($contract_approval);
+        return view("15_CCM_Approval", compact(["contract_approval", "tahun_proyeks", "filterTahun", "month", "filterBulan", "unit_kerjas_select", "filterUnit"]));
     }
 
     public function lockApproval(Request $request){
@@ -131,7 +214,7 @@ class ContractApprovalController extends Controller
 
         $progress = $contract->project->ProyekProgress->sortByDesc("created_at")->first();
 
-        // dd($progress);
+        // dd($contract->project->unit_kerja);
 
         //Kategori VO
         $cat_vo = $perubahan->where("jenis_perubahan", "=", "VO");
@@ -160,6 +243,7 @@ class ContractApprovalController extends Controller
         if(!empty($approval)){
             $approval->id_contract = $data["id_contract"];
             $approval->kode_proyek = $data["kode_proyek"];
+            $approval->unit_kerja = $contract->project->unit_kerja;
             $approval->nilai_kontrak = $progress->ok_review ?? 0;
             $approval->periode = $data["periode"] == 1 ? 12 : $data["periode"];
             $approval->tahun = $data["tahun"];
@@ -196,6 +280,7 @@ class ContractApprovalController extends Controller
             $approve = new ContractApproval();
             $approve->id_contract = $data["id_contract"];
             $approve->kode_proyek = $data["kode_proyek"];
+            $approve->unit_kerja = $contract->project->unit_kerja;
             $approve->periode = $data["periode"] == 1 ? 12 : $data["periode"];
             $approve->tahun = $data["tahun"];
             $approve->jumlah_vo = $jumlah_vo ?? 0;
@@ -279,19 +364,20 @@ class ContractApprovalController extends Controller
 
         $approval->is_approved = $data["approve"];
 
-        if($approval->save()){
-            $this->sendDataSAP($id_contract);
-            Alert::success("success", "Contract berhasil di Approve");
-            return response()->json([
-                "status" => "success",
-                "link" => true,
-            ]);
-        }else{
-            Alert::error("error", "Contract gagal di Approve");
-            return response()->json([
-                "status" => "error",
-                "link" => false,
-            ]);
+        if($this->sendDataSAP($id_contract)){
+            if($approval->save()){
+                Alert::success("success", "Contract berhasil di Approve");
+                return response()->json([
+                    "status" => "success",
+                    "link" => true,
+                ]);
+            }else{
+                Alert::error("error", "Contract gagal di Approve");
+                return response()->json([
+                    "status" => "error",
+                    "link" => false,
+                ]);
+            }
         }
 
     }

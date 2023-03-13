@@ -173,7 +173,7 @@
                             </div>
                         @endif
 
-                        @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
+                        {{-- @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
                             <div class="menu-item">
                                 <a class="menu-link " href="/document"
                                     style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'document') ? 'background-color:#008CB4' : '' }}">
@@ -188,7 +188,7 @@
                                     <span class="menu-title" style="font-size: 16px; padding-left: 10px">Document</span>
                                 </a>
                             </div>
-                        @endif
+                        @endif --}}
 
                         @if (auth()->user()->check_administrator || $adminPIC || auth()->user()->check_user_sales )
                             <div class="menu-item">
