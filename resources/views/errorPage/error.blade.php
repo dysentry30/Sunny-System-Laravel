@@ -43,6 +43,13 @@
                 <h1 class=""><span>{{$status_code[0]}}</span><span>{{$status_code[1]}}</span><span>{{$status_code[2]}}</span></h1>
                 <h5 class="">{{$headline}}</h5>
                 <p class="mb-4">{{$sub_headline}}</p>
+                @if ($is_add_link)
+                    <form action="{!! $action_form !!}" method="post">
+                        @csrf
+                        <input type="hidden" name="user" id="user" value="{{$user->nip}}">
+                        <input type="submit" class="btn btn-sm btn-dark" value="{{$button_value}}">
+                    </form>
+                @endif
               </div>
             </div>
           </div>

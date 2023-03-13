@@ -2112,7 +2112,7 @@
                                                                                         <!--end::Nilai OK-->
                                                                                         <!--begin::Start-->
                                                                                         <td>
-                                                                                            {{ Carbon\Carbon::create($proyekberjalan0->proyek->tanggal_mulai_terkontrak)->translatedFormat("d F Y") }}
+                                                                                            {{ Carbon\Carbon::create($proyekberjalan0->proyek->tanggal_mulai_terkontrak ?? Carbon\Carbon::now())->translatedFormat("d F Y") }}
                                                                                         </td>
                                                                                         <!--end::End-->
                                                                                         <!--begin::Start-->
@@ -2123,8 +2123,8 @@
                                                                                         <!--begin::Durasi-->
                                                                                         <td>
                                                                                             @php
-                                                                                                $tglakhir = Carbon\Carbon::create($proyekberjalan0->proyek->tanggal_akhir_terkontrak);
-                                                                                                $tglawal = Carbon\Carbon::create($proyekberjalan0->proyek->tanggal_mulai_terkontrak);
+                                                                                                $tglakhir = Carbon\Carbon::create($proyekberjalan0->proyek->tanggal_akhir_terkontrak ?? Carbon\Carbon::now());
+                                                                                                $tglawal = Carbon\Carbon::create($proyekberjalan0->proyek->tanggal_mulai_terkontrak ?? Carbon\Carbon::now());
                                                                                                 $durasi = $tglakhir->diff($tglawal);
                                                                                             @endphp
                                                                                             {{ $durasi->y }} Tahun,
@@ -2216,8 +2216,8 @@
                                                                                         <!--begin::Durasi-->
                                                                                         <td>
                                                                                             @php
-                                                                                                $tglakhir = Carbon\Carbon::create($proyekberjalan0->proyek->tanggal_akhir_terkontrak);
-                                                                                                $tglawal = Carbon\Carbon::create($proyekberjalan0->proyek->tanggal_mulai_terkontrak);
+                                                                                                $tglakhir = Carbon\Carbon::create($proyekberjalan0->proyek->tanggal_akhir_terkontrak ?? Carbon\Carbon::now());
+                                                                                                $tglawal = Carbon\Carbon::create($proyekberjalan0->proyek->tanggal_mulai_terkontrak ?? Carbon\Carbon::now());
                                                                                                 $durasi = $tglakhir->diff($tglawal);
                                                                                             @endphp
                                                                                             {{ $durasi->y }} Tahun,
@@ -4587,8 +4587,8 @@
                                     <span class="">Durasi Proyek: </span>
                                 </div>
                                 @php
-                                    $tglakhir = Carbon\Carbon::create($proyek->proyek->tanggal_akhir_terkontrak);
-                                    $tglawal = Carbon\Carbon::create($proyek->proyek->tanggal_mulai_terkontrak);
+                                    $tglakhir = Carbon\Carbon::create($proyek->proyek->tanggal_akhir_terkontrak ?? Carbon\Carbon::now());
+                                    $tglawal = Carbon\Carbon::create($proyek->proyek->tanggal_mulai_terkontrak ?? Carbon\Carbon::now());
                                     $durasi = $tglakhir->diff($tglawal);
                                 @endphp
                                 <div class="col text-dark text-start">
