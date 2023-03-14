@@ -24,6 +24,22 @@ class ContractApprovalController extends Controller
         // $profit_center = $contract->project->UnitKerja->id_profit_center;
         // $claims = $contract->PerubahanKontrak;
         $data_claims = $claims_all->map(function($item, $key) use($claims_all){
+
+            $item_claim = $claims_all->groupBy("jenis_perubahan")->filter(function($i, $key) use($item){
+                return $key == $item->jenis_perubahan;
+                // return $i->stage == 1;
+            })->flatten();
+
+            $claim_val = $item_claim->filter(function($ic) use($item){
+                if($item->stage == 1 ){
+                    return $ic->stage == 1;
+                }elseif($item->stage == 2){
+                    return $ic->stage == 2;
+                }elseif($item->stage == 5){
+                    return $ic->stage == 5;
+                }
+            })->count();
+
             $profit_center = $item->Proyek->profit_center;
             $newClass = new stdClass();
             $newClass->TANGGAL = (int) date("Ymd");
@@ -40,9 +56,11 @@ class ContractApprovalController extends Controller
                 $newClass->CLAIM_CAT = "ITEM DISETUJUI";
             };
 
-            $newClass->CLAIM_VAL = $claims_all->groupBy("jenis_perubahan")->map(function($i, $key) use($item){
-                return $key = $i->count();
-            })->get($item->jenis_perubahan);
+            $newClass->CLAIM_VAL = $claim_val;
+
+            // $newClass->CLAIM_VAL = $claims_all->groupBy("jenis_perubahan")->map(function($i, $key) use($item){
+            //     return $key = $i->count();
+            // })->get($item->jenis_perubahan);
 
             if ($item->jenis_perubahan == "Klaim") {
                 $newClass->CATEGORY = "CLAIM";
@@ -88,31 +106,31 @@ class ContractApprovalController extends Controller
         //SAP PRODUCTION
 
         // FIRST STEP SEND DATA TO BW
-        $csrf_token = "";
-        $content_location = "";
-        // $response = getAPI("https://wtappbw-qas.wika.co.id:44350/sap/bw4/v1/push/dataStores/yodaltes4/requests", [], [], false);
-        // $http = Http::withBasicAuth("WIKA_API", "WikaWika2022");
-        $get_token = Http::withBasicAuth("WIKA_API", "WikaWika2022")->withHeaders(["x-csrf-token" => "Fetch"])->get("https://wtappbw-prd.wika.co.id:44360/sap/bw4/v1/push/dataStores/zosbi006/requests");
-        $csrf_token = $get_token->header("x-csrf-token");
-        $cookie = "";
-        collect($get_token->cookies()->toArray())->each(function($c) use(&$cookie) {
-            $cookie .= $c["Name"] . "=" . $c["Value"] . ";"; 
-        });
+        // $csrf_token = "";
+        // $content_location = "";
+        // // $response = getAPI("https://wtappbw-qas.wika.co.id:44350/sap/bw4/v1/push/dataStores/yodaltes4/requests", [], [], false);
+        // // $http = Http::withBasicAuth("WIKA_API", "WikaWika2022");
+        // $get_token = Http::withBasicAuth("WIKA_API", "WikaWika2022")->withHeaders(["x-csrf-token" => "Fetch"])->get("https://wtappbw-prd.wika.co.id:44360/sap/bw4/v1/push/dataStores/zosbi006/requests");
+        // $csrf_token = $get_token->header("x-csrf-token");
+        // $cookie = "";
+        // collect($get_token->cookies()->toArray())->each(function($c) use(&$cookie) {
+        //     $cookie .= $c["Name"] . "=" . $c["Value"] . ";"; 
+        // });
 
-        // SECOND STEP SEND DATA TO BW
-        $get_content_location = Http::withBasicAuth("WIKA_API", "WikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie])->post("https://wtappbw-prd.wika.co.id:44360/sap/bw4/v1/push/dataStores/zosbi006/requests");
-        $content_location = $get_content_location->header("content-location");
+        // // SECOND STEP SEND DATA TO BW
+        // $get_content_location = Http::withBasicAuth("WIKA_API", "WikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie])->post("https://wtappbw-prd.wika.co.id:44360/sap/bw4/v1/push/dataStores/zosbi006/requests");
+        // $content_location = $get_content_location->header("content-location");
         
 
-        // THIRD STEP SEND DATA TO BW
-        // dd($new_class->toJson());
-        $fill_data = Http::withBasicAuth("WIKA_API", "WikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie, "content-type" => "application/json"])->post("https://wtappbw-prd.wika.co.id:44360/sap/bw4/v1/push/dataStores/zosbi006/dataSend?request=$content_location&datapid=1", $data_claims->toArray());
+        // // THIRD STEP SEND DATA TO BW
+        // // dd($new_class->toJson());
+        // $fill_data = Http::withBasicAuth("WIKA_API", "WikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie, "content-type" => "application/json"])->post("https://wtappbw-prd.wika.co.id:44360/sap/bw4/v1/push/dataStores/zosbi006/dataSend?request=$content_location&datapid=1", $data_claims->toArray());
         
-        // FOURTH STEP SEND DATA TO BW
-        $closed_request = Http::withBasicAuth("WIKA_API", "WikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie])->post("https://wtappbw-prd.wika.co.id:44360/sap/bw4/v1/push/dataStores/zosbi006/requests/$content_location/close");
-        // dd($closed_request, $data_claims, $fill_data);
+        // // FOURTH STEP SEND DATA TO BW
+        // $closed_request = Http::withBasicAuth("WIKA_API", "WikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie])->post("https://wtappbw-prd.wika.co.id:44360/sap/bw4/v1/push/dataStores/zosbi006/requests/$content_location/close");
+        // // dd($closed_request, $data_claims, $fill_data);
 
-        return response()->json($data_claims);
+        // return response()->json($data_claims);
     }
 
     public function index(Request $request){
