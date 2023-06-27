@@ -173,10 +173,10 @@
                             </div>
                         @endif
 
-                        {{-- @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
+                        @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
                             <div class="menu-item">
                                 <a class="menu-link " href="/document"
-                                    style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'document') ? 'background-color:#008CB4' : '' }}">
+                                    style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'document-database') ? 'background-color:#008CB4' : '' }}">
                                     <span class="menu-icon">
                                         <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
                                         <span class="svg-icon svg-icon-2">
@@ -185,10 +185,27 @@
                                         </span>
                                         <!--end::Svg Icon-->
                                     </span>
-                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Document</span>
+                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Document Database</span>
                                 </a>
                             </div>
-                        @endif --}}
+                        @endif
+                        
+                        @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
+                            <div class="menu-item">
+                                <a class="menu-link " href="/document-template"
+                                    style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'document-template') ? 'background-color:#008CB4' : '' }}">
+                                    <span class="menu-icon">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                        <span class="svg-icon svg-icon-2">
+                                            <img alt="Logo" src="/media/icons/duotune/creatio/documents.svg"
+                                                class="h-30px logo" />
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Document Template</span>
+                                </a>
+                            </div>
+                        @endif
 
                         @if (auth()->user()->check_administrator || $adminPIC || auth()->user()->check_user_sales )
                             <div class="menu-item">

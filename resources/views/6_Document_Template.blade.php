@@ -3,7 +3,7 @@
 {{-- end:: template main --}}
 
 {{-- begin:: title --}}
-@section('title', 'Claim Managements')
+@section('title', 'Dokumen Template')
 {{-- end:: title --}}
 
 {{-- begin:: content --}}
@@ -25,13 +25,21 @@
                         data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                         class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
                         <!--begin::Title-->
-                        <h1 class="d-flex align-items-center fs-3 my-1">Dokumen Database
+                        <h1 class="d-flex align-items-center fs-3 my-1">Dokumen Template
                         </h1>
                         <!--end::Title-->
                     </div>
                     <!--end::Page title-->
                     <!--begin::Actions-->
                     <div class="d-flex align-items-center py-1">
+                        <div class="d-flex align-items-center justify-content-end py-1 gap-3 me-5">
+                            <div class="d-flex">
+                                <a class="btn btn-sm btn-primary"
+                                style="background-color:#008CB4;" href="#" data-bs-toggle="modal"
+                                data-bs-target="#kt_modal_new">
+                                New</a>
+                            </div>
+                        </div>
                         <!--begin::Wrapper-->
                          <!--begin::Button-->
                          {{-- <a type="submit" class="btn btn-sm btn-primary" id="kt_toolbar_primary_button"
@@ -74,72 +82,19 @@
 
                                         <!--Begin:: BUTTON FILTER-->
                                         <form action="" class="d-flex flex-row w-auto" method="get">
-                                            <!--begin::Select Options-->
-                                            <div style="" id="nama-proyek" class="d-flex align-items-center position-relative me-3">
-                                                <select id="nama-proyek" name="nama-proyek"
-                                                    class="form-select form-select-solid select2-hidden-accessible mx-3"
-                                                    data-control="select2" data-hide-search="true" data-placeholder="Nama Proyek"
-                                                    tabindex="-1" aria-hidden="true">
-                                                    <option value="" selected></option>
-                                                    @forelse ($proyeks as $proyek)
-                                                        <option value="{{ $proyek->kode_proyek }}" {{ $nama_proyek == $proyek->kode_proyek ? 'selected' : '' }}>{{ $proyek->nama_proyek }}</option>
-                                                    @empty
-                                                        <option value=""></option>
-                                                    @endforelse
-                                                    
-                                                </select>
-                                            </div>
-                                            <!--end::Select Options-->
 
                                             <!--begin:: Input Filter-->
                                             <div id="jenis-dokumen" class="d-flex align-items-center position-relative">
                                                 <select id="jenis-dokumen" name="jenis-dokumen" class="form-select form-select-solid w-200px ms-2"
                                                     data-control="select2" data-hide-search="true" data-placeholder="Jenis Dokumen">
                                                     <option></option>
-                                                    @forelse ($category_document as $item)
-                                                    @php
-                                                    $kategori = "";
-                                                        switch ($item) {
-                                                            case 'aanwitjzing':
-                                                                $kategori = "Aanwitjzing";
-                                                                break;
-                                                            case 'resiko-perolehan':
-                                                                $kategori = "Input Risk (Perolehan)";
-                                                                break;
-                                                            case 'resiko-pelaksanaan':
-                                                                $kategori = "Input Risk (Pelaksanaan)";
-                                                                break;
-                                                            case 'pending-issue':
-                                                                $kategori = "Pending Issue (Perolehan)";
-                                                                break;
-                                                            case 'pending-issue-pelaksanaan':
-                                                                $kategori = "Pending Issue (Pelaksanaan)";
-                                                                break;
-                                                            case 'pending-issue-pemeliharaan':
-                                                                $kategori = "Pending Issue (Pemeliharaan)";
-                                                                break;
-                                                            case 'perubahan-kontrak':
-                                                                $kategori = "Perubahan Kontrak";
-                                                                break;
-                                                            case 'tinjauan-perolehan':
-                                                                $kategori = "Tinjauan Dokumen Kontrak (Perolehan)";
-                                                                break;
-                                                            case 'usulan-perubahan':
-                                                                $kategori = "Usulan Perubahan Draft Kontrak (Perolehan)";
-                                                                break;
-                                                            case 'pasal-kontraktual':
-                                                                $kategori = "Pasal Kontraktual";
-                                                                break;
-                                                            case 'rkap_bab12':
-                                                                $kategori = "Usulan Perubahan Draft Kontrak";
-                                                                break;
-                                                            
-                                                        }
-                                                    @endphp
-                                                        <option value="{{ $item }}" {{ $jenis_dokumen == $item ? 'selected' : '' }}>{{ $kategori }}</option>
+                                                    <option value="Input Resiko (Perolehan)" {{ $category_get == 'Input Resiko (Perolehan)' ? 'selected' : '' }}>Input Resiko (Perolehan)</option>
+                                                    <option value="Input Resiko (Pelaksanaan)" {{ $category_get == 'Input Resiko (Pelaksanaan)' ? 'selected' : '' }}>Input Resiko (Pelaksanaan)</option>
+                                                    <option value="Input Resiko (Pemeliharaan)" {{ $category_get == 'Input Resiko (Pemeliharaan)' ? 'selected' : '' }}>Input Resiko (Pemeliharaan)</option>
+                                                    {{-- @forelse ($category_document as $item)
                                                     @empty
                                                         <option value=""></option>
-                                                    @endforelse
+                                                    @endforelse --}}
                                                 </select>
                                             </div>
 
@@ -155,7 +110,7 @@
                                                 
                                             <script>
                                                 function resetFilter() {
-                                                    window.location.href = "/document";
+                                                    window.location.href = "/document-template";
                                                 }
                                             </script>
                                         </form>
@@ -167,12 +122,11 @@
                                 <!--end::Card header-->
 
                                 <div class="card-body pt-5">
-                                    <table class="table align-middle table-row-dashed fs-6 gy-2" id="claim-management">
+                                    <table class="table align-middle table-row-dashed fs-6 gy-2" id="document">
                                         <thead>
                                             <!--begin::Table row-->
                                             <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                                 <th class="min-w-auto">No.</th>
-                                                <th class="min-w-auto">Nama Proyek</th>
                                                 <th class="min-w-auto">@sortablelink('category','Jenis Dokumen')</th>
                                                 <th class="min-w-auto">Nama Dokumen</th>
                                                 <th class="min-w-auto">Tanggal Upload</th>
@@ -192,55 +146,19 @@
                                             @php
                                                 $no = 1;
                                             @endphp
-                                            @forelse ($documents as $item)
-
-                                            @php
-                                            $kategori = "";
-                                                switch ($item->category) {
-                                                    case 'aanwitjzing':
-                                                        $kategori = "Aanwitjzing";
-                                                        break;
-                                                    case 'resiko-perolehan':
-                                                        $kategori = "Input Risk (Perolehan)";
-                                                        break;
-                                                    case 'resiko-pelaksanaan':
-                                                        $kategori = "Input Risk (Pelaksanaan)";
-                                                        break;
-                                                    case 'pending-issue':
-                                                        $kategori = "Pending Issue (Perolehan)";
-                                                        break;
-                                                    case 'pending-issue-pelaksanaan':
-                                                        $kategori = "Pending Issue (Pelaksanaan)";
-                                                        break;
-                                                    case 'pending-issue-pemeliharaan':
-                                                        $kategori = "Pending Issue (Pemeliharaan)";
-                                                        break;
-                                                    case 'perubahan-kontrak':
-                                                        $kategori = "Perubahan Kontrak";
-                                                        break;
-                                                    case 'tinjauan-perolehan':
-                                                        $kategori = "Tinjauan Dokumen Kontrak (Perolehan)";
-                                                        break;
-                                                    case 'usulan-perubahan':
-                                                        $kategori = "Usulan Perubahan Draft Kontrak (Perolehan)";
-                                                        break;
-                                                    case 'pasal-kontraktual':
-                                                        $kategori = "Pasal Kontraktual";
-                                                        break;
-                                                    case 'rkap_bab12':
-                                                        $kategori = "Usulan Perubahan Draft Kontrak";
-                                                        break;
-                                                    
-                                                }
-                                            @endphp
+                                            @forelse ($documents_template as $item)
 
                                             <tr>
                                                 <td>{{ $no++ }}</td>
-                                                <td>{{ $item->contract->project->nama_proyek }}</td>
-                                                <td>{{ $kategori }}</td>
-                                                <td>{{ $item->nama_document }}</td>
+                                                <td>{{ $item->category }}</td>
+                                                <td>{{ $item->nama_dokumen }}</td>
                                                 <td>{{ $item->created_at }}</td>
-                                                <td><a target="_blank" class="btn btn-secondary btn-sm text-hover-primary" href="{{ asset('words/'.$item->id_document) }}">Download</a></td>
+                                                <td>
+                                                    <a target="_blank" class="btn btn-primary btn-sm text-white" href="{{ asset('template/'.$item->id_dokumen) }}">Download</a>&nbsp;
+                                                    @if (auth()->user()->check_admin_kontrak)
+                                                    <button type="button" class="btn btn-secondary btn-sm text-hover-danger" onclick="confirmDelete('{{ $item->id }}')">Delete</button>
+                                                    @endif
+                                                </td>
                                             </tr>
                                             @empty
                                                 <tr>
@@ -261,6 +179,72 @@
             
                     </div>
                     <!--end::Contacts App- Edit Contact-->
+                    <!--Begin::Modal = New Document Template-->
+                    <div class="modal fade" id="kt_modal_new" tabindex="-1" aria-hidden="true">
+                        <!--begin::Modal dialog-->
+                        <div class="modal-dialog modal-dialog-centered mw-500px">
+                            <!--begin::Modal content-->
+                            <div class="modal-content">
+                                <!--begin::Modal header-->
+                                <div class="modal-header">
+                                    <!--begin::Modal title-->
+                                    <h2>Add Dokumen Template</h2>
+                                    <!--end::Modal title-->
+                                    <!--begin::Close-->
+                                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                                        <span class="svg-icon svg-icon-1">
+                                            <i class="bi bi-x-lg"></i>
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </div>
+                                    <!--end::Close-->
+                                </div>
+                                <!--end::Modal header-->
+                                <!--begin::Modal body-->
+                                <div class="modal-body py-lg-6 px-lg-6">
+                
+                                    <!--begin::Input group Website-->
+                                    <form action="/document-template/new" method="POST"
+                                        enctype="multipart/form-data">
+                                        @csrf
+                                        <input type="hidden" class="modal-name" name="modal-name">
+                                        <div class="row">
+                                            <div class="col">
+                                                <label class="fs-6 fw-bold form-label">
+                                                    <span style="font-weight: normal">Jenis Dokumen</span>
+                                                </label>
+                                                <select name="category" id="kategori" class="form-select form-select-solid"
+                                                    data-control="select2" data-hide-search="true" data-placeholder="Pilih Jenis Dokumen" tabindex="-1" aria-hidden="true">
+                                                    <option value=""></option>
+                                                    <option value="Input Resiko (Perolehan)">Input Resiko (Perolehan)</option>
+                                                    <option value="Input Resiko (Pelaksanaan)">Input Resiko (Pelaksanaan)</option>
+                                                    <option value="Input Resiko (Pemeliharaan)">Input Resiko (Pemeliharaan)</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                
+                                        <br>
+                                        <div class="row">
+                                            <input type="file" name="file-document" id="file-document" class="form-control form-control-solid">
+                                        </div>
+                                        <!--end::Input group-->
+                                        <div class="modal-footer mt-4">
+                                            <button type="submit" id="save-perubahan-kontrak"
+                                                class="btn btn-sm btn-primary">Save</button>
+                                        </div>
+                                    </form>
+                
+                
+                                </div>
+                                <!--end::Modal body-->
+
+                            </div>
+                            <!--end::Modal content-->
+                        </div>
+                        <!--end::Modal dialog-->
+                    </div>
+                    <!--end::Modal - New Document Template-->
                 </div>
                 <!--end::Container-->
 
@@ -292,7 +276,7 @@
     <!--begin:: Dokumen File Upload Max Size-->
     <script>
         $(document).ready(function() {
-            $('#claim-management').DataTable( {
+            $('#document').DataTable( {
                 // dom: 'Bfrtip',
                 dom: '<"float-start"f><"#example"t>rti',
                 pageLength : 50,
@@ -300,5 +284,31 @@
             } );
         });
     </script>
+<script>
+    async function confirmDelete(id) {
+        Swal.fire({
+            title: 'Apakah anda yakin menghapus dokumen ini?',
+            text: "Aksi ini tidak dapat dikembalikan",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: '#008CB4',
+            cancelButtonColor: '#BABABA',
+            confirmButtonText: 'Ya'
+        }).then(async(result)=>{
+            if(result.isConfirmed){
+                const formData = new FormData();
+                formData.append("_token", "{{ csrf_token() }}");
+                const sendData = await fetch(`/document-template/delete/${id}`,{
+                    method: "POST",
+                    body: formData
+                }).then(res => res.json());
+            if(sendData.link){
+                window.location.reload();
+            }
+            }
+
+        })
+    }
+</script>
 
 @endsection

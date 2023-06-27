@@ -116,6 +116,15 @@ function moveFileTemp(UploadedFile $file, $file_name)
     return $result;
 }
 
+function moveFileDocumentTemp(UploadedFile $file, $file_name)
+{
+    $path = "template/";
+    $file_name =  $file_name . "." . $file->getClientOriginalExtension();
+    $result = $file->move(public_path($path), $file_name);
+
+    return $result;
+}
+
 function moneyFormatToNumber(string $value)
 {
     return (int) str_replace(",", "", $value);

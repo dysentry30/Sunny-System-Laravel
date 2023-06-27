@@ -1169,15 +1169,21 @@ class DashboardController extends Controller
                     $result = collect();
                     $counter = 0;
                     $potensial = 0;
+                    $potensial_value = 0;
                     $subs = 0;
+                    $subs_value = 0;
                     $revisi = 0;
+                    $revisi_value = 0;
                     $nego = 0;
+                    $nego_value = 0;
                     $setuju = 0;
+                    $setuju_value = 0;
                     $tolak = 0;
+                    $tolak_value = 0;
                     $dispute = 0;
+                    $dispute_value = 0;
                     $nilai = 0;
                     foreach($contracts_perubahan as $cp) {
-                        // dump($cp);
                         // $qualified_kontrak = collect();
                         if(!empty($cp->jenis_perubahan)){
                             // dd($result);
@@ -1191,18 +1197,25 @@ class DashboardController extends Controller
                                     $data["total_nilai"] = $data["total_nilai"] + $cp->biaya_pengajuan;
                                     if($cp->stage == 1){
                                         $data["potensial"] = $data["potensial"] + 1;
+                                        $data["potensial_value"] = $data["potensial_value"] + $cp->biaya_pengajuan;
                                     }elseif($cp->stage == 2){
                                         $data["subs"] = $data["subs"] + 1;
+                                        $data["subs_value"] = $data["subs_value"] + $cp->biaya_pengajuan;
                                     }elseif($cp->stage == 3){
                                         $data["revisi"] = $data["revisi"] + 1;
+                                        $data["revisi_value"] = $data["revisi_value"] + $cp->biaya_pengajuan;
                                     }elseif($cp->stage == 4){
                                         $data["nego"] = $data["nego"] + 1;
+                                        $data["nego_value"] = $data["nego_value"] + $cp->biaya_pengajuan;
                                     }elseif($cp->stage == 5){
                                         $data["setuju"] = $data["setuju"] + 1;
+                                        $data["setuju_value"] = $data["setuju_value"] + $cp->biaya_pengajuan;
                                     }elseif($cp->stage == 6 && $cp->is_dispute == false){
                                         $data["tolak"] = $data["tolak"] + 1;
+                                        $data["tolak_value"] = $data["tolak_value"] + $cp->biaya_pengajuan;
                                     }else{
                                         $data["dispute"] = $data["dispute"] + 1;
+                                        $data["dispute_value"] = $data["dispute_value"] + $cp->biaya_pengajuan;
                                     }
                                     // dump($data);
                                     $result[$p] = $data ;
@@ -1210,20 +1223,27 @@ class DashboardController extends Controller
                                 } else {
                                     if($cp->stage == 1){
                                         $potensial += 1;
+                                        $potensial_value += $cp->biaya_pengajuan;
                                     }elseif($cp->stage == 2){
                                         $subs += 1;
+                                        $subs_value += $cp->biaya_pengajuan;
                                     }elseif($cp->stage == 3){
                                         $revisi += 1;
+                                        $revisi_value += $cp->biaya_pengajuan;
                                     }elseif($cp->stage == 4){
                                         $nego += 1;
+                                        $nego_value += $cp->biaya_pengajuan;
                                     }elseif($cp->stage == 5){
                                         $setuju += 1;
+                                        $setuju_value += $cp->biaya_pengajuan;
                                     }elseif($cp->stage == 6 && $cp->is_dispute == false){
                                         $tolak += 1;
+                                        $tolak_value += $cp->biaya_pengajuan;
                                     }else{
                                         $dispute += 1;
+                                        $dispute_value += $cp->biaya_pengajuan;
                                     }
-                                    $result[$p] = ["jenis_perubahan" => $p, "total_item" => ++$counter, "total_nilai" => $nilai += $cp->biaya_pengajuan, "potensial"=>$potensial, "subs" => $subs, "revisi" => $revisi, "nego" => $nego, "setuju" => $setuju, "tolak" => $tolak, "dispute" => $dispute];
+                                    $result[$p] = ["jenis_perubahan" => $p, "total_item" => ++$counter, "total_nilai" => $nilai += $cp->biaya_pengajuan, "potensial"=>$potensial, "subs" => $subs, "revisi" => $revisi, "nego" => $nego, "setuju" => $setuju, "tolak" => $tolak, "dispute" => $dispute, "potensial_value"=>$potensial_value, "subs_value" => $subs_value, "revisi_value" => $revisi_value, "nego_value" => $nego_value, "setuju_value" => $setuju_value, "tolak_value" => $tolak_value, "dispute_value" => $dispute_value];
                                 }
                             } else {
                                 if(!empty($result[$p])) {
@@ -1233,7 +1253,7 @@ class DashboardController extends Controller
                                     $data["total_nilai"] = $data["total_nilai"];
                                     // dump($data);
                                 } else {
-                                    $result[$p] = ["jenis_perubahan" => $p, "total_item" => 0, "total_nilai" => 0, "potensial" => 0, "subs" => 0, "revisi" => 0, "nego" => 0, "setuju" => 0, "tolak" => 0, "dispute" => 0];
+                                    $result[$p] = ["jenis_perubahan" => $p, "total_item" => 0, "total_nilai" => 0, "potensial" => 0, "subs" => 0, "revisi" => 0, "nego" => 0, "setuju" => 0, "tolak" => 0, "dispute" => 0, "potensial_value" => 0, "subs_value" => 0, "revisi_value" => 0, "nego_value" => 0, "setuju_value" => 0, "tolak_value" => 0, "dispute_value" => 0];
                                 }
                             }
                             // foreach($cp->PerubahanKontrak as $pk) {
@@ -1253,7 +1273,7 @@ class DashboardController extends Controller
                             // }
                             // dump($result);
                         }else{
-                            $result[$p] = ["jenis_perubahan" => $p, "total_item" => 0, "total_nilai" => 0, "potensial" => 0, "subs" => 0, "revisi" => 0, "nego" => 0, "setuju" => 0, "tolak" => 0, "dispute" => 0];
+                            $result[$p] = ["jenis_perubahan" => $p, "total_item" => 0, "total_nilai" => 0, "potensial" => 0, "subs" => 0, "revisi" => 0, "nego" => 0, "setuju" => 0, "tolak" => 0, "dispute" => 0, "potensial_value" => 0, "subs_value" => 0, "revisi_value" => 0, "nego_value" => 0, "setuju_value" => 0, "tolak_value" => 0, "dispute_value" => 0];
                         }
                     }
                     return $result;
@@ -1362,6 +1382,74 @@ class DashboardController extends Controller
                 return [$key . " <b>" . Percentage::fromFractionAndTotal($p->count(), $change_status->count())->asString() . "</b>", $p->count()];
             })->values();
 
+            
+            $potensial_total_item = $contracts_perubahan->filter(function($cp){
+                return $cp->stage == 1;
+            })->groupBy('jenis_perubahan')->flatten()->count();
+
+            $submission_total_item = $contracts_perubahan->filter(function($cp){
+                return $cp->stage == 2;
+            })->groupBy('jenis_perubahan')->flatten()->count();
+
+            $revision_total_item = $contracts_perubahan->filter(function($cp){
+                return $cp->stage == 3;
+            })->groupBy('jenis_perubahan')->flatten()->count();
+
+            $negotiation_total_item = $contracts_perubahan->filter(function($cp){
+                return $cp->stage == 4;
+            })->groupBy('jenis_perubahan')->flatten()->count();
+
+            $approve_total_item = $contracts_perubahan->filter(function($cp){
+                return $cp->stage == 5;
+            })->groupBy('jenis_perubahan')->flatten()->count();
+
+            $dispute_total_item = $contracts_perubahan->filter(function($cp){
+                return $cp->stage == 6 && $cp->is_dispute == true;
+            })->groupBy('jenis_perubahan')->flatten()->count();
+
+            $reject_total_item = $contracts_perubahan->filter(function($cp){
+                return $cp->stage == 6;
+            })->groupBy('jenis_perubahan')->flatten()->count();
+
+
+            
+            $potensial_total_value = $contracts_perubahan->filter(function($cp){
+                return $cp->stage == 1;
+            })->groupBy('jenis_perubahan')->flatten()->sum('biaya_pengajuan');
+
+            $submission_total_value = $contracts_perubahan->filter(function($cp){
+                return $cp->stage == 2;
+            })->groupBy('jenis_perubahan')->flatten()->sum('biaya_pengajuan');
+            
+            $revision_total_value = $contracts_perubahan->filter(function($cp){
+                return $cp->stage == 3;
+            })->groupBy('jenis_perubahan')->flatten()->sum('biaya_pengajuan');
+            
+            $negotiation_total_value = $contracts_perubahan->filter(function($cp){
+                return $cp->stage == 4;
+            })->groupBy('jenis_perubahan')->flatten()->sum('biaya_pengajuan');
+            
+            $approve_total_value = $contracts_perubahan->filter(function($cp){
+                return $cp->stage == 5;
+            })->groupBy('jenis_perubahan')->flatten()->sum('biaya_pengajuan');
+            
+            $reject_total_value = $contracts_perubahan->filter(function($cp){
+                return $cp->stage == 6;
+            })->groupBy('jenis_perubahan')->flatten()->sum('biaya_pengajuan');
+            
+            $dispute_total_value = $contracts_perubahan->filter(function($cp){
+                return $cp->stage == 6 && $cp->is_dispute == true;
+            })->groupBy('jenis_perubahan')->flatten()->sum('biaya_pengajuan');
+            
+            // dd($revision_total_value);
+
+            // dd($process_post_claim);
+            
+
+
+            // $total_item_perubahan = ["potensial" => $potensial_total_item, "subs" => $submission_total_item, "revisi" => $revision_total_item, "nego" => $negotiation_total_item, "setuju" => $approve_total_item, "tolak" => $reject_total_item, "dispute" => $dispute_total_item];
+
+            // dd($total_item_perubahan);
             $tanggal_awal = new DateTime($proyek->tanggal_mulai_terkontrak);
             $tanggal_akhir = new DateTime($proyek->tanggal_akhir_terkontrak);
             $date_now = new DateTime();
@@ -1379,9 +1467,12 @@ class DashboardController extends Controller
             $total_sub_value = $kategori_kontrak->where("stage", ">=", 2)->sum("biaya_pengajuan");
             $total_approve_value = $kategori_kontrak->where("stage", "=", 5)->sum("nilai_disetujui");
 
-            $percen_pre_claim = Percentage::fromFractionAndTotal($total_sub, $total_potensial)->asString();
-            $percen_during_claim = Percentage::fromFractionAndTotal($total_approve_reject, $total_sub)->asString();
-            $percen_post_claim = Percentage::fromFractionAndTotal($total_approve_value, $total_sub_value)->asString();
+            // $percen_pre_claim = Percentage::fromFractionAndTotal($total_sub, $total_potensial)->asString();
+            // $percen_during_claim = Percentage::fromFractionAndTotal($total_approve_reject, $total_sub)->asString();
+            // $percen_post_claim = Percentage::fromFractionAndTotal($total_approve_value, $total_sub_value)->asString();
+            $percen_pre_claim = Percentage::fromFractionAndTotal($submission_total_value, $potensial_total_value)->asString();
+            $percen_during_claim = Percentage::fromFractionAndTotal($approve_total_value, $potensial_total_value)->asString();
+            $percen_post_claim = Percentage::fromFractionAndTotal($approve_total_value, $submission_total_value)->asString();
 
             $proyek_progress =$proyek->ProyekProgress->sortByDesc("created_at")->first();
             if($proyek_progress){
@@ -1435,7 +1526,7 @@ class DashboardController extends Controller
             
             
             //Begin::Janminan
-            $kategori_jaminan = $proyek->jenis_proyek == "J" ? collect(["Advance Payment", "Performance", "Warranty", "Partner"]) : collect(["Advance Payment", "Performance", "Warranty"]);
+            $kategori_jaminan = collect(["Advance Payment", "Performance", "Warranty", "Partner"]);
             $contract_jaminan = $proyek->ContractManagements->Jaminan->groupBy("kategori_jaminan")->sortByDesc("created_at");
             // dd($contract_asuransi);
             if(!empty($contract_jaminan->toArray())){
@@ -1505,7 +1596,55 @@ class DashboardController extends Controller
             // $bond = collect($bond);
             // dd($proyek->ContractManagements);
 
-            return view("/DashboardCCM/Dashboard_pelaksanaan_proyek", compact(["bulan_get", "change_status_out", "unit_kerjas_all", "tahun_get", "tahun", "jumlahKontrak", "totalKontrak", "totalPersen", "detail_perubahan_kontrak", "proyek_get", "unit_kerja_get", "dop_get", "proyek", "proyeks", "dops", "unit_kerjas", "changes_overview", "total_pengajuan", "persentasePerubahan", "contract_pelaksanaan_new", "month", "time_status", "percen_pre_claim", "percen_during_claim", "percen_post_claim", "unit_kerja_select", "dop_select", "percen_progress_status", "cat_kontrak", "persentasePerubahan", "perubahan_total", "asuransi_proyek", "jaminan_proyek"]));
+            return view("/DashboardCCM/Dashboard_pelaksanaan_proyek", compact([
+                "bulan_get",
+                "change_status_out",
+                "unit_kerjas_all",
+                "tahun_get",
+                "tahun",
+                "jumlahKontrak",
+                "totalKontrak",
+                "totalPersen",
+                "detail_perubahan_kontrak",
+                "proyek_get",
+                "unit_kerja_get",
+                "dop_get",
+                "proyek",
+                "proyeks",
+                "dops",
+                "unit_kerjas",
+                "changes_overview",
+                "total_pengajuan",
+                "persentasePerubahan",
+                "contract_pelaksanaan_new",
+                "month",
+                "time_status",
+                "percen_pre_claim",
+                "percen_during_claim",
+                "percen_post_claim",
+                "unit_kerja_select",
+                "dop_select",
+                "percen_progress_status",
+                "cat_kontrak",
+                "persentasePerubahan",
+                "perubahan_total",
+                "asuransi_proyek",
+                "jaminan_proyek",
+                "potensial_total_item",
+                "submission_total_item",
+                "revision_total_item",
+                "negotiation_total_item",
+                "approve_total_item",
+                "dispute_total_item",
+                "reject_total_item",
+                "potensial_total_value",
+                "submission_total_value",
+                "revision_total_value",
+                "negotiation_total_value",
+                "approve_total_value",
+                "dispute_total_value",
+                "reject_total_value"
+            ]));
         }
         // dd($proyeks);
         // $claims = PerubahanKontrak::all()->filter(function($cl) use($proyeks) {
@@ -2085,15 +2224,21 @@ class DashboardController extends Controller
                     $result = collect();
                     $counter = 0;
                     $potensial = 0;
+                    $potensial_value = 0;
                     $subs = 0;
+                    $subs_value = 0;
                     $revisi = 0;
+                    $revisi_value = 0;
                     $nego = 0;
+                    $nego_value = 0;
                     $setuju = 0;
+                    $setuju_value = 0;
                     $tolak = 0;
+                    $tolak_value = 0;
                     $dispute = 0;
+                    $dispute_value = 0;
                     $nilai = 0;
                     foreach($contracts_perubahan as $cp) {
-                        // dump($cp);
                         // $qualified_kontrak = collect();
                         if(!empty($cp->jenis_perubahan)){
                             // dd($result);
@@ -2107,18 +2252,25 @@ class DashboardController extends Controller
                                     $data["total_nilai"] = $data["total_nilai"] + $cp->biaya_pengajuan;
                                     if($cp->stage == 1){
                                         $data["potensial"] = $data["potensial"] + 1;
+                                        $data["potensial_value"] = $data["potensial_value"] + $cp->biaya_pengajuan;
                                     }elseif($cp->stage == 2){
                                         $data["subs"] = $data["subs"] + 1;
+                                        $data["subs_value"] = $data["subs_value"] + $cp->biaya_pengajuan;
                                     }elseif($cp->stage == 3){
                                         $data["revisi"] = $data["revisi"] + 1;
+                                        $data["revisi_value"] = $data["revisi_value"] + $cp->biaya_pengajuan;
                                     }elseif($cp->stage == 4){
                                         $data["nego"] = $data["nego"] + 1;
+                                        $data["nego_value"] = $data["nego_value"] + $cp->biaya_pengajuan;
                                     }elseif($cp->stage == 5){
                                         $data["setuju"] = $data["setuju"] + 1;
+                                        $data["setuju_value"] = $data["setuju_value"] + $cp->biaya_pengajuan;
                                     }elseif($cp->stage == 6 && $cp->is_dispute == false){
                                         $data["tolak"] = $data["tolak"] + 1;
+                                        $data["tolak_value"] = $data["tolak_value"] + $cp->biaya_pengajuan;
                                     }else{
                                         $data["dispute"] = $data["dispute"] + 1;
+                                        $data["dispute_value"] = $data["dispute_value"] + $cp->biaya_pengajuan;
                                     }
                                     // dump($data);
                                     $result[$p] = $data ;
@@ -2126,20 +2278,27 @@ class DashboardController extends Controller
                                 } else {
                                     if($cp->stage == 1){
                                         $potensial += 1;
+                                        $potensial_value += $cp->biaya_pengajuan;
                                     }elseif($cp->stage == 2){
                                         $subs += 1;
+                                        $subs_value += $cp->biaya_pengajuan;
                                     }elseif($cp->stage == 3){
                                         $revisi += 1;
+                                        $revisi_value += $cp->biaya_pengajuan;
                                     }elseif($cp->stage == 4){
                                         $nego += 1;
+                                        $nego_value += $cp->biaya_pengajuan;
                                     }elseif($cp->stage == 5){
                                         $setuju += 1;
+                                        $setuju_value += $cp->biaya_pengajuan;
                                     }elseif($cp->stage == 6 && $cp->is_dispute == false){
                                         $tolak += 1;
+                                        $tolak_value += $cp->biaya_pengajuan;
                                     }else{
                                         $dispute += 1;
+                                        $dispute_value += $cp->biaya_pengajuan;
                                     }
-                                    $result[$p] = ["jenis_perubahan" => $p, "total_item" => ++$counter, "total_nilai" => $nilai += $cp->biaya_pengajuan, "potensial"=>$potensial, "subs" => $subs, "revisi" => $revisi, "nego" => $nego, "setuju" => $setuju, "tolak" => $tolak, "dispute" => $dispute];
+                                    $result[$p] = ["jenis_perubahan" => $p, "total_item" => ++$counter, "total_nilai" => $nilai += $cp->biaya_pengajuan, "potensial"=>$potensial, "subs" => $subs, "revisi" => $revisi, "nego" => $nego, "setuju" => $setuju, "tolak" => $tolak, "dispute" => $dispute, "potensial_value"=>$potensial_value, "subs_value" => $subs_value, "revisi_value" => $revisi_value, "nego_value" => $nego_value, "setuju_value" => $setuju_value, "tolak_value" => $tolak_value, "dispute_value" => $dispute_value];
                                 }
                             } else {
                                 if(!empty($result[$p])) {
@@ -2149,7 +2308,7 @@ class DashboardController extends Controller
                                     $data["total_nilai"] = $data["total_nilai"];
                                     // dump($data);
                                 } else {
-                                    $result[$p] = ["jenis_perubahan" => $p, "total_item" => 0, "total_nilai" => 0, "potensial" => 0, "subs" => 0, "revisi" => 0, "nego" => 0, "setuju" => 0, "tolak" => 0, "dispute" => 0];
+                                    $result[$p] = ["jenis_perubahan" => $p, "total_item" => 0, "total_nilai" => 0, "potensial" => 0, "subs" => 0, "revisi" => 0, "nego" => 0, "setuju" => 0, "tolak" => 0, "dispute" => 0, "potensial_value" => 0, "subs_value" => 0, "revisi_value" => 0, "nego_value" => 0, "setuju_value" => 0, "tolak_value" => 0, "dispute_value" => 0];
                                 }
                             }
                             // foreach($cp->PerubahanKontrak as $pk) {
@@ -2169,7 +2328,7 @@ class DashboardController extends Controller
                             // }
                             // dump($result);
                         }else{
-                            $result[$p] = ["jenis_perubahan" => $p, "total_item" => 0, "total_nilai" => 0, "potensial" => 0, "subs" => 0, "revisi" => 0, "nego" => 0, "setuju" => 0, "tolak" => 0, "dispute" => 0];
+                            $result[$p] = ["jenis_perubahan" => $p, "total_item" => 0, "total_nilai" => 0, "potensial" => 0, "subs" => 0, "revisi" => 0, "nego" => 0, "setuju" => 0, "tolak" => 0, "dispute" => 0, "potensial_value" => 0, "subs_value" => 0, "revisi_value" => 0, "nego_value" => 0, "setuju_value" => 0, "tolak_value" => 0, "dispute_value" => 0];
                         }
                     }
                     return $result;
@@ -2212,7 +2371,7 @@ class DashboardController extends Controller
                     //         }
                     //     }
                     // }
-                    $result[$item] = ["jenis_perubahan" => $item, "total_item" => 0, "total_nilai" => 0, "potensial" => 0, "subs" => 0, "revisi" => 0, "nego" => 0, "setuju" => 0, "tolak" => 0, "dispute" => 0];
+                    $result[$item] = ["jenis_perubahan" => $item, "total_item" => 0, "total_nilai" => 0];
                     return $result;
                 });
                 $cat_kontrak = $perubahan->map(function($p, $key) use($perubahan, $totalKontrakFull) {
@@ -2320,7 +2479,7 @@ class DashboardController extends Controller
             
             
             //Begin::Janminan
-            $kategori_jaminan = $proyek->jenis_proyek == "J" ? collect(["Advance Payment", "Performance", "Warranty", "Partner"]) : collect(["Advance Payment", "Performance", "Warranty"]);
+            $kategori_jaminan = collect(["Advance Payment", "Performance", "Warranty", "Partner"]);
             $contract_jaminan = $proyek->ContractManagements->Jaminan->groupBy("kategori_jaminan")->sortByDesc("created_at");
             // dd($contract_asuransi);
 
@@ -2366,6 +2525,67 @@ class DashboardController extends Controller
                 return [$key . " <b>" . Percentage::fromFractionAndTotal($p->count(), $change_status->count())->asString() . "</b>", $p->count()];
             })->values();
 
+            
+            $potensial_total_item = $contracts_perubahan->filter(function($cp){
+                return $cp->stage == 1;
+            })->groupBy('jenis_perubahan')->flatten()->count();
+
+            $submission_total_item = $contracts_perubahan->filter(function($cp){
+                return $cp->stage == 2;
+            })->groupBy('jenis_perubahan')->flatten()->count();
+
+            $revision_total_item = $contracts_perubahan->filter(function($cp){
+                return $cp->stage == 3;
+            })->groupBy('jenis_perubahan')->flatten()->count();
+
+            $negotiation_total_item = $contracts_perubahan->filter(function($cp){
+                return $cp->stage == 4;
+            })->groupBy('jenis_perubahan')->flatten()->count();
+
+            $approve_total_item = $contracts_perubahan->filter(function($cp){
+                return $cp->stage == 5;
+            })->groupBy('jenis_perubahan')->flatten()->count();
+
+            $dispute_total_item = $contracts_perubahan->filter(function($cp){
+                return $cp->stage == 6 && $cp->is_dispute == true;
+            })->groupBy('jenis_perubahan')->flatten()->count();
+
+            $reject_total_item = $contracts_perubahan->filter(function($cp){
+                return $cp->stage == 6;
+            })->groupBy('jenis_perubahan')->flatten()->count();
+
+
+            
+            $potensial_total_value = $contracts_perubahan->filter(function($cp){
+                return $cp->stage == 1;
+            })->groupBy('jenis_perubahan')->flatten()->sum('biaya_pengajuan');
+
+            $submission_total_value = $contracts_perubahan->filter(function($cp){
+                return $cp->stage == 2;
+            })->groupBy('jenis_perubahan')->flatten()->sum('biaya_pengajuan');
+            
+            $revision_total_value = $contracts_perubahan->filter(function($cp){
+                return $cp->stage == 3;
+            })->groupBy('jenis_perubahan')->flatten()->sum('biaya_pengajuan');
+            
+            $negotiation_total_value = $contracts_perubahan->filter(function($cp){
+                return $cp->stage == 4;
+            })->groupBy('jenis_perubahan')->flatten()->sum('biaya_pengajuan');
+            
+            $approve_total_value = $contracts_perubahan->filter(function($cp){
+                return $cp->stage == 5;
+            })->groupBy('jenis_perubahan')->flatten()->sum('biaya_pengajuan');
+            
+            $reject_total_value = $contracts_perubahan->filter(function($cp){
+                return $cp->stage == 6;
+            })->groupBy('jenis_perubahan')->flatten()->sum('biaya_pengajuan');
+            
+            $dispute_total_value = $contracts_perubahan->filter(function($cp){
+                return $cp->stage == 6 && $cp->is_dispute == true;
+            })->groupBy('jenis_perubahan')->flatten()->sum('biaya_pengajuan');
+
+
+
             $tanggal_awal = new DateTime($proyek->tanggal_mulai_terkontrak);
             $tanggal_akhir = new DateTime($proyek->tanggal_akhir_terkontrak);
             $date_now = new DateTime();
@@ -2383,9 +2603,13 @@ class DashboardController extends Controller
             $total_sub_value = $kategori_kontrak->where("stage", ">=", 2)->sum("biaya_pengajuan");
             $total_approve_value = $kategori_kontrak->where("stage", "=", 5)->sum("nilai_disetujui");
 
-            $percen_pre_claim = Percentage::fromFractionAndTotal($total_sub, $total_potensial)->asString();
-            $percen_during_claim = Percentage::fromFractionAndTotal($total_approve_reject, $total_sub)->asString();
-            $percen_post_claim = Percentage::fromFractionAndTotal($total_approve_value, $total_sub_value)->asString();
+            // $percen_pre_claim = Percentage::fromFractionAndTotal($total_sub, $total_potensial)->asString();
+            // $percen_during_claim = Percentage::fromFractionAndTotal($total_approve_reject, $total_sub)->asString();
+            // $percen_post_claim = Percentage::fromFractionAndTotal($total_approve_value, $total_sub_value)->asString();
+
+            $percen_pre_claim = Percentage::fromFractionAndTotal($submission_total_value, $potensial_total_value)->asString();
+            $percen_during_claim = Percentage::fromFractionAndTotal($approve_total_value, $potensial_total_value)->asString();
+            $percen_post_claim = Percentage::fromFractionAndTotal($approve_total_value, $submission_total_value)->asString();
             
             $proyek_progress =$proyek->ProyekProgress->sortByDesc("created_at")->first();
             if($proyek_progress){
@@ -2423,7 +2647,55 @@ class DashboardController extends Controller
             // ];
             // $bond = collect($bond);
 
-            return view("/DashboardCCM/Dashboard_pemeliharaan_proyek", compact(["bulan_get", "change_status_out", "unit_kerjas_all", "tahun_get", "tahun", "jumlahKontrak", "totalKontrak", "totalPersen", "detail_perubahan_kontrak", "proyek_get", "unit_kerja_get", "dop_get", "proyek", "proyeks", "dops", "unit_kerjas", "changes_overview", "total_pengajuan", "persentasePerubahan", "contracts_pemeliharaan", "month", "time_status", "percen_pre_claim", "percen_during_claim", "percen_post_claim", "unit_kerja_select", "dop_select", "percen_progress_status", "cat_kontrak", "persentasePerubahan", "perubahan_total", "asuransi_proyek", "jaminan_proyek"]));
+            return view("/DashboardCCM/Dashboard_pemeliharaan_proyek", compact([
+                "bulan_get",
+                "change_status_out",
+                "unit_kerjas_all",
+                "tahun_get",
+                "tahun",
+                "jumlahKontrak",
+                "totalKontrak",
+                "totalPersen",
+                "detail_perubahan_kontrak",
+                "proyek_get",
+                "unit_kerja_get",
+                "dop_get",
+                "proyek",
+                "proyeks",
+                "dops",
+                "unit_kerjas",
+                "changes_overview",
+                "total_pengajuan",
+                "persentasePerubahan",
+                "contracts_pemeliharaan",
+                "month",
+                "time_status",
+                "percen_pre_claim",
+                "percen_during_claim",
+                "percen_post_claim",
+                "unit_kerja_select",
+                "dop_select",
+                "percen_progress_status",
+                "cat_kontrak",
+                "persentasePerubahan",
+                "perubahan_total",
+                "asuransi_proyek",
+                "jaminan_proyek",
+                "potensial_total_item",
+                "submission_total_item",
+                "revision_total_item",
+                "negotiation_total_item",
+                "approve_total_item",
+                "dispute_total_item",
+                "reject_total_item",
+                "potensial_total_value",
+                "submission_total_value",
+                "revision_total_value",
+                "negotiation_total_value",
+                "approve_total_value",
+                "dispute_total_value",
+                "reject_total_value"
+            ]));
         }
         // dd($proyeks);
         // $claims = PerubahanKontrak::all()->filter(function($cl) use($proyeks) {

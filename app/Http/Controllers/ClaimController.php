@@ -287,7 +287,7 @@ class ClaimController extends Controller
         // dd($filterStatus);
         // $filterBulan = $data["bulan-perubahan"];
         $data = $request->all();
-        $link = $data["link"] ?? "kt_user_view_VO";
+        $link = $data["link"] ?? "kt_user_view_claim_VO";
         // dd($link);
 
         // $monthNow = new DateTime("M");

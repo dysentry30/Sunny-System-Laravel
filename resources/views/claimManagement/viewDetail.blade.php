@@ -167,7 +167,7 @@
                                                     
                                                 <script>
                                                     function resetFilter() {
-                                                        window.location.href = "/contract-management";
+                                                        window.location.href = "/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $contracts->id_contract }}";
                                                     }
                                                 </script>
                                                 <!--end:: RESET-->

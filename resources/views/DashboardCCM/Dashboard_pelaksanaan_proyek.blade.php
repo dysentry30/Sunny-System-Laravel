@@ -885,6 +885,13 @@
                         <!--end::Card Diagram-->
 
                         <br>
+                        <div class="row mb-4 mx-3">
+                            <!--begin::Title body-->
+                            <div style="border-radius: 0px" class="card-body bg-success">
+                                <h2 class="m-0 text-center">CHANGE DESCRIPTION</h2>
+                            </div>
+                            <!--end::Title body-->
+                        </div>
 
                         <!--begin::Tabel Header-->
                         <div class="row mb-4 mx-3">
@@ -905,7 +912,7 @@
                             <div class="col">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-success">
-                                    <h2 class="m-0 text-center">SUBS</h2>
+                                    <h2 class="m-0 text-center">SUBSMISSION</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
@@ -1030,6 +1037,335 @@
                             </div>
                         </div>
                         @endforeach
+                        <!--TOTAL-->
+                        <div class="row mb-4 mx-3">
+                            <div class="col-2">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-success">
+                                    <h2 class="m-0 text-center">TOTAL</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col">
+                                <!--begin::Title body-->
+                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                    <!--begin::Title body-->
+                                    <div style="border-radius: 0px" class="card-body bg-secondary">
+                                        <h2 class="m-0 text-center">{{ $potensial_total_item ?? 0 }}</h2>
+                                    </div>
+                                    <!--end::Title body-->
+                                </a>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col">
+                                <!--begin::Title body-->
+                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                    <!--begin::Title body-->
+                                    <div style="border-radius: 0px" class="card-body bg-secondary">
+                                        <h2 class="m-0 text-center">{{ $submission_total_item ?? 0 }}</h2>
+                                    </div>
+                                    <!--end::Title body-->
+                                </a>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col-1">
+                                <!--begin::Title body-->
+                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                    <!--begin::Title body-->
+                                    <div style="border-radius: 0px" class="card-body bg-secondary">
+                                        <h2 class="m-0 text-center">{{ $revision_total_item ?? 0 }}</h2>
+                                    </div>
+                                    <!--end::Title body-->
+                                </a>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col-1">
+                                <!--begin::Title body-->
+                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                    <!--begin::Title body-->
+                                    <div style="border-radius: 0px" class="card-body bg-secondary">
+                                        <h2 class="m-0 text-center">{{ $negotiation_total_item ?? 0 }}</h2>
+                                    </div>
+                                    <!--end::Title body-->
+                                </a>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col-1">
+                                <!--begin::Title body-->
+                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                    <!--begin::Title body-->
+                                    <div style="border-radius: 0px" class="card-body bg-secondary">
+                                        <h2 class="m-0 text-center">{{ $approve_total_item ?? 0 }}</h2>
+                                    </div>
+                                    <!--end::Title body-->
+                                </a>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col-1">
+                                <!--begin::Title body-->
+                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                    <!--begin::Title body-->
+                                    <div style="border-radius: 0px" class="card-body bg-secondary">
+                                        <h2 class="m-0 text-center">{{ $reject_total_item ?? 0 }}</h2>
+                                    </div>
+                                    <!--end::Title body-->
+                                </a>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col">
+                                <!--begin::Title body-->
+                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                    <!--begin::Title body-->
+                                    <div style="border-radius: 0px" class="card-body bg-secondary">
+                                        <h2 class="m-0 text-center">{{ $dispute_total_item ?? 0 }}</h2>
+                                    </div>
+                                    <!--end::Title body-->
+                                </a>
+                                <!--end::Title body-->
+                            </div>
+                        </div>
+                        <!--end::Table Body-->
+
+                        <br>
+                        <div class="row mb-4 mx-3">
+                            <!--begin::Title body-->
+                            <div style="border-radius: 0px" class="card-body bg-success">
+                                <h2 class="m-0 text-center">CHANGE VALUE ( DALAM JUTAAN )</h2>
+                            </div>
+                            <!--end::Title body-->
+                        </div>
+
+                        <!--begin::Tabel Header-->
+                        <div class="row mb-4 mx-3">
+                            <div class="col-2">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-success">
+                                    <h2 class="m-0 text-center">URAIAN</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-success">
+                                    <h2 class="m-0 text-center">POTENTIAL</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-success">
+                                    <h2 class="m-0 text-center">SUBSMISSION</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col-4">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="py-2 bg-success">
+                                    <h4 class="m-0 text-center">SUBMISIONS STATUS</h4>
+                                    <div class="row">
+                                        <div class="col">
+                                            <h6 class="m-0 text-center">REVISION</h6>
+                                        </div>
+                                        <div class="col">
+                                            <h6 class="m-0 text-center">NEGOITATION</h6>
+                                        </div>
+                                        <div class="col">
+                                            <h6 class="m-0 text-center">APPROVED</h6>
+                                        </div>
+                                        <div class="col">
+                                            <h6 class="m-0 text-center">REJECTED</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-success">
+                                    <h2 class="m-0 text-center">DISPUTE</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                        </div>
+                        <!--end::Tabel Header-->
+                        {{-- @dd($proyek) --}}
+                        <!--begin::Table Body-->
+                        @foreach ($cat_kontrak as $table)
+                        {{-- @dd($table) --}}
+                        <div class="row mb-4 mx-3">
+                            <div class="col-2">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-success">
+                                    <h2 class="m-0 text-center">{{ $table["jenis_perubahan"] }}</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col">
+                                <!--begin::Title body-->
+                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                    <!--begin::Title body-->
+                                    <div style="border-radius: 0px" class="card-body bg-secondary">
+                                        <h2 class="m-0 text-center">{{ !empty($table["potensial_value"]) ? number_format($table["potensial_value"]/1000000, 0, ".", ".") : 0 }}</h2>
+                                    </div>
+                                    <!--end::Title body-->
+                                </a>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col">
+                                <!--begin::Title body-->
+                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                    <!--begin::Title body-->
+                                    <div style="border-radius: 0px" class="card-body bg-secondary">
+                                        <h2 class="m-0 text-center">{{ !empty($table["subs_value"]) ? number_format($table["subs_value"]/1000000, 0, ".", ".") : 0 }}</h2>
+                                    </div>
+                                    <!--end::Title body-->
+                                </a>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col-1">
+                                <!--begin::Title body-->
+                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                    <!--begin::Title body-->
+                                    <div style="border-radius: 0px" class="card-body bg-secondary">
+                                        <h2 class="m-0 text-center">{{ !empty($table["revisi_value"]) ? number_format($table["revisi_value"]/1000000, 0, ".", ".") : 0 }}</h2>
+                                    </div>
+                                    <!--end::Title body-->
+                                </a>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col-1">
+                                <!--begin::Title body-->
+                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                    <!--begin::Title body-->
+                                    <div style="border-radius: 0px" class="card-body bg-secondary">
+                                        <h2 class="m-0 text-center">{{ !empty($table["nego_value"]) ? number_format($table["nego_value"]/1000000, 0, ".", ".") : 0 }}</h2>
+                                    </div>
+                                    <!--end::Title body-->
+                                </a>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col-1">
+                                <!--begin::Title body-->
+                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                    <!--begin::Title body-->
+                                    <div style="border-radius: 0px" class="card-body bg-secondary">
+                                        <h2 class="m-0 text-center">{{ !empty($table["setuju_value"]) ? number_format($table["setuju_value"]/1000000, 0, ".", ".") : 0 }}</h2>
+                                    </div>
+                                    <!--end::Title body-->
+                                </a>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col-1">
+                                <!--begin::Title body-->
+                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                    <!--begin::Title body-->
+                                    <div style="border-radius: 0px" class="card-body bg-secondary">
+                                        <h2 class="m-0 text-center">{{ !empty($table["tolak_value"]) ? number_format($table["tolak_value"]/1000000, 0, ".", ".") : 0 }}</h2>
+                                    </div>
+                                    <!--end::Title body-->
+                                </a>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col">
+                                <!--begin::Title body-->
+                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                    <!--begin::Title body-->
+                                    <div style="border-radius: 0px" class="card-body bg-secondary">
+                                        <h2 class="m-0 text-center">{{ !empty($table["tolak_value"]) ? number_format($table["dispute_value"]/1000000, 0, ".", ".") : 0 }}</h2>
+                                    </div>
+                                    <!--end::Title body-->
+                                </a>
+                                <!--end::Title body-->
+                            </div>
+                        </div>
+                        @endforeach
+                        <!--TOTAL-->
+                        <div class="row mb-4 mx-3">
+                            <div class="col-2">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-success">
+                                    <h2 class="m-0 text-center">TOTAL</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col">
+                                <!--begin::Title body-->
+                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                    <!--begin::Title body-->
+                                    <div style="border-radius: 0px" class="card-body bg-secondary">
+                                        <h2 class="m-0 text-center">{{ number_format($potensial_total_value/1000000, 0, ',', '.') ?? 0 }}</h2>
+                                    </div>
+                                    <!--end::Title body-->
+                                </a>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col">
+                                <!--begin::Title body-->
+                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                    <!--begin::Title body-->
+                                    <div style="border-radius: 0px" class="card-body bg-secondary">
+                                        <h2 class="m-0 text-center">{{ number_format($submission_total_value/1000000, 0, ',', '.') ?? 0 }}</h2>
+                                    </div>
+                                    <!--end::Title body-->
+                                </a>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col-1">
+                                <!--begin::Title body-->
+                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                    <!--begin::Title body-->
+                                    <div style="border-radius: 0px" class="card-body bg-secondary">
+                                        <h2 class="m-0 text-center">{{ number_format($revision_total_value/1000000, 0, ',', '.') ?? 0 }}</h2>
+                                    </div>
+                                    <!--end::Title body-->
+                                </a>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col-1">
+                                <!--begin::Title body-->
+                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                    <!--begin::Title body-->
+                                    <div style="border-radius: 0px" class="card-body bg-secondary">
+                                        <h2 class="m-0 text-center">{{ number_format($negotiation_total_value/1000000, 0, ',', '.') ?? 0 }}</h2>
+                                    </div>
+                                    <!--end::Title body-->
+                                </a>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col-1">
+                                <!--begin::Title body-->
+                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                    <!--begin::Title body-->
+                                    <div style="border-radius: 0px" class="card-body bg-secondary">
+                                        <h2 class="m-0 text-center">{{ number_format($approve_total_value/1000000, 0, ',', '.') ?? 0 }}</h2>
+                                    </div>
+                                    <!--end::Title body-->
+                                </a>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col-1">
+                                <!--begin::Title body-->
+                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                    <!--begin::Title body-->
+                                    <div style="border-radius: 0px" class="card-body bg-secondary">
+                                        <h2 class="m-0 text-center">{{ number_format($reject_total_value/1000000, 0, ',', '.') ?? 0 }}</h2>
+                                    </div>
+                                    <!--end::Title body-->
+                                </a>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col">
+                                <!--begin::Title body-->
+                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                    <!--begin::Title body-->
+                                    <div style="border-radius: 0px" class="card-body bg-secondary">
+                                        <h2 class="m-0 text-center">{{ number_format($dispute_total_value/1000000, 0, ',', '.') ?? 0 }}</h2>
+                                    </div>
+                                    <!--end::Title body-->
+                                </a>
+                                <!--end::Title body-->
+                            </div>
+                        </div>
                         <!--end::Table Body-->
                         
                         <br>
