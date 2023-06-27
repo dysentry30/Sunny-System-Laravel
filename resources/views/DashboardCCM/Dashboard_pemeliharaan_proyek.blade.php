@@ -329,7 +329,7 @@
                                         <!--begin::Title-->
                                         <div class="card-title d-flex flex-column">
                                             <!--begin::Amount-->
-                                            <span class="fs-2 opacity-75 fw-bold text-white me-2 lh-1 ls-n2" id="data-items">RA START</span>
+                                            <span class="fs-2 opacity-75 fw-bold text-white me-2 lh-1 ls-n2" id="data-items">RA KONTRAK</span>
                                             <!--end::Amount-->
                                             <!--begin::Subtitle-->
                                             <span class="text-white pt-1 fs-3">{{ Carbon\Carbon::create($proyek->tanggal_mulai_terkontrak)->translatedFormat("d M Y") ?? "-" }}</span>
@@ -1035,8 +1035,8 @@
                             </div>
                         </div>
                         @endforeach
-                        <!--TOTAL-->
-                        <div class="row mb-4 mx-3">
+                         <!--TOTAL-->
+                         <div class="row mb-4 mx-3">
                             <div class="col-2">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-success">
@@ -1366,6 +1366,8 @@
                             </div>
                         </div>
                         <!--end::Table Body-->
+                        
+                        <br>
 
                         <!--begin::Tabel Header-->
                         <div class="row mb-4 mx-3">

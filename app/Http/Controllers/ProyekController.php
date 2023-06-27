@@ -490,8 +490,8 @@ class ProyekController extends Controller
             foreach ($matriks_approval as $key => $user) {
                 $url = $request->schemeAndHttpHost() . "?redirectTo=/rekomendasi?open=kt_modal_view_proyek_$newProyek->kode_proyek";
                 $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
-                    "api_key" => "c15978155a6b4656c4c0276c5adbb5917eb033d5",
-                    "sender" => "62811881227",
+                    "api_key" => "4DCR3IU2Eu70znFSvnuc3X3x9gJdcc",
+                    "sender" => "628188827008",
                     // "number" => "085157875773",
                     "number" => "085156341949",
                     "message" => "Yth Bapak/Ibu .....\nDengan ini menyampaikan Pengajuan Nota Rekomendasi Tahap I untuk Proyek *$newProyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",

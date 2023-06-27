@@ -300,11 +300,11 @@ class UserController extends Controller
         // $file_name = "tanda-tangan-" . $data["nip"] . "." . "png";
         // imagesavealpha($src, true);
         
-        $file_name = "tanda-tangan-" . $data["nip"] . "." . $data["upload-ttd"]->clientExtension();
-        $src = imagecreatefromjpeg($data["upload-ttd"]);
-        $new = imagescale($src,100);
+        // $file_name = "tanda-tangan-" . $data["nip"] . "." . $data["upload-ttd"]->clientExtension();
+        // $src = imagecreatefromjpeg($data["upload-ttd"]);
+        // $new = imagescale($src,100);
 
-        imagejpeg($new, public_path("/file-ttd/$file_name"), 100);
+        // imagejpeg($new, public_path("/file-ttd/$file_name"), 100);
         // $data["upload-ttd"]->storeAs("/", $file_name, ["disk" => "public/ttd"]);
 
         $user = User::find($data["user-id"]);
@@ -312,7 +312,7 @@ class UserController extends Controller
         $user->name = $data["name-user"];
         $user->email = $data["email"];
         $user->no_hp = $data["phone-number"];
-        $user->file_ttd = $file_name;
+        // $user->file_ttd = $file_name;
         $user->is_active = $request->has("is-active");
         // if (!Auth::user()->check_administrator) {
         if (str_contains($user->email, "@wika-customer")) {
