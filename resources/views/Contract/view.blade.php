@@ -7790,7 +7790,7 @@
                 <div class="modal-body py-lg-6 px-lg-6">
 
                     <!--begin::Input group Website-->
-                    <form action="/contract-management/rencana-kerja-kontrak/upload" method="POST"
+                    <form action="/contract-management/final-dokumen/upload" method="POST"
                         enctype="multipart/form-data">
                         <div class="row">
                             @csrf
@@ -7832,6 +7832,7 @@
                                  --}}
                                 <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
                                     name="id-contract">
+                                <input type="hidden" class="modal-name" name="kategori" value="rkap-bab12">
                                 <input type="hidden" class="modal-name" name="modal-name">
                                 {{-- <textarea name="kelengkapan-adkon" id="kelengkapan-adkon" rows="10"
                                     class="form-control form-control-solid"></textarea> --}}

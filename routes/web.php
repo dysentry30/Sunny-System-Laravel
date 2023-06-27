@@ -428,7 +428,12 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
 
     // Begin :: Menu Document
-    Route::get('/document', [DocumentController::class, "documentIndex"]);
+    // Route::get('/document', [DocumentController::class, "documentIndex"]);
+    Route::get('/document', [DocumentController::class, "documentDatabaseView"]);
+    Route::get('/document-template', [DocumentController::class, "documentTemplateView"]);
+    Route::post('/document-template/new', [DocumentController::class, "documentTemplateNew"]);
+    Route::post('/document-template/delete/{id}', [DocumentController::class, "documentTemplateDelete"]);
+    // Route::get('/document/view', [DocumentController::class, "documentDatabaseView"]);
     // End :: Menu Document
 
 
@@ -3148,11 +3153,13 @@ Route::get('/send-data-industry-attractivness', function (Request $request) {
 // End Send Data Industry Attractivness ke SAP
 
 // Begin Send Data Claim ke BW SAP
-// Route::post('/send-data-claim-management', function (Request $request) {
-//     $data = $request->all();
+// Route::get('/send-data-claim-management', function (Request $request) {
+//     // $data = $request->all();
 
 //     // $claims_all = PerubahanKontrak::all();
-//     $claims_all = PerubahanKontrak::whereIn("jenis_perubahan", ["VO", "Klaim"])->where("id_contract", "=", $data)->first();
+//     // $claims_all = PerubahanKontrak::whereIn("jenis_perubahan", ["VO", "Klaim"])->where("id_contract", "=", $data)->first();
+//     $claims_all = PerubahanKontrak::whereIn("jenis_perubahan", ["VO", "Klaim"])->where("id_contract", "=", "9163afe7-0617-3423-9f49-ed78e1d0ea9d")->get();
+//     // dd($claims_all);
 //     // $claims_map = $claims_all->map(function($claim){
 //     //     return $claim->Proyek->UnitKerja->id_profit_center;
 //     // });
@@ -3163,7 +3170,23 @@ Route::get('/send-data-industry-attractivness', function (Request $request) {
 //         return $item->Proyek->profit_center != "";
 //         // return $item;
 //     });
-//     $data_claims = $filter->map(function($item, $key)use($filter){
+//     $data_claims = $claims_all->map(function($item, $key) use($claims_all){
+
+//         $item_claim = $claims_all->groupBy("jenis_perubahan")->filter(function($i, $key) use($item){
+//             return $key == $item->jenis_perubahan;
+//             // return $i->stage == 1;
+//         })->flatten();
+
+//         $claim_val = $item_claim->filter(function($ic) use($item){
+//             if($item->stage == 1 ){
+//                 return $ic->stage == 1;
+//             }elseif($item->stage == 2){
+//                 return $ic->stage == 2;
+//             }elseif($item->stage == 5){
+//                 return $ic->stage == 5;
+//             }
+//         })->count();
+
 //         $profit_center = $item->Proyek->profit_center;
 
 //         $newClass = new stdClass();
@@ -3180,13 +3203,27 @@ Route::get('/send-data-industry-attractivness', function (Request $request) {
 //         }elseif($item->stage == 5){
 //             $newClass->CLAIM_CAT = "ITEM DISETUJUI";
 //         };
-//         $newClass->CLAIM_VAL = $filter->count();
-//         $newClass->CATEGORY = "$item->jenis_perubahan";
+
+//         $newClass->CLAIM_VAL = $claim_val;
+
+//         if($item->stage == 5){
+//             $newClass->CLAIM_AMOUNT = (int)$item->nilai_disetujui;
+//         }else{
+//             $newClass->CLAIM_AMOUNT = (int)$item->biaya_pengajuan;
+//         }
+        
+//         // $newClass->CLAIM_AMOUNT = (int)$item_claim->sum("biaya_pengajuan");
+
+//         if ($item->jenis_perubahan == "Klaim") {
+//             $newClass->CATEGORY = "CLAIM";
+//         }else{
+//             $newClass->CATEGORY = "$item->jenis_perubahan";
+//         }
 
 //         return $newClass;
 //     })->values();
 
-//     // return response()->json($data_claims, 200);
+//     return response()->json($data_claims, 200);
 //     // dd($data_claims->toJson());
 
 //     // FIRST STEP SEND DATA TO BW
@@ -3214,7 +3251,7 @@ Route::get('/send-data-industry-attractivness', function (Request $request) {
 //     $closed_request = Http::withBasicAuth("WIKA_API", "WikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie])->post("https://wtappbw-dev.wika.co.id:44340/sap/bw4/v1/push/dataStores/zosbi006/requests/$content_location/close");
 //     dd($closed_request, $data_claims, $fill_data);
 
-//     // return response()->json($data_claims);
+//     return response()->json($data_claims);
 // });
 // End Send Data Claim ke BW SAP
 

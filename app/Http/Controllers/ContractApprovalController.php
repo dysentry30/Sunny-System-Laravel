@@ -58,6 +58,14 @@ class ContractApprovalController extends Controller
 
             $newClass->CLAIM_VAL = $claim_val;
 
+            if($item->stage == 5){
+                $newClass->CLAIM_AMOUNT = (int)$item->nilai_disetujui;
+            }else{
+                $newClass->CLAIM_AMOUNT = (int)$item->biaya_pengajuan;
+            }
+            
+            // $newClass->CLAIM_AMOUNT = (int)$item_claim->sum("biaya_pengajuan");
+            
             // $newClass->CLAIM_VAL = $claims_all->groupBy("jenis_perubahan")->map(function($i, $key) use($item){
             //     return $key = $i->count();
             // })->get($item->jenis_perubahan);
