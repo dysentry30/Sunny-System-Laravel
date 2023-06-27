@@ -1382,7 +1382,7 @@ class DashboardController extends Controller
                 return [$key . " <b>" . Percentage::fromFractionAndTotal($p->count(), $change_status->count())->asString() . "</b>", $p->count()];
             })->values();
 
-            
+
             $potensial_total_item = $contracts_perubahan->filter(function($cp){
                 return $cp->stage == 1;
             })->groupBy('jenis_perubahan')->flatten()->count();
@@ -1440,16 +1440,7 @@ class DashboardController extends Controller
             $dispute_total_value = $contracts_perubahan->filter(function($cp){
                 return $cp->stage == 6 && $cp->is_dispute == true;
             })->groupBy('jenis_perubahan')->flatten()->sum('biaya_pengajuan');
-            
-            // dd($revision_total_value);
 
-            // dd($process_post_claim);
-            
-
-
-            // $total_item_perubahan = ["potensial" => $potensial_total_item, "subs" => $submission_total_item, "revisi" => $revision_total_item, "nego" => $negotiation_total_item, "setuju" => $approve_total_item, "tolak" => $reject_total_item, "dispute" => $dispute_total_item];
-
-            // dd($total_item_perubahan);
             $tanggal_awal = new DateTime($proyek->tanggal_mulai_terkontrak);
             $tanggal_akhir = new DateTime($proyek->tanggal_akhir_terkontrak);
             $date_now = new DateTime();
@@ -1526,6 +1517,7 @@ class DashboardController extends Controller
             
             
             //Begin::Janminan
+            // $kategori_jaminan = $proyek->jenis_proyek == "J" ? collect(["Advance Payment", "Performance", "Warranty", "Partner"]) : collect(["Advance Payment", "Performance", "Warranty"]);
             $kategori_jaminan = collect(["Advance Payment", "Performance", "Warranty", "Partner"]);
             $contract_jaminan = $proyek->ContractManagements->Jaminan->groupBy("kategori_jaminan")->sortByDesc("created_at");
             // dd($contract_asuransi);

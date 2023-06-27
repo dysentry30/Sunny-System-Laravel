@@ -65,8 +65,8 @@ class RekomendasiController extends Controller
 
                 $url = $request->schemeAndHttpHost() . "?redirectTo=/rekomendasi?open=kt_modal_view_proyek_rekomendasi_".$proyek->kode_proyek;
                 $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
-                    "api_key" => "c15978155a6b4656c4c0276c5adbb5917eb033d5",
-                    "sender" => "62811881227",
+                    "api_key" => "4DCR3IU2Eu70znFSvnuc3X3x9gJdcc",
+                    "sender" => "628188827008",
                     "number" => "085157875773",
                     // "number" => "085156341949",
                     "message" => "Yth Bapak/Ibu .....\nDengan ini menyampaikan Hasil Assessment Nota Rekomendasi Tahap I untuk Proyek *$proyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
@@ -155,8 +155,8 @@ class RekomendasiController extends Controller
 
             $url = $request->schemeAndHttpHost() . "?redirectTo=/rekomendasi?open=kt_modal_view_proyek_rekomendasi_" . $proyek->kode_proyek;
             $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
-                "api_key" => "c15978155a6b4656c4c0276c5adbb5917eb033d5",
-                "sender" => "62811881227",
+                "api_key" => "4DCR3IU2Eu70znFSvnuc3X3x9gJdcc",
+            "sender" => "628188827008",
                 "number" => "085157875773",
                 // "number" => "085156341949",
                 "message" => "Yth Bapak/Ibu .....\nDengan ini menyampaikan Hasil Verifikasi Nota Rekomendasi Tahap I untuk Proyek *$proyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
@@ -195,8 +195,8 @@ class RekomendasiController extends Controller
             if($is_checked) {
                 $url = $request->schemeAndHttpHost() . "?redirectTo=/rekomendasi?open=kt_user_view_persetujuan" . $proyek->kode_proyek;
                 $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
-                    "api_key" => "c15978155a6b4656c4c0276c5adbb5917eb033d5",
-                    "sender" => "62811881227",
+                    "api_key" => "4DCR3IU2Eu70znFSvnuc3X3x9gJdcc",
+                    "sender" => "628188827008",
                     "number" => "085157875773",
                     // "number" => "085156341949",
                     "message" => "Yth Bapak/Ibu .....\nDengan ini menyampaikan menyampaikan permohonan tanda tangan rekomendasi untuk Nota Rekomendasi Tahap I Proyek *$proyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
@@ -258,13 +258,14 @@ class RekomendasiController extends Controller
                     $matriks_approval = MatriksApprovalRekomendasi::where("unit_kerja", "=", $proyek->UnitKerja->Divisi->id_divisi)->where("klasifikasi_proyek", "=", $proyek->klasifikasi_pasdin)->where("kategori", "=", "Persetujuan")->get();
                     foreach ($matriks_approval as $key => $user) {
                         $user = $user->Pegawai->User;
+                        URL::forceScheme("https");
                         $url = URL::temporarySignedRoute("rekomendasi", now()->addHours(3), ["open" => "kt_modal_view_proyek_persetujuan_" . $proyek->kode_proyek, "user" => $user->nip]);
                         // $url = $request->schemeAndHttpHost() . "?redirectTo=/rekomendasi?open=kt_user_view_persetujuan" . $proyek->kode_proyek . "&token=$token";
                         $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
-                            "api_key" => "c15978155a6b4656c4c0276c5adbb5917eb033d5",
-                            "sender" => "62811881227",
-                            // "number" => "085157875773",
-                            "number" => "085156341949",
+                            "api_key" => "4DCR3IU2Eu70znFSvnuc3X3x9gJdcc",
+                            "sender" => "628188827008",
+                            "number" => "085157875773",
+                            // "number" => "085156341949",
                             "message" => "Yth Bapak/Ibu .....\nDengan ini menyampaikan Permohonan tanda tangan Persetujuan Nota Rekomendasi Tahap I untuk Proyek *$proyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
                             // "url" => $url
                         ]);
@@ -311,10 +312,10 @@ class RekomendasiController extends Controller
                         $url = URL::temporarySignedRoute("rekomendasi", now()->addHours(3), ["open" => "kt_modal_view_proyek_persetujuan_" . $proyek->kode_proyek, "user" => $user->nip]);
                         // $url = $request->schemeAndHttpHost() . "?redirectTo=/rekomendasi?open=kt_user_view_persetujuan" . $proyek->kode_proyek . "&token=$token";
                         $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
-                            "api_key" => "c15978155a6b4656c4c0276c5adbb5917eb033d5",
-                            "sender" => "62811881227",
-                            // "number" => "085157875773",
-                            "number" => "085156341949",
+                            "api_key" => "4DCR3IU2Eu70znFSvnuc3X3x9gJdcc",
+                            "sender" => "628188827008",
+                            "number" => "085157875773",
+                            // "number" => "085156341949",
                             "message" => "Yth Bapak/Ibu .....\nDengan ini menyampaikan Permohonan tanda tangan Persetujuan Nota Rekomendasi Tahap I untuk Proyek *$proyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
                             // "url" => $url
                         ]);
@@ -386,7 +387,7 @@ class RekomendasiController extends Controller
                 $is_proyek_mega = str_contains($proyek->klasifikasi_pasdin, "Mega") ? true : false;
                 $is_proyek_besar = str_contains($proyek->klasifikasi_pasdin, "Besar") ? true : false;
                 $hasil_assessment = collect(json_decode($proyek->hasil_assessment));
-                createWordPersetujuan($proyek, $hasil_assessment, $is_proyek_besar, $is_proyek_mega);
+                // createWordPersetujuan($proyek, $hasil_assessment, $is_proyek_besar, $is_proyek_mega);
                 $proyek->is_disetujui = true;
             }
             // $proyek->recommended_with_note = $data["note-rekomendasi"];

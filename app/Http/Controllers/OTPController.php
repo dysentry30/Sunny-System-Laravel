@@ -39,10 +39,10 @@ class OTPController extends Controller
         $user->otp = json_encode(["otp" => $otp, "send_otp_counter" => 1]);
         $user->save();
         $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
-            "api_key" => "c15978155a6b4656c4c0276c5adbb5917eb033d5",
-            "sender" => "62811881227",
-            // "number" => "085157875773",
-            "number" => "085156341949",
+            "api_key" => "4DCR3IU2Eu70znFSvnuc3X3x9gJdcc",
+            "sender" => "628188827008",
+            "number" => "085157875773",
+            // "number" => "085156341949",
             "message" => "Yth Bapak/Ibu *$user->name*\n\n*$otp*\n\nadalah kode OTP anda. Silahkan masukan kode tersebut untuk melanjutkan approval.\n.\n\nTerimakasih 🙏🏻",
             // "url" => $url
         ]);
@@ -64,10 +64,10 @@ class OTPController extends Controller
         $user->otp = json_encode(["otp" => $otp, "send_otp_counter" => $send_otp_counter]);
         $user->save();
         $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
-            "api_key" => "c15978155a6b4656c4c0276c5adbb5917eb033d5",
-            "sender" => "62811881227",
-            // "number" => "085157875773",
-            "number" => "085156341949",
+            "api_key" => "4DCR3IU2Eu70znFSvnuc3X3x9gJdcc",
+            "sender" => "628188827008",
+            "number" => "085157875773",
+            // "number" => "085156341949",
             "message" => "Yth Bapak/Ibu *$user->name*\n\n*$otp*\n\nadalah kode OTP anda. Silahkan masukan kode tersebut untuk melanjutkan approval.\n.\n\nTerimakasih 🙏🏻",
             // "url" => $url
         ]);
