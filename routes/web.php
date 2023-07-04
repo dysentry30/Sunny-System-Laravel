@@ -456,6 +456,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     Route::post('/csi/send/{id}', [CSIController::class, "sendCsi"]);
 
+    Route::post('/csi/get-progress/{kodeProyek}', [CSIController::class, "createCsi"]);
+
     Route::post('/csi/customer-survey-save', [CSIController::class, "saveSurvey"]);
 
     // End CSI

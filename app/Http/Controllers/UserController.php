@@ -109,7 +109,7 @@ class UserController extends Controller
                         return redirect()->intended("/");
                     }
                 } else {
-                    Alert::success('Selamat Datang', "Silahkan Mengisi Survey Berikut");
+                    // Alert::success('Selamat Datang', "Silahkan Mengisi Survey Berikut");
                     return redirect()->intended("/csi/customer-survey");
                 }
             }

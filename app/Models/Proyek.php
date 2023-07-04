@@ -174,4 +174,9 @@ class Proyek extends Model
     {
         return $this->hasOne(Departemen::class, "kode_departemen", "departemen_proyek");
     }
+
+    public function Csi()
+    {
+        return $this->hasOne(Csi::class, "no_spk", "kode_proyek");
+    }
 }

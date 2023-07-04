@@ -8,6 +8,7 @@ use App\Models\Proyek;
 use App\Models\Customer;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\StrukturCustomer;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
@@ -16,8 +17,11 @@ use RealRashid\SweetAlert\Facades\Alert;
 class CSIController extends Controller
 {
     public function index(Request $request) {
+        $proyeks = Proyek::get();
+        // $csi = Proyek::join("proyek_csi", "proyek_csi.no_spk", "=", "proyeks.kode_proyek")->get();
+        // dd($csi);
         $csi = Csi::all();
-        return view("14_CSI", compact(["csi"]));
+        return view("14_CSI", compact(["csi", "proyeks"]));
     }
     
     public function indexCustomer(Request $request, $id = "") {
@@ -51,6 +55,9 @@ class CSIController extends Controller
         }
         $csi->save();
         // dd($csi);
+        if (str_contains(Auth::user()->email, "@wika-customer")) {
+            Alert::html('To Whom It May Concern <br><br> Mr/Mrs : <b>' . $csi->Struktur->nama_struktur . '</b>  <br> Position : <b>' . $csi->Struktur->jabatan_struktur . '</b> <br> Project : <b>' . $csi->Proyek->nama_proyek . '</b>' , '<br> We kindly ask for your assistance in measuring the customer satisfaction index for the project which we are currently running. As part of our commitment to provide high-quality services, we believe it is essential to evaluate and understand our valuable customers level of satisfaction.' . '<br>  We hope that you are willing to provide information to help us with this project. We are looking forward to receiving your response and help to improve our customer satisfaction.' . '<br><br> Best regards, <br> SvP Strategic Marketing & Transformation', 'success')->autoClose(12000)->width(1000);
+        }
         return view("/Csi/view_csi", compact(["csi","customer", "proyek", "jawaban"]));
     }
 
@@ -150,9 +157,9 @@ class CSIController extends Controller
         // $url = "https://crm-dev.wika.co.id/customer/view/". $data['id-pemberi-kerja']."/". str_replace(" ", "%20", $data['pemberi-kerja']);
         $url = "https://crm-dev.wika.co.id/csi-login";
         $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
-            "api_key" => "c15978155a6b4656c4c0276c5adbb5917eb033d5",
-            "sender" => "62811881227",
-            "number" => $data['nomor-penerima'],
+            "api_key" => "4DCR3IU2Eu70znFSvnuc3X3x9gJdcc",
+            "sender" => "628188827008",
+            "number" => "085157875773",
             "message" => "Hi, *". $data['nama-penerima']. "* dari *" . $data['pemberi-kerja'] . "*.\nSilahkan tekan link di bawah ini untuk pengisian survey kami.\nGunakan User dan password dibawah ini untuk login : \nUser : *" . $user->email . "*\nPassword : *" . $user->email . "*\n\n$url",
             // "url" => $url
         ]);
@@ -164,10 +171,54 @@ class CSIController extends Controller
             return redirect()->back();
         });
         
-        $user->save();
+        $newStruktur = StrukturCustomer::where('id_struktur_organisasi', $data["id-pemberi-kerja"])->where('proyek_struktur', $data["kode-proyek"])->where('role_struktur', $data["segmen"])->first(); 
+        if (!empty($newStruktur)) {
+            $newStruktur->nama_struktur = $data["nama-penerima"];
+            $newStruktur->id_struktur_organisasi = $user->nip;
+            $newStruktur->jabatan_struktur = $data["jabatan"];
+            $newStruktur->email_struktur = $data["email"];
+            $newStruktur->phone_struktur = $data["nomor-penerima"];
+            $newStruktur->save();
+        } else {
+            $newStruktur = new StrukturCustomer();
+            $newStruktur->id_struktur_organisasi = $user->nip;
+            $newStruktur->id_customer = $data["id-pemberi-kerja"];
+            $newStruktur->nama_struktur = $data["nama-penerima"];
+            $newStruktur->jabatan_struktur = $data["jabatan"];
+            $newStruktur->email_struktur = $data["email"];
+            $newStruktur->phone_struktur = $data["nomor-penerima"];
+            $newStruktur->proyek_struktur = $data["kode-proyek"];
+            $newStruktur->role_struktur = $data["segmen"];
+            $newStruktur->save();
+        }
+
         $csi->save();
+        $user->save();
+
 
         Alert::success('Success', "Berhasil, Pesan Telah Terkirim ke ". $data['nama-penerima']);
         return redirect()->back();
     }
+    
+    public function createCsi(Request $request) {
+
+        $data = $request->all();
+
+        $newCsi = new Csi();
+        $newCsi->id_customer = $data["id-customer"];
+        $newCsi->id_struktur_organisasi = null;
+        $newCsi->no_spk = $data["kode-proyek"];
+        $newCsi->tanggal = now();
+        $newCsi->status = "Not Sent";
+        $newCsi->progress = mt_rand(20, 100);
+        if ($newCsi->id_customer == null) {
+            Alert::error("Error", "Progress Gagal Didapatkan, Hubungi Admin !");
+            return redirect()->back();
+        }
+        $newCsi->save();
+
+        Alert::success('Success', "Berhasil, Progress Didapatkan");
+        return redirect()->back();
+    }
+
 }
