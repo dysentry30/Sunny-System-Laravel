@@ -1509,7 +1509,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     // Master Data Provinsi
     Route::get('/provinsi', function (Request $request) {   
-        $provinsi = Provinsi::all();
+        $provinsi = Provinsi::where("country_id", "=", "ID")->get();
         return view("/MasterData/Provinsi", compact(["provinsi"]));
     });
 
@@ -2423,9 +2423,10 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             array_push($proyeks, $proyek);
             //    dump($proyeks);
         }
+        $title = "Group RKAP";
         // dd();
 
-        return view("/11_Rkap", compact(["unitkerjas", "proyeks"]));
+        return view("/11_Rkap", compact(["unitkerjas", "proyeks", "title"]));
     });
 
     Route::get('/rkap/{divcode}/{tahun_pelaksanaan}', function ($divcode, $tahun_pelaksanaan, Request $request) {
@@ -2451,9 +2452,10 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             array_push($proyeks, $proyek);
             //    dump($proyeks);
         }
+        $title = "RKAP Awal";
         // dd();
 
-        return view("/11_Rkap", compact(["unitkerjas", "proyeks"]));
+        return view("/11_Rkap", compact(["unitkerjas", "proyeks", "title"]));
     });
 
     Route::get('/ok-review', function () {
@@ -2469,9 +2471,10 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             array_push($proyeks, $proyek);
             //    dump($proyeks);
         }
+        $title = "RKAP Review";
         // dd();
 
-        return view("/11_Rkap", compact(["unitkerjas", "proyeks"]));
+        return view("/11_Rkap", compact(["unitkerjas", "proyeks" ,"title"]));
     });
     // end RKAP AWAL dan REVIEW
 
