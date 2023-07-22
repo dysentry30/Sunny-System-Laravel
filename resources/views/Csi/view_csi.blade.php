@@ -244,7 +244,68 @@
 
                     <!--begin::Post-->
                     <!--begin::Header Contract-->
-                    <div class="px-12" style="margin-bottom: 2rem;">
+                    <div id="agreed-survey" class="px-12" style="margin-bottom: 2rem;">
+                        <div class="card card-flush h-lg-100 p-12" id="kt_contacts_main">
+                            <!--begin::Row-->
+                            <p>
+                            <h4>To Whom It May Concern</h4> 
+                            <br><br> 
+                            Mr/Mrs : <h4>{{  $csi->Struktur->nama_struktur }}</h4> 
+                            <br> 
+                            Position : <h4>{{ $csi->Struktur->jabatan_struktur }}</h4>
+                            <br> 
+                            Project : <h4>{{ $proyek->nama_proyek }}</h4>
+                            <br><br>
+                            <h4>We kindly ask for your assistance in measuring the customer satisfaction index for the project which we are currently running. As part of our commitment to provide high-quality services, we believe it is essential to evaluate and understand our valuable customers level of satisfaction.</h4>
+                            <i>Kami mohon bantuan Anda dalam mengukur indeks kepuasan pelanggan untuk proyek yang sedang kami jalankan. Sebagai bagian dari komitmen kami untuk menyediakan layanan berkualitas tinggi, kami percaya penting untuk mengevaluasi dan memahami tingkat kepuasan pelanggan kami yang berharga.</i>
+                            <br>
+                            <br>
+                            <h4>We hope that you are willing to provide information to help us with this project. We are looking forward to receiving your response and help to improve our customer satisfaction.</h4>
+                            <i>Kami harap Anda bersedia memberikan informasi untuk membantu kami dalam proyek ini. Kami berharap dapat menerima tanggapan Anda dan membantu meningkatkan kepuasan pelanggan kami.</i>
+                            <br><br>
+                            Best regards, 
+                            <br> 
+                            SvP Strategic Marketing & Transformation</p>
+                            <!--end::Row-->
+                            <hr> <br>
+                            <!--begin::Col-->
+                            <div class="d-flex align-items-center">
+                                <div class="text-end me-5">
+                                    <input onclick="surveyButton(this)" class="form-check-input" type="checkbox" value="" id="persetujuan" name="persetujuan" {{ empty($csi->jawaban) ? '' : 'checked disabled' }}>
+                                </div>
+                                <div class="text-dark text-start">
+                                    <span class=""><h4>Agreed to fill out the survey given, signed below</h4><i>Setuju untuk mengisi survei yang diberikan, saya yang bertanda tangan dibawah ini</i> </span>
+                                </div>
+                            </div>
+                            <!--end::Col-->
+                        </div>
+                    </div>
+                    <div id="spinner-survey" style="display: none"  class="card card-flush p-12 mx-12">
+                        <span class="spinner-border text-primary text-center" role="status"></span>
+                    </div>
+                    <!--begin::Container-->
+                    <script>
+                        function surveyButton(e) {
+                            // console.log(e.value,e.checked);     
+                            if (e.checked == true) {
+                                setTimeout( function() {
+                                    document.getElementById("spinner-survey").style.display = "";
+                                    document.getElementById('agreed-survey').style.display = "none";
+                                    setTimeout( function() {
+                                        document.getElementById("spinner-survey").style.display = "none";
+                                        document.getElementById('body-survey').style.display = "";
+                                        document.getElementById('head-survey').style.display = "";
+                                    }, 1000);
+                                }, 500);
+                            } else {
+                                document.getElementById('head-survey').style.display = "none";
+                                document.getElementById('body-survey').style.display = "none";
+                            }                       
+                        }
+                    </script>
+
+                    <!--begin::Header Contract-->
+                    <div id="head-survey" class="px-12 mb-6" style="margin-bottom: 2rem; display: none">
                         <div class="card card-flush h-lg-100" id="kt_contacts_main">
                             <!--begin::Row-->
                             <div class="d-flex align-items-center py-2">
@@ -325,10 +386,10 @@
                                 <div class="col-6">
                                     <div class="d-flex align-items-center">
                                         <div class="col-3 text-end me-5">
-                                            <span class="">Disclaimer / Persetujan : </span>
+                                            <span class="">Agreed : </span>
                                         </div>
                                         <div class="text-dark text-start">
-                                            <input class="form-check-input" type="checkbox" value="" id="persetujuan" name="persetujuan" {{ empty($csi->jawaban) ? '' : 'checked disabled' }}>
+                                            <input class="form-check-input" type="checkbox" value="" id="persetujuan" name="persetujuan" checked disabled>
                                         </div>
                                     </div>
                                     <!--end::Input group Name-->
@@ -339,8 +400,9 @@
                         </div>
                     </div>
                     <!--begin::Container-->
+                    
                     <!--begin::Card "style edited"-->
-                    <div class="card" Id="List-vv" style="position: relative; overflow: hidden;">
+                    <div class="card mx-12" id="body-survey" style="position: relative; overflow: hidden; display: {{ empty($csi->jawaban) ? 'none' : '' }}" >
 
                         <!--begin::Card header-->
                         {{-- <div class="card-header border-0 py-1">
@@ -363,7 +425,10 @@
                             <ol class="decimal_type" style="list-style-type: decimal;margin-left:1cmundefined;">
                                 <li><strong><span style="line-height:150%;font-size:12px;">Customer Loyalty</span></strong>
                                     <ol class="decimal_type" style="list-style-type: decimal;">
-                                        <li><span style="line-height:150%;font-size:12px;">Perusahaan saya tidak berencana untuk menggunakan jasa konstruksi selain PT Wijaya Karya.</span></li>
+                                        <li>
+                                            <span style="line-height:150%;font-size:12px;"><b>My company does not plan to use construction services other than PT Wijaya Karya.</b></span><br>
+                                            <span style="line-height:150%;font-size:12px;"><i>(Perusahaan saya tidak berencana untuk menggunakan jasa konstruksi selain PT Wijaya Karya)</i></span>
+                                        </li>
                                         <!--begin::Answer-->
                                         <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                             <span class="col-3 text-end">
@@ -394,7 +459,10 @@
                                             </span>
                                         </div>
                                         <!--end::Answer-->
-                                        <li><span style="line-height:150%;font-size:12px;">Untuk berbagai kebutuhan jasa konstruksi perusahaan saya akan selalu menggunakan PT Wijaya Karya.</span></li>
+                                        <li>
+                                            <span style="line-height:150%;font-size:12px;"><b>For various needs of my company's construction services, I will always use PT Wijaya Karya.</b></span><br>
+                                            <span style="line-height:150%;font-size:12px;"><i>(Untuk berbagai kebutuhan jasa konstruksi perusahaan saya akan selalu menggunakan PT Wijaya Karya.)</i></span>
+                                        </li>
                                         <!--begin::Answer-->
                                         <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                             <span class="col-3 text-end">

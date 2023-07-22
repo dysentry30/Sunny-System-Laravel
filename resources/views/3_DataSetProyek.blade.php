@@ -1,44 +1,32 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <base href="">
     <title>Data Set Proyek</title>
     
     <!-- begin::DataTables -->
-    <link rel="stylesheet" href="datatables/jquery.dataTables.min.css">
-    <link rel="stylesheet" href="datatables/fixedColumns.dataTables.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css">
-    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css"> --}}
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="/datatables/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="/datatables/fixedColumns.dataTables.min.css">
+    <link rel="stylesheet" href="/datatables/buttons.dataTables.min.css">    
     <!-- end::DataTables -->
 
     <link rel="shortcut icon" href="{{ asset('/media/logos/Icon-Sunny.png') }}" />
     <!--begin::Fonts-->
 
-    {{-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" /> --}}
     <link rel="stylesheet" href="{{ asset('/css/cssFont.css') }}" />
     <!--end::Fonts-->
 
     <!-- begin::Bootstrap CSS -->
-    {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous"> --}}
     <link href="{{ asset('/bootstrap/bootstrap.min.css') }}" rel="stylesheet">
-    {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css"> --}}
-    {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css"> --}}
     <link rel="stylesheet" href="{{ asset('/bootstrap/bootstrap-icons.css') }}">
     <!-- end::Bootstrap CSS -->
 
     <!-- begin::Froala CSS -->
-    {{-- <link href='https://cdn.jsdelivr.net/npm/froala-editor@latest/css/froala_editor.pkgd.min.css' rel='stylesheet'
-        type='text/css' /> --}}
     <link href='{{ asset('/froala/froala_editor.pkgd.min.css') }}' rel='stylesheet'
         type='text/css' />
     <!-- end::Froala CSS -->
     
     <!-- Begin:: Leaflet Map -->
-    {{-- <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
-    integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
-    crossorigin=""/> --}}
     <!-- End:: Leaflet Map -->
 
     <!--begin::Page Vendor Stylesheets(used by this page)-->
@@ -46,7 +34,7 @@
         type="text/css" />
     <!--end::Page Vendor Stylesheets-->
 
-    <!--begin::Global Stylesheets Bundle(used by all pages)-->
+     <!--begin::Global Stylesheets Bundle(used by all pages)-->
     <link href="{{ asset('/plugins/global/plugins.bundle.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('/css/style.bundle.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('/css/custom.css') }}" rel="stylesheet" type="text/css" />
@@ -131,6 +119,10 @@
             border-radius: 4px;
             padding: 10px;
 
+        }
+
+        table, th, td, tr {
+            border: 0.5px solid #ACADBA !important;
         }
 
     </style>
@@ -240,147 +232,80 @@
 
 
                         <!--begin::Card header-->
-                        <div class="card-header border-0 py-1">
+                        <div class="card-header border-0 ps-6 pt-2 mb-0">
                             <!--begin::Card title-->
                             <div class="card-title">
-
                                 <!--Begin:: BUTTON FILTER-->
                                 <form action="" class="d-flex flex-row w-auto" method="get">
-                                    <!--Begin:: Select Options-->
-                                    <select id="column" name="column" onchange="changes(this)"
-                                        class="form-select form-select-solid"
-                                        style="margin-right: 2rem" data-control="select2" data-hide-search="true"
-                                        data-placeholder="Column" data-select2-id="select2-data-bulan" tabindex="-1"
-                                        aria-hidden="true">
-                                        {{-- <option {{ $column == '' ? 'selected' : '' }}></option> --}}
-                                        <option value="nama_proyek" {{ $column == 'nama_proyek' ? 'selected' : '' }}>Nama
-                                            Proyek</option>
-                                        <option value="kode_proyek" {{ $column == 'kode_proyek' ? 'selected' : '' }}>Kode
-                                            Proyek</option>
-                                        <option value="tahun_perolehan"
-                                            {{ $column == 'tahun_perolehan' ? 'selected' : '' }}>Tahun Perolehan</option>
-                                        <option value="unit_kerja" {{$column == "unit_kerja" ? "selected" : ""}}>Unit Kerja</option>
-                                        <option value="stage" {{$column == "stage" ? "selected" : ""}}>Stage</option>
-                                        <option value="jenis_proyek" {{$column == "jenis_proyek" ? "selected" : ""}}>Jenis Proyek</option>
-                                        <option value="tipe_proyek" {{$column == "tipe_proyek" ? "selected" : ""}}>Tipe Proyek</option>
-
+                                    <!--begin::Select Options-->
+                                    <select id="tahun-proyek" name="tahun-proyek"
+                                    class="form-select form-select-solid mx-3"
+                                        data-control="select2" data-hide-search="true" data-placeholder="Tahun"
+                                        tabindex="-1" aria-hidden="true">
+                                        @foreach ($tahun_proyeks as $tahun)
+                                        <option value="{{$tahun}}" {{$selected_year == $tahun ? "selected" : ""}}>{{$tahun}}</option>
+                                        @endforeach
                                     </select>
-                                    <!--End:: Select Options-->
+                                    <!--end::Select Options-->
+                                    
+                                    <!--begin::Select Options-->
+                                    <select name="filter-unit" class="form-select form-select-solid w-200px ms-5"
+                                    data-control="select2" data-hide-search="true" data-placeholder="Unit Kerja">
+                                        <option></option>
+                                        @foreach ($unitkerjas as $unitkerja)
+                                            <option value="{{ $unitkerja->divcode }}"
+                                                {{ $filterUnit == $unitkerja->divcode ? 'selected' : '' }}>
+                                                {{ $unitkerja->unit_kerja }}</option>
+                                        @endforeach
+                                    </select>
+                                    <!--end::Select Options-->
+                                    
+                                    <div style="" id="filterStage" class="d-flex align-items-center position-relative">
+                                        <select name="filter-stage"
+                                            class="form-select form-select-solid w-auto ms-2"
+                                            data-control="select2" data-hide-search="true" data-placeholder="Pilih Stage"
+                                            tabindex="-1" aria-hidden="true">
+                                            <option></option>
+                                            <option value="1" {{ $filterStage == '1' ? 'selected' : '' }}>Pasar Dini
+                                            </option>
+                                            <option value="2" {{ $filterStage == '2' ? 'selected' : '' }}>Pasar Potensial
+                                            </option>
+                                            <option value="3" {{ $filterStage == '3' ? 'selected' : '' }}>Prakualifikasi
+                                            </option>
+                                            <option value="4" {{ $filterStage == '4' ? 'selected' : '' }}>Tender Diikuti
+                                            </option>
+                                            <option value="5" {{ $filterStage == '5' ? 'selected' : '' }}>Perolehan</option>
+                                            <option value="6" {{ $filterStage == '6' ? 'selected' : '' }}>Menang</option>
+                                            <option value="7" {{ $filterStage == '7' ? 'selected' : '' }}>Kalah</option>
+                                            <option value="8" {{ $filterStage == '8' ? 'selected' : '' }}>Terkontrak
+                                            </option>
+                                            {{-- <option value="9" {{ $filterStage == '9' ? 'selected' : '' }}>Terendah</option> --}}
+                                            {{-- <option value="10" {{ $filterStage == '10' ? 'selected' : '' }}>Selesai</option> --}}
+                                        </select>
+                                    </div>
 
-                                    <!--begin:: Input Filter-->
-                                    {{-- @if ($column == 'stage') --}}
-                                        <div style="display: none !important" id="filterStage" class="d-flex align-items-center position-relative">
-                                            <select name="filter-stage"
-                                                class="form-select form-select-solid w-auto ms-2"
-                                                data-control="select2" data-hide-search="true" data-placeholder="Pilih Stage"
-                                                tabindex="-1" aria-hidden="true">
-                                                <option></option>
-                                                <option value="1" {{ $filter == '1' ? 'selected' : '' }}>Pasar Dini
-                                                </option>
-                                                <option value="2" {{ $filter == '2' ? 'selected' : '' }}>Pasar Potensial
-                                                </option>
-                                                <option value="3" {{ $filter == '3' ? 'selected' : '' }}>Prakualifikasi
-                                                </option>
-                                                <option value="4" {{ $filter == '4' ? 'selected' : '' }}>Tender Diikuti
-                                                </option>
-                                                <option value="5" {{ $filter == '5' ? 'selected' : '' }}>Perolehan</option>
-                                                <option value="6" {{ $filter == '6' ? 'selected' : '' }}>Menang</option>
-                                                <option value="7" {{ $filter == '7' ? 'selected' : '' }}>Kalah</option>
-                                                <option value="8" {{ $filter == '8' ? 'selected' : '' }}>Terkontrak
-                                                </option>
-                                                <option value="9" {{ $filter == '9' ? 'selected' : '' }}>Terendah</option>
-                                                <option value="10" {{ $filter == '10' ? 'selected' : '' }}>Selesai</option>
-                                            </select>
-                                        </div>
-                                    {{-- @elseif ($column == 'jenis_proyek') --}}
-                                        <div style="display: none !important" id="filterJenis" class="d-flex align-items-center position-relative">
-                                            <select name="filter-jenis"
-                                                class="form-select form-select-solid w-auto ms-2"
-                                                data-control="select2" data-hide-search="true" data-placeholder="Jenis Proyek"
-                                                tabindex="-1" aria-hidden="true">
-                                                <option></option>
-                                                <option value="I" {{ $filter == 'I' ? 'selected' : '' }}>Internal</option>
-                                                <option value="N" {{ $filter == 'N' ? 'selected' : '' }}>External</option>
-                                                <option value="J" {{ $filter == 'J' ? 'selected' : '' }}>JO</option>
-                                            </select>
-                                        </div>
-                                        <div style="display: none !important" id="filterTipe" class="d-flex align-items-center position-relative">
-                                            <select name="filter-tipe"
-                                                class="form-select form-select-solid w-auto ms-2"
-                                                data-control="select2" data-hide-search="true" data-placeholder="Tipe Proyek"
-                                                tabindex="-1" aria-hidden="true">
-                                                <option></option>
-                                                <option value="R" {{ $filter == 'R' ? 'selected' : '' }}>Retail</option>
-                                                <option value="P" {{ $filter == 'P' ? 'selected' : '' }}>Non-Retail</option>
-                                            </select>
-                                        </div>
-                                    {{-- @elseif ($column == 'unit_kerja') --}}
-                                        <div style="display: none !important" id="filterUnit" class="d-flex align-items-center position-relative">
-                                            <select name="filter-unit" class="form-select form-select-solid w-200px ms-2"
-                                                data-control="select2" data-hide-search="true" data-placeholder="Unit Kerja">
-                                                <option></option>
-                                                @foreach ($unitkerjas as $unitkerja)
-                                                    <option value="{{ $unitkerja->divcode }}"
-                                                        {{ old('unit-kerja') == $unitkerja->divcode ? 'selected' : '' }}>
-                                                        {{ $unitkerja->unit_kerja }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    {{-- @else --}}
-                                        <div id="filter" class="d-flex align-items-center position-relative">
-                                            <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
-                                            <span class="svg-icon svg-icon-1 position-absolute ms-6">
-                                                <i class="bi bi-search"></i>
-                                            </span>
-                                            <!--end::Svg Icon-->
-                                            <input type="text" data-kt-customer-table-filter="search"
-                                                name="filter" value="{{ $filter }}"
-                                                class="form-control form-control-solid ms-2 ps-12 w-auto"
-                                                placeholder="Input Filter" />
-                                        </div>
-                                    {{-- @endif --}}
+                                    <div id="filterJenis" class="d-flex align-items-center position-relative">
+                                        <select name="filter-jenis"
+                                            class="form-select form-select-solid w-auto ms-2"
+                                            data-control="select2" data-hide-search="true" data-placeholder="Jenis Proyek"
+                                            tabindex="-1" aria-hidden="true">
+                                            <option></option>
+                                            <option value="I" {{ $filterJenis == 'I' ? 'selected' : '' }}>Internal</option>
+                                            <option value="N" {{ $filterJenis == 'N' ? 'selected' : '' }}>External</option>
+                                            <option value="J" {{ $filterJenis == 'J' ? 'selected' : '' }}>JO</option>
+                                        </select>
+                                    </div>
 
-                                    <script>
-                                        function changes(e) {
-                                            if (e.value == "stage") {
-                                                // console.log(e);
-                                                // window.location.href = "/proyek?column=stage";
-                                                document.getElementById("filterStage").style.display = "";
-                                                document.getElementById("filterUnit").style.setProperty("display", "none", "important");
-                                                document.getElementById("filterTipe").style.setProperty("display", "none", "important");
-                                                document.getElementById("filterJenis").style.setProperty("display", "none", "important");
-                                                document.getElementById("filter").style.setProperty("display", "none", "important");
-                                                document.getElementById("filter").value = "";
-                                            } else if (e.value == "unit_kerja") {
-                                                document.getElementById("filterUnit").style.display = "";
-                                                document.getElementById("filterJenis").style.setProperty("display", "none", "important");
-                                                document.getElementById("filterTipe").style.setProperty("display", "none", "important");
-                                                document.getElementById("filterStage").style.setProperty("display", "none", "important");
-                                                document.getElementById("filter").style.setProperty("display", "none", "important");
-                                                document.getElementById("filter").value = "";
-                                            } else if (e.value == "jenis_proyek") {
-                                                document.getElementById("filterJenis").style.display = "";
-                                                document.getElementById("filterUnit").style.setProperty("display", "none", "important");
-                                                document.getElementById("filterTipe").style.setProperty("display", "none", "important");
-                                                document.getElementById("filterStage").style.setProperty("display", "none", "important");
-                                                document.getElementById("filter").style.setProperty("display", "none", "important");
-                                                document.getElementById("filter").value = "";
-                                            } else if (e.value == "tipe_proyek") {
-                                                document.getElementById("filterTipe").style.display = "";
-                                                document.getElementById("filterJenis").style.setProperty("display", "none", "important");
-                                                document.getElementById("filterUnit").style.setProperty("display", "none", "important");
-                                                document.getElementById("filterStage").style.setProperty("display", "none", "important");
-                                                document.getElementById("filter").style.setProperty("display", "none", "important");
-                                                document.getElementById("filter").value = "";
-                                            } else {
-                                                document.getElementById("filter").style.display = "";
-                                                document.getElementById("filterUnit").style.setProperty("display", "none", "important");
-                                                document.getElementById("filterStage").style.setProperty("display", "none", "important");
-                                                document.getElementById("filterJenis").style.setProperty("display", "none", "important");
-                                                document.getElementById("filterTipe").style.setProperty("display", "none", "important");
-                                            }
-                                        }
-                                    </script>
+                                    <div id="filterTipe" class="d-flex align-items-center position-relative">
+                                        <select name="filter-tipe"
+                                            class="form-select form-select-solid w-auto ms-2"
+                                            data-control="select2" data-hide-search="true" data-placeholder="Tipe Proyek"
+                                            tabindex="-1" aria-hidden="true">
+                                            <option></option>
+                                            <option value="R" {{ $filterTipe == 'R' ? 'selected' : '' }}>Retail</option>
+                                            <option value="P" {{ $filterTipe == 'P' ? 'selected' : '' }}>Non-Retail</option>
+                                        </select>
+                                    </div>
                                     <!--end:: Input Filter-->
 
                                     <!--begin:: Filter-->
@@ -401,34 +326,14 @@
                                     <!--end:: RESET-->
                                 </form>
                                 <!--end:: BUTTON FILTER-->
-
-
                             </div>
                             <!--begin::Card title-->
-
-                            <!--begin::Paginate-->
-                            {{-- <div class="align-items-center d-flex flex-row-reverse">
-												<div>
-													{{ $proyeks->links() }}
-												</div>
-
-												<div class="p-2" style="color:gray">
-													Showing
-													{{ $proyeks->firstItem() }}
-													to
-													{{ $proyeks->lastItem() }}
-													of
-													{{ $proyeks->total()}}
-													entries
-												</div>
-											</div> --}}
-                            <!--end::Paginate-->
                         </div>
                         <!--end::Card header-->
 
 
                         <!--begin::Card body-->
-                        <div class="card-body pt-0 ">
+                        <div class="card-body pt-5 overflow-scroll">
 
 
                             <!--begin::Table Proyek-->
@@ -436,8 +341,8 @@
                                 <!--begin::Table head-->
                                 <thead>
                                     <!--begin::Table row-->
-                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase text-sm gs-0">
-                                        <th class="min-w-auto"><small>Kode Proyek</small></th>
+                                    <tr class="text-start text-white fw-bolder fs-7 text-uppercase bg-primary opacity-75">
+                                        <th class="min-w-auto ps-5"><small>Kode Proyek</small></th>
                                         <th class="min-w-auto"><small>Nama Proyek</small></th>
                                         <th class="min-w-auto"><small>Unit Kerja</small></th>
                                         <th class="min-w-auto"><small>Stage</small></th>
@@ -449,10 +354,11 @@
                                         <th class="min-w-auto"><small>Nilai Realisasi</small></th>
                                         <th class="min-w-auto"><small>Pelanggan</small></th>
                                         <th class="min-w-auto text-center"><small>Jenis Proyek</small></th>
+                                        <th class="min-w-auto text-center"><small>Tipe Proyek</small></th>
                                         <th class="min-w-auto"><small>Sumber Dana</small></th>
                                         <th class="min-w-auto"><small>Status Pasar Dini</small></th>
                                         <th class="min-w-auto"><small>Asal Info proyek</small></th>
-                                        <th class="min-w-auto"><small>Nilai OK Review (Valas) (Exclude Tax)</small></th>
+                                        <th class="min-w-auto"><small>Nilai OK Review (Valas)</small></th>
                                         <th class="min-w-auto"><small>Mata Uang Review</small></th>
                                         <th class="min-w-auto"><small>Bulan Pelaksanaan Review</small></th>
                                         <th class="min-w-auto"><small>Laporan Pasar Dini</small></th>
@@ -497,7 +403,8 @@
                                         <th class="min-w-auto"><small>Tanggal Selesai Bash PHO</small></th>
                                         <th class="min-w-auto"><small>Tanggal Selesai Bash FHO</small></th>
                                         <th class="min-w-auto"><small>Laporan Terkontrak</small></th>
-
+                                        <th class="min-w-auto"><small>Is RKAP</small></th>
+                                        <th class="min-w-auto"><small>Is Cancel</small></th>
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>
@@ -510,7 +417,7 @@
                                     @foreach ($proyeks as $proyek)
                                         <tr>
                                             <!--begin::Name-->
-                                            <td>
+                                            <td class="ps-5">
                                                 <small>
                                                     <a href="/proyek/view/{{ $proyek->kode_proyek }}" id="click-name"
                                                         class="text-gray-800 text-hover-primary">{{ $proyek->kode_proyek }}</a>
@@ -520,8 +427,7 @@
                                             <!--begin::Email-->
                                             <td>
                                                 <small>
-                                                    <a href="/proyek/view/{{ $proyek->kode_proyek }}" id="click-name"
-                                                        class="text-gray-800 text-hover-primary">{{ $proyek->nama_proyek }}</a>
+                                                    {{ $proyek->nama_proyek }}
                                                 </small>
                                             </td>
                                             <!--end::Email-->
@@ -673,7 +579,7 @@
                                                 @php
                                                 if ($proyek->tipe_proyek == 'R') {
                                                     $total_rkap = $proyek->Forecasts->filter(function($f) use($selected_year){
-                                                        return $f->tahun == (int) $selected_year ;
+                                                        return $f->tahun == (int) $selected_year && $f->periode_prognosa == (int) date("m") ;
                                                     })->sum(function($f) {
                                                         return (int) $f->rkap_forecast;
                                                     });
@@ -704,8 +610,9 @@
                                             <td class="text-end">
                                                 @php
                                                     $total_forecast = $proyek->Forecasts->filter(function($f) use($selected_year){
-                                                        $date = date_create($f->created_at);
-                                                        return date_format($date, "Y") == $selected_year;
+                                                        // $date = date_create($f->created_at);
+                                                        // return date_format($date, "Y") == $selected_year;
+                                                        return $f->tahun == $selected_year && $f->periode_prognosa == (int) date("m");
                                                     })->sum(function($f) {
                                                         return (int) $f->nilai_forecast;
                                                     });
@@ -721,7 +628,7 @@
                                                 @php
                                                 if ($proyek->stage == 8) {
                                                     $total_realisasi = $proyek->Forecasts->filter(function($f) use($selected_year){
-                                                        return $f->tahun == (int) $selected_year ;
+                                                        return $f->tahun == (int) $selected_year && $f->periode_prognosa == (int) date("m");
                                                     })->sum(function($f) {
                                                         return (int) $f->realisasi_forecast;
                                                     });
@@ -734,7 +641,16 @@
                                                 </small>
                                             </td>
                                             <!--end::Realisasi-->
-
+                                            <!--begin::customer-->
+                                            <td class="text-break text-start {{ $proyek->proyekBerjalan ? '' : 'text-danger' }} text-truncate" style="max-width: 120px">
+                                                <small class="{{ $proyek->proyekBerjalan ? '' : 'badge badge-light-danger' }}">
+                                                    {{-- {{ $proyek->proyekBerjalan->name_customer ?? "*Belum Ditentukan" }} --}}
+                                                    @if ($proyek->proyekBerjalan)
+                                                    {{ $proyek->proyekBerjalan->name_customer ?? "-" }}
+                                                    @endif
+                                                </small>
+                                            </td>
+                                            <!--end::customer-->
 
                                             <!--begin::Jenis Proyek-->
                                             <td class="text-center">
@@ -758,6 +674,25 @@
                                                 </small>
                                             </td>
                                             <!--end::Jenis Proyek-->
+
+                                            <!--begin::Tipe Proyek-->
+                                            <td class="text-center">
+                                                <small>
+                                                    @switch($proyek->tipe_proyek)
+                                                        @case('R')
+                                                            Retail
+                                                        @break
+
+                                                        @case('P')
+                                                            Non Retail
+                                                        @break
+
+                                                        @default
+                                                            -
+                                                    @endswitch
+                                                </small>
+                                            </td>
+                                            <!--end::Tipe Proyek-->
 
                                             <!--begin::column-->
                                             <td class="text-start">
@@ -797,12 +732,63 @@
                                             <!--begin::column-->
                                             <td class="text-start">
                                                 <small>
-                                                    {{ $proyek->bulan_review ?? "-" }}
+                                                    @switch($proyek->bulan_review ?? "-")
+                                                        @case('1')
+                                                            Januari
+                                                        @break
+
+                                                        @case('2')
+                                                            Februari
+                                                        @break
+
+                                                        @case('3')
+                                                            Maret
+                                                        @break
+
+                                                        @case('4')
+                                                            April
+                                                        @break
+
+                                                        @case('5')
+                                                            Mei
+                                                        @break
+
+                                                        @case('6')
+                                                            Juni
+                                                        @break
+
+                                                        @case('7')
+                                                            Juli
+                                                        @break
+
+                                                        @case('8')
+                                                            Agustus
+                                                        @break
+
+                                                        @case('9')
+                                                            September
+                                                        @break
+
+                                                        @case('10')
+                                                            Oktober
+                                                        @break
+
+                                                        @case('11')
+                                                            November
+                                                        @break
+
+                                                        @case('12')
+                                                            Desember
+                                                        @break
+
+                                                        @default
+                                                            -
+                                                    @endswitch
                                                 </small>
                                             </td>
                                             <!--end::column-->
                                             <!--begin::column-->
-                                            <td class="text-start">
+                                            <td class="text-start text-truncate" style="max-width: 250px;">
                                                 <small>
                                                     {{ $proyek->laporan_kualitatif_pasdin	 ?? "-" }}
                                                 </small>
@@ -858,7 +844,7 @@
                                             </td>
                                             <!--end::column-->
                                             <!--begin::column-->
-                                            <td class="text-start">
+                                            <td class="text-start text-truncate" style="max-width: 250px;">
                                                 <small>
                                                     {{ $proyek->laporan_kualitatif_paspot ?? "-" }}
                                                 </small>
@@ -900,7 +886,7 @@
                                             </td>
                                             <!--end::column-->
                                             <!--begin::column-->
-                                            <td class="text-start">
+                                            <td class="text-start text-truncate" style="max-width: 250px;">
                                                 <small>
                                                     {{ $proyek->laporan_prakualifikasi ?? "-" }}
                                                 </small>
@@ -928,7 +914,7 @@
                                             </td>
                                             <!--end::column-->
                                             <!--begin::column-->
-                                            <td class="text-start">
+                                            <td class="text-start text-truncate" style="max-width: 250px;">
                                                 <small>
                                                     {{ $proyek->laporan_tender ?? "-" }}
                                                 </small>
@@ -937,7 +923,7 @@
                                             <!--begin::column-->
                                             <td class="text-start">
                                                 <small>
-                                                    {{ $proyek->nilai_perolehan ?? "-" }}
+                                                    {{ number_format((int)$proyek->nilai_perolehan, 0, '.', '.') ?? '0' }}
                                                 </small>
                                             </td>
                                             <!--end::column-->
@@ -956,35 +942,35 @@
                                             </td>
                                             <!--end::column-->
                                             <!--begin::column-->
-                                            <td class="text-start">
+                                            <td class="text-start text-truncate" style="max-width: 250px;">
                                                 <small>
                                                     {{ $proyek->laporan_perolehan ?? "-" }}
                                                 </small>
                                             </td>
                                             <!--end::column-->
                                             <!--begin::column-->
-                                            <td class="text-start">
+                                            <td class="text-start text-truncate" style="max-width: 250px;">
                                                 <small>
                                                     {{ $proyek->aspek_pesaing ?? "-" }}
                                                 </small>
                                             </td>
                                             <!--end::column-->
                                             <!--begin::column-->
-                                            <td class="text-start">
+                                            <td class="text-start text-truncate" style="max-width: 250px;">
                                                 <small>
                                                     {{ $proyek->aspek_non_pesaing ?? "-" }}
                                                 </small>
                                             </td>
                                             <!--end::column-->
                                             <!--begin::column-->
-                                            <td class="text-start">
+                                            <td class="text-start text-truncate" style="max-width: 250px;">
                                                 <small>
                                                     {{ $proyek->saran_perbaikan ?? "-" }}
                                                 </small>
                                             </td>
                                             <!--end::column-->
                                             <!--begin::column-->
-                                            <td class="text-start">
+                                            <td class="text-start text-truncate" style="max-width: 250px;">
                                                 <small>
                                                     {{ $proyek->laporan_menang ?? "-" }}
                                                 </small>
@@ -1147,12 +1133,26 @@
                                             </td>
                                             <!--end::column-->
                                             <!--begin::column-->
-                                            <td class="text-start">
+                                            <td class="text-start text-truncate" style="max-width: 250px;">
                                                 <small>
                                                     {{ $proyek->laporan_terkontrak ?? "-" }}
                                                 </small>
                                             </td>
                                             <!--end::column-->
+                                            <!--begin::isrkap-->
+                                            <td class="text-start text-truncate" style="max-width: 250px;">
+                                                <small>
+                                                    {{ $proyek->is_rkap == true ? "RKAP" : "-" }}
+                                                </small>
+                                            </td>
+                                            <!--end::isrkap-->
+                                            <!--begin::iscancel-->
+                                            <td class="text-start text-truncate" style="max-width: 250px;">
+                                                <small>
+                                                    {{ $proyek->is_cancel == true ? "Cancel" : "-" }}
+                                                </small>
+                                            </td>
+                                            <!--end::iscancel-->
 
                                         </tr>
                                     @endforeach
@@ -1204,9 +1204,14 @@
 
 
     <!--end::Main-->
+
+    <!--begin::Global Javascript Bundle(used by all pages)-->
+    <script src="{{ asset('/plugins/global/plugins.bundle.js') }}"></script>
+    <script src="{{ asset('/js/scripts.bundle.js') }}"></script>
+    <!--end::Global Javascript Bundle-->
     
     <!--begin::Javascript-->
-    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    {{-- <script src="https://code.jquery.com/jquery-3.5.1.js"></script> --}}
     <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script> 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script> 
