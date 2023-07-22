@@ -427,68 +427,72 @@
                                     <ol class="decimal_type" style="list-style-type: decimal;">
                                         <li>
                                             <span style="line-height:150%;font-size:12px;"><b>My company does not plan to use construction services other than PT Wijaya Karya.</b></span><br>
-                                            <span style="line-height:150%;font-size:12px;"><i>(Perusahaan saya tidak berencana untuk menggunakan jasa konstruksi selain PT Wijaya Karya)</i></span>
+                                            <span style="line-height:150%;font-size:12px;"><i>Perusahaan saya tidak berencana untuk menggunakan jasa konstruksi selain PT Wijaya Karya</i></span>
                                         </li>
                                         <!--begin::Answer-->
                                         <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                             <span class="col-3 text-end">
+                                                <p style="line-height:150%;font-size:12px;"><b>Disagree</b></p>
                                                 <p style="line-height:150%;font-size:12px;">Sangat Tidak Setuju</p>
                                             </span>
-                                            <span class="col p-0 pt-1 text-center">
+                                            <span class="col p-0 pt-3 text-center">
                                                 <input required type="radio" name="answer_1_1" value="1" {{ !empty($jawaban["answer_1_1"]) && $jawaban["answer_1_1"] == '1' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                 <br>1
                                             </span>
-                                            <span class="col p-0 pt-1 text-center">
+                                            <span class="col p-0 pt-3 text-center">
                                                 <input required type="radio" name="answer_1_1" value="2" {{ !empty($jawaban["answer_1_1"]) && $jawaban["answer_1_1"] == '2' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                 <br>2
                                             </span>
-                                            <span class="col p-0 pt-1 text-center">
+                                            <span class="col p-0 pt-3 text-center">
                                                 <input required type="radio" name="answer_1_1" value="3" {{ !empty($jawaban["answer_1_1"]) && $jawaban["answer_1_1"] == '3' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                 <br>3
                                             </span>
-                                            <span class="col p-0 pt-1 text-center">
+                                            <span class="col p-0 pt-3 text-center">
                                                 <input required type="radio" name="answer_1_1" value="4" {{ !empty($jawaban["answer_1_1"]) && $jawaban["answer_1_1"] == '4' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                 <br>4
                                             </span>
-                                            <span class="col p-0 pt-1 text-center">
+                                            <span class="col p-0 pt-3 text-center">
                                                 <input required type="radio" name="answer_1_1" value="5" {{ !empty($jawaban["answer_1_1"]) && $jawaban["answer_1_1"] == '5' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                 <br>5
                                             </span>
                                             <span class="col-2 text-start">
+                                                <p style="line-height:150%;font-size:12px;"><b>Agree</b></p>
                                                 <p style="line-height:150%;font-size:12px;">Sangat Setuju</p>
                                             </span>
                                         </div>
                                         <!--end::Answer-->
                                         <li>
                                             <span style="line-height:150%;font-size:12px;"><b>For various needs of my company's construction services, I will always use PT Wijaya Karya.</b></span><br>
-                                            <span style="line-height:150%;font-size:12px;"><i>(Untuk berbagai kebutuhan jasa konstruksi perusahaan saya akan selalu menggunakan PT Wijaya Karya.)</i></span>
+                                            <span style="line-height:150%;font-size:12px;"><i>Untuk berbagai kebutuhan jasa konstruksi perusahaan saya akan selalu menggunakan PT Wijaya Karya.</i></span>
                                         </li>
                                         <!--begin::Answer-->
                                         <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                             <span class="col-3 text-end">
+                                                <p style="line-height:150%;font-size:12px;"><b>Disagree</b></p>
                                                 <p style="line-height:150%;font-size:12px;">Sangat Tidak Setuju</p>
                                             </span>
-                                            <span class="col p-0 pt-1 text-center">
+                                            <span class="col p-0 pt-3 text-center">
                                                 <input required type="radio" name="answer_1_2" value="1" {{ !empty($jawaban["answer_1_2"]) && $jawaban["answer_1_2"] == '1' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                 <br>1
                                             </span>
-                                            <span class="col p-0 pt-1 text-center">
+                                            <span class="col p-0 pt-3 text-center">
                                                 <input required type="radio" name="answer_1_2" value="2" {{ !empty($jawaban["answer_1_2"]) && $jawaban["answer_1_2"] == '2' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                 <br>2
                                             </span>
-                                            <span class="col p-0 pt-1 text-center">
+                                            <span class="col p-0 pt-3 text-center">
                                                 <input required type="radio" name="answer_1_2" value="3" {{ !empty($jawaban["answer_1_2"]) && $jawaban["answer_1_2"] == '3' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                 <br>3
                                             </span>
-                                            <span class="col p-0 pt-1 text-center">
+                                            <span class="col p-0 pt-3 text-center">
                                                 <input required type="radio" name="answer_1_2" value="4" {{ !empty($jawaban["answer_1_2"]) && $jawaban["answer_1_2"] == '4' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                 <br>4
                                             </span>
-                                            <span class="col p-0 pt-1 text-center">
+                                            <span class="col p-0 pt-3 text-center">
                                                 <input required type="radio" name="answer_1_2" value="5" {{ !empty($jawaban["answer_1_2"]) && $jawaban["answer_1_2"] == '5' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                 <br>5
                                             </span>
                                             <span class="col-2 text-start">
+                                                <p style="line-height:150%;font-size:12px;"><b>Agree</b></p>
                                                 <p style="line-height:150%;font-size:12px;">Sangat Setuju</p>
                                             </span>
                                         </div>
@@ -501,33 +505,38 @@
                                 <br>
                                 <li><strong><span style="line-height:150%;font-size:12px;">Customer Satisfaction Index</span></strong>
                                     <ol class="decimal_type" style="list-style-type: undefined;">
-                                        <li><span style="line-height:150%;font-size:12px;">Mesikpun harga yang ditawarkan lebih mahal dibandingkan dengan perusahaan jasa konstruksi lain, perusahaan saya akan tetap menggunakan jasa PT Wijaya Karya.</span>
+                                        <li>
+                                            <span style="line-height:150%;font-size:12px;"><b>Even though the price offered is higher than other construction service companies, my company will still use the services of PT Wijaya Karya.</b></span><br>
+                                            <span style="line-height:150%;font-size:12px;"><i>Mesikpun harga yang ditawarkan lebih mahal dibandingkan dengan perusahaan jasa konstruksi lain, perusahaan saya akan tetap menggunakan jasa PT Wijaya Karya.</i></span>
+                                        </li>
                                         <!--begin::Answer-->
                                         <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                             <span class="col-3 text-end">
+                                                <p style="line-height:150%;font-size:12px;"><b>Disagree</b></p>
                                                 <p style="line-height:150%;font-size:12px;">Sangat Tidak Setuju</p>
                                             </span>
-                                            <span class="col p-0 pt-1 text-center">
+                                            <span class="col p-0 pt-3 text-center">
                                                 <input required type="radio" name="answer_2_1" value="1" {{ !empty($jawaban["answer_2_1"]) && $jawaban["answer_2_1"] == '1' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                 <br>1
                                             </span>
-                                            <span class="col p-0 pt-1 text-center">
+                                            <span class="col p-0 pt-3 text-center">
                                                 <input required type="radio" name="answer_2_1" value="2" {{ !empty($jawaban["answer_2_1"]) && $jawaban["answer_2_1"] == '2' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                 <br>2
                                             </span>
-                                            <span class="col p-0 pt-1 text-center">
+                                            <span class="col p-0 pt-3 text-center">
                                                 <input required type="radio" name="answer_2_1" value="3" {{ !empty($jawaban["answer_2_1"]) && $jawaban["answer_2_1"] == '3' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                 <br>3
                                             </span>
-                                            <span class="col p-0 pt-1 text-center">
+                                            <span class="col p-0 pt-3 text-center">
                                                 <input required type="radio" name="answer_2_1" value="4" {{ !empty($jawaban["answer_2_1"]) && $jawaban["answer_2_1"] == '4' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                 <br>4
                                             </span>
-                                            <span class="col p-0 pt-1 text-center">
+                                            <span class="col p-0 pt-3 text-center">
                                                 <input required type="radio" name="answer_2_1" value="5" {{ !empty($jawaban["answer_2_1"]) && $jawaban["answer_2_1"] == '5' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                 <br>5
                                             </span>
                                             <span class="col-2 text-start">
+                                                <p style="line-height:150%;font-size:12px;"><b>Agree</b></p>
                                                 <p style="line-height:150%;font-size:12px;">Sangat Setuju</p>
                                             </span>
                                         </div>
@@ -536,29 +545,31 @@
                                         <!--begin::Answer-->
                                         <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                             <span class="col-3 text-end">
+                                                <p style="line-height:150%;font-size:12px;"><b>Disagree</b></p>
                                                 <p style="line-height:150%;font-size:12px;">Sangat Tidak Setuju</p>
                                             </span>
-                                            <span class="col p-0 pt-1 text-center">
+                                            <span class="col p-0 pt-3 text-center">
                                                 <input required type="radio" name="answer_2_2" value="1" {{ !empty($jawaban["answer_2_2"]) && $jawaban["answer_2_2"] == '1' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                 <br>1
                                             </span>
-                                            <span class="col p-0 pt-1 text-center">
+                                            <span class="col p-0 pt-3 text-center">
                                                 <input required type="radio" name="answer_2_2" value="2" {{ !empty($jawaban["answer_2_2"]) && $jawaban["answer_2_2"] == '2' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                 <br>2
                                             </span>
-                                            <span class="col p-0 pt-1 text-center">
+                                            <span class="col p-0 pt-3 text-center">
                                                 <input required type="radio" name="answer_2_2" value="3" {{ !empty($jawaban["answer_2_2"]) && $jawaban["answer_2_2"] == '3' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                 <br>3
                                             </span>
-                                            <span class="col p-0 pt-1 text-center">
+                                            <span class="col p-0 pt-3 text-center">
                                                 <input required type="radio" name="answer_2_2" value="4" {{ !empty($jawaban["answer_2_2"]) && $jawaban["answer_2_2"] == '4' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                 <br>4
                                             </span>
-                                            <span class="col p-0 pt-1 text-center">
+                                            <span class="col p-0 pt-3 text-center">
                                                 <input required type="radio" name="answer_2_2" value="5" {{ !empty($jawaban["answer_2_2"]) && $jawaban["answer_2_2"] == '5' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                 <br>5
                                             </span>
                                             <span class="col-2 text-start">
+                                                <p style="line-height:150%;font-size:12px;"><b>Agree</b></p>
                                                 <p style="line-height:150%;font-size:12px;">Sangat Setuju</p>
                                             </span>
                                         </div>
@@ -567,29 +578,31 @@
                                         <!--begin::Answer-->
                                         <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                             <span class="col-3 text-end">
+                                                <p style="line-height:150%;font-size:12px;"><b>Disagree</b></p>
                                                 <p style="line-height:150%;font-size:12px;">Sangat Tidak Setuju</p>
                                             </span>
-                                            <span class="col p-0 pt-1 text-center">
+                                            <span class="col p-0 pt-3 text-center">
                                                 <input required type="radio" name="answer_2_3" value="1" {{ !empty($jawaban["answer_2_3"]) && $jawaban["answer_2_3"] == '1' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                 <br>1
                                             </span>
-                                            <span class="col p-0 pt-1 text-center">
+                                            <span class="col p-0 pt-3 text-center">
                                                 <input required type="radio" name="answer_2_3" value="2" {{ !empty($jawaban["answer_2_3"]) && $jawaban["answer_2_3"] == '2' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                 <br>2
                                             </span>
-                                            <span class="col p-0 pt-1 text-center">
+                                            <span class="col p-0 pt-3 text-center">
                                                 <input required type="radio" name="answer_2_3" value="3" {{ !empty($jawaban["answer_2_3"]) && $jawaban["answer_2_3"] == '3' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                 <br>3
                                             </span>
-                                            <span class="col p-0 pt-1 text-center">
+                                            <span class="col p-0 pt-3 text-center">
                                                 <input required type="radio" name="answer_2_3" value="4" {{ !empty($jawaban["answer_2_3"]) && $jawaban["answer_2_3"] == '4' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                 <br>4
                                             </span>
-                                            <span class="col p-0 pt-1 text-center">
+                                            <span class="col p-0 pt-3 text-center">
                                                 <input required type="radio" name="answer_2_3" value="5" {{ !empty($jawaban["answer_2_3"]) && $jawaban["answer_2_3"] == '5' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                 <br>5
                                             </span>
                                             <span class="col-2 text-start">
+                                                <p style="line-height:150%;font-size:12px;"><b>Agree</b></p>
                                                 <p style="line-height:150%;font-size:12px;">Sangat Setuju</p>
                                             </span>
                                         </div>
@@ -607,29 +620,31 @@
                                         <!--begin::Answer-->
                                         <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                             <span class="col-3 text-end">
+                                                <p style="line-height:150%;font-size:12px;"><b>Disagree</b></p>
                                                 <p style="line-height:150%;font-size:12px;">Sangat Tidak Setuju</p>
                                             </span>
-                                            <span class="col p-0 pt-1 text-center">
+                                            <span class="col p-0 pt-3 text-center">
                                                 <input required type="radio" name="answer_3" value="1" {{ !empty($jawaban["answer_3"]) && $jawaban["answer_3"] == '1' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                 <br>1
                                             </span>
-                                            <span class="col p-0 pt-1 text-center">
+                                            <span class="col p-0 pt-3 text-center">
                                                 <input required type="radio" name="answer_3" value="2" {{ !empty($jawaban["answer_3"]) && $jawaban["answer_3"] == '2' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                 <br>2
                                             </span>
-                                            <span class="col p-0 pt-1 text-center">
+                                            <span class="col p-0 pt-3 text-center">
                                                 <input required type="radio" name="answer_3" value="3" {{ !empty($jawaban["answer_3"]) && $jawaban["answer_3"] == '3' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                 <br>3
                                             </span>
-                                            <span class="col p-0 pt-1 text-center">
+                                            <span class="col p-0 pt-3 text-center">
                                                 <input required type="radio" name="answer_3" value="4" {{ !empty($jawaban["answer_3"]) && $jawaban["answer_3"] == '4' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                 <br>4
                                             </span>
-                                            <span class="col p-0 pt-1 text-center">
+                                            <span class="col p-0 pt-3 text-center">
                                                 <input required type="radio" name="answer_3" value="5" {{ !empty($jawaban["answer_3"]) && $jawaban["answer_3"] == '5' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                 <br>5
                                             </span>
                                             <span class="col-2 text-start">
+                                                <p style="line-height:150%;font-size:12px;"><b>Agree</b></p>
                                                 <p style="line-height:150%;font-size:12px;">Sangat Setuju</p>
                                             </span>
                                         </div>
@@ -648,29 +663,31 @@
                                                 <!--begin::Answer-->
                                                 <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                                     <span class="col-3 text-end">
+                                                        <p style="line-height:150%;font-size:12px;"><b>Not satisfied</b></p>
                                                         <p style="line-height:150%;font-size:12px;">Sangat Tidak Puas</p>
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_4_1_1" value="1" {{ !empty($jawaban["answer_4_1_1"]) && $jawaban["answer_4_1_1"] == '1' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>1
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_4_1_1" value="2" {{ !empty($jawaban["answer_4_1_1"]) && $jawaban["answer_4_1_1"] == '2' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>2
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_4_1_1" value="3" {{ !empty($jawaban["answer_4_1_1"]) && $jawaban["answer_4_1_1"] == '3' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>3
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_4_1_1" value="4" {{ !empty($jawaban["answer_4_1_1"]) && $jawaban["answer_4_1_1"] == '4' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>4
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_4_1_1" value="5" {{ !empty($jawaban["answer_4_1_1"]) && $jawaban["answer_4_1_1"] == '5' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>5
                                                     </span>
                                                     <span class="col-2 text-start">
+                                                        <p style="line-height:150%;font-size:12px;"><b>Satisfied</b></p>
                                                         <p style="line-height:150%;font-size:12px;">Sangat Puas</p>
                                                     </span>
                                                 </div>
@@ -679,29 +696,31 @@
                                                 <!--begin::Answer-->
                                                 <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                                     <span class="col-3 text-end">
+                                                        <p style="line-height:150%;font-size:12px;"><b>Very Unimportant</b></p>
                                                         <p style="line-height:150%;font-size:12px;">Sangat Tidak Penting</p>
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_4_1_2" value="1" {{ !empty($jawaban["answer_4_1_2"]) && $jawaban["answer_4_1_2"] == '1' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>1
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_4_1_2" value="2" {{ !empty($jawaban["answer_4_1_2"]) && $jawaban["answer_4_1_2"] == '2' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>2
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_4_1_2" value="3" {{ !empty($jawaban["answer_4_1_2"]) && $jawaban["answer_4_1_2"] == '3' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>3
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_4_1_2" value="4" {{ !empty($jawaban["answer_4_1_2"]) && $jawaban["answer_4_1_2"] == '4' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>4
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_4_1_2" value="5" {{ !empty($jawaban["answer_4_1_2"]) && $jawaban["answer_4_1_2"] == '5' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>5
                                                     </span>
                                                     <span class="col-2 text-start">
+                                                        <p style="line-height:150%;font-size:12px;"><b>Very Important</b></p>
                                                         <p style="line-height:150%;font-size:12px;">Sangat Penting</p>
                                                     </span>
                                                 </div>
@@ -715,29 +734,31 @@
                                                 <!--begin::Answer-->
                                                 <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                                     <span class="col-3 text-end">
+                                                        <p style="line-height:150%;font-size:12px;"><b>Not satisfied</b></p>
                                                         <p style="line-height:150%;font-size:12px;">Sangat Tidak Puas</p>
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_4_2_1" value="1" {{ !empty($jawaban["answer_4_2_1"]) && $jawaban["answer_4_2_1"] == '1' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>1
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_4_2_1" value="2" {{ !empty($jawaban["answer_4_2_1"]) && $jawaban["answer_4_2_1"] == '2' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>2
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_4_2_1" value="3" {{ !empty($jawaban["answer_4_2_1"]) && $jawaban["answer_4_2_1"] == '3' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>3
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_4_2_1" value="4" {{ !empty($jawaban["answer_4_2_1"]) && $jawaban["answer_4_2_1"] == '4' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>4
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_4_2_1" value="5" {{ !empty($jawaban["answer_4_2_1"]) && $jawaban["answer_4_2_1"] == '5' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>5
                                                     </span>
                                                     <span class="col-2 text-start">
+                                                        <p style="line-height:150%;font-size:12px;"><b>Satisfied</b></p>
                                                         <p style="line-height:150%;font-size:12px;">Sangat Puas</p>
                                                     </span>
                                                 </div>
@@ -746,29 +767,31 @@
                                                 <!--begin::Answer-->
                                                 <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                                     <span class="col-3 text-end">
+                                                        <p style="line-height:150%;font-size:12px;"><b>Very Unimportant</b></p>
                                                         <p style="line-height:150%;font-size:12px;">Sangat Tidak Penting</p>
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_4_2_2" value="1" {{ !empty($jawaban["answer_4_2_2"]) && $jawaban["answer_4_2_2"] == '1' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>1
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_4_2_2" value="2" {{ !empty($jawaban["answer_4_2_2"]) && $jawaban["answer_4_2_2"] == '2' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>2
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_4_2_2" value="3" {{ !empty($jawaban["answer_4_2_2"]) && $jawaban["answer_4_2_2"] == '3' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>3
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_4_2_2" value="4" {{ !empty($jawaban["answer_4_2_2"]) && $jawaban["answer_4_2_2"] == '4' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>4
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_4_2_2" value="5" {{ !empty($jawaban["answer_4_2_2"]) && $jawaban["answer_4_2_2"] == '5' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>5
                                                     </span>
                                                     <span class="col-2 text-start">
+                                                        <p style="line-height:150%;font-size:12px;"><b>Very Important</b></p>
                                                         <p style="line-height:150%;font-size:12px;">Sangat Penting</p>
                                                     </span>
                                                 </div>
@@ -784,29 +807,31 @@
                                                         <!--begin::Answer-->
                                                         <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                                             <span class="col-3 text-end">
-                                                                <p style="line-height:150%;font-size:12px;">Sangat Tidak Puas</p>
+                                                                <p style="line-height:150%;font-size:12px;"><b>Not satisfied</b></p>
+                                                        <p style="line-height:150%;font-size:12px;">Sangat Tidak Puas</p>
                                                             </span>
-                                                            <span class="col p-0 pt-1 text-center">
+                                                            <span class="col p-0 pt-3 text-center">
                                                                 <input required type="radio" name="answer_4_3_1" value="1" {{ !empty($jawaban["answer_4_3_1"]) && $jawaban["answer_4_3_1"] == '1' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                                 <br>1
                                                             </span>
-                                                            <span class="col p-0 pt-1 text-center">
+                                                            <span class="col p-0 pt-3 text-center">
                                                                 <input required type="radio" name="answer_4_3_1" value="2" {{ !empty($jawaban["answer_4_3_1"]) && $jawaban["answer_4_3_1"] == '2' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                                 <br>2
                                                             </span>
-                                                            <span class="col p-0 pt-1 text-center">
+                                                            <span class="col p-0 pt-3 text-center">
                                                                 <input required type="radio" name="answer_4_3_1" value="3" {{ !empty($jawaban["answer_4_3_1"]) && $jawaban["answer_4_3_1"] == '3' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                                 <br>3
                                                             </span>
-                                                            <span class="col p-0 pt-1 text-center">
+                                                            <span class="col p-0 pt-3 text-center">
                                                                 <input required type="radio" name="answer_4_3_1" value="4" {{ !empty($jawaban["answer_4_3_1"]) && $jawaban["answer_4_3_1"] == '4' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                                 <br>4
                                                             </span>
-                                                            <span class="col p-0 pt-1 text-center">
+                                                            <span class="col p-0 pt-3 text-center">
                                                                 <input required type="radio" name="answer_4_3_1" value="5" {{ !empty($jawaban["answer_4_3_1"]) && $jawaban["answer_4_3_1"] == '5' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                                 <br>5
                                                             </span>
                                                             <span class="col-2 text-start">
+                                                                <p style="line-height:150%;font-size:12px;"><b>Satisfied</b></p>
                                                                 <p style="line-height:150%;font-size:12px;">Sangat Puas</p>
                                                             </span>
                                                         </div>
@@ -819,29 +844,31 @@
                                                         <!--begin::Answer-->
                                                         <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                                             <span class="col-3 text-end">
+                                                                <p style="line-height:150%;font-size:12px;"><b>Very Unimportant</b></p>
                                                                 <p style="line-height:150%;font-size:12px;">Sangat Tidak Penting</p>
                                                             </span>
-                                                            <span class="col p-0 pt-1 text-center">
+                                                            <span class="col p-0 pt-3 text-center">
                                                                 <input required type="radio" name="answer_4_3_2" value="1" {{ !empty($jawaban["answer_4_3_2"]) && $jawaban["answer_4_3_2"] == '1' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                                 <br>1
                                                             </span>
-                                                            <span class="col p-0 pt-1 text-center">
+                                                            <span class="col p-0 pt-3 text-center">
                                                                 <input required type="radio" name="answer_4_3_2" value="2" {{ !empty($jawaban["answer_4_3_2"]) && $jawaban["answer_4_3_2"] == '2' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                                 <br>2
                                                             </span>
-                                                            <span class="col p-0 pt-1 text-center">
+                                                            <span class="col p-0 pt-3 text-center">
                                                                 <input required type="radio" name="answer_4_3_2" value="3" {{ !empty($jawaban["answer_4_3_2"]) && $jawaban["answer_4_3_2"] == '3' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                                 <br>3
                                                             </span>
-                                                            <span class="col p-0 pt-1 text-center">
+                                                            <span class="col p-0 pt-3 text-center">
                                                                 <input required type="radio" name="answer_4_3_2" value="4" {{ !empty($jawaban["answer_4_3_2"]) && $jawaban["answer_4_3_2"] == '4' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                                 <br>4
                                                             </span>
-                                                            <span class="col p-0 pt-1 text-center">
+                                                            <span class="col p-0 pt-3 text-center">
                                                                 <input required type="radio" name="answer_4_3_2" value="5" {{ !empty($jawaban["answer_4_3_2"]) && $jawaban["answer_4_3_2"] == '5' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                                 <br>5
                                                             </span>
                                                             <span class="col-2 text-start">
+                                                                <p style="line-height:150%;font-size:12px;"><b>Very Important</b></p>
                                                                 <p style="line-height:150%;font-size:12px;">Sangat Penting</p>
                                                             </span>
                                                         </div>
@@ -859,29 +886,31 @@
                                                         <!--begin::Answer-->
                                                         <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                                             <span class="col-3 text-end">
-                                                                <p style="line-height:150%;font-size:12px;">Sangat Tidak Puas</p>
+                                                                <p style="line-height:150%;font-size:12px;"><b>Not satisfied</b></p>
+                                                        <p style="line-height:150%;font-size:12px;">Sangat Tidak Puas</p>
                                                             </span>
-                                                            <span class="col p-0 pt-1 text-center">
+                                                            <span class="col p-0 pt-3 text-center">
                                                                 <input required type="radio" name="answer_4_4_1_a" value="1" {{ !empty($jawaban["answer_4_4_1_a"]) && $jawaban["answer_4_4_1_a"] == '1' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                                 <br>1
                                                             </span>
-                                                            <span class="col p-0 pt-1 text-center">
+                                                            <span class="col p-0 pt-3 text-center">
                                                                 <input required type="radio" name="answer_4_4_1_a" value="2" {{ !empty($jawaban["answer_4_4_1_a"]) && $jawaban["answer_4_4_1_a"] == '2' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                                 <br>2
                                                             </span>
-                                                            <span class="col p-0 pt-1 text-center">
+                                                            <span class="col p-0 pt-3 text-center">
                                                                 <input required type="radio" name="answer_4_4_1_a" value="3" {{ !empty($jawaban["answer_4_4_1_a"]) && $jawaban["answer_4_4_1_a"] == '3' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                                 <br>3
                                                             </span>
-                                                            <span class="col p-0 pt-1 text-center">
+                                                            <span class="col p-0 pt-3 text-center">
                                                                 <input required type="radio" name="answer_4_4_1_a" value="4" {{ !empty($jawaban["answer_4_4_1_a"]) && $jawaban["answer_4_4_1_a"] == '4' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                                 <br>4
                                                             </span>
-                                                            <span class="col p-0 pt-1 text-center">
+                                                            <span class="col p-0 pt-3 text-center">
                                                                 <input required type="radio" name="answer_4_4_1_a" value="5" {{ !empty($jawaban["answer_4_4_1_a"]) && $jawaban["answer_4_4_1_a"] == '5' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                                 <br>5
                                                             </span>
                                                             <span class="col-2 text-start">
+                                                                <p style="line-height:150%;font-size:12px;"><b>Satisfied</b></p>
                                                                 <p style="line-height:150%;font-size:12px;">Sangat Puas</p>
                                                             </span>
                                                         </div>
@@ -890,29 +919,31 @@
                                                         <!--begin::Answer-->
                                                         <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                                             <span class="col-3 text-end">
+                                                                <p style="line-height:150%;font-size:12px;"><b>Very Unimportant</b></p>
                                                                 <p style="line-height:150%;font-size:12px;">Sangat Tidak Penting</p>
                                                             </span>
-                                                            <span class="col p-0 pt-1 text-center">
+                                                            <span class="col p-0 pt-3 text-center">
                                                                 <input required type="radio" name="answer_4_4_1_b" value="1" {{ !empty($jawaban["answer_4_4_1_b"]) && $jawaban["answer_4_4_1_b"] == '1' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                                 <br>1
                                                             </span>
-                                                            <span class="col p-0 pt-1 text-center">
+                                                            <span class="col p-0 pt-3 text-center">
                                                                 <input required type="radio" name="answer_4_4_1_b" value="2" {{ !empty($jawaban["answer_4_4_1_b"]) && $jawaban["answer_4_4_1_b"] == '2' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                                 <br>2
                                                             </span>
-                                                            <span class="col p-0 pt-1 text-center">
+                                                            <span class="col p-0 pt-3 text-center">
                                                                 <input required type="radio" name="answer_4_4_1_b" value="3" {{ !empty($jawaban["answer_4_4_1_b"]) && $jawaban["answer_4_4_1_b"] == '3' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                                 <br>3
                                                             </span>
-                                                            <span class="col p-0 pt-1 text-center">
+                                                            <span class="col p-0 pt-3 text-center">
                                                                 <input required type="radio" name="answer_4_4_1_b" value="4" {{ !empty($jawaban["answer_4_4_1_b"]) && $jawaban["answer_4_4_1_b"] == '4' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                                 <br>4
                                                             </span>
-                                                            <span class="col p-0 pt-1 text-center">
+                                                            <span class="col p-0 pt-3 text-center">
                                                                 <input required type="radio" name="answer_4_4_1_b" value="5" {{ !empty($jawaban["answer_4_4_1_b"]) && $jawaban["answer_4_4_1_b"] == '5' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                                 <br>5
                                                             </span>
                                                             <span class="col-2 text-start">
+                                                                <p style="line-height:150%;font-size:12px;"><b>Very Important</b></p>
                                                                 <p style="line-height:150%;font-size:12px;">Sangat Penting</p>
                                                             </span>
                                                         </div>
@@ -925,29 +956,31 @@
                                                         <!--begin::Answer-->
                                                         <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                                             <span class="col-3 text-end">
-                                                                <p style="line-height:150%;font-size:12px;">Sangat Tidak Puas</p>
+                                                                <p style="line-height:150%;font-size:12px;"><b>Not satisfied</b></p>
+                                                        <p style="line-height:150%;font-size:12px;">Sangat Tidak Puas</p>
                                                             </span>
-                                                            <span class="col p-0 pt-1 text-center">
+                                                            <span class="col p-0 pt-3 text-center">
                                                                 <input required type="radio" name="answer_4_4_2_a" value="1" {{ !empty($jawaban["answer_4_4_2_a"]) && $jawaban["answer_4_4_2_a"] == '1' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                                 <br>1
                                                             </span>
-                                                            <span class="col p-0 pt-1 text-center">
+                                                            <span class="col p-0 pt-3 text-center">
                                                                 <input required type="radio" name="answer_4_4_2_a" value="2" {{ !empty($jawaban["answer_4_4_2_a"]) && $jawaban["answer_4_4_2_a"] == '2' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                                 <br>2
                                                             </span>
-                                                            <span class="col p-0 pt-1 text-center">
+                                                            <span class="col p-0 pt-3 text-center">
                                                                 <input required type="radio" name="answer_4_4_2_a" value="3" {{ !empty($jawaban["answer_4_4_2_a"]) && $jawaban["answer_4_4_2_a"] == '3' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                                 <br>3
                                                             </span>
-                                                            <span class="col p-0 pt-1 text-center">
+                                                            <span class="col p-0 pt-3 text-center">
                                                                 <input required type="radio" name="answer_4_4_2_a" value="4" {{ !empty($jawaban["answer_4_4_2_a"]) && $jawaban["answer_4_4_2_a"] == '4' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                                 <br>4
                                                             </span>
-                                                            <span class="col p-0 pt-1 text-center">
+                                                            <span class="col p-0 pt-3 text-center">
                                                                 <input required type="radio" name="answer_4_4_2_a" value="5" {{ !empty($jawaban["answer_4_4_2_a"]) && $jawaban["answer_4_4_2_a"] == '5' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                                 <br>5
                                                             </span>
                                                             <span class="col-2 text-start">
+                                                                <p style="line-height:150%;font-size:12px;"><b>Satisfied</b></p>
                                                                 <p style="line-height:150%;font-size:12px;">Sangat Puas</p>
                                                             </span>
                                                         </div>
@@ -956,29 +989,31 @@
                                                         <!--begin::Answer-->
                                                         <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                                             <span class="col-3 text-end">
+                                                                <p style="line-height:150%;font-size:12px;"><b>Very Unimportant</b></p>
                                                                 <p style="line-height:150%;font-size:12px;">Sangat Tidak Penting</p>
                                                             </span>
-                                                            <span class="col p-0 pt-1 text-center">
+                                                            <span class="col p-0 pt-3 text-center">
                                                                 <input required type="radio" name="answer_4_4_2_b" value="1" {{ !empty($jawaban["answer_4_4_2_b"]) && $jawaban["answer_4_4_2_b"] == '1' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                                 <br>1
                                                             </span>
-                                                            <span class="col p-0 pt-1 text-center">
+                                                            <span class="col p-0 pt-3 text-center">
                                                                 <input required type="radio" name="answer_4_4_2_b" value="2" {{ !empty($jawaban["answer_4_4_2_b"]) && $jawaban["answer_4_4_2_b"] == '2' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                                 <br>2
                                                             </span>
-                                                            <span class="col p-0 pt-1 text-center">
+                                                            <span class="col p-0 pt-3 text-center">
                                                                 <input required type="radio" name="answer_4_4_2_b" value="3" {{ !empty($jawaban["answer_4_4_2_b"]) && $jawaban["answer_4_4_2_b"] == '3' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                                 <br>3
                                                             </span>
-                                                            <span class="col p-0 pt-1 text-center">
+                                                            <span class="col p-0 pt-3 text-center">
                                                                 <input required type="radio" name="answer_4_4_2_b" value="4" {{ !empty($jawaban["answer_4_4_2_b"]) && $jawaban["answer_4_4_2_b"] == '4' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                                 <br>4
                                                             </span>
-                                                            <span class="col p-0 pt-1 text-center">
+                                                            <span class="col p-0 pt-3 text-center">
                                                                 <input required type="radio" name="answer_4_4_2_b" value="5" {{ !empty($jawaban["answer_4_4_2_b"]) && $jawaban["answer_4_4_2_b"] == '5' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                                 <br>5
                                                             </span>
                                                             <span class="col-2 text-start">
+                                                                <p style="line-height:150%;font-size:12px;"><b>Very Important</b></p>
                                                                 <p style="line-height:150%;font-size:12px;">Sangat Penting</p>
                                                             </span>
                                                         </div>
@@ -991,29 +1026,31 @@
                                                         <!--begin::Answer-->
                                                         <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                                             <span class="col-3 text-end">
-                                                                <p style="line-height:150%;font-size:12px;">Sangat Tidak Puas</p>
+                                                                <p style="line-height:150%;font-size:12px;"><b>Not satisfied</b></p>
+                                                        <p style="line-height:150%;font-size:12px;">Sangat Tidak Puas</p>
                                                             </span>
-                                                            <span class="col p-0 pt-1 text-center">
+                                                            <span class="col p-0 pt-3 text-center">
                                                                 <input required type="radio" name="answer_4_4_3_a" value="1" {{ !empty($jawaban["answer_4_4_3_a"]) && $jawaban["answer_4_4_3_a"] == '1' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                                 <br>1
                                                             </span>
-                                                            <span class="col p-0 pt-1 text-center">
+                                                            <span class="col p-0 pt-3 text-center">
                                                                 <input required type="radio" name="answer_4_4_3_a" value="2" {{ !empty($jawaban["answer_4_4_3_a"]) && $jawaban["answer_4_4_3_a"] == '2' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                                 <br>2
                                                             </span>
-                                                            <span class="col p-0 pt-1 text-center">
+                                                            <span class="col p-0 pt-3 text-center">
                                                                 <input required type="radio" name="answer_4_4_3_a" value="3" {{ !empty($jawaban["answer_4_4_3_a"]) && $jawaban["answer_4_4_3_a"] == '3' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                                 <br>3
                                                             </span>
-                                                            <span class="col p-0 pt-1 text-center">
+                                                            <span class="col p-0 pt-3 text-center">
                                                                 <input required type="radio" name="answer_4_4_3_a" value="4" {{ !empty($jawaban["answer_4_4_3_a"]) && $jawaban["answer_4_4_3_a"] == '4' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                                 <br>4
                                                             </span>
-                                                            <span class="col p-0 pt-1 text-center">
+                                                            <span class="col p-0 pt-3 text-center">
                                                                 <input required type="radio" name="answer_4_4_3_a" value="5" {{ !empty($jawaban["answer_4_4_3_a"]) && $jawaban["answer_4_4_3_a"] == '5' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                                 <br>5
                                                             </span>
                                                             <span class="col-2 text-start">
+                                                                <p style="line-height:150%;font-size:12px;"><b>Satisfied</b></p>
                                                                 <p style="line-height:150%;font-size:12px;">Sangat Puas</p>
                                                             </span>
                                                         </div>
@@ -1022,29 +1059,31 @@
                                                         <!--begin::Answer-->
                                                         <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                                             <span class="col-3 text-end">
+                                                                <p style="line-height:150%;font-size:12px;"><b>Very Unimportant</b></p>
                                                                 <p style="line-height:150%;font-size:12px;">Sangat Tidak Penting</p>
                                                             </span>
-                                                            <span class="col p-0 pt-1 text-center">
+                                                            <span class="col p-0 pt-3 text-center">
                                                                 <input required type="radio" name="answer_4_4_3_b" value="1" {{ !empty($jawaban["answer_4_4_3_b"]) && $jawaban["answer_4_4_3_b"] == '1' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                                 <br>1
                                                             </span>
-                                                            <span class="col p-0 pt-1 text-center">
+                                                            <span class="col p-0 pt-3 text-center">
                                                                 <input required type="radio" name="answer_4_4_3_b" value="2" {{ !empty($jawaban["answer_4_4_3_b"]) && $jawaban["answer_4_4_3_b"] == '2' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                                 <br>2
                                                             </span>
-                                                            <span class="col p-0 pt-1 text-center">
+                                                            <span class="col p-0 pt-3 text-center">
                                                                 <input required type="radio" name="answer_4_4_3_b" value="3" {{ !empty($jawaban["answer_4_4_3_b"]) && $jawaban["answer_4_4_3_b"] == '3' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                                 <br>3
                                                             </span>
-                                                            <span class="col p-0 pt-1 text-center">
+                                                            <span class="col p-0 pt-3 text-center">
                                                                 <input required type="radio" name="answer_4_4_3_b" value="4" {{ !empty($jawaban["answer_4_4_3_b"]) && $jawaban["answer_4_4_3_b"] == '4' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                                 <br>4
                                                             </span>
-                                                            <span class="col p-0 pt-1 text-center">
+                                                            <span class="col p-0 pt-3 text-center">
                                                                 <input required type="radio" name="answer_4_4_3_b" value="5" {{ !empty($jawaban["answer_4_4_3_b"]) && $jawaban["answer_4_4_3_b"] == '5' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                                 <br>5
                                                             </span>
                                                             <span class="col-2 text-start">
+                                                                <p style="line-height:150%;font-size:12px;"><b>Very Important</b></p>
                                                                 <p style="line-height:150%;font-size:12px;">Sangat Penting</p>
                                                             </span>
                                                         </div>
@@ -1057,29 +1096,31 @@
                                                         <!--begin::Answer-->
                                                         <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                                             <span class="col-3 text-end">
-                                                                <p style="line-height:150%;font-size:12px;">Sangat Tidak Puas</p>
+                                                                <p style="line-height:150%;font-size:12px;"><b>Not satisfied</b></p>
+                                                        <p style="line-height:150%;font-size:12px;">Sangat Tidak Puas</p>
                                                             </span>
-                                                            <span class="col p-0 pt-1 text-center">
+                                                            <span class="col p-0 pt-3 text-center">
                                                                 <input required type="radio" name="answer_4_4_4_a" value="1" {{ !empty($jawaban["answer_4_4_4_a"]) && $jawaban["answer_4_4_4_a"] == '1' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                                 <br>1
                                                             </span>
-                                                            <span class="col p-0 pt-1 text-center">
+                                                            <span class="col p-0 pt-3 text-center">
                                                                 <input required type="radio" name="answer_4_4_4_a" value="2" {{ !empty($jawaban["answer_4_4_4_a"]) && $jawaban["answer_4_4_4_a"] == '2' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                                 <br>2
                                                             </span>
-                                                            <span class="col p-0 pt-1 text-center">
+                                                            <span class="col p-0 pt-3 text-center">
                                                                 <input required type="radio" name="answer_4_4_4_a" value="3" {{ !empty($jawaban["answer_4_4_4_a"]) && $jawaban["answer_4_4_4_a"] == '3' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                                 <br>3
                                                             </span>
-                                                            <span class="col p-0 pt-1 text-center">
+                                                            <span class="col p-0 pt-3 text-center">
                                                                 <input required type="radio" name="answer_4_4_4_a" value="4" {{ !empty($jawaban["answer_4_4_4_a"]) && $jawaban["answer_4_4_4_a"] == '4' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                                 <br>4
                                                             </span>
-                                                            <span class="col p-0 pt-1 text-center">
+                                                            <span class="col p-0 pt-3 text-center">
                                                                 <input required type="radio" name="answer_4_4_4_a" value="5" {{ !empty($jawaban["answer_4_4_4_a"]) && $jawaban["answer_4_4_4_a"] == '5' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                                 <br>5
                                                             </span>
                                                             <span class="col-2 text-start">
+                                                                <p style="line-height:150%;font-size:12px;"><b>Satisfied</b></p>
                                                                 <p style="line-height:150%;font-size:12px;">Sangat Puas</p>
                                                             </span>
                                                         </div>
@@ -1088,29 +1129,31 @@
                                                         <!--begin::Answer-->
                                                         <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                                             <span class="col-3 text-end">
+                                                                <p style="line-height:150%;font-size:12px;"><b>Very Unimportant</b></p>
                                                                 <p style="line-height:150%;font-size:12px;">Sangat Tidak Penting</p>
                                                             </span>
-                                                            <span class="col p-0 pt-1 text-center">
+                                                            <span class="col p-0 pt-3 text-center">
                                                                 <input required type="radio" name="answer_4_4_4_b" value="1" {{ !empty($jawaban["answer_4_4_4_b"]) && $jawaban["answer_4_4_4_b"] == '1' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                                 <br>1
                                                             </span>
-                                                            <span class="col p-0 pt-1 text-center">
+                                                            <span class="col p-0 pt-3 text-center">
                                                                 <input required type="radio" name="answer_4_4_4_b" value="2" {{ !empty($jawaban["answer_4_4_4_b"]) && $jawaban["answer_4_4_4_b"] == '2' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                                 <br>2
                                                             </span>
-                                                            <span class="col p-0 pt-1 text-center">
+                                                            <span class="col p-0 pt-3 text-center">
                                                                 <input required type="radio" name="answer_4_4_4_b" value="3" {{ !empty($jawaban["answer_4_4_4_b"]) && $jawaban["answer_4_4_4_b"] == '3' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                                 <br>3
                                                             </span>
-                                                            <span class="col p-0 pt-1 text-center">
+                                                            <span class="col p-0 pt-3 text-center">
                                                                 <input required type="radio" name="answer_4_4_4_b" value="4" {{ !empty($jawaban["answer_4_4_4_b"]) && $jawaban["answer_4_4_4_b"] == '4' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                                 <br>4
                                                             </span>
-                                                            <span class="col p-0 pt-1 text-center">
+                                                            <span class="col p-0 pt-3 text-center">
                                                                 <input required type="radio" name="answer_4_4_4_b" value="5" {{ !empty($jawaban["answer_4_4_4_b"]) && $jawaban["answer_4_4_4_b"] == '5' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                                 <br>5
                                                             </span>
                                                             <span class="col-2 text-start">
+                                                                <p style="line-height:150%;font-size:12px;"><b>Very Important</b></p>
                                                                 <p style="line-height:150%;font-size:12px;">Sangat Penting</p>
                                                             </span>
                                                         </div>
@@ -1133,29 +1176,31 @@
                                                 <!--begin::Answer-->
                                                 <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                                     <span class="col-3 text-end">
+                                                        <p style="line-height:150%;font-size:12px;"><b>Not satisfied</b></p>
                                                         <p style="line-height:150%;font-size:12px;">Sangat Tidak Puas</p>
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_5_1_1" value="1" {{ !empty($jawaban["answer_5_1_1"]) && $jawaban["answer_5_1_1"] == '1' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>1
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_5_1_1" value="2" {{ !empty($jawaban["answer_5_1_1"]) && $jawaban["answer_5_1_1"] == '2' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>2
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_5_1_1" value="3" {{ !empty($jawaban["answer_5_1_1"]) && $jawaban["answer_5_1_1"] == '3' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>3
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_5_1_1" value="4" {{ !empty($jawaban["answer_5_1_1"]) && $jawaban["answer_5_1_1"] == '4' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>4
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_5_1_1" value="5" {{ !empty($jawaban["answer_5_1_1"]) && $jawaban["answer_5_1_1"] == '5' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>5
                                                     </span>
                                                     <span class="col-2 text-start">
+                                                        <p style="line-height:150%;font-size:12px;"><b>Satisfied</b></p>
                                                         <p style="line-height:150%;font-size:12px;">Sangat Puas</p>
                                                     </span>
                                                 </div>
@@ -1164,29 +1209,31 @@
                                                 <!--begin::Answer-->
                                                 <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                                     <span class="col-3 text-end">
+                                                        <p style="line-height:150%;font-size:12px;"><b>Very Unimportant</b></p>
                                                         <p style="line-height:150%;font-size:12px;">Sangat Tidak Penting</p>
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_5_1_2" value="1" {{ !empty($jawaban["answer_5_1_2"]) && $jawaban["answer_5_1_2"] == '1' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>1
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_5_1_2" value="2" {{ !empty($jawaban["answer_5_1_2"]) && $jawaban["answer_5_1_2"] == '2' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>2
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_5_1_2" value="3" {{ !empty($jawaban["answer_5_1_2"]) && $jawaban["answer_5_1_2"] == '3' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>3
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_5_1_2" value="4" {{ !empty($jawaban["answer_5_1_2"]) && $jawaban["answer_5_1_2"] == '4' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>4
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_5_1_2" value="5" {{ !empty($jawaban["answer_5_1_2"]) && $jawaban["answer_5_1_2"] == '5' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>5
                                                     </span>
                                                     <span class="col-2 text-start">
+                                                        <p style="line-height:150%;font-size:12px;"><b>Very Important</b></p>
                                                         <p style="line-height:150%;font-size:12px;">Sangat Penting</p>
                                                     </span>
                                                 </div>
@@ -1199,29 +1246,31 @@
                                                 <!--begin::Answer-->
                                                 <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                                     <span class="col-3 text-end">
+                                                        <p style="line-height:150%;font-size:12px;"><b>Not satisfied</b></p>
                                                         <p style="line-height:150%;font-size:12px;">Sangat Tidak Puas</p>
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_5_2_1" value="1" {{ !empty($jawaban["answer_5_2_1"]) && $jawaban["answer_5_2_1"] == '1' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>1
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_5_2_1" value="2" {{ !empty($jawaban["answer_5_2_1"]) && $jawaban["answer_5_2_1"] == '2' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>2
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_5_2_1" value="3" {{ !empty($jawaban["answer_5_2_1"]) && $jawaban["answer_5_2_1"] == '3' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>3
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_5_2_1" value="4" {{ !empty($jawaban["answer_5_2_1"]) && $jawaban["answer_5_2_1"] == '4' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>4
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_5_2_1" value="5" {{ !empty($jawaban["answer_5_2_1"]) && $jawaban["answer_5_2_1"] == '5' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>5
                                                     </span>
                                                     <span class="col-2 text-start">
+                                                        <p style="line-height:150%;font-size:12px;"><b>Satisfied</b></p>
                                                         <p style="line-height:150%;font-size:12px;">Sangat Puas</p>
                                                     </span>
                                                 </div>
@@ -1230,29 +1279,31 @@
                                                 <!--begin::Answer-->
                                                 <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                                     <span class="col-3 text-end">
+                                                        <p style="line-height:150%;font-size:12px;"><b>Very Unimportant</b></p>
                                                         <p style="line-height:150%;font-size:12px;">Sangat Tidak Penting</p>
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_5_2_2" value="1" {{ !empty($jawaban["answer_5_2_2"]) && $jawaban["answer_5_2_2"] == '1' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>1
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_5_2_2" value="2" {{ !empty($jawaban["answer_5_2_2"]) && $jawaban["answer_5_2_2"] == '2' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>2
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_5_2_2" value="3" {{ !empty($jawaban["answer_5_2_2"]) && $jawaban["answer_5_2_2"] == '3' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>3
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_5_2_2" value="4" {{ !empty($jawaban["answer_5_2_2"]) && $jawaban["answer_5_2_2"] == '4' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>4
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_5_2_2" value="5" {{ !empty($jawaban["answer_5_2_2"]) && $jawaban["answer_5_2_2"] == '5' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>5
                                                     </span>
                                                     <span class="col-2 text-start">
+                                                        <p style="line-height:150%;font-size:12px;"><b>Very Important</b></p>
                                                         <p style="line-height:150%;font-size:12px;">Sangat Penting</p>
                                                     </span>
                                                 </div>
@@ -1265,29 +1316,31 @@
                                                 <!--begin::Answer-->
                                                 <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                                     <span class="col-3 text-end">
+                                                        <p style="line-height:150%;font-size:12px;"><b>Not satisfied</b></p>
                                                         <p style="line-height:150%;font-size:12px;">Sangat Tidak Puas</p>
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_5_3_1" value="1" {{ !empty($jawaban["answer_5_3_1"]) && $jawaban["answer_5_3_1"] == '1' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>1
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_5_3_1" value="2" {{ !empty($jawaban["answer_5_3_1"]) && $jawaban["answer_5_3_1"] == '2' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>2
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_5_3_1" value="3" {{ !empty($jawaban["answer_5_3_1"]) && $jawaban["answer_5_3_1"] == '3' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>3
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_5_3_1" value="4" {{ !empty($jawaban["answer_5_3_1"]) && $jawaban["answer_5_3_1"] == '4' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>4
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_5_3_1" value="5" {{ !empty($jawaban["answer_5_3_1"]) && $jawaban["answer_5_3_1"] == '5' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>5
                                                     </span>
                                                     <span class="col-2 text-start">
+                                                        <p style="line-height:150%;font-size:12px;"><b>Satisfied</b></p>
                                                         <p style="line-height:150%;font-size:12px;">Sangat Puas</p>
                                                     </span>
                                                 </div>
@@ -1296,29 +1349,31 @@
                                                 <!--begin::Answer-->
                                                 <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                                     <span class="col-3 text-end">
+                                                        <p style="line-height:150%;font-size:12px;"><b>Very Unimportant</b></p>
                                                         <p style="line-height:150%;font-size:12px;">Sangat Tidak Penting</p>
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_5_3_2" value="1" {{ !empty($jawaban["answer_5_3_2"]) && $jawaban["answer_5_3_2"] == '1' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>1
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_5_3_2" value="2" {{ !empty($jawaban["answer_5_3_2"]) && $jawaban["answer_5_3_2"] == '2' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>2
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_5_3_2" value="3" {{ !empty($jawaban["answer_5_3_2"]) && $jawaban["answer_5_3_2"] == '3' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>3
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_5_3_2" value="4" {{ !empty($jawaban["answer_5_3_2"]) && $jawaban["answer_5_3_2"] == '4' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>4
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_5_3_2" value="5" {{ !empty($jawaban["answer_5_3_2"]) && $jawaban["answer_5_3_2"] == '5' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>5
                                                     </span>
                                                     <span class="col-2 text-start">
+                                                        <p style="line-height:150%;font-size:12px;"><b>Very Important</b></p>
                                                         <p style="line-height:150%;font-size:12px;">Sangat Penting</p>
                                                     </span>
                                                 </div>
@@ -1331,29 +1386,31 @@
                                                 <!--begin::Answer-->
                                                 <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                                     <span class="col-3 text-end">
+                                                        <p style="line-height:150%;font-size:12px;"><b>Not satisfied</b></p>
                                                         <p style="line-height:150%;font-size:12px;">Sangat Tidak Puas</p>
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_5_4_1" value="1" {{ !empty($jawaban["answer_5_4_1"]) && $jawaban["answer_5_4_1"] == '1' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>1
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_5_4_1" value="2" {{ !empty($jawaban["answer_5_4_1"]) && $jawaban["answer_5_4_1"] == '2' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>2
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_5_4_1" value="3" {{ !empty($jawaban["answer_5_4_1"]) && $jawaban["answer_5_4_1"] == '3' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>3
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_5_4_1" value="4" {{ !empty($jawaban["answer_5_4_1"]) && $jawaban["answer_5_4_1"] == '4' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>4
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_5_4_1" value="5" {{ !empty($jawaban["answer_5_4_1"]) && $jawaban["answer_5_4_1"] == '5' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>5
                                                     </span>
                                                     <span class="col-2 text-start">
+                                                        <p style="line-height:150%;font-size:12px;"><b>Satisfied</b></p>
                                                         <p style="line-height:150%;font-size:12px;">Sangat Puas</p>
                                                     </span>
                                                 </div>
@@ -1362,29 +1419,31 @@
                                                 <!--begin::Answer-->
                                                 <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                                     <span class="col-3 text-end">
+                                                        <p style="line-height:150%;font-size:12px;"><b>Very Unimportant</b></p>
                                                         <p style="line-height:150%;font-size:12px;">Sangat Tidak Penting</p>
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_5_4_2" value="1" {{ !empty($jawaban["answer_5_4_2"]) && $jawaban["answer_5_4_2"] == '1' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>1
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_5_4_2" value="2" {{ !empty($jawaban["answer_5_4_2"]) && $jawaban["answer_5_4_2"] == '2' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>2
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_5_4_2" value="3" {{ !empty($jawaban["answer_5_4_2"]) && $jawaban["answer_5_4_2"] == '3' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>3
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_5_4_2" value="4" {{ !empty($jawaban["answer_5_4_2"]) && $jawaban["answer_5_4_2"] == '4' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>4
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_5_4_2" value="5" {{ !empty($jawaban["answer_5_4_2"]) && $jawaban["answer_5_4_2"] == '5' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>5
                                                     </span>
                                                     <span class="col-2 text-start">
+                                                        <p style="line-height:150%;font-size:12px;"><b>Very Important</b></p>
                                                         <p style="line-height:150%;font-size:12px;">Sangat Penting</p>
                                                     </span>
                                                 </div>
@@ -1397,29 +1456,31 @@
                                                 <!--begin::Answer-->
                                                 <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                                     <span class="col-3 text-end">
+                                                        <p style="line-height:150%;font-size:12px;"><b>Not satisfied</b></p>
                                                         <p style="line-height:150%;font-size:12px;">Sangat Tidak Puas</p>
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_5_5_1" value="1" {{ !empty($jawaban["answer_5_5_1"]) && $jawaban["answer_5_5_1"] == '1' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>1
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_5_5_1" value="2" {{ !empty($jawaban["answer_5_5_1"]) && $jawaban["answer_5_5_1"] == '2' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>2
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_5_5_1" value="3" {{ !empty($jawaban["answer_5_5_1"]) && $jawaban["answer_5_5_1"] == '3' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>3
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_5_5_1" value="4" {{ !empty($jawaban["answer_5_5_1"]) && $jawaban["answer_5_5_1"] == '4' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>4
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_5_5_1" value="5" {{ !empty($jawaban["answer_5_5_1"]) && $jawaban["answer_5_5_1"] == '5' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>5
                                                     </span>
                                                     <span class="col-2 text-start">
+                                                        <p style="line-height:150%;font-size:12px;"><b>Satisfied</b></p>
                                                         <p style="line-height:150%;font-size:12px;">Sangat Puas</p>
                                                     </span>
                                                 </div>
@@ -1428,29 +1489,31 @@
                                                 <!--begin::Answer-->
                                                 <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                                     <span class="col-3 text-end">
+                                                        <p style="line-height:150%;font-size:12px;"><b>Very Unimportant</b></p>
                                                         <p style="line-height:150%;font-size:12px;">Sangat Tidak Penting</p>
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_5_5_2" value="1" {{ !empty($jawaban["answer_5_5_2"]) && $jawaban["answer_5_5_2"] == '1' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>1
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_5_5_2" value="2" {{ !empty($jawaban["answer_5_5_2"]) && $jawaban["answer_5_5_2"] == '2' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>2
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_5_5_2" value="3" {{ !empty($jawaban["answer_5_5_2"]) && $jawaban["answer_5_5_2"] == '3' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>3
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_5_5_2" value="4" {{ !empty($jawaban["answer_5_5_2"]) && $jawaban["answer_5_5_2"] == '4' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>4
                                                     </span>
-                                                    <span class="col p-0 pt-1 text-center">
+                                                    <span class="col p-0 pt-3 text-center">
                                                         <input required type="radio" name="answer_5_5_2" value="5" {{ !empty($jawaban["answer_5_5_2"]) && $jawaban["answer_5_5_2"] == '5' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
                                                         <br>5
                                                     </span>
                                                     <span class="col-2 text-start">
+                                                        <p style="line-height:150%;font-size:12px;"><b>Very Important</b></p>
                                                         <p style="line-height:150%;font-size:12px;">Sangat Penting</p>
                                                     </span>
                                                 </div>
