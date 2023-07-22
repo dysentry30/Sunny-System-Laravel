@@ -247,6 +247,7 @@
                             str_contains(Request::Path(), 'direktorat') ||
                             str_contains(Request::Path(), 'departemen') ||
                             str_contains(Request::Path(), 'matriks-approval-rekomendasi') ||
+                            str_contains(Request::Path(), 'provinsi') ||
                             // str_contains(Request::Path(), 'instansi') ||
                             str_contains(Request::Path(), 'team-proyek') ? 'background-color:#008CB4' : '' }}">
 

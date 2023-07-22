@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProyekController;
 use App\Http\Controllers\UserController;
 use App\Models\Customer;
@@ -27,7 +28,6 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
@@ -597,7 +597,7 @@ Route::middleware(["web"])->group(function () {
             "msg" => "Proyek tidak ditemukan!",
         ], 404);
         dd($data);
-    })->middleware("userAuth");
+    });
     // End - POST Profit Center dan SPK Internal dari PIS
 
 
@@ -626,3 +626,28 @@ Route::middleware(["web"])->group(function () {
     //     return $xml_data->asXML();
     // }
 });
+
+// ROUTE FOR WIKA MOBILE
+Route::get('/get-unit-kerja/{direktorat}', function (string $direktorat) {
+    // $curYear = (int) date("Y");
+    $curYear = 2022;
+    $unit_kerjas = UnitKerja::with(["proyeks"])->get()->map(function($unit_kerja) {
+        $new_class = new stdClass();
+        $new_class->divcode = $unit_kerja->divcode;
+        $new_class->unit_kerja = $unit_kerja->unit_kerja;
+        $new_class->direktorat = $unit_kerja->dop;
+        $new_class->tahun = $unit_kerja->proyeks->isNotEmpty() ? $unit_kerja->proyeks->groupBy("tahun_perolehan")->keys()->max() : 0;
+        return $new_class;
+    })->whereNotIn("divcode", ["C", "B", "D", "8"]);
+    if($direktorat != "All Direktorat") {
+        $unit_kerjas = $unit_kerjas->where("direktorat", "=", $direktorat);
+    }
+    return response()->json($unit_kerjas->values());
+});
+
+Route::post("/login", [UserController::class, "authen"]);
+
+Route::get("/get-nilai-dashboard/{unit_kerja}", [DashboardController::class, "getNilaiDashboard"]);
+
+Route::get("/get-forecast-bulanan/{unit_kerja}/{year}/{month}", [DashboardController::class, "getForecastBulanan"]);
+

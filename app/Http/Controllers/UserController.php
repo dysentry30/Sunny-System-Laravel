@@ -54,7 +54,7 @@ class UserController extends Controller
 
     public function authen(Request $request)
     {
-        if (str_contains($request->url(), "api")) {
+        if (str_contains($request->url(), "api") && !$request->isMobile) {
             // $request->email = $request->UserName;
             // $request->password = $request->UserPassword;
             $credentials = $request->validate([
@@ -78,6 +78,8 @@ class UserController extends Controller
                     "user" => $user,
                 ])->cookie("BPMCSRF", $token, 60);
             }
+        } else if((bool) $request->isMobile)  {
+            return self::loginForMobile($request);
         } else {
             
             $credentials = $request->validate([
@@ -117,6 +119,15 @@ class UserController extends Controller
         Alert::error("Login Gagal", "Pastikan Email dan Password Benar");
         // dd("gagal login");
         return back();
+    }
+
+    function loginForMobile(Request $request) {
+        $data = $request->all();
+        $user = User::select(["*"])->where("email", "=", $data["UserName"])->get()->first();
+        if(!empty($user) && Hash::check($data["UserPassword"], $user->password)) {
+            return response()->json($user);
+        }
+        return response()->json("Gagal");
     }
     
     public function logout(Request $request)

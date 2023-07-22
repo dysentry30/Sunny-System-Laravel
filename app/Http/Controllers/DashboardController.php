@@ -888,6 +888,7 @@ class DashboardController extends Controller
             // dd($kategori_kontrak);
             // End :: Changes Overview
 
+
             $jumlahKontrak = 0;
             $totalKontrak = 0;
             $totalPersen = 0;
@@ -2572,5 +2573,61 @@ class DashboardController extends Controller
             $diff_date = $file_date->diffInMinutes($now, true);
             if ($diff_date > 29) File::delete($file);
         });
+    }
+
+    // Function for mobile route
+    public function getNilaiDashboard($unit_kerja)
+    {
+        $curYear = (int) date("Y") - 1;
+        $curMonth = (int) date("m");
+        $unit_kerjas = str_contains(",", $unit_kerja) ? explode(",", $unit_kerja) : [$unit_kerja];
+        $totalRkap = 0;
+        $totalForecast = 0;
+        $totalRealisasi = 0;
+        $totalRKAPCurMonth = 0;
+        $proyeks = Proyek::where("tahun_perolehan", "=", $curYear)->where("is_cancel", "!=", true)->get()->whereIn("unit_kerja", $unit_kerjas);
+        $proyeks->each(function ($p) use ($curMonth, $curYear, &$totalRkap, &$totalForecast, &$totalRealisasi, &$totalRKAPCurMonth) {
+            $forecasts = $p->Forecasts->where("tahun", "=", $curYear);
+            foreach ($forecasts as $f) {
+                if ($f->periode_prognosa <= $curMonth) {
+                    if(!empty($f->month_rkap)) {
+                        $totalRkap += $f->rkap_forecast;
+                    }
+                    if(!empty($f->month_forecast)) {
+                        $totalForecast += $f->nilai_forecast;
+                    }
+                    if(!empty($f->month_realisasi)) {
+                        $totalRealisasi += $f->realisasi_forecast;
+                    }
+                }
+                if ($f->periode_prognosa == $curMonth) {
+                    if(!empty($f->month_rkap)) {
+                        $totalRKAPCurMonth += $f->rkap_forecast;
+                    }
+                }
+            }
+        });
+        $data = [
+            "totalRKAP" => $totalRkap / 1_000_000_000,
+            "totalForecast" => $totalForecast / 1_000_000_000,
+            "totalRealisasi" => $totalRealisasi / 1_000_000_000,
+            "totalRKAPCurMonth" => $totalRKAPCurMonth / 1_000_000_000,
+        ];
+        return response()->json($data);
+    }
+
+    public function getForecastBulanan(String $unit_kerja, $year, $month) {
+        $unit_kerjas = str_contains(",", $unit_kerja) ? explode(",", $unit_kerja) : [$unit_kerja];
+        // $curMonth = (int) date("m");
+        $forecasts = Proyek::with(["Forecasts"])->whereIn("unit_kerja", $unit_kerjas)->where("tahun_perolehan", "=", $year)->where("is_cancel", "!=", true)->get();
+        $forecasts = $forecasts->map(function($p) use($year, $month) {
+            $new_class = new stdClass();
+            $new_class->kode_proyek = $p->kode_proyek;
+            $new_class->nama_proyek = $p->nama_proyek;
+            // $new_class->forecasts = $p->forecasts->where("tahun", "=", $year)->where("periode_prognosa", "=", $month);
+            $new_class->forecasts = $p->forecasts->where("tahun", "=", $year)->where("periode_prognosa", "=", $month);
+            return $new_class;
+        });
+        return response()->json($forecasts);
     }
 }

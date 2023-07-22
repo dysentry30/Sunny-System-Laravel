@@ -298,6 +298,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     Route::post('/contract-management/ba-defect/upload', [ContractManagementsController::class, 'baDefectContractUpload']);
 
+    Route::get('/contract-management/bast-2/{id_document}/delete', [ContractManagementsController::class, 'deleteBast']);
+
     Route::post('/contract-management/dokumen-pendukung/upload', [ContractManagementsController::class, 'dokumenPendukungContractUpload']);
 
     Route::post('/contract-management/pending-issue/upload', [ContractManagementsController::class, 'pendingIssueContractUpload']);
@@ -520,6 +522,9 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     // Get kode nasabah  
     Route::post('/customer/get-kode-nasabah', [CustomerController::class, 'getKodeNasabah']);
+    
+    // Get kode BP  
+    Route::post('/customer/get-kode-bp', [CustomerController::class, 'getKodeBP']);
     
     // Save Masalah Hukum 
     Route::post('/customer/masalah-hukum/save', [CustomerController::class, 'saveMasalahHukum']);
@@ -901,7 +906,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $tahun = (int) date("m") == 1 ? (int) date("Y") - 1 : (int) date("Y");
         $data = $request->all();
         $unit_kerja = UnitKerja::where("unit_kerja", "=", $data["unit_kerja"])->first();
-        $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->select(["history_forecast.*", "proyeks.unit_kerja"])->where("proyeks.unit_kerja", "=", $unit_kerja->divcode)->where("proyeks.tahun_perolehan", "=", $tahun)->where("history_forecast.periode_prognosa", "=", $data["periode_prognosa"])->where("history_forecast.tahun", "=", $tahun)->get(); 
+        $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->select(["history_forecast.*", "proyeks.unit_kerja", "proyeks.stage"])->where("proyeks.unit_kerja", "=", $unit_kerja->divcode)->where("proyeks.tahun_perolehan", "=", $tahun)->where("history_forecast.periode_prognosa", "=", $data["periode_prognosa"])->where("history_forecast.tahun", "=", $tahun)->get(); 
         $result_all_data_send_to_sap = collect();
         $history_forecasts->each(function ($h) use ($data, $tahun, &$result_all_data_send_to_sap) {
             $h->is_approved_1 = (bool) $data["is_approved"] ? "t" : "f";
@@ -909,33 +914,77 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
             // Begin :: Kirim data Forecast ke SAP
             if((bool) $data["is_approved"]) {
-                $data_send_to_sap = collect([
-                    "FISCAL_PERIOD" => date("Y") . str_pad($data["periode_prognosa"], 3, 0, STR_PAD_LEFT),
-                    "FISCALYEAR_VARIANT" => "K4",
-                    "FISCAL_YEAR" => $tahun,
-                    "COMP_CODE" => (string) $h->Proyek->UnitKerja->company_code ?? "",
-                    "AUDITTRAIL" => "INPUT_PROG",
-                    "CATEGORY" => "PROG",
-                    "PROFIT_CENTER_DIV" => (string) $h->Proyek->UnitKerja->id_profit_center ?? "",
-                    "KODE_PROYEK" => str_contains($h->kode_proyek, "KD") ? DB::table('proyek_code_crm')->where("kode_proyek", "=", $h->kode_proyek)->first()->kode_proyek_crm ?? $h->kode_proyek : $h->kode_proyek,
-                    "VERSION" => "PROG_" . str_pad($h->periode_prognosa, 3, 0, STR_PAD_LEFT),
-                    "KEY_FIGURE" => "10000",
-                    "AMOUNT" => (int) $h->nilai_forecast,
-                    "DESCRIPTION" => "MONTH " . str_pad($h->month_forecast, 2, 0, STR_PAD_LEFT),
-                ]);
-                $result_all_data_send_to_sap->push($data_send_to_sap);
+                // $data_send_to_sap = collect([
+                //     "FISCAL_PERIOD" => date("Y") . str_pad($data["periode_prognosa"], 3, 0, STR_PAD_LEFT),
+                //     "FISCALYEAR_VARIANT" => "K4",
+                //     "FISCAL_YEAR" => $tahun,
+                //     "COMP_CODE" => (string) $h->Proyek->UnitKerja->company_code ?? "",
+                //     "AUDITTRAIL" => "INPUT_PROG",
+                //     "CATEGORY" => "PROG",
+                //     "PROFIT_CENTER_DIV" => (string) $h->Proyek->UnitKerja->id_profit_center ?? "",
+                //     "KODE_PROYEK" => str_contains($h->kode_proyek, "KD") ? DB::table('proyek_code_crm')->where("kode_proyek", "=", $h->kode_proyek)->first()->kode_proyek_crm ?? $h->kode_proyek : $h->kode_proyek,
+                //     "VERSION" => "PROG_" . str_pad($h->periode_prognosa, 3, 0, STR_PAD_LEFT),
+                //     "KEY_FIGURE" => "10000",
+                //     "AMOUNT" => (int) $h->nilai_forecast,
+                //     "DESCRIPTION" => "MONTH " . str_pad($h->month_forecast, 2, 0, STR_PAD_LEFT),
+                // ]);
+                $jenis_proyek = "";
+                $cat_project = "";
+                switch($h->Proyek->jenis_proyek) {
+                    case "I":
+                        $jenis_proyek = "INTERN";
+                        break;
+                    case "N":
+                        $jenis_proyek = "EXTERN";
+                        break;
+                    case "J":
+                        $jenis_proyek = "JO";
+                        break;
+                }
+                switch($h->Proyek->tipe_proyek) {
+                    case "P":
+                        $cat_project = "Proyek";
+                        break;
+                    case "R":
+                        $cat_project = "Retail";
+                        break;
+                }
+                if($h->stage < 8) {
+                    $data_send_to_sap = collect([
+                        "/BIC/ZIOCH0008" => (string) $h->Proyek->UnitKerja->id_profit_center ?? "",
+                        "/BIC/ZIOCH0022" => str_contains($h->kode_proyek, "KD") ? DB::table('proyek_code_crm')->where("kode_proyek", "=", $h->kode_proyek)->first()->kode_proyek_crm ?? $h->kode_proyek : $h->kode_proyek,
+                        "/BIC/ZIOCH0002" => "A000",
+                        "/BIC/ZIOCH0098" => (string) $h->Proyek->UnitKerja->Departemen?->profit_center_departemen ?? "",
+                        "DESCRIPTION" => (string) $h->Proyek->nama_proyek,
+                        "CAT_FOR_PROJECT" => $cat_project,
+                        "STATUS_CONTRACT" => $jenis_proyek,
+                        "/BIC/ZIOCH0109" => (int) ($h->tahun . str_pad($h->month_forecast, 2, 0, STR_PAD_LEFT) . str_pad(Carbon::createFromFormat("Y/n/d", "$h->tahun/$h->periode_prognosa/01")->format("d"), 2, 0, STR_PAD_LEFT)), // Periode
+                        "CUSTOMER_CRM" => $h->Proyek->proyekBerjalan->customer->name ?? "", // nama customer di customer
+                        "CUSTOMER" => $h->Proyek->proyekBerjalan->customer->kode_bp ?? "", // kode sap di customer
+                        "SBU" => $h->Proyek->Sbu->kode_sbu ?? "", // kode sbu di SBU
+                        "AMOUNT_PROGNOSA" => (int) $h->nilai_forecast,
+                        "REPORT_PERIOD" => (int) (date("Y") . str_pad($data["periode_prognosa"], 3, 0, STR_PAD_LEFT)),
+                        "VERSION" => "PROG",
+                    ]);
+                    $result_all_data_send_to_sap->push($data_send_to_sap);
+                }
             }
             
             $h->save();
         });
         if((bool) $data["is_approved"]) {
+            $results_response = collect();
+            $result_all_data_send_to_sap = $result_all_data_send_to_sap->where("AMOUNT_PROGNOSA", ">", 0);
             // FIRST STEP SEND DATA TO BW
+            setLogging("prognosa", "SEND PROGNOSA TO SAP ". $data["unit_kerja"] ." =>", $result_all_data_send_to_sap->toArray());
+            // return response()->json($result_all_data_send_to_sap, 200);
             $csrf_token = "";
             $content_location = "";
             // $response = getAPI("https://wtappbw-qas.wika.co.id:44350/sap/bw4/v1/push/dataStores/yodaltes4/requests", [], [], false);
             // $http = Http::withBasicAuth("WIKA_API", "WikaWikaWika2022");
             $get_token = Http::withBasicAuth("WIKA_API", "WikaWikaWika2022")->withHeaders(["x-csrf-token" => "Fetch"])->get("https://wtappbw-dev.wika.co.id:44340/sap/bw4/v1/push/dataStores/zosbpc004/requests");
             $csrf_token = $get_token->header("x-csrf-token");
+            $results_response->push($get_token->body());
             $cookie = "";
             collect($get_token->cookies()->toArray())->each(function($c) use(&$cookie) {
                 $cookie .= $c["Name"] . "=" . $c["Value"] . ";"; 
@@ -1462,7 +1511,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     // Master Data Provinsi
     Route::get('/provinsi', function (Request $request) {   
-        $provinsi = Provinsi::all();
+        $provinsi = Provinsi::where("country_id", "=", "ID")->get();
         return view("/MasterData/Provinsi", compact(["provinsi"]));
     });
 
@@ -2182,26 +2231,29 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     //Begin :: History Autorisasi
     Route::get('/history-autorisasi', function (Request $request) {
         $bulan = (int) date('m');
-        $year = 2022;
+        $year = (int) date('Y');
         if ($bulan == 1) {
             $periodeOtor = 12;
         } else {
             $periodeOtor = $request->query("periode-prognosa") ?? $bulan - 1;
+            $jenisProyek = $request->query("jenis-proyek") ?? "All";
         }
         
         // $periodeOtor = (int) date('m');
         if ($periodeOtor == 1) {
-            $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("periode_prognosa", "=", $periodeOtor)->where("tahun", "=", $year)->join("dops", "dops.dop", "=", "proyeks.dop")->join("unit_kerjas", "unit_kerjas.divcode", "=", "proyeks.unit_kerja");
+            $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("tahun_perolehan", "=", $year)->where("periode_prognosa", "=", $periodeOtor)->where("tahun", "=", $year)->join("dops", "dops.dop", "=", "proyeks.dop")->join("unit_kerjas", "unit_kerjas.divcode", "=", "proyeks.unit_kerja");
         } else {
-            $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("periode_prognosa", "=", $periodeOtor)->where("tahun", "=", $year)->join("dops", "dops.dop", "=", "proyeks.dop")->join("unit_kerjas", "unit_kerjas.divcode", "=", "proyeks.unit_kerja");
+            $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("tahun_perolehan", "=", $year)->where("periode_prognosa", "=", $periodeOtor)->where("tahun", "=", $year)->join("dops", "dops.dop", "=", "proyeks.dop")->join("unit_kerjas", "unit_kerjas.divcode", "=", "proyeks.unit_kerja");
         }
-
+        if($jenisProyek == "N") {
+            $history_forecasts = $history_forecasts->where("jenis_proyek", "!=", "I");
+        }
         // dd($history_forecasts->select(["proyeks.kode_proyek","proyeks.unit_kerja", "unit_kerjas.unit_kerja", "periode_prognosa", "history_forecast.created_at", "nilaiok_review", "nilaiok_awal", "nilai_forecast", "realisasi_forecast"])->get()->first());
-        $history_forecasts = $history_forecasts->select(["proyeks.kode_proyek", "proyeks.unit_kerja", "unit_kerjas.unit_kerja", "periode_prognosa", "history_forecast.created_at", "nilaiok_review", "nilaiok_awal", "rkap_forecast", "nilai_forecast", "realisasi_forecast", "is_approved_1"])->get()->groupBy("unit_kerja");
+        $history_forecasts = $history_forecasts->select(["proyeks.kode_proyek", "proyeks.unit_kerja", "unit_kerjas.unit_kerja", "periode_prognosa", "history_forecast.created_at", "nilaiok_review", "nilaiok_awal", "rkap_forecast", "nilai_forecast", "realisasi_forecast", "is_approved_1", "stage", "is_rkap"])->get()->groupBy("unit_kerja");
 
         // $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("stage", "!=", 7)->join("dops", "dops.dop", "=", "proyeks.dop")->join("unit_kerjas", "unit_kerjas.divcode", "=", "proyeks.unit_kerja");
         // $history_forecasts = $history_forecasts->get()->groupBy("unit_kerja");
-        return view("/12_Autorisasi", compact("history_forecasts", "periodeOtor"));
+        return view("/12_Autorisasi", compact("history_forecasts", "periodeOtor", "jenisProyek"));
     });
     //End :: History Autorisasi
 
@@ -2373,9 +2425,10 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             array_push($proyeks, $proyek);
             //    dump($proyeks);
         }
+        $title = "Group RKAP";
         // dd();
 
-        return view("/11_Rkap", compact(["unitkerjas", "proyeks"]));
+        return view("/11_Rkap", compact(["unitkerjas", "proyeks", "title"]));
     });
 
     Route::get('/rkap/{divcode}/{tahun_pelaksanaan}', function ($divcode, $tahun_pelaksanaan, Request $request) {
@@ -2401,9 +2454,10 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             array_push($proyeks, $proyek);
             //    dump($proyeks);
         }
+        $title = "RKAP Awal";
         // dd();
 
-        return view("/11_Rkap", compact(["unitkerjas", "proyeks"]));
+        return view("/11_Rkap", compact(["unitkerjas", "proyeks", "title"]));
     });
 
     Route::get('/ok-review', function () {
@@ -2419,9 +2473,10 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             array_push($proyeks, $proyek);
             //    dump($proyeks);
         }
+        $title = "RKAP Review";
         // dd();
 
-        return view("/11_Rkap", compact(["unitkerjas", "proyeks"]));
+        return view("/11_Rkap", compact(["unitkerjas", "proyeks" ,"title"]));
     });
     // end RKAP AWAL dan REVIEW
 

@@ -294,6 +294,7 @@
                                                 <td>
                                                     <label><b>{{ $item->kategori }}</b></label>
                                                     <input type="hidden" class="form-control form-control-solid" name="kategori[]" value="{{ $item->kategori }}" {{ $is_approved->isEmpty() ? "" : "readonly" }}>
+                                                    <input type="hidden" class="form-control form-control-solid" name="index[]" value="{{ $item->index }}" {{ $is_approved->isEmpty() ? "" : "readonly" }}>
                                                 </td>
                                                 <td>
                                                     <p hidden>{{ $item->sub_pasal }}</p>
@@ -320,6 +321,7 @@
                                             <td>
                                                 <label><b>Nama Proyek</b></label>
                                                 <input type="hidden" class="form-control form-control-solid" name="kategori[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="Nama Proyek">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="1">
                                             </td>
                                             <td>
                                                 <input {{ $is_approved->isEmpty() ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
@@ -341,6 +343,7 @@
                                             <td>
                                                 <label><b>Lokasi Proyek</b></label>
                                                 <input type="hidden" class="form-control form-control-solid" {{ $is_approved->isEmpty() ? "" : "readonly" }} name="kategori[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="Lokasi Proyek">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="2">
                                             </td>
                                             <td>
                                                 <input {{ $is_approved->isEmpty() ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
@@ -362,6 +365,7 @@
                                             <td>
                                                 <label><b>Nama Pemilik Proyek</b></label>
                                                 <input type="hidden" class="form-control form-control-solid" {{ $is_approved->isEmpty() ? "" : "readonly" }} name="kategori[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="Nama Pemilik Proyek">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="3">
                                             </td>
                                             <td>
                                                 <input {{ $is_approved->isEmpty() ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
@@ -383,6 +387,7 @@
                                             <td>
                                                 <label><b>Nama dan Alamat Engineer/Konsultan</b></label>
                                                 <input type="hidden" class="form-control form-control-solid" {{ $is_approved->isEmpty() ? "" : "readonly" }} name="kategori[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="Nama dan Alamat Engineer/Konsultan">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="4">
                                             </td>
                                             <td>
                                                 <input {{ $is_approved->isEmpty() ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
@@ -404,6 +409,7 @@
                                             <td>
                                                 <label><b>Ruang Lingkup</b></label>
                                                 <input type="hidden" class="form-control form-control-solid" {{ $is_approved->isEmpty() ? "" : "readonly" }} name="kategori[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="Ruang Lingkup">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="5">
                                             </td>
                                             <td>
                                                 <input {{ $is_approved->isEmpty() ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
@@ -425,6 +431,7 @@
                                             <td>
                                                 <label><b>Nilai Pugu/HPS (jika ada)</b></label>
                                                 <input type="hidden" class="form-control form-control-solid" {{ $is_approved->isEmpty() ? "" : "readonly" }} name="kategori[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="Nilai Pugu/HPS (jika ada)">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="6">
                                             </td>
                                             <td>
                                                 <input {{ $is_approved->isEmpty() ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
@@ -446,6 +453,7 @@
                                             <td>
                                                 <label><b>Sumber Dana</b></label>
                                                 <input type="hidden" class="form-control form-control-solid" {{ $is_approved->isEmpty() ? "" : "readonly" }} name="kategori[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="Sumber Dana">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="7">
                                             </td>
                                             <td>
                                                 <input {{ $is_approved->isEmpty() ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
@@ -467,6 +475,7 @@
                                             <td>
                                                 <label><b>Jenis Kontrak</b></label>
                                                 <input type="hidden" class="form-control form-control-solid" {{ $is_approved->isEmpty() ? "" : "readonly" }} name="kategori[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="Jenis Kontrak">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="8">
                                             </td>
                                             <td>
                                                 <input {{ $is_approved->isEmpty() ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
@@ -488,6 +497,7 @@
                                             <td>
                                                 <label><b>Hirarki Dokumen</b></label>
                                                 <input type="hidden" class="form-control form-control-solid" {{ $is_approved->isEmpty() ? "" : "readonly" }} name="kategori[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="Hirarki Dokumen">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="9">
                                             </td>
                                             <td>
                                                 <input {{ $is_approved->isEmpty() ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
@@ -509,6 +519,7 @@
                                             <td>
                                                 <label><b>Waktu Penyelesaisan Pekerjaan</b></label>
                                                 <input type="hidden" class="form-control form-control-solid" {{ $is_approved->isEmpty() ? "" : "readonly" }} name="kategori[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="Waktu Penyelesaisan Pekerjaan">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="10">
                                             </td>
                                             <td>
                                                 <input {{ $is_approved->isEmpty() ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
@@ -530,6 +541,7 @@
                                             <td>
                                                 <label><b>Jangka Waktu Masa Pemeliharaan</b></label>
                                                 <input type="hidden" class="form-control form-control-solid" {{ $is_approved->isEmpty() ? "" : "readonly" }} name="kategori[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="Jangka Waktu Masa Pemeliharaan">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="11">
                                             </td>
                                             <td>
                                                 <input {{ $is_approved->isEmpty() ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
@@ -551,6 +563,7 @@
                                             <td>
                                                 <label><b>Jangka Waktu Masa Performa (jika ada)</b></label>
                                                 <input type="hidden" class="form-control form-control-solid" {{ $is_approved->isEmpty() ? "" : "readonly" }} name="kategori[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="Jangka Waktu Masa Performa (jika ada)">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="12">
                                             </td>
                                             <td>
                                                 <input {{ $is_approved->isEmpty() ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
@@ -572,6 +585,7 @@
                                             <td>
                                                 <label><b>Hukum dan Bahasa yang Berlaku</b></label>
                                                 <input type="hidden" class="form-control form-control-solid" {{ $is_approved->isEmpty() ? "" : "readonly" }} name="kategori[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="Hukum dan Bahasa yang Berlaku">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="13">
                                             </td>
                                             <td>
                                                 <input {{ $is_approved->isEmpty() ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
@@ -593,6 +607,7 @@
                                             <td>
                                                 <label><b>Cara Pembayaran</b></label>
                                                 <input type="hidden" class="form-control form-control-solid" {{ $is_approved->isEmpty() ? "" : "readonly" }} name="kategori[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="Cara Pembayaran">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="14">
                                             </td>
                                             <td>
                                                 <input {{ $is_approved->isEmpty() ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
@@ -614,6 +629,7 @@
                                             <td>
                                                 <label><b>Dokumen Syarat Pembayaran</b></label>
                                                 <input type="hidden" class="form-control form-control-solid" {{ $is_approved->isEmpty() ? "" : "readonly" }} name="kategori[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="Dokumen Syarat Pembayaran">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="15">
                                             </td>
                                             <td>
                                                 <input {{ $is_approved->isEmpty() ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
@@ -635,6 +651,7 @@
                                             <td>
                                                 <label><b>Uang Muka</b></label>
                                                 <input type="hidden" class="form-control form-control-solid" {{ $is_approved->isEmpty() ? "" : "readonly" }} name="kategori[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="Uang Muka">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="16">
                                             </td>
                                             <td>
                                                 <input {{ $is_approved->isEmpty() ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
@@ -656,6 +673,7 @@
                                             <td>
                                                 <label><b>Hak dan Kewajiban Pengguna Jasa</b></label>
                                                 <input type="hidden" class="form-control form-control-solid" {{ $is_approved->isEmpty() ? "" : "readonly" }} name="kategori[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="Hak dan Kewajiban Pengguna Jasa">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="17">
                                             </td>
                                             <td>
                                                 <input {{ $is_approved->isEmpty() ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
@@ -677,6 +695,7 @@
                                             <td>
                                                 <label><b>Hak dan Kewajiban Penyedia Jasa</b></label>
                                                 <input type="hidden" class="form-control form-control-solid" {{ $is_approved->isEmpty() ? "" : "readonly" }} name="kategori[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="Hak dan Kewajiban Penyedia Jasa">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="18">
                                             </td>
                                             <td>
                                                 <input {{ $is_approved->isEmpty() ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
@@ -698,6 +717,7 @@
                                             <td>
                                                 <label><b>Akses ke Lokasi/Lapangan</b></label>
                                                 <input type="hidden" class="form-control form-control-solid" {{ $is_approved->isEmpty() ? "" : "readonly" }} name="kategori[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="Akses ke Lokasi/Lapangan">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="19">
                                             </td>
                                             <td>
                                                 <input {{ $is_approved->isEmpty() ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
@@ -719,6 +739,7 @@
                                             <td>
                                                 <label><b>Serah Terima Lahan/Lokasi Pekerjaan</b></label>
                                                 <input type="hidden" class="form-control form-control-solid" {{ $is_approved->isEmpty() ? "" : "readonly" }} name="kategori[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="Serah Terima Lahan/Lokasi Pekerjaan">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="20">
                                             </td>
                                             <td>
                                                 <input {{ $is_approved->isEmpty() ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
@@ -740,6 +761,7 @@
                                             <td>
                                                 <label><b>Jaminan Uang Muka</b></label>
                                                 <input type="hidden" class="form-control form-control-solid" {{ $is_approved->isEmpty() ? "" : "readonly" }} name="kategori[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="Jaminan Uang Muka">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="21">
                                             </td>
                                             <td>
                                                 <input {{ $is_approved->isEmpty() ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
@@ -761,6 +783,7 @@
                                             <td>
                                                 <label><b>Pengembalian Uang Muka</b></label>
                                                 <input type="hidden" class="form-control form-control-solid" {{ $is_approved->isEmpty() ? "" : "readonly" }} name="kategori[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="Pengembalian Uang Muka">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="22">
                                             </td>
                                             <td>
                                                 <input {{ $is_approved->isEmpty() ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
@@ -782,6 +805,7 @@
                                             <td>
                                                 <label><b>Jaminan Pelaksanaan</b></label>
                                                 <input type="hidden" class="form-control form-control-solid" {{ $is_approved->isEmpty() ? "" : "readonly" }} name="kategori[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="Jaminan Pelaksanaan">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="23">
                                             </td>
                                             <td>
                                                 <input {{ $is_approved->isEmpty() ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
@@ -803,6 +827,7 @@
                                             <td>
                                                 <label><b>Retensi</b></label>
                                                 <input type="hidden" class="form-control form-control-solid" {{ $is_approved->isEmpty() ? "" : "readonly" }} name="kategori[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="Retensi">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="24">
                                             </td>
                                             <td>
                                                 <input {{ $is_approved->isEmpty() ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
@@ -824,6 +849,7 @@
                                             <td>
                                                 <label><b>Jaminan Pemeliharaan</b></label>
                                                 <input type="hidden" class="form-control form-control-solid" {{ $is_approved->isEmpty() ? "" : "readonly" }} name="kategori[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="Jaminan Pemeliharaan">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="25">
                                             </td>
                                             <td>
                                                 <input {{ $is_approved->isEmpty() ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
@@ -845,6 +871,7 @@
                                             <td>
                                                 <label><b>Jaminan Performa (jika ada)</b></label>
                                                 <input type="hidden" class="form-control form-control-solid" {{ $is_approved->isEmpty() ? "" : "readonly" }} name="kategori[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="Jaminan Performa (jika ada)">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="26">
                                             </td>
                                             <td>
                                                 <input {{ $is_approved->isEmpty() ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
@@ -866,6 +893,7 @@
                                             <td>
                                                 <label><b>Asuransi (CAR/CECR)</b></label>
                                                 <input type="hidden" class="form-control form-control-solid" {{ $is_approved->isEmpty() ? "" : "readonly" }} name="kategori[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="Asuransi (CAR/CECR)">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="27">
                                             </td>
                                             <td>
                                                 <input {{ $is_approved->isEmpty() ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
@@ -887,6 +915,7 @@
                                             <td>
                                                 <label><b>Serah Terima Pekerjaan (parsial/tidak)</b></label>
                                                 <input type="hidden" class="form-control form-control-solid" {{ $is_approved->isEmpty() ? "" : "readonly" }} name="kategori[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="Serah Terima Pekerjaan (parsial/tidak)">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="28">
                                             </td>
                                             <td>
                                                 <input {{ $is_approved->isEmpty() ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
@@ -908,6 +937,7 @@
                                             <td>
                                                 <label><b>Pembayaran Material On Site (jika ada)</b></label>
                                                 <input type="hidden" class="form-control form-control-solid" {{ $is_approved->isEmpty() ? "" : "readonly" }} name="kategori[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="Pembayaran Material On Site (jika ada)">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="29">
                                             </td>
                                             <td>
                                                 <input {{ $is_approved->isEmpty() ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
@@ -935,6 +965,7 @@
                                                 <small><b>a. Keterlambatan Pekerjaan</b></small>
                                             </td>
                                             <input type="hidden" class="form-control form-control-solid" {{ $is_approved->isEmpty() ? "" : "readonly" }} name="kategori[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="Denda/Sanksi - Keterlambatan Pekerjaan">
+                                            <input type="hidden" class="form-control form-control-solid" name="index[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="30">
                                             <td>
                                                 <input {{ $is_approved->isEmpty() ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
                                             </td>
@@ -953,6 +984,7 @@
                                                 <small><b>b. Keterlambatan Pembayaran</b></small>
                                             </td>
                                             <input type="hidden" class="form-control form-control-solid" {{ $is_approved->isEmpty() ? "" : "readonly" }} name="kategori[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="Denda/Sanksi - Keterlambatan Pembayaran">
+                                            <input type="hidden" class="form-control form-control-solid" name="index[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="31">
                                             <td>
                                                 <input {{ $is_approved->isEmpty() ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
                                             </td>
@@ -973,6 +1005,7 @@
                                             <td>
                                                 <label><b>Peristiwa Kompensasi/Klaim</b></label>
                                                 <input type="hidden" class="form-control form-control-solid" {{ $is_approved->isEmpty() ? "" : "readonly" }} name="kategori[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="Peristiwa Kompensasi/Klaim">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="32">
                                             </td>
                                             <td>
                                                 <input {{ $is_approved->isEmpty() ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
@@ -994,6 +1027,7 @@
                                             <td>
                                                 <label><b>Variasi/Tambah Kurang</b></label>
                                                 <input type="hidden" class="form-control form-control-solid" {{ $is_approved->isEmpty() ? "" : "readonly" }} name="kategori[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="Variasi/Tambah Kurang">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="33">
                                             </td>
                                             <td>
                                                 <input {{ $is_approved->isEmpty() ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
@@ -1015,6 +1049,7 @@
                                             <td>
                                                 <label><b>Perpanjangan Waktu (EOT)</b></label>
                                                 <input type="hidden" class="form-control form-control-solid" {{ $is_approved->isEmpty() ? "" : "readonly" }} name="kategori[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="Perpanjangan Waktu (EOT)">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="34">
                                             </td>
                                             <td>
                                                 <input {{ $is_approved->isEmpty() ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
@@ -1036,6 +1071,7 @@
                                             <td>
                                                 <label><b>Penyesuaian Harga (Eskalasi)</b></label>
                                                 <input type="hidden" class="form-control form-control-solid" {{ $is_approved->isEmpty() ? "" : "readonly" }} name="kategori[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="Penyesuaian Harga (Eskalasi)">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="35">
                                             </td>
                                             <td>
                                                 <input {{ $is_approved->isEmpty() ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
@@ -1057,6 +1093,7 @@
                                             <td>
                                                 <label><b>TKDN</b></label>
                                                 <input type="hidden" class="form-control form-control-solid" {{ $is_approved->isEmpty() ? "" : "readonly" }} name="kategori[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="TKDN">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="36">
                                             </td>
                                             <td>
                                                 <input {{ $is_approved->isEmpty() ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
@@ -1078,6 +1115,7 @@
                                             <td>
                                                 <label><b>Hak Pemutusan Kontrak atau Penghentian Pekerjaan oleh Penyedia Jasa</b></label>
                                                 <input type="hidden" class="form-control form-control-solid" {{ $is_approved->isEmpty() ? "" : "readonly" }} name="kategori[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="Hak Pemutusan Kontrak atau Penghentian Pekerjaan oleh Penyedia Jasa">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="37">
                                             </td>
                                             <td>
                                                 <input {{ $is_approved->isEmpty() ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
@@ -1099,6 +1137,7 @@
                                             <td>
                                                 <label><b>Hak Penundaan Pekerjaan oleh Penyedia Jasa</b></label>
                                                 <input type="hidden" class="form-control form-control-solid" {{ $is_approved->isEmpty() ? "" : "readonly" }} name="kategori[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="Hak Penundaan Pekerjaan oleh Penyedia Jasa">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="38">
                                             </td>
                                             <td>
                                                 <input {{ $is_approved->isEmpty() ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
@@ -1120,6 +1159,7 @@
                                             <td>
                                                 <label><b>Penyelesaian Perselisihan</b></label>
                                                 <input type="hidden" class="form-control form-control-solid" {{ $is_approved->isEmpty() ? "" : "readonly" }} name="kategori[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="Penyelesaian Perselisihan">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="39">
                                             </td>
                                             <td>
                                                 <input {{ $is_approved->isEmpty() ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
@@ -1141,6 +1181,7 @@
                                             <td>
                                                 <label><b>Kegagalan Bangunan</b></label>
                                                 <input type="hidden" class="form-control form-control-solid" {{ $is_approved->isEmpty() ? "" : "readonly" }} name="kategori[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="Kegagalan Bangunan">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="40">
                                             </td>
                                             <td>
                                                 <input {{ $is_approved->isEmpty() ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
@@ -1162,6 +1203,7 @@
                                             <td>
                                                 <label><b>Force Majeure/Keadaan Kahar</b></label>
                                                 <input type="hidden" class="form-control form-control-solid" {{ $is_approved->isEmpty() ? "" : "readonly" }} name="kategori[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="Force Majeure/Keadaan Kahar">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ $is_approved->isEmpty() ? "" : "readonly" }} value="41">
                                             </td>
                                             <td>
                                                 <input {{ $is_approved->isEmpty() ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
