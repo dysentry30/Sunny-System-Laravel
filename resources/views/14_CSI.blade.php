@@ -102,7 +102,7 @@
                                         <tbody class="fw-bold text-gray-600 fs-6">
                                             @foreach ($proyeks as $proyek)
                                                 {{-- @if ((int) $proyek->progress >= 20 && (int) $proyek->progress <= 40) --}}
-                                                @if (!empty($proyek->proyekBerjalan))
+                                                @if (!empty($proyek->proyekBerjalan) && !empty($proyek->proyekBerjalan->name_customer))
                                                     <tr>
                                                         <td>
                                                             <a target="_blank"
@@ -171,7 +171,7 @@
                                 <tbody class="fw-bold text-gray-600 fs-6">
                                     @foreach ($proyeks as $proyek)
                                         {{-- @dd($proyek) --}}
-                                        @if ((int) $proyek->progress >= 90)
+                                        @if ((int) $proyek->progress >= 90 && !empty($proyek->proyekBerjalan) && !empty($proyek->proyekBerjalan->name_customer))
                                             <tr>
                                                 <td>
                                                     <a target="_blank"
