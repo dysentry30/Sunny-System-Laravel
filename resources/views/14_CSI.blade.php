@@ -332,7 +332,7 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--Begin::Input-->
-                                <select onchange="pilihSegmen(this)" id="segmen" name="segmen" class="form-select form-select-solid"
+                                <select onchange="pilihSegmen(this, '{{ $c->id_csi }}')" id="segmen-{{ $c->id_csi }}" name="segmen" class="form-select form-select-solid"
                                     data-control="select2" data-hide-search="true" data-placeholder="Pilih Role" required>
                                     <option></option>
                                     <option value="Decision Maker">Decision Maker</option>
@@ -354,13 +354,13 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <select id="jabatan" name="jabatan" class="form-select form-select-solid"
+                                <select id="jabatan-{{ $c->id_csi }}" name="jabatan" class="form-select form-select-solid"
                                     data-control="select2" data-hide-search="true" data-placeholder="Pilih Jabatan">
                                     <option value=""></option>
                                 </select>
                                 <script>
-                                    function pilihSegmen(e) {
-                                        let jabatan = document.getElementById('jabatan');
+                                    function pilihSegmen(e, id) {
+                                        let jabatan = document.getElementById(`jabatan-${id}`);
                                         // console.log(e.value, jabatan);
                                         if (e.value == 'Decision Maker') {
                                             jabatan.innerHTML = `
