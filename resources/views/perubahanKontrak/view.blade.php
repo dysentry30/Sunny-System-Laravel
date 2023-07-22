@@ -1,6 +1,6 @@
 @extends('template.main')
 
-@section('title', 'Perubahan Kontrak')
+@section('title', 'Change Description')
 @section('content')
     <!--begin::Root-->
     <div class=" d-flex flex-column flex-root">
@@ -35,7 +35,7 @@
                             <div data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                                 class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
                                 <!--begin::Title-->
-                                <h1 class="d-flex align-items-center fs-3 my-1">Perubahan Kontrak
+                                <h1 class="d-flex align-items-center fs-3 my-1">Change Description 
                                 </h1>
                                 <!--end::Title-->
                             </div>
@@ -285,13 +285,13 @@
 
                                                                 <div class="col">
                                                                     <label class="fs-6 fw-bold form-label">
-                                                                        <span style="font-weight: normal">Tanggal Perubahan</span>
+                                                                        <span style="font-weight: normal">Tanggal Kejadian Perubahan</span>
                                                                         {{-- <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem"
                                                                             id="start-date-modal">
                                                                             <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
                                                                         </a> --}}
                                                                     </label><br>
-                                                                    <b>{{Carbon\Carbon::create($perubahan_kontrak->tanggal_perubahan)->translatedFormat("d F Y")}}}</b>
+                                                                    <b>{{Carbon\Carbon::create($perubahan_kontrak->tanggal_perubahan)->translatedFormat("d F Y")}}</b>
                                                                     {{-- <input type="date" name="tanggal-perubahan" class="form-control form-control-solid" value="{{Carbon\Carbon::create($perubahan_kontrak->tanggal_perubahan)->format("Y-m-d")}}"> --}}
                                                                 </div>
                                                             </div>
@@ -331,20 +331,26 @@
                                                                 </div>
                                                                 <div class="col">
                                                                     <label class="fs-6 fw-bold form-label">
-                                                                        <span style="font-weight: normal">Biaya Pengajuan</span>
+                                                                        <span style="font-weight: normal">Dampak Biaya</span>
                                                                     </label><br>
-                                                                    <b>{{ number_format($perubahan_kontrak->biaya_pengajuan, 0, ".", ".") }}</b>
+                                                                        <span style="font-weight: normal">
+                                                                            <b class="badge {{ (int) $perubahan_kontrak->biaya_pengajuan != 0 ? 'badge-primary' : 'badge-danger' }}">{{ (int) $perubahan_kontrak->biaya_pengajuan != 0 ? 'Yes' : 'No' }}</b>
+                                                                            <b class="{{$perubahan_kontrak->jenis_perubahan == 'Anti Klaim' ? 'text-danger ' : ''}}">{{ number_format($perubahan_kontrak->biaya_pengajuan, 0, ".", ".") }}</b>
+                                                                        </span>
                                                                     {{-- <input type="text" name="biaya-pengajuan" value="{{ number_format($perubahan_kontrak->biaya_pengajuan, 0, ".", ".") }}" class="form-control form-control-solid reformat" /> --}}
                                                                 </div>
                                                                 <div class="col">
                                                                     <label class="fs-6 fw-bold form-label">
-                                                                        <span style="font-weight: normal">Waktu Pengajuan</span>
+                                                                        <span style="font-weight: normal">Dampak Waktu</span>
                                                                         {{-- <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)"
                                                                             id="start-date-modal">
                                                                             <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
                                                                         </a> --}}
                                                                     </label><br>
-                                                                    <b>{{Carbon\Carbon::create($perubahan_kontrak->waktu_pengajuan)->translatedFormat("d F Y")}}</b>
+                                                                    <span style="font-weight: normal">
+                                                                        <b class="badge {{ !empty($perubahan_kontrak->biaya_pengajuan) ? 'badge-primary' : 'badge-danger' }}">{{ !empty($perubahan_kontrak->biaya_pengajuan) ? 'Yes' : 'No' }}</b>
+                                                                        <b>{{Carbon\Carbon::create($perubahan_kontrak->waktu_pengajuan)->translatedFormat("d F Y")}}</b>
+                                                                    </span>
                                                                     {{-- <input type="date" name="waktu-pengajuan" value="{{Carbon\Carbon::create($perubahan_kontrak->waktu_pengajuan)->format("Y-m-d")}}" class="form-control form-control-solid" /> --}}
                                                                 </div>
                                                             </div>
@@ -378,7 +384,7 @@
                                                                     <!--begin::Input-->
                                                                     <select name="status-perubahan-kontrak" id="status-perubahan-kontrak" class="form-select form-select-solid"
                                                                     data-control="select2" data-hide-search="true"
-                                                                    data-placeholder="Pilih Status Perubahan Kontrak">
+                                                                    data-placeholder="Pilih Status Change Description ">
                                                                         <option value=""></option>
                                                                         <option {{$perubahan_kontrak->status == 0 ? "selected" : ""}} value="0">Open</option>
                                                                         <option {{$perubahan_kontrak->status == 1 ? "selected" : ""}} value="1">Closed</option>

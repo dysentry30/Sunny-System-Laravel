@@ -151,7 +151,7 @@
                                         </span>
                                         <!--end::Svg Icon-->
                                     </span>
-                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Claim Management</span>
+                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Change Management</span>
                                 </a>
                             </div>
                         @endif
@@ -168,7 +168,7 @@
                                         </span>
                                         <!--end::Svg Icon-->
                                     </span>
-                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">History Approval</span>
+                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Request For Approval</span>
                                 </a>
                             </div>
                         @endif

@@ -70,7 +70,7 @@
                                 @php
                                     // $contract = $contracts->values();
                                 @endphp
-                                <h1 class="d-flex align-items-center fs-3 my-1">Datail Claim - &nbsp; <b>{{ $contracts->project->nama_proyek }}</b>
+                                <h1 class="d-flex align-items-center fs-3 my-1">Datail Change - &nbsp; <b>{{ $contracts->project->nama_proyek }}</b>
                                 </h1>
                                 <!--end::Title-->
                             </div>
@@ -225,13 +225,13 @@
                                                     <div class="tab-pane fade {{ $link == "kt_user_view_claim_VO" ? "show active" : "" }}" id="kt_user_view_claim_VO" role="tabpanel">
                                                         <table class="table align-middle table-row-dashed fs-6 gy-2 card-body" id="view_VO">
                                                             <thead>
-                                                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                    <th class="min-w-auto">Tanggal Perubahan</th>
+                                                                <tr class="text-center text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                    <th class="min-w-125px">Tanggal Kejadian Perubahan</th>
                                                                     <th class="min-w-auto">Uraian Perubahan</th>
                                                                     <th class="min-w-auto">No Proposal Klaim</th>
                                                                     <th class="min-w-auto">Tanggal Pengajuan</th>
-                                                                    <th class="min-w-auto">Biaya Pengajuan</th>
-                                                                    <th class="min-w-auto">Waktu Pengajuan</th>
+                                                                    <th class="min-w-125px" colspan="2">Dampak Biaya</th>
+                                                                    <th class="min-w-125px" colspan="2">Dampak Waktu</th>
                                                                     <th class="min-w-auto">Status</th>
                                                                 </tr>
                                                             </thead>
@@ -253,12 +253,22 @@
                                                                     <td>
                                                                         {{ Carbon\Carbon::parse($vo->tanggal_pengajuan)->translatedFormat('d F Y') }}
                                                                     </td>
+                                                                     <!--Begin::Dampak Biaya-->
+                                                                     <td class="fw-bolder text-center">
+                                                                        {{ (int) $vo->biaya_pengajuan != 0 ? 'Yes' : 'No' }}
+                                                                    </td>
                                                                     <td>
                                                                         {{ number_format($vo->biaya_pengajuan, 0, ".", ".") }}
+                                                                    </td>
+                                                                    <!--end::Dampak Biaya-->
+                                                                    <!--begin::Dampak Waktu-->
+                                                                    <td class="fw-bolder text-center">
+                                                                        {{ !empty($vo->waktu_pengajuan) ? 'Yes' : 'No' }}
                                                                     </td>
                                                                     <td>
                                                                         {{ Carbon\Carbon::parse($vo->waktu_pengajuan)->translatedFormat('d F Y') }}
                                                                     </td>
+                                                                    <!--end::Dampak Waktu-->
                                                                     @php
                                                                     $stage = "";
                                                                     $class_name = "";
@@ -323,13 +333,13 @@
                                                     <div class="tab-pane fade {{ $link == "kt_user_view_claim" ? "show active" : "" }}" id="kt_user_view_claim" role="tabpanel">
                                                         <table class="table align-middle table-row-dashed fs-6 gy-2 card-body" id="view_Klaim">
                                                             <thead>
-                                                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                    <th class="min-w-auto">Tanggal Perubahan</th>
+                                                                <tr class="text-center text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                    <th class="min-w-125px">Tanggal Kejadian Perubahan</th>
                                                                     <th class="min-w-auto">Uraian Perubahan</th>
                                                                     <th class="min-w-auto">No Proposal Klaim</th>
                                                                     <th class="min-w-auto">Tanggal Pengajuan</th>
-                                                                    <th class="min-w-auto">Biaya Pengajuan</th>
-                                                                    <th class="min-w-auto">Waktu Pengajuan</th>
+                                                                    <th class="min-w-125px" colspan="2">Dampak Biaya</th>
+                                                                    <th class="min-w-125px" colspan="2">Dampak Waktu</th>
                                                                     <th class="min-w-auto">Status</th>
                                                                 </tr>
                                                             </thead>
@@ -351,12 +361,22 @@
                                                                     <td>
                                                                         {{ Carbon\Carbon::parse($klaim->tanggal_pengajuan)->translatedFormat('d F Y') }}
                                                                     </td>
+                                                                    <!--Begin::Dampak Biaya-->
+                                                                     <td class="fw-bolder text-center">
+                                                                        {{ (int) $klaim->biaya_pengajuan != 0 ? 'Yes' : 'No' }}
+                                                                    </td>
                                                                     <td>
                                                                         {{ number_format($klaim->biaya_pengajuan, 0, ".", ".") }}
+                                                                    </td>
+                                                                    <!--end::Dampak Biaya-->
+                                                                    <!--begin::Dampak Waktu-->
+                                                                    <td class="fw-bolder text-center">
+                                                                        {{ !empty($klaim->waktu_pengajuan) ? 'Yes' : 'No' }}
                                                                     </td>
                                                                     <td>
                                                                         {{ Carbon\Carbon::parse($klaim->waktu_pengajuan)->translatedFormat('d F Y') }}
                                                                     </td>
+                                                                    <!--end::Dampak Waktu-->
                                                                     @php
                                                                     $stage = "";
                                                                     $class_name = "";
@@ -421,13 +441,13 @@
                                                     <div class="tab-pane fade {{ $link == "kt_user_view_overview_anticlaim" ? "show active" : "" }}" id="kt_user_view_overview_anticlaim" role="tabpanel">
                                                         <table class="table align-middle table-row-dashed fs-6 gy-2 card-body" id="view_AntiKlaim">
                                                             <thead>
-                                                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                    <th class="min-w-auto">Tanggal Perubahan</th>
+                                                                <tr class="text-center text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                    <th class="min-w-125px">Tanggal Kejadian Perubahan</th>
                                                                     <th class="min-w-auto">Uraian Perubahan</th>
                                                                     <th class="min-w-auto">No Proposal Klaim</th>
                                                                     <th class="min-w-auto">Tanggal Pengajuan</th>
-                                                                    <th class="min-w-auto">Biaya Pengajuan</th>
-                                                                    <th class="min-w-auto">Waktu Pengajuan</th>
+                                                                    <th class="min-w-125px" colspan="2">Dampak Biaya</th>
+                                                                    <th class="min-w-125px" colspan="2">Dampak Waktu</th>
                                                                     <th class="min-w-auto">Status</th>
                                                                 </tr>
                                                             </thead>
@@ -449,12 +469,22 @@
                                                                     <td>
                                                                         {{ Carbon\Carbon::parse($anti_klaim->tanggal_pengajuan)->translatedFormat('d F Y') }}
                                                                     </td>
+                                                                    <!--Begin::Dampak Biaya-->
+                                                                     <td class="fw-bolder text-center">
+                                                                        {{ (int) $anti_klaim->biaya_pengajuan != 0 ? 'Yes' : 'No' }}
+                                                                    </td>
                                                                     <td>
-                                                                        {{ number_format($anti_klaim->biaya_pengajuan, 0, ".", ".") }}
+                                                                        (-) {{ number_format($anti_klaim->biaya_pengajuan, 0, ".", ".") }}
+                                                                    </td>
+                                                                    <!--end::Dampak Biaya-->
+                                                                    <!--begin::Dampak Waktu-->
+                                                                    <td class="fw-bolder text-center">
+                                                                        {{ !empty($anti_klaim->waktu_pengajuan) ? 'Yes' : 'No' }}
                                                                     </td>
                                                                     <td>
                                                                         {{ Carbon\Carbon::parse($anti_klaim->waktu_pengajuan)->translatedFormat('d F Y') }}
                                                                     </td>
+                                                                    <!--end::Dampak Waktu-->
                                                                     @php
                                                                     $stage = "";
                                                                     $class_name = "";
@@ -519,13 +549,13 @@
                                                     <div class="tab-pane fade {{ $link == "kt_user_view_overview_asuransi" ? "show active" : "" }}" id="kt_user_view_overview_asuransi" role="tabpanel">
                                                         <table class="table align-middle table-row-dashed fs-6 gy-2 card-body" id="view_KlaimAsuransi">
                                                             <thead>
-                                                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                    <th class="min-w-auto">Tanggal Perubahan</th>
+                                                                <tr class="text-center text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                    <th class="min-w-125px">Tanggal Kejadian Perubahan</th>
                                                                     <th class="min-w-auto">Uraian Perubahan</th>
                                                                     <th class="min-w-auto">No Proposal Klaim</th>
                                                                     <th class="min-w-auto">Tanggal Pengajuan</th>
-                                                                    <th class="min-w-auto">Biaya Pengajuan</th>
-                                                                    <th class="min-w-auto">Waktu Pengajuan</th>
+                                                                    <th class="min-w-125px" colspan="2">Dampak Biaya</th>
+                                                                    <th class="min-w-125px" colspan="2">Dampak Waktu</th>
                                                                     <th class="min-w-auto">Status</th>
                                                                 </tr>
                                                             </thead>
@@ -547,12 +577,22 @@
                                                                     <td>
                                                                         {{ Carbon\Carbon::parse($klaim_asuransi->tanggal_pengajuan)->translatedFormat('d F Y') }}
                                                                     </td>
+                                                                    <!--Begin::Dampak Biaya-->
+                                                                     <td class="fw-bolder text-center">
+                                                                        {{ (int) $klaim_asuransi->biaya_pengajuan != 0 ? 'Yes' : 'No' }}
+                                                                    </td>
                                                                     <td class="text-end">
                                                                         {{ number_format($klaim_asuransi->biaya_pengajuan, 0, ".", ".") }}
+                                                                    </td>
+                                                                    <!--end::Dampak Biaya-->
+                                                                    <!--begin::Dampak Waktu-->
+                                                                    <td>
+                                                                        {{ !empty($klaim_asuransi->waktu_pengajuan) ? 'Yes' : 'No' }}
                                                                     </td>
                                                                     <td>
                                                                         {{ Carbon\Carbon::parse($klaim_asuransi->waktu_pengajuan)->translatedFormat('d F Y') }}
                                                                     </td>
+                                                                    <!--end::Dampak Waktu-->
                                                                     @php
                                                                     $stage = "";
                                                                     $class_name = "";
@@ -618,12 +658,12 @@
                                                         <table class="table align-middle table-row-dashed fs-6 gy-2 card-body" id="view_KlaimAll">
                                                             <thead>
                                                                 <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                    <th class="min-w-auto">Jenis Perubahan</th>
+                                                                    <th class="min-w-125px">Jenis Perubahan</th>
                                                                     <th class="min-w-auto">Uraian Perubahan</th>
                                                                     <th class="min-w-auto">No Proposal Klaim</th>
                                                                     <th class="min-w-auto">Tanggal Pengajuan</th>
-                                                                    <th class="min-w-auto">Biaya Pengajuan</th>
-                                                                    <th class="min-w-auto">Waktu Pengajuan</th>
+                                                                    <th class="min-w-125px" colspan="2">Dampak Biaya</th>
+                                                                    <th class="min-w-125px" colspan="2">Dampak Waktu</th>
                                                                     <th class="min-w-auto">Status</th>
                                                                 </tr>
                                                             </thead>
@@ -646,10 +686,10 @@
                                                                         {{ Carbon\Carbon::parse($claim->tanggal_pengajuan)->translatedFormat('d F Y') }}
                                                                     </td>
                                                                     <td>
-                                                                        {{ number_format($claim->biaya_pengajuan, 0, ".", ".") }}
+                                                                        {{ (int) $claim->biaya_pengajuan != 0 ? 'Yes' : 'No' }} | {{ number_format($claim->biaya_pengajuan, 0, ".", ".") }}
                                                                     </td>
                                                                     <td>
-                                                                        {{ Carbon\Carbon::parse($claim->waktu_pengajuan)->translatedFormat('d F Y') }}
+                                                                        {{ !empty($claim->waktu_pengajuan) ? 'Yes' : 'No' }} | {{ Carbon\Carbon::parse($claim->waktu_pengajuan)->translatedFormat('d F Y') }}
                                                                     </td>
                                                                     @php
                                                                     $stage = "";
@@ -730,7 +770,7 @@
                         <!--begin::Modal header-->
                         <div class="modal-header">
                             <!--begin::Modal title-->
-                            <h2>Add Perubahan Kontrak</h2>
+                            <h2>Add Change Description</h2>
                             <!--end::Modal title-->
                             <!--begin::Close-->
                             <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
@@ -771,8 +811,8 @@
                                     </div>
         
                                     <div class="col">
-                                        <label class="fs-6 fw-bold form-label">
-                                            <span style="font-weight: normal">Tanggal Perubahan</span>
+                                        <label class="text-center fw-bold form-label">
+                                            <span style="font-weight: normal">Tanggal Kejadian Perubahan</span>
                                             <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
                                                 <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
                                             </a>
@@ -812,13 +852,13 @@
                                     </div>
                                     <div class="col mt-3">
                                         <label class="fs-6 fw-bold form-label">
-                                            <span style="font-weight: normal">Biaya Pengajuan</span>
+                                            <span style="font-weight: normal">Dampak Biaya</span>
                                         </label>
                                         <input type="text" name="biaya-pengajuan" class="form-control form-control-solid reformat"/>
                                     </div>
                                     <div class="col">
-                                        <label class="fs-6 fw-bold form-label">
-                                            <span style="font-weight: normal">Waktu Pengajuan</span>
+                                        <label class="fs-6 fw-bold form-150pxbel">
+                                            <span style="font-weight: 150px">Dampak Waktu</span>
                                             <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
                                                 <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
                                             </a>
@@ -853,7 +893,7 @@
                         <!--begin::Modal header-->
                         <div class="modal-header">
                             <!--begin::Modal title-->
-                            <h2>Upload Final | Perubahan Kontrak</h2>
+                            <h2>Upload Final | Change Description</h2>
                             <!--end::Modal title-->
                             <!--begin::Close-->
                             <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
@@ -955,7 +995,7 @@
                 buttons: [
                     {
                         extend: 'excelHtml5',
-                        title: 'Perubahan Kontrak VO'
+                        title: 'Change Description VO'
                     }
                     ]
             } );
@@ -971,7 +1011,7 @@
                 buttons: [
                     {
                         extend: 'excelHtml5',
-                        title: 'Perubahan Kontrak Klaim'
+                        title: 'Change Description Klaim'
                     }
                     ]
             } );
@@ -987,7 +1027,7 @@
                 buttons: [
                     {
                         extend: 'excelHtml5',
-                        title: 'Perubahan Kontrak Anti Klaim'
+                        title: 'Change Description Anti Klaim'
                     }
                     ]
             } );
@@ -1003,7 +1043,7 @@
                 buttons: [
                     {
                         extend: 'excelHtml5',
-                        title: 'Perubahan Kontrak Klaim Asuransi'
+                        title: 'Change Description Klaim Asuransi'
                     }
                     ]
             } );
@@ -1019,7 +1059,7 @@
                 buttons: [
                     {
                         extend: 'excelHtml5',
-                        title: 'Perubahan Kontrak'
+                        title: 'Change Description'
                     }
                     ]
             } );
