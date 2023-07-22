@@ -148,7 +148,7 @@ class ProyekController extends Controller
     public function save(Request $request, Proyek $newProyek)
     {
         $dataProyek = $request->all();
-        $proyekAll = Proyek::where("unit_kerja", "=", Auth::user()->unit_kerja)->get();
+        $proyekAll = Proyek::where("unit_kerja", "=", $dataProyek["unit-kerja"])->get();
         $unitKerja = UnitKerja::where('divcode', "=", $dataProyek["unit-kerja"])->get()->first();
 
         $messages = [
@@ -217,20 +217,8 @@ class ProyekController extends Controller
         $newProyek->porsi_jo = 100;
         $newProyek->is_cancel = false;
 
-        if ((int) $newProyek->nilaiok_awal <= 250000000000) {
-            $newProyek->klasifikasi_pasdin = "Proyek Kecil";
-        } else if ((int) $newProyek->nilaiok_awal > 2000000000000) {
-            $newProyek->klasifikasi_pasdin = "Mega Proyek";
-        } else if ((int) $newProyek->nilaiok_awal > 500000000000) {
-            $newProyek->klasifikasi_pasdin = "Proyek Besar";
-        } else if ((int) $newProyek->nilaiok_awal > 250000000000) {
-            $newProyek->klasifikasi_pasdin = "Proyek Menengah";
-        } else {
-            $newProyek->klasifikasi_pasdin = null;
-        }
-
         //begin::Generate Kode Proyek
-        $generateProyek = Proyek::where("tahun_perolehan", "=", (int) date("Y"))->get()->sortBy("id");
+        // $generateProyek = Proyek::where("tahun_perolehan", "=", (int) date("Y"))->get()->sortBy("id");
 
         $unit_kerja = $dataProyek["unit-kerja"];
         $jenis_proyek = $dataProyek["jenis-proyek"];
@@ -249,33 +237,51 @@ class ProyekController extends Controller
         // Menggabungkan semua kode beserta nomor urut
         $kode_proyek = $unit_kerja . $jenis_proyek . $tipe_proyek . $kode_tahun;
 
-        $no_urut = $generateProyek->count(function($p) use($kode_proyek) {
-            return str_contains($p->kode_proyek, $kode_proyek);
-        }) + 1;
+        // $no_urut = $generateProyek->count(function($p) use($kode_proyek) {
+        //     return str_contains($p->kode_proyek, $kode_proyek);
+        // }) + 1;
+
+        $lastProyek = Proyek::where("kode_proyek", "like", "%".$kode_proyek."%")->get()->sortBy("created_at")->last();
+        $no_urut = (int) preg_replace("/[^0-9]/", "",$lastProyek->kode_proyek) + 1;
+        $len = strlen($no_urut);
+        $no_urut = substr($no_urut, ($len-3), 3);
+
+        // dd($no_urut, $lastProyek); 
 
         // Untuk membuat 3 digit nomor urut terakhir
         $no_urut = str_pad(strval($no_urut), 3, 0, STR_PAD_LEFT);
-        // dd($no_urut, $kode_proyek);
         // if (str_contains($generateProyek->last()->kode_proyek, "KD")) {
             //     $no_urut = (int) $generateProyek->last()->id + 1;
             // } else {
                 //     // $no_urut = count($generateProyek)+1;
-                //     $no_urut = (int) $generateProyek->last()->id + 1;
-                // }
-                
+        //     $no_urut = (int) $generateProyek->last()->id + 1;
+        // }
+        
+        // dd($kode_proyek . $no_urut);
+        // for ($i= $no_urut; $i < $no_urut+100; $i++) { 
+            //     # code...
+            // }
+            
         $existProyek = Proyek::find($kode_proyek . $no_urut);
         if (!empty($existProyek)) {
-            $number = (int) $no_urut++;
-            $no_urut = str_pad(strval($no_urut), 3, 0, STR_PAD_LEFT);
+            $number = (int) $no_urut+1;
+            
+            foreach ($proyekAll as $proyekExist) {
+                if ($proyekExist->kode_proyek != $existProyek->kode_proyek) {
+                    $number = (int) $no_urut+1;
+                }
+            }
+            $number = str_pad(strval($number), 3, 0, STR_PAD_LEFT);
+            // dd($existProyek, $kode_proyek . $number);
             $newProyek->kode_proyek = $kode_proyek . $number;
         } else {
             $newProyek->kode_proyek = $kode_proyek . $no_urut;
         }
+        // dd($newProyek->kode_proyek, $existProyek);
         //end::Generate Kode Proyek
 
         // $newForecast = new Forecast;
         // $newForecast-
-
 
 
         //end::Generate Kode Proyek
@@ -284,9 +290,9 @@ class ProyekController extends Controller
         Alert::success('Success', $dataProyek["nama-proyek"] . ", Berhasil Ditambahkan");
         // dd($newProyek);
 
-        if (!empty($newProyek->kode_proyek)) {
+        if ($newProyek->save()) {
 
-            if ($tipe_proyek == "P") {
+            if ($tipe_proyek == "P"){
                 $uuid = new Uuid();
                 $contractManagements = new ContractManagements();
                 // dd($contractManagements);
@@ -300,10 +306,10 @@ class ProyekController extends Controller
                 $contractManagements->contract_proceed = "Belum Selesai";
                 $contractManagements->stages = (int) 1;
                 $contractManagements->save();
-            }
+            }   
 
             if ($idCustomer != null) {
-                $customerHistory = ProyekBerjalans::where('kode_proyek', "=", $newProyek->kode_proyek)->get()->first();
+                // $customerHistory = ProyekBerjalans::where('kode_proyek', "=", $newProyek->kode_proyek)->get()->first();
                 // dd($customerHistory);
                 $customerHistory = new ProyekBerjalans();
                 $customerHistory->id_customer = $idCustomer;
@@ -318,9 +324,7 @@ class ProyekController extends Controller
                 $customerHistory->stage = $newProyek->stage;
                 $customerHistory->save();
             }
-            // dd($newProyek->kode_proyek, $customerHistory, $contractManagements);
-            $newProyek->save();
-            return redirect("/proyek/view/" . $newProyek->kode_proyek)->with("success", ($dataProyek["nama-proyek"] . " (" . $newProyek->kode_proyek . ") " . ", Berhasil dibuat"));
+            return redirect("/proyek/view/".$newProyek->kode_proyek)->with("success", ($dataProyek["nama-proyek"] . ", Berhasil dibuat"));
         }
         // return redirect("/proyek")->with("failed", ($dataProyek["nama-proyek"].", Gagal Dibuat"));
     }

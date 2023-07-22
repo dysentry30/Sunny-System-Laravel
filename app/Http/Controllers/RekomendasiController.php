@@ -309,6 +309,7 @@ class RekomendasiController extends Controller
                     $matriks_approval = MatriksApprovalRekomendasi::where("unit_kerja", "=", $proyek->UnitKerja->Divisi->id_divisi)->where("klasifikasi_proyek", "=", $proyek->klasifikasi_pasdin)->where("kategori", "=", "Persetujuan")->get();
                     foreach ($matriks_approval as $key => $user) {
                         $user = $user->Pegawai->User;
+                        URL::forceScheme("https");
                         $url = URL::temporarySignedRoute("rekomendasi", now()->addHours(3), ["open" => "kt_modal_view_proyek_persetujuan_" . $proyek->kode_proyek, "user" => $user->nip]);
                         // $url = $request->schemeAndHttpHost() . "?redirectTo=/rekomendasi?open=kt_user_view_persetujuan" . $proyek->kode_proyek . "&token=$token";
                         $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
@@ -440,6 +441,13 @@ class RekomendasiController extends Controller
                     // return errorPage(403, "OTP Invalid", "Oops! OTP is invalid.", "");
                 }
             } else {
+                // Check if the user has submitted approval
+                $open_modal = explode("_",$data["open"]);
+                $proyek = Proyek::find($open_modal[count($open_modal) - 1]);
+                $data_approval_persetujuan = collect(json_decode($proyek->approved_persetujuan));
+                if($data_approval_persetujuan->isNotEmpty() && $data_approval_persetujuan->where("user_id", "=", $user->id)->count() > 0) {
+                    return errorPage(403, "Link has expired", "Link has expired", "Oops! This link has expired. You already submitted for this link.");
+                }
                 return $otp_controller->index($request, $user);
             }
         }

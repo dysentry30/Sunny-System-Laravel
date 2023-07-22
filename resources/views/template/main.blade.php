@@ -100,6 +100,24 @@
             pointer-events: none;
             touch-action: none;
         }
+        table thead tr th{
+            background-color: #0DB0D9 !important;
+            color: white !important;
+            padding: 5px !important;
+        }
+        table tbody tr td{
+            padding: 5px !important;
+        }
+
+        table, th, td, tr {
+            border: 0.5px solid #ACADBA !important;
+        }
+        th a {
+            color: white !important;
+        }
+        .fa.fa-sort {
+            color: white !important;
+        }
     </style>
     {{-- end:: Disable Native Date Browser --}}
 </head>

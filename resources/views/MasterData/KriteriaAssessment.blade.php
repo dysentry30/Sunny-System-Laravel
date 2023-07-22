@@ -140,18 +140,18 @@
 
 
                             <!--begin::Table-->
-                            <table class="table align-middle table-row-dashed fs-6 gy-2" id="example">
+                            <table class="table align-middle table-bordered border-dark fs-6 gy-2" id="example">
                                 <!--begin::Table head-->
                                 <thead>
                                     <!--begin::Table row-->
-                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                        <th class="min-w-auto">Tahun</th>
-                                        <th class="min-w-auto">Kategori</th>
-                                        <th class="min-w-auto">Kriteria Penilaian</th>
-                                        <th class="min-w-auto">Klasifikasi</th>
-                                        <th class="min-w-auto">Isi</th>
-                                        <th class="min-w-auto">Nilai</th>
-                                        <th class="min-w-auto text-center">Action</th>
+                                    <tr class="text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-auto ps-5 text-white">Tahun</th>
+                                        <th class="min-w-auto text-white">Kategori</th>
+                                        <th class="min-w-auto text-white">Kriteria Penilaian</th>
+                                        <th class="min-w-auto text-white">Klasifikasi</th>
+                                        <th class="min-w-auto text-white">Isi</th>
+                                        <th class="min-w-auto text-white">Nilai</th>
+                                        <th class="min-w-auto text-white text-center">Action</th>
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>
@@ -171,7 +171,7 @@
                                             }
                                             @endphp
                                         <tr> --}}
-                                            <td>{{$kriteria->tahun}}</td>
+                                            <td class="text-center">{{$kriteria->tahun}}</td>
                                             <td>{{$kriteria->kategori}}</td>
                                             <td>{{$kriteria->kriteria_penilaian}}</td>
                                             <td>{{$kriteria->klasifikasi}}</td>

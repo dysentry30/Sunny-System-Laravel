@@ -140,16 +140,16 @@
 
 
                             <!--begin::Table-->
-                            <table class="table align-middle table-row-dashed fs-6 gy-2" id="example">
+                            <table class="table align-middle table-bordered border-dark fs-6 gy-2" id="example">
                                 <!--begin::Table head-->
                                 <thead>
                                     <!--begin::Table row-->
-                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                        <th class="min-w-auto">Item</th>
-                                        <th class="min-w-auto">Isi Item</th>
-                                        <th class="min-w-auto">Sub Item</th>
-                                        <th class="min-w-auto">Tahun</th>
-                                        <th class="min-w-auto">Action</th>
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0 bg-primary">
+                                        <th class="min-w-auto text-white">Item</th>
+                                        <th class="min-w-auto text-white">Isi Item</th>
+                                        <th class="min-w-auto text-white">Sub Item</th>
+                                        <th class="min-w-auto text-white">Tahun</th>
+                                        <th class="min-w-auto text-white">Action</th>
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>

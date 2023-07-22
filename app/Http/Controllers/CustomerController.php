@@ -516,6 +516,7 @@ class CustomerController extends Controller
 
         // form company information
         $editCustomer->jenis_instansi = $data["jenis-instansi"];
+        $editCustomer->kode_bp = $data["kode-bp"];
         $editCustomer->kode_pelanggan = $data["kodepelanggan-company"];
         $editCustomer->npwp_company = $data["npwp-company"];
         $editCustomer->npwp_address = $data["npwp-address"];
@@ -1326,7 +1327,29 @@ class CustomerController extends Controller
 
     public function getKodeNasabah(Request $request) {
         $response = Http::post("http://nasabah.wika.co.id/index.php/mod_excel/post_json_crm", $request->all())->body();
+        // $response = Http::post("http://nasabah.wika.co.id/index.php/mod_excel/get_json_pmcs", $request->all())->body();
+        // dd($response);
         return response($response);
+    }
+
+    public function getKodeBP(Request $request) {
+        // $response = collect(Http::get("http://nasabah.wika.co.id/index.php/mod_excel/get_json_pmcs")->json());
+        $response = collect(Http::get("http://nasabah.wika.co.id/index.php/mod_excel/get_json_kdnasabah?kd=:$request->kode_nasabah")->json()[0]);
+        if($response->isEmpty()) {
+            return response()->json([
+                "status" => false,
+                "msg" => "Customer tidak ditemukan di PIS",
+            ]);
+        } else if(empty($response["kdbp_sap"])) {
+            return response()->json([
+                "status" => false,
+                "msg" => "Kode BP tidak ditemukan di kode nasabah $request->kode_nasabah",
+            ]);
+        }
+        return response([
+            "status" => true,
+            "kode_bp" => $response["kdbp_sap"],
+        ]);
     }
 
     public function getFullMonth($month)

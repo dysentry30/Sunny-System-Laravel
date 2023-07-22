@@ -3,12 +3,17 @@
 {{-- End::Extend Header --}}
 
 {{-- Begin::Title --}}
-@section('title', 'Industry Attractivness')
+@section('title', 'Industry Attractiveness')
 {{-- End::Title --}}
 
 <!--begin::Main-->
 @section('content')
 
+    <style>
+        table, tr,td {
+            border: 1px solid black !important;
+        }
+    </style>
 
     <!--begin::Root-->
     <div class="d-flex flex-column flex-root">
@@ -33,7 +38,7 @@
                                 data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                                 class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
                                 <!--begin::Title-->
-                                <h1 class="d-flex align-items-center fs-3 my-1">Industry Attractivness
+                                <h1 class="d-flex align-items-center fs-3 my-1">Industry Attractiveness
                                 </h1>
                                 <!--end::Title-->
                             </div>
@@ -48,10 +53,8 @@
                                 <div class="d-flex align-items-center py-1">
 
                                     <!--begin::Button-->
-                                    <a href="#kt_modal_input_industry" data-bs-toggle="modal" class="btn btn-sm btn-primary me-4"
-                                        style="background-color:#008CB4">Tambah Industry Attractiveness</a>
-
-                                    <a href="/send-data-industry-attractivness" class="btn btn-sm btn-secondary" >Send Data</a>
+                                    <a href="/send-data-industry-attractivness" class="btn btn-sm btn-primary" id="kt_toolbar_primary_button"
+                                        style="background-color:#008CB4">Send Data</a>
 
                                     <!--begin::Wrapper-->
                                     {{-- <div class="me-4" style="margin-left:10px;">
@@ -179,18 +182,17 @@
 
 
                             <!--begin::Table-->
-                            <table class="table align-middle table-row-dashed fs-6 gy-2" id="kt_customers_table">
+                            <table class="table align-middle fs-6 gy-2" id="">
                                 <!--begin::Table head-->
                                 <thead>
                                     <!--begin::Table row-->
-                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                        <th class="min-w-auto">Kode Attractiveness</th>
-                                        {{-- <th class="min-w-auto">@sortablelink('mata_uang', 'Industry Attractiveness ')</th> --}}
-                                        <th class="min-w-auto">Deskripsi Attractiveness</th>
-                                        <th class="min-w-auto ">Owner Attractiveness</th>
-                                        <th class="min-w-auto ">Periode</th>
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0 bg-primary">
+                                        <th class="min-w-auto text-white">Kode Owner</th>
+                                        {{-- <th class="min-w-auto text-white">@sortablelink('mata_uang', 'Industry Attractiveness ')</th> --}}
+                                        <th class="min-w-auto text-white">Deskripsi Owner</th>
+                                        <th class="min-w-auto text-white ">Owner Attractiveness</th>
                                         @if (auth()->user()->check_administrator)
-                                            <th class="text-center">
+                                            <th class="text-center text-white">
                                                 Action
                                             </th>
                                         @endif
@@ -222,12 +224,6 @@
                                                 {{$industryOwner->owner_attractiveness}}
                                             </td>
                                             <!--end::No-->
-
-                                            <!--begin::Periode-->
-                                            <td class="">
-                                                {{ Carbon\Carbon::createFromFormat("m-Y", $industryOwner->periode)->translatedFormat("F Y")}}
-                                            </td>
-                                            <!--end::Periode-->
 
                                             @if (auth()->user()->check_administrator)
                                                 <!--begin::Action-->
@@ -358,180 +354,6 @@
         </div>
         <!--end::Modal - Create App-->
     </form>
-    <!--begin::Modal - Input Industry Attractiveness-->
-    <div class="modal fade" id="kt_modal_input_industry" tabindex="-1" aria-hidden="true">
-        <form action="/industry-attractiveness/save" method="POST">
-            @csrf
-            <input type="hidden" name="modal" value="kt_modal_input_industry">
-            <!--begin::Modal dialog-->
-            <div class="modal-dialog modal-dialog-centered mw-800px">
-                <!--begin::Modal content-->
-                <div class="modal-content">
-                    <!--begin::Modal header-->
-                    <div class="modal-header">
-                        <!--begin::Modal title-->
-                        <h2>New Industry Attractiveness</h2>
-                        <!--end::Modal title-->
-                        <!--begin::Close-->
-                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                            <span class="svg-icon svg-icon-1">
-                                <i class="bi bi-x-lg"></i>
-                            </span>
-                            <!--end::Svg Icon-->
-                        </div>
-                        <!--end::Close-->
-                    </div>
-                    <!--end::Modal header-->
-    
-                    <!--begin::Modal body-->
-                    <div class="modal-body py-lg-6 px-lg-6">
-    
-    
-                        <!--begin::Row Kanan+Kiri-->
-                        <div class="row fv-row">
-                            <!--begin::Col-->
-                            <div class="">
-                                <!--begin::Input group Website-->
-                                <div class="fv-row mb-7">
-                                    <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Kode Attractiveness</span>
-                                    </label>
-                                    <!--end::Label-->
-                                    <!--begin::Input-->
-                                    <input type="text" class="form-control form-control-solid" id="kode-attractiveness"
-                                        name="kode-attractiveness" value="{{old("kode-attractiveness")}}" placeholder="Kode Attractiveness" />
-                                    <!--end::Input-->
-                                </div>
-                                <!--end::Input group-->
-                            </div>
-                            <!--End begin::Col-->
-                            <div class="">
-                                <!--begin::Input group Website-->
-                                <div class="fv-row mb-7">
-                                    <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Owner Attractiveness</span>
-                                    </label>
-                                    <!--end::Label-->
-                                    <!--begin::Input-->
-
-                                    <select name="owner-attractiveness" id="owner-attractiveness"
-                                        class="form-select form-select-solid select2-hidden-accessible"
-                                        data-control="select2" data-hide-search="true" data-placeholder="Pilh Owner Attractiveness..."
-                                        data-select2-id="select2-owner-attractiveness" tabindex="-1" aria-hidden="true">
-                                            <option value=""></option>
-                                            <option value="Menarik">Menarik</option>
-                                            <option value="Cenderung Menarik">Cenderung Menarik</option>
-                                            <option value="Netral">Netral</option>
-                                            <option value="Cenderung Waspada">Cenderung Waspada</option>
-                                            <option value="Waspada">Waspada</option>
-                                    </select>
-
-                                    {{-- <input type="text" class="form-control form-control-solid" id="mata-uang"
-                                        name="owner-attractiveness" value="{{old("owner-attractiveness")}}" placeholder="Owner Attractiveness" /> --}}
-                                    <!--end::Input-->
-                                </div>
-                                <!--end::Input group-->
-                            </div>
-                            
-                            <div class="">
-                                <!--begin::Input group Website-->
-                                <div class="fv-row mb-7">
-                                    <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Deskripsi Attractiveness</span>
-                                    </label>
-                                    <!--end::Label-->
-                                    <!--begin::Input-->
-
-                                    <select name="deskripsi-attractiveness" id="deskripsi-attractiveness"
-                                        class="form-select form-select-solid select2-hidden-accessible"
-                                        data-control="select2" data-hide-search="false" data-placeholder="Pilh Deskripsi Attractiveness..."
-                                        data-select2-id="select2-deskripsi-attractiveness" tabindex="-1" aria-hidden="true">
-                                            <option value=""></option>
-                                            @foreach ($industrySector as $sector)
-                                                <option value="{{$sector->id_industry_sector}}">{{$sector->description}}</option>
-                                            @endforeach
-                                    </select>
-
-                                    {{-- <input type="text" class="form-control form-control-solid" id="mata-uang"
-                                        name="deskripsi-attractiveness" value="{{old("deskripsi-attractiveness")}}" placeholder="Deskripsi Attractiveness" /> --}}
-                                    <!--end::Input-->
-                                </div>
-                                <!--end::Input group-->
-                            </div>
-                            <!--End begin::Col-->
-
-                            <div class="">
-                                <!--begin::Input group Website-->
-                                <div class="row fv-row mb-7">
-                                    <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Periode</span>
-                                    </label>
-                                    <div class="col">
-                                        <!--end::Label-->
-                                        <!--begin::Input-->
-                                        <select name="periode[bulan]" id="bulan"
-                                        class="form-select form-select-solid select2-hidden-accessible"
-                                        data-control="select2" data-hide-search="false" data-placeholder="Pilh Bulan..."
-                                        data-select2-id="select2-bulan" tabindex="-1" aria-hidden="true">
-                                            <option value=""></option>
-                                            @foreach (range(1,12) as $bulan)
-                                                @dump($bulan)
-                                                @php
-                                                    $bulan_formatted = Carbon\Carbon::createFromFormat("m", $bulan);
-                                                @endphp
-                                                <option value="{{ $bulan }}" {{$bulan == (int) old("periode.bulan") ? "selected" : ""}}>{{$bulan_formatted->translatedFormat("F")}}</option>
-                                            @endforeach
-                                        </select>
-                                        {{-- <input type="text" class="form-control form-control-solid" id="mata-uang"
-                                            name="periode[]" value="" placeholder="Bulan" /> --}}
-                                        <!--end::Input-->
-                                    </div>
-                                    <div class="col">
-                                        <select name="periode[tahun]" id="tahun"
-                                        class="form-select form-select-solid select2-hidden-accessible"
-                                        data-control="select2" data-hide-search="true" data-placeholder="Pilh Tahun..."
-                                        data-select2-id="select2-tahun" tabindex="-1" aria-hidden="true">
-                                            <option value=""></option>
-                                            @php
-                                                $tahun_min = (int) date("Y") - 1;
-                                                $tahun_max = $tahun_min + 2;
-                                            @endphp
-                                            @foreach (range($tahun_min, $tahun_max) as $year)
-                                                <option value="{{ $year }}" {{$year == (int) old("periode.tahun") ? "selected" : ""}}>{{$year}}</option>
-                                            @endforeach
-                                        </select>
-                                        <!--begin::Input-->
-                                        {{-- <input type="text" class="form-control form-control-solid" id="mata-uang"
-                                            name="periode[]" value="" placeholder="Tahun" /> --}}
-                                        <!--end::Input-->
-                                    </div>
-                                </div>
-                                <!--end::Input group-->
-                            </div>
-                        </div>
-                        <!--End::Row Kanan+Kiri-->
-    
-    
-    
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white" id="new_save"
-                            style="background-color:#008CB4">Save</button>
-    
-                    </div>
-                    <!--end::Modal body-->
-                </div>
-                <!--end::Modal content-->
-            </div>
-            <!--end::Modal dialog-->
-        </form>
-    </div>
-    <!--end::Modal - Input Industry Attractiveness-->
     <!--end::Modals-->
     
     {{-- <!--begin::Modal EDIT-->
