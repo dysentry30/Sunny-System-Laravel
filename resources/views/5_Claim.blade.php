@@ -3,7 +3,7 @@
 {{-- end:: template main --}}
 
 {{-- begin:: title --}}
-@section('title', 'Claim Managements')
+@section('title', 'Change Managements')
 {{-- end:: title --}}
 
 {{-- begin:: content --}}
@@ -25,7 +25,7 @@
                         data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                         class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
                         <!--begin::Title-->
-                        <h1 class="d-flex align-items-center fs-3 my-1">Claim Managements
+                        <h1 class="d-flex align-items-center fs-3 my-1">Change Managements
                         </h1>
                         <!--end::Title-->
                     </div>

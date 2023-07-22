@@ -1227,28 +1227,60 @@ class DashboardController extends Controller
                                     // dump($setuju);
                                     $data["jenis_perubahan"] = $data["jenis_perubahan"];
                                     $data["total_item"] = $data["total_item"] + 1;
-                                    $data["total_nilai"] = $data["total_nilai"] + $cp->biaya_pengajuan;
+                                    if($data["jenis_perubahan"] == "Anti Klaim") {
+                                        $data["total_nilai"] = $data["total_nilai"] - $cp->biaya_pengajuan;
+                                    } else {
+                                        $data["total_nilai"] = $data["total_nilai"] + $cp->biaya_pengajuan;
+                                    }
                                     if($cp->stage == 1){
                                         $data["potensial"] = $data["potensial"] + 1;
-                                        $data["potensial_value"] = $data["potensial_value"] + $cp->biaya_pengajuan;
+                                        if($data["jenis_perubahan"] == "Anti Klaim") {
+                                            $data["potensial_value"] = $data["potensial_value"] - $cp->biaya_pengajuan;
+                                        } else {
+                                            $data["potensial_value"] = $data["potensial_value"] + $cp->biaya_pengajuan;
+                                        }
                                     }elseif($cp->stage == 2){
                                         $data["subs"] = $data["subs"] + 1;
-                                        $data["subs_value"] = $data["subs_value"] + $cp->biaya_pengajuan;
+                                        if($data["jenis_perubahan"] == "Anti Klaim") {
+                                            $data["subs_value"] = $data["subs_value"] - $cp->biaya_pengajuan;
+                                        } else {
+                                            $data["subs_value"] = $data["subs_value"] + $cp->biaya_pengajuan;
+                                        }
                                     }elseif($cp->stage == 3){
                                         $data["revisi"] = $data["revisi"] + 1;
-                                        $data["revisi_value"] = $data["revisi_value"] + $cp->biaya_pengajuan;
+                                        if($data["jenis_perubahan"] == "Anti Klaim") {
+                                            $data["revisi_value"] = $data["revisi_value"] - $cp->biaya_pengajuan;
+                                        } else {
+                                            $data["revisi_value"] = $data["revisi_value"] + $cp->biaya_pengajuan;
+                                        }
                                     }elseif($cp->stage == 4){
                                         $data["nego"] = $data["nego"] + 1;
-                                        $data["nego_value"] = $data["nego_value"] + $cp->biaya_pengajuan;
+                                        if($data["jenis_perubahan"] == "Anti Klaim") {
+                                            $data["nego_value"] = $data["nego_value"] - $cp->biaya_pengajuan;
+                                        } else {
+                                            $data["nego_value"] = $data["nego_value"] + $cp->biaya_pengajuan;
+                                        }
                                     }elseif($cp->stage == 5){
                                         $data["setuju"] = $data["setuju"] + 1;
-                                        $data["setuju_value"] = $data["setuju_value"] + $cp->biaya_pengajuan;
+                                        if($data["jenis_perubahan"] == "Anti Klaim") {
+                                            $data["setuju_value"] = $data["setuju_value"] - $cp->biaya_pengajuan;
+                                        } else {
+                                            $data["setuju_value"] = $data["setuju_value"] + $cp->biaya_pengajuan;
+                                        }
                                     }elseif($cp->stage == 6 && $cp->is_dispute == false){
                                         $data["tolak"] = $data["tolak"] + 1;
-                                        $data["tolak_value"] = $data["tolak_value"] + $cp->biaya_pengajuan;
+                                        if($data["jenis_perubahan"] == "Anti Klaim") {
+                                            $data["tolak_value"] = $data["tolak_value"] - $cp->biaya_pengajuan;
+                                        } else {
+                                            $data["tolak_value"] = $data["tolak_value"] + $cp->biaya_pengajuan;
+                                        }
                                     }else{
                                         $data["dispute"] = $data["dispute"] + 1;
-                                        $data["dispute_value"] = $data["dispute_value"] + $cp->biaya_pengajuan;
+                                        if($data["jenis_perubahan"] == "Anti Klaim") {
+                                            $data["dispute_value"] = $data["dispute_value"] - $cp->biaya_pengajuan;
+                                        } else {
+                                            $data["dispute_value"] = $data["dispute_value"] + $cp->biaya_pengajuan;
+                                        }
                                     }
                                     // dump($data);
                                     $result[$p] = $data ;
@@ -1256,25 +1288,53 @@ class DashboardController extends Controller
                                 } else {
                                     if($cp->stage == 1){
                                         $potensial += 1;
-                                        $potensial_value += $cp->biaya_pengajuan;
+                                        if($p == "Anti Klaim") {
+                                            $potensial_value -= $cp->biaya_pengajuan;
+                                        } else {
+                                            $potensial_value += $cp->biaya_pengajuan;
+                                        }
                                     }elseif($cp->stage == 2){
                                         $subs += 1;
-                                        $subs_value += $cp->biaya_pengajuan;
+                                        if($p == "Anti Klaim") {
+                                            $subs_value -= $cp->biaya_pengajuan;
+                                        } else {
+                                            $subs_value += $cp->biaya_pengajuan;
+                                        }
                                     }elseif($cp->stage == 3){
                                         $revisi += 1;
-                                        $revisi_value += $cp->biaya_pengajuan;
+                                        if($p == "Anti Klaim") {
+                                            $revisi_value -= $cp->biaya_pengajuan;
+                                        } else {
+                                            $revisi_value += $cp->biaya_pengajuan;
+                                        }
                                     }elseif($cp->stage == 4){
                                         $nego += 1;
-                                        $nego_value += $cp->biaya_pengajuan;
+                                        if($p == "Anti Klaim") {
+                                            $nego_value -= $cp->biaya_pengajuan;
+                                        } else {
+                                            $nego_value += $cp->biaya_pengajuan;
+                                        }
                                     }elseif($cp->stage == 5){
                                         $setuju += 1;
-                                        $setuju_value += $cp->biaya_pengajuan;
+                                        if($p == "Anti Klaim") {
+                                            $setuju_value -= $cp->biaya_pengajuan;
+                                        } else {
+                                            $setuju_value += $cp->biaya_pengajuan;
+                                        }
                                     }elseif($cp->stage == 6 && $cp->is_dispute == false){
                                         $tolak += 1;
-                                        $tolak_value += $cp->biaya_pengajuan;
+                                        if($p == "Anti Klaim") {
+                                            $tolak_value -= $cp->biaya_pengajuan;
+                                        } else {
+                                            $tolak_value += $cp->biaya_pengajuan;
+                                        }
                                     }else{
                                         $dispute += 1;
-                                        $dispute_value += $cp->biaya_pengajuan;
+                                        if($p == "Anti Klaim") {
+                                            $dispute_value -= $cp->biaya_pengajuan;
+                                        } else {
+                                            $dispute_value += $cp->biaya_pengajuan;
+                                        }
                                     }
                                     $result[$p] = ["jenis_perubahan" => $p, "total_item" => ++$counter, "total_nilai" => $nilai += $cp->biaya_pengajuan, "potensial"=>$potensial, "subs" => $subs, "revisi" => $revisi, "nego" => $nego, "setuju" => $setuju, "tolak" => $tolak, "dispute" => $dispute, "potensial_value"=>$potensial_value, "subs_value" => $subs_value, "revisi_value" => $revisi_value, "nego_value" => $nego_value, "setuju_value" => $setuju_value, "tolak_value" => $tolak_value, "dispute_value" => $dispute_value];
                                 }
@@ -1446,33 +1506,65 @@ class DashboardController extends Controller
 
 
             
-            $potensial_total_value = $contracts_perubahan->filter(function($cp){
-                return $cp->stage == 1;
-            })->groupBy('jenis_perubahan')->flatten()->sum('biaya_pengajuan');
+            // $potensial_total_value = $contracts_perubahan->filter(function($cp){
+            //     return $cp->stage == 1;
+            // })->groupBy('jenis_perubahan')->flatten()->sum('biaya_pengajuan');
 
-            $submission_total_value = $contracts_perubahan->filter(function($cp){
-                return $cp->stage == 2;
-            })->groupBy('jenis_perubahan')->flatten()->sum('biaya_pengajuan');
+            // $submission_total_value = $contracts_perubahan->filter(function($cp){
+            //     return $cp->stage == 2;
+            // })->groupBy('jenis_perubahan')->flatten()->sum('biaya_pengajuan');
             
-            $revision_total_value = $contracts_perubahan->filter(function($cp){
-                return $cp->stage == 3;
-            })->groupBy('jenis_perubahan')->flatten()->sum('biaya_pengajuan');
+            // $revision_total_value = $contracts_perubahan->filter(function($cp){
+            //     return $cp->stage == 3;
+            // })->groupBy('jenis_perubahan')->flatten()->sum('biaya_pengajuan');
             
-            $negotiation_total_value = $contracts_perubahan->filter(function($cp){
-                return $cp->stage == 4;
-            })->groupBy('jenis_perubahan')->flatten()->sum('biaya_pengajuan');
+            // $negotiation_total_value = $contracts_perubahan->filter(function($cp){
+            //     return $cp->stage == 4;
+            // })->groupBy('jenis_perubahan')->flatten()->sum('biaya_pengajuan');
             
-            $approve_total_value = $contracts_perubahan->filter(function($cp){
-                return $cp->stage == 5;
-            })->groupBy('jenis_perubahan')->flatten()->sum('biaya_pengajuan');
+            // $approve_total_value = $contracts_perubahan->filter(function($cp){
+            //     return $cp->stage == 5;
+            // })->groupBy('jenis_perubahan')->flatten()->sum('biaya_pengajuan');
             
-            $reject_total_value = $contracts_perubahan->filter(function($cp){
-                return $cp->stage == 6;
-            })->groupBy('jenis_perubahan')->flatten()->sum('biaya_pengajuan');
+            // $reject_total_value = $contracts_perubahan->filter(function($cp){
+            //     return $cp->stage == 6;
+            // })->groupBy('jenis_perubahan')->flatten()->sum('biaya_pengajuan');
             
-            $dispute_total_value = $contracts_perubahan->filter(function($cp){
-                return $cp->stage == 6 && $cp->is_dispute == true;
-            })->groupBy('jenis_perubahan')->flatten()->sum('biaya_pengajuan');
+            // $dispute_total_value = $contracts_perubahan->filter(function($cp){
+            //     return $cp->stage == 6 && $cp->is_dispute == true;
+            // })->groupBy('jenis_perubahan')->flatten()->sum('biaya_pengajuan');
+            $potensial_total_value = 0;
+
+            $submission_total_value = 0;
+            
+            $revision_total_value = 0;
+            
+            $negotiation_total_value = 0;
+            
+            $approve_total_value = 0;
+            
+            $reject_total_value = 0;
+            
+            $dispute_total_value = 0;
+            
+            foreach ($cat_kontrak as $ck) {
+                $potensial_total_value += $ck["potensial_value"];
+    
+                $submission_total_value += $ck["subs_value"];
+                
+                $revision_total_value += $ck["revisi_value"];
+                
+                $negotiation_total_value += $ck["nego_value"];
+                
+                $approve_total_value += $ck["setuju_value"];
+                
+                $reject_total_value += $ck["tolak_value"];
+                
+                $dispute_total_value += $ck["dispute_value"];
+            }
+
+            
+
 
             $tanggal_awal = new DateTime($proyek->tanggal_mulai_terkontrak);
             $tanggal_akhir = new DateTime($proyek->tanggal_akhir_terkontrak);
@@ -1488,6 +1580,7 @@ class DashboardController extends Controller
             // $total_sub = $kategori_kontrak->where("stage", "=", 2)->count();
             $total_sub = $kategori_kontrak->where("stage", ">=", 2)->count();
             $total_approve_reject = $kategori_kontrak->whereIn("stage", [5,6])->count();
+
             $total_sub_value = $kategori_kontrak->where("stage", ">=", 2)->sum("biaya_pengajuan");
             $total_approve_value = $kategori_kontrak->where("stage", "=", 5)->sum("nilai_disetujui");
 
@@ -1509,7 +1602,7 @@ class DashboardController extends Controller
 
             
             //Begin::Asuransi
-            $kategori_asuransi = collect(["CAR/EAR", "Third Party Liability", "Professional Indemnity", "Heavy Equipment"]);
+            $kategori_asuransi = collect(["CAR/EAR", "Third Party Liability", "Professional Indemnity", "Heavy Equipment", "CECR"]);
             $contract_asuransi = $proyek->ContractManagements->Asuransi->groupBy("kategori_asuransi")->sortByDesc("created_at");
             // dd($contract_asuransi);
             if(!empty($contract_asuransi->toArray())){
@@ -2274,28 +2367,60 @@ class DashboardController extends Controller
                                     // dump($setuju);
                                     $data["jenis_perubahan"] = $data["jenis_perubahan"];
                                     $data["total_item"] = $data["total_item"] + 1;
-                                    $data["total_nilai"] = $data["total_nilai"] + $cp->biaya_pengajuan;
+                                    if($data["jenis_perubahan"] == "Anti Klaim") {
+                                        $data["total_nilai"] = $data["total_nilai"] - $cp->biaya_pengajuan;
+                                    } else {
+                                        $data["total_nilai"] = $data["total_nilai"] + $cp->biaya_pengajuan;
+                                    }
                                     if($cp->stage == 1){
                                         $data["potensial"] = $data["potensial"] + 1;
-                                        $data["potensial_value"] = $data["potensial_value"] + $cp->biaya_pengajuan;
+                                        if($data["jenis_perubahan"] == "Anti Klaim") {
+                                            $data["potensial_value"] = $data["potensial_value"] - $cp->biaya_pengajuan;
+                                        } else {
+                                            $data["potensial_value"] = $data["potensial_value"] + $cp->biaya_pengajuan;
+                                        }
                                     }elseif($cp->stage == 2){
                                         $data["subs"] = $data["subs"] + 1;
-                                        $data["subs_value"] = $data["subs_value"] + $cp->biaya_pengajuan;
+                                        if($data["jenis_perubahan"] == "Anti Klaim") {
+                                            $data["subs_value"] = $data["subs_value"] - $cp->biaya_pengajuan;
+                                        } else {
+                                            $data["subs_value"] = $data["subs_value"] + $cp->biaya_pengajuan;
+                                        }
                                     }elseif($cp->stage == 3){
                                         $data["revisi"] = $data["revisi"] + 1;
-                                        $data["revisi_value"] = $data["revisi_value"] + $cp->biaya_pengajuan;
+                                        if($data["jenis_perubahan"] == "Anti Klaim") {
+                                            $data["revisi_value"] = $data["revisi_value"] - $cp->biaya_pengajuan;
+                                        } else {
+                                            $data["revisi_value"] = $data["revisi_value"] + $cp->biaya_pengajuan;
+                                        }
                                     }elseif($cp->stage == 4){
                                         $data["nego"] = $data["nego"] + 1;
-                                        $data["nego_value"] = $data["nego_value"] + $cp->biaya_pengajuan;
+                                        if($data["jenis_perubahan"] == "Anti Klaim") {
+                                            $data["nego_value"] = $data["nego_value"] - $cp->biaya_pengajuan;
+                                        } else {
+                                            $data["nego_value"] = $data["nego_value"] + $cp->biaya_pengajuan;
+                                        }
                                     }elseif($cp->stage == 5){
                                         $data["setuju"] = $data["setuju"] + 1;
-                                        $data["setuju_value"] = $data["setuju_value"] + $cp->biaya_pengajuan;
+                                        if($data["jenis_perubahan"] == "Anti Klaim") {
+                                            $data["setuju_value"] = $data["setuju_value"] - $cp->biaya_pengajuan;
+                                        } else {
+                                            $data["setuju_value"] = $data["setuju_value"] + $cp->biaya_pengajuan;
+                                        }
                                     }elseif($cp->stage == 6 && $cp->is_dispute == false){
                                         $data["tolak"] = $data["tolak"] + 1;
-                                        $data["tolak_value"] = $data["tolak_value"] + $cp->biaya_pengajuan;
+                                        if($data["jenis_perubahan"] == "Anti Klaim") {
+                                            $data["tolak_value"] = $data["tolak_value"] - $cp->biaya_pengajuan;
+                                        } else {
+                                            $data["tolak_value"] = $data["tolak_value"] + $cp->biaya_pengajuan;
+                                        }
                                     }else{
                                         $data["dispute"] = $data["dispute"] + 1;
-                                        $data["dispute_value"] = $data["dispute_value"] + $cp->biaya_pengajuan;
+                                        if($data["jenis_perubahan"] == "Anti Klaim") {
+                                            $data["dispute_value"] = $data["dispute_value"] - $cp->biaya_pengajuan;
+                                        } else {
+                                            $data["dispute_value"] = $data["dispute_value"] + $cp->biaya_pengajuan;
+                                        }
                                     }
                                     // dump($data);
                                     $result[$p] = $data ;
@@ -2303,25 +2428,53 @@ class DashboardController extends Controller
                                 } else {
                                     if($cp->stage == 1){
                                         $potensial += 1;
-                                        $potensial_value += $cp->biaya_pengajuan;
+                                        if($p == "Anti Klaim") {
+                                            $potensial_value -= $cp->biaya_pengajuan;
+                                        } else {
+                                            $potensial_value += $cp->biaya_pengajuan;
+                                        }
                                     }elseif($cp->stage == 2){
                                         $subs += 1;
-                                        $subs_value += $cp->biaya_pengajuan;
+                                        if($p == "Anti Klaim") {
+                                            $subs_value -= $cp->biaya_pengajuan;
+                                        } else {
+                                            $subs_value += $cp->biaya_pengajuan;
+                                        }
                                     }elseif($cp->stage == 3){
                                         $revisi += 1;
-                                        $revisi_value += $cp->biaya_pengajuan;
+                                        if($p == "Anti Klaim") {
+                                            $revisi_value -= $cp->biaya_pengajuan;
+                                        } else {
+                                            $revisi_value += $cp->biaya_pengajuan;
+                                        }
                                     }elseif($cp->stage == 4){
                                         $nego += 1;
-                                        $nego_value += $cp->biaya_pengajuan;
+                                        if($p == "Anti Klaim") {
+                                            $nego_value -= $cp->biaya_pengajuan;
+                                        } else {
+                                            $nego_value += $cp->biaya_pengajuan;
+                                        }
                                     }elseif($cp->stage == 5){
                                         $setuju += 1;
-                                        $setuju_value += $cp->biaya_pengajuan;
+                                        if($p == "Anti Klaim") {
+                                            $setuju_value -= $cp->biaya_pengajuan;
+                                        } else {
+                                            $setuju_value += $cp->biaya_pengajuan;
+                                        }
                                     }elseif($cp->stage == 6 && $cp->is_dispute == false){
                                         $tolak += 1;
-                                        $tolak_value += $cp->biaya_pengajuan;
+                                        if($p == "Anti Klaim") {
+                                            $tolak_value -= $cp->biaya_pengajuan;
+                                        } else {
+                                            $tolak_value += $cp->biaya_pengajuan;
+                                        }
                                     }else{
                                         $dispute += 1;
-                                        $dispute_value += $cp->biaya_pengajuan;
+                                        if($p == "Anti Klaim") {
+                                            $dispute_value -= $cp->biaya_pengajuan;
+                                        } else {
+                                            $dispute_value += $cp->biaya_pengajuan;
+                                        }
                                     }
                                     $result[$p] = ["jenis_perubahan" => $p, "total_item" => ++$counter, "total_nilai" => $nilai += $cp->biaya_pengajuan, "potensial"=>$potensial, "subs" => $subs, "revisi" => $revisi, "nego" => $nego, "setuju" => $setuju, "tolak" => $tolak, "dispute" => $dispute, "potensial_value"=>$potensial_value, "subs_value" => $subs_value, "revisi_value" => $revisi_value, "nego_value" => $nego_value, "setuju_value" => $setuju_value, "tolak_value" => $tolak_value, "dispute_value" => $dispute_value];
                                 }
@@ -2462,7 +2615,7 @@ class DashboardController extends Controller
             // dd($change_status);
 
             //Begin::Asuransi
-            $kategori_asuransi = collect(["CAR/EAR", "Third Party Liability", "Professional Indemnity", "Heavy Equipment"]);
+            $kategori_asuransi = collect(["CAR/EAR", "Third Party Liability", "Professional Indemnity", "Heavy Equipment", "CECR"]);
             $contract_asuransi = $proyek->ContractManagements->Asuransi->groupBy("kategori_asuransi")->sortByDesc("created_at");
             // dd($contract_asuransi);
 
@@ -2581,33 +2734,63 @@ class DashboardController extends Controller
 
 
             
-            $potensial_total_value = $contracts_perubahan->filter(function($cp){
-                return $cp->stage == 1;
-            })->groupBy('jenis_perubahan')->flatten()->sum('biaya_pengajuan');
+            // $potensial_total_value = $contracts_perubahan->filter(function($cp){
+            //     return $cp->stage == 1;
+            // })->groupBy('jenis_perubahan')->flatten()->sum('biaya_pengajuan');
 
-            $submission_total_value = $contracts_perubahan->filter(function($cp){
-                return $cp->stage == 2;
-            })->groupBy('jenis_perubahan')->flatten()->sum('biaya_pengajuan');
+            // $submission_total_value = $contracts_perubahan->filter(function($cp){
+            //     return $cp->stage == 2;
+            // })->groupBy('jenis_perubahan')->flatten()->sum('biaya_pengajuan');
             
-            $revision_total_value = $contracts_perubahan->filter(function($cp){
-                return $cp->stage == 3;
-            })->groupBy('jenis_perubahan')->flatten()->sum('biaya_pengajuan');
+            // $revision_total_value = $contracts_perubahan->filter(function($cp){
+            //     return $cp->stage == 3;
+            // })->groupBy('jenis_perubahan')->flatten()->sum('biaya_pengajuan');
             
-            $negotiation_total_value = $contracts_perubahan->filter(function($cp){
-                return $cp->stage == 4;
-            })->groupBy('jenis_perubahan')->flatten()->sum('biaya_pengajuan');
+            // $negotiation_total_value = $contracts_perubahan->filter(function($cp){
+            //     return $cp->stage == 4;
+            // })->groupBy('jenis_perubahan')->flatten()->sum('biaya_pengajuan');
             
-            $approve_total_value = $contracts_perubahan->filter(function($cp){
-                return $cp->stage == 5;
-            })->groupBy('jenis_perubahan')->flatten()->sum('biaya_pengajuan');
+            // $approve_total_value = $contracts_perubahan->filter(function($cp){
+            //     return $cp->stage == 5;
+            // })->groupBy('jenis_perubahan')->flatten()->sum('biaya_pengajuan');
             
-            $reject_total_value = $contracts_perubahan->filter(function($cp){
-                return $cp->stage == 6;
-            })->groupBy('jenis_perubahan')->flatten()->sum('biaya_pengajuan');
+            // $reject_total_value = $contracts_perubahan->filter(function($cp){
+            //     return $cp->stage == 6;
+            // })->groupBy('jenis_perubahan')->flatten()->sum('biaya_pengajuan');
             
-            $dispute_total_value = $contracts_perubahan->filter(function($cp){
-                return $cp->stage == 6 && $cp->is_dispute == true;
-            })->groupBy('jenis_perubahan')->flatten()->sum('biaya_pengajuan');
+            // $dispute_total_value = $contracts_perubahan->filter(function($cp){
+            //     return $cp->stage == 6 && $cp->is_dispute == true;
+            // })->groupBy('jenis_perubahan')->flatten()->sum('biaya_pengajuan');
+
+            $potensial_total_value = 0;
+
+            $submission_total_value = 0;
+            
+            $revision_total_value = 0;
+            
+            $negotiation_total_value = 0;
+            
+            $approve_total_value = 0;
+            
+            $reject_total_value = 0;
+            
+            $dispute_total_value = 0;
+            
+            foreach ($cat_kontrak as $ck) {
+                $potensial_total_value += $ck["potensial_value"];
+    
+                $submission_total_value += $ck["subs_value"];
+                
+                $revision_total_value += $ck["revisi_value"];
+                
+                $negotiation_total_value += $ck["nego_value"];
+                
+                $approve_total_value += $ck["setuju_value"];
+                
+                $reject_total_value += $ck["tolak_value"];
+                
+                $dispute_total_value += $ck["dispute_value"];
+            }
 
 
 
