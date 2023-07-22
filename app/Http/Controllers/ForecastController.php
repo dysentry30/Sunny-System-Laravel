@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use DateTime;
+use stdClass;
 use App\Models\Dop;
 use App\Models\Proyek;
 use App\Models\Forecast;
-use App\Models\HistoryForecast;
 use App\Models\UnitKerja;
-use DateTime;
 use Illuminate\Http\Request;
+use App\Models\HistoryForecast;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use stdClass;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class ForecastController extends Controller
 {
@@ -418,7 +419,12 @@ class ForecastController extends Controller
     }
 
     public function viewForecastKumulatifEksternal(Request $request, $periode = "", $year = "")
-    {
+    {   
+        // if (!str_contains(Auth::user()->email, "@sunny")) {
+        //     Alert::warning("Warning", "Forecast Kumulatif Eksternal dan Internal Dalam Pengecekan, Mohon Tunggu");
+        //     $url = "/forecast";
+        //     return redirect($url);
+        // }
 
         $month_title = \Carbon\Carbon::parse(new DateTime("now"))->translatedFormat("F");
         $periode = $periode != "" ? (int) $periode : (int) date("m");
@@ -436,7 +442,7 @@ class ForecastController extends Controller
 
         // $selectForecast = Forecast::with(['Proyek'])->join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->select(["proyeks.nama_proyek", "proyeks.kode_proyek", "proyeks.unit_kerja", "proyeks.jenis_proyek", "proyeks.tipe_proyek", "proyeks.dop", "forecasts.month_forecast", "forecasts.nilai_forecast", "forecasts.month_rkap", "forecasts.rkap_forecast", "forecasts.month_realisasi", "forecasts.realisasi_forecast", "forecasts.periode_prognosa", "forecasts.created_at"])->where("forecasts.periode_prognosa", "=", $periode, "or")->where("proyeks.jenis_proyek", "!=", "I");
         // $selectForecastInternal = Forecast::with(['Proyek'])->join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->select(["proyeks.nama_proyek", "proyeks.kode_proyek", "proyeks.unit_kerja", "proyeks.jenis_proyek", "proyeks.tipe_proyek", "proyeks.dop", "forecasts.month_forecast", "forecasts.nilai_forecast", "forecasts.month_rkap", "forecasts.rkap_forecast", "forecasts.month_realisasi", "forecasts.realisasi_forecast", "forecasts.periode_prognosa", "forecasts.created_at"])->where("forecasts.periode_prognosa", "=", $periode, "or");
-        $selectForecast = Forecast::with(['Proyek'])->join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->select(["proyeks.stage", "proyeks.nama_proyek", "proyeks.kode_proyek", "proyeks.unit_kerja", "proyeks.jenis_proyek", "proyeks.tipe_proyek", "proyeks.dop", "forecasts.month_forecast", "forecasts.nilai_forecast", "forecasts.month_rkap", "forecasts.rkap_forecast", "forecasts.month_realisasi", "forecasts.realisasi_forecast", "forecasts.periode_prognosa", "forecasts.created_at"])->where("forecasts.periode_prognosa", "=", $periode)->whereYear("forecasts.created_at", $year)->where("proyeks.jenis_proyek", "!=", "I");
+        $selectForecast = Forecast::with(['Proyek'])->join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->select(["proyeks.stage", "proyeks.nama_proyek", "proyeks.kode_proyek", "proyeks.unit_kerja", "proyeks.jenis_proyek", "proyeks.tipe_proyek", "proyeks.dop", "proyeks.tahun_perolehan", "proyeks.is_cancel", "proyeks.is_rkap", "forecasts.month_forecast", "forecasts.nilai_forecast", "forecasts.month_rkap", "forecasts.rkap_forecast", "forecasts.month_realisasi", "forecasts.realisasi_forecast", "forecasts.periode_prognosa", "forecasts.tahun", "forecasts.created_at"])->where("forecasts.periode_prognosa", "=", $periode)->where("forecasts.tahun", "=", $year)->where("proyeks.tahun_perolehan", "=", $year)->where("proyeks.is_cancel", "!=", true)->where("proyeks.jenis_proyek", "!=", "I");
         // $selectForecastInternal = Forecast::with(['Proyek'])->join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->select(["proyeks.nama_proyek", "proyeks.kode_proyek", "proyeks.unit_kerja", "proyeks.jenis_proyek", "proyeks.tipe_proyek", "proyeks.dop", "forecasts.month_forecast", "forecasts.nilai_forecast", "forecasts.month_rkap", "forecasts.rkap_forecast", "forecasts.month_realisasi", "forecasts.realisasi_forecast", "forecasts.periode_prognosa", "forecasts.created_at"])->where("forecasts.periode_prognosa", "=", $periode, "or")->whereYear("forecasts.created_at", $year);
         if (Auth::user()->check_administrator) {
             // $dops = Dop::with(["Proyek"])->get()->sortBy("dop");
@@ -459,14 +465,21 @@ class ForecastController extends Controller
             // $forecastKumulatifIncludeInternal = $selectForecastInternal->get()->where("unit_kerja", "=", Auth::user()->unit_kerja)->groupBy(["dop", "unit_kerja"]);
         }
 
-        // dd($selectForecast->get());
+        // dd($forecastKumulatifEksternal);
         $forecastEkstenal = true;
+        // dump($year, $periode);
 
         return view('Forecast/viewForecastKumulatifEksternal', compact(['month_title', 'periode', 'forecastKumulatifEksternal', 'unitKerjas', 'historyForecast', 'forecastEkstenal']));
     }
 
     public function viewForecastKumulatifIncludeInternal(Request $request, $periode = "", $year = "")
     {
+
+        // if (!str_contains(Auth::user()->email, "@sunny")) {
+        //     Alert::warning("Warning", "Forecast Kumulatif Eksternal dan Internal Dalam Pengecekan, Mohon Tunggu");
+        //     $url = "/forecast";
+        //     return redirect($url);
+        // }
 
         $month_title = \Carbon\Carbon::parse(new DateTime("now"))->translatedFormat("F");
         $periode = $periode != "" ? (int) $periode : (int) date("m");
@@ -480,7 +493,7 @@ class ForecastController extends Controller
 
         $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
 
-        $selectForecast = Forecast::with(['Proyek'])->join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->select(["proyeks.stage", "proyeks.nama_proyek", "proyeks.kode_proyek", "proyeks.unit_kerja", "proyeks.jenis_proyek", "proyeks.tipe_proyek", "proyeks.dop", "forecasts.month_forecast", "forecasts.nilai_forecast", "forecasts.month_rkap", "forecasts.rkap_forecast", "forecasts.month_realisasi", "forecasts.realisasi_forecast", "forecasts.periode_prognosa", "forecasts.created_at"])->where("forecasts.periode_prognosa", "=", $periode)->whereYear("forecasts.created_at", $year);
+        $selectForecast = Forecast::with(['Proyek'])->join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->select(["proyeks.stage", "proyeks.nama_proyek", "proyeks.kode_proyek", "proyeks.unit_kerja", "proyeks.jenis_proyek", "proyeks.tipe_proyek", "proyeks.dop", "proyeks.tahun_perolehan", "proyeks.is_cancel", "proyeks.is_rkap", "forecasts.month_forecast", "forecasts.nilai_forecast", "forecasts.month_rkap", "forecasts.rkap_forecast", "forecasts.month_realisasi", "forecasts.realisasi_forecast", "forecasts.periode_prognosa", "forecasts.tahun", "forecasts.created_at"])->where("forecasts.periode_prognosa", "=", $periode)->where("forecasts.tahun", "=", $year)->where("proyeks.tahun_perolehan", "=", $year);
         if (Auth::user()->check_administrator) {
 
             $forecastKumulatifEksternal = $selectForecast->get()->sortBy("dop")->groupBy(["dop", "unit_kerja"]);
@@ -744,12 +757,12 @@ class ForecastController extends Controller
             }
         } else {
             if (!Auth::user()->check_administrator) {
-                if ($unit_kerja_user instanceof Collection) {
+                // if ($unit_kerja_user instanceof Collection) {
                     $historyForecast = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->where("history_forecast.tahun", "=", $year)->select(["proyeks.nama_proyek", "unit_kerjas.divcode", "proyeks.dop", "unit_kerjas.unit_kerja", "history_forecast.*", "history_forecast.created_at", "proyeks.stage", "proyeks.is_cancel"])->get()->whereIn("divcode", $unit_kerja_user->toArray())->groupBy(["dop", "unit_kerja", "periode_prognosa"]);
-                    // dd($historyForecast);
-                } else {
-                    $historyForecast = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->where("history_forecast.tahun", "=", $year)->select(["proyeks.nama_proyek", "unit_kerjas.divcode", "proyeks.dop", "unit_kerjas.unit_kerja", "history_forecast.*", "history_forecast.created_at", "proyeks.stage", "proyeks.is_cancel"])->get()->where("divcode", "=", $unit_kerja_user)->groupBy(["dop", "unit_kerja", "periode_prognosa"]);
-                }
+                    // dump($historyForecast);
+                // } else {
+                //     $historyForecast = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->where("history_forecast.tahun", "=", $year)->select(["proyeks.nama_proyek", "unit_kerjas.divcode", "proyeks.dop", "unit_kerjas.unit_kerja", "history_forecast.*", "history_forecast.created_at", "proyeks.stage", "proyeks.is_cancel"])->get()->where("divcode", "=", $unit_kerja_user)->groupBy(["dop", "unit_kerja", "periode_prognosa"]);
+                // }
             } else {
                 $historyForecast = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->where("history_forecast.tahun", "=", $year)->select(["proyeks.nama_proyek", "unit_kerjas.divcode", "proyeks.dop", "unit_kerjas.unit_kerja", "history_forecast.*", "history_forecast.created_at", "proyeks.stage", "proyeks.is_cancel"])->get()->groupBy(["dop", "unit_kerja", "periode_prognosa"]);
             }

@@ -116,12 +116,12 @@
                             <!--Begin :: Filter-->
                             <div class="card">
                                 <div class="card-title">
-                                    <div class="row">
-                                        <div class="col-2">
-                                        <p class="mt-3 text-end">Periode Otorisasi : </p>
-                                        </div>
-                                        <div class="col-3">
-                                                <form action="/history-autorisasi" method="get">
+                                    <form action="/history-autorisasi" method="get">
+                                        <div class="row">
+                                            <div class="col-2">
+                                                <p class="mt-3 text-end">Periode Otorisasi : </p>
+                                            </div>
+                                            <div class="col-3">
                                                 <!--begin::Select Options-->
                                                 <select onchange="this.form.submit()" id="periode-prognosa" name="periode-prognosa"
                                                     class="form-select form-select-solid w-100 ms-2 "
@@ -143,15 +143,30 @@
                                                     <option value="12" {{ $periodeOtor == 12 ? 'selected' : '' }}>Desember</option>
                                                 </select>
                                                 <!--end::Select Options-->
-                                            </form>
+                                            </div>
+
+                                            <div class="col">
+                                                <!--begin::Select Options-->
+                                                <select onchange="this.form.submit()" id="jenis-proyek" name="jenis-proyek"
+                                                    class="form-select form-select-solid w-100 ms-2 "
+                                                    style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
+                                                    data-placeholder="Jenis Proyek" data-select2-id="select2-jenis-proyek" tabindex="-1"
+                                                    aria-hidden="true">
+                                                        <option value=""></option>
+                                                        <option value="All" {{ $jenisProyek == 'All' ? 'selected' : '' }}>All</option>
+                                                        <option value="N" {{ $jenisProyek == 'N' ? 'selected' : '' }}>Eksternal</option>
+                                                </select>
+                                                <!--end::Select Options-->
+                                            </div>
+                                                
+                                            <div class="col">
+                                                <form action=""></form>
+                                                <form action="" method="GET">
+                                                    <button type="submit" class="btn btn-light">Reset</button>
+                                                </form>
+                                            </div>
                                         </div>
-                                            
-                                        <div class="col">
-                                            <form action="" method="GET">
-                                                <button type="submit" class="btn btn-light">Reset</button>
-                                            </form>
-                                        </div>
-                                    </div>
+                                    </form>
                                 </div>
                             </div>
                             <!--End :: Filter-->
@@ -177,6 +192,7 @@
                                         <th class="min-w-auto text-center">Total Forecast</th>
                                         <th class="min-w-auto text-center">Total Realisasi</th>
                                         <th class="min-w-auto text-center">Tanggal Locked</th>
+                                        <th class="min-w-auto text-center">Tanggal Unlocked</th>
                                         <th class="min-w-auto text-center">Is Approve</th>
                                         {{-- <th class="min-w-auto text-center">@sortablelink('is_active','Is Locked')</th> --}}
                                         {{-- <th class="text-center">Action</th>
@@ -251,15 +267,15 @@
                                                 @endswitch
                                             </td>
                                             <td class="text-center">
-                                                {{-- {{($history->first()->created_at)->translatedFormat("Y")}} --}}
-                                                2022
+                                                {{ Carbon\Carbon::create($history->first()->created_at)->translatedFormat("Y")}}
+                                                {{-- 2022 --}}
                                             </td>
                                             {{-- <td class="text-center">
                                                 {{ number_format((int) $history->sum(function($f) {
                                                     return (int) $f->nilaiok_review;
                                                 }), 0, ".", ".") }}
                                             </td> --}}
-                                            <td class="text-center">
+                                            <td class="text-end">
                                                 {{number_format((int) $history->sum(function($f) {
                                                     return (int) $f->rkap_forecast;
                                                 }), 0, ".", ".")}}
@@ -267,13 +283,13 @@
                                                     return (int) $f->nilaiok_awal;
                                                 }), 0, ".", ".")}} --}}
                                             </td>
-                                            <td class="text-center">
+                                            <td class="text-end">
                                                 {{number_format((int) $history->sum(function($f) {
                                                     return (int) $f->nilai_forecast;
                                                 }), 0, ".", ".")}}
                                             </td>
-                                            <td class="text-center">
-                                                {{number_format((int) $history->sum(function($f) {
+                                            <td class="text-end">
+                                                {{number_format((int) $history->where("stage", "=", 8)->sum(function($f) {
                                                     return (int) $f->realisasi_forecast;
                                                 }), 0, ".", ".")}}
                                             </td>
@@ -281,8 +297,23 @@
                                                 {{-- @dd($history->first()) --}}
                                                 {{Carbon\Carbon::parse($history->first()->created_at)->translatedFormat("d F Y")}}
                                             </td>
-                                            <td class="text-center">
-                                                {{$history->first()->is_approved_1 == null ? "Pending" : ($history->first()->is_approved_1 == true ? "Approve" : "Not Approve")}}
+                                            <td class="">
+                                                @if($history->first()->is_request_unlock == "t")
+                                                    {{Carbon\Carbon::parse($history->first()->updated_at)->translatedFormat("d F Y")}}
+                                                @else 
+                                                    <span class="badge badge-danger">Not request for unlock</span>
+                                                @endif
+                                            </td>
+                                            <td class="">
+                                                @if($history->first()->is_approved_1 == null) 
+                                                    <span class="badge badge-info">Pending</span>
+                                                @else
+                                                    @if($history->first()->is_approved_1 == true)
+                                                        <span class="badge badge-success">Approved</span>
+                                                    @else
+                                                        <span class="badge badge-danger">Not Approve</span>
+                                                    @endif
+                                                @endif
                                             </td>
                                             {{-- <td class="text-center">
                                                 {{$history->dop}}
@@ -290,6 +321,30 @@
                                             </td> --}}
                                         </tr>
                                     @endforeach
+                                    @php
+                                        $total_rkap = $history_forecasts->sum(function ($f) {
+                                            return $f->sum(function($f) {
+                                                return (int) $f->rkap_forecast;
+                                            });
+                                        });
+                                        $total_forecast = $history_forecasts->sum(function ($f) {
+                                            return $f->sum(function($f) {
+                                                return (int) $f->nilai_forecast;
+                                            });
+                                        });
+                                        $total_realisasi = $history_forecasts->sum(function ($f) {
+                                            return $f->sum(function($f) {
+                                                return (int) $f->realisasi_forecast;
+                                            });
+                                        });
+                                    @endphp
+                                    <tr class="bg-dark">
+                                        <td class="text-white">Total</td>
+                                        <td colspan="2"></td>
+                                        <td class="text-end text-white">{{ number_format($total_rkap, 0, ".", "."); }}</td>
+                                        <td class="text-end text-white">{{ number_format($total_forecast, 0, ".", "."); }}</td>
+                                        <td class="text-end text-white">{{ number_format($total_realisasi, 0, ".", "."); }}</td>
+                                    </tr>
                                     {{-- @foreach ($proyeks as $proyekArray)
                                         @foreach ($proyekArray as $proyek)
                                         <tr>

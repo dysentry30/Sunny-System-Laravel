@@ -244,6 +244,7 @@
                                         <th class="min-w-auto">@sortablelink('divisi', 'Divisi PIC')</th>
                                         <th class="min-w-auto">@sortablelink('is_active', 'Is Active')</th>
                                         <th class="min-w-auto">@sortablelink('id_profit_center', 'ID Profit Center')</th>
+                                        <th class="min-w-auto">@sortablelink('company_code', 'Company Code')</th>
                                         @if (auth()->user()->check_administrator)
                                             <th class="text-center">Settings</th>
                                             <th class="text-center">Action</th>
@@ -299,6 +300,11 @@
                                             <!--begin::Coloumn-->
                                             <td>
                                                 {{ $unitkerja->id_profit_center ?? "-"}}
+                                            </td>
+                                            <!--end::Coloumn-->
+                                            <!--begin::Coloumn-->
+                                            <td>
+                                                {{ $unitkerja->company_code ?? "-"}}
                                             </td>
                                             <!--end::Coloumn-->
 

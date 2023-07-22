@@ -70,7 +70,7 @@
                 <center>
                     <input type="submit" name="verify-otp" value="Verify OTP" class="btn btn-sm btn-primary"><br>
                 </center>
-                <small class="mobile-text fs-10">*The OTP code cannot be pasted to this page, please type it manually.</small>
+                <small class="fs-10 text-danger">*The OTP code cannot be pasted to this page, please type it manually.</small>
             </form>
             <div class="text-center mt-5">
                 @if (!empty($user->otp))
