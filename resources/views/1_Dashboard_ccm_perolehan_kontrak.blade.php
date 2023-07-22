@@ -1067,166 +1067,482 @@
                                             
                                             <!--begin::NDA-->
                                             @php
+                                                $dokumenCRM_NDA = $proyek->DokumenNda->first();
                                                 $dokumenNDA = $contract->UploadFinal->where('category', '=', 'Dokumen NDA')->first();
+                                                if(!empty($dokumenNDA)){
+                                                    $statusWaktuUpload = new DateTime($dokumenNDA->created_at);
+                                                    $currentDate = new DateTime();
+                                                    $limitWaktu = $statusWaktuUpload->diff($currentDate)->d;
+                                                }
                                             @endphp
-                                            {{-- @dump($dokumenNDA) --}}
+                                            {{-- @dump($statusWaktuUpload) --}}
                                             <td class="text-center">
-                                                <small class="{{ !empty($dokumenNDA) ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
-                                                    @if (!empty($dokumenNDA))
-                                                    Approved
+                                                <small class="{{ !empty($dokumenCRM_NDA) ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
+                                                    @if (!empty($dokumenCRM_NDA))
+                                                    RFA <br>
+                                                    {{ Carbon\Carbon::create($dokumenCRM_NDA->created_at)->format('d/m/Y') }}
                                                     @else
                                                     Open
+                                                    @endif
+                                                </small>
+                                                <br>
+                                                <small class="{{ !empty($dokumenNDA) ? 'badge badge-light-warning' : 'badge badge-light-danger' }} my-1">
+                                                    @if (!empty($dokumenNDA))
+                                                    Approved <br>
+                                                    {{ Carbon\Carbon::create($dokumenNDA->created_at)->format('d/m/Y') }}
+                                                    @else
+                                                    Open
+                                                    @endif
+                                                </small>
+                                                <br>
+                                                <small class="{{ !empty($dokumenNDA) ? 'badge badge-light-primary' : 'badge badge-light-danger' }} my-1">
+                                                    @if (!empty($dokumenNDA) && $limitWaktu > 14)
+                                                        Late
+                                                    @elseif (!empty($dokumenNDA) && $limitWaktu <= 14)
+                                                        On Time
+                                                    @elseif (!empty($dokumenCRM_NDA))
+                                                        On Going
+                                                    @else
+                                                        Open
                                                     @endif
                                                 </small>
                                             </td>
                                             <!--end::NDA-->
                                             <!--begin::LOI-->
+                                            @php
+                                                $dokumenCRM_LOI = $proyek->AttachmentMenang->first();
+                                                $dokumenLOI = $contract->UploadFinal->where('category', '=', 'Dokumen LOI')->first();
+                                                if(!empty($dokumenLOI)){
+                                                    $statusWaktuUpload = new DateTime($dokumenLOI->created_at);
+                                                    $currentDate = new DateTime();
+                                                    $limitWaktu = $statusWaktuUpload->diff($currentDate)->d;
+                                                }
+                                            @endphp
+                                            {{-- @dump($statusWaktuUpload) --}}
                                             <td class="text-center">
-                                                <small class="{{ $proyek->AttachmentMenang->isNotEmpty() ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
-                                                    @if ($proyek->AttachmentMenang->isNotEmpty())
-                                                    Yes
+                                                <small class="{{ !empty($dokumenCRM_LOI) ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
+                                                    @if (!empty($dokumenCRM_LOI))
+                                                    RFA <br>
+                                                    {{ Carbon\Carbon::create($dokumenCRM_LOI->created_at)->format('d/m/Y') }}
                                                     @else
-                                                    No
+                                                    Open
+                                                    @endif
+                                                </small>
+                                                <br>
+                                                <small class="{{ !empty($dokumenLOI) ? 'badge badge-light-warning' : 'badge badge-light-danger' }} my-1">
+                                                    @if (!empty($dokumenLOI))
+                                                    Approved <br>
+                                                    {{ Carbon\Carbon::create($dokumenLOI->created_at)->format('d/m/Y') }}
+                                                    @else
+                                                    Open
+                                                    @endif
+                                                </small>
+                                                <br>
+                                                <small class="{{ !empty($dokumenLOI) ? 'badge badge-light-primary' : 'badge badge-light-danger' }} my-1">
+                                                    @if (!empty($dokumenLOI) && $limitWaktu > 14)
+                                                        Late
+                                                    @elseif (!empty($dokumenLOI) && $limitWaktu <= 14)
+                                                        On Time
+                                                    @elseif (!empty($dokumenCRM_LOI))
+                                                        On Going
+                                                    @else
+                                                        Open
                                                     @endif
                                                 </small>
                                             </td>
                                             <!--end::LOI-->
                                             <!--begin::MOU-->
                                             @php
+                                                $dokumenCRM_MOU = $proyek->DokumenMou->first();
                                                 $dokumenMOU = $contract->UploadFinal->where('category', '=', 'Dokumen MOU')->first();
+                                                if(!empty($dokumenMOU)){
+                                                    $statusWaktuUpload = new DateTime($dokumenMOU->created_at);
+                                                    $currentDate = new DateTime();
+                                                    $limitWaktu = $statusWaktuUpload->diff($currentDate)->d;
+                                                }
                                             @endphp
+                                            {{-- @dump($statusWaktuUpload) --}}
                                             <td class="text-center">
-                                                <small class="{{ !empty($dokumenMOU) ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
-                                                    @if (!empty($dokumenMOU))
-                                                    Approved
+                                                <small class="{{ !empty($dokumenCRM_MOU) ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
+                                                    @if (!empty($dokumenCRM_MOU))
+                                                    RFA <br>
+                                                    {{ Carbon\Carbon::create($dokumenCRM_MOU->created_at)->format('d/m/Y') }}
                                                     @else
                                                     Open
+                                                    @endif
+                                                </small>
+                                                <br>
+                                                <small class="{{ !empty($dokumenMOU) ? 'badge badge-light-warning' : 'badge badge-light-danger' }} my-1">
+                                                    @if (!empty($dokumenMOU))
+                                                    Approved <br>
+                                                    {{ Carbon\Carbon::create($dokumenMOU->created_at)->format('d/m/Y') }}
+                                                    @else
+                                                    Open
+                                                    @endif
+                                                </small>
+                                                <br>
+                                                <small class="{{ !empty($dokumenMOU) ? 'badge badge-light-primary' : 'badge badge-light-danger' }} my-1">
+                                                    @if (!empty($dokumenMOU) && $limitWaktu > 14)
+                                                        Late
+                                                    @elseif (!empty($dokumenMOU) && $limitWaktu <= 14)
+                                                        On Time
+                                                    @elseif (!empty($dokumenCRM_MOU))
+                                                        On Going
+                                                    @else
+                                                        Open
                                                     @endif
                                                 </small>
                                             </td>
                                             <!--end::MOU-->
                                             <!--begin::ECA-->
                                             @php
+                                                $dokumenCRM_ECA = $proyek->DokumenEca->first();
                                                 $dokumenECA = $contract->UploadFinal->where('category', '=', 'Dokumen ECA')->first();
+                                                if(!empty($dokumenECA)){
+                                                    $statusWaktuUpload = new DateTime($dokumenECA->created_at);
+                                                    $currentDate = new DateTime();
+                                                    $limitWaktu = $statusWaktuUpload->diff($currentDate)->d;
+                                                }
                                             @endphp
+                                            {{-- @dump($statusWaktuUpload) --}}
                                             <td class="text-center">
-                                                <small class="{{ !empty($dokumenECA) ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
-                                                    @if (!empty($dokumenECA))
-                                                    Approved
+                                                <small class="{{ !empty($dokumenCRM_ECA) ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
+                                                    @if (!empty($dokumenCRM_ECA))
+                                                    RFA <br>
+                                                    {{ Carbon\Carbon::create($dokumenCRM_ECA->created_at)->format('d/m/Y') }}
                                                     @else
                                                     Open
+                                                    @endif
+                                                </small>
+                                                <br>
+                                                <small class="{{ !empty($dokumenECA) ? 'badge badge-light-warning' : 'badge badge-light-danger' }} my-1">
+                                                    @if (!empty($dokumenECA))
+                                                    Approved <br>
+                                                    {{ Carbon\Carbon::create($dokumenECA->created_at)->format('d/m/Y') }}
+                                                    @else
+                                                    Open
+                                                    @endif
+                                                </small>
+                                                <br>
+                                                <small class="{{ !empty($dokumenECA) ? 'badge badge-light-primary' : 'badge badge-light-danger' }} my-1">
+                                                    @if (!empty($dokumenECA) && $limitWaktu > 14)
+                                                        Late
+                                                    @elseif (!empty($dokumenECA) && $limitWaktu <= 14)
+                                                        On Time
+                                                    @elseif (!empty($dokumenCRM_ECA))
+                                                        On Going
+                                                    @else
+                                                        Open
                                                     @endif
                                                 </small>
                                             </td>
                                             <!--end::ECA-->
                                             <!--begin::ICA-->
                                             @php
+                                                $dokumenCRM_ICA = $proyek->DokumenIca->first();
                                                 $dokumenICA = $contract->UploadFinal->where('category', '=', 'Dokumen ICA')->first();
+                                                if(!empty($dokumenICA)){
+                                                    $statusWaktuUpload = new DateTime($dokumenICA->created_at);
+                                                    $currentDate = new DateTime();
+                                                    $limitWaktu = $statusWaktuUpload->diff($currentDate)->d;
+                                                }
                                             @endphp
+                                            {{-- @dump($statusWaktuUpload) --}}
                                             <td class="text-center">
-                                                <small class="{{ !empty($dokumenICA) ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
-                                                    @if (!empty($dokumenICA))
-                                                    Approved
+                                                <small class="{{ !empty($dokumenCRM_ICA) ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
+                                                    @if (!empty($dokumenCRM_ICA))
+                                                    RFA <br>
+                                                    {{ Carbon\Carbon::create($dokumenCRM_ICA->created_at)->format('d/m/Y') }}
                                                     @else
                                                     Open
+                                                    @endif
+                                                </small>
+                                                <br>
+                                                <small class="{{ !empty($dokumenICA) ? 'badge badge-light-warning' : 'badge badge-light-danger' }} my-1">
+                                                    @if (!empty($dokumenICA))
+                                                    Approved <br>
+                                                    {{ Carbon\Carbon::create($dokumenICA->created_at)->format('d/m/Y') }}
+                                                    @else
+                                                    Open
+                                                    @endif
+                                                </small>
+                                                <br>
+                                                <small class="{{ !empty($dokumenICA) ? 'badge badge-light-primary' : 'badge badge-light-danger' }} my-1">
+                                                    @if (!empty($dokumenICA) && $limitWaktu > 14)
+                                                        Late
+                                                    @elseif (!empty($dokumenICA) && $limitWaktu <= 14)
+                                                        On Time
+                                                    @elseif (!empty($dokumenCRM_ICA))
+                                                        On Going
+                                                    @else
+                                                        Open
                                                     @endif
                                                 </small>
                                             </td>
                                             <!--end::ICA-->
                                             <!--begin::DRAFT-->
+                                                @php
+                                                $dokumenCRM_Draft = $proyek->DokumenDraft->first();
+                                                $dokumenDraft = $contract->UploadFinal->where('category', '=', 'Dokumen Draft Kontrak')->first();
+                                                if(!empty($dokumenDraft)){
+                                                    $statusWaktuUpload = new DateTime($dokumenDraft->created_at);
+                                                    $currentDate = new DateTime();
+                                                    $limitWaktu = $statusWaktuUpload->diff($currentDate)->d;
+                                                }
+                                            @endphp
+                                            {{-- @dump($statusWaktuUpload) --}}
                                             <td class="text-center">
-                                                <small class="{{ $proyek->DokumenDraft->isNotEmpty() ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
-                                                    @if ($proyek->DokumenDraft->isNotEmpty())
-                                                    Yes
+                                                <small class="{{ !empty($dokumenCRM_Draft) ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
+                                                    @if (!empty($dokumenCRM_Draft))
+                                                    RFA <br>
+                                                    {{ Carbon\Carbon::create($dokumenCRM_Draft->created_at)->format('d/m/Y') }}
                                                     @else
-                                                    No
+                                                    Open
+                                                    @endif
+                                                </small>
+                                                <br>
+                                                <small class="{{ !empty($dokumenDraft) ? 'badge badge-light-warning' : 'badge badge-light-danger' }} my-1">
+                                                    @if (!empty($dokumenDraft))
+                                                    Approved <br>
+                                                    {{ Carbon\Carbon::create($dokumenDraft->created_at)->format('d/m/Y') }}
+                                                    @else
+                                                    Open
+                                                    @endif
+                                                </small>
+                                                <br>
+                                                <small class="{{ !empty($dokumenDraft) ? 'badge badge-light-primary' : 'badge badge-light-danger' }} my-1">
+                                                    @if (!empty($dokumenDraft) && $limitWaktu > 14)
+                                                        Late
+                                                    @elseif (!empty($dokumenDraft) && $limitWaktu <= 14)
+                                                        On Time
+                                                    @elseif (!empty($dokumenCRM_Draft))
+                                                        On Going
+                                                    @else
+                                                        Open
                                                     @endif
                                                 </small>
                                             </td>
                                             <!--end::DRAFT-->
-                                            <!--begin::DEVIATION-->
-                                            <td class="text-center">
-                                                {{-- <small class="{{ $proyek->AttachmentMenang->isNotEmpty() ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
-                                                    @if ($proyek->AttachmentMenang->isNotEmpty())
-                                                    Yes
-                                                    @else
-                                                    No
-                                                    @endif
-                                                </small> --}}
-                                                -
-                                            </td>
-                                            <!--end::DEVIATION-->
-                                            <!--begin::ITB-->
+                                            <!--begin::RKS-->
                                             @php
-                                                $dokumenITB = $contract->UploadFinal->where('category', '=', 'Dokumen ITB/TOR')->first();
+                                                $dokumenCRM_RKS = $proyek->DokumenRks->first();
+                                                $dokumenRKS = $contract->UploadFinal->where('category', '=', 'Dokumen RKS / Project Spesification')->first();
+                                                if(!empty($dokumenRKS)){
+                                                    $statusWaktuUpload = new DateTime($dokumenRKS->created_at);
+                                                    $currentDate = new DateTime();
+                                                    $limitWaktu = $statusWaktuUpload->diff($currentDate)->d;
+                                                }
                                             @endphp
+                                            {{-- @dump($statusWaktuUpload) --}}
                                             <td class="text-center">
-                                                <small class="{{ !empty($dokumenITB) ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
-                                                    @if (!empty($dokumenITB))
-                                                    Approved
+                                                <small class="{{ !empty($dokumenCRM_RKS) ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
+                                                    @if (!empty($dokumenCRM_RKS))
+                                                    RFA <br>
+                                                    {{ Carbon\Carbon::create($dokumenCRM_RKS->created_at)->format('d/m/Y') }}
                                                     @else
                                                     Open
+                                                    @endif
+                                                </small>
+                                                <br>
+                                                <small class="{{ !empty($dokumenRKS) ? 'badge badge-light-warning' : 'badge badge-light-danger' }} my-1">
+                                                    @if (!empty($dokumenRKS))
+                                                    Approved <br>
+                                                    {{ Carbon\Carbon::create($dokumenRKS->created_at)->format('d/m/Y') }}
+                                                    @else
+                                                    Open
+                                                    @endif
+                                                </small>
+                                                <br>
+                                                <small class="{{ !empty($dokumenRKS) ? 'badge badge-light-primary' : 'badge badge-light-danger' }} my-1">
+                                                    @if (!empty($dokumenRKS) && $limitWaktu > 14)
+                                                        Late
+                                                    @elseif (!empty($dokumenRKS) && $limitWaktu <= 14)
+                                                        On Time
+                                                    @elseif (!empty($dokumenCRM_RKS))
+                                                        On Going
+                                                    @else
+                                                        Open
+                                                    @endif
+                                                </small>
+                                            </td>
+                                            <!--end::RKS-->
+                                            <!--begin::ITB-->
+                                            @php
+                                                $dokumenCRM_ITB = $proyek->DokumenItbTor->first();
+                                                $dokumenITB = $contract->UploadFinal->where('category', '=', 'Dokumen ITB/TOR')->first();
+                                                if(!empty($dokumenITB)){
+                                                    $statusWaktuUpload = new DateTime($dokumenITB->created_at);
+                                                    $currentDate = new DateTime();
+                                                    $limitWaktu = $statusWaktuUpload->diff($currentDate)->d;
+                                                }
+                                            @endphp
+                                            {{-- @dump($statusWaktuUpload) --}}
+                                            <td class="text-center">
+                                                <small class="{{ !empty($dokumenCRM_ITB) ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
+                                                    @if (!empty($dokumenCRM_ITB))
+                                                    RFA <br>
+                                                    {{ Carbon\Carbon::create($dokumenCRM_ITB->created_at)->format('d/m/Y') }}
+                                                    @else
+                                                    Open
+                                                    @endif
+                                                </small>
+                                                <br>
+                                                <small class="{{ !empty($dokumenITB) ? 'badge badge-light-warning' : 'badge badge-light-danger' }} my-1">
+                                                    @if (!empty($dokumenITB))
+                                                    Approved <br>
+                                                    {{ Carbon\Carbon::create($dokumenITB->created_at)->format('d/m/Y') }}
+                                                    @else
+                                                    Open
+                                                    @endif
+                                                </small>
+                                                <br>
+                                                <small class="{{ !empty($dokumenITB) ? 'badge badge-light-primary' : 'badge badge-light-danger' }} my-1">
+                                                    @if (!empty($dokumenITB) && $limitWaktu > 14)
+                                                        Late
+                                                    @elseif (!empty($dokumenITB) && $limitWaktu <= 14)
+                                                        On Time
+                                                    @elseif (!empty($dokumenCRM_ITB))
+                                                        On Going
+                                                    @else
+                                                        Open
                                                     @endif
                                                 </small>
                                             </td>
                                             <!--end::ITB-->
                                             <!--begin::TENDER-->
+                                            @php
+                                                $dokumenCRM_Tender = $proyek->DokumenTender->first();
+                                                $dokumenTender = $contract->UploadFinal->where('category', '=', 'Tinjauan Dokumen Kontrak - Perolehan')->first();
+                                                if(!empty($dokumenTender)){
+                                                    $statusWaktuUpload = new DateTime($dokumenTender->created_at);
+                                                    $currentDate = new DateTime();
+                                                    $limitWaktu = $statusWaktuUpload->diff($currentDate)->d;
+                                                }
+                                            @endphp
+                                            {{-- @dump($statusWaktuUpload) --}}
                                             <td class="text-center">
-                                                <small class="{{ $contract->UploadFinal->where("category", "=", "tinjauan-perolehan")->isNotEmpty() ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
-                                                    @if ($contract->UploadFinal->where("category", "=", "tinjauan-perolehan")->isNotEmpty())
-                                                    Yes
+                                                <small class="{{ !empty($dokumenCRM_Tender) ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
+                                                    @if (!empty($dokumenCRM_Tender))
+                                                    RFA <br>
+                                                    {{ Carbon\Carbon::create($dokumenCRM_Tender->created_at)->format('d/m/Y') }}
                                                     @else
-                                                    No
+                                                    Open
                                                     @endif
                                                 </small>
-                                                {{-- @if (!empty($contract))
-                                                    @if ($contract->UploadFinal->where("category", "=", "tinjauan-perolehan")->isNotEmpty())
-                                                        <small class="badge badge-light-success">
-                                                            Yes
-                                                        </small>
+                                                <br>
+                                                <small class="{{ !empty($dokumenTender) ? 'badge badge-light-warning' : 'badge badge-light-danger' }} my-1">
+                                                    @if (!empty($dokumenTender))
+                                                    Approved <br>
+                                                    {{ Carbon\Carbon::create($dokumenTender->created_at)->format('d/m/Y') }}
+                                                    @else
+                                                    Open
                                                     @endif
-                                                @else
-                                                    <small class="badge badge-light-danger">
-                                                        No
-                                                    </small>
-                                                @endif --}}
+                                                </small>
+                                                <br>
+                                                <small class="{{ !empty($dokumenTender) ? 'badge badge-light-primary' : 'badge badge-light-danger' }} my-1">
+                                                    @if (!empty($dokumenTender) && $limitWaktu > 14)
+                                                        Late
+                                                    @elseif (!empty($dokumenTender) && $limitWaktu <= 14)
+                                                        On Time
+                                                    @elseif (!empty($dokumenCRM_Tender))
+                                                        On Going
+                                                    @else
+                                                        Open
+                                                    @endif
+                                                </small>
                                             </td>
                                             <!--end::TENDER-->
                                             <!--begin::RISK-->
+                                            @php
+                                                $dokumenCRM_Risk = $proyek->RiskTenderProyek->first();
+                                                $dokumenRisk = $contract->UploadFinal->where('category', '=', 'Dokumen Resiko - Perolehan')->first();
+                                                if(!empty($dokumenRisk)){
+                                                    $statusWaktuUpload = new DateTime($dokumenRisk->created_at);
+                                                    $currentDate = new DateTime();
+                                                    $limitWaktu = $statusWaktuUpload->diff($currentDate)->d;
+                                                }
+                                            @endphp
+                                            {{-- @dump($statusWaktuUpload) --}}
                                             <td class="text-center">
-                                                <small class="{{ $contract->UploadFinal->where("category", "=", "resiko-perolehan")->isNotEmpty() ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
-                                                    @if ($contract->UploadFinal->where("category", "=", "resiko-perolehan")->isNotEmpty())
-                                                    Yes
+                                                <small class="{{ !empty($dokumenCRM_Risk) ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
+                                                    @if (!empty($dokumenCRM_Risk))
+                                                    RFA <br>
+                                                    {{ Carbon\Carbon::create($dokumenCRM_Risk->created_at)->format('d/m/Y') }}
                                                     @else
-                                                    No
+                                                    Open
                                                     @endif
                                                 </small>
-                                                {{-- @if (!empty($contract))
-                                                    @if ($contract->inputRisks->isNotEmpty())
-                                                        <small class="badge badge-light-success">
-                                                            Yes
-                                                        </small>
+                                                <br>
+                                                <small class="{{ !empty($dokumenRisk) ? 'badge badge-light-warning' : 'badge badge-light-danger' }} my-1">
+                                                    @if (!empty($dokumenRisk))
+                                                    Approved <br>
+                                                    {{ Carbon\Carbon::create($dokumenRisk->created_at)->format('d/m/Y') }}
+                                                    @else
+                                                    Open
                                                     @endif
-                                                @else
-                                                    <small class="badge badge-light-danger">
-                                                        No
-                                                    </small>
-                                                @endif --}}
+                                                </small>
+                                                <br>
+                                                <small class="{{ !empty($dokumenRisk) ? 'badge badge-light-primary' : 'badge badge-light-danger' }} my-1">
+                                                    @if (!empty($dokumenRisk) && $limitWaktu > 14)
+                                                        Late
+                                                    @elseif (!empty($dokumenRisk) && $limitWaktu <= 14)
+                                                        On Time
+                                                    @elseif (!empty($dokumenCRM_Risk))
+                                                        On Going
+                                                    @else
+                                                        Open
+                                                    @endif
+                                                </small>
                                             </td>
                                             <!--end::RISK-->
                                             <!--begin::DAFTAR-->
+                                            @php
+                                                // $dokumenCRM_Aanwitjzing = $proyek->AanwitjzingTenderProyek->first();
+                                                $dokumenAanwitjzing = $contract->UploadFinal->where('category', '=', 'Dokumen Aanwitjzing')->first();
+                                                if(!empty($dokumenAanwitjzing)){
+                                                    $statusWaktuUpload = new DateTime($dokumenAanwitjzing->created_at);
+                                                    $currentDate = new DateTime();
+                                                    $limitWaktu = $statusWaktuUpload->diff($currentDate)->d;
+                                                }
+                                            @endphp
+                                            {{-- @dump($statusWaktuUpload) --}}
                                             <td class="text-center">
-                                                @if (!empty($contract))
-                                                    @if ($contract->questionsProjects->isNotEmpty())
-                                                        <small class="badge badge-light-success">
-                                                            Yes
-                                                        </small>
+                                                {{-- <small class="{{ !empty($dokumenCRM_Aanwitjzing) ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
+                                                    @if (!empty($dokumenCRM_Aanwitjzing))
+                                                    RFA <br>
+                                                    {{ Carbon\Carbon::create($dokumenCRM_Aanwitjzing->created_at)->format('d/m/Y') }}
+                                                    @else
+                                                    Open
                                                     @endif
-                                                @else
-                                                    <small class="badge badge-light-danger">
-                                                        No
-                                                    </small>
-                                                @endif
+                                                </small>
+                                                <br>
+                                                <small class="{{ !empty($dokumenAanwitjzing) ? 'badge badge-light-warning' : 'badge badge-light-danger' }} my-1">
+                                                    @if (!empty($dokumenAanwitjzing))
+                                                    Approved <br>
+                                                    {{ Carbon\Carbon::create($dokumenAanwitjzing->created_at)->format('d/m/Y') }}
+                                                    @else
+                                                    Open
+                                                    @endif
+                                                </small>
+                                                <br>
+                                                <small class="{{ !empty($dokumenAanwitjzing) ? 'badge badge-light-primary' : 'badge badge-light-danger' }} my-1">
+                                                    @if (!empty($dokumenAanwitjzing) && $limitWaktu > 14)
+                                                        Late
+                                                    @elseif (!empty($dokumenAanwitjzing) && $limitWaktu <= 14)
+                                                        On Time
+                                                    @elseif (!empty($dokumenCRM_Aanwitjzing))
+                                                        On Going
+                                                    @else
+                                                        Open
+                                                    @endif
+                                                </small> --}}
+                                                <small class="badge {{!empty($dokumenAanwitjzing) ? "badge-light-success" : "badge-light-danger"}}">
+                                                    @if (!empty($dokumenAanwitjzing))
+                                                        Approved
+                                                    @else
+                                                        Open
+                                                    @endif
+                                                </small>
                                             </td>
                                             <!--end::DAFTAR-->
                                             
@@ -1240,13 +1556,14 @@
                                             <td class="text-center">
                                                 @php
                                                 if (!empty($contract)) {
-                                                    $status = $proyek->ContractManagements->reviewProjects->isNotEmpty() && $proyek->ContractManagements->inputRisks->isNotEmpty() && $proyek->ContractManagements->questionsProjects->isNotEmpty();
+                                                    $status = !empty($dokumenNDA) && !empty($dokumenLOI) && !empty($dokumenMOU) && !empty($dokumenECA) && !empty($dokumenICA) && !empty($dokumenRKS) && !empty($dokumenITB) && !empty($dokumenTender) && !empty($dokumenRisk) && !empty($dokumenAanwitjzing);
+                                                    // $status = $proyek->ContractManagements->reviewProjects->isNotEmpty() && $proyek->ContractManagements->inputRisks->isNotEmpty() && $proyek->ContractManagements->questionsProjects->isNotEmpty();
                                                     // $status = $proyek->DokumenNda->isNotEmpty() && $proyek->DokumenMou->isNotEmpty() && $proyek->AttachmentMenang->isNotEmpty() && $proyek->RiskTenderProyek->isNotEmpty() && $proyek->DokumenEca->isNotEmpty() && $proyek->DokumenIca->isNotEmpty();
                                                 } else {
                                                     $status = false;
                                                 }
                                                 @endphp
-                                                <P class="badge {{$status ? "badge-light-success" : "badge-light-danger"}} tender-review">{{$status ? "Closed" : "Open"}}</P>
+                                                <p class="badge {{$status ? "badge-light-success" : "badge-light-danger"}} tender-review">{{$status ? "Closed" : "Open"}}</p>
                                             </td>
                                             <!--end::STATUS-->
                                         </tr>
