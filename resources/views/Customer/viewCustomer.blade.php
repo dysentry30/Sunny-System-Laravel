@@ -81,6 +81,25 @@
                                     <!--end::Button-->
 
                                     <!--begin::Button-->
+                                    @if ($customer->kode_bp)
+                                        <div class="" data-bs-toggle="tooltip" data-bs-html="true" 
+                                        data-bs-title="<b>Kode BP</b> sudah didapatkan" >
+                                            <button type="button"  class="btn disabled btn-sm btn-light btn-active-success me-3" onclick="getKodeBP(this)" id="get-kode-bp">
+                                                Get Kode BP</button>
+                                        </div>
+                                    @elseif (empty($customer->kode_nasabah))
+                                        <div class="" data-bs-toggle="tooltip" data-bs-html="true" 
+                                        data-bs-title="<b>Kode Nasabah</b> belum didapatkan" >
+                                            <button type="button"  class="btn disabled btn-sm btn-light btn-active-success me-3" onclick="getKodeBP(this)" id="get-kode-bp">
+                                                Get Kode BP</button>
+                                        </div>
+                                    @else 
+                                        <button type="button" class="btn btn-sm btn-light btn-active-success me-3" onclick="getKodeBP(this)" id="get-kode-bp">
+                                            Get Kode BP</button>
+                                    @endif
+                                    <!--end::Button-->
+
+                                    <!--begin::Button-->
                                     <button type="submit" class="btn btn-sm btn-primary" id="customer-edit-save" style="background-color:#008CB4;">
                                         Save</button>
                                     <!--end::Button-->
@@ -415,10 +434,12 @@
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
+                                                                    {{-- @dd($sumberdanas) --}}
                                                                     <select name="jenis-instansi" onchange="getValueInstansi(this)" class="form-select form-select-solid" data-control="select2" data-hide-search="true"
                                                                         data-placeholder="Pilih Instansi">
                                                                         <option></option>
                                                                         @foreach ($sumberdanas as $sumberdana)
+                                                                        @if ($sumberdana->is_instansi)
                                                                             @if ($sumberdana->nama_sumber == $customer->jenis_instansi)
                                                                                 <option value="{{ $sumberdana->nama_sumber }}" selected>
                                                                                     {{ $sumberdana->nama_sumber }}
@@ -428,6 +449,7 @@
                                                                                     {{ $sumberdana->nama_sumber }}
                                                                                 </option>
                                                                             @endif
+                                                                        @endif
                                                                         @endforeach
                                                                     </select>
                                                                     <!--end::Input-->
@@ -821,6 +843,18 @@
                                                                 <!--end::Input-->
                                                             </div>
                                                             <!--end::column-->
+                                                            <div class="col-6">
+                                                                <!--begin::label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span class="required">Kode BP</span>
+                                                                </label>
+                                                                <!--end::label-->
+                                                                <!--begin::Input-->
+                                                                <div id="div-tax">
+                                                                    <input type="text" name="kode-bp" id="kode-bp" class="form-control form-control-solid" value="{{$customer->kode_bp ?? ""}}">
+                                                                </div>
+                                                                <!--end::Input-->
+                                                            </div>
                                                             <!--ENd::Row-->
 
                                                             <!--begin::Fungsi Select Provinsi-->
@@ -2078,6 +2112,7 @@
                                                                     <tbody class="fw-bold text-gray-600">
                                                                         @if (isset($proyekberjalan))
                                                                             @foreach ($proyekberjalan as $proyekberjalan0)
+                                                                            {{-- @dump($proyekberjalan0) --}}
                                                                                 @if ($proyekberjalan0->stage == 8)
                                                                                     <tr>
                                                                                         <!--begin::Kode-->
@@ -2107,17 +2142,17 @@
                                                                                         </td>
                                                                                         <!--end::Unit-->
                                                                                         <!--begin::Nilai OK-->
-                                                                                        <td>{{ number_format($proyekberjalan0->proyek->nilai_rkap, 0, '.', '.') }}
+                                                                                        <td>{{ (!empty($proyekberjalan0->proyek) && $proyekberjalan0->proyek->nilai_rkap != null) ? number_format($proyekberjalan0->proyek->nilai_rkap, 0, '.', '.') : 0  }}
                                                                                         </td>
                                                                                         <!--end::Nilai OK-->
                                                                                         <!--begin::Start-->
                                                                                         <td>
-                                                                                            {{ Carbon\Carbon::create($proyekberjalan0->proyek->tanggal_mulai_terkontrak ?? Carbon\Carbon::now())->translatedFormat("d F Y") }}
+                                                                                            {{ !empty($proyekberjalan0->proyek->tanggal_mulai_terkontrak) ? Carbon\Carbon::create($proyekberjalan0->proyek->tanggal_mulai_terkontrak)->translatedFormat("d F Y") : Carbon\Carbon::now()->translatedFormat("d F Y") }}
                                                                                         </td>
                                                                                         <!--end::End-->
                                                                                         <!--begin::Start-->
                                                                                         <td>
-                                                                                            {{ Carbon\Carbon::create($proyekberjalan0->proyek->tanggal_akhir_terkontrak)->translatedFormat("d F Y") }}
+                                                                                            {{ !empty($proyekberjalan0->proyek->tanggal_akhir_terkontrak) ? Carbon\Carbon::create($proyekberjalan0->proyek->tanggal_akhir_terkontrak)->translatedFormat("d F Y") : Carbon\Carbon::now()->translatedFormat("d F Y")}}
                                                                                         </td>
                                                                                         <!--end::End-->
                                                                                         <!--begin::Durasi-->
@@ -2972,23 +3007,10 @@
 
                                                         </div>
                                                         <!--begin::Data CSI-->
-                                                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">CSI
+                                                        {{-- <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">CSI
                                                             <i onclick="hideColumn(this, '#divCSI')" id="hide-button" style="display: none" class="bi bi-arrows-collapse"></i><i
                                                                 onclick="showColumn(this, '#divCSI')" id="show-button" class="bi bi-arrows-expand"></i>
-                                                        </h3>
-                                                        {{-- <script>
-                                                            function hideColumn() {
-                                                                document.getElementById("divCSI").style.display = "none";
-                                                                document.getElementById("hide-button").style.display = "none";
-                                                                document.getElementById("show-button").style.display = "";
-                                                            }
-
-                                                            function showColumn() {
-                                                                document.getElementById("divCSI").style.display = "";
-                                                                document.getElementById("hide-button").style.display = "";
-                                                                document.getElementById("show-button").style.display = "none";
-                                                            }
-                                                        </script> --}}
+                                                        </h3> --}}
                                                         <br>
                                                         <div id="divCSI" style="display:none">
                                                             <!--end::Data CSI-->
@@ -7136,9 +7158,15 @@
         // BEGIN :: GET KODE NASABAH
         async function getKodeNasabah(e) {
             const npwp = "{{$customer->npwp_company}}";
-            if(pic == undefined || npwp == "") {
+            if(pic == undefined) {
                 Toast.fire({
                     html: "Field PIC is empty",
+                    icon: "error",
+                });
+                return;
+            } else if(npwp == "") {
+                Toast.fire({
+                    html: "Field NPWP is empty",
                     icon: "error",
                 });
                 return;
@@ -7338,6 +7366,34 @@
             }
         }
         // END :: GET KODE NASABAH
+        
+        // BEGIN :: GET KODE BP
+        async function getKodeBP(e) {
+            const data = {
+                kode_nasabah: "{{$customer->kode_nasabah}}"
+            };
+
+            const getKodeBPRes = await fetch("/customer/get-kode-bp", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-Token": "{{csrf_token()}}"
+                },
+                body: JSON.stringify(data),
+            }).then(res => res.json());
+            if(getKodeBPRes.status) {
+                document.querySelector("#kode-bp").value = getKodeBPRes.kode_bp;
+                document.querySelector("#customer-edit-save").click();
+                return;
+            } else {
+                Toast.fire({
+                    html: getKodeBPRes.msg,
+                    icon: "error",
+                });
+                return;
+            }
+        }
+        // END :: GET KODE BP
 
         // BEGIN :: REMOVE SYMBOL CHAR
         function removeSymbol(e) {

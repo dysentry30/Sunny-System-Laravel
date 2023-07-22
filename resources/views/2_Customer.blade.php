@@ -184,10 +184,13 @@
                                         <th class="min-w-auto">Kode Pelanggan</th>
                                         <th class="min-w-auto text-center">Pelanggan</th>
                                         <th class="min-w-auto">Email</th>
+                                        <th class="min-w-auto">Kode BP</th>
+                                        <th class="min-w-auto">Industry Sector</th>
+                                        <th class="min-w-auto">Instansi</th>
                                         {{-- <th class="min-w-auto">Kontak Nomor</th> --}}
-                                        <th class="max-w-auto">Customer</th>
-                                        <th class="min-w-auto">Partner</th>
-                                        <th class="min-w-auto">Competitor</th>
+                                        {{-- <th class="max-w-auto">Customer</th> --}}
+                                        {{-- <th class="min-w-auto">Partner</th> --}}
+                                        {{-- <th class="min-w-auto">Competitor</th> --}}
                                         <th class="min-w-auto">Kode Nasabah</th>
                                         @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)"))
                                         <th class="min-w-auto text-center">Action</th>
@@ -234,25 +237,40 @@
                                                 <a href="#" class="text-gray-800 text-hover-primary">{{ ($customers->email) }}</a>
                                                 </td>
                                                 <!--end::Email-->
+                                                <!--begin::Column-->
+                                                <td>
+                                                {{ $customers->unique_code ?? "-" }}
+                                                </td>
+                                                <!--end::Column-->
+                                                <!--begin::Column-->
+                                                <td>
+                                                {{ $customers->IndustryOwner->owner_attractiveness ?? "-" }}
+                                                </td>
+                                                <!--end::Column-->
+                                                <!--begin::Column-->
+                                                <td>
+                                                {{ $customers->jenis_instansi ?? "-" }}
+                                                </td>
+                                                <!--end::Column-->
                                                 <!--begin::Nomor-->
                                                 {{-- <td>
                                                 {{ $customers->phone_number }}
                                                 </td> --}}
                                                 <!--end::Nomor-->
                                                 <!--begin::check_customer-->
-                                                <td>
+                                                {{-- <td>
                                                 {{ ($customers->check_customer == 1 ? "Yes" : "No") }}
-                                                </td>
+                                                </td> --}}
                                                 <!--end::check_customer-->
                                                 <!--begin::check_partner-->
-                                                <td>
+                                                {{-- <td>
                                                 {{ ($customers->check_partner == 1 ? "Yes" : "No") }}
-                                                </td>
+                                                </td> --}}
                                                 <!--end::check_partner-->
                                                 <!--begin::check_competitor-->
-                                                <td data-filter="mastercard">
+                                                {{-- <td data-filter="mastercard">
                                                 {{ ($customers->check_competitor == 1 ? "Yes" : "No") }}
-                                                </td>
+                                                </td> --}}
                                                 <!--end::check_competitor-->
                                                 <!--begin::Kode Nasabah-->
                                                 <td>
@@ -639,7 +657,8 @@
         $('#example').DataTable( {
             dom: '<"float-start"f><"#example"t>rtip',
             // dom: 'frtip',
-            pageLength : 50,
+            pageLength : 20,
+            order: [[0, 'desc']]
             // ordering : false,
             // buttons: [
             //     'copy', 'csv', 'excel', 'pdf', 'print'

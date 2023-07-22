@@ -32,7 +32,6 @@
 
     }
     
-    
 </style>
 
 
@@ -320,7 +319,7 @@
                             $proyeks = $proyeks->reverse();
                         @endphp
                         <!--begin::Card body-->
-                        <div class="card-body px-3 pt-0">
+                        <div class="overflow-scroll card-body px-3 pt-0">
                             <!--begin::Table Proyek-->
                             <table class="table table-striped table-hover align-middle table-row-dashed fs-6 gy-2" id="example">
                                 <!--begin::Table head-->
@@ -1149,19 +1148,21 @@
     <script>
         $(document).ready(function() {
             $('#example').DataTable( {
-                dom: 'Bfrtip',
-                // dom: '<"float-start"f><"#example"t>rtip',
-                pageLength : 50,
-                scrollY : "1000px",
-                scrollX : true,
-                scrollCollapse: true,
-                paging : false,
-                fixedColumns:   {
-                    left: 2,
-                    right: 0
-                },
+                // dom: 'Bfrtip',
+                dom: '<"float-start me-3"f><"#example"t>Brtip',
+                pageLength : 20,
+                order: [[0, 'desc']],
+                // scrollY : "1000px",
+                // scrollX : true,
+                // scrollCollapse: true,
+                // paging : false,
+                // fixedColumns:   {
+                //     left: 2,
+                //     right: 0
+                // },
                 buttons: [
-                    'copy', 'csv', 'excel', 'pdf', 'print'
+                    'csv', 'excel', 'print'
+                    // 'copy', 'csv', 'excel', 'pdf', 'print'
                 ]
             } );
         } );

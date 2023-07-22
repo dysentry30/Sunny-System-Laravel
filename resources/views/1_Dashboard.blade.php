@@ -256,6 +256,7 @@
                                         data-placeholder="Bulan" data-select2-id="select2-data-bulan" tabindex="-1"
                                         aria-hidden="true">
                                         <option {{ $month == '' ? 'selected' : '' }}></option>
+                                        @if ($year != 2021)
                                         <option value="1" {{ $month == 1 ? 'selected' : '' }}>Januari</option>
                                         <option value="2" {{ $month == 2 ? 'selected' : '' }}>Februari</option>
                                         <option value="3" {{ $month == 3 ? 'selected' : '' }}>Maret</option>
@@ -267,6 +268,7 @@
                                         <option value="9" {{ $month == 9 ? 'selected' : '' }}>September</option>
                                         <option value="10" {{ $month == 10 ? 'selected' : '' }}>Oktober</option>
                                         <option value="11" {{ $month == 11 ? 'selected' : '' }}>November</option>
+                                        @endif
                                         <option value="12" {{ $month == 12 ? 'selected' : '' }}>Desember</option>
                                     </select>
                                     <!--end::Select Options-->
@@ -281,12 +283,12 @@
                                         data-control="select2" data-hide-search="true" data-placeholder="Tahun"
                                         data-select2-id="select2-data-tahun" tabindex="-1" aria-hidden="true">
                                         @if ($year == null)
-                                            @for ($i = $years - 2; $i < $years + 10; $i++)
+                                            @for ($i = 2021; $i <= (int) date('Y'); $i++)
                                                 <option value="{{ $i }}" {{ $years == $i ? 'selected' : '' }}>
                                                     {{ $i }}</option>
                                             @endfor
                                         @else
-                                            @for ($i = $year - 2; $i < $year + 10; $i++)
+                                            @for ($i = 2021; $i <= (int) date('Y'); $i++)
                                                 <option value="{{ $i }}" {{ $year == $i ? 'selected' : '' }}>
                                                     {{ $i }}</option>
                                             @endfor
@@ -865,12 +867,12 @@
                                                         <thead class="bg-white" style="position: sticky; top:0">
                                                             <!--begin::Table row-->
                                                             <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                <th class="min-w-auto">@sortablelink('nama_proyek', 'Nama Proyek')</th>
-                                                                <th class="min-w-auto">@sortablelink('unit_kerja', 'Unit Kerja')</th>
-                                                                <th class="min-w-auto">@sortablelink('tipe_proyek', 'Tipe Proyek')</th>
-                                                                <th class="min-w-auto">@sortablelink('stage', 'Stage')</th>
+                                                                <th class="min-w-auto">Nama Proyek</th>
+                                                                <th class="min-w-auto">Unit Kerja</th>
+                                                                <th class="min-w-auto">Tipe Proyek</th>
+                                                                <th class="min-w-auto">Stage</th>
                                                                 <th class="min-w-auto">Bulan Forecast</th>
-                                                                <th class="min-w-auto text-end">@sortablelink('forecast', 'Nilai Forecast')</th>
+                                                                <th class="min-w-auto text-end">Nilai Forecast</th>
                                                             </tr>
                                                             <!--end::Table row-->
                                                         </thead>
@@ -1127,12 +1129,12 @@
                                                         <thead class="bg-white" style="position: sticky; top:0">
                                                             <!--begin::Table row-->
                                                             <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                <th class="min-w-auto">@sortablelink('nama_proyek', 'Nama Proyek')</th>
-                                                                <th class="min-w-auto">@sortablelink('unit_kerja', 'Unit Kerja')</th>
-                                                                <th class="min-w-auto">@sortablelink('tipe_proyek', 'Tipe Proyek')</th>
-                                                                <th class="min-w-auto">@sortablelink('stage', 'Stage')</th>
+                                                                <th class="min-w-auto">Nama Proyek</th>
+                                                                <th class="min-w-auto">Unit Kerja</th>
+                                                                <th class="min-w-auto">Tipe Proyek</th>
+                                                                <th class="min-w-auto">Stage</th>
                                                                 <th class="min-w-auto">Bulan Forecast</th>
-                                                                <th class="min-w-auto text-end">@sortablelink('nilai_perolehan', 'Nilai Reailisasi')</th>
+                                                                <th class="min-w-auto text-end">Nilai Reailisasi</th>
                                                             </tr>
                                                             <!--end::Table row-->
                                                         </thead>
@@ -1415,9 +1417,9 @@
                                                     <thead>
                                                         <!--begin::Table row-->
                                                         <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                            <th class="min-w-auto">@sortablelink('kode_proyek', 'Nama Proyek')</th>
-                                                            <th class="min-w-auto">@sortablelink('kode_proyek', 'Unit Kerja')</th>
-                                                            <th class="min-w-auto">@sortablelink('nilai_claim', 'Nilai Claim')</th>
+                                                            <th class="min-w-auto">Nama Proyek</th>
+                                                            <th class="min-w-auto">Unit Kerja</th>
+                                                            <th class="min-w-auto">Nilai Claim</th>
                                                         </tr>
                                                         <!--end::Table row-->
                                                     </thead>
@@ -1470,9 +1472,9 @@
                                                     <thead>
                                                         <!--begin::Table row-->
                                                         <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                            <th class="min-w-auto">@sortablelink('kode_proyek', 'Nama Proyek')</th>
-                                                            <th class="min-w-auto">@sortablelink('kode_proyek', 'Unit Kerja')</th>
-                                                            <th class="min-w-auto">@sortablelink('nilai_claim', 'Nilai Anti Claim')</th>
+                                                            <th class="min-w-auto">Nama Proyek</th>
+                                                            <th class="min-w-auto">Unit Kerja</th>
+                                                            <th class="min-w-auto">Nilai Anti Claim</th>
                                                         </tr>
                                                         <!--end::Table row-->
                                                     </thead>
@@ -1523,9 +1525,9 @@
                                                     <thead>
                                                         <!--begin::Table row-->
                                                         <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                            <th class="min-w-auto">@sortablelink('kode_proyek', 'Nama Proyek')</th>
-                                                            <th class="min-w-auto">@sortablelink('kode_proyek', 'Unit Kerja')</th>
-                                                            <th class="min-w-auto">@sortablelink('nilai_claim', 'Nilai Change Request')</th>
+                                                            <th class="min-w-auto">Nama Proyek</th>
+                                                            <th class="min-w-auto">Unit Kerja</th>
+                                                            <th class="min-w-auto">Nilai Change Request</th>
                                                         </tr>
                                                         <!--end::Table row-->
                                                     </thead>
@@ -2755,8 +2757,9 @@
     <!--Begin::Trigger Point Chart Forecast-->
     <script>
         // Begin :: Checking is filter active
-        const isFilterActive = !Boolean("{{empty($unit_kerja_get) || empty($dop_get)}}");
+        // const isFilterActive = !Boolean("{{!empty($unit_kerja_get) || !empty($dop_get)}}");
         const filterGet = "{{!empty($unit_kerja_get) ? $unit_kerja_get : $dop_get}}";
+        const yearGet = "{{$year}}"
         // End :: Checking is filter active
 
         function getFullscreenElement() {
@@ -2779,10 +2782,13 @@
                 const type = data[1];
                 const date = new Date().getMonth() + 1;
                 const prognosa = periodePrognosa.value != "" ? periodePrognosa.value : date;
-                let url = `/dashboard/filter/${prognosa}/${type}/${month}`;
+                let url = `/dashboard/filter/${yearGet}/${prognosa}/${type}/${month}`;
                 const unitKerja = $("#unit-kerja").select2({}).val();
                 if (unitKerja) {
                     url += `/${unitKerja}`;
+                }
+                if(yearGet) {
+
                 }
                 const dop = $("#dop").select2({}).val();
                 if (dop) {
@@ -2928,7 +2934,7 @@
                             stage = "Kalah";
                             break;
                         case 8:
-                            if (filter.tipe_proyek == 'R') {
+                            if (filter.tipe_proyek == 'R' || filter.tipe_proyek == 'Retail') {
                                 stage = "Terkontrak-Retail";
                             } else {
                                 stage = "Terkontrak";
@@ -3088,7 +3094,7 @@
                             stage = "Kalah";
                             break;
                         case 8:
-                            if (filter.tipe_proyek == 'R') {
+                            if (filter.tipe_proyek == 'R' || filter.tipe_proyek == 'Retail') {
                                 stage = "Terkontrak-Retail";
                             } else {
                                 stage = "Terkontrak";
@@ -3260,7 +3266,7 @@
                             stage = "Kalah";
                             break;
                         case 8:
-                            if (filter.tipe_proyek == 'R') {
+                            if (filter.tipe_proyek == 'R' || filter.tipe_proyek == 'Retail') {
                                 stage = "Terkontrak-Retail";
                             } else {
                                 stage = "Terkontrak";
@@ -3415,7 +3421,7 @@
                             stage = "Kalah";
                             break;
                         case 8:
-                            if (filter.tipe_proyek == 'R') {
+                            if (filter.tipe_proyek == 'R' || filter.tipe_proyek == 'Retail') {
                                 stage = "Terkontrak-Retail";
                             } else {
                                 stage = "Terkontrak";
@@ -3564,7 +3570,7 @@
                             stage = "Kalah";
                             break;
                         case 8:
-                            if (filter.tipe_proyek == 'R') {
+                            if (filter.tipe_proyek == 'R' || filter.tipe_proyek == 'Retail') {
                                 stage = "Terkontrak-Retail";
                             } else {
                                 stage = "Terkontrak";
@@ -3687,8 +3693,11 @@
                     for(let filter in filtering) {
                     filter = filtering[filter];
                     let stage = "";
-                    totalNilaiLainnya += Number(filter.nilai_perolehan);
-                    totalNilaiPagu += Number(filter.hps_pagu);
+                    if(type == "Proyek Menang Tender") {
+                        totalNilaiLainnya += Number(filter.nilai_perolehan);
+                    } else {
+                        totalNilaiLainnya += Number(filter.hps_pagu);
+                    }
                     // if(filter.tipe == "Proyek Menang") {
                     // } else {
                     //     totalNilaiLainnya += Number(filter.nilai_rkap);
@@ -3720,7 +3729,7 @@
                             stage = "Kalah";
                             break;
                         case 8:
-                            if (filter.tipe_proyek == 'R') {
+                            if (filter.tipe_proyek == 'R' || filter.tipe_proyek == 'Retail') {
                                 stage = "Terkontrak-Retail";
                             } else {
                                 stage = "Terkontrak";
@@ -3834,11 +3843,7 @@
                 thead.innerHTML = theadHTML;
                 tbody.innerHTML = tbodyHTML;
                 titleTable.innerHTML = `Nilai ${type}`;
-                if(type == "Proyek Menang Tender") {
-                        total.innerHTML = `Total Nilai ${type} = <b>${Intl.NumberFormat((["id"])).format(totalNilaiLainnya)}</b>`;
-                    } else {
-                        total.innerHTML = `Total Nilai ${type} = <b>${Intl.NumberFormat((["id"])).format(totalNilaiPagu)}</b>`;
-                    }
+                total.innerHTML = `Total Nilai ${type} = <b>${Intl.NumberFormat((["id"])).format(totalNilaiLainnya)}</b>`;
                 table.style.display = "";
                 const chartLine = document.querySelector(chartElt);
                 chartLine.style.display = "none";
@@ -3860,7 +3865,11 @@
                     for(let filter in filtering) {
                     filter = filtering[filter];
                     let stage = "";
-                    totalNilaiLainnya += Number(filter.nilai_perolehan);
+                    if(type == "Nilai Menang Tender") {
+                        totalNilaiLainnya += Number(filter.nilai_perolehan);
+                    } else {
+                        totalNilaiLainnya += Number(filter.hps_pagu);
+                    }
                     // if(filter.tipe == "Proyek Menang") {
                     // } else {
                     //     // totalNilaiLainnya += Number(filter.nilai_rkap);
@@ -3891,7 +3900,7 @@
                             stage = "Kalah";
                             break;
                         case 8:
-                            if (filter.tipe_proyek == 'R') {
+                            if (filter.tipe_proyek == 'R' || filter.tipe_proyek == 'Retail') {
                                 stage = "Terkontrak-Retail";
                             } else {
                                 stage = "Terkontrak";
@@ -4061,7 +4070,7 @@
                             stage = "Kalah";
                             break;
                         case 8:
-                            if (filter.tipe_proyek == 'R') {
+                            if (filter.tipe_proyek == 'R' || filter.tipe_proyek == 'Retail') {
                                 stage = "Terkontrak-Retail";
                             } else {
                                 stage = "Terkontrak";
@@ -4213,7 +4222,12 @@
                     for(let filter in filtering) {
                     filter = filtering[filter];
                     let stage = "";
-                    totalNilaiLainnya += Number(filter.nilai_perolehan || filter.nilai_rkap);
+                    if (type.trim() == "Prakualifikasi" || type.trim() == "Tender Diikuti" || type.trim() == "Kalah dan Cancel") {
+                        totalNilaiLainnya += Number(filter.hps_pagu);
+                    } else {
+                        totalNilaiLainnya += Number(filter.nilai_perolehan);
+                        // console.log(totalNilaiLainnya, filter, "oke");
+                    }
                     switch (Number(filter.stage)) {
                         case 0:
                             stage = "Cancel";
@@ -4240,7 +4254,7 @@
                             stage = "Kalah";
                             break;
                         case 8:
-                            if (filter.tipe_proyek == 'R') {
+                            if (filter.tipe_proyek == 'R' || filter.tipe_proyek == 'Retail') {
                                 stage = "Terkontrak-Retail";
                             } else {
                                 stage = "Terkontrak";
@@ -4447,7 +4461,7 @@
                             stage = "Kalah";
                             break;
                         case 8:
-                            if (filter.tipe_proyek == 'R') {
+                            if (filter.tipe_proyek == 'R' || filter.tipe_proyek == 'Retail') {
                                 stage = "Terkontrak-Retail";
                             } else {
                                 stage = "Terkontrak";
@@ -4580,11 +4594,17 @@
         monitoringProyekPie.forEach(point => {
             point.addEventListener("click", async e => {
                 const tipe = point.parentElement.getAttribute("aria-label").replaceAll(/[^a-z][^A-Z]|proyek stage|\./gi, "").trim();
-                let url = `/dashboard/monitoring-proyek/${tipe}/${prognosa}`;
-                if(isFilterActive) {
-                    url = `/dashboard/monitoring-proyek/${tipe}/${prognosa}/${filterGet}`;
+                // let url = `/dashboard/monitoring-proyek/${tipe}/${prognosa}`;
+                // if(isFilterActive) {
+                //     url = `/dashboard/monitoring-proyek/${tipe}/${prognosa}/${filterGet}`;
+                //     console.log(url);
+                // }
+                // getDataTable("#datatable-monitoring-proyek", "#monitoring-proyek", url, tipe, 9);
+                if(filterGet) {
+                    getDataTable("#datatable-monitoring-proyek", "#monitoring-proyek", `/dashboard/monitoring-proyek/${tipe}/${prognosa}/${filterGet}`, tipe, 9);
+                } else {
+                    getDataTable("#datatable-monitoring-proyek", "#monitoring-proyek", `/dashboard/monitoring-proyek/${tipe}/${prognosa}`, tipe, 9);
                 }
-                getDataTable("#datatable-monitoring-proyek", "#monitoring-proyek", url, tipe, 9);
                 
             })
         })
