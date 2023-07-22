@@ -678,7 +678,7 @@
                                                                 <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2" id="id-tender-review">{{ $tender_review }}</span>
                                                                 <!--end::Amount-->
                                                                 <!--begin::Subtitle-->
-                                                                <span class="text-white opacity-75 pt-1 fw-semibold fs-3">Tender Review</span>
+                                                                <span class="text-white opacity-75 pt-1 fw-semibold fs-3">Tender Status</span>
                                                                 <!--end::Subtitle-->
                                                             </div>
                                                             <!--end::Title-->
@@ -1066,12 +1066,16 @@
                                             <!--end::Role-->
                                             
                                             <!--begin::NDA-->
+                                            @php
+                                                $dokumenNDA = $contract->UploadFinal->where('category', '=', 'Dokumen NDA')->first();
+                                            @endphp
+                                            {{-- @dump($dokumenNDA) --}}
                                             <td class="text-center">
-                                                <small class="{{ $proyek->DokumenNda->isNotEmpty() ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
-                                                    @if ($proyek->DokumenNda->isNotEmpty())
-                                                    Yes
+                                                <small class="{{ !empty($dokumenNDA) ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
+                                                    @if (!empty($dokumenNDA))
+                                                    Approved
                                                     @else
-                                                    No
+                                                    Open
                                                     @endif
                                                 </small>
                                             </td>
@@ -1088,34 +1092,43 @@
                                             </td>
                                             <!--end::LOI-->
                                             <!--begin::MOU-->
+                                            @php
+                                                $dokumenMOU = $contract->UploadFinal->where('category', '=', 'Dokumen MOU')->first();
+                                            @endphp
                                             <td class="text-center">
-                                                <small class="{{ $proyek->DokumenMou->isNotEmpty() ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
-                                                    @if ($proyek->DokumenMou->isNotEmpty())
-                                                    Yes
+                                                <small class="{{ !empty($dokumenMOU) ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
+                                                    @if (!empty($dokumenMOU))
+                                                    Approved
                                                     @else
-                                                    No
+                                                    Open
                                                     @endif
                                                 </small>
                                             </td>
                                             <!--end::MOU-->
                                             <!--begin::ECA-->
+                                            @php
+                                                $dokumenECA = $contract->UploadFinal->where('category', '=', 'Dokumen ECA')->first();
+                                            @endphp
                                             <td class="text-center">
-                                                <small class="{{ $proyek->DokumenEca->isNotEmpty() ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
-                                                    @if ($proyek->DokumenEca->isNotEmpty())
-                                                    Yes
+                                                <small class="{{ !empty($dokumenECA) ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
+                                                    @if (!empty($dokumenECA))
+                                                    Approved
                                                     @else
-                                                    No
+                                                    Open
                                                     @endif
                                                 </small>
                                             </td>
                                             <!--end::ECA-->
                                             <!--begin::ICA-->
+                                            @php
+                                                $dokumenICA = $contract->UploadFinal->where('category', '=', 'Dokumen ICA')->first();
+                                            @endphp
                                             <td class="text-center">
-                                                <small class="{{ $proyek->DokumenIca->isNotEmpty() ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
-                                                    @if ($proyek->DokumenIca->isNotEmpty())
-                                                    Yes
+                                                <small class="{{ !empty($dokumenICA) ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
+                                                    @if (!empty($dokumenICA))
+                                                    Approved
                                                     @else
-                                                    No
+                                                    Open
                                                     @endif
                                                 </small>
                                             </td>
@@ -1144,12 +1157,15 @@
                                             </td>
                                             <!--end::DEVIATION-->
                                             <!--begin::ITB-->
+                                            @php
+                                                $dokumenITB = $contract->UploadFinal->where('category', '=', 'Dokumen ITB/TOR')->first();
+                                            @endphp
                                             <td class="text-center">
-                                                <small class="{{ $proyek->DokumenItbTor->isNotEmpty() ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
-                                                    @if ($proyek->DokumenItbTor->isNotEmpty())
-                                                    Yes
+                                                <small class="{{ !empty($dokumenITB) ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
+                                                    @if (!empty($dokumenITB))
+                                                    Approved
                                                     @else
-                                                    No
+                                                    Open
                                                     @endif
                                                 </small>
                                             </td>
