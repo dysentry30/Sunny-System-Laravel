@@ -256,12 +256,12 @@
                             <br> 
                             Project : <h4>{{ $proyek->nama_proyek }}</h4>
                             <br><br>
-                            <h4>We kindly ask for your assistance in measuring the customer satisfaction index for the project which we are currently running. As part of our commitment to provide high-quality services, we believe it is essential to evaluate and understand our valuable customers level of satisfaction.</h4>
-                            <i>Kami mohon bantuan Anda dalam mengukur indeks kepuasan pelanggan untuk proyek yang sedang kami jalankan. Sebagai bagian dari komitmen kami untuk menyediakan layanan berkualitas tinggi, kami percaya penting untuk mengevaluasi dan memahami tingkat kepuasan pelanggan kami yang berharga.</i>
+                            <h4>Kami mohon bantuan Anda dalam mengukur indeks kepuasan pelanggan untuk proyek yang sedang kami jalankan. Sebagai bagian dari komitmen kami untuk menyediakan layanan berkualitas tinggi, kami percaya penting untuk mengevaluasi dan memahami tingkat kepuasan pelanggan kami yang berharga.</h4>
+                            <i>We kindly ask for your assistance in measuring the customer satisfaction index for the project which we are currently running. As part of our commitment to provide high-quality services, we believe it is essential to evaluate and understand our valuable customers level of satisfaction.</i>
                             <br>
                             <br>
-                            <h4>We hope that you are willing to provide information to help us with this project. We are looking forward to receiving your response and help to improve our customer satisfaction.</h4>
-                            <i>Kami harap Anda bersedia memberikan informasi untuk membantu kami dalam proyek ini. Kami berharap dapat menerima tanggapan Anda dan membantu meningkatkan kepuasan pelanggan kami.</i>
+                            <h4>Kami harap Anda bersedia memberikan informasi untuk membantu kami dalam proyek ini. Kami berharap dapat menerima tanggapan Anda dan membantu meningkatkan kepuasan pelanggan kami.</h4>
+                            <i>We hope that you are willing to provide information to help us with this project. We are looking forward to receiving your response and help to improve our customer satisfaction.</i>
                             <br><br>
                             Best regards, 
                             <br> 
@@ -274,7 +274,7 @@
                                     <input onclick="surveyButton(this)" class="form-check-input" type="checkbox" value="" id="persetujuan" name="persetujuan" {{ empty($csi->jawaban) ? '' : 'checked disabled' }}>
                                 </div>
                                 <div class="text-dark text-start">
-                                    <span class=""><h4>Agreed to fill out the survey given, signed below</h4><i>Setuju untuk mengisi survei yang diberikan, saya yang bertanda tangan dibawah ini</i> </span>
+                                    <span class=""><h4>Setuju untuk mengisi survei yang diberikan, saya yang bertanda tangan dibawah ini</h4><i>Agreed to fill out the survey given, signed below</i></span>
                                 </div>
                             </div>
                             <!--end::Col-->
@@ -426,8 +426,8 @@
                                 <li><strong><span style="line-height:150%;font-size:12px;">Customer Loyalty</span></strong>
                                     <ol class="decimal_type" style="list-style-type: decimal;">
                                         <li>
-                                            <span style="line-height:150%;font-size:12px;"><b>My company does not plan to use construction services other than PT Wijaya Karya.</b></span><br>
-                                            <span style="line-height:150%;font-size:12px;"><i>Perusahaan saya tidak berencana untuk menggunakan jasa konstruksi selain PT Wijaya Karya</i></span>
+                                            <span style="line-height:150%;font-size:12px;"><b>Perusahaan saya tidak berencana untuk menggunakan jasa konstruksi selain PT Wijaya Karya</b></span><br>
+                                            <span style="line-height:150%;font-size:12px;"><i>My company does not plan to use construction services other than PT Wijaya Karya.</i></span>
                                         </li>
                                         <!--begin::Answer-->
                                         <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
@@ -462,8 +462,8 @@
                                         </div>
                                         <!--end::Answer-->
                                         <li>
-                                            <span style="line-height:150%;font-size:12px;"><b>For various needs of my company's construction services, I will always use PT Wijaya Karya.</b></span><br>
-                                            <span style="line-height:150%;font-size:12px;"><i>Untuk berbagai kebutuhan jasa konstruksi perusahaan saya akan selalu menggunakan PT Wijaya Karya.</i></span>
+                                            <span style="line-height:150%;font-size:12px;"><b>Untuk berbagai kebutuhan jasa konstruksi perusahaan saya akan selalu menggunakan PT Wijaya Karya.</b></span><br>
+                                            <span style="line-height:150%;font-size:12px;"><i>For various needs of my company's construction services, I will always use PT Wijaya Karya.</i></span>
                                         </li>
                                         <!--begin::Answer-->
                                         <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
@@ -506,8 +506,8 @@
                                 <li><strong><span style="line-height:150%;font-size:12px;">Customer Satisfaction Index</span></strong>
                                     <ol class="decimal_type" style="list-style-type: undefined;">
                                         <li>
-                                            <span style="line-height:150%;font-size:12px;"><b>Even though the price offered is higher than other construction service companies, my company will still use the services of PT Wijaya Karya.</b></span><br>
-                                            <span style="line-height:150%;font-size:12px;"><i>Mesikpun harga yang ditawarkan lebih mahal dibandingkan dengan perusahaan jasa konstruksi lain, perusahaan saya akan tetap menggunakan jasa PT Wijaya Karya.</i></span>
+                                            <span style="line-height:150%;font-size:12px;"><b>Mesikpun harga yang ditawarkan lebih mahal dibandingkan dengan perusahaan jasa konstruksi lain, perusahaan saya akan tetap menggunakan jasa PT Wijaya Karya.</b></span><br>
+                                            <span style="line-height:150%;font-size:12px;"><i>Even though the price offered is higher than other construction service companies, my company will still use the services of PT Wijaya Karya.</i></span>
                                         </li>
                                         <!--begin::Answer-->
                                         <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
@@ -541,7 +541,10 @@
                                             </span>
                                         </div>
                                         <!--end::Answer-->
-                                        <li><span style="line-height:150%;font-size:12px;">Saya percaya 100% kepada PT Wijaya Karya.</span></li>
+                                        <li>
+                                            <span style="line-height:150%;font-size:12px;"><b>Saya percaya 100% kepada PT Wijaya Karya.</b></span><br>
+                                            <span style="line-height:150%;font-size:12px;"><i>I have 100% trust in PT Wijaya Karya.</i></span>
+                                        </li>
                                         <!--begin::Answer-->
                                         <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                             <span class="col-3 text-end">
@@ -574,7 +577,10 @@
                                             </span>
                                         </div>
                                         <!--end::Answer-->
-                                        <li><span style="line-height:150%;font-size:12px;">Saya sangat merekomendasikan jasa konstruksi PT Wijaya Karya kepada perusahaan lain.</span></li>
+                                        <li>
+                                            <span style="line-height:150%;font-size:12px;"><b>Saya sangat merekomendasikan jasa konstruksi PT Wijaya Karya kepada perusahaan lain.</b></span><br>
+                                            <span style="line-height:150%;font-size:12px;"><i>I highly recommend the construction services of PT Wijaya Karya to other companies.</i></span>
+                                        </li>
                                         <!--begin::Answer-->
                                         <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                             <span class="col-3 text-end">
@@ -616,7 +622,10 @@
                                 <br>
                                 <li><strong><span style="line-height:150%;font-size:12px;">Net Promoter Score</span></strong>
                                     <ol class="decimal_type" style="list-style-type: undefined;">
-                                        <li><span style="line-height:;font-size:9.0pt;line-height:;;">Bersediakah anda merekomendasikan produk/jasa Perusahaan Jasa PT Wijaya Karya kepada orang/perusahaan lain?</span></li>
+                                        <li>
+                                            <span style="line-height:;font-size:9.0pt;line-height:;;"><b>Bersediakah anda merekomendasikan produk/jasa Perusahaan Jasa PT Wijaya Karya kepada orang/perusahaan lain?</b></span><br>
+                                            <span style="line-height:;font-size:9.0pt;line-height:;;"><i>Are you willing to recommend the products/services of PT Wijaya Karya Service Company to other people/companies?</i></span>
+                                        </li>
                                         <!--begin::Answer-->
                                         <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                             <span class="col-3 text-end">
@@ -659,7 +668,10 @@
                                     <ol class="decimal_type" style="list-style-type: undefined;">
                                         <li><strong><span style="line-height:150%;font-size:12px;">Mutu Produk</span></strong>
                                             <ol class="decimal_type" style="list-style-type: undefined;">
-                                                <li><span style="line-height:;font-size:9.0pt;line-height:;;">Seberapa puaskah anda terhadap mutu hasil pekerjaan?</span></li>
+                                                <li>
+                                                    <span style="line-height:;font-size:9.0pt;line-height:;;"><b>Seberapa puaskah anda terhadap mutu hasil pekerjaan?</b></span><br>
+                                                    <span style="line-height:;font-size:9.0pt;line-height:;;"><i>Your response to the quality of the work?</i></span>
+                                                </li>
                                                 <!--begin::Answer-->
                                                 <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                                     <span class="col-3 text-end">
@@ -692,7 +704,10 @@
                                                     </span>
                                                 </div>
                                                 <!--end::Answer-->
-                                                <li><span style="line-height:;font-size:9.0pt;line-height:;;">Seberapa pentingkah mutu hasil pekerjaan?</span></li>
+                                                <li>
+                                                    <span style="line-height:;font-size:9.0pt;line-height:;;"><b>Seberapa pentingkah mutu hasil pekerjaan?</b></span><br>
+                                                    <span style="line-height:;font-size:9.0pt;line-height:;;"><i>How important is the quality of the work?</i></span>
+                                                </li>
                                                 <!--begin::Answer-->
                                                 <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                                     <span class="col-3 text-end">
@@ -730,7 +745,10 @@
                                         <br>
                                         <li><strong><span style="line-height:150%;font-size:12px;">Mutu Waktu</span></strong>
                                             <ol class="decimal_type" style="list-style-type: undefined;">
-                                                <li><span style="line-height:;font-size:9.0pt;line-height:;;">Seberapa puaskah anda terhadap pencapaian progress pekerjaan dalam penyelesaian proyek terhadap waktu yang telah ditetapkan.</span></li>
+                                                <li>
+                                                    <span style="line-height:;font-size:9.0pt;line-height:;;"><b>Seberapa puaskah anda terhadap pencapaian progress pekerjaan dalam penyelesaian proyek terhadap waktu yang telah ditetapkan.</b></span><br>
+                                                    <span style="line-height:;font-size:9.0pt;line-height:;;"><i>Your response to the demands of work progress in completing the project against a predetermined time.</i></span>
+                                                </li>
                                                 <!--begin::Answer-->
                                                 <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                                     <span class="col-3 text-end">
@@ -763,7 +781,10 @@
                                                     </span>
                                                 </div>
                                                 <!--end::Answer-->
-                                                <li><span style="line-height:;font-size:9.0pt;line-height:;;">Seberapa pentingkah pencapaian progress pekerjaan dalam penyelesaian proyek terhadap waktu yang telah ditetapkan?</span></li>
+                                                <li>
+                                                    <span style="line-height:;font-size:9.0pt;line-height:;;"><b>Seberapa pentingkah pencapaian progress pekerjaan dalam penyelesaian proyek terhadap waktu yang telah ditetapkan?</b></span><br>
+                                                    <span style="line-height:;font-size:9.0pt;line-height:;;"><i>How important is the achievement of work progress in the completion of the project in the allotted time?</i></span>
+                                                </li>
                                                 <!--begin::Answer-->
                                                 <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                                     <span class="col-3 text-end">
@@ -801,9 +822,14 @@
                                         <br>
                                         <li><strong><span style="line-height:150%;font-size:12px;">Safety Health &amp; Environment (SHE)</span></strong>
                                             <ol class="decimal_type" style="list-style-type: undefined;">
-                                                <li><span style="line-height:;font-size:9.0pt;line-height:;;">Seberapa puaskah anda terhadap kinerja pelaksanaan SHE &amp; pengamanan diproyek dalam hal:</span>
+                                                <li>
+                                                    <span style="line-height:;font-size:9.0pt;line-height:;;"><b>Seberapa puaskah anda terhadap kinerja pelaksanaan SHE &amp; pengamanan diproyek dalam hal:</b></span><br>
+                                                    <span style="line-height:;font-size:9.0pt;line-height:;;"><i>Quick response and to the performance of SHE &amp; project security in terms of:</i></span>
                                                     <ul class="decimal_type" style="list-style-type: disc;">
-                                                        <li><span style="line-height:;font-size:9.0pt;line-height:;;">Kelengkapan alat-alat pelindung diri dan kepatuhan pekerja dalam pemakaian alat-alat pelindung diri.</span></li>
+                                                        <li>
+                                                            <span style="line-height:;font-size:9.0pt;line-height:;;"><b>Kelengkapan alat-alat pelindung diri dan kepatuhan pekerja dalam pemakaian alat-alat pelindung diri.</b></span><br>
+                                                            <span style="line-height:;font-size:9.0pt;line-height:;;"><i>Completeness of personal protective equipment and compliance of workers in the use of personal protective equipment.</i></span>
+                                                        </li>
                                                         <!--begin::Answer-->
                                                         <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                                             <span class="col-3 text-end">
@@ -838,9 +864,14 @@
                                                         <!--end::Answer-->
                                                     </ul>
                                                 </li>
-                                                <li><span style="line-height:;font-size:9.0pt;line-height:;;">Seberapa pentingkah kinerja pelaksanaan SHE &amp; pengamanan diproyek dalam hal:</span>
+                                                <li>
+                                                    <span style="line-height:;font-size:9.0pt;line-height:;;"><b>Seberapa pentingkah kinerja pelaksanaan SHE &amp; pengamanan diproyek dalam hal:</b></span><br>
+                                                    <span style="line-height:;font-size:9.0pt;line-height:;;"><i>Is it important to implement SHE &amp; project security in terms of:</i></span>
                                                     <ul style="list-style-type: disc;">
-                                                        <li><span style="line-height:;font-size:9.0pt;line-height:;;">Kelengkapan alat-alat pelindung diri dan kepatuhan pekerja dalam pemakaian alat-alat pelindung diri.</span></li>
+                                                        <li>
+                                                            <span style="line-height:;font-size:9.0pt;line-height:;;"><b>Kelengkapan alat-alat pelindung diri dan kepatuhan pekerja dalam pemakaian alat-alat pelindung diri.</b></span><br>
+                                                            <span style="line-height:;font-size:9.0pt;line-height:;;"><i>Completeness of personal protective equipment and worker compliance in the use of personal protective equipment.</i></span>
+                                                        </li>
                                                         <!--begin::Answer-->
                                                         <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                                             <span class="col-3 text-end">
@@ -882,7 +913,10 @@
                                             <ol class="decimal_type" style="list-style-type: undefined;">
                                                 <li><strong><span style="line-height:150%;font-size:12px;">Pemasangan rambu-rambu SHE.</span></strong>
                                                     <ul class="decimal_type" style="list-style-type: disc;">
-                                                        <li><span style="line-height:;font-size:9.0pt;line-height:;;">Seberapa puaskah anda terhadap kinerja pelaksanaan SHE &amp; pengamanan diproyek dalam hal</span><span style="line-height:;font-size:9.0pt;line-height:;;">&nbsp;p</span><span style="line-height:150%;font-size:12px;">emasangan rambu-rambu SHE.</span></li>
+                                                        <li>
+                                                            <span style="line-height:;font-size:9.0pt;line-height:;;"><b>Seberapa puaskah anda terhadap kinerja pelaksanaan SHE &amp; pengamanan diproyek dalam hal&nbsp;pemasangan rambu-rambu SHE.</b></span><br>
+                                                            <span style="line-height:;font-size:9.0pt;line-height:;;"><i>How satisfied are you with the performance of SHE &amp; security is projected in terms of installing SHE signs.</i></span>
+                                                        </li>
                                                         <!--begin::Answer-->
                                                         <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                                             <span class="col-3 text-end">
@@ -915,7 +949,10 @@
                                                             </span>
                                                         </div>
                                                         <!--end::Answer-->
-                                                        <li><span style="line-height:;font-size:9.0pt;line-height:;;">Seberapa pentingkah kinerja pelaksanaan SHE &amp; pengamanan diproyek dalam hal</span><span style="line-height:150%;font-size:9.0pt;">&nbsp;p</span><span style="line-height:150%;font-size:12px;">emasangan rambu-rambu SHE.</span></li>
+                                                        <li>
+                                                            <span style="line-height:;font-size:9.0pt;line-height:;;"><b>Seberapa pentingkah kinerja pelaksanaan SHE &amp; pengamanan diproyek dalam hal&nbsp;pemasangan rambu-rambu SHE.</b></span><br>
+                                                            <span style="line-height:;font-size:9.0pt;line-height:;;"><i>How important is the performance of SHE &amp; security is projected in terms of installing SHE signs.</i></span>
+                                                        </li>
                                                         <!--begin::Answer-->
                                                         <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                                             <span class="col-3 text-end">
@@ -952,7 +989,10 @@
                                                 </li>
                                                 <li><strong><span style="line-height:150%;font-size:12px;">Pengelolaan sampah dan limbah B3.</span></strong>
                                                     <ul class="decimal_type" style="list-style-type: disc;">
-                                                        <li><span style="line-height:;font-size:9.0pt;line-height:;;">Seberapa puaskah anda terhadap kinerja pelaksanaan SHE &amp; pengamanan diproyek dalam hal</span><span style="line-height:;font-size:9.0pt;line-height:;;">&nbsp;pengelolaan sampah dan limbah B3</span></li>
+                                                        <li>
+                                                            <span style="line-height:;font-size:9.0pt;line-height:;;"><b>Seberapa puaskah anda terhadap kinerja pelaksanaan SHE &amp; pengamanan diproyek dalam hal&nbsp;pengelolaan sampah dan limbah B3</b></span><br>
+                                                            <span style="line-height:;font-size:9.0pt;line-height:;;"><i>How satisfied are you with the performance of SHE &amp; safeguards are projected in terms of waste management and B3 waste</i></span>
+                                                        </li>
                                                         <!--begin::Answer-->
                                                         <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                                             <span class="col-3 text-end">
@@ -985,7 +1025,10 @@
                                                             </span>
                                                         </div>
                                                         <!--end::Answer-->
-                                                        <li><span style="line-height:;font-size:9.0pt;line-height:;;">Seberapa pentingkah kinerja pelaksanaan SHE &amp; pengamanan diproyek dalam hal</span><span style="line-height:150%;font-size:9.0pt;">&nbsp;p</span><span style="line-height:150%;font-size:12px;">engelolaan sampah dan limbah B3</span><span style="line-height:150%;font-size:12px;">.</span></li>
+                                                        <li>
+                                                            <span style="line-height:;font-size:9.0pt;line-height:;;"><b>Seberapa pentingkah kinerja pelaksanaan SHE &amp; pengamanan diproyek dalam hal&nbsp;pengelolaan sampah dan limbah B3.</b></span><br>
+                                                            <span style="line-height:;font-size:9.0pt;line-height:;;"><i>How important is the performance of SHE &amp; safeguards are projected in terms of waste management and B3 waste.</i></span>
+                                                        </li>
                                                         <!--begin::Answer-->
                                                         <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                                             <span class="col-3 text-end">
@@ -1022,7 +1065,10 @@
                                                 </li>
                                                 <li><strong><span style="line-height:150%;font-size:12px;">Penanganan keluhan masyarakat yang berhubungan dengan lingkungan sekitar proyek.</span></strong>
                                                     <ul class="decimal_type" style="list-style-type: disc;">
-                                                        <li><span style="line-height:;font-size:9.0pt;line-height:;;">Seberapa puaskah anda terhadap kinerja pelaksanaan SHE &amp; pengamanan diproyek dalam hal</span><span style="line-height:;font-size:9.0pt;line-height:;;">&nbsp;p</span><span style="line-height:150%;font-size:12px;">enanganan keluhan masyarakat yang berhubungan dengan lingkungan sekitar proyek.</span></li>
+                                                        <li>
+                                                            <span style="line-height:;font-size:9.0pt;line-height:;;"><b>Seberapa puaskah anda terhadap kinerja pelaksanaan SHE &amp; pengamanan diproyek dalam hal&nbsp;penanganan keluhan masyarakat yang berhubungan dengan lingkungan sekitar proyek.</b></span><br>
+                                                            <span style="line-height:;font-size:9.0pt;line-height:;;"><i>How satisfied are you with SHE &amp; safeguards are projected in terms of handling public complaints regarding the environment around the project.</i></span>
+                                                        </li>
                                                         <!--begin::Answer-->
                                                         <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                                             <span class="col-3 text-end">
@@ -1055,7 +1101,10 @@
                                                             </span>
                                                         </div>
                                                         <!--end::Answer-->
-                                                        <li><span style="line-height:;font-size:9.0pt;line-height:;;">Seberapa pentingkah kinerja pelaksanaan SHE &amp; pengamanan diproyek dalam hal</span><span style="line-height:150%;font-size:9.0pt;">&nbsp;p</span><span style="line-height:150%;font-size:12px;">enanganan keluhan masyarakat yang berhubungan dengan lingkungan sekitar proyek.</span></li>
+                                                        <li>
+                                                            <span style="line-height:;font-size:9.0pt;line-height:;;"><b>Seberapa pentingkah kinerja pelaksanaan SHE &amp; pengamanan diproyek dalam hal&nbsp;penanganan keluhan masyarakat yang berhubungan dengan lingkungan sekitar proyek.</b></span><br>
+                                                            <span style="line-height:;font-size:9.0pt;line-height:;;"><i>How important is the performance of SHE &amp; safeguards are projected in terms of handling community complaints related to the environment around the project.</i></span>
+                                                        </li>
                                                         <!--begin::Answer-->
                                                         <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                                             <span class="col-3 text-end">
@@ -1092,7 +1141,10 @@
                                                 </li>
                                                 <li><strong><span style="line-height:150%;font-size:12px;">Pengelolaan pengamanan proyek.</span></strong>
                                                     <ul style="list-style-type: disc;">
-                                                        <li><span style="line-height:;font-size:9.0pt;line-height:;;">Seberapa puaskah anda terhadap kinerja pelaksanaan SHE &amp; pengamanan diproyek dalam hal</span><span style="line-height:;font-size:9.0pt;line-height:;;">&nbsp;p</span><span style="line-height:150%;font-size:12px;">engelolaan pengamanan proyek.</span></li>
+                                                        <li>
+                                                            <span style="line-height:;font-size:9.0pt;line-height:;;"><b>Seberapa puaskah anda terhadap kinerja pelaksanaan SHE &amp; pengamanan diproyek dalam hal&nbsp;pengelolaan pengamanan proyek.</b></span><br>
+                                                            <span style="line-height:;font-size:9.0pt;line-height:;;"><i>How satisfied are you with the performance of SHE &amp; project security in terms of project security management.</i></span>
+                                                        </li>
                                                         <!--begin::Answer-->
                                                         <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                                             <span class="col-3 text-end">
@@ -1125,7 +1177,10 @@
                                                             </span>
                                                         </div>
                                                         <!--end::Answer-->
-                                                        <li><span style="line-height:;font-size:9.0pt;line-height:;;">Seberapa pentingkah kinerja pelaksanaan SHE &amp; pengamanan diproyek dalam hal</span><span style="line-height:150%;font-size:9.0pt;">&nbsp;p</span><span style="line-height:150%;font-size:12px;">engelolaan pengamanan proyek.</span></li>
+                                                        <li>
+                                                            <span style="line-height:;font-size:9.0pt;line-height:;;"><b>Seberapa pentingkah kinerja pelaksanaan SHE &amp; pengamanan diproyek dalam hal&nbsp;pengelolaan pengamanan proyek.</b></span><br>
+                                                            <span style="line-height:;font-size:9.0pt;line-height:;;"><i>How important is the performance of SHE &amp; project security in terms of project security management.</i></span>
+                                                        </li>
                                                         <!--begin::Answer-->
                                                         <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                                             <span class="col-3 text-end">
@@ -1172,7 +1227,10 @@
                                     <ol class="decimal_type" style="list-style-type: undefined;">
                                         <li><strong><span style="line-height:150%;font-size:12px;">Kerjasama, Koordinasi dan Komunikasi antara Tim Manajemen WIKA dengan Konsultan/Owner</span></strong><strong><span style="line-height:150%;">.</span></strong>
                                             <ol class="decimal_type" style="list-style-type: undefined;">
-                                                <li><span style="line-height:;font-size:9.0pt;line-height:;;">Seberapa puaskah anda terhadap Kerjasama, Koordinasi dan Komunikasi antara Tim Manajemen WIKA dengan Konsultan/Owner?</span></li>
+                                                <li>
+                                                    <span style="line-height:;font-size:9.0pt;line-height:;;"><b>Seberapa puaskah anda terhadap Kerjasama, Koordinasi dan Komunikasi antara Tim Manajemen WIKA dengan Konsultan/Owner?</b></span><br>
+                                                    <span style="line-height:;font-size:9.0pt;line-height:;;"><i>How satisfied are you with the Cooperation, Coordination and Communication between WIKA's Management Team and the Consultant/Owner?</i></span>
+                                                </li>
                                                 <!--begin::Answer-->
                                                 <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                                     <span class="col-3 text-end">
@@ -1205,7 +1263,10 @@
                                                     </span>
                                                 </div>
                                                 <!--end::Answer-->
-                                                <li><span style="line-height:;font-size:9.0pt;line-height:;;">Seberapa pentingkah Kerjasama, Koordinasi dan Komunikasi antara Tim Manajemen WIKA dengan Konsultan/Owner?</span></li>
+                                                <li>
+                                                    <span style="line-height:;font-size:9.0pt;line-height:;;"><b>Seberapa pentingkah Kerjasama, Koordinasi dan Komunikasi antara Tim Manajemen WIKA dengan Konsultan/Owner?</b></span><br>
+                                                    <span style="line-height:;font-size:9.0pt;line-height:;;"><i>How important is Cooperation, Coordination and Communication between the WIKA Management Team and the Consultant/Owner?</i></span>
+                                                </li>
                                                 <!--begin::Answer-->
                                                 <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                                     <span class="col-3 text-end">
@@ -1240,9 +1301,12 @@
                                                 <!--end::Answer-->
                                             </ol>
                                         </li>
-                                        <li><strong><span style="line-height:150%;font-size:12px;">R</span></strong><strong><span style="line-height:150%;font-size:12px;">espon dalam penanganan dan penyelesaian permasalahan</span></strong><strong><span style="line-height:150%;font-size:12px;">.</span></strong>
+                                        <li><strong><span style="line-height:150%;font-size:12px;">Respon dalam penanganan dan penyelesaian permasalahan.</span></strong>
                                             <ol class="decimal_type" style="list-style-type: undefined;">
-                                                <li><span style="line-height:;font-size:9.0pt;line-height:;;">Seberapa puaskah anda terhadap respon dalam penanganan dan penyelesaian permasalahan?</span></li>
+                                                <li>
+                                                    <span style="line-height:;font-size:9.0pt;line-height:;;"><b>Seberapa puaskah anda terhadap respon dalam penanganan dan penyelesaian permasalahan?</b></span><br>
+                                                    <span style="line-height:;font-size:9.0pt;line-height:;;"><i>How satisfied were you with the response in dealing with and resolving the problem?</i></span>
+                                                </li>
                                                 <!--begin::Answer-->
                                                 <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                                     <span class="col-3 text-end">
@@ -1275,7 +1339,10 @@
                                                     </span>
                                                 </div>
                                                 <!--end::Answer-->
-                                                <li><span style="line-height:;font-size:9.0pt;line-height:;;">Seberapa pentingkah respon dalam penanganan dan penyelesaian permasalahan?</span></li>
+                                                <li>
+                                                    <span style="line-height:;font-size:9.0pt;line-height:;;"><b>Seberapa pentingkah respon dalam penanganan dan penyelesaian permasalahan?</b></span><br>
+                                                    <span style="line-height:;font-size:9.0pt;line-height:;;"><i>How important is response in dealing with and solving problems?</i></span>
+                                                </li>
                                                 <!--begin::Answer-->
                                                 <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                                     <span class="col-3 text-end">
@@ -1312,7 +1379,10 @@
                                         </li>
                                         <li><strong><span style="line-height:150%;font-size:12px;">K</span></strong><strong><span style="line-height:150%;font-size:12px;">etepatan komitmen yang dijanjikan</span></strong>
                                             <ol class="decimal_type" style="list-style-type: undefined;">
-                                                <li><span style="line-height:;font-size:9.0pt;line-height:;;">Seberapa puaskah anda terhadap ketepatan komitmen yang dijanjikan?</span></li>
+                                                <li>
+                                                    <span style="line-height:;font-size:9.0pt;line-height:;;"><b>Seberapa puaskah anda terhadap ketepatan komitmen yang dijanjikan?</b></span><br>
+                                                    <span style="line-height:;font-size:9.0pt;line-height:;;"><i>How satisfied are you with the fidelity of the promised commitments?</i></span>
+                                                </li>
                                                 <!--begin::Answer-->
                                                 <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                                     <span class="col-3 text-end">
@@ -1345,7 +1415,10 @@
                                                     </span>
                                                 </div>
                                                 <!--end::Answer-->
-                                                <li><span style="line-height:;font-size:9.0pt;line-height:;;">Seberapa pentingkah ketepatan komitmen yang dijanjikan?</span></li>
+                                                <li>
+                                                    <span style="line-height:;font-size:9.0pt;line-height:;;"><b>Seberapa pentingkah ketepatan komitmen yang dijanjikan?</b></span><br>
+                                                    <span style="line-height:;font-size:9.0pt;line-height:;;"><i>How important is the loyalty of the promised commitment?</i></span>
+                                                </li>
                                                 <!--begin::Answer-->
                                                 <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                                     <span class="col-3 text-end">
@@ -1380,9 +1453,12 @@
                                                 <!--end::Answer-->
                                             </ol>
                                         </li>
-                                        <li><strong><span style="line-height:150%;font-size:12px;">T</span></strong><strong><span style="line-height:150%;font-size:12px;">ertib administrasi (laporan, surat menyurat, dll) yang diterapkan</span></strong><strong><span style="line-height:150%;">.</span></strong>
+                                        <li><strong><span style="line-height:150%;font-size:12px;">Tertib administrasi (laporan, surat menyurat, dll) yang diterapkan.</span></strong>
                                             <ol class="decimal_type" style="list-style-type: undefined;">
-                                                <li><span style="line-height:;font-size:9.0pt;line-height:;;">Seberapa puaskah anda terhadap tertib administrasi (laporan, surat menyurat, dll) yang diterapkan?</span></li>
+                                                <li>
+                                                    <span style="line-height:;font-size:9.0pt;line-height:;;"><b>Seberapa puaskah anda terhadap tertib administrasi (laporan, surat menyurat, dll) yang diterapkan?</b></span><br>
+                                                    <span style="line-height:;font-size:9.0pt;line-height:;;"><i>How satisfied are you with the administrative procedures (reports, correspondence, etc.) implemented?</i></span>
+                                                </li>
                                                 <!--begin::Answer-->
                                                 <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                                     <span class="col-3 text-end">
@@ -1415,7 +1491,10 @@
                                                     </span>
                                                 </div>
                                                 <!--end::Answer-->
-                                                <li><span style="line-height:;font-size:9.0pt;line-height:;;">Seberapa pentingkah tertib administrasi (laporan, surat-menyurat, dll) yang diterapkan?</span></li>
+                                                <li>
+                                                    <span style="line-height:;font-size:9.0pt;line-height:;;"><b>Seberapa pentingkah tertib administrasi (laporan, surat-menyurat, dll) yang diterapkan?</b></span><br>
+                                                    <span style="line-height:;font-size:9.0pt;line-height:;;"><i>How important is the administrative order (reports, correspondence, etc.) that is applied?</i></span>
+                                                </li>
                                                 <!--begin::Answer-->
                                                 <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                                     <span class="col-3 text-end">
@@ -1452,7 +1531,10 @@
                                         </li>
                                         <li><strong><span style="line-height:150%;font-size:12px;">P</span></strong><strong><span style="line-height:150%;font-size:12px;">rofesionalisme sumber daya manusia WIKA di proyek</span></strong><strong><span style="line-height:;font-size:9.0pt;line-height:;;">.</span></strong>
                                             <ol class="decimal_type" style="list-style-type: undefined;">
-                                                <li><span style="line-height:;font-size:9.0pt;line-height:;;">Seberapa puaskah anda terhadap profesionalisme sumber daya manusia WIKA di proyek?</span></li>
+                                                <li>
+                                                    <span style="line-height:;font-size:9.0pt;line-height:;;"><i>Seberapa puaskah anda terhadap profesionalisme sumber daya manusia WIKA di proyek?</i><bspan><br><br>
+                                                    <span style="line-height:;font-size:9.0pt;line-height:;;"><i>How satisfied are you with the professionalism of WIKA's HR in the project?</i></span>
+                                                </li>
                                                 <!--begin::Answer-->
                                                 <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                                     <span class="col-3 text-end">
@@ -1485,7 +1567,10 @@
                                                     </span>
                                                 </div>
                                                 <!--end::Answer-->
-                                                <li><span style="line-height:;font-size:9.0pt;line-height:;;">Seberapa pentingkah profesionalisme sumber daya manusia WIKA di proyek?</span></li>
+                                                <li>
+                                                    <span style="line-height:;font-size:9.0pt;line-height:;;"><b>Seberapa pentingkah profesionalisme sumber daya manusia WIKA di proyek?</b></span><br>
+                                                    <span style="line-height:;font-size:9.0pt;line-height:;;"><i>How important is the professionalism of WIKA's human resources in the project?</i></span>
+                                                </li>
                                                 <!--begin::Answer-->
                                                 <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                                     <span class="col-3 text-end">
@@ -1528,7 +1613,9 @@
                                 <br>
                                 <li><strong><span style="line-height:150%;font-size:12px;">Komentar/pendapat anda tentang kinerja WIKA jika dibandingkan dengan kontraktor lain.</span></strong>
                                     <ol style="list-style-type: lower-alpha;">
-                                        <li><span style="line-height:150%;font-size:12px;">Apabila WIKA dibandingkan dengan (silahkan isi nama kontraktor)</span>
+                                        <li>
+                                            <span style="line-height:150%;font-size:12px;"><b>Apabila WIKA dibandingkan dengan (silahkan isi nama kontraktor)</b></span><br>
+                                            <span style="line-height:150%;font-size:12px;"><i>When compared to WIKA (please fill in the name of the contractor)</i></span>
                                             <ol style="list-style-type: lower-roman;">
                                                 <li><span style="line-height:150%;font-size:12px;">Mutu Hasil Pekerjaan</span>
                                                     <ol style="list-style-type: decimal;">
@@ -1536,15 +1623,15 @@
                                                         <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                                             <span class="col text-center">
                                                                 <input class="" type="radio"name="answer_6_a_i"value="1" {{ !empty($jawaban["answer_6_a_i"]) && $jawaban["answer_6_a_i"] == '1' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
-                                                                <label class="mb-3">< (lebih buruk)</label>
+                                                                <label class="mb-3">< <b>worse</b> (lebih buruk)</label>
                                                             </span>
                                                             <span class="col text-center">
                                                                 <input class="" type="radio"name="answer_6_a_i"value="2" {{ !empty($jawaban["answer_6_a_i"]) && $jawaban["answer_6_a_i"] == '2' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
-                                                                <label class="mb-3">= (sama)</label>
+                                                                <label class="mb-3">= <b>same</b> (sama)</label>
                                                             </span>
                                                             <span class="col text-center">
                                                                 <input  class="" type="radio"name="answer_6_a_i"value="3" {{ !empty($jawaban["answer_6_a_i"]) && $jawaban["answer_6_a_i"] == '3' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
-                                                                <label class="mb-3">> (lebih baik)</label>
+                                                                <label class="mb-3">> <b>better</b> (lebih baik)</label>
                                                             </span>
                                                         </div>
                                                         <!--end::Answer-->
@@ -1556,15 +1643,15 @@
                                                         <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                                             <span class="col text-center">
                                                                 <input class="" type="radio"name="answer_6_a_ii"value="1" {{ !empty($jawaban["answer_6_a_ii"]) && $jawaban["answer_6_a_ii"] == '1' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
-                                                                <label class="mb-3">< (lebih buruk)</label>
+                                                                <label class="mb-3">< <b>worse</b> (lebih buruk)</label>
                                                             </span>
                                                             <span class="col text-center">
                                                                 <input class="" type="radio"name="answer_6_a_ii"value="2" {{ !empty($jawaban["answer_6_a_ii"]) && $jawaban["answer_6_a_ii"] == '2' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
-                                                                <label class="mb-3">= (sama)</label>
+                                                                <label class="mb-3">= <b>same</b> (sama)</label>
                                                             </span>
                                                             <span class="col text-center">
                                                                 <input  class="" type="radio"name="answer_6_a_ii"value="3" {{ !empty($jawaban["answer_6_a_ii"]) && $jawaban["answer_6_a_ii"] == '3' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
-                                                                <label class="mb-3">> (lebih baik)</label>
+                                                                <label class="mb-3">> <b>better</b> (lebih baik)</label>
                                                             </span>
                                                         </div>
                                                         <!--end::Answer-->
@@ -1576,15 +1663,15 @@
                                                         <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                                             <span class="col text-center">
                                                                 <input class="" type="radio"name="answer_6_a_iii"value="1" {{ !empty($jawaban["answer_6_a_iii"]) && $jawaban["answer_6_a_iii"] == '1' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
-                                                                <label class="mb-3">< (lebih buruk)</label>
+                                                                <label class="mb-3">< <b>worse</b> (lebih buruk)</label>
                                                             </span>
                                                             <span class="col text-center">
                                                                 <input class="" type="radio"name="answer_6_a_iii"value="2" {{ !empty($jawaban["answer_6_a_iii"]) && $jawaban["answer_6_a_iii"] == '2' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
-                                                                <label class="mb-3">= (sama)</label>
+                                                                <label class="mb-3">= <b>same</b> (sama)</label>
                                                             </span>
                                                             <span class="col text-center">
                                                                 <input  class="" type="radio"name="answer_6_a_iii"value="3" {{ !empty($jawaban["answer_6_a_iii"]) && $jawaban["answer_6_a_iii"] == '3' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
-                                                                <label class="mb-3">> (lebih baik)</label>
+                                                                <label class="mb-3">> <b>better</b> (lebih baik)</label>
                                                             </span>
                                                         </div>
                                                         <!--end::Answer-->
@@ -1596,15 +1683,15 @@
                                                         <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                                             <span class="col text-center">
                                                                 <input class="" type="radio"name="answer_6_a_iv"value="1" {{ !empty($jawaban["answer_6_a_iv"]) && $jawaban["answer_6_a_iv"] == '1' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
-                                                                <label class="mb-3">< (lebih buruk)</label>
+                                                                <label class="mb-3">< <b>worse</b> (lebih buruk)</label>
                                                             </span>
                                                             <span class="col text-center">
                                                                 <input class="" type="radio"name="answer_6_a_iv"value="2" {{ !empty($jawaban["answer_6_a_iv"]) && $jawaban["answer_6_a_iv"] == '2' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
-                                                                <label class="mb-3">= (sama)</label>
+                                                                <label class="mb-3">= <b>same</b> (sama)</label>
                                                             </span>
                                                             <span class="col text-center">
                                                                 <input  class="" type="radio"name="answer_6_a_iv"value="3" {{ !empty($jawaban["answer_6_a_iv"]) && $jawaban["answer_6_a_iv"] == '3' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
-                                                                <label class="mb-3">> (lebih baik)</label>
+                                                                <label class="mb-3">> <b>better</b> (lebih baik)</label>
                                                             </span>
                                                         </div>
                                                         <!--end::Answer-->
@@ -1616,15 +1703,15 @@
                                                         <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3">
                                                             <span class="col text-center">
                                                                 <input class="" type="radio"name="answer_6_a_v"value="1" {{ !empty($jawaban["answer_6_a_v"]) && $jawaban["answer_6_a_v"] == '1' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
-                                                                <label class="mb-3">< (lebih buruk)</label>
+                                                                <label class="mb-3">< <b>worse</b> (lebih buruk)</label>
                                                             </span>
                                                             <span class="col text-center">
                                                                 <input class="" type="radio"name="answer_6_a_v"value="2" {{ !empty($jawaban["answer_6_a_v"]) && $jawaban["answer_6_a_v"] == '2' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
-                                                                <label class="mb-3">= (sama)</label>
+                                                                <label class="mb-3">= <b>same</b> (sama)</label>
                                                             </span>
                                                             <span class="col text-center">
                                                                 <input  class="" type="radio"name="answer_6_a_v"value="3" {{ !empty($jawaban["answer_6_a_v"]) && $jawaban["answer_6_a_v"] == '3' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
-                                                                <label class="mb-3">> (lebih baik)</label>
+                                                                <label class="mb-3">> <b>better</b> (lebih baik)</label>
                                                             </span>
                                                         </div>
                                                         <!--end::Answer-->
@@ -1634,33 +1721,37 @@
                                         </li>
                                     </ol>
                                 </li>
-                                <li><strong><span style="line-height:150%;font-size:12px;">Rekomendasi untuk proyek yang akan datang? (</span></strong><strong><span style="line-height:150%;font-size:12px;">Ya/Tidak</span></strong><strong><span style="line-height:150%;font-size:12px;">)</span></strong>
+                                <li>
+                                    <span style="line-height:150%;font-size:12px;"><b>Rekomendasi untuk proyek yang akan datang? (Ya/Tidak)</b></span><br>
+                                    <span style="line-height:150%;font-size:12px;"><i>Recommendations for future projects? (Yes/No)</i></span>
                                     <ol class="decimal_type" style="list-style-type: undefined;">
                                         <!--begin::Answer-->
                                         <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3 ms-3">
                                             <span class="col text-center">
                                                 <input class="" type="radio"name="answer_7"value="1" {{ !empty($jawaban["answer_7"]) && $jawaban["answer_7"] == '1' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
-                                                <label class="mb-3">Tidak</label>
+                                                <label class="mb-3"><b>No</b> (Tidak)</label>
                                             </span>
                                             <span class="col text-center">
                                                 <input  class="" type="radio"name="answer_7"value="2" {{ !empty($jawaban["answer_7"]) && $jawaban["answer_7"] == '2' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
-                                                <label class="mb-3">Ya</label>
+                                                <label class="mb-3"><b>Yes</b> (Ya)</label>
                                             </span>
                                         </div>
                                         <!--end::Answer-->
                                     </ol>
                                 </li>
-                                <li><strong><span style="line-height:150%;font-size:12px;">Apakah anda akan merekomendasikan WIKA pada rekan/teman bisnis anda?</span></strong>
+                                <li>
+                                    <span style="line-height:150%;font-size:12px;"><b>Apakah anda akan merekomendasikan WIKA pada rekan/teman bisnis anda?</b></span><br>
+                                    <span style="line-height:150%;font-size:12px;"><i>Would you recommend WIKA to your business partners/friends?</i></span>
                                     <ol class="decimal_type" style="list-style-type: undefined;">
                                         <!--begin::Answer-->
                                         <div class="row w-75 bg-secondary bg-opacity-50 rounded p-4 pb-0 my-3 ms-3">
                                             <span class="col text-center">
                                                 <input class="" type="radio"name="answer_8"value="1" {{ !empty($jawaban["answer_8"]) && $jawaban["answer_8"] == '1' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
-                                                <label class="mb-3">Tidak</label>
+                                                <label class="mb-3"><b>No</b> (Tidak)</label>
                                             </span>
                                             <span class="col text-center">
                                                 <input  class="" type="radio"name="answer_8"value="2" {{ !empty($jawaban["answer_8"]) && $jawaban["answer_8"] == '2' ? 'checked' : ''  }} {{ $viewer ? 'disabled' : '' }}>
-                                                <label class="mb-3">Ya</label>
+                                                <label class="mb-3"><b>Yes</b> (Ya)</label>
                                             </span>
                                         </div>
                                         <!--end::Answer-->
@@ -1669,7 +1760,7 @@
                                 <li><strong><span style="line-height:150%;font-size:12px;">Kritik/saran?&nbsp;</span></strong></li>
                             </ol>
                             <div class="form-group ms-16 mw-850px">
-                                <textarea id="kritik-saran" name="kritik-saran" class="form-control form-control-solid" rows="4">{{ $jawaban["kritik-saran"] ?? '-' }}</textarea>
+                                <textarea id="kritik-saran" name="kritik-saran" class="form-control form-control-solid" rows="4" {{ $viewer ? 'readonly' : '' }}>{{ $jawaban["kritik-saran"] ?? '-' }}</textarea>
                             </div>
                             <!--end::Survey-->
                             <!--begin::Table-->
