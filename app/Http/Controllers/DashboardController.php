@@ -1548,19 +1548,19 @@ class DashboardController extends Controller
             $dispute_total_value = 0;
             
             foreach ($cat_kontrak as $ck) {
-                $potensial_total_value += $ck["potensial_value"];
+                $potensial_total_value += $ck["potensial_value"] ?? 0;
     
-                $submission_total_value += $ck["subs_value"];
+                $submission_total_value += $ck["subs_value"] ?? 0;
                 
-                $revision_total_value += $ck["revisi_value"];
+                $revision_total_value += $ck["revisi_value"] ?? 0;
                 
-                $negotiation_total_value += $ck["nego_value"];
+                $negotiation_total_value += $ck["nego_value"] ?? 0;
                 
-                $approve_total_value += $ck["setuju_value"];
+                $approve_total_value += $ck["setuju_value"] ?? 0;
                 
-                $reject_total_value += $ck["tolak_value"];
+                $reject_total_value += $ck["tolak_value"] ?? 0;
                 
-                $dispute_total_value += $ck["dispute_value"];
+                $dispute_total_value += $ck["dispute_value"] ?? 0;
             }
 
             
@@ -2777,19 +2777,19 @@ class DashboardController extends Controller
             $dispute_total_value = 0;
             
             foreach ($cat_kontrak as $ck) {
-                $potensial_total_value += $ck["potensial_value"];
+                $potensial_total_value += $ck["potensial_value"] ?? 0;
     
-                $submission_total_value += $ck["subs_value"];
+                $submission_total_value += $ck["subs_value"] ?? 0;
                 
-                $revision_total_value += $ck["revisi_value"];
+                $revision_total_value += $ck["revisi_value"] ?? 0;
                 
-                $negotiation_total_value += $ck["nego_value"];
+                $negotiation_total_value += $ck["nego_value"] ?? 0;
                 
-                $approve_total_value += $ck["setuju_value"];
+                $approve_total_value += $ck["setuju_value"] ?? 0;
                 
-                $reject_total_value += $ck["tolak_value"];
+                $reject_total_value += $ck["tolak_value"] ?? 0;
                 
-                $dispute_total_value += $ck["dispute_value"];
+                $dispute_total_value += $ck["dispute_value"] ?? 0;
             }
 
 
