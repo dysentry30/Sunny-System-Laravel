@@ -81,6 +81,25 @@
                                     <!--end::Button-->
 
                                     <!--begin::Button-->
+                                    @if ($customer->kode_bp)
+                                        <div class="" data-bs-toggle="tooltip" data-bs-html="true" 
+                                        data-bs-title="<b>Kode BP</b> sudah didapatkan" >
+                                            <button type="button"  class="btn disabled btn-sm btn-light btn-active-success me-3" onclick="getKodeBP(this)" id="get-kode-bp">
+                                                Get Kode BP</button>
+                                        </div>
+                                    @elseif (empty($customer->kode_nasabah))
+                                        <div class="" data-bs-toggle="tooltip" data-bs-html="true" 
+                                        data-bs-title="<b>Kode Nasabah</b> belum didapatkan" >
+                                            <button type="button"  class="btn disabled btn-sm btn-light btn-active-success me-3" onclick="getKodeBP(this)" id="get-kode-bp">
+                                                Get Kode BP</button>
+                                        </div>
+                                    @else 
+                                        <button type="button" class="btn btn-sm btn-light btn-active-success me-3" onclick="getKodeBP(this)" id="get-kode-bp">
+                                            Get Kode BP</button>
+                                    @endif
+                                    <!--end::Button-->
+
+                                    <!--begin::Button-->
                                     <button type="submit" class="btn btn-sm btn-primary" id="customer-edit-save" style="background-color:#008CB4;">
                                         Save</button>
                                     <!--end::Button-->
@@ -821,6 +840,18 @@
                                                                 <!--end::Input-->
                                                             </div>
                                                             <!--end::column-->
+                                                            <div class="col-6">
+                                                                <!--begin::label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span class="required">Kode BP</span>
+                                                                </label>
+                                                                <!--end::label-->
+                                                                <!--begin::Input-->
+                                                                <div id="div-tax">
+                                                                    <input type="text" name="kode-bp" id="kode-bp" class="form-control form-control-solid" value="{{$customer->kode_bp ?? ""}}">
+                                                                </div>
+                                                                <!--end::Input-->
+                                                            </div>
                                                             <!--ENd::Row-->
 
                                                             <!--begin::Fungsi Select Provinsi-->
@@ -7136,9 +7167,15 @@
         // BEGIN :: GET KODE NASABAH
         async function getKodeNasabah(e) {
             const npwp = "{{$customer->npwp_company}}";
-            if(pic == undefined || npwp == "") {
+            if(pic == undefined) {
                 Toast.fire({
                     html: "Field PIC is empty",
+                    icon: "error",
+                });
+                return;
+            } else if(npwp == "") {
+                Toast.fire({
+                    html: "Field NPWP is empty",
                     icon: "error",
                 });
                 return;
@@ -7338,6 +7375,34 @@
             }
         }
         // END :: GET KODE NASABAH
+        
+        // BEGIN :: GET KODE BP
+        async function getKodeBP(e) {
+            const data = {
+                kode_nasabah: "{{$customer->kode_nasabah}}"
+            };
+
+            const getKodeBPRes = await fetch("/customer/get-kode-bp", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-Token": "{{csrf_token()}}"
+                },
+                body: JSON.stringify(data),
+            }).then(res => res.json());
+            if(getKodeBPRes.status) {
+                document.querySelector("#kode-bp").value = getKodeBPRes.kode_bp;
+                document.querySelector("#customer-edit-save").click();
+                return;
+            } else {
+                Toast.fire({
+                    html: getKodeBPRes.msg,
+                    icon: "error",
+                });
+                return;
+            }
+        }
+        // END :: GET KODE BP
 
         // BEGIN :: REMOVE SYMBOL CHAR
         function removeSymbol(e) {

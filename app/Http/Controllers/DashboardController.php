@@ -15,6 +15,7 @@ use ParagonIE\Sodium\Compat;
 use App\Models\ClaimManagements;
 use App\Models\PerubahanKontrak;
 use App\Models\ContractManagements;
+use App\Models\HistoryForecast;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
@@ -99,8 +100,10 @@ class DashboardController extends Controller
             $paretoProyeks = Proyek::with(['Forecasts', 'UnitKerja', 'ContractManagements'])->where("proyeks.jenis_proyek", "!=", "I")->where("proyeks.tahun_perolehan", "=", $year)->get()->whereIn("unit_kerja", $unit_kerja_user->toArray());
             $claims = ClaimManagements::join("proyeks", "proyeks.kode_proyek", "=", "claim_managements.kode_proyek")->get()->whereIn("unit_kerja", $unit_kerja_user->toArray());
             $unitKerja = UnitKerja::get()->whereIn("divcode", $unit_kerja_user->toArray());
-            // $nilaiHistoryForecast = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("history_forecast.periode_prognosa", "=", $request->get("periode-prognosa") != "" ? (string) $request->get("periode-prognosa") : date("m"))->whereYear("history_forecast.created_at", "=", (string) $request->get("tahun-history") != "" ? (string) $request->get("tahun-history") : date("Y"))->get()->whereIn("unit_kerja", $unit_kerja_user->toArray());
-            $nilaiHistoryForecast = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("jenis_proyek", "!=", "I")->where("forecasts.periode_prognosa", "=", $request->get("periode-prognosa") != "" ? (string) $request->get("periode-prognosa") : (int) date("m"))->where("forecasts.tahun", "=", $year)->get()->whereNotIn("unit_kerja", ["B", "C", "D", "8"]);
+            $nilaiHistoryForecast = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("history_forecast.periode_prognosa", "=", $request->get("periode-prognosa") != "" ? (string) $request->get("periode-prognosa") : date("m"))->where("history_forecast.tahun", "=", (string) $request->get("tahun-history") != "" ? (string) $request->get("tahun-history") : date("Y"))->get()->whereIn("unit_kerja", $unit_kerja_user->toArray());
+            if($nilaiHistoryForecast->count() < 1) {
+                $nilaiHistoryForecast = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("jenis_proyek", "!=", "I")->where("tahun_perolehan", "=", $year)->where("forecasts.periode_prognosa", "=", $request->get("periode-prognosa") != "" ? (string) $request->get("periode-prognosa") : (int) date("m"))->where("forecasts.tahun", "=", $year)->get()->whereNotIn("unit_kerja", ["B", "C", "D", "8"]);
+            }
             // dd($nilaiHistoryForecast, Auth::user());
             if (!empty($request->get("unit-kerja"))) {
                 // dd($request);
@@ -4475,5 +4478,61 @@ class DashboardController extends Controller
             $diff_date = $file_date->diffInMinutes($now, true);
             if ($diff_date > 29) File::delete($file);
         });
+    }
+
+    // Function for mobile route
+    public function getNilaiDashboard($unit_kerja)
+    {
+        $curYear = (int) date("Y") - 1;
+        $curMonth = (int) date("m");
+        $unit_kerjas = str_contains(",", $unit_kerja) ? explode(",", $unit_kerja) : [$unit_kerja];
+        $totalRkap = 0;
+        $totalForecast = 0;
+        $totalRealisasi = 0;
+        $totalRKAPCurMonth = 0;
+        $proyeks = Proyek::where("tahun_perolehan", "=", $curYear)->where("is_cancel", "!=", true)->get()->whereIn("unit_kerja", $unit_kerjas);
+        $proyeks->each(function ($p) use ($curMonth, $curYear, &$totalRkap, &$totalForecast, &$totalRealisasi, &$totalRKAPCurMonth) {
+            $forecasts = $p->Forecasts->where("tahun", "=", $curYear);
+            foreach ($forecasts as $f) {
+                if ($f->periode_prognosa <= $curMonth) {
+                    if(!empty($f->month_rkap)) {
+                        $totalRkap += $f->rkap_forecast;
+                    }
+                    if(!empty($f->month_forecast)) {
+                        $totalForecast += $f->nilai_forecast;
+                    }
+                    if(!empty($f->month_realisasi)) {
+                        $totalRealisasi += $f->realisasi_forecast;
+                    }
+                }
+                if ($f->periode_prognosa == $curMonth) {
+                    if(!empty($f->month_rkap)) {
+                        $totalRKAPCurMonth += $f->rkap_forecast;
+                    }
+                }
+            }
+        });
+        $data = [
+            "totalRKAP" => $totalRkap / 1_000_000_000,
+            "totalForecast" => $totalForecast / 1_000_000_000,
+            "totalRealisasi" => $totalRealisasi / 1_000_000_000,
+            "totalRKAPCurMonth" => $totalRKAPCurMonth / 1_000_000_000,
+        ];
+        return response()->json($data);
+    }
+
+    public function getForecastBulanan(String $unit_kerja, $year, $month) {
+        $unit_kerjas = str_contains(",", $unit_kerja) ? explode(",", $unit_kerja) : [$unit_kerja];
+        // $curMonth = (int) date("m");
+        $forecasts = Proyek::with(["Forecasts"])->whereIn("unit_kerja", $unit_kerjas)->where("tahun_perolehan", "=", $year)->where("is_cancel", "!=", true)->get();
+        $forecasts = $forecasts->map(function($p) use($year, $month) {
+            $new_class = new stdClass();
+            $new_class->kode_proyek = $p->kode_proyek;
+            $new_class->nama_proyek = $p->nama_proyek;
+            // $new_class->forecasts = $p->forecasts->where("tahun", "=", $year)->where("periode_prognosa", "=", $month);
+            $new_class->forecasts = $p->forecasts->where("tahun", "=", $year)->where("periode_prognosa", "=", $month);
+            return $new_class;
+        });
+        return response()->json($forecasts);
     }
 }
