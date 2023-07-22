@@ -1533,19 +1533,19 @@ class DashboardController extends Controller
             // $dispute_total_value = $contracts_perubahan->filter(function($cp){
             //     return $cp->stage == 6 && $cp->is_dispute == true;
             // })->groupBy('jenis_perubahan')->flatten()->sum('biaya_pengajuan');
-            $potensial_total_value = 0;
+            $potensial_total_value = 1;
 
-            $submission_total_value = 0;
+            $submission_total_value = 1;
             
-            $revision_total_value = 0;
+            $revision_total_value = 1;
             
-            $negotiation_total_value = 0;
+            $negotiation_total_value = 1;
             
-            $approve_total_value = 0;
+            $approve_total_value = 1;
             
-            $reject_total_value = 0;
+            $reject_total_value = 1;
             
-            $dispute_total_value = 0;
+            $dispute_total_value = 1;
             
             foreach ($cat_kontrak as $ck) {
                 $potensial_total_value += $ck["potensial_value"] ?? 0;
@@ -2762,19 +2762,19 @@ class DashboardController extends Controller
             //     return $cp->stage == 6 && $cp->is_dispute == true;
             // })->groupBy('jenis_perubahan')->flatten()->sum('biaya_pengajuan');
 
-            $potensial_total_value = 0;
+            $potensial_total_value = 1;
 
-            $submission_total_value = 0;
+            $submission_total_value = 1;
             
-            $revision_total_value = 0;
+            $revision_total_value = 1;
             
-            $negotiation_total_value = 0;
+            $negotiation_total_value = 1;
             
-            $approve_total_value = 0;
+            $approve_total_value = 1;
             
-            $reject_total_value = 0;
+            $reject_total_value = 1;
             
-            $dispute_total_value = 0;
+            $dispute_total_value = 1;
             
             foreach ($cat_kontrak as $ck) {
                 $potensial_total_value += $ck["potensial_value"] ?? 0;
