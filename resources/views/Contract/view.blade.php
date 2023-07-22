@@ -1082,7 +1082,7 @@
                                 {{-- @if ($is_approved->isEmpty()) --}}
                                 <a href="/review-contract/view/{{ $contract->id_contract }}/1" target="_blank" Id="Plus">+</a>
                                 {{-- @endif --}}
-                                @else
+                                @elseif ($contract->reviewProjects->isNotEmpty() && $contract->project->DokumenTender->isNotEmpty())
                                     <a class="btn btn-primary btn-sm p-2 gap-3" href="/review-contract/view/{{ $contract->id_contract }}/1" target="_blank">view</a>
                                     {{-- <a class="btn btn-primary btn-sm p-2 px-3 mx-3" data-kt-countup-tabs="true" data-bs-toggle="tab"
                                     href="#kt_user_view_overview_pelaksanaan">Lihat Pelaksanaan</a>     --}}
