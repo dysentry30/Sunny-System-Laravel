@@ -2989,9 +2989,9 @@
                                                     <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                                         Document NDA <i class="bi bi-journal-text"></i>
                                                         @php
-                                                            $status = $proyek->DokumenNda->count() < 1 ? "Document belum diupload" : "Waiting for Approval";
-                                                            $class_button = $proyek->DokumenNda->count() < 1 ? "bg-danger" : "bg-info";
                                                             $upload_final_NDA = $proyek->ContractManagements->UploadFinal->where("category", "=", "Dokumen NDA")->first();
+                                                            $status = $proyek->DokumenNda->count() < 1 ? "Document belum diupload" : (empty($upload_final) ? "Waiting for Approval" : "bg-success");
+                                                            $class_button = $proyek->DokumenNda->count() < 1 ? "bg-danger" : "bg-info";
                                                         @endphp
                                                         <span class="badge {{$class_button}}"><b>{{$status}}</b></span>
                                                         <i class="bi-exclamation-circle" data-bs-toggle="tooltip" data-bs-title="Status ini akan berubah menjadi <b>Waiting for Approval</b> secara otomatis ketika Dokumen sudah diupload dan akan muncul button download dokumen final ketika dokumen final nya sudah tersedia di <b>CCM</b>" data-bs-html="true"></i>
@@ -3957,16 +3957,30 @@
                                                         </h6> --}}
                                                     <br>
                                                     <h3 class="fw-bolder m-0 required" id="HeadDetail"
-                                                        style="font-size:14px;">Risk Tender
+                                                        style="font-size:14px;">
+                                                        Risk Tender
+                                                        @php
+                                                            $upload_final = $proyek->ContractManagements->UploadFinal->where("category", "=", "Dokumen Resiko - Perolehan")->first();
+                                                            $class_button = $proyek->RiskTenderProyek->count() < 1 ? "bg-danger" : (empty($upload_final) ? "bg-info" : "bg-success");
+                                                            $status = $proyek->RiskTenderProyek->count() < 1 ? "Document belum diupload" : (empty($upload_final) ? "Waiting for Approval" : "Approved");
+                                                        @endphp
+                                                        <span class="badge {{$class_button}}"><b>{{$status}}</b></span>
+                                                        <i class="bi-exclamation-circle" data-bs-toggle="tooltip" data-bs-title="Status ini akan berubah menjadi <b>Waiting for Approval</b> secara otomatis ketika Dokumen sudah diupload dan akan muncul button download dokumen final ketika dokumen final nya sudah tersedia di <b>CCM</b>" data-bs-html="true"></i>
+                                                        
+                                                        @if (!empty($upload_final_NDA)) 
+                                                            <a href="{{asset("words/". $upload_final_NDA->id_document)}}" class="btn btn-sm btn-success"><b>Download Dokumen Final</b></a>
+                                                        @endif
                                                     </h3>
                                                     <small><a class="text-active-primary text-gray"
                                                             href="https://crm.wika.co.id/faqs/104625_RiskTender_Input-Kosong.rev.xlsx">Download
                                                             Template Risk Tender</a></small>
                                                     <br><br>
                                                     <div class="w-50">
-                                                        <input onchange="this.form.submit()" type="file"
-                                                            class="form-control form-control-sm form-input-solid"
-                                                            name="risk-tender" accept=".pdf, .xlsx">
+                                                        @if (empty($upload_final))
+                                                            <input onchange="this.form.submit()" type="file"
+                                                                class="form-control form-control-sm form-input-solid"
+                                                                name="risk-tender" accept=".pdf, .xlsx">
+                                                        @endif
                                                     </div>
                                                     <h6 id="error-risk-tender" class="text-danger fw-normal"
                                                         style="display: none">*File terlalu besar ! Max Size 50Mb</h6>
