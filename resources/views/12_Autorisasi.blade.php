@@ -204,7 +204,7 @@
                                 <!--begin::Table body-->
                                 <tbody class="fw-bold text-gray-600">
                                     @foreach ($history_forecasts as $unit_kerja => $history)
-                                        <tr>
+                                        <tr class="{{$history->first()->is_approved_1 == true ? "bg-success" : ""}}">
                                             <td class="">
                                                 <a href="#" id="click-name"
                                                     class="text-hover-primary mb-1">{{ $unit_kerja }}</a>

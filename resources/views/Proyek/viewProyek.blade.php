@@ -2988,6 +2988,17 @@
                                                     <!--Begin::Title Biru Form: Document NDA-->
                                                     <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                                         Document NDA <i class="bi bi-journal-text"></i>
+                                                        @php
+                                                            $status = $proyek->DokumenNda->count() < 1 ? "Document belum diupload" : "Waiting for Approval";
+                                                            $class_button = $proyek->DokumenNda->count() < 1 ? "bg-danger" : "bg-info";
+                                                            $upload_final_NDA = $proyek->ContractManagements->UploadFinal->where("category", "=", "Dokumen NDA")->first();
+                                                        @endphp
+                                                        <span class="badge {{$class_button}}"><b>{{$status}}</b></span>
+                                                        <i class="bi-exclamation-circle" data-bs-toggle="tooltip" data-bs-title="Status ini akan berubah menjadi <b>Waiting for Approval</b> secara otomatis ketika Dokumen sudah diupload dan akan muncul button download dokumen final ketika dokumen final nya sudah tersedia di <b>CCM</b>" data-bs-html="true"></i>
+                                                        
+                                                        @if (!empty($upload_final_NDA)) 
+                                                            <a href="{{asset("words/". $upload_final_NDA->id_document)}}" class="btn btn-sm btn-success"><b>Download Dokumen Final</b></a>
+                                                        @endif
                                                     </h3>
                                                     <br>
                                                     <div class="w-50">
@@ -3069,6 +3080,17 @@
                                                     <!--Begin::Title Biru Form: Document MOU-->
                                                     <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                                         Document MOU <i class="bi bi-journal-text"></i>
+                                                        @php
+                                                            $status = $proyek->DokumenMou->count() < 1 ? "Document belum diupload" : "Waiting for Approval";
+                                                            $class_button = $proyek->DokumenMou->count() < 1 ? "bg-danger" : "bg-info";
+                                                            $upload_final = $proyek->ContractManagements->UploadFinal->where("category", "=", "Dokumen MOU")->first();
+                                                        @endphp
+                                                        <span class="badge {{$class_button}}"><b>{{$status}}</b></span>
+                                                        <i class="bi-exclamation-circle" data-bs-toggle="tooltip" data-bs-title="Status ini akan berubah menjadi <b>Waiting for Approval</b> secara otomatis ketika Dokumen sudah diupload dan akan muncul button download dokumen final ketika dokumen final nya sudah tersedia di <b>CCM</b>" data-bs-html="true"></i>
+                                                        
+                                                        @if (!empty($upload_final)) 
+                                                            <a href="{{asset("words/". $upload_final->id_document)}}" class="btn btn-sm btn-success"><b>Download Dokumen Final</b></a>
+                                                        @endif
                                                     </h3>
                                                     <br>
                                                     <div class="w-50">
@@ -3150,6 +3172,17 @@
                                                     <!--Begin::Title Biru Form: Document ECA-->
                                                     <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                                         Document ECA <i class="bi bi-journal-text"></i>
+                                                        @php
+                                                            $status = $proyek->DokumenEca->count() < 1 ? "Document belum diupload" : "Waiting for Approval";
+                                                            $class_button = $proyek->DokumenEca->count() < 1 ? "bg-danger" : "bg-info";
+                                                            $upload_final = $proyek->ContractManagements->UploadFinal->where("category", "=", "Dokumen ECA")->first();
+                                                        @endphp
+                                                        <span class="badge {{$class_button}}"><b>{{$status}}</b></span>
+                                                        <i class="bi-exclamation-circle" data-bs-toggle="tooltip" data-bs-title="Status ini akan berubah menjadi <b>Waiting for Approval</b> secara otomatis ketika Dokumen sudah diupload dan akan muncul button download dokumen final ketika dokumen final nya sudah tersedia di <b>CCM</b>" data-bs-html="true"></i>
+                                                        
+                                                        @if (!empty($upload_final)) 
+                                                            <a href="{{asset("words/". $upload_final->id_document)}}" class="btn btn-sm btn-success"><b>Download Dokumen Final</b></a>
+                                                        @endif
                                                     </h3>
                                                     <br>
                                                     <div class="w-50">
@@ -3231,6 +3264,17 @@
                                                     <!--Begin::Title Biru Form: Document ICA-->
                                                     <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                                         Document ICA <i class="bi bi-journal-text"></i>
+                                                        @php
+                                                            $status = $proyek->DokumenIca->count() < 1 ? "Document belum diupload" : "Waiting for Approval";
+                                                            $class_button = $proyek->DokumenIca->count() < 1 ? "bg-danger" : "bg-info";
+                                                            $upload_final = $proyek->ContractManagements->UploadFinal->where("category", "=", "Dokumen ICA")->first();
+                                                        @endphp
+                                                        <span class="badge {{$class_button}}"><b>{{$status}}</b></span>
+                                                        <i class="bi-exclamation-circle" data-bs-toggle="tooltip" data-bs-title="Status ini akan berubah menjadi <b>Waiting for Approval</b> secara otomatis ketika Dokumen sudah diupload dan akan muncul button download dokumen final ketika dokumen final nya sudah tersedia di <b>CCM</b>" data-bs-html="true"></i>
+                                                        
+                                                        @if (!empty($upload_final)) 
+                                                            <a href="{{asset("words/". $upload_final->id_document)}}" class="btn btn-sm btn-success"><b>Download Dokumen Final</b></a>
+                                                        @endif
                                                     </h3>
                                                     <br>
                                                     <div class="w-50">
@@ -3312,6 +3356,17 @@
                                                     <!--Begin::Title Biru Form: Document RKS-->
                                                     <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                                         Document RKS <i class="bi bi-journal-text"></i>
+                                                        @php
+                                                            $status = $proyek->DokumenRks->count() < 1 ? "Document belum diupload" : "Waiting for Approval";
+                                                            $class_button = $proyek->DokumenRks->count() < 1 ? "bg-danger" : "bg-info";
+                                                            $upload_final = $proyek->ContractManagements->UploadFinal->where("category", "=", "Dokumen RKS")->first();
+                                                        @endphp
+                                                        <span class="badge {{$class_button}}"><b>{{$status}}</b></span>
+                                                        <i class="bi-exclamation-circle" data-bs-toggle="tooltip" data-bs-title="Status ini akan berubah menjadi <b>Waiting for Approval</b> secara otomatis ketika Dokumen sudah diupload dan akan muncul button download dokumen final ketika dokumen final nya sudah tersedia di <b>CCM</b>" data-bs-html="true"></i>
+                                                        
+                                                        @if (!empty($upload_final)) 
+                                                            <a href="{{asset("words/". $upload_final->id_document)}}" class="btn btn-sm btn-success"><b>Download Dokumen Final</b></a>
+                                                        @endif
                                                     </h3>
                                                     <br>
                                                     <div class="w-50">
@@ -3392,6 +3447,17 @@
                                                     <!--Begin::Title Biru Form: Document ITB TOR-->
                                                     <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                                         Document ITB TOR <i class="bi bi-journal-text"></i>
+                                                        @php
+                                                            $status = $proyek->DokumenItbTor->count() < 1 ? "Document belum diupload" : "Waiting for Approval";
+                                                            $class_button = $proyek->DokumenItbTor->count() < 1 ? "bg-danger" : "bg-info";
+                                                            $upload_final = $proyek->ContractManagements->UploadFinal->where("category", "=", "Dokumen ITB/TOR")->first();
+                                                        @endphp
+                                                        <span class="badge {{$class_button}}"><b>{{$status}}</b></span>
+                                                        <i class="bi-exclamation-circle" data-bs-toggle="tooltip" data-bs-title="Status ini akan berubah menjadi <b>Waiting for Approval</b> secara otomatis ketika Dokumen sudah diupload dan akan muncul button download dokumen final ketika dokumen final nya sudah tersedia di <b>CCM</b>" data-bs-html="true"></i>
+                                                        
+                                                        @if (!empty($upload_final)) 
+                                                            <a href="{{asset("words/". $upload_final->id_document)}}" class="btn btn-sm btn-success"><b>Download Dokumen Final</b></a>
+                                                        @endif
                                                     </h3>
                                                     <br>
                                                     <div class="w-50">
@@ -8928,5 +8994,6 @@
         }
     </script>
     {{-- End::Get Data MPA and Ketua Tim Tender --}}
+
 
 @endsection
