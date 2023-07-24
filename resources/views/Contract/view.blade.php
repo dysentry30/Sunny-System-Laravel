@@ -10160,7 +10160,7 @@
                         <div class="radio">
                             <input type="radio" name="is_perpanjangan_waktu" id="is_perpanjangan_waktu" value="true">&nbsp;
                             <span>Ya</span><br>
-                            <input type="radio" name="is_penambahan_waktu" id="is_penambahan_waktu" value="false">&nbsp;
+                            <input type="radio" name="is_perpanjangan_waktu" id="is_perpanjangan_waktu" value="false">&nbsp;
                             <span>Tidak</span>
                         </div>
                         
