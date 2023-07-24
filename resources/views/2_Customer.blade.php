@@ -175,133 +175,137 @@
 
                         <!--begin::Card body-->
                         <div class="card-body pt-2">
-                            <table class="table align-middle table-row-dashed fs-6 gy-2" id="example">
-                                <!--begin::Table head-->
-                                <thead>
-                                    <!--begin::Table row-->
-                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                        {{-- <th class="min-w-auto">No.</th> --}}
-                                        <th class="min-w-auto">Kode Pelanggan</th>
-                                        <th class="min-w-auto text-center">Pelanggan</th>
-                                        <th class="min-w-auto">Email</th>
-                                        <th class="min-w-auto">Kode BP</th>
-                                        <th class="min-w-auto">Industry Sector</th>
-                                        <th class="min-w-auto">Instansi</th>
-                                        {{-- <th class="min-w-auto">Kontak Nomor</th> --}}
-                                        {{-- <th class="max-w-auto">Customer</th> --}}
-                                        {{-- <th class="min-w-auto">Partner</th> --}}
-                                        {{-- <th class="min-w-auto">Competitor</th> --}}
-                                        <th class="min-w-auto">Kode Nasabah</th>
-                                        @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)"))
-                                        <th class="min-w-auto text-center">Action</th>
-                                        @endif
-                                        {{-- <th class="max-w-120px"><center>Action</center></th> --}}
-                                    </tr>
-                                    <!--end::Table row-->
-                                </thead>
-                                <!--end::Table head-->
-                                
-                               
-                                    <!-- Begin :: Results -->
-                                    {{-- <tbody class="fw-bold text-gray-600" id="data-wrapper">
-
-                                        <!-- Results :: Data Tabel Infinite Scroll -->
-
-                                    </tbody> --}}
-                                    <tbody class="fw-bold text-gray-600">
-
-                                        <!-- Results :: Data Tabel Infinite Scroll -->
-
-                                        {{-- @if ($column != null || $sort != null ) --}}
-                                        
-
-                                            @foreach ($results as $customers)
-
-                                            <tr>
-                                                <!--begin::Kode Pelanggan-->
-                                                <td>
-                                                @if (empty($customers->kode_pelanggan))                                                    
-                                                <a target="_blank" href="/customer/view/{{ $customers->id_customer }}/{{ $customers->name }}" class="text-gray-800 text-hover-primary ps-6">-</a>
-                                                @else
-                                                <a target="_blank" href="/customer/view/{{ $customers->id_customer }}/{{ $customers->name }}" class="text-gray-800 text-hover-primary">{{ $customers->kode_pelanggan }}</a>
-                                                @endif
-                                                </td>
-                                                <!--end::Kode Pelanggan-->
-                                                <!--begin::Name-->
-                                                <td>
-                                                <a target="_blank" href="/customer/view/{{ $customers->id_customer }}/{{ $customers->name }}" class="text-gray-800 text-hover-primary">{{ $customers->name }}</a>
-                                                </td>
-                                                <!--end::Name-->
-                                                <!--begin::Email-->
-                                                <td>
-                                                <a href="#" class="text-gray-800 text-hover-primary">{{ ($customers->email) }}</a>
-                                                </td>
-                                                <!--end::Email-->
-                                                <!--begin::Column-->
-                                                <td>
-                                                {{ $customers->unique_code ?? "-" }}
-                                                </td>
-                                                <!--end::Column-->
-                                                <!--begin::Column-->
-                                                <td>
-                                                {{ $customers->IndustryOwner->owner_attractiveness ?? "-" }}
-                                                </td>
-                                                <!--end::Column-->
-                                                <!--begin::Column-->
-                                                <td>
-                                                {{ $customers->jenis_instansi ?? "-" }}
-                                                </td>
-                                                <!--end::Column-->
-                                                <!--begin::Nomor-->
-                                                {{-- <td>
-                                                {{ $customers->phone_number }}
-                                                </td> --}}
-                                                <!--end::Nomor-->
-                                                <!--begin::check_customer-->
-                                                {{-- <td>
-                                                {{ ($customers->check_customer == 1 ? "Yes" : "No") }}
-                                                </td> --}}
-                                                <!--end::check_customer-->
-                                                <!--begin::check_partner-->
-                                                {{-- <td>
-                                                {{ ($customers->check_partner == 1 ? "Yes" : "No") }}
-                                                </td> --}}
-                                                <!--end::check_partner-->
-                                                <!--begin::check_competitor-->
-                                                {{-- <td data-filter="mastercard">
-                                                {{ ($customers->check_competitor == 1 ? "Yes" : "No") }}
-                                                </td> --}}
-                                                <!--end::check_competitor-->
-                                                <!--begin::Kode Nasabah-->
-                                                <td>
-                                                {{ $customers->kode_nasabah }}
-                                                </td>
-                                                <!--end::Kode Nasabah-->
-                                                <!--begin::Action-->
-                                                @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)"))
-                                                    <td class="text-center">
-                                                        <button data-bs-toggle="modal"
-                                                            data-bs-target="#kt_modal_delete{{ $customers->id_customer }}"
-                                                            id="modal-delete"
-                                                            class="btn btn-sm btn-light btn-active-danger">Delete
-                                                        </button>
+                            
+                            <div class="overflow-scroll">
+                                <!--end::Table-->
+                                <table class="table align-middle table-row-dashed fs-6 gy-2" id="example">
+                                    <!--begin::Table head-->
+                                    <thead>
+                                        <!--begin::Table row-->
+                                        <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                            {{-- <th class="min-w-auto">No.</th> --}}
+                                            <th class="min-w-auto">Kode Pelanggan</th>
+                                            <th class="min-w-auto text-center">Pelanggan</th>
+                                            <th class="min-w-auto">Email</th>
+                                            <th class="min-w-auto">Kode BP</th>
+                                            <th class="min-w-auto">Industry Sector</th>
+                                            <th class="min-w-auto">Instansi</th>
+                                            {{-- <th class="min-w-auto">Kontak Nomor</th> --}}
+                                            {{-- <th class="max-w-auto">Customer</th> --}}
+                                            {{-- <th class="min-w-auto">Partner</th> --}}
+                                            {{-- <th class="min-w-auto">Competitor</th> --}}
+                                            <th class="min-w-auto">Kode Nasabah</th>
+                                            @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)"))
+                                            <th class="min-w-auto text-center">Action</th>
+                                            @endif
+                                            {{-- <th class="max-w-120px"><center>Action</center></th> --}}
+                                        </tr>
+                                        <!--end::Table row-->
+                                    </thead>
+                                    <!--end::Table head-->
+                                    
+                                   
+                                        <!-- Begin :: Results -->
+                                        {{-- <tbody class="fw-bold text-gray-600" id="data-wrapper">
+    
+                                            <!-- Results :: Data Tabel Infinite Scroll -->
+    
+                                        </tbody> --}}
+                                        <tbody class="fw-bold text-gray-600">
+    
+                                            <!-- Results :: Data Tabel Infinite Scroll -->
+    
+                                            {{-- @if ($column != null || $sort != null ) --}}
+                                            
+    
+                                                @foreach ($results as $customers)
+    
+                                                <tr>
+                                                    <!--begin::Kode Pelanggan-->
+                                                    <td>
+                                                    @if (empty($customers->kode_pelanggan))                                                    
+                                                    <a target="_blank" href="/customer/view/{{ $customers->id_customer }}/{{ $customers->name }}" class="text-gray-800 text-hover-primary ps-6">-</a>
+                                                    @else
+                                                    <a target="_blank" href="/customer/view/{{ $customers->id_customer }}/{{ $customers->name }}" class="text-gray-800 text-hover-primary">{{ $customers->kode_pelanggan }}</a>
+                                                    @endif
                                                     </td>
-                                                @endif
-                                                <!--end::Action-->
-                                            </tr>
-                                            @endforeach
-                                                
-                                            <script>
-                                                const tbody = document.querySelector("#data-wrapper");
-                                                tbody.style.display = "none";
-                                            </script>
-                                        {{-- @endif --}}
-
-                                    </tbody>
-                                    <!-- End :: Results -->
-
-                            </table>
-                            <!--end::Table-->
+                                                    <!--end::Kode Pelanggan-->
+                                                    <!--begin::Name-->
+                                                    <td>
+                                                    <a target="_blank" href="/customer/view/{{ $customers->id_customer }}/{{ $customers->name }}" class="text-gray-800 text-hover-primary">{{ $customers->name }}</a>
+                                                    </td>
+                                                    <!--end::Name-->
+                                                    <!--begin::Email-->
+                                                    <td>
+                                                    <a href="#" class="text-gray-800 text-hover-primary">{{ ($customers->email) }}</a>
+                                                    </td>
+                                                    <!--end::Email-->
+                                                    <!--begin::Column-->
+                                                    <td>
+                                                    {{ $customers->kode_bp ?? "-" }}
+                                                    </td>
+                                                    <!--end::Column-->
+                                                    <!--begin::Column-->
+                                                    <td>
+                                                    {{ $customers->IndustrySector->description ?? "-" }}
+                                                    </td>
+                                                    <!--end::Column-->
+                                                    <!--begin::Column-->
+                                                    <td>
+                                                    {{ $customers->jenis_instansi ?? "-" }}
+                                                    </td>
+                                                    <!--end::Column-->
+                                                    <!--begin::Nomor-->
+                                                    {{-- <td>
+                                                    {{ $customers->phone_number }}
+                                                    </td> --}}
+                                                    <!--end::Nomor-->
+                                                    <!--begin::check_customer-->
+                                                    {{-- <td>
+                                                    {{ ($customers->check_customer == 1 ? "Yes" : "No") }}
+                                                    </td> --}}
+                                                    <!--end::check_customer-->
+                                                    <!--begin::check_partner-->
+                                                    {{-- <td>
+                                                    {{ ($customers->check_partner == 1 ? "Yes" : "No") }}
+                                                    </td> --}}
+                                                    <!--end::check_partner-->
+                                                    <!--begin::check_competitor-->
+                                                    {{-- <td data-filter="mastercard">
+                                                    {{ ($customers->check_competitor == 1 ? "Yes" : "No") }}
+                                                    </td> --}}
+                                                    <!--end::check_competitor-->
+                                                    <!--begin::Kode Nasabah-->
+                                                    <td>
+                                                    {{ $customers->kode_nasabah }}
+                                                    </td>
+                                                    <!--end::Kode Nasabah-->
+                                                    <!--begin::Action-->
+                                                    @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)"))
+                                                        <td class="text-center">
+                                                            <button data-bs-toggle="modal"
+                                                                data-bs-target="#kt_modal_delete{{ $customers->id_customer }}"
+                                                                id="modal-delete"
+                                                                class="btn btn-sm btn-light btn-active-danger">Delete
+                                                            </button>
+                                                        </td>
+                                                    @endif
+                                                    <!--end::Action-->
+                                                </tr>
+                                                @endforeach
+                                                    
+                                                <script>
+                                                    const tbody = document.querySelector("#data-wrapper");
+                                                    tbody.style.display = "none";
+                                                </script>
+                                            {{-- @endif --}}
+    
+                                        </tbody>
+                                        <!-- End :: Results -->
+    
+                                </table>
+                                <!--end::Table-->
+                            </div>
 
                         <!-- Data Loader -->
                         {{-- <div class="auto-load text-center">

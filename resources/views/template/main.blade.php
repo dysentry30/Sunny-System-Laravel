@@ -119,12 +119,20 @@
         table.dataTable{
             border-collapse: collapse !important;
         }
+        
+        .content-table table {
+            border-collapse: collapse !important;
+        }
 
         table, th, td, tr {
             border: 0.5px solid #333333 !important;
         }
         th a {
             color: white !important;
+        }
+        .accordion-button{
+            background-color: white !important;
+            box-shadow: inset 0 0px 0 #eff2f5;
         }
         .fa.fa-sort {
             color: white !important;
