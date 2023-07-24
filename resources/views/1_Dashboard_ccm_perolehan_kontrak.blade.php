@@ -1069,13 +1069,13 @@
                                             @php
                                                 $dokumenCRM_NDA = $proyek->DokumenNda->first();
                                                 $dokumenNDA = $contract->UploadFinal->where('category', '=', 'Dokumen NDA')->first();
-                                                if(!empty($dokumenNDA)){
+                                                if(!empty($dokumenNDA) && !empty($dokumenCRM_NDA)){
                                                     $statusWaktuUpload = new DateTime($dokumenNDA->created_at);
-                                                    $currentDate = new DateTime();
+                                                    $currentDate = new DateTime($dokumenCRM_NDA->created_at);
                                                     $limitWaktu = $statusWaktuUpload->diff($currentDate)->d;
+                                                    // dump($limitWaktu);
                                                 }
                                             @endphp
-                                            {{-- @dump($statusWaktuUpload) --}}
                                             <td class="text-center">
                                                 <small class="{{ !empty($dokumenCRM_NDA) ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
                                                     @if (!empty($dokumenCRM_NDA))
@@ -1096,9 +1096,9 @@
                                                 </small>
                                                 <br>
                                                 <small class="{{ !empty($dokumenNDA) ? 'badge badge-light-primary' : 'badge badge-light-danger' }} my-1">
-                                                    @if (!empty($dokumenNDA) && $limitWaktu > 14)
+                                                    @if (!empty($dokumenNDA) && (!empty($dokumenCRM_NDA) && $limitWaktu > 14))
                                                         Late
-                                                    @elseif (!empty($dokumenNDA) && $limitWaktu <= 14)
+                                                    @elseif (!empty($dokumenNDA) && (!empty($dokumenCRM_NDA) && $limitWaktu <= 14))
                                                         On Time
                                                     @elseif (!empty($dokumenCRM_NDA))
                                                         On Going
@@ -1112,9 +1112,9 @@
                                             @php
                                                 $dokumenCRM_LOI = $proyek->AttachmentMenang->first();
                                                 $dokumenLOI = $contract->UploadFinal->where('category', '=', 'Dokumen LOI')->first();
-                                                if(!empty($dokumenLOI)){
+                                                if(!empty($dokumenLOI) && !empty($dokumenCRM_LOI)){
                                                     $statusWaktuUpload = new DateTime($dokumenLOI->created_at);
-                                                    $currentDate = new DateTime();
+                                                    $currentDate = new DateTime($dokumenCRM_LOI->created_at);
                                                     $limitWaktu = $statusWaktuUpload->diff($currentDate)->d;
                                                 }
                                             @endphp
@@ -1139,9 +1139,9 @@
                                                 </small>
                                                 <br>
                                                 <small class="{{ !empty($dokumenLOI) ? 'badge badge-light-primary' : 'badge badge-light-danger' }} my-1">
-                                                    @if (!empty($dokumenLOI) && $limitWaktu > 14)
+                                                    @if (!empty($dokumenLOI) && (!empty($dokumenCRM_LOI) && $limitWaktu > 14))
                                                         Late
-                                                    @elseif (!empty($dokumenLOI) && $limitWaktu <= 14)
+                                                    @elseif (!empty($dokumenLOI) && (!empty($dokumenCRM_LOI) && $limitWaktu <= 14))
                                                         On Time
                                                     @elseif (!empty($dokumenCRM_LOI))
                                                         On Going
@@ -1155,9 +1155,9 @@
                                             @php
                                                 $dokumenCRM_MOU = $proyek->DokumenMou->first();
                                                 $dokumenMOU = $contract->UploadFinal->where('category', '=', 'Dokumen MOU')->first();
-                                                if(!empty($dokumenMOU)){
+                                                if(!empty($dokumenMOU) && !empty($dokumenCRM_MOU)){
                                                     $statusWaktuUpload = new DateTime($dokumenMOU->created_at);
-                                                    $currentDate = new DateTime();
+                                                    $currentDate = new DateTime($dokumenCRM_MOU->created_at);
                                                     $limitWaktu = $statusWaktuUpload->diff($currentDate)->d;
                                                 }
                                             @endphp
@@ -1182,9 +1182,9 @@
                                                 </small>
                                                 <br>
                                                 <small class="{{ !empty($dokumenMOU) ? 'badge badge-light-primary' : 'badge badge-light-danger' }} my-1">
-                                                    @if (!empty($dokumenMOU) && $limitWaktu > 14)
+                                                    @if (!empty($dokumenMOU) && (!empty($dokumenCRM_MOU) && $limitWaktu > 14))
                                                         Late
-                                                    @elseif (!empty($dokumenMOU) && $limitWaktu <= 14)
+                                                    @elseif (!empty($dokumenMOU) && (!empty($dokumenCRM_MOU) && $limitWaktu <= 14))
                                                         On Time
                                                     @elseif (!empty($dokumenCRM_MOU))
                                                         On Going
@@ -1198,9 +1198,9 @@
                                             @php
                                                 $dokumenCRM_ECA = $proyek->DokumenEca->first();
                                                 $dokumenECA = $contract->UploadFinal->where('category', '=', 'Dokumen ECA')->first();
-                                                if(!empty($dokumenECA)){
+                                                if(!empty($dokumenECA) && !empty($dokumenCRM_ECA)){
                                                     $statusWaktuUpload = new DateTime($dokumenECA->created_at);
-                                                    $currentDate = new DateTime();
+                                                    $currentDate = new DateTime($dokumenCRM_ECA->created_at);
                                                     $limitWaktu = $statusWaktuUpload->diff($currentDate)->d;
                                                 }
                                             @endphp
@@ -1225,9 +1225,9 @@
                                                 </small>
                                                 <br>
                                                 <small class="{{ !empty($dokumenECA) ? 'badge badge-light-primary' : 'badge badge-light-danger' }} my-1">
-                                                    @if (!empty($dokumenECA) && $limitWaktu > 14)
+                                                    @if (!empty($dokumenECA) && (!empty($dokumenCRM_ECA) && $limitWaktu > 14))
                                                         Late
-                                                    @elseif (!empty($dokumenECA) && $limitWaktu <= 14)
+                                                    @elseif (!empty($dokumenECA) && (!empty($dokumenCRM_ECA) && $limitWaktu <= 14))
                                                         On Time
                                                     @elseif (!empty($dokumenCRM_ECA))
                                                         On Going
@@ -1241,9 +1241,9 @@
                                             @php
                                                 $dokumenCRM_ICA = $proyek->DokumenIca->first();
                                                 $dokumenICA = $contract->UploadFinal->where('category', '=', 'Dokumen ICA')->first();
-                                                if(!empty($dokumenICA)){
+                                                if(!empty($dokumenICA) && !empty($dokumenCRM_ICA)){
                                                     $statusWaktuUpload = new DateTime($dokumenICA->created_at);
-                                                    $currentDate = new DateTime();
+                                                    $currentDate = new DateTime($dokumenCRM_ICA->created_at);
                                                     $limitWaktu = $statusWaktuUpload->diff($currentDate)->d;
                                                 }
                                             @endphp
@@ -1268,9 +1268,9 @@
                                                 </small>
                                                 <br>
                                                 <small class="{{ !empty($dokumenICA) ? 'badge badge-light-primary' : 'badge badge-light-danger' }} my-1">
-                                                    @if (!empty($dokumenICA) && $limitWaktu > 14)
+                                                    @if (!empty($dokumenICA) && (!empty($dokumenCRM_ICA) && $limitWaktu > 14))
                                                         Late
-                                                    @elseif (!empty($dokumenICA) && $limitWaktu <= 14)
+                                                    @elseif (!empty($dokumenICA) && (!empty($dokumenCRM_ICA) && $limitWaktu <= 14))
                                                         On Time
                                                     @elseif (!empty($dokumenCRM_ICA))
                                                         On Going
@@ -1281,14 +1281,14 @@
                                             </td>
                                             <!--end::ICA-->
                                             <!--begin::DRAFT-->
-                                                @php
-                                                $dokumenCRM_Draft = $proyek->DokumenDraft->first();
-                                                $dokumenDraft = $contract->UploadFinal->where('category', '=', 'Dokumen Draft Kontrak')->first();
-                                                if(!empty($dokumenDraft)){
-                                                    $statusWaktuUpload = new DateTime($dokumenDraft->created_at);
-                                                    $currentDate = new DateTime();
-                                                    $limitWaktu = $statusWaktuUpload->diff($currentDate)->d;
-                                                }
+                                            @php
+                                            $dokumenCRM_Draft = $proyek->DokumenDraft->first();
+                                            $dokumenDraft = $contract->UploadFinal->where('category', '=', 'Dokumen Draft Kontrak')->first();
+                                            if(!empty($dokumenDraft) && !empty($dokumenCRM_Draft)){
+                                                $statusWaktuUpload = new DateTime($dokumenDraft->created_at);
+                                                $currentDate = new DateTime($dokumenCRM_Draft->created_at);
+                                                $limitWaktu = $statusWaktuUpload->diff($currentDate)->d;
+                                            }
                                             @endphp
                                             {{-- @dump($statusWaktuUpload) --}}
                                             <td class="text-center">
@@ -1311,9 +1311,9 @@
                                                 </small>
                                                 <br>
                                                 <small class="{{ !empty($dokumenDraft) ? 'badge badge-light-primary' : 'badge badge-light-danger' }} my-1">
-                                                    @if (!empty($dokumenDraft) && $limitWaktu > 14)
+                                                    @if (!empty($dokumenDraft) && (!empty($dokumenCRM_Draft) && $limitWaktu > 14))
                                                         Late
-                                                    @elseif (!empty($dokumenDraft) && $limitWaktu <= 14)
+                                                    @elseif (!empty($dokumenDraft) && (!empty($dokumenCRM_Draft) && $limitWaktu <= 14))
                                                         On Time
                                                     @elseif (!empty($dokumenCRM_Draft))
                                                         On Going
@@ -1327,9 +1327,9 @@
                                             @php
                                                 $dokumenCRM_RKS = $proyek->DokumenRks->first();
                                                 $dokumenRKS = $contract->UploadFinal->where('category', '=', 'Dokumen RKS / Project Spesification')->first();
-                                                if(!empty($dokumenRKS)){
+                                                if(!empty($dokumenRKS) && !empty($dokumenCRM_RKS)){
                                                     $statusWaktuUpload = new DateTime($dokumenRKS->created_at);
-                                                    $currentDate = new DateTime();
+                                                    $currentDate = new DateTime($dokumenCRM_RKS->created_at);
                                                     $limitWaktu = $statusWaktuUpload->diff($currentDate)->d;
                                                 }
                                             @endphp
@@ -1354,9 +1354,9 @@
                                                 </small>
                                                 <br>
                                                 <small class="{{ !empty($dokumenRKS) ? 'badge badge-light-primary' : 'badge badge-light-danger' }} my-1">
-                                                    @if (!empty($dokumenRKS) && $limitWaktu > 14)
+                                                    @if (!empty($dokumenRKS) && (!empty($dokumenCRM_RKS) && $limitWaktu > 14))
                                                         Late
-                                                    @elseif (!empty($dokumenRKS) && $limitWaktu <= 14)
+                                                    @elseif (!empty($dokumenRKS) && (!empty($dokumenCRM_RKS) && $limitWaktu <= 14))
                                                         On Time
                                                     @elseif (!empty($dokumenCRM_RKS))
                                                         On Going
@@ -1370,9 +1370,9 @@
                                             @php
                                                 $dokumenCRM_ITB = $proyek->DokumenItbTor->first();
                                                 $dokumenITB = $contract->UploadFinal->where('category', '=', 'Dokumen ITB/TOR')->first();
-                                                if(!empty($dokumenITB)){
+                                                if(!empty($dokumenITB) && !empty($dokumenCRM_ITB)){
                                                     $statusWaktuUpload = new DateTime($dokumenITB->created_at);
-                                                    $currentDate = new DateTime();
+                                                    $currentDate = new DateTime($dokumenCRM_ITB->created_at);
                                                     $limitWaktu = $statusWaktuUpload->diff($currentDate)->d;
                                                 }
                                             @endphp
@@ -1397,9 +1397,9 @@
                                                 </small>
                                                 <br>
                                                 <small class="{{ !empty($dokumenITB) ? 'badge badge-light-primary' : 'badge badge-light-danger' }} my-1">
-                                                    @if (!empty($dokumenITB) && $limitWaktu > 14)
+                                                    @if (!empty($dokumenITB) && (!empty($dokumenCRM_ITB) && $limitWaktu > 14))
                                                         Late
-                                                    @elseif (!empty($dokumenITB) && $limitWaktu <= 14)
+                                                    @elseif (!empty($dokumenITB) && (!empty($dokumenCRM_ITB) && $limitWaktu <= 14))
                                                         On Time
                                                     @elseif (!empty($dokumenCRM_ITB))
                                                         On Going
@@ -1413,9 +1413,9 @@
                                             @php
                                                 $dokumenCRM_Tender = $proyek->DokumenTender->first();
                                                 $dokumenTender = $contract->UploadFinal->where('category', '=', 'Tinjauan Dokumen Kontrak - Perolehan')->first();
-                                                if(!empty($dokumenTender)){
+                                                if(!empty($dokumenTender) && !empty($dokumenCRM_Tender)){
                                                     $statusWaktuUpload = new DateTime($dokumenTender->created_at);
-                                                    $currentDate = new DateTime();
+                                                    $currentDate = new DateTime($dokumenCRM_Tender->created_at);
                                                     $limitWaktu = $statusWaktuUpload->diff($currentDate)->d;
                                                 }
                                             @endphp
@@ -1440,9 +1440,9 @@
                                                 </small>
                                                 <br>
                                                 <small class="{{ !empty($dokumenTender) ? 'badge badge-light-primary' : 'badge badge-light-danger' }} my-1">
-                                                    @if (!empty($dokumenTender) && $limitWaktu > 14)
+                                                    @if (!empty($dokumenTender) && (!empty($dokumenCRM_Tender) && $limitWaktu > 14))
                                                         Late
-                                                    @elseif (!empty($dokumenTender) && $limitWaktu <= 14)
+                                                    @elseif (!empty($dokumenTender) && (!empty($dokumenCRM_Tender) && $limitWaktu <= 14))
                                                         On Time
                                                     @elseif (!empty($dokumenCRM_Tender))
                                                         On Going
@@ -1456,9 +1456,9 @@
                                             @php
                                                 $dokumenCRM_Risk = $proyek->RiskTenderProyek->first();
                                                 $dokumenRisk = $contract->UploadFinal->where('category', '=', 'Dokumen Resiko - Perolehan')->first();
-                                                if(!empty($dokumenRisk)){
+                                                if(!empty($dokumenRisk) && !empty($dokumenCRM_Risk)){
                                                     $statusWaktuUpload = new DateTime($dokumenRisk->created_at);
-                                                    $currentDate = new DateTime();
+                                                    $currentDate = new DateTime($dokumenCRM_Risk->created_at);
                                                     $limitWaktu = $statusWaktuUpload->diff($currentDate)->d;
                                                 }
                                             @endphp
@@ -1483,9 +1483,9 @@
                                                 </small>
                                                 <br>
                                                 <small class="{{ !empty($dokumenRisk) ? 'badge badge-light-primary' : 'badge badge-light-danger' }} my-1">
-                                                    @if (!empty($dokumenRisk) && $limitWaktu > 14)
+                                                    @if (!empty($dokumenRisk) && (!empty($dokumenCRM_Risk) && $limitWaktu > 14))
                                                         Late
-                                                    @elseif (!empty($dokumenRisk) && $limitWaktu <= 14)
+                                                    @elseif (!empty($dokumenRisk) && (!empty($dokumenCRM_Risk) && $limitWaktu <= 14))
                                                         On Time
                                                     @elseif (!empty($dokumenCRM_Risk))
                                                         On Going

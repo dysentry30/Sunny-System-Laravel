@@ -274,7 +274,7 @@ class ContractManagementsController extends Controller
             }
         }
         $proyeks_perolehan = $proyeks_all->whereIn("stage", [2, 3, 4, 5, 6])->where("is_cancel", "!=", true)->where("is_tidak_lulus_pq", "!=", true);
-        $proyeks_pelaksanaan = $proyeks_all->where("stage", "=", 8)->where("is_cancel", "!=", true)->where("is_tidak_lulus_pq", "!=", true);
+        $proyeks_pelaksanaan = $proyeks_all->where("stage", ">=", 8)->where("is_cancel", "!=", true)->where("is_tidak_lulus_pq", "!=", true);
         $proyeks_pemeliharaan = $proyeks_all->where("is_cancel", "!=", true)->where("stages", "=", 3);
     // return view("4_Contract", compact(["proyeks"]));
         return view("4_Contract", compact(["proyeks_perolehan", "proyeks_pelaksanaan", "proyeks_pemeliharaan", "filterUnit", "filterJenis", "unitkerjas", "tahun_proyeks", "filterTahun", "month", "filterBulan", "unit_kerjas_select"]));

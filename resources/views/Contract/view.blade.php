@@ -1349,7 +1349,7 @@
                             </table>
                             <!--End:Table: Review-->
                             @php
-                            $uploadFilePerubahan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "usulan-perubahan")->first();
+                            $uploadFilePerubahan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Usulan Perubahan Draft Kontrak")->first();
                             @endphp
                             <!--End:Table: Review-->
                             @if (!empty($uploadFilePerubahan))
@@ -2943,7 +2943,7 @@
                             </table>
                             <!--End:Table: Pasal Kontraktual-->
                             @php
-                            $uploadFilePasalKontraktual = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "pasal-kontraktual")->first();
+                            $uploadFilePasalKontraktual = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Pasal Kontraktual")->first();
                             @endphp
                             <!--End:Table: Review-->
                             @if (!empty($uploadFilePasalKontraktual))
@@ -3550,7 +3550,7 @@
                             </table>
                             <!--End:Table: Checklist Manajemen Kontrak-->
                             @php
-                                $uploadFilePerubahan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "checklist-pelaksanaan")->first();
+                                $uploadFilePerubahan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Checklist Manajemen Kontrak")->first();
                             @endphp
                             <!--End:Table: Review-->
                             @if (!empty($uploadFilePerubahan))
@@ -5078,8 +5078,8 @@
 
                         </table>
                         @php
-                            $uploadFilePendingPemeliharaan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "pending-issue-pemeliharaan")->first();
-                            $uploadFilePendingPelaksanaan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "pending-issue-pelaksanaan")->first();
+                            $uploadFilePendingPemeliharaan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Pending Issue - Pemeliharaan")->first();
+                            $uploadFilePendingPelaksanaan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Pending Issue - Pelaksanaan")->first();
                             @endphp
                             <!--End:Table: Review-->
                             @if (!empty($uploadFilePendingPelaksanaan))

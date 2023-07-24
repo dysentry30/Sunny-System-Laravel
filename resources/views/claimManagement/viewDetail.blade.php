@@ -208,7 +208,7 @@
                                             </ul>
                                             <!--end:::Tabs Navigasi-->
                                             @php
-                                                $uploadFilePerubahan = $contracts->UploadFinal->where('id_contract', '=', $contracts->id_contract)->where('category', '=', "perubahan-kontrak")->first();
+                                                $uploadFilePerubahan = $contracts->UploadFinal->where('id_contract', '=', $contracts->id_contract)->where('category', '=', "Dokumen Perubahan Kontrak")->first();
                                             @endphp
                                             <!--End:Table: Review-->
                                             @if (!empty($uploadFilePerubahan))
@@ -920,7 +920,7 @@
                                         </label>
                                         <!--end::Label-->
                                         <!--begin::Input-->
-                                        <input type="hidden" name="kategori" value="perubahan-kontrak">
+                                        <input type="hidden" name="kategori" value="Dokumen Perubahan Kontrak">
                                         <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                                         <!--end::Input-->
                                     </div>

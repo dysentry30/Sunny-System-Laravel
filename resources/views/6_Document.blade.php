@@ -97,7 +97,7 @@
                                                     data-control="select2" data-hide-search="true" data-placeholder="Jenis Dokumen">
                                                     <option></option>
                                                     @forelse ($category_document as $item)
-                                                    @php
+                                                    {{-- @php
                                                     $kategori = "";
                                                         switch ($item) {
                                                             case 'aanwitjzing':
@@ -135,8 +135,8 @@
                                                                 break;
                                                             
                                                         }
-                                                    @endphp
-                                                        <option value="{{ $item }}" {{ $jenis_dokumen == $item ? 'selected' : '' }}>{{ $kategori }}</option>
+                                                    @endphp --}}
+                                                        <option value="{{ $item }}" {{ $jenis_dokumen == $item ? 'selected' : '' }}>{{ $item }}</option>
                                                     @empty
                                                         <option value=""></option>
                                                     @endforelse
@@ -194,7 +194,7 @@
                                             @endphp
                                             @forelse ($documents as $item)
 
-                                            @php
+                                            {{-- @php
                                             $kategori = "";
                                                 switch ($item->category) {
                                                     case 'aanwitjzing':
@@ -232,15 +232,15 @@
                                                         break;
                                                     
                                                 }
-                                            @endphp
+                                            @endphp --}}
 
                                             <tr>
                                                 <td>{{ $no++ }}</td>
                                                 <td>{{ $item->contract->project->nama_proyek }}</td>
-                                                <td>{{ $kategori }}</td>
+                                                <td>{{ $item->category }}</td>
                                                 <td>{{ $item->nama_document }}</td>
-                                                <td>{{ $item->created_at }}</td>
-                                                <td><a target="_blank" class="btn btn-secondary btn-sm text-hover-primary" href="{{ asset('words/'.$item->id_document) }}">Download</a></td>
+                                                <td class="text-center">{{ Carbon\Carbon::createFromTimeString($item->created_at)->translatedFormat("d F Y | H:i") }}</td>
+                                                <td class="text-center"><a target="_blank" class="btn btn-secondary btn-sm text-hover-primary" href="{{ asset('words/'.$item->id_document) }}">Download</a></td>
                                             </tr>
                                             @empty
                                                 <tr>
