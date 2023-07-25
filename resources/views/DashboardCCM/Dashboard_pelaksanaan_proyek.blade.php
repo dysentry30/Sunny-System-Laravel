@@ -325,21 +325,23 @@
                             <!--begin::Card-->
                             <div class="ms-6 col pt-0">
                                 <!--begin::Card widget 20-->
-                                <div class="mt-3 rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #F7AD1A;background-repeat: no-repeat;background-size: auto;">
+                                <div class="py-0 rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #F7AD1A;background-repeat: no-repeat;background-size: auto;">
                                     <!--begin::Header-->
                                     <div class="card-header">
                                         <!--begin::Title-->
                                         <div class="card-title d-flex flex-column">
                                             <!--begin::Amount-->
-                                            <span class="fs-2 opacity-75 fw-bold text-white me-2 lh-1 ls-n2" id="data-items">RI KONTRAK</span>
+                                            <span class="fs-1 opacity-75 fw-bold text-white me-2 lh-1 ls-n2" id="data-items">RI KONTRAK</span>
                                             <!--end::Amount-->
                                             <!--begin::Subtitle-->
-                                            <span class="text-white pt-1 fs-3">{{ Carbon\Carbon::create($proyek->tanggal_akhir_terkontrak)->translatedFormat("d M Y") ?? "-" }}</span>
                                             <!--end::Subtitle-->
                                         </div>
                                         <!--end::Title-->
                                     </div>
                                     <!--end::Header-->
+                                    <div class="card-body py-7">
+                                        <span class="text-white pt-1 fs-2">{{ Carbon\Carbon::create($proyek->tanggal_akhir_terkontrak)->translatedFormat("d F Y") ?? "-" }}</span>
+                                    </div>
                                 </div>
                                 <!--end::Card widget 20-->
                             </div>
@@ -347,21 +349,23 @@
                             <!--begin::Card-->
                             <div class="col pt-0">
                                 <!--begin::Card widget 20-->
-                                <div class="mt-3 rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #28B3AC;background-repeat: no-repeat;background-size: auto;">
+                                <div class="py-0 rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #28B3AC;background-repeat: no-repeat;background-size: auto;">
                                     <!--begin::Header-->
                                     <div class="card-header">
                                         <!--begin::Title-->
                                         <div class="card-title d-flex flex-column">
                                             <!--begin::Amount-->
-                                            <span class="fs-2 opacity-75 fw-bold text-white me-2 lh-1 ls-n2" id="data-items">RI EFEKTIF</span>
+                                            <span class="fs-1 opacity-75 fw-bold text-white me-2 lh-1 ls-n2" id="data-items">RI EFEKTIF</span>
                                             <!--end::Amount-->
                                             <!--begin::Subtitle-->
-                                            <span class="text-white pt-1 fs-3">{{ Carbon\Carbon::create($proyek->tanggal_akhir_terkontrak)->translatedFormat("d M Y") ?? "-" }}</span>
                                             <!--end::Subtitle-->
                                         </div>  
                                         <!--end::Title-->
                                     </div>
                                     <!--end::Header-->
+                                    <div class="card-body py-7">
+                                        <span class="text-white pt-1 fs-2">{{ Carbon\Carbon::create($proyek->tanggal_akhir_terkontrak)->translatedFormat("d F Y") ?? "-" }}</span>
+                                    </div>
                                 </div>
                                 <!--end::Card widget 20-->
                             </div>
@@ -1537,6 +1541,18 @@
                                    })->values();
                                @endphp --}}
                            @foreach ($asuransi_proyek as $asuransi)
+                           @php
+                           if (!empty($asuransi["tgl_berakhir"])) {
+                               $asuransiExpired = new DateTime($asuransi["tgl_berakhir"]);
+                               $currentDate = new DateTime();
+                               $interval = $currentDate->diff($asuransiExpired);
+                               if($interval->invert == 1){
+                                   $is_expired = "EXPIRED";
+                               }else{
+                                   $is_expired = "VALID";
+                               }
+                           }
+                           @endphp
                            <div class="row mb-4 ms-3 align-items-center">
                                <div class="col-3">
                                    <!--begin::Title body-->
@@ -1564,7 +1580,7 @@
                                <div class="col-3">
                                    <!--begin::Title body-->
                                    <div style="border-radius: 0px" class="card-body bg-secondary">
-                                       <p class="fw-bolder m-0 text-center">{{ $asuransi["status"] == null ? "-" : $asuransi["status"] }}</p>
+                                       <p class="fw-bolder m-0 text-center">{{ empty($asuransi["tgl_berakhir"]) ? "-" : $is_expired }}</p>
                                    </div>
                                    <!--end::Title body-->
                                </div>
@@ -1615,6 +1631,18 @@
                                @endphp --}}
                                    <!--begin::Title body-->
                                    @foreach ($jaminan_proyek as $jaminan)
+                                   @php
+                                    if (!empty($jaminan["tgl_berakhir"])) {
+                                        $jaminanExpired = new DateTime($jaminan["tgl_berakhir"]);
+                                        $currentDate = new DateTime();
+                                        $interval = $currentDate->diff($jaminanExpired);
+                                        if($interval->invert == 1){
+                                            $is_expired = "EXPIRED";
+                                        }else{
+                                            $is_expired = "VALID";
+                                        }
+                                    }
+                                    @endphp
                                    <div class="row mb-4 me-3">
                                     <div class="col-3">
                                         <!--begin::Title body-->
@@ -1642,7 +1670,7 @@
                                     <div class="col-3">
                                         <!--begin::Title body-->
                                         <div style="border-radius: 0px" class="card-body bg-secondary">
-                                            <p class="fw-bolder m-0 text-center">{{ $jaminan["status"] == null ? "-" : $jaminan["status"] }}</p>
+                                            <p class="fw-bolder m-0 text-center">{{ empty($jaminan["tgl_berakhir"]) ? "-" : $is_expired }}</p>
                                         </div>
                                         <!--end::Title body-->
                                     </div>

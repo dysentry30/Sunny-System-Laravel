@@ -473,7 +473,7 @@
                                                                      <td class="fw-bolder text-center">
                                                                         {{ (int) $anti_klaim->biaya_pengajuan != 0 ? 'Yes' : 'No' }}
                                                                     </td>
-                                                                    <td>
+                                                                    <td class="text-danger">
                                                                         (-) {{ number_format($anti_klaim->biaya_pengajuan, 0, ".", ".") }}
                                                                     </td>
                                                                     <!--end::Dampak Biaya-->

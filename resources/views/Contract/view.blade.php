@@ -3150,12 +3150,12 @@
                                         <td>
                                             VO
                                         </td>
-                                        <td>
+                                        <td class="text-center">
                                             <p class="{{ $class_name }}">
                                                 {{ $status }}
                                             </p>
                                         </td>
-                                        <td>
+                                        <td class="text-center">
                                             <small>
                                                 <a class="badge badge-light-primary" href="/claim-management/proyek/{{ $contract->project->kode_proyek }}/{{ $contract->id_contract }}?link=kt_user_view_claim_VO" target="_blank">Lihat Detail</a>
                                             </small>
@@ -3174,12 +3174,12 @@
                                         <td>
                                             Klaim
                                         </td>
-                                        <td>
+                                        <td class="text-center">
                                             <p class="{{ $class_name }}">
                                                 {{ $status }}
                                             </p>
                                         </td>
-                                        <td>
+                                        <td class="text-center">
                                             <small>
                                                 <a class="badge badge-light-primary" href="/claim-management/proyek/{{ $contract->project->kode_proyek }}/{{ $contract->id_contract }}?link=kt_user_view_claim" target="_blank">Lihat Detail</a>
                                             </small>
@@ -3198,12 +3198,12 @@
                                         <td>
                                             Anti Klaim
                                         </td>
-                                        <td>
+                                        <td class="text-center">
                                             <p class="{{ $class_name }}">
                                                 {{ $status }}
                                             </p>
                                         </td>
-                                        <td>
+                                        <td class="text-center">
                                             <small>
                                                 <a class="badge badge-light-primary" href="/claim-management/proyek/{{ $contract->project->kode_proyek }}/{{ $contract->id_contract }}?link=kt_user_view_overview_anticlaim" target="_blank">Lihat Detail</a>
                                             </small>
@@ -3222,12 +3222,12 @@
                                         <td>
                                             Klaim Asuransi
                                         </td>
-                                        <td>
+                                        <td class="text-center">
                                            <p class="{{ $class_name }}">
                                                 {{ $status }}
                                            </p>
                                         </td>
-                                        <td>
+                                        <td class="text-center">
                                             <small>
                                                 <a class="badge badge-light-primary" href="/claim-management/proyek/{{ $contract->project->kode_proyek }}/{{ $contract->id_contract }}?link=kt_user_view_overview_asuransi" target="_blank">Lihat Detail</a>
                                             </small>
@@ -3354,14 +3354,14 @@
                                     </tr>   
                                     @empty
                                     <tr>
-                                        <td colspan="6" class="text-center">
+                                        <td colspan="8" class="text-center">
                                             <h6><b>There is no data</b></h6>
                                         </td>
                                     </tr>
                                     @endforelse
                                     @else
                                     <tr>
-                                        <td colspan="6" class="text-center">
+                                        <td colspan="8" class="text-center">
                                             <h6><b>There is no data</b></h6>
                                         </td>
                                     </tr>
@@ -3485,14 +3485,14 @@
                                  </tr> 
                                  @empty
                                  <tr>
-                                     <td colspan="6" class="text-center">
+                                     <td colspan="8" class="text-center">
                                          <h6><b>There is no data</b></h6>
                                      </td>
                                  </tr>
                                 @endforelse
                                 @else
                                 <tr>
-                                    <td colspan="6" class="text-center">
+                                    <td colspan="8" class="text-center">
                                         <h6><b>There is no data</b></h6>
                                     </td>
                                 </tr>
@@ -3543,6 +3543,11 @@
                                             </td> --}}
                                         </tr>
                                     @empty
+                                    <tr>
+                                        <td colspan="2" class="text-center">
+                                            <h6><b>There is no data</b></h6>
+                                        </td>
+                                    </tr>
                                     @endforelse                                
                                 </tbody>
                                 <!--end::Table body-->
@@ -10472,7 +10477,7 @@
                                     <br>
                                     <div class="input-group">
                                         <div class="input-group-text">
-                                            <input class="form-check-input mt-0 me-2" type="radio" aria-label="" name="jawaban-8[]" value="Setiap Tanggal">
+                                            <input class="form-check-input mt-0 me-2" type="radio" aria-label="" name="jawaban-8[]" value="Setiap Tanggal" id="flexCheckDefault">
                                             <span>Dilakukan pada tanggal...</span>
                                         </div>
                                         <input type="date" class="form-control" name="sub-jawaban-8[]" aria-label="Text input with checkbox">
@@ -10483,7 +10488,7 @@
                                     <br>
                                     <div class="input-group">
                                         <div class="input-group-text">
-                                            <input class="form-check-input mt-0 me-2" type="radio" aria-label="" name="jawaban-9[]" value="Cara Lain">
+                                            <input class="form-check-input mt-0 me-2" type="radio" aria-label="" name="jawaban-8[]" value="Cara Lain" id="flexCheckDefault">
                                             <span>Cara lain?</span>
                                         </div>
                                         <input type="date" class="form-control" name="sub-jawaban-8[]" aria-label="Text input with checkbox">
@@ -10523,7 +10528,8 @@
                                     <br>
                                     <div class="input-group">
                                         <div class="input-group-text">
-                                            <input class="form-check-input mt-0 me-2" type="radio" aria-label="" name="Cara Lain" value="Cara Lain">
+                                            <input class="form-check-input" type="radio" value="Cara Lain" name="jawaban-9[]" id="flexCheckDefault">
+                                            {{-- <input class="form-check-input mt-0 me-2" type="radio" aria-label="" name="Cara Lain" value="Cara Lain"> --}}
                                             <span>Cara Lain...</span>
                                         </div>
                                         <input type="text" class="form-control" name="sub-jawaban-9[]" aria-label="Text input with checkbox">
@@ -15594,6 +15600,7 @@ aria-hidden="true">
         const elementBoots = new bootstrap.Modal(element, {});
         const url = e.getAttribute("data-url");
         const getChecklistManajemenRes = await fetch(url).then(res => res.text());
+        console.log(getChecklistManajemenRes);
         body.innerHTML = getChecklistManajemenRes;
         DOMtoTable(body, element);
         elementBoots.show();

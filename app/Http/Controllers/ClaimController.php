@@ -417,8 +417,8 @@ class ClaimController extends Controller
             "uraian-perubahan" => "required|string",
             "proposal-klaim" => "required|string",
             "tanggal-pengajuan" => "required|string",
-            "biaya-pengajuan" => "required|string",
-            "waktu-pengajuan" => "required|string",
+            // "biaya-pengajuan" => "required|string",
+            // "waktu-pengajuan" => "required|string",
         ];
         $validation = Validator::make($data, $rules, $messages);
 
@@ -461,8 +461,8 @@ class ClaimController extends Controller
             // $perubahan_kontrak->instruksi_owner = $data["instruksi-owner"];
             $perubahan_kontrak->proposal_klaim = $data["proposal-klaim"];
             $perubahan_kontrak->tanggal_pengajuan = $data["tanggal-pengajuan"];
-            $perubahan_kontrak->biaya_pengajuan = str_replace(".", "", $data["biaya-pengajuan"]);
-            $perubahan_kontrak->waktu_pengajuan = $data["waktu-pengajuan"];
+            $perubahan_kontrak->biaya_pengajuan = !empty($data["biaya-pengajuan"]) ? str_replace(".", "", $data["biaya-pengajuan"]) : null;
+            $perubahan_kontrak->waktu_pengajuan = !empty($data["biaya-pengajuan"]) ? $data["waktu-pengajuan"] : null;
             $perubahan_kontrak->stage = 1;
             // dd($perubahan_kontrak);
             if ($perubahan_kontrak->save()) {

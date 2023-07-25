@@ -2303,13 +2303,13 @@ class ContractManagementsController extends Controller
         $rules = [
             "pending-issue" => "required",
             "penyebab-issue" => "required",
-            "resiko-biaya" => "required",
-            "resiko-waktu" => "required",
-            "resiko-mutu" => "required",
+            // "resiko-biaya" => "required",
+            // "resiko-waktu" => "required",
+            // "resiko-mutu" => "required",
             "rencana-tindak-lanjut" => "required",
-            "ancaman" => "required",
+            // "ancaman" => "required",
             "id-contract" => "required",
-            "peluang" => "required",
+            // "peluang" => "required",
         ];
 
         if (isset($data["file-document"])) {
@@ -2339,7 +2339,7 @@ class ContractManagementsController extends Controller
             $uploadFinal->nama_document = $nama_file;
             $uploadFinal->category = $data["kategori"];
 
-            $pendingIssue->document = $nama_file;
+            $pendingIssue->nama_document = $nama_file;
             $pendingIssue->id_document = $id_document;
 
             $uploadFinal->save();
@@ -2383,13 +2383,13 @@ class ContractManagementsController extends Controller
         $rules = [
             "pending-issue" => "required",
             "penyebab-issue" => "required",
-            "resiko-biaya" => "required",
-            "resiko-waktu" => "required",
-            "resiko-mutu" => "required",
+            // "resiko-biaya" => "required",
+            // "resiko-waktu" => "required",
+            // "resiko-mutu" => "required",
             "rencana-tindak-lanjut" => "required",
-            "ancaman" => "required",
+            // "ancaman" => "required",
             "id-contract" => "required",
-            "peluang" => "required",
+            // "peluang" => "required",
         ];
         if (isset($data["pending-issue-file"])) {
             $rules["pending-issue-file"] = "required|file";
@@ -3224,7 +3224,8 @@ class ContractManagementsController extends Controller
         // dd($id);
         $html = '';
         if($id->kategori == 'Progress 0-20%') {
-            $html = "<div id='progress_0-20'>
+            $html = "
+            <div id='progress_0-20'>
                 <div id='slide-2' class='data'>
                     <!--begin::Label-->
                     <label class='fs-6 fw-bold form-label'>
@@ -3240,7 +3241,7 @@ class ContractManagementsController extends Controller
                     <!--end::Label-->
                     <!--begin::Input-->
                     <!--end::Input-->
-                    <h6>$id->jawaban_1, " . Carbon::create($id->sub_jawaban_1)->translatedFormat('d F Y') . "</h6>
+                    <h6>$id->jawaban_1," . ($id->jawaban_1 == "Ya" ? Carbon::parse($id->sub_jawaban_2)->translatedFormat('d F Y') : $id->sub_jawaban_1) . "</h6>
                     <br>
                     <!--end::Input-->
                 </div>

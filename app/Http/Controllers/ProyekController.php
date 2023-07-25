@@ -1361,10 +1361,21 @@ class ProyekController extends Controller
         $claimManagement = ClaimManagements::where('kode_proyek', "=", $deleteProyek->kode_proyek)->get();
         $forecasts = Forecast::where('kode_proyek', "=", $deleteProyek->kode_proyek)->get();
         $historyForecasts = HistoryForecast::where('kode_proyek', "=", $deleteProyek->kode_proyek)->get();
+        
+        $data = [
+            "Proyek_Detail" => $deleteProyek->toArray(),
+            "Proyek_Berjalan_Detail" => !empty($proyekBerjalan) ? $proyekBerjalan->toArray() : null ,
+            "Contract_Management_Detail" => !empty($contractManagement) ? $contractManagement->toArray() : null,
+            "ClaimManagement_Detail" => !empty($claimManagement) ? $claimManagement->toArray() : null,
+            "Forecast_Detail" => !empty($forecasts) ? $forecasts->toArray() : null,
+            "History_Forcast" => !empty($historyForecasts) ? $historyForecasts->toArray() : null,
+        ];
+
+        
         $claimManagement->each(function ($claim) {
             $claim->delete();
         });
-
+        
         Alert::success('Delete', $deleteProyek->nama_proyek . ", Berhasil Dihapus");
         if (!empty($proyekBerjalan)) {
             $proyekBerjalan->delete();
@@ -1382,8 +1393,9 @@ class ProyekController extends Controller
                 $hf->delete();
             }
         }
+        setLogging("proyek-delete", "Proyek ". $deleteProyek->kode_proyek . " - " . $deleteProyek->nama_proyek ." =>", $data);
         $deleteProyek->delete();
-
+        
         // if ($proyekBerjalan != null && $contractManagement != null && $forecasts != null) {
         //     $deleteProyek->delete();
         //     $contractManagement->delete();
