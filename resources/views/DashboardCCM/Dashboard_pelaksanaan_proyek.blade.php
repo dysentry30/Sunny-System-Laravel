@@ -89,6 +89,7 @@
                 @include('template.header')
                 <!--end::Header-->
 
+
                 <!--begin::Content-->
                 <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
                     <!--begin::Toolbar-->
@@ -120,7 +121,7 @@
                                             <!--end:::Tab Item Tab Pane-->
                                             <!--begin:::Tab Item Tab Pane-->
                                             <li class="nav-item">
-                                                <a class="nav-link text-active-primary pb-4 "
+                                                <a class="nav-link text-active-primary pb-4"
                                                     href="/dashboard-ccm/pemeliharaan-kontrak" style="font-size:14px;">Pemeliharaan Kontrak</a>
                                             </li>
                                             <!--end:::Tab Item Tab Pane-->
@@ -141,7 +142,7 @@
                         <!--Begin :: Filter-->
                         <div class="card">
                             <div class="card-body">
-                                {{-- <div class="row">
+                                <div class="row">
                                     <div class="col-3">
                                         <select onchange="selectFilter(this)" id="dop" name="dop"
                                                 class="form-select form-select-solid w-auto"
@@ -168,16 +169,17 @@
                                         </select>
                                     </div>
 
-                                    
                                     <div class="col-3">
                                         <select onchange="selectFilter(this)" id="proyek" name="proyek"
                                                 class="form-select form-select-solid w-auto"
                                                 style="margin-right: 2rem;" data-control="select2" data-hide-search="false"
                                                 data-placeholder="Proyek" data-select2-id="select2-data-proyek" tabindex="-1"
                                                 aria-hidden="true">
+                                                {{-- <option value="" {{$dop_get == "" ? "selected" : ""}}></option> --}}
                                                 <option value="" selected></option>
-                                                @foreach ($contracts_pelaksanaan as $p)
-                                                    <option value="{{ $p->project_id }}" {{ $proyek_get == $p->project_id ? 'selected' : '' }} >{{ $p->nama_proyek }} ({{$p->project_id}})</option>
+                                                @foreach ($proyeks as $p)
+                                                    {{-- <option value="{{ $p->divcode }}" {{ $p_get == $p->divcode ? 'selected' : '' }} >{{ $p->unit_kerja }}</option> --}}
+                                                    <option value="{{ $p->kode_proyek }}" {{ $proyek_get == $p->kode_proyek ? 'selected' : '' }} >{{ $p->nama_proyek }} ({{$p->kode_proyek}})</option>
                                                 @endforeach
                                         </select>
                                     </div>
@@ -186,96 +188,7 @@
                                             <button type="submit" class="btn btn-secondary">Reset</button>
                                         </form>
                                     </div>
-                                </div> --}}
-                                <form action="" method="GET">
-                                        <div class="row">
-                                            <div class="col-2">                                        
-                                                <select onchange="this.form.submit()" id="dop" name="dop"
-                                                        class="form-select form-select-solid w-auto"
-                                                        style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
-                                                        data-placeholder="Direktorat" data-select2-id="select2-data-dop" tabindex="-1"
-                                                        aria-hidden="true">
-                                                        <option value="" selected></option>
-                                                        @foreach ($dops as $dop)
-                                                            <option value="{{ $dop->dop }}" {{ $dop_get == $dop->dop || $proyek->dop == $dop->dop ? 'selected' : '' }} >{{ $dop->dop }}</option>
-                                                        @endforeach
-                                                </select>
-                                            </div>
-
-                                            <div class="col-2">
-                                                <select onchange="this.form.submit()" id="unit-kerja" name="unit-kerja"
-                                                        class="form-select form-select-solid w-auto"
-                                                        style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
-                                                        data-placeholder="Unit Kerja" data-select2-id="select2-data-unit-kerja" tabindex="-1"
-                                                        aria-hidden="true">
-                                                        <option value="" selected></option>
-                                                        @foreach ($unit_kerjas as $unit_kerjas)
-                                                            <option value="{{ $unit_kerjas->divcode }}" {{ $unit_kerja_get == $unit_kerjas->divcode || $proyek->unit_kerja == $unit_kerjas->divcode ? 'selected' : '' }} >{{ $unit_kerjas->unit_kerja }}</option>
-                                                        @endforeach
-                                                </select>
-                                            </div>
-
-                                            <div class="col-2">
-                                                <select onchange="selectFilter(this)" id="kode-proyek" name="proyek"
-                                                        class="form-select form-select-solid w-auto"
-                                                        style="margin-right: 2rem;" data-control="select2" data-hide-search="false"
-                                                        data-placeholder="Proyek" data-select2-id="select2-data-proyek" tabindex="-1"
-                                                        aria-hidden="true">
-                                                        <option value="" selected></option>
-                                                        @foreach ($contract_pelaksanaan_new as $kontrak)
-                                                            <option value="{{ $kontrak->project_id }}" {{ $proyek_get == $kontrak->project_id ? 'selected' : '' }} >{{ $kontrak->project->nama_proyek }} ({{ $kontrak->project_id }})</option>
-                                                            {{-- <option value="{{ $proyek->kode_proyek }}" >{{ $proyek->nama_proyek }} ({{$proyek->kode_proyek}})</option> --}}
-                                                        @endforeach
-                                                </select>
-                                            </div>
-
-                                            <div class="col-2">
-                                                <select id="bulan" name="bulan"
-                                                        class="form-select form-select-solid w-auto"
-                                                        style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
-                                                        data-placeholder="Bulan" data-select2-id="select2-data-bulan" tabindex="-1"
-                                                        aria-hidden="true">
-                                                        <option {{ $month == '' ? 'selected' : '' }}></option>
-                                                        <option value="1" {{ $bulan_get == 1 || $proyek->bulan_pelaksanaan == 1 ? 'selected' : '' }}>Januari</option>
-                                                        <option value="2" {{ $bulan_get == 2 || $proyek->bulan_pelaksanaan == 2 ? 'selected' : '' }}>Februari</option>
-                                                        <option value="3" {{ $bulan_get == 3 || $proyek->bulan_pelaksanaan == 3 ? 'selected' : '' }}>Maret</option>
-                                                        <option value="4" {{ $bulan_get == 4 || $proyek->bulan_pelaksanaan == 4 ? 'selected' : '' }}>April</option>
-                                                        <option value="5" {{ $bulan_get == 5 || $proyek->bulan_pelaksanaan == 5 ? 'selected' : '' }}>Mei</option>
-                                                        <option value="6" {{ $bulan_get == 6 || $proyek->bulan_pelaksanaan == 6 ? 'selected' : '' }}>Juni</option>
-                                                        <option value="7" {{ $bulan_get == 7 || $proyek->bulan_pelaksanaan == 7 ? 'selected' : '' }}>Juli</option>
-                                                        <option value="8" {{ $bulan_get == 8 || $proyek->bulan_pelaksanaan == 8 ? 'selected' : '' }}>Agustus</option>
-                                                        <option value="9" {{ $bulan_get == 9 || $proyek->bulan_pelaksanaan == 9 ? 'selected' : '' }}>September</option>
-                                                        <option value="10" {{ $bulan_get == 10 || $proyek->bulan_pelaksanaan == 10 ? 'selected' : '' }}>Oktober</option>
-                                                        <option value="11" {{ $bulan_get == 11 || $proyek->bulan_pelaksanaan == 11 ? 'selected' : '' }}>November</option>
-                                                        <option value="12" {{ $bulan_get == 12 || $proyek->bulan_pelaksanaan == 12 ? 'selected' : '' }}>Desember</option>
-                                                </select>
-                                            </div>
-
-                                            <div class="col-2">
-                                                <select id="tahun" name="tahun"
-                                                        class="form-select form-select-solid w-auto"
-                                                        style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
-                                                        data-placeholder="Tahun" data-select2-id="select2-data-tahun" tabindex="-1"
-                                                        aria-hidden="true">
-                                                        <option value="" selected></option>
-                                                        @foreach ($tahun as $t)
-                                                            <option value="{{$t}}" {{ $tahun_get == $t ? 'selected' : '' }}>{{$t}}</option>
-                                                        @endforeach 
-                                                </select>
-                                            </div>
-                                            
-                                            <div class="col-2" data-control="select-2" data-select2-id="select-data-submit">
-                                                    <button type="submit" class="btn btn-light btn-active-primary">Filter</button>
-                                                    <button type="button" onclick="resetFilter()" class="btn btn-light btn-active-primary">Reset</button>
-                                                    <script>
-                                                        function resetFilter() {
-                                                            window.location.href = "/dashboard-ccm/pelaksanaan-kontrak";
-                                                        }
-                                                    </script>
-                                            </div>
-
-                                    </div>
-                                </form>
+                                </div>
                             </div>
                         </div>
                         <!--End :: Filter-->
@@ -285,10 +198,9 @@
                         <!--begin::Title-->
                         <div class="mb-4">
                             <div class="col-12">
-                                {{-- @dd($proyek) --}}
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-secondary">
-                                    <h2 class="m-0 text-center">{{ "SP00".sprintf("%02d", mt_rand(0, 99)) }} &nbsp; - &nbsp; {{ $proyek->UnitKerja->unit_kerja }} &nbsp; - &nbsp; {{ $proyek->nama_proyek }}</h2>
+                                    <h2 class="m-0 text-center">{{ "SP00".sprintf("%02d", mt_rand(0, 99)) }}- {{ $proyek->UnitKerja->unit_kerja }} &nbsp; - &nbsp; {{ $proyek->nama_proyek }}</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
@@ -306,26 +218,12 @@
                         </div>
                         <!--end::Title-->
 
-                        @php
-                        if (!empty($proyek->ContractManagements->ContractBast)) {
-                            $bast_1 = $proyek->ContractManagements->ContractBast->filter(function($item){
-                                return $item->bast == 1;
-                            })->first();
-                            $bast_2 = $proyek->ContractManagements->ContractBast->filter(function($item){
-                                return $item->bast == 2;
-                            })->first();
-                        }else {
-                            $bast_1 = "-";
-                            $bast_2 = "-";
-                        };
-                        @endphp
-
                         <!--begin::Row-->
-                        <div class="row mb-0">
+                        <div class="row">
                             <!--begin::Card-->
-                            <div class="ms-6 col pt-0">
+                            <div class="ms-6 col mb-6 pt-0">
                                 <!--begin::Card widget 20-->
-                                <div class="mt-3 rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #F7AD1A;background-repeat: no-repeat;background-size: auto;">
+                                <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #F7AD1A;background-repeat: no-repeat;background-size: auto;">
                                     <!--begin::Header-->
                                     <div class="card-header">
                                         <!--begin::Title-->
@@ -334,7 +232,7 @@
                                             <span class="fs-2 opacity-75 fw-bold text-white me-2 lh-1 ls-n2" id="data-items">RI KONTRAK</span>
                                             <!--end::Amount-->
                                             <!--begin::Subtitle-->
-                                            <span class="text-white pt-1 fs-3">{{ Carbon\Carbon::create($proyek->tanggal_akhir_terkontrak)->translatedFormat("d M Y") ?? "-" }}</span>
+                                            <span class="text-white pt-1 fs-3">{!! $proyek->tanggal_mulai_terkontrak !!}</span>
                                             <!--end::Subtitle-->
                                         </div>
                                         <!--end::Title-->
@@ -345,9 +243,9 @@
                             </div>
                             <!--end::Card-->
                             <!--begin::Card-->
-                            <div class="col pt-0">
+                            <div class="col mb-6 pt-0">
                                 <!--begin::Card widget 20-->
-                                <div class="mt-3 rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #28B3AC;background-repeat: no-repeat;background-size: auto;">
+                                <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #28B3AC;background-repeat: no-repeat;background-size: auto;">
                                     <!--begin::Header-->
                                     <div class="card-header">
                                         <!--begin::Title-->
@@ -356,7 +254,7 @@
                                             <span class="fs-2 opacity-75 fw-bold text-white me-2 lh-1 ls-n2" id="data-items">RI EFEKTIF</span>
                                             <!--end::Amount-->
                                             <!--begin::Subtitle-->
-                                            <span class="text-white pt-1 fs-3">{{ Carbon\Carbon::create($proyek->tanggal_akhir_terkontrak)->translatedFormat("d M Y") ?? "-" }}</span>
+                                            <span class="text-white pt-1 fs-3">{{ $proyek->tanggal_akhir_terkontrak }}</span>
                                             <!--end::Subtitle-->
                                         </div>  
                                         <!--end::Title-->
@@ -367,27 +265,9 @@
                             </div>
                             <!--begin::Card-->
                             <!--end::Card-->
-                            <div class="col pt-0">
+                            <div class="col mb-6 pt-0">
                                 <!--begin::Card widget 20-->
                                 <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #F7AD1A;background-repeat: no-repeat;background-size: auto;">
-                                    <!--begin::Header-->
-                                    <div class="card-header">
-                                        <!--begin::Title-->
-                                        <div class="card-title d-flex flex-column">
-                                            <!--begin::Amount-->
-                                            <span class="fs-2 opacity-75 fw-bold text-white me-2 lh-1 ls-n2" id="data-items">RA BAST 1</span>
-                                            <!--end::Amount-->
-                                            <!--begin::Subtitle-->
-                                            <span class="text-white pt-1 fs-3">{{ Carbon\Carbon::create($proyek->tanggal_selesai_fho)->translatedFormat("d M Y") ?? "-" }}</span>
-                                            <!--end::Subtitle-->
-                                        </div>  
-                                        <!--end::Title-->
-                                    </div>
-                                    <!--end::Header-->
-                                </div>
-                                <!--end::Card widget 20-->
-                                <!--begin::Card widget 20-->
-                                <div class="mt-3  rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #F7AD1A;background-repeat: no-repeat;background-size: auto;">
                                     <!--begin::Header-->
                                     <div class="card-header">
                                         <!--begin::Title-->
@@ -396,7 +276,7 @@
                                             <span class="fs-2 opacity-75 fw-bold text-white me-2 lh-1 ls-n2" id="data-items">RI BAST 1</span>
                                             <!--end::Amount-->
                                             <!--begin::Subtitle-->
-                                            <span class="text-white pt-1 fs-3">{{ !empty($bast_1) ? Carbon\Carbon::create($bast_1->tanggal_dokumen)->translatedFormat("d M Y") : "-"  }}</span>
+                                            <span class="text-white pt-1 fs-3">{{ $proyek->tanggal_selesai_pho }}</span>
                                             <!--end::Subtitle-->
                                         </div>  
                                         <!--end::Title-->
@@ -407,27 +287,9 @@
                             </div>
                             <!--end::Card-->
                             <!--begin::Card-->
-                            <div class="col pt-0">
+                            <div class="col mb-6 pt-0">
                                 <!--begin::Card widget 20-->
                                 <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #28B3AC;background-repeat: no-repeat;background-size: auto;">
-                                    <!--begin::Header-->
-                                    <div class="card-header">
-                                        <!--begin::Title-->
-                                        <div class="card-title d-flex flex-column">
-                                            <!--begin::Amount-->
-                                            <span class="fs-2 opacity-75 fw-bold text-white me-2 lh-1 ls-n2" id="data-items">RA BAST 2</span>
-                                            <!--end::Amount-->
-                                            <!--begin::Subtitle-->
-                                            <span class="text-white pt-1 fs-3">{{ Carbon\Carbon::create($proyek->tanggal_selesai_fho)->translatedFormat("d M Y") ?? "-" }}</span>
-                                            <!--end::Subtitle-->
-                                        </div>  
-                                        <!--end::Title-->
-                                    </div>
-                                    <!--end::Header-->
-                                </div>
-                                <!--end::Card widget 20-->
-                                <!--begin::Card widget 20-->
-                                <div class="mt-3 rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #28B3AC;background-repeat: no-repeat;background-size: auto;">
                                     <!--begin::Header-->
                                     <div class="card-header">
                                         <!--begin::Title-->
@@ -436,7 +298,7 @@
                                             <span class="fs-2 opacity-75 fw-bold text-white me-2 lh-1 ls-n2" id="data-items">RI BAST 2</span>
                                             <!--end::Amount-->
                                             <!--begin::Subtitle-->
-                                            <span class="text-white pt-1 fs-3">{{ !empty($bast_2) ? Carbon\Carbon::create($bast_2->tanggal_dokumen)->translatedFormat("d M Y") : "-"  }}</span>
+                                            <span class="text-white pt-1 fs-3">{{ $proyek->tanggal_selesai_fho }}</span>
                                             <!--end::Subtitle-->
                                         </div>  
                                         <!--end::Title-->
@@ -447,119 +309,33 @@
                             </div>
                             <!--end::Card-->
                             <!--begin::Card-->
-                            <div class="col pt-0">
+                            <div class="me-6 col mb-6 pt-0">
                                 <!--begin::Card widget 20-->
-                                <div class="py-0 rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #027DB8;background-repeat: no-repeat;background-size: auto;">
+                                <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #027DB8;background-repeat: no-repeat;background-size: auto;">
                                     <!--begin::Header-->
                                     <div class="card-header">
                                         <!--begin::Title-->
                                         <div class="card-title d-flex flex-column">
                                             <!--begin::Amount-->
-                                            <span class="fs-1 fw-bold text-white me-2 lh-1 ls-n2 opacity-75" id="data-items">PROJECT STATUS</span>
+                                            <span class="fs-2 fw-bold text-white me-2 lh-1 ls-n2 opacity-75" id="data-items">PROJECT STATUS</span>
                                             <!--end::Amount-->
+                                            <!--begin::Subtitle-->
+                                            @if (empty($proyek->tanggal_mulai_terkontrak))
+                                            <span class="text-white pt-1 fs-2">Persiapan</span>
+                                            @elseif ($proyek->tanggal_mulai_terkontrak < now()->translatedFormat("Y-m-d") && $proyek->tanggal_akhir_terkontrak > now()->translatedFormat("Y-m-d") )
+                                            <span class="text-white pt-1 fs-2">Pelaksanaan</span>
+                                            @elseif ($proyek->tanggal_selesai_pho )
+                                            <span class="text-white pt-1 fs-2">Pemeliharaan</span>
+                                            @elseif ($proyek->tanggal_selesai_fho < now()->translatedFormat("Y-m-d") )
+                                            <span class="text-white pt-1 fs-2">Proyek Selesai</span>
+                                            @else
+                                            <span class="text-white pt-1 fs-2">-</span>
+                                            @endif 
+                                            <!--end::Subtitle-->
                                         </div>  
                                         <!--end::Title-->
                                     </div>
                                     <!--end::Header-->
-                                    <!--begin::Header-->
-                                    <div class="card-body py-7">
-                                        <!--begin::Subtitle-->
-                                        @if (empty($proyek->tanggal_mulai_terkontrak))
-                                        <span class="text-white fs-1">Persiapan</span>
-                                        @elseif ($proyek->tanggal_mulai_terkontrak < now()->translatedFormat("Y-m-d") && $proyek->tanggal_akhir_terkontrak > now()->translatedFormat("Y-m-d") )
-                                        <span class="text-white fs-1">Pelaksanaan</span>
-                                        @elseif ($proyek->tanggal_selesai_pho )
-                                        <span class="text-white fs-1">Pemeliharaan</span>
-                                        @elseif ($proyek->tanggal_selesai_fho < now()->translatedFormat("Y-m-d") )
-                                        <span class="text-white fs-1">Proyek Selesai</span>
-                                        @else
-                                        <span class="text-white fs-1">-</span>
-                                        @endif 
-                                        <!--end::Subtitle-->
-                                    </div>
-                                    <!--end::Header-->
-                                </div>
-                                <!--end::Card widget 20-->
-                            </div>
-                            <!--end::Card-->
-                            <!--begin::Card-->
-                            <div class="col pt-0">
-                                <!--begin::Card widget 20-->
-                                <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90 mb-5 mb-xl-10" style="background-color: #BB2F5D; border-radius: 0%">
-                                    <!--begin::Header-->
-                                    <div class="card-header pt-5">
-                                        <!--begin::Title-->
-                                        <div class="card-title d-flex flex-column">
-                                            @php
-                                                $timeStatus = mt_rand(10, 95);
-                                                $timePending = 100 - (int) $timeStatus;
-                                            @endphp
-                                            <!--begin::Amount-->
-                                            <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2">{{ !empty($time_status) ? $time_status : "0%" }}</span>
-                                            <!--end::Amount-->
-                                            <!--begin::Subtitle-->
-                                            <span class="text-white opacity-75 pt-1 fw-semibold fs-6">TIME STATUS</span>
-                                            <!--end::Subtitle-->
-                                        </div>
-                                        <!--end::Title-->
-                                    </div>
-                                    <!--end::Header-->
-                                    <!--begin::Card body-->
-                                    <div class="card-body d-flex align-items-end pt-0 pb-6">
-                                        <!--begin::Progress-->
-                                        <div class="d-flex align-items-center flex-column mt-3 w-100">
-                                            <div class="d-flex justify-content-between fw-bold fs-6 text-white opacity-75 w-100 mt-auto mb-2">
-                                                <span>{{ !empty($time_status) ? $time_status : "0%" }}</span>
-                                                {{-- <span>-{{ $timePending }}%</span> --}}
-                                            </div>
-                                            <div class="h-8px mx-3 w-100 bg-white bg-opacity-50 rounded">
-                                                <div class="bg-white rounded h-8px" role="progressbar" style="width: {{ (int)$time_status }};" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
-                                        <!--end::Progress-->
-                                    </div>
-                                    <!--end::Card body-->
-                                </div>
-                                <!--end::Card widget 20-->
-                            </div>
-                            <!--end::Card-->
-                            <!--begin::Card-->
-                            <div class="col pt-0 me-6">
-                                <!--begin::Card widget 20-->
-                                <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90 mb-5 mb-xl-10" style="background-color: #9D4C83; border-radius: 0%">
-                                    <!--begin::Header-->
-                                    <div class="card-header pt-5">
-                                        <!--begin::Title-->
-                                        <div class="card-title d-flex flex-column">
-                                            @php
-                                                $progresStatus = mt_rand(10, 95);
-                                                $progresPending = 100 - (int) $progresStatus;
-                                            @endphp
-                                            <!--begin::Amount-->
-                                            <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2">{{ $percen_progress_status }}</span>
-                                            <!--end::Amount-->
-                                            <!--begin::Subtitle-->
-                                            <span class="text-white opacity-75 pt-1 fw-semibold fs-6">PROGRESS STATUS</span>
-                                            <!--end::Subtitle-->
-                                        </div>
-                                        <!--end::Title-->
-                                    </div>
-                                    <!--end::Header-->
-                                    <!--begin::Card body-->
-                                    <div class="card-body d-flex align-items-end pt-0 pb-6">
-                                        <!--begin::Progress-->
-                                        <div class="d-flex align-items-center flex-column mt-3 w-100">
-                                            <div class="d-flex justify-content-between fw-bold fs-6 text-white opacity-75 w-100 mt-auto mb-2">
-                                                <span>{{ $percen_progress_status }}</span>
-                                                {{-- <span>-{{ $progresPending }}%</span> --}}
-                                            </div>
-                                            <div class="h-8px mx-3 w-100 bg-white bg-opacity-50 rounded">
-                                                <div class="bg-white rounded h-8px" role="progressbar" style="width: {{ (int) $percen_progress_status }}%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
-                                        <!--end::Progress-->
-                                    </div>
-                                    <!--end::Card body-->
                                 </div>
                                 <!--end::Card widget 20-->
                             </div>
@@ -568,137 +344,196 @@
                         <!--end::Row-->
 
                         <!--begin::Card Diagram-->
-                        <div class="row my-5">
-                            <div class="col">
-                                <div class="card-body text-center fs-2 text-white bg-success">
-                                    <b>Contract Historical</b>
+                        <div class="row mx-3">
+                            <!--begin::Card column-->
+                            <div class="col-2 ">
+                                <!--begin::Link-->
+                                <div class="col mb-4">
+                                    <!--begin::Card body-->
+                                    <div class="pt-0">
+                                        <!--begin::Card widget 20-->
+                                        <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #E4E6EF;background-image:url('/assets/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                            <!--begin::Card body-->
+                                            <div class="btn rounded-0 btn-active-primary card-body d-flex align-items-end pt-3">
+                                                <!--begin::Progress-->
+                                                <div class="d-flex align-items-center flex-column  w-100">
+                                                    @if (empty($proyek->ContractManagements))
+                                                    <a target="_blank" class="text-gray-800 fs-3" href="#">Lihat Kontrak</a>
+                                                    @else    
+                                                    <a target="_blank" class="text-gray-800 fs-3" href="/contract-management/view/{{ urlencode(urlencode($proyek->ContractManagements->id_contract)) }}">Lihat Kontrak</a>
+                                                    @endif
+                                                </div>
+                                                <!--end::Progress-->
+                                            </div>
+                                            <!--end::Card body-->
+                                        </div>
+                                        <!--end::Card widget 20-->
+                                    </div>
+                                    <!--end::Card body-->
                                 </div>
-                            </div>
-                        </div>
-                        <!--end::Card Diagram-->
-
-                        <!--begin::Card Diagram-->
-                        <div class="row my-5">
-                            <div class="col">
-                                <div class="card-body text-center fs-4 text-white bg-success">
-                                    <b>Contract Value</b>
+                                <!--end::Link-->
+                                <!--begin::Link-->
+                                <div class="col mb-4">
+                                    <!--begin::Card body-->
+                                    <div class="pt-0">
+                                        <!--begin::Card widget 20-->
+                                        <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #E4E6EF;background-image:url('/assets/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                            <!--begin::Card body-->
+                                            <div class="btn rounded-0 btn-active-primary card-body d-flex align-items-end pt-3">
+                                                <!--begin::Progress-->
+                                                <div class="d-flex align-items-center flex-column  w-100">
+                                                    <a target="_blank" class="text-gray-800 fs-3" href="/proyek/view/{{ $proyek->kode_proyek }}">Lihat Proyek</a>
+                                                </div>
+                                                <!--end::Progress-->
+                                            </div>
+                                            <!--end::Card body-->
+                                        </div>
+                                        <!--end::Card widget 20-->
+                                    </div>
+                                    <!--end::Card body-->
                                 </div>
-                            </div>
-                            <div class="col">
-                                <div class="card-body text-center fs-4 text-white bg-success">
-                                    <b>Contract Schedule</b>
+                                <!--end::Link-->
+                                <!--begin::Link-->
+                                <div class="col mb-4">
+                                    <!--begin::Card body-->
+                                    <div class="pt-0">
+                                        <!--begin::Card widget 20-->
+                                        <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #E4E6EF;background-image:url('/assets/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                            <!--begin::Card body-->
+                                            <div class="btn rounded-0 btn-active-primary card-body d-flex align-items-end pt-3">
+                                                <!--begin::Progress-->
+                                                <div class="d-flex align-items-center flex-column  w-100">
+                                                    @if (empty($proyek->ContractManagements))
+                                                    <a target="_blank" class="text-gray-800 fs-3" href="#">Lihat Kontrak</a>
+                                                    @else    
+                                                    <a target="_blank" class="text-gray-800 fs-3" href="/contract-management/view/{{ urlencode(urlencode($proyek->ContractManagements->id_contract)) }}">Lihat Kontrak</a>
+                                                    @endif
+                                                </div>
+                                                <!--end::Progress-->
+                                            </div>
+                                            <!--end::Card body-->
+                                        </div>
+                                        <!--end::Card widget 20-->
+                                    </div>
+                                    <!--end::Card body-->
                                 </div>
-                            </div>
-                        </div>
-                        <!--end::Card Diagram-->
-
-                        <!--begin::Card Diagram-->
-                        <div class="row my-5">
-                            <div class="col">
-                                <div class="overflow-scroll border" style="max-height: 200px">
-                                    <table class="table">
-                                        <thead class="position-sticky top-0 left-0">
-                                            <tr class="fw-boldest">
-                                                <th rowspan="2" class="text-center align-middle">NO</th>
-                                                <th rowspan="2" class="text-center align-middle">URAIAN</th>
-                                                <th colspan="4" class="text-center">OMZET KONTRAK</th>
-                                            </tr>
-                                            <tr class="fw-boldest">
-                                                
-                                                <th class="text-center">IDR</th>
-                                                <th class="text-center">USD</th>
-                                                <th class="text-center">KURS KONTRAK</th>
-                                                <th class="text-center">NILAI (EKIVALEN)</th>    
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td class="text-center">1</td>
-                                                <td>Original</td>
-                                                <td class="text-center">100.000.000.000</td>
-                                                <td class="text-center">100.000.000.000</td>
-                                                <td class="text-center">100.000.000.000</td>
-                                                <td class="text-center">100.000.000.000</td>
-                                            </tr>
-                                            @foreach (range(1,4) as $item)
-                                                <tr>
-                                                    <td class="text-center">{{$item + 1}}</td>
-                                                    <td>Amandemen - {{ $item }}</td>
-                                                    <td class="text-center">100.000.000.000</td>
-                                                    <td class="text-center">100.000.000.000</td>
-                                                    <td class="text-center">100.000.000.000</td>
-                                                    <td class="text-center">100.000.000.000</td>
-                                                </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
+                                <!--end::Link-->
+                                <!--begin::Link-->
+                                <div class="col mb-4">
+                                    <!--begin::Card body-->
+                                    <div class="pt-0">
+                                        <!--begin::Card widget 20-->
+                                        <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #E4E6EF;background-image:url('/assets/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                            <!--begin::Card body-->
+                                            <div class="btn rounded-0 btn-active-primary card-body d-flex align-items-end pt-3">
+                                                <!--begin::Progress-->
+                                                <div class="d-flex align-items-center flex-column  w-100">
+                                                    <a target="_blank" class="text-gray-800 fs-3" href="/proyek/view/{{ $proyek->kode_proyek }}">Lihat Proyek</a>
+                                                </div>
+                                                <!--end::Progress-->
+                                            </div>
+                                            <!--end::Card body-->
+                                        </div>
+                                        <!--end::Card widget 20-->
+                                    </div>
+                                    <!--end::Card body-->
                                 </div>
-                                <small>* this table is scrollable</small>
-                            </div>
-                            <div class="col">
-                                <div class="overflow-scroll border" style="max-height: 200px">
-                                    <table class="table">
-                                        <thead class="position-sticky top-0 left-0">
-                                            <tr class="fw-boldest">
-                                                <th class="text-center align-middle">NO</th>
-                                                <th class="text-center align-middle">URAIAN</th>
-                                                <th class="text-center">ORIGINAL</th>
-                                                @foreach (range(1,3) as $item)
-                                                    <th class="text-center">AMD.{{$item}}</th>
-                                                @endforeach
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td class="text-center">1</td>
-                                                <td>Tanggal Efektif</td>
-                                                <td class="text-center">{{ Carbon\Carbon::now()->translatedFormat("d-M-Y")}}</td>
-                                                <td class="text-center">{{ Carbon\Carbon::now()->translatedFormat("d-M-Y")}}</td>
-                                                <td class="text-center">{{ Carbon\Carbon::now()->translatedFormat("d-M-Y")}}</td>
-                                                <td class="text-center">{{ Carbon\Carbon::now()->translatedFormat("d-M-Y")}}</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="text-center">2</td>
-                                                <td>BAST-1 (PHO)</td>
-                                                <td class="text-center">{{ Carbon\Carbon::now()->translatedFormat("d-M-Y")}}</td>
-                                                <td class="text-center">{{ Carbon\Carbon::now()->translatedFormat("d-M-Y")}}</td>
-                                                <td class="text-center">{{ Carbon\Carbon::now()->translatedFormat("d-M-Y")}}</td>
-                                                <td class="text-center">{{ Carbon\Carbon::now()->translatedFormat("d-M-Y")}}</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="text-center">3</td>
-                                                <td>Durasi Pelaksanaan</td>
-                                                <td class="text-center">9000</td>
-                                                <td class="text-center">9000</td>
-                                                <td class="text-center">9000</td>
-                                                <td class="text-center">9000</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="text-center">4</td>
-                                                <td>BAST-2 (FHO)</td>
-                                                <td class="text-center">{{ Carbon\Carbon::now()->translatedFormat("d-M-Y")}}</td>
-                                                <td class="text-center">{{ Carbon\Carbon::now()->translatedFormat("d-M-Y")}}</td>
-                                                <td class="text-center">{{ Carbon\Carbon::now()->translatedFormat("d-M-Y")}}</td>
-                                                <td class="text-center">{{ Carbon\Carbon::now()->translatedFormat("d-M-Y")}}</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="text-center">5</td>
-                                                <td>Durasi Pemeliharaan</td>
-                                                <td class="text-center">9000</td>
-                                                <td class="text-center">9000</td>
-                                                <td class="text-center">9000</td>
-                                                <td class="text-center">9000</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                <!--end::Link-->
+                                <!--begin::Link-->
+                                <div class="col mb-4">
+                                    <!--begin::Card body-->
+                                    <div class="pt-0">
+                                        <!--begin::Card widget 20-->
+                                        <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #E4E6EF;background-image:url('/assets/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                            <!--begin::Card body-->
+                                            <div class="btn rounded-0 btn-active-primary card-body d-flex align-items-end pt-3">
+                                                <!--begin::Progress-->
+                                                <div class="d-flex align-items-center flex-column  w-100">
+                                                    @if (empty($proyek->ContractManagements))
+                                                    <a target="_blank" class="text-gray-800 fs-3" href="#">Lihat Kontrak</a>
+                                                    @else    
+                                                    <a target="_blank" class="text-gray-800 fs-3" href="/contract-management/view/{{ urlencode(urlencode($proyek->ContractManagements->id_contract)) }}">Lihat Kontrak</a>
+                                                    @endif
+                                                </div>
+                                                <!--end::Progress-->
+                                            </div>
+                                            <!--end::Card body-->
+                                        </div>
+                                        <!--end::Card widget 20-->
+                                    </div>
+                                    <!--end::Card body-->
                                 </div>
-                                <small>* this table is scrollable</small>
+                                <!--end::Link-->
+                                <!--begin::Link-->
+                                <div class="col mb-4">
+                                    <!--begin::Card body-->
+                                    <div class="pt-0">
+                                        <!--begin::Card widget 20-->
+                                        <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #E4E6EF;background-image:url('/assets/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                            <!--begin::Card body-->
+                                            <div class="btn rounded-0 btn-active-primary card-body d-flex align-items-end pt-3">
+                                                <!--begin::Progress-->
+                                                <div class="d-flex align-items-center flex-column  w-100">
+                                                    <a target="_blank" class="text-gray-800 fs-3" href="/proyek/view/{{ $proyek->kode_proyek }}">Lihat Proyek</a>
+                                                </div>
+                                                <!--end::Progress-->
+                                            </div>
+                                            <!--end::Card body-->
+                                        </div>
+                                        <!--end::Card widget 20-->
+                                    </div>
+                                    <!--end::Card body-->
+                                </div>
+                                <!--end::Link-->
+                                <!--begin::Link-->
+                                <div class="col mb-4">
+                                    <!--begin::Card body-->
+                                    <div class="pt-0">
+                                        <!--begin::Card widget 20-->
+                                        <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #E4E6EF;background-image:url('/assets/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                            <!--begin::Card body-->
+                                            <div class="btn rounded-0 btn-active-primary card-body d-flex align-items-end pt-3">
+                                                <!--begin::Progress-->
+                                                <div class="d-flex align-items-center flex-column  w-100">
+                                                    @if (empty($proyek->ContractManagements))
+                                                    <a target="_blank" class="text-gray-800 fs-3" href="#">Lihat Kontrak</a>
+                                                    @else    
+                                                    <a target="_blank" class="text-gray-800 fs-3" href="/contract-management/view/{{ urlencode(urlencode($proyek->ContractManagements->id_contract)) }}">Lihat Kontrak</a>
+                                                    @endif
+                                                </div>
+                                                <!--end::Progress-->
+                                            </div>
+                                            <!--end::Card body-->
+                                        </div>
+                                        <!--end::Card widget 20-->
+                                    </div>
+                                    <!--end::Card body-->
+                                </div>
+                                <!--end::Link-->
+                                <!--begin::Link-->
+                                <div class="col mb-4">
+                                    <!--begin::Card body-->
+                                    <div class="pt-0">
+                                        <!--begin::Card widget 20-->
+                                        <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #E4E6EF;background-image:url('/assets/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                            <!--begin::Card body-->
+                                            <div class="btn rounded-0 btn-active-primary card-body d-flex align-items-end pt-3">
+                                                <!--begin::Progress-->
+                                                <div class="d-flex align-items-center flex-column  w-100">
+                                                    <a target="_blank" class="text-gray-800 fs-3" href="/proyek/view/{{ $proyek->kode_proyek }}">Lihat Proyek</a>
+                                                </div>
+                                                <!--end::Progress-->
+                                            </div>
+                                            <!--end::Card body-->
+                                        </div>
+                                        <!--end::Card widget 20-->
+                                    </div>
+                                    <!--end::Card body-->
+                                </div>
+                                <!--end::Link-->
                             </div>
-                        </div>
-                        <!--end::Card Diagram-->
-
-                        <div class="row">
-                            <div class="col-12">
+                            <!--end begin::Card column-->
+                            <div class="col-10">
                                 
                                 <!--begin::Title-->
                                 <div class="mb-4">
@@ -713,7 +548,7 @@
                                 <!--end::Title-->
 
                                 <!--begin::Row-->
-                                <div class="row align-items-center justify-content-center">
+                                <div class="row">
                                     <!--begin::Card column-->
                                     <div class="col-6">
                                             <!--begin::COLUMN CHART-->
@@ -724,10 +559,10 @@
                                     <!--end-begin::Card column-->
                                     <div class="col-6">
                                             <!--begin::PIE CHART-->
-                                            {{-- <figure class="highcharts-figure"> --}}
+                                            <figure class="highcharts-figure">
                                                 <div id="changes-status"></div>
                                                 <!-- data table is inserted here -->
-                                            {{-- </figure> --}}
+                                            </figure>
                                             <!--end::PIE CHART-->
                                     </div>
                                     <!--end::Card column-->
@@ -787,15 +622,9 @@
                             </div>
                             <!--end::Card column-->
                         </div>
+                        <!--end::Card Diagram-->
 
                         <br>
-                        <div class="row mb-4 mx-3">
-                            <!--begin::Title body-->
-                            <div style="border-radius: 0px" class="card-body bg-success">
-                                <h2 class="m-0 text-center">CHANGE DESCRIPTION</h2>
-                            </div>
-                            <!--end::Title body-->
-                        </div>
 
                         <!--begin::Tabel Header-->
                         <div class="row mb-4 mx-3">
@@ -816,7 +645,7 @@
                             <div class="col">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-success">
-                                    <h2 class="m-0 text-center">SUBSMISSION</h2>
+                                    <h2 class="m-0 text-center">SUBS</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
@@ -850,516 +679,140 @@
                             </div>
                         </div>
                         <!--end::Tabel Header-->
-                        {{-- @dd($proyek) --}}
+
                         <!--begin::Table Body-->
-                        @foreach ($cat_kontrak as $table)
+                        @foreach ($kategori_kontrak as $table)
                         {{-- @dd($table) --}}
                         <div class="row mb-4 mx-3">
                             <div class="col-2">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-success">
-                                    <h2 class="m-0 text-center">{{ $table["jenis_perubahan"] }}</h2>
+                                    <h2 class="m-0 text-center">{{ $table[0] }}</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
                             <div class="col">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
-                                    <!--begin::Title body-->
-                                    <div style="border-radius: 0px" class="card-body bg-secondary">
-                                        <h2 class="m-0 text-center">{{ $table["potensial"] ?? 0 }}</h2>
-                                    </div>
-                                    <!--end::Title body-->
-                                </a>
+                                <div style="border-radius: 0px" class="card-body bg-secondary">
+                                    <h2 class="m-0 text-center">{{ $table[4] ?? 0 }}</h2>
+                                </div>
                                 <!--end::Title body-->
                             </div>
                             <div class="col">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
-                                    <!--begin::Title body-->
-                                    <div style="border-radius: 0px" class="card-body bg-secondary">
-                                        <h2 class="m-0 text-center">{{ $table["subs"] ?? 0 }}</h2>
-                                    </div>
-                                    <!--end::Title body-->
-                                </a>
+                                <div style="border-radius: 0px" class="card-body bg-secondary">
+                                    <h2 class="m-0 text-center">{{ $table[5] ?? 0 }}</h2>
+                                </div>
                                 <!--end::Title body-->
                             </div>
                             <div class="col-1">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
-                                    <!--begin::Title body-->
-                                    <div style="border-radius: 0px" class="card-body bg-secondary">
-                                        <h2 class="m-0 text-center">{{ $table["revisi"] ?? 0 }}</h2>
-                                    </div>
-                                    <!--end::Title body-->
-                                </a>
+                                <div style="border-radius: 0px" class="card-body bg-secondary">
+                                    <h2 class="m-0 text-center">{{ $table[6] ?? 0 }}</h2>
+                                </div>
                                 <!--end::Title body-->
                             </div>
                             <div class="col-1">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
-                                    <!--begin::Title body-->
-                                    <div style="border-radius: 0px" class="card-body bg-secondary">
-                                        <h2 class="m-0 text-center">{{ $table["nego"] ?? 0 }}</h2>
-                                    </div>
-                                    <!--end::Title body-->
-                                </a>
+                                <div style="border-radius: 0px" class="card-body bg-secondary">
+                                    <h2 class="m-0 text-center">{{ $table[7] ?? 0 }}</h2>
+                                </div>
                                 <!--end::Title body-->
                             </div>
                             <div class="col-1">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
-                                    <!--begin::Title body-->
-                                    <div style="border-radius: 0px" class="card-body bg-secondary">
-                                        <h2 class="m-0 text-center">{{ $table["setuju"] ?? 0 }}</h2>
-                                    </div>
-                                    <!--end::Title body-->
-                                </a>
+                                <div style="border-radius: 0px" class="card-body bg-secondary">
+                                    <h2 class="m-0 text-center">{{ $table[8] ?? 0 }}</h2>
+                                </div>
                                 <!--end::Title body-->
                             </div>
                             <div class="col-1">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
-                                    <!--begin::Title body-->
-                                    <div style="border-radius: 0px" class="card-body bg-secondary">
-                                        <h2 class="m-0 text-center">{{ $table["tolak"] ?? 0 }}</h2>
-                                    </div>
-                                    <!--end::Title body-->
-                                </a>
+                                <div style="border-radius: 0px" class="card-body bg-secondary">
+                                    <h2 class="m-0 text-center">{{ $table[9] ?? 0 }}</h2>
+                                </div>
                                 <!--end::Title body-->
                             </div>
                             <div class="col">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
-                                    <!--begin::Title body-->
-                                    <div style="border-radius: 0px" class="card-body bg-secondary">
-                                        <h2 class="m-0 text-center">{{ $table["dispute"] ?? 0 }}</h2>
-                                    </div>
-                                    <!--end::Title body-->
-                                </a>
+                                <div style="border-radius: 0px" class="card-body bg-secondary">
+                                    <h2 class="m-0 text-center">{{ $table[10] ?? 0 }}</h2>
+                                </div>
                                 <!--end::Title body-->
                             </div>
                         </div>
                         @endforeach
-                        <!--TOTAL-->
+                        <!--end::Table Body-->
+                        
+                        <br>
+                        
+                        <!--begin::Tabel Header-->
                         <div class="row mb-4 mx-3">
-                            <div class="col-2">
+                            <div class="col-9">
                                 <!--begin::Title body-->
-                                <div style="border-radius: 0px" class="card-body bg-success">
-                                    <h2 class="m-0 text-center">TOTAL</h2>
+                                <div style="border-radius: 0px" class="card-body bg-warning">
+                                    <h2 class="m-0 text-center">TOTAL NILAI PERUBAHAN : Rp {{ number_format($totalKontrak, 0, ".", ".") }}</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
-                            <div class="col">
+                            <div class="col-3">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
-                                    <!--begin::Title body-->
-                                    <div style="border-radius: 0px" class="card-body bg-secondary">
-                                        <h2 class="m-0 text-center">{{ $potensial_total_item ?? 0 }}</h2>
-                                    </div>
-                                    <!--end::Title body-->
-                                </a>
-                                <!--end::Title body-->
-                            </div>
-                            <div class="col">
-                                <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
-                                    <!--begin::Title body-->
-                                    <div style="border-radius: 0px" class="card-body bg-secondary">
-                                        <h2 class="m-0 text-center">{{ $submission_total_item ?? 0 }}</h2>
-                                    </div>
-                                    <!--end::Title body-->
-                                </a>
-                                <!--end::Title body-->
-                            </div>
-                            <div class="col-1">
-                                <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
-                                    <!--begin::Title body-->
-                                    <div style="border-radius: 0px" class="card-body bg-secondary">
-                                        <h2 class="m-0 text-center">{{ $revision_total_item ?? 0 }}</h2>
-                                    </div>
-                                    <!--end::Title body-->
-                                </a>
-                                <!--end::Title body-->
-                            </div>
-                            <div class="col-1">
-                                <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
-                                    <!--begin::Title body-->
-                                    <div style="border-radius: 0px" class="card-body bg-secondary">
-                                        <h2 class="m-0 text-center">{{ $negotiation_total_item ?? 0 }}</h2>
-                                    </div>
-                                    <!--end::Title body-->
-                                </a>
-                                <!--end::Title body-->
-                            </div>
-                            <div class="col-1">
-                                <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
-                                    <!--begin::Title body-->
-                                    <div style="border-radius: 0px" class="card-body bg-secondary">
-                                        <h2 class="m-0 text-center">{{ $approve_total_item ?? 0 }}</h2>
-                                    </div>
-                                    <!--end::Title body-->
-                                </a>
-                                <!--end::Title body-->
-                            </div>
-                            <div class="col-1">
-                                <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
-                                    <!--begin::Title body-->
-                                    <div style="border-radius: 0px" class="card-body bg-secondary">
-                                        <h2 class="m-0 text-center">{{ $reject_total_item ?? 0 }}</h2>
-                                    </div>
-                                    <!--end::Title body-->
-                                </a>
-                                <!--end::Title body-->
-                            </div>
-                            <div class="col">
-                                <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
-                                    <!--begin::Title body-->
-                                    <div style="border-radius: 0px" class="card-body bg-secondary">
-                                        <h2 class="m-0 text-center">{{ $dispute_total_item ?? 0 }}</h2>
-                                    </div>
-                                    <!--end::Title body-->
-                                </a>
+                                <div style="border-radius: 0px" class="card-body bg-warning">
+                                    <h2 class="m-0 text-center">{{ $totalPersen }} %</h2>
+                                </div>
                                 <!--end::Title body-->
                             </div>
                         </div>
+                        <!--end::Tabel Header-->
+
+                        <!--begin::Table Body-->
+                        @foreach ($kategori_kontrak as $table)
+                        {{-- @dd($table) --}}
+                        <div class="row mb-4 mx-3">
+                            <div class="col-3">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-warning">
+                                    <h2 class="m-0 text-center">{{ $table[0] }}</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col-1">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-secondary">
+                                    <h2 class="m-0 text-center">{{ $table[1] }}</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col-5">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-secondary">
+                                    <h2 class="m-0 text-center">Rp {{ number_format($table[2], 0, ".", ".") }}</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col-3">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-secondary">
+                                    <h2 class="m-0 text-center">{{ $table[3] }} %</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                        </div>
+                        @endforeach
                         <!--end::Table Body-->
 
-                        <br>
-                        <div class="row mb-4 mx-3">
-                            <!--begin::Title body-->
-                            <div style="border-radius: 0px" class="card-body bg-success">
-                                <h2 class="m-0 text-center">CHANGE VALUE ( DALAM JUTAAN )</h2>
-                            </div>
-                            <!--end::Title body-->
-                        </div>
-
                         <!--begin::Tabel Header-->
                         <div class="row mb-4 mx-3">
-                            <div class="col-2">
+                            <div class="col-12">
                                 <!--begin::Title body-->
-                                <div style="border-radius: 0px" class="card-body bg-success">
-                                    <h2 class="m-0 text-center">URAIAN</h2>
-                                </div>
-                                <!--end::Title body-->
-                            </div>
-                            <div class="col">
-                                <!--begin::Title body-->
-                                <div style="border-radius: 0px" class="card-body bg-success">
-                                    <h2 class="m-0 text-center">POTENTIAL</h2>
-                                </div>
-                                <!--end::Title body-->
-                            </div>
-                            <div class="col">
-                                <!--begin::Title body-->
-                                <div style="border-radius: 0px" class="card-body bg-success">
-                                    <h2 class="m-0 text-center">SUBSMISSION</h2>
-                                </div>
-                                <!--end::Title body-->
-                            </div>
-                            <div class="col-4">
-                                <!--begin::Title body-->
-                                <div style="border-radius: 0px" class="py-2 bg-success">
-                                    <h4 class="m-0 text-center">SUBMISIONS STATUS</h4>
-                                    <div class="row">
-                                        <div class="col">
-                                            <h6 class="m-0 text-center">REVISION</h6>
-                                        </div>
-                                        <div class="col">
-                                            <h6 class="m-0 text-center">NEGOITATION</h6>
-                                        </div>
-                                        <div class="col">
-                                            <h6 class="m-0 text-center">APPROVED</h6>
-                                        </div>
-                                        <div class="col">
-                                            <h6 class="m-0 text-center">REJECTED</h6>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!--end::Title body-->
-                            </div>
-                            <div class="col">
-                                <!--begin::Title body-->
-                                <div style="border-radius: 0px" class="card-body bg-success">
-                                    <h2 class="m-0 text-center">DISPUTE</h2>
+                                <div style="border-radius: 0px" class="card-body bg-warning">
+                                    <h2 class="m-0 text-center">% PERUBAHAN VS KONTRAK</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
                         </div>
                         <!--end::Tabel Header-->
-                        {{-- @dd($proyek) --}}
-                        <!--begin::Table Body-->
-                        @foreach ($cat_kontrak as $table)
-                        {{-- @dd($table) --}}
-                        <div class="row mb-4 mx-3">
-                            <div class="col-2">
-                                <!--begin::Title body-->
-                                <div style="border-radius: 0px" class="card-body bg-success">
-                                    <h2 class="m-0 text-center">{{ $table["jenis_perubahan"] }}</h2>
-                                </div>
-                                <!--end::Title body-->
-                            </div>
-                            <div class="col">
-                                <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
-                                    <!--begin::Title body-->
-                                    <div style="border-radius: 0px" class="card-body bg-secondary">
-                                        <h2 class="m-0 text-center">{{ !empty($table["potensial_value"]) ? number_format($table["potensial_value"]/1000000, 0, ".", ".") : 0 }}</h2>
-                                    </div>
-                                    <!--end::Title body-->
-                                </a>
-                                <!--end::Title body-->
-                            </div>
-                            <div class="col">
-                                <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
-                                    <!--begin::Title body-->
-                                    <div style="border-radius: 0px" class="card-body bg-secondary">
-                                        <h2 class="m-0 text-center">{{ !empty($table["subs_value"]) ? number_format($table["subs_value"]/1000000, 0, ".", ".") : 0 }}</h2>
-                                    </div>
-                                    <!--end::Title body-->
-                                </a>
-                                <!--end::Title body-->
-                            </div>
-                            <div class="col-1">
-                                <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
-                                    <!--begin::Title body-->
-                                    <div style="border-radius: 0px" class="card-body bg-secondary">
-                                        <h2 class="m-0 text-center">{{ !empty($table["revisi_value"]) ? number_format($table["revisi_value"]/1000000, 0, ".", ".") : 0 }}</h2>
-                                    </div>
-                                    <!--end::Title body-->
-                                </a>
-                                <!--end::Title body-->
-                            </div>
-                            <div class="col-1">
-                                <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
-                                    <!--begin::Title body-->
-                                    <div style="border-radius: 0px" class="card-body bg-secondary">
-                                        <h2 class="m-0 text-center">{{ !empty($table["nego_value"]) ? number_format($table["nego_value"]/1000000, 0, ".", ".") : 0 }}</h2>
-                                    </div>
-                                    <!--end::Title body-->
-                                </a>
-                                <!--end::Title body-->
-                            </div>
-                            <div class="col-1">
-                                <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
-                                    <!--begin::Title body-->
-                                    <div style="border-radius: 0px" class="card-body bg-secondary">
-                                        <h2 class="m-0 text-center">{{ !empty($table["setuju_value"]) ? number_format($table["setuju_value"]/1000000, 0, ".", ".") : 0 }}</h2>
-                                    </div>
-                                    <!--end::Title body-->
-                                </a>
-                                <!--end::Title body-->
-                            </div>
-                            <div class="col-1">
-                                <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
-                                    <!--begin::Title body-->
-                                    <div style="border-radius: 0px" class="card-body bg-secondary">
-                                        <h2 class="m-0 text-center">{{ !empty($table["tolak_value"]) ? number_format($table["tolak_value"]/1000000, 0, ".", ".") : 0 }}</h2>
-                                    </div>
-                                    <!--end::Title body-->
-                                </a>
-                                <!--end::Title body-->
-                            </div>
-                            <div class="col">
-                                <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
-                                    <!--begin::Title body-->
-                                    <div style="border-radius: 0px" class="card-body bg-secondary">
-                                        <h2 class="m-0 text-center">{{ !empty($table["tolak_value"]) ? number_format($table["dispute_value"]/1000000, 0, ".", ".") : 0 }}</h2>
-                                    </div>
-                                    <!--end::Title body-->
-                                </a>
-                                <!--end::Title body-->
-                            </div>
-                        </div>
-                        @endforeach
-                        <!--TOTAL-->
-                        <div class="row mb-4 mx-3">
-                            <div class="col-2">
-                                <!--begin::Title body-->
-                                <div style="border-radius: 0px" class="card-body bg-success">
-                                    <h2 class="m-0 text-center">TOTAL</h2>
-                                </div>
-                                <!--end::Title body-->
-                            </div>
-                            <div class="col">
-                                <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
-                                    <!--begin::Title body-->
-                                    <div style="border-radius: 0px" class="card-body bg-secondary">
-                                        <h2 class="m-0 text-center">{{ number_format($potensial_total_value/1000000, 0, ',', '.') ?? 0 }}</h2>
-                                    </div>
-                                    <!--end::Title body-->
-                                </a>
-                                <!--end::Title body-->
-                            </div>
-                            <div class="col">
-                                <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
-                                    <!--begin::Title body-->
-                                    <div style="border-radius: 0px" class="card-body bg-secondary">
-                                        <h2 class="m-0 text-center">{{ number_format($submission_total_value/1000000, 0, ',', '.') ?? 0 }}</h2>
-                                    </div>
-                                    <!--end::Title body-->
-                                </a>
-                                <!--end::Title body-->
-                            </div>
-                            <div class="col-1">
-                                <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
-                                    <!--begin::Title body-->
-                                    <div style="border-radius: 0px" class="card-body bg-secondary">
-                                        <h2 class="m-0 text-center">{{ number_format($revision_total_value/1000000, 0, ',', '.') ?? 0 }}</h2>
-                                    </div>
-                                    <!--end::Title body-->
-                                </a>
-                                <!--end::Title body-->
-                            </div>
-                            <div class="col-1">
-                                <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
-                                    <!--begin::Title body-->
-                                    <div style="border-radius: 0px" class="card-body bg-secondary">
-                                        <h2 class="m-0 text-center">{{ number_format($negotiation_total_value/1000000, 0, ',', '.') ?? 0 }}</h2>
-                                    </div>
-                                    <!--end::Title body-->
-                                </a>
-                                <!--end::Title body-->
-                            </div>
-                            <div class="col-1">
-                                <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
-                                    <!--begin::Title body-->
-                                    <div style="border-radius: 0px" class="card-body bg-secondary">
-                                        <h2 class="m-0 text-center">{{ number_format($approve_total_value/1000000, 0, ',', '.') ?? 0 }}</h2>
-                                    </div>
-                                    <!--end::Title body-->
-                                </a>
-                                <!--end::Title body-->
-                            </div>
-                            <div class="col-1">
-                                <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
-                                    <!--begin::Title body-->
-                                    <div style="border-radius: 0px" class="card-body bg-secondary">
-                                        <h2 class="m-0 text-center">{{ number_format($reject_total_value/1000000, 0, ',', '.') ?? 0 }}</h2>
-                                    </div>
-                                    <!--end::Title body-->
-                                </a>
-                                <!--end::Title body-->
-                            </div>
-                            <div class="col">
-                                <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
-                                    <!--begin::Title body-->
-                                    <div style="border-radius: 0px" class="card-body bg-secondary">
-                                        <h2 class="m-0 text-center">{{ number_format($dispute_total_value/1000000, 0, ',', '.') ?? 0 }}</h2>
-                                    </div>
-                                    <!--end::Title body-->
-                                </a>
-                                <!--end::Title body-->
-                            </div>
-                        </div>
 
-                        <!--start::% Nilai Kontrak-->
-                        <div class="row mb-4 mx-3">
-                            <div class="col-2">
-                                <!--begin::Title body-->
-                                <div style="border-radius: 0px" class="card-body bg-success">
-                                    <h2 class="m-0 text-center">% Nilai Kontrak</h2>
-                                </div>
-                                <!--end::Title body-->
-                            </div>
-                            <div class="col">
-                                <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
-                                    <!--begin::Title body-->
-                                    <div style="border-radius: 0px" class="card-body bg-secondary">
-                                        <h2 class="m-0 text-center">{{ number_format((($potensial_total_value / $proyek->nilai_perolehan) * 100), 2, ".", ".") . "%" ?? 0 }}</h2>
-                                    </div>
-                                    <!--end::Title body-->
-                                </a>
-                                <!--end::Title body-->
-                            </div>
-                            <div class="col">
-                                <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
-                                    <!--begin::Title body-->
-                                    <div style="border-radius: 0px" class="card-body bg-secondary">
-                                        <h2 class="m-0 text-center">{{ number_format((($submission_total_value / $proyek->nilai_perolehan) * 100), 2, ".", ".") . "%" ?? 0 }}</h2>
-                                    </div>
-                                    <!--end::Title body-->
-                                </a>
-                                <!--end::Title body-->
-                            </div>
-                            <div class="col-1">
-                                <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
-                                    <!--begin::Title body-->
-                                    <div style="border-radius: 0px" class="card-body bg-secondary">
-                                        <h2 class="m-0 text-center">{{ number_format((($revision_total_value / $proyek->nilai_perolehan) * 100), 2, ".", ".") . "%" ?? 0 }}</h2>
-                                    </div>
-                                    <!--end::Title body-->
-                                </a>
-                                <!--end::Title body-->
-                            </div>
-                            <div class="col-1">
-                                <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
-                                    <!--begin::Title body-->
-                                    <div style="border-radius: 0px" class="card-body bg-secondary">
-                                        <h2 class="m-0 text-center">{{ number_format((($negotiation_total_value / $proyek->nilai_perolehan) * 100), 2, ".", ".") . "%" ?? 0 }}</h2>
-                                    </div>
-                                    <!--end::Title body-->
-                                </a>
-                                <!--end::Title body-->
-                            </div>
-                            <div class="col-1">
-                                <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
-                                    <!--begin::Title body-->
-                                    <div style="border-radius: 0px" class="card-body bg-secondary">
-                                        <h2 class="m-0 text-center">{{ number_format((($approve_total_value / $proyek->nilai_perolehan) * 100), 2, ".", ".") . "%" ?? 0 }}</h2>
-                                    </div>
-                                    <!--end::Title body-->
-                                </a>
-                                <!--end::Title body-->
-                            </div>
-                            <div class="col-1">
-                                <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
-                                    <!--begin::Title body-->
-                                    <div style="border-radius: 0px" class="card-body bg-secondary">
-                                        <h2 class="m-0 text-center">{{ number_format((($reject_total_value / $proyek->nilai_perolehan) * 100), 2, ".", ".") . "%" ?? 0 }}</h2>
-                                    </div>
-                                    <!--end::Title body-->
-                                </a>
-                                <!--end::Title body-->
-                            </div>
-                            <div class="col">
-                                <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
-                                    <!--begin::Title body-->
-                                    <div style="border-radius: 0px" class="card-body bg-secondary">
-                                        <h2 class="m-0 text-center">{{ number_format((($dispute_total_value / $proyek->nilai_perolehan) * 100), 2, ".", ".") . "%" ?? 0 }}</h2>
-                                    </div>
-                                    <!--end::Title body-->
-                                </a>
-                                <!--end::Title body-->
-                            </div>
-                        </div>
-                        <!--end::% Nilai Kontrak-->
-                        
                         <br>
 
                         <!--begin::Title-->
@@ -1388,7 +841,7 @@
                                             <span class="text-white fs-3 ms-6">Proses Pre-Claim : </span>
                                             <!--end::Amount-->
                                             <!--begin::Subtitle-->
-                                            <span class="text-white fs-3 ms-12 fw-bolder">{{ $percen_pre_claim }}</span>
+                                            <span class="text-white fs-3 ms-12 fw-bolder">{{ mt_rand(85, 95) }} %</span>
                                             <!--end::Subtitle-->
                                         </div>
                                         <!--end::Title-->
@@ -1410,7 +863,7 @@
                                             <span class="text-white fs-3 ms-6">Proses During-Claim : </span>
                                             <!--end::Amount-->
                                             <!--begin::Subtitle-->
-                                            <span class="text-white fs-3 ms-12 fw-bolder">{{ $percen_during_claim }}</span>
+                                            <span class="text-white fs-3 ms-12 fw-bolder">{{ mt_rand(85, 95) }} %</span>
                                             <!--end::Subtitle-->
                                         </div>
                                         <!--end::Title-->
@@ -1432,7 +885,7 @@
                                             <span class="text-white fs-3 ms-6">Proses Post-Claim : </span>
                                             <!--end::Amount-->
                                             <!--begin::Subtitle-->
-                                            <span class="text-white fs-3 ms-12 fw-bolder">{{ $percen_post_claim }}</span>
+                                            <span class="text-white fs-3 ms-12 fw-bolder">{{ mt_rand(85, 95) }} %</span>
                                             <!--end::Subtitle-->
                                         </div>
                                         <!--end::Title-->
@@ -1501,49 +954,40 @@
                                     </div>
                                 </div>
                                 <!--end::Title body-->
-                               <!--begin::Title body-->
-                               {{-- @if (!empty($proyek->ContractManagements->Asuransi)) --}}
-                               {{-- @php
-                                   $asuransiTableView = $proyek->ContractManagements->Asuransi->groupBy("kategori_asuransi")->map(function($item, $key){
-                                       return $item->sortByDesc("created_at")->first();    
-                                   })->values();
-                               @endphp --}}
-                           @foreach ($asuransi_proyek as $asuransi)
-                           <div class="row mb-4 ms-3 align-items-center">
-                               <div class="col-3">
-                                   <!--begin::Title body-->
-                                   <div style="border-radius: 0px" class="card-body bg-secondary">
-                                       <p class="fw-bolder m-0 text-center">{{ $asuransi["kategori"] }}</p>
-                                   </div>
-                                   <!--end::Title body-->
-                               </div>
-                               <div class="col-3">
-                                   <!--begin::Title body-->
-                                   <div style="border-radius: 0px" class="card-body bg-secondary">
-                                       {{-- <p class="fw-bolder m-0 text-center">{{ Carbon\Carbon::createFromFormat('Y-m-d', $asuransi["tgl_penerbitan"])->translatedFormat("d/m/Y") }}</p> --}}
-                                       <p class="fw-bolder m-0 text-center">{{ $asuransi["tgl_penerbitan"] == null ? "-" : Carbon\Carbon::create($asuransi["tgl_penerbitan"])->translatedFormat("d F Y") }}</p>
-                                   </div>
-                                   <!--end::Title body-->
-                               </div>
-                               <div class="col-3">
-                                   <!--begin::Title body-->
-                                   <div style="border-radius: 0px" class="card-body bg-secondary">
-                                       {{-- <p class="fw-bolder m-0 text-center">{{ Carbon\Carbon::createFromFormat('Y-m-d', $asuransi["tgl_berakhir"])->translatedFormat("d/m/Y") }}</p> --}}
-                                       <p class="fw-bolder m-0 text-center">{{ $asuransi["tgl_berakhir"] == null ? "-" : Carbon\Carbon::create($asuransi["tgl_berakhir"])->translatedFormat("d F Y") }}</p>
-                                   </div>
-                                   <!--end::Title body-->
-                               </div>
-                               <div class="col-3">
-                                   <!--begin::Title body-->
-                                   <div style="border-radius: 0px" class="card-body bg-secondary">
-                                       <p class="fw-bolder m-0 text-center">{{ $asuransi["status"] == null ? "-" : $asuransi["status"] }}</p>
-                                   </div>
-                                   <!--end::Title body-->
-                               </div>
-                           </div>
-                           @endforeach
-                           {{-- @endif --}}
-                           <!--end::Title body-->
+                                <!--begin::Title body-->
+                                @foreach ($insurance as $status)
+                                <div class="row mb-4 ms-3">
+                                    <div class="col-3">
+                                        <!--begin::Title body-->
+                                        <div style="border-radius: 0px" class="card-body bg-secondary">
+                                            <p class="fw-bolder m-0 text-center">{{ $status[0] }}</p>
+                                        </div>
+                                        <!--end::Title body-->
+                                    </div>
+                                    <div class="col-3">
+                                        <!--begin::Title body-->
+                                        <div style="border-radius: 0px" class="card-body bg-secondary">
+                                            <p class="fw-bolder m-0 text-center">{{ date("d/m/Y") }}</p>
+                                        </div>
+                                        <!--end::Title body-->
+                                    </div>
+                                    <div class="col-3">
+                                        <!--begin::Title body-->
+                                        <div style="border-radius: 0px" class="card-body bg-secondary">
+                                            <p class="fw-bolder m-0 text-center">{{ date("d/m/Y") }}</p>
+                                        </div>
+                                        <!--end::Title body-->
+                                    </div>
+                                    <div class="col-3">
+                                        <!--begin::Title body-->
+                                        <div style="border-radius: 0px" class="card-body bg-secondary">
+                                            <p class="fw-bolder m-0 text-center">{{ $status[1] == 1 ? "VALID" : "EXPIRED" }}</p>
+                                        </div>
+                                        <!--end::Title body-->
+                                    </div>
+                                </div>
+                                @endforeach
+                                <!--end::Title body-->
                             </div>
                             <div class="col-6">
                                 <!--begin::Title body-->
@@ -1578,50 +1022,40 @@
                                     </div>
                                 </div>
                                 <!--end::Title body-->
-                               <!--end::Title body-->
-                               {{-- @if (!empty($proyek->ContractManagements->Jaminan)) --}}
-                               {{-- @php
-                                   $jaminanTableView = $proyek->ContractManagements->Jaminan->groupBy("kategori_jaminan")->map(function($item, $key){
-                                       return $item->sortByDesc("created_at")->first();    
-                                   })->values();
-                               @endphp --}}
-                                   <!--begin::Title body-->
-                                   @foreach ($jaminan_proyek as $jaminan)
-                                   <div class="row mb-4 me-3">
+                                <!--begin::Title body-->
+                                @foreach ($bond as $status)
+                                <div class="row mb-4 me-3">
                                     <div class="col-3">
                                         <!--begin::Title body-->
                                         <div style="border-radius: 0px" class="card-body bg-secondary">
-                                            <p class="fw-bolder m-0 text-center">{{ $jaminan["kategori"] }}</p>
+                                            <p class="fw-bolder m-0 text-center">{{ $status[0] }}</p>
                                         </div>
                                         <!--end::Title body-->
                                     </div>
                                     <div class="col-3">
                                         <!--begin::Title body-->
                                         <div style="border-radius: 0px" class="card-body bg-secondary">
-                                            {{-- <p class="fw-bolder m-0 text-center">{{ Carbon\Carbon::createFromFormat('Y-m-d', $jaminan["tgl_penerbitan"])->translatedFormat("d/m/Y") }}</p> --}}
-                                            <p class="fw-bolder m-0 text-center">{{ $jaminan["tgl_penerbitan"] == null ? "-" : Carbon\Carbon::create($jaminan["tgl_penerbitan"])->translatedFormat("d F Y") }}</p>
+                                            <p class="fw-bolder m-0 text-center">{{ date("d/m/Y") }}</p>
                                         </div>
                                         <!--end::Title body-->
                                     </div>
                                     <div class="col-3">
                                         <!--begin::Title body-->
                                         <div style="border-radius: 0px" class="card-body bg-secondary">
-                                            {{-- <p class="fw-bolder m-0 text-center">{{ Carbon\Carbon::createFromFormat('Y-m-d', $jaminan["tgl_berakhir"])->translatedFormat("d/m/Y") }}</p> --}}
-                                            <p class="fw-bolder m-0 text-center">{{ $jaminan["tgl_berakhir"] == null ? "-" : Carbon\Carbon::create($jaminan["tgl_berakhir"])->translatedFormat("d F Y") }}</p>
+                                            <p class="fw-bolder m-0 text-center">{{ date("d/m/Y") }}</p>
                                         </div>
                                         <!--end::Title body-->
                                     </div>
                                     <div class="col-3">
                                         <!--begin::Title body-->
                                         <div style="border-radius: 0px" class="card-body bg-secondary">
-                                            <p class="fw-bolder m-0 text-center">{{ $jaminan["status"] == null ? "-" : $jaminan["status"] }}</p>
+                                            <p class="fw-bolder m-0 text-center">{{ $status[1] == 1 ? "VALID" : "EXPIRED" }}</p>
                                         </div>
                                         <!--end::Title body-->
                                     </div>
-                                   </div>
-                                   @endforeach
-                                   <!--end::Title body-->
-                               {{-- @endif --}}
+                                </div>
+                                @endforeach
+                                <!--end::Title body-->
                             </div>
                         </div>
                         <!--end::Title-->
@@ -1667,74 +1101,10 @@
 @section('js-script')
 
     <!--begin::Highchart Donut Changes Overview-->
-    {{-- <script>
+    <script>
         const changesOverview = JSON.parse('{!! json_encode($kategori_kontrak) !!}');
         Highcharts.chart('contract-divisi', {
             chart: {
-                type: 'pie',
-                options3d: {
-                    enabled: true,
-                    alpha: 5
-                }
-            },
-            title: {
-                text: 'Changes Overview',
-                style: {
-                    fontWeight: 'bold',
-                    fontSize: '20px'
-                }
-            },
-            subtitle: {
-                // text: '3D donut in Highcharts'
-            },
-            tooltip: {
-                headerFormat: '<span style="font-size:15px">{point.key}</span><table>',
-                pointFormat: '<tr><td style="padding:0">{series.name}: </td>' +
-                    '<td style="padding:0"><b>&nbsp;{point.y}</b></td></tr>',
-                footerFormat: '</table>',
-                shared: true,
-                useHTML: true
-            },
-            plotOptions: {
-                pie: {
-                    innerSize: 0,
-                    depth: 5,
-                    showInLegend: false,
-                    dataLabels: {
-                        enabled: true,
-                    }
-                }
-            },
-            legend: {
-                layout: 'horizontal',
-                align: 'center',
-                verticalAlign: 'bottom',
-                format : '<b>{point.key}</b><br>',
-                itemStyle: {
-                    fontSize:'15px',
-                },
-            },
-            credits: {
-                enabled: false
-            },
-            exporting: {
-                showTable: false,
-                allowHTML: true
-            },
-            series: [{
-                name: 'Kontrak',
-                data: changesOverview
-            }]
-        });
-    </script> --}}
-    <!--end::Highchart Donut Changes Overview-->
-
-    <!--begin::Highchart Donut Changes Overview-->
-    <script>
-        const changesOverview = JSON.parse('{!! $changes_overview->toJson() !!}');
-        Highcharts.chart('contract-divisi', {
-            chart: {
-                // height: 250,
                 type: 'pie',
                 options3d: {
                     enabled: true,
@@ -1795,7 +1165,6 @@
 
     <!--begin::Highchart Donut Changes Status -->
     <script>
-        const changeStatus = JSON.parse('{!! $change_status_out->toJson() !!}');
         Highcharts.chart('changes-status', {
             chart: {
                 type: 'pie',
@@ -1850,7 +1219,12 @@
             },
             series: [{
                 name: 'Kontrak',
-                data: changeStatus
+                data: [
+                    ['Dispute', 8],
+                    ['Revision', 16],
+                    ['Reject', 2],
+                    ['Approve', 10],
+                ]
             }]
         });
     </script>
@@ -2110,7 +1484,7 @@
     </script>
     <!-- End :: Animation Counter Number -->
 
-    {{-- <!-- Begin :: Select Filter Dropdown -->
+    <!-- Begin :: Select Filter Dropdown -->
     <script>
         function selectFilter(e) {
             const value = e.value;
@@ -2122,28 +1496,6 @@
                 url = `/dashboard-ccm/pelaksanaan-kontrak?unit-kerja=${value}`;
             } else {
                 url = `/dashboard-ccm/pelaksanaan-kontrak?kode-proyek=${value}`;
-            }
-            window.location.href = url;
-            return;
-        }
-    </script>
-    <!-- End :: Select Filter Dropdown --> --}}
-    <!-- Begin :: Select Filter Dropdown -->
-    <script>
-        function selectFilter(e) {
-            const value = e.value;
-            const type = e.getAttribute("id");
-            let url = "";
-            if(type == "dop") {
-                url = `/dashboard-ccm/pelaksanaan-kontrak?dop=${value}`;
-            } else if(type == "unit-kerja") {
-                url = `/dashboard-ccm/pelaksanaan-kontrak?unit-kerja=${value}`;
-            } else if(type == "kode-proyek") {
-                url = `/dashboard-ccm/pelaksanaan-kontrak?kode-proyek=${value}`;
-            } else if(type == "tahun"){
-                url = `/dashboard-ccm/pelaksanaan-kontrak?tahun=${value}`;
-            }else{
-                url = `/dashboard-ccm/pelaksanaan-kontrak?bulan=${value}`;
             }
             window.location.href = url;
             return;

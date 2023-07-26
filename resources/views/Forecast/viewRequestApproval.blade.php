@@ -158,10 +158,10 @@
                                         <div class="row">
                                             <div class="col">
                                                 @php
-                                                $now = Carbon\Carbon::now()->subMonths(2);
+                                                $now = Carbon\Carbon::now()->day(1)->subMonths(5);
                                                 @endphp
                                                 <ul class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-5">
-                                                    @foreach (range(1,3) as $item)
+                                                    @foreach (range(1,5) as $item)
                                                         <!--begin:::Tab item Pasar Dini-->
                                                         <li class="nav-item">
                                                             <a class="nav-link text-active-primary {{$item == 3 ? "active" : ""}}" data-bs-toggle="tab"
@@ -225,10 +225,10 @@
                                 style="overflow: auto; background-color:white; white-space: nowrap;">
                                 <!--begin::Contacts App- Edit Contact-->
                                 @php
-                                    $now = Carbon\Carbon::now()->subMonths(2);
+                                    $now = Carbon\Carbon::now()->day(1)->subMonths(5);
                                 @endphp
                                 <div class="tab-content">
-                                    @foreach (range(1,3) as $item)
+                                    @foreach (range(1,5) as $item)
                                         <div class="tab-pane fade {{$item == 3 ? "show active" : ""}}" id="kt_user_view_forecasts_{{(int) $now->format("m")}}_{{$now->format("Y")}}" role="tabpanel">
 
                                             <!--begin::All Content-->

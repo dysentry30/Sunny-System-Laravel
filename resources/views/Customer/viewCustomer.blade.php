@@ -434,12 +434,10 @@
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
-                                                                    {{-- @dd($sumberdanas) --}}
                                                                     <select name="jenis-instansi" onchange="getValueInstansi(this)" class="form-select form-select-solid" data-control="select2" data-hide-search="true"
                                                                         data-placeholder="Pilih Instansi">
                                                                         <option></option>
                                                                         @foreach ($sumberdanas as $sumberdana)
-                                                                        @if ($sumberdana->is_instansi)
                                                                             @if ($sumberdana->nama_sumber == $customer->jenis_instansi)
                                                                                 <option value="{{ $sumberdana->nama_sumber }}" selected>
                                                                                     {{ $sumberdana->nama_sumber }}
@@ -449,7 +447,6 @@
                                                                                     {{ $sumberdana->nama_sumber }}
                                                                                 </option>
                                                                             @endif
-                                                                        @endif
                                                                         @endforeach
                                                                     </select>
                                                                     <!--end::Input-->
@@ -3007,10 +3004,23 @@
 
                                                         </div>
                                                         <!--begin::Data CSI-->
-                                                        {{-- <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">CSI
+                                                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">CSI
                                                             <i onclick="hideColumn(this, '#divCSI')" id="hide-button" style="display: none" class="bi bi-arrows-collapse"></i><i
                                                                 onclick="showColumn(this, '#divCSI')" id="show-button" class="bi bi-arrows-expand"></i>
-                                                        </h3> --}}
+                                                        </h3>
+                                                        {{-- <script>
+                                                            function hideColumn() {
+                                                                document.getElementById("divCSI").style.display = "none";
+                                                                document.getElementById("hide-button").style.display = "none";
+                                                                document.getElementById("show-button").style.display = "";
+                                                            }
+
+                                                            function showColumn() {
+                                                                document.getElementById("divCSI").style.display = "";
+                                                                document.getElementById("hide-button").style.display = "";
+                                                                document.getElementById("show-button").style.display = "none";
+                                                            }
+                                                        </script> --}}
                                                         <br>
                                                         <div id="divCSI" style="display:none">
                                                             <!--end::Data CSI-->

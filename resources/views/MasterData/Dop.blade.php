@@ -175,11 +175,11 @@
 
 
                             <!--begin::Table-->
-                            <table class="table align-middle fs-6 gy-2" id="kt_customers_table">
+                            <table class="table align-middle table-row-dashed fs-6 gy-2" id="kt_customers_table">
                                 <!--begin::Table head-->
                                 <thead>
                                     <!--begin::Table row-->
-                                    <tr class="text-start text-white fw-bolder fs-7 text-uppercase gs-0">
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                         <th class="min-w-auto">No.</th>
                                         <th class="min-w-auto">@sortablelink('dop', 'Nama DOP')</th>
                                         @if (auth()->user()->check_administrator)

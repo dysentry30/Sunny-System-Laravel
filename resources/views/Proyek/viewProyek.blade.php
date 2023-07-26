@@ -62,9 +62,9 @@
 
                 <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
 
-                    @php
+                    {{-- @php
                         $check_green_line = checkGreenLine($proyek);
-                    @endphp
+                    @endphp --}}
 
                     <!--begin::Toolbar-->
                     <div class="toolbar" id="kt_toolbar">
@@ -107,36 +107,22 @@
                                 <!--end::Button-->
 
                                 <!--begin::Button-->    
-                                @if ($proyek->is_request_rekomendasi == false && !$check_green_line && $proyek->stage == 1)
-                                    <input type="button" name="proyek-rekomendasi" value="Pengajuan Rekomendasi" class="btn btn-sm btn-success ms-2" id="proyek-rekomendasi" data-bs-toggle="modal" data-bs-target="#modal-send-pengajuan"
+                                {{-- @if ($proyek->is_request_rekomendasi == false && !$check_green_line && $proyek->stage == 1)
+                                    <input type="submit" name="proyek-rekomendasi" value="Pengajuan Rekomendasi" class="btn btn-sm btn-success ms-2" id="proyek-rekomendasi"
                                         style="background-color:#00b48d">
-                                @elseif($proyek->stage > 1 && $proyek->is_disetujui == true )
-                                    <div class="" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" data-bs-title="<b>Rekomendasi Aproved</b><br>Silahkan Lanjut Stage Selanjutnya">
-                                        <p class="mt-4 btn btn-sm btn-success ms-2">
-                                            Rekomendasi Approved
-                                        </p>
-                                    </div>
-                                @elseif($proyek->stage > 1 && $proyek->is_disetujui == false )
-                                    <div class="" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" data-bs-title="<b>Rekomendasi Rejected</b><br>Silahkan Lanjut Stage Selanjutnya">
-                                        <p class="mt-4 btn btn-sm btn-danger ms-2">
-                                            Rekomendasi Rejected
-                                        </p>
-                                    </div>
                                 @elseif($proyek->stage > 1 && !$check_green_line)
-                                    <div class="" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" data-bs-title="<b>Rekomendasi Aproved</b><br>Silahkan Lanjut Stage Selanjutnya">
-                                        <p class="mt-4 btn btn-sm btn-success ms-2">
-                                            Rekomendasi Approved
-                                        </p>
+                                    <div class="" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="left" data-bs-title="Proyek ini sudah melewati tahap <b>Rekomendasi</b>">
+                                        <input type="submit" name="proyek-rekomendasi" value="Pengajuan Rekomendasi" class="btn btn-sm btn-secondary ms-2" id="proyek-rekomendasi" disabled >
                                     </div>
                                 @elseif($proyek->stage == 1 && $check_green_line)
-                                    <div class="" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" data-bs-title="Proyek ini termasuk ke dalam kategori<br><b>Green Lane</b>">
+                                    <div class="" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="left" data-bs-title="Proyek ini sudah termasuk ke dalam kategori <b>Green Line</b>">
                                         <input type="submit" name="proyek-rekomendasi" value="Pengajuan Rekomendasi" class="btn btn-sm btn-secondary ms-2" id="proyek-rekomendasi" disabled >
                                     </div>
                                 @else 
                                     <div class="" data-bs-toggle="tooltip" data-bs-title="Sedang Dalam Proses Pengajuan Rekomendasi">
                                         <input type="submit" name="proyek-rekomendasi" value="Pengajuan Rekomendasi" class="btn btn-sm btn-secondary ms-2" id="proyek-rekomendasi" disabled >
                                     </div>
-                                @endif
+                                @endif --}}
                                 <!--end::Button-->
 
                                 <!--begin::Button-->
@@ -208,73 +194,6 @@
                         <!--end::Container-->
                     </div>
                     <!--end::Toolbar-->
-                    
-                    @if ($proyek->is_request_rekomendasi == false && !$check_green_line && $proyek->stage == 1)
-                    <!-- begin::modal confirm send wa-->
-                    <div class="modal fade w-100" style="margin-top: 120px" id="modal-send-pengajuan" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog mw-600px">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Ajukan Rekomendasi Proyek ?</h1>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <input type="hidden"  name="proyek-rekomendasi" value="Pengajuan Rekomendasi"/>
-                                    @php
-                                        $name_customer = $proyek->proyekBerjalan->name_customer ?? null;
-                                        $jenis_instansi = $proyek->proyekBerjalan->customer->jenis_instansi ?? null;
-                                        $custNegara = $proyek->proyekBerjalan->customer->negara ?? null;
-                                        $custProvinsi = $proyek->proyekBerjalan->customer->Provinsi->province_name ?? null;
-                                        $forbes_rank = $proyek->proyekBerjalan->customer->forbes_rank ?? null;
-                                        $lq_rank = $proyek->proyekBerjalan->customer->lq_rank ?? null;
-                                        $masalahHukum = $proyek->proyekBerjalan->customer->MasalahHukum ?? collect([]);
-                                    @endphp
-
-                                    <p>Nama Proyek : <b>{{ $proyek->nama_proyek }}</b></p>
-                                    <p>RA Klasifikasi Proyek  : <b class="{{ $proyek->klasifikasi_pasdin ?? "text-danger" }}">{{ $proyek->klasifikasi_pasdin ?? "*Belum Ditentukan" }}</b></p>
-                                    <p>Sumber Dana  : <b class="{{ $proyek->SumberDana->nama_sumber ?? "text-danger" }}">{{ $proyek->SumberDana->nama_sumber ?? "*Belum Ditentukan" }}</b></p>
-                                    <br>
-                                    <p>Nama Pemberi Kerja : <b class="{{ $name_customer ?? "text-danger" }}">{{ $name_customer ?? "*Belum Ditentukan" }}</b></p>
-                                    <p>Instansi Pemberi Kerja : <b class="{{ $jenis_instansi ?? "text-danger" }}">{{ $jenis_instansi ?? "*Belum Ditentukan" }}</b></p>
-                                    <p>ID Negara Pemberi Kerja : <b class="{{ $custNegara ?? "text-danger" }}">{{ $custNegara ?? "*Belum Ditentukan" }}</b></p>
-                                    <p>Provinsi Pemberi Kerja : <b class="{{ $custProvinsi ?? "text-danger" }}">{{ $custProvinsi ?? "*Belum Ditentukan" }}</b></p>
-                                    <p>Fortune Rank Pemberi Kerja : <b class="{{ $forbes_rank ?? "text-danger" }}">{{ $forbes_rank ?? "*Belum Ditentukan" }}</b></p>
-                                    <p>LQ Rank Pemberi Kerja : <b class="{{ $lq_rank ?? "text-danger" }}">{{ $lq_rank ?? "*Belum Ditentukan" }}</b></p>
-                                    <p>Masalah Hukum Pemberi Kerja : <b class="{{ $masalahHukum->count() == 0 ? "text-success" : "text-danger" }}">{{ $masalahHukum->count() == 0 ? "0 Kasus" : $masalahHukum->count()." Kasus" }}</b></p>
-
-                                    <br>
-
-                                    @if (!empty($name_customer) && !empty($proyek->klasifikasi_pasdin) && !empty($proyek->SumberDana->nama_sumber) && !empty($jenis_instansi) && !empty($custNegara) && !empty($custProvinsi) && !empty($forbes_rank) && !empty($lq_rank))
-                                        <input class="form-check-input" onclick="sendWa(this)" id="confirm-send-wa" name="confirm-send-wa" type="checkbox">
-                                        <i class="fs-6 text-primary">
-                                            Saya Setuju Melakukan Pengajuan dan Data Sudah Sudah Terisi Dengan Benar
-                                        </i>
-                                    @else
-                                        <i class="fs-6 text-danger">*Pastikan Data Sudah Sudah Terisi Dengan Benar Sebelum Melakukan Pegajuan</i>
-                                    @endif
-                                </div>
-                                    
-                                <div class="modal-footer">
-                                    <button type="submit" class="btn btn-success btn-sm" id="button-send-wa" style="display: none">Send <i class="bi bi-send"></i></button>
-                                </div>
-
-                                <script>
-                                    function sendWa(e) {
-                                        const sendWa = e.checked;
-                                        console.log(sendWa);
-                                        if (sendWa == true) {
-                                            document.getElementById("button-send-wa").style.display = "";
-                                        } else {
-                                            document.getElementById("button-send-wa").style.display = "none";
-                                        }
-                                    }
-                                </script>
-                            
-                            </div>
-                        </div>
-                    </div>
-                    <!-- end::modal confirm send wa-->
-                    @endif
 
 
 
@@ -318,21 +237,21 @@
                                                             Pasar Potensial
                                                         </a>
                                                     @else
-                                                        @if ($check_green_line)
+                                                    <a href="#"
+                                                        class="stage-button stage-action color-is-default stage-is-not-active"
+                                                        style="outline: 0px; cursor: pointer;" stage="2">
+                                                        Pasar Potensial
+                                                    </a>
+                                                        {{-- @if ($check_green_line)
+                                                        @else
+                                                        @endif --}}
+                                                        {{-- <div class="stage-button color-is-default stage-is-not-active" data-bs-toggle="tooltip" data-bs-html="true" data-bs-title="Tidak bisa lanjut ke <b>Pasar Potensial</b>, karena Proyek <b>Non Green Line</b>. Silahkan ajukan Rekomendasi dengan tekan button <b>Pengajuan Rekomendasi</b>.">
                                                             <a href="#"
-                                                                class="stage-button stage-action color-is-default stage-is-not-active"
-                                                                style="outline: 0px; cursor: pointer;" stage="2">
+                                                                class="text-white stage-action"
+                                                                style="outline: 0px; pointer-events: none;" stage="2">
                                                                 Pasar Potensial
                                                             </a>
-                                                        @else
-                                                            <div class="stage-button color-is-default stage-is-not-active" data-bs-toggle="tooltip" data-bs-html="true" data-bs-title="Tidak bisa lanjut ke <b>Pasar Potensial</b>, karena Proyek <b>Non Green Line</b>. Silahkan ajukan Rekomendasi dengan tekan button <b>Pengajuan Rekomendasi</b>.">
-                                                                <a href="#"
-                                                                    class="text-white stage-action"
-                                                                    style="outline: 0px; pointer-events: none;" stage="2">
-                                                                    Pasar Potensial
-                                                                </a>
-                                                            </div>
-                                                        @endif
+                                                        </div> --}}
                                                     @endif
 
                                                     @if ($proyek->is_tidak_lulus_pq)
@@ -1100,38 +1019,18 @@
                                                             <!--end::Input group-->
                                                         </div>
 
-                                                        <div class="col-6 mt-5">
-                                                            <div class="form-check">
-                                                                {{-- <input class="form-check-input" name="is-green-line" disabled type="checkbox" {{(bool) $check_green_line ? "checked" : ""}} disabled id="flexCheckDefault">
+                                                        <div class="col-6 mt-5 ms-5">
+                                                            {{-- <div class="form-check">
+                                                                <input class="form-check-input" name="is-green-line" disabled type="checkbox" {{(bool) $check_green_line ? "checked" : ""}} disabled id="flexCheckDefault">
                                                                 <label class="form-check-label" for="flexCheckDefault">
-                                                                  Green Lane
-                                                                </label> --}}
-                                                                @if ((bool) $check_green_line)
-                                                                    <span class="px-4 fs-4 badge badge-success">
-                                                                        Green Lane
-                                                                    </span>
-                                                                @else
-                                                                    <span class="px-4 fs-4 badge badge-danger">
-                                                                        Non Green Lane
-                                                                    </span>
-                                                                    
-                                                                @endif
-                                                            </div><br>
+                                                                  Green Line
+                                                                </label>
+                                                            </div><br> --}}
                                                             <div class="form-check">
-                                                                {{-- <input class="form-check-input" name="is-green-line" disabled type="checkbox" {{(bool) $proyek->is_rkap ? "checked" : ""}} disabled id="flexCheckDefault">
+                                                                <input class="form-check-input" name="is-green-line" disabled type="checkbox" {{(bool) $proyek->is_rkap ? "checked" : ""}} disabled id="flexCheckDefault">
                                                                 <label class="form-check-label" for="flexCheckDefault">
-                                                                    Proyek RKAP
-                                                                </label> --}}
-                                                                @if ((bool) $proyek->is_rkap)
-                                                                    <span class="px-4 fs-4 badge badge-light-success">
-                                                                        Proyek RKAP
-                                                                    </span>
-                                                                @else
-                                                                    <span class="px-4 fs-4 badge badge-light-danger">
-                                                                        Proyek Non RKAP
-                                                                    </span>
-                                                                    
-                                                                @endif
+                                                                  Proyek RKAP
+                                                                </label>
                                                             </div>
                                                         </div>
                                                         <!--End::Col-->
@@ -1539,7 +1438,7 @@
                                                                 <!--begin::Input-->
                                                                 <select id="sumber-dana" name="sumber-dana"
                                                                     class="form-select form-select-solid"
-                                                                    data-control="select2" data-hide-search="false"
+                                                                    data-control="select2" data-hide-search="true"
                                                                     data-placeholder="Pilih Sumber Dana">
                                                                     <option></option>
                                                                     @foreach ($sumberdanas as $sumberdana)
@@ -1566,7 +1465,7 @@
                                                             <div class="fv-row mb-7">
                                                                 <!--begin::Label-->
                                                                 <label class="fs-6 fw-bold form-label mt-3">
-                                                                    <span>Nilai OK (Exclude Ppn) </span>
+                                                                    <span>Nilai OK (Excludde Ppn) </span>
                                                                 </label>
                                                                 <!--end::Label-->
                                                                 <!--begin::Input-->
@@ -1580,6 +1479,7 @@
                                                             <!--end::Input group-->
                                                         </div>
                                                         <!--End::Col-->
+                                                        @if ($proyek->unit_kerja == "G" ||$proyek->unit_kerja == "H" || $proyek->unit_kerja == "P" || $proyek->unit_kerja == "J")
                                                         <div class="col-6">
                                                             <!--begin::Input group Website-->
                                                             <div class="fv-row mb-7">
@@ -1603,10 +1503,10 @@
                                                             </div>
                                                             <!--end::Input group-->
                                                         </div>
+                                                        @endif
                                                         <!--End::Col-->
                                                     </div>
                                                     <!--End::Row Kanan+Kiri-->
-                                                    {{-- @dump($proyek->Departemen) --}}
 
                                                     <!--begin::Row Kanan+Kiri-->
                                                     <div class="row fv-row">
@@ -2108,43 +2008,6 @@
                                                     <!--divRkapAwal-->
 
 
-                                                    <!--Begin::Rekomendasi-->
-                                                    @if (!(bool)$check_green_line)
-                                                    <br>
-
-                                                    {{-- <div class="fv-row mb-7">
-                                                        <!--Begin::Col-->
-                                                        <div class="col-6">
-                                                            <!--Begin::Label-->
-                                                            <label class="fs-6 form-label mt-3">
-                                                                <span> Hasil Nota Rekomendasi<i class="bi bi-lock"></i></span>
-                                                            </label>
-                                                            <!--End::Label-->
-                                                            <!--begin::Input-->
-                                                            <input type="text"
-                                                            class="form-control form-control-solid "
-                                                            id="nota-rekomendasi" name="nota-rekomendasi" placeholder="Hasil Nota Rekomendasi" style="cursor: default" readonly />
-                                                         <!--end::Input-->
-                                                        </div>
-                                                        <!--End::Col-->
-                                                    </div>
-                                                    <br> --}}
-                                                    <!--Begin::Col-->
-                                                    <div class="fv-row mb-7">
-                                                        <div class="col-6">
-                                                            <label class="fs-6 form-label mt-3">
-                                                                <span>Catatan Nota Rekomendasi<i class="bi bi-lock"></i></span>
-                                                            </label>
-                                                            <div class="form-group">
-                                                                <textarea id="catatan-nota-rekomendasi" name="catatan-nota-rekomendasi" class="form-control" rows="4" style="cursor: default" readonly></textarea>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!--End::Col-->
-                                                    @endif
-                                                    <!--End::Rekomendasi-->
-
-
                                                     <!--Begin::Title Biru Form: Laporan Kualitatif-->
                                                     <br>
                                                     <h3 class="fw-bolder m-0 required" id="HeadDetail"
@@ -2265,74 +2128,11 @@
                                                             <!--begin::Input group Website-->
                                                             <div class="fv-row mb-7">
                                                                 <!--begin::Label-->
-                                                                <label class="fs-6 fw-bold form-label mt-3 required">
-                                                                    <span>Status Pasar <i class="bi bi-lock"></i></span>
-                                                                </label>
-                                                                <!--end::Label-->
-                                                                <!--begin::Input-->
-                                                                @php
-                                                                    $jumlahBobot = 0;
-                                                                    $statusPasar = '';
-                                                                    foreach ($kriteriapasarproyek as $kriteria) {
-                                                                        $jumlahBobot += $kriteria->bobot;
-                                                                        $jumlahKriteria = count($kriteriapasarproyek);
-                                                                        $statusPasar = round($jumlahBobot / $jumlahKriteria, 2);
-                                                                    }
-                                                                    if ($statusPasar == '') {
-                                                                        $statusPasar = '*Kriteria Pasar Belum Diisi';
-                                                                    } elseif ($statusPasar >= 0.75) {
-                                                                        $statusPasar = 'Potensial';
-                                                                    } else {
-                                                                        $statusPasar = 'Non-Potensial';
-                                                                    }
-                                                                @endphp
-                                                                <input type="text"
-                                                                    class="form-control form-control-solid {{ $statusPasar == '*Kriteria Pasar Belum Diisi' ? 'text-danger' : '' }}"
-                                                                    id="status-pasar" name="status-pasar"
-                                                                    value="{{ $statusPasar }}" readonly />
-                                                                <!--end::Input-->
-                                                            </div>
-                                                            <!--end::Input group-->
-                                                        </div>
-                                                        <!--begin::Label-->
-                                                        <!--Begin ::Col-->
-                                                        <div class="col-6">
-                                                            <!--begin::Input group Website-->
-                                                            <div class="fv-row mb-7">
-                                                                <!--begin::Label-->
-                                                                <label class="fs-6 fw-bold form-label mt-3">
-                                                                    <span>Klasifikasi <i class="bi bi-lock"></i></span>
-                                                                </label>
-                                                                <!--end::Label-->
-                                                                <!--begin::Input-->
-                                                                <input type="text"
-                                                                    class="form-control form-control-solid"
-                                                                    id="klasifikasi" name="klasifikasi"
-                                                                    value="{{ $proyek->klasifikasi }}"
-                                                                    placeholder="Klasifikasi" readonly />
-                                                                <!--end::Input-->
-                                                            </div>
-                                                            <!--end::Input group-->
-                                                        </div>
-                                                        <!--End ::Col-->
-                                                        
-                                                    </div>
-                                                    <!--End begin::Row-->
-
-                                                    <!-- begin::row -->
-                                                    <div class="row fv-row">
-                                                        <div class="col-6">
-                                                            <div class="fv-row mb-7">
                                                                 <label class="fs-6 fw-bold form-label mt-3">
                                                                     <span>Provinsi</span>
                                                                 </label>
                                                                 <!--end::Label-->
                                                                 <!--begin::Input-->
-                                                                {{-- <input type="text"
-                                                                        class="form-control form-control-solid"
-                                                                        id="provinsi" name="provinsi"
-                                                                        value="{{ $proyek->provinsi }}"
-                                                                        placeholder="Provinsi" /> --}}
                                                                 <select name="provinsi" id="provinsi"
                                                                     class="form-select form-select-solid"
                                                                     data-control="select2" data-hide-search="false"
@@ -2352,26 +2152,68 @@
                                                                     @endforeach
                                                                 </select>
                                                                 <!--end::Input-->
+                                                                
                                                             </div>
+                                                            <!--end::Input group-->
                                                         </div>
                                                         <!--End begin::Col-->
                                                         <div class="col-6">
+                                                            <!--begin::Input group Website-->
                                                             <div class="fv-row mb-7">
                                                                 <!--begin::Label-->
                                                                 <label class="fs-6 fw-bold form-label mt-3">
-                                                                    <span>MPA <i class="bi bi-lock"></i></span>
+                                                                    <span>Klasifikasi <i class="bi bi-lock"></i></span>
                                                                 </label>
                                                                 <!--end::Label-->
                                                                 <!--begin::Input-->
                                                                 <input type="text"
                                                                     class="form-control form-control-solid"
-                                                                    id="mpa" name="mpa" value=""
-                                                                    placeholder="MPA" readonly />
+                                                                    id="klasifikasi" name="klasifikasi"
+                                                                    value="{{ $proyek->klasifikasi }}"
+                                                                    placeholder="Klasifikasi" readonly />
                                                                 <!--end::Input-->
                                                             </div>
+                                                            <!--end::Input group-->
                                                         </div>
+                                                        <!--End begin::Col-->
                                                     </div>
-                                                    <!-- begin::row -->
+                                                    <!--End begin::Row-->
+
+                                                    <!--begin::Row-->
+                                                    {{-- <div class="row fv-row">
+                                                        <!--begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Label-->
+                                                            <label class="fs-6 fw-bold form-label mt-3 required">
+                                                                <span>Status Pasar <i class="bi bi-lock"></i></span>
+                                                            </label>
+                                                            <!--end::Label-->
+                                                            <!--begin::Input-->
+                                                            @php
+                                                                $jumlahBobot = 0;
+                                                                $statusPasar = '';
+                                                                foreach ($kriteriapasarproyek as $kriteria) {
+                                                                    $jumlahBobot += $kriteria->bobot;
+                                                                    $jumlahKriteria = count($kriteriapasarproyek);
+                                                                    $statusPasar = round($jumlahBobot / $jumlahKriteria, 2);
+                                                                }
+                                                                if ($statusPasar == '') {
+                                                                    $statusPasar = '*Kriteria Pasar Belum Diisi';
+                                                                } elseif ($statusPasar >= 0.75) {
+                                                                    $statusPasar = 'Potensial';
+                                                                } else {
+                                                                    $statusPasar = 'Non-Potensial';
+                                                                }
+                                                            @endphp
+                                                            <input type="text"
+                                                                class="form-control form-control-solid {{ $statusPasar == '*Kriteria Pasar Belum Diisi' ? 'text-danger' : '' }}"
+                                                                id="status-pasar" name="status-pasar"
+                                                                value="{{ $statusPasar }}" readonly />
+                                                            <!--end::Input-->
+                                                        </div>
+                                                        <!--End begin::Col-->
+                                                    </div> --}}
+                                                    <!--End begin::Row-->
 
                                                     <!--begin::Row-->
                                                     <div class="row fv-row">
@@ -2444,26 +2286,6 @@
                                                                     @endif
                                                                     @endforeach --}}
                                                                 </select>
-                                                                <!--end::Input-->
-                                                            </div>
-                                                            <!--end::Input group-->
-                                                        </div>
-                                                        <!--End begin::Col-->
-                                                        <!--begin::Col-->
-                                                        <div class="col-6">
-                                                            <!--begin::Input group Website-->
-                                                            <div class="fv-row mb-7">
-                                                                <!--begin::Label-->
-                                                                <label class="fs-6 fw-bold form-label mt-3">
-                                                                    <span>Ketua Tim Tander <i class="bi bi-lock"></i>
-                                                                    </span>
-                                                                </label>
-                                                                <!--end::Label-->
-                                                                <!--begin::Input-->
-                                                                <input type="text"
-                                                                    class="form-control form-control-solid"
-                                                                    id="ketua-tim-tender" name="ketua-tim-tender" value=""
-                                                                    placeholder="Ketua Tim Tender" readonly />
                                                                 <!--end::Input-->
                                                             </div>
                                                             <!--end::Input group-->
@@ -2549,9 +2371,9 @@
                                                                 }
                                                             }
                                                         @endphp
-                                                        <a onclick="kategoriSelect()" href="#" Id="Plus"
+                                                        {{-- <a onclick="kategoriSelect()" href="#" Id="Plus"
                                                             style="display: {{ $style }}" data-bs-toggle="modal"
-                                                            data-bs-target="#kt_modal_kriteria_pasardini">+</a>
+                                                            data-bs-target="#kt_modal_kriteria_pasardini">+</a> --}}
                                                     </h3>
                                                     <br>
                                                     <!--begin::Table Kriteria Pasar-->
@@ -2988,17 +2810,6 @@
                                                     <!--Begin::Title Biru Form: Document NDA-->
                                                     <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                                         Document NDA <i class="bi bi-journal-text"></i>
-                                                        @php
-                                                            $upload_final_NDA = $proyek->ContractManagements->UploadFinal->where("category", "=", "Dokumen NDA")->first();
-                                                            $status = $proyek->DokumenNda->count() < 1 ? "Document belum diupload" : (empty($upload_final) ? "Waiting for Approval" : "bg-success");
-                                                            $class_button = $proyek->DokumenNda->count() < 1 ? "bg-danger" : "bg-info";
-                                                        @endphp
-                                                        <span class="badge {{$class_button}}"><b>{{$status}}</b></span>
-                                                        <i class="bi-exclamation-circle" data-bs-toggle="tooltip" data-bs-title="Status ini akan berubah menjadi <b>Waiting for Approval</b> secara otomatis ketika Dokumen sudah diupload dan akan muncul button download dokumen final ketika dokumen final nya sudah tersedia di <b>CCM</b>" data-bs-html="true"></i>
-                                                        
-                                                        @if (!empty($upload_final_NDA)) 
-                                                            <a href="{{asset("words/". $upload_final_NDA->id_document)}}" class="btn btn-sm btn-success"><b>Download Dokumen Final</b></a>
-                                                        @endif
                                                     </h3>
                                                     <br>
                                                     <div class="w-50">
@@ -3080,17 +2891,6 @@
                                                     <!--Begin::Title Biru Form: Document MOU-->
                                                     <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                                         Document MOU <i class="bi bi-journal-text"></i>
-                                                        @php
-                                                            $status = $proyek->DokumenMou->count() < 1 ? "Document belum diupload" : "Waiting for Approval";
-                                                            $class_button = $proyek->DokumenMou->count() < 1 ? "bg-danger" : "bg-info";
-                                                            $upload_final = $proyek->ContractManagements->UploadFinal->where("category", "=", "Dokumen MOU")->first();
-                                                        @endphp
-                                                        <span class="badge {{$class_button}}"><b>{{$status}}</b></span>
-                                                        <i class="bi-exclamation-circle" data-bs-toggle="tooltip" data-bs-title="Status ini akan berubah menjadi <b>Waiting for Approval</b> secara otomatis ketika Dokumen sudah diupload dan akan muncul button download dokumen final ketika dokumen final nya sudah tersedia di <b>CCM</b>" data-bs-html="true"></i>
-                                                        
-                                                        @if (!empty($upload_final)) 
-                                                            <a href="{{asset("words/". $upload_final->id_document)}}" class="btn btn-sm btn-success"><b>Download Dokumen Final</b></a>
-                                                        @endif
                                                     </h3>
                                                     <br>
                                                     <div class="w-50">
@@ -3172,17 +2972,6 @@
                                                     <!--Begin::Title Biru Form: Document ECA-->
                                                     <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                                         Document ECA <i class="bi bi-journal-text"></i>
-                                                        @php
-                                                            $status = $proyek->DokumenEca->count() < 1 ? "Document belum diupload" : "Waiting for Approval";
-                                                            $class_button = $proyek->DokumenEca->count() < 1 ? "bg-danger" : "bg-info";
-                                                            $upload_final = $proyek->ContractManagements->UploadFinal->where("category", "=", "Dokumen ECA")->first();
-                                                        @endphp
-                                                        <span class="badge {{$class_button}}"><b>{{$status}}</b></span>
-                                                        <i class="bi-exclamation-circle" data-bs-toggle="tooltip" data-bs-title="Status ini akan berubah menjadi <b>Waiting for Approval</b> secara otomatis ketika Dokumen sudah diupload dan akan muncul button download dokumen final ketika dokumen final nya sudah tersedia di <b>CCM</b>" data-bs-html="true"></i>
-                                                        
-                                                        @if (!empty($upload_final)) 
-                                                            <a href="{{asset("words/". $upload_final->id_document)}}" class="btn btn-sm btn-success"><b>Download Dokumen Final</b></a>
-                                                        @endif
                                                     </h3>
                                                     <br>
                                                     <div class="w-50">
@@ -3264,17 +3053,6 @@
                                                     <!--Begin::Title Biru Form: Document ICA-->
                                                     <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                                         Document ICA <i class="bi bi-journal-text"></i>
-                                                        @php
-                                                            $status = $proyek->DokumenIca->count() < 1 ? "Document belum diupload" : "Waiting for Approval";
-                                                            $class_button = $proyek->DokumenIca->count() < 1 ? "bg-danger" : "bg-info";
-                                                            $upload_final = $proyek->ContractManagements->UploadFinal->where("category", "=", "Dokumen ICA")->first();
-                                                        @endphp
-                                                        <span class="badge {{$class_button}}"><b>{{$status}}</b></span>
-                                                        <i class="bi-exclamation-circle" data-bs-toggle="tooltip" data-bs-title="Status ini akan berubah menjadi <b>Waiting for Approval</b> secara otomatis ketika Dokumen sudah diupload dan akan muncul button download dokumen final ketika dokumen final nya sudah tersedia di <b>CCM</b>" data-bs-html="true"></i>
-                                                        
-                                                        @if (!empty($upload_final)) 
-                                                            <a href="{{asset("words/". $upload_final->id_document)}}" class="btn btn-sm btn-success"><b>Download Dokumen Final</b></a>
-                                                        @endif
                                                     </h3>
                                                     <br>
                                                     <div class="w-50">
@@ -3356,17 +3134,6 @@
                                                     <!--Begin::Title Biru Form: Document RKS-->
                                                     <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                                         Document RKS <i class="bi bi-journal-text"></i>
-                                                        @php
-                                                            $status = $proyek->DokumenRks->count() < 1 ? "Document belum diupload" : "Waiting for Approval";
-                                                            $class_button = $proyek->DokumenRks->count() < 1 ? "bg-danger" : "bg-info";
-                                                            $upload_final = $proyek->ContractManagements->UploadFinal->where("category", "=", "Dokumen RKS")->first();
-                                                        @endphp
-                                                        <span class="badge {{$class_button}}"><b>{{$status}}</b></span>
-                                                        <i class="bi-exclamation-circle" data-bs-toggle="tooltip" data-bs-title="Status ini akan berubah menjadi <b>Waiting for Approval</b> secara otomatis ketika Dokumen sudah diupload dan akan muncul button download dokumen final ketika dokumen final nya sudah tersedia di <b>CCM</b>" data-bs-html="true"></i>
-                                                        
-                                                        @if (!empty($upload_final)) 
-                                                            <a href="{{asset("words/". $upload_final->id_document)}}" class="btn btn-sm btn-success"><b>Download Dokumen Final</b></a>
-                                                        @endif
                                                     </h3>
                                                     <br>
                                                     <div class="w-50">
@@ -3447,17 +3214,6 @@
                                                     <!--Begin::Title Biru Form: Document ITB TOR-->
                                                     <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                                         Document ITB TOR <i class="bi bi-journal-text"></i>
-                                                        @php
-                                                            $status = $proyek->DokumenItbTor->count() < 1 ? "Document belum diupload" : "Waiting for Approval";
-                                                            $class_button = $proyek->DokumenItbTor->count() < 1 ? "bg-danger" : "bg-info";
-                                                            $upload_final = $proyek->ContractManagements->UploadFinal->where("category", "=", "Dokumen ITB/TOR")->first();
-                                                        @endphp
-                                                        <span class="badge {{$class_button}}"><b>{{$status}}</b></span>
-                                                        <i class="bi-exclamation-circle" data-bs-toggle="tooltip" data-bs-title="Status ini akan berubah menjadi <b>Waiting for Approval</b> secara otomatis ketika Dokumen sudah diupload dan akan muncul button download dokumen final ketika dokumen final nya sudah tersedia di <b>CCM</b>" data-bs-html="true"></i>
-                                                        
-                                                        @if (!empty($upload_final)) 
-                                                            <a href="{{asset("words/". $upload_final->id_document)}}" class="btn btn-sm btn-success"><b>Download Dokumen Final</b></a>
-                                                        @endif
                                                     </h3>
                                                     <br>
                                                     <div class="w-50">
@@ -3957,30 +3713,16 @@
                                                         </h6> --}}
                                                     <br>
                                                     <h3 class="fw-bolder m-0 required" id="HeadDetail"
-                                                        style="font-size:14px;">
-                                                        Risk Tender
-                                                        @php
-                                                            $upload_final = $proyek->ContractManagements->UploadFinal->where("category", "=", "Dokumen Resiko - Perolehan")->first();
-                                                            $class_button = $proyek->RiskTenderProyek->count() < 1 ? "bg-danger" : (empty($upload_final) ? "bg-info" : "bg-success");
-                                                            $status = $proyek->RiskTenderProyek->count() < 1 ? "Document belum diupload" : (empty($upload_final) ? "Waiting for Approval" : "Approved");
-                                                        @endphp
-                                                        <span class="badge {{$class_button}}"><b>{{$status}}</b></span>
-                                                        <i class="bi-exclamation-circle" data-bs-toggle="tooltip" data-bs-title="Status ini akan berubah menjadi <b>Waiting for Approval</b> secara otomatis ketika Dokumen sudah diupload dan akan muncul button download dokumen final ketika dokumen final nya sudah tersedia di <b>CCM</b>" data-bs-html="true"></i>
-                                                        
-                                                        @if (!empty($upload_final_NDA)) 
-                                                            <a href="{{asset("words/". $upload_final_NDA->id_document)}}" class="btn btn-sm btn-success"><b>Download Dokumen Final</b></a>
-                                                        @endif
+                                                        style="font-size:14px;">Risk Tender
                                                     </h3>
                                                     <small><a class="text-active-primary text-gray"
                                                             href="https://crm.wika.co.id/faqs/104625_RiskTender_Input-Kosong.rev.xlsx">Download
                                                             Template Risk Tender</a></small>
                                                     <br><br>
                                                     <div class="w-50">
-                                                        @if (empty($upload_final))
-                                                            <input onchange="this.form.submit()" type="file"
-                                                                class="form-control form-control-sm form-input-solid"
-                                                                name="risk-tender" accept=".pdf, .xlsx">
-                                                        @endif
+                                                        <input onchange="this.form.submit()" type="file"
+                                                            class="form-control form-control-sm form-input-solid"
+                                                            name="risk-tender" accept=".pdf, .xlsx">
                                                     </div>
                                                     <h6 id="error-risk-tender" class="text-danger fw-normal"
                                                         style="display: none">*File terlalu besar ! Max Size 50Mb</h6>
@@ -4311,7 +4053,7 @@
                                                                     <!--end::Column-->
                                                                     <!--begin::Column-->
                                                                     <td>
-                                                                        {{ $peserta->oe_tender ?? '-' }}
+                                                                        {{ number_format($peserta->oe_tender, 2, ",", ".")  ?? '-' }}
                                                                     </td>
                                                                     <!--end::Column-->
                                                                     <!--begin::Column-->
@@ -8982,32 +8724,5 @@
         }
     </script>
     {{-- End :: JO Detail Save --}}
-
-    {{-- Begin::Get Data MPA and Ketua Tim Tender --}}
-    <script>
-        async function getDataMPAKetuaTender(e){
-            const data = e.value;
-            // let namaElt = document.getElementById("name-user")
-            // let emailElt = document.getElementById("email")
-            // let phoneElt = document.getElementById("phone-number")
-            await fetch(`/testing-user/${data}`, {
-                method: 'GET',
-            }).then((result)=>{
-                return result.json();
-            }).then((data)=>{
-                if(data.status == true){
-                    document.getElementById("mpa").value = data.data.mpa
-                    document.getElementById("ketua-tim-tender").value = data.data.ketua
-                }else{
-                    document.getElementById("mpa").value = ""
-                    document.getElementById("ketua-tim-tender").value = ""
-                }
-            }).catch((err)=>{
-                console.log(err)
-            })
-        }
-    </script>
-    {{-- End::Get Data MPA and Ketua Tim Tender --}}
-
 
 @endsection

@@ -3,264 +3,6 @@
 <!--begin::Main-->
 @section('content')
 
-{{-- Begin :: css --}}
-<style>
-    .timeline-centered {
-        position: relative;
-        margin-bottom: 30px;
-    }
-
-    .timeline-centered:before, .timeline-centered:after {
-        content: " ";
-        display: table;
-    }
-
-    .timeline-centered:after {
-        clear: both;
-    }
-
-    .timeline-centered:before, .timeline-centered:after {
-        content: " ";
-        display: table;
-    }
-
-    .timeline-centered:after {
-        clear: both;
-    }
-
-    .timeline-centered:before {
-        content: '';
-        position: absolute;
-        display: block;
-        width: 4px;
-        background: #f5f5f6;
-        left: 50%;
-        top: 20px;
-        bottom: 20px;
-        margin-left: -4px;
-    }
-
-    .timeline-centered .timeline-entry {
-        position: relative;
-        width: 50%;
-        float: right;
-        margin-bottom: 70px;
-        clear: both;
-    }
-
-        .timeline-centered .timeline-entry:before, .timeline-centered .timeline-entry:after {
-            content: " ";
-            display: table;
-        }
-
-        .timeline-centered .timeline-entry:after {
-            clear: both;
-        }
-
-        .timeline-centered .timeline-entry:before, .timeline-centered .timeline-entry:after {
-            content: " ";
-            display: table;
-        }
-
-        .timeline-centered .timeline-entry:after {
-            clear: both;
-        }
-
-        .timeline-centered .timeline-entry.begin {
-            margin-bottom: 0;
-        }
-
-        .timeline-centered .timeline-entry.left-aligned {
-            float: left;
-        }
-
-            .timeline-centered .timeline-entry.left-aligned .timeline-entry-inner {
-                margin-left: 0;
-                margin-right: -18px;
-            }
-
-                .timeline-centered .timeline-entry.left-aligned .timeline-entry-inner .timeline-time {
-                    left: auto;
-                    right: -100px;
-                    text-align: left;
-                }
-
-                .timeline-centered .timeline-entry.left-aligned .timeline-entry-inner .timeline-icon {
-                    float: right;
-                }
-
-                .timeline-centered .timeline-entry.left-aligned .timeline-entry-inner .timeline-content {
-                    margin-left: 0;
-                    margin-right: 70px;
-                }
-
-                    .timeline-centered .timeline-entry.left-aligned .timeline-entry-inner .timeline-content:after {
-                        left: auto;
-                        right: 0;
-                        margin-left: 0;
-                        margin-right: -9px;
-                        -moz-transform: rotate(180deg);
-                        -o-transform: rotate(180deg);
-                        -webkit-transform: rotate(180deg);
-                        -ms-transform: rotate(180deg);
-                        transform: rotate(180deg);
-                    }
-
-        .timeline-centered .timeline-entry .timeline-entry-inner {
-            position: relative;
-            margin-left: -22px;
-        }
-
-            .timeline-centered .timeline-entry .timeline-entry-inner:before, .timeline-centered .timeline-entry .timeline-entry-inner:after {
-                content: " ";
-                display: table;
-            }
-
-            .timeline-centered .timeline-entry .timeline-entry-inner:after {
-                clear: both;
-            }
-
-            .timeline-centered .timeline-entry .timeline-entry-inner:before, .timeline-centered .timeline-entry .timeline-entry-inner:after {
-                content: " ";
-                display: table;
-            }
-
-            .timeline-centered .timeline-entry .timeline-entry-inner:after {
-                clear: both;
-            }
-
-            .timeline-centered .timeline-entry .timeline-entry-inner .timeline-time {
-                position: absolute;
-                left: -100px;
-                text-align: right;
-                padding: 10px;
-                -webkit-box-sizing: border-box;
-                -moz-box-sizing: border-box;
-                box-sizing: border-box;
-            }
-
-                .timeline-centered .timeline-entry .timeline-entry-inner .timeline-time > span {
-                    display: block;
-                }
-
-                    .timeline-centered .timeline-entry .timeline-entry-inner .timeline-time > span:first-child {
-                        font-size: 15px;
-                        font-weight: bold;
-                    }
-
-                    .timeline-centered .timeline-entry .timeline-entry-inner .timeline-time > span:last-child {
-                        font-size: 12px;
-                    }
-
-            .timeline-centered .timeline-entry .timeline-entry-inner .timeline-icon {
-                background: #fff;
-                color: #737881;
-                display: block;
-                width: 40px;
-                height: 40px;
-                -webkit-background-clip: padding-box;
-                -moz-background-clip: padding;
-                background-clip: padding-box;
-                -webkit-border-radius: 20px;
-                -moz-border-radius: 20px;
-                border-radius: 20px;
-                text-align: center;
-                -moz-box-shadow: 0 0 0 5px #f5f5f6;
-                -webkit-box-shadow: 0 0 0 5px #f5f5f6;
-                box-shadow: 0 0 0 5px #f5f5f6;
-                line-height: 40px;
-                font-size: 15px;
-                float: left;
-            }
-
-                .timeline-centered .timeline-entry .timeline-entry-inner .timeline-icon.bg-primary {
-                    background-color: #303641;
-                    color: #fff;
-                }
-
-                .timeline-centered .timeline-entry .timeline-entry-inner .timeline-icon.bg-secondary {
-                    background-color: #ee4749;
-                    color: #fff;
-                }
-
-                .timeline-centered .timeline-entry .timeline-entry-inner .timeline-icon.bg-success {
-                    background-color: #00a651;
-                    color: #fff;
-                }
-
-                .timeline-centered .timeline-entry .timeline-entry-inner .timeline-icon.bg-info {
-                    background-color: #21a9e1;
-                    color: #fff;
-                }
-
-                .timeline-centered .timeline-entry .timeline-entry-inner .timeline-icon.bg-warning {
-                    background-color: #fad839;
-                    color: #fff;
-                }
-
-                .timeline-centered .timeline-entry .timeline-entry-inner .timeline-icon.bg-danger {
-                    background-color: #cc2424;
-                    color: #fff;
-                }
-
-            .timeline-centered .timeline-entry .timeline-entry-inner .timeline-content {
-                position: relative;
-                background: #f5f5f6;
-                padding: 1.7em;
-                margin-left: 70px;
-                -webkit-background-clip: padding-box;
-                -moz-background-clip: padding;
-                background-clip: padding-box;
-                -webkit-border-radius: 3px;
-                -moz-border-radius: 3px;
-                border-radius: 3px;
-            }
-
-                .timeline-centered .timeline-entry .timeline-entry-inner .timeline-content:after {
-                    content: '';
-                    display: block;
-                    position: absolute;
-                    width: 0;
-                    height: 0;
-                    border-style: solid;
-                    border-width: 9px 9px 9px 0;
-                    border-color: transparent #f5f5f6 transparent transparent;
-                    left: 0;
-                    top: 10px;
-                    margin-left: -9px;
-                }
-
-                .timeline-centered .timeline-entry .timeline-entry-inner .timeline-content h2, .timeline-centered .timeline-entry .timeline-entry-inner .timeline-content p {
-                    color: #737881;
-                    font-family: "Noto Sans",sans-serif;
-                    font-size: 12px;
-                    margin: 0;
-                    line-height: 1.428571429;
-                }
-
-                    .timeline-centered .timeline-entry .timeline-entry-inner .timeline-content p + p {
-                        margin-top: 15px;
-                    }
-
-                .timeline-centered .timeline-entry .timeline-entry-inner .timeline-content h2 {
-                    font-size: 16px;
-                    margin-bottom: 10px;
-                }
-
-                    .timeline-centered .timeline-entry .timeline-entry-inner .timeline-content h2 a {
-                        color: #303641;
-                    }
-
-                    .timeline-centered .timeline-entry .timeline-entry-inner .timeline-content h2 span {
-                        -webkit-opacity: .6;
-                        -moz-opacity: .6;
-                        opacity: .6;
-                        -ms-filter: alpha(opacity=60);
-                        filter: alpha(opacity=60);
-                    }
-</style>
-{{-- End :: css --}}
-
     @php
         $is_super_user = str_contains(Auth::user()->name, "PIC") || Auth::user()->check_administrator;
     @endphp
@@ -382,13 +124,7 @@
 
                                         <!--begin:::Tab item -->
                                         <li class="nav-item">
-                                            <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab" href="#kt_user_view_rekomendasi" style="font-size:14px;">Verifikasi Assessment</a>
-                                        </li>
-                                        <!--end:::Tab item -->
-
-                                        <!--begin:::Tab item -->
-                                        <li class="nav-item">
-                                            <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab" href="#kt_user_view_persetujuan" style="font-size:14px;">Persetujuan Nota Rekomendasi 1</a>
+                                            <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab" href="#kt_user_view_persetujuan" style="font-size:14px;">Persetujuan</a>
                                         </li>
                                         <!--end:::Tab item -->
                                     </ul>
@@ -405,7 +141,6 @@
                             <div id="tab-content" class="tab-content">
                                 {{-- Begin :: Tab Content Proyek Pengajuan Rekomendasi --}}
                                 <div class="tab-pane fade show active" id="kt_user_view_pengajuan" role="tabpanel">
-                                    <a href="#" onclick="exportToExcel(this, '#rekomendasi-pengajuan')" class="btn btn-sm btn-success"><i class="bi bi-file-spreadsheet-fill"></i>Export to Excel</a>
                                     <!--begin::Table Claim-->
                                     <table class="table align-middle table-row-dashed fs-6" id="rekomendasi-pengajuan">
                                         <!--begin::Table head-->
@@ -420,8 +155,7 @@
                                                 <th class="min-w-auto">Nilai OK</th>
                                                 <th class="min-w-auto">Kategori Proyek</th>
                                                 <th class="min-w-auto">Mengusulkan</th>
-                                                <th class="min-w-auto">Status Pengajuan</th>
-                                                <th class="min-w-auto">Status Persetujuan</th>
+                                                <th class="min-w-auto">Status</th>
                                                 {{-- <th class="min-w-auto">ID Contract</th> --}}
                                             </tr>
                                             <!--end::Table row-->
@@ -429,32 +163,28 @@
                                         <!--end::Table head-->
                                         <!--begin::Table body-->
                                         <tbody class="fw-bold text-gray-600 fs-6">
-                                            @if (!empty($proyeks_pengajuan))
+                                            @if (!empty($proyeks_pengajuan) && !$is_super_user)
                                                 @forelse ($proyeks_pengajuan as $proyek)
                                                     @php
-                                                        $customer = $proyek->proyekBerjalan->Customer ?? null;
+                                                        $customer = $proyek->proyekBerjalan->Customer;
                                                         $approved_data = collect([json_decode($proyek->approved_rekomendasi)])->flatten();
                                                         $is_approved = $approved_data->every(function($item) {
                                                             return !empty($item) && $item->status == "approved";
                                                         }) && ($approved_data->count() == $all_super_user_counter);
                                                         // dd($approved_data);
-                                                        $is_review_assessment = false;
                                                         if($is_approved) {
-                                                            $is_review_assessment = $is_approved && empty($proyek->review_assessment);
+                                                            // $approved_data_first = $approved_data;
                                                         } else {
                                                             $is_user_id_exist = $approved_data->filter(function($d) {
                                                                 return !empty($d->user_id) && $d->user_id == Auth::user()->id;
                                                             });
                                                         }
-                                                        $is_pending = !$is_approved && ($approved_data->count() <= $all_super_user_counter);
+                                                        $is_pending = !$is_approved && ($approved_data->count() < $all_super_user_counter);
                                                     @endphp
                                                     <tr>
                                                         <td>
-                                                            @if ($is_user_exist_in_matriks_approval)
-                                                                <a href="#kt_modal_view_proyek_{{$proyek->kode_proyek}}" data-bs-toggle="modal" class="text-hover-primary">{{ $proyek->nama_proyek }}</a>
-                                                            @else
-                                                                <a href="/proyek/view/{{$proyek->kode_proyek}}" target="_blank" class="text-hover-primary">{{ $proyek->nama_proyek }}</a>
-                                                            @endif
+                                                            {{-- <a href="#kt_modal_view_proyek_{{$proyek->kode_proyek}}" target="_blank" data-bs-toggle="modal" class="text-hover-primary">{{ $proyek->nama_proyek }}</a> --}}
+                                                            <a href="/proyek/view/{{$proyek->kode_proyek}}" target="_blank" class="text-hover-primary">{{ $proyek->nama_proyek }}</a>
                                                         </td>
                                                         <td>
                                                             @php
@@ -500,50 +230,12 @@
                                                             </small>
                                                         </td>
                                                         <td>
-                                                            @if ($proyek->is_request_rekomendasi && !$proyek->review_assessment)
-                                                                @if (!empty(Auth::user()->Pegawai->MatriksApproval) && Auth::user()->Pegawai->MatriksApproval->contains("kategori", "Pengajuan"))
-                                                                    <small class="badge badge-light-warning">Request Pengajuan</small>
-                                                                @else
-                                                                    <small class="badge badge-light-primary">Proses Pengajuan</small>
-                                                                @endif
-                                                            @elseif ($proyek->review_assessment && is_null($proyek->recommended_with_note))
-                                                                <small class="badge badge-light-primary">Proses Verifikasi</small>
-                                                            @elseif ($proyek->review_assessment && !is_null($proyek->recommended_with_note))
-                                                                <small class="badge badge-light-success">Pengajuan Disetujui</small>
-                                                            @elseif ($proyek->review_assessment == false && $proyek->is_recommended == false && $proyek->is_disetujui == false)
-                                                                <small class="badge badge-light-danger">Pengajuan Ditolak</small>
-                                                            @endif
-                                                            {{-- @if ($proyek->review_assessment && $proyek->review_assessment && !$proyek->is_recommended && !$proyek->is_recommended_with_note)
-                                                                <small class="badge badge-light-success">Pengajuan Disetujui</small>
-                                                            @elseif($is_pending && $proyek->is_disetujui == null)
-                                                                <small class="badge badge-light-info">Proses Pengajuan</small>
-                                                            @elseif($is_review_assessment)
-                                                                <small class="badge badge-light-primary">Review Assessment</small>
-                                                            @elseif($proyek->is_recommended && empty($proyek->recommended_with_note))
-                                                                <small class="badge badge-light-success">Direkomendasikan</small>
-                                                            @elseif($proyek->is_recommended && !empty($proyek->recommended_with_note))
-                                                                <small class="badge badge-light-success">Direkomendasikan dengan catatan</small>
-                                                            @elseif(!$is_pending && !$proyek->is_recommended || !$proyek->review_assessment)
-                                                                <small class="badge badge-light-danger">Tidak Direkomendasikan</small>
-                                                            @endif --}}
-                                                        </td>
-                                                        <td>
-                                                            @if ($proyek->is_disetujui)
-                                                                <small class="badge badge-light-success">
-                                                                    <a href="#kt_modal_view_proyek_history_{{$proyek->kode_proyek}}" data-bs-toggle="modal" class="text-success">Disetujui</a>
-                                                                </small>
-                                                            @elseif($proyek->is_disetujui == false && !is_null($proyek->is_disetujui))
-                                                                <small class="badge badge-light-danger">
-                                                                    <a href="#kt_modal_view_proyek_history_{{$proyek->kode_proyek}}" data-bs-toggle="modal" class="text-danger">Ditolak</a>
-                                                                </small>
-                                                            @elseif($proyek->is_request_rekomendasi && !$proyek->review_assessment)
+                                                            @if ($is_approved)
+                                                                <small class="badge badge-light-success">Disetujui</small>
+                                                            @elseif($is_pending)
                                                                 <small class="badge badge-light-primary">Proses Pengajuan</small>
-                                                            @elseif($proyek->review_assessment == true && is_null($proyek->is_penyusun_approved))
-                                                                <small class="badge badge-light-primary">Proses Penyusun</small>
-                                                            @elseif($proyek->is_penyusun_approved == true && is_null($proyek->is_recommended))
-                                                                <small class="badge badge-light-primary">Proses Rekomendasi</small>
-                                                            @elseif($proyek->is_recommended == true && is_null($proyek->is_disetujui))
-                                                                <small class="badge badge-light-primary">Proses Penyetujuan</small>
+                                                            @else
+                                                                <small class="badge badge-light-danger">Ditolak</small>
                                                             @endif
                                                         </td>
                                                     </tr>
@@ -559,203 +251,6 @@
                                     <!--end::Table -->
                                 </div>
                                 {{-- End :: Tab Content Proyek Pengajuan Rekomendasi --}}
-                                
-                                {{-- Begin :: Tab Content Proyek Tabs Rekomendasi --}}
-                                <div class="tab-pane fade" id="kt_user_view_rekomendasi" role="tabpanel">
-                                    <!--begin::Table Claim-->
-                                    <table class="table align-middle table-row-dashed fs-6" id="rekomendasi-persetujuan">
-                                        <!--begin::Table head-->
-                                        <thead class="">
-                                            <!--begin::Table row-->
-                                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                <th class="min-w-auto">Nama Proyek</th>
-                                                <th class="min-w-auto">Lokasi</th>
-                                                <th class="min-w-auto">Pemberi Kerja</th>
-                                                <th class="min-w-auto">Instansi</th>
-                                                <th class="min-w-auto">Sumber Dana</th>
-                                                <th class="min-w-auto">Nilai OK</th>
-                                                <th class="min-w-auto">Kategori Proyek</th>
-                                                <th class="min-w-auto">Mengusulkan</th>
-                                                <th class="min-w-auto">Score Assessment</th>
-                                                <th class="min-w-auto">Tier</th>
-                                                <th class="min-w-auto">Status Pengajuan</th>
-                                                <th class="min-w-auto">Status Persetujuan</th>
-                                                {{-- <th class="min-w-auto">ID Contract</th> --}}
-                                            </tr>
-                                            <!--end::Table row-->
-                                        </thead>
-                                        <!--end::Table head-->
-                                        <!--begin::Table body-->
-                                        <tbody class="fw-bold text-gray-600 fs-6">
-                                            @if (!empty($proyeks_rekomendasi))
-                                                @forelse ($proyeks_rekomendasi as $proyek)
-                                                    @php
-                                                        $customer = $proyek->proyekBerjalan->Customer;
-                                                        $approved_data = collect([json_decode($proyek->approved_rekomendasi)])->flatten();
-                                                        $hasil_assessment = collect([json_decode($proyek->hasil_assessment)])->flatten();
-                                                        $avg_score_assessment = $hasil_assessment->sum("score");
-                                                        $is_approved = $approved_data->every(function($item) {
-                                                            return !empty($item) && $item->status == "approved";
-                                                        }) && ($approved_data->count() == $all_super_user_counter);
-                                                        // dd($approved_data);
-                                                        $is_review_assessment = false;
-                                                        if($is_approved) {
-                                                            $is_review_assessment = $is_approved && empty($proyek->review_assessment);
-                                                        } else {
-                                                            $is_user_id_exist = $approved_data->filter(function($d) {
-                                                                return !empty($d->user_id) && $d->user_id == Auth::user()->id;
-                                                            });
-                                                        }
-                                                        $is_pending = !$is_approved && ($approved_data->count() < $all_super_user_counter) && !$proyek->is_recommended;
-                                                    @endphp
-                                                    <tr>
-                                                        <td>
-                                                            <a href="#kt_modal_view_proyek_rekomendasi_{{$proyek->kode_proyek}}" target="_blank" data-bs-toggle="modal" class="text-hover-primary">{{ $proyek->nama_proyek }}</a>
-                                                        </td>
-                                                        <td>
-                                                            @php
-                                                                try {
-                                                                    $provinsi = App\Models\Provinsi::find($proyek->provinsi)->first()->province_name;
-                                                                } catch (\Throwable $th) {
-                                                                    $provinsi = $proyek->provinsi;
-                                                                }
-                                                            @endphp
-                                                            <small>{{ $provinsi ?? "-" }}</small>
-                                                        </td>
-                                                        <td>
-                                                            <small>{{ $customer->name ?? "-" }}</small>
-                                                        </td>
-                                                        <td>
-                                                            <small>{{ $customer->jenis_instansi ?? "-" }}</small>
-                                                        </td>
-                                                        <td>
-                                                            @php
-                                                                try {
-                                                                    $sumber_dana = App\Models\SumberDana::where("nama_sumber", "=", $customer->sumber_dana)->first()->nama_sumber;
-                                                                } catch (\Throwable $th) {
-                                                                    $sumber_dana = $proyek->sumber_dana;
-                                                                }
-                                                            @endphp
-                                                            <small>{{ $sumber_dana ?? "-" }}</small>
-                                                        </td>
-                                                        <td>
-                                                            <small>{{ number_format((int)$proyek->nilaiok_awal, 0, '.', '.' ?? '0'); }}</small>
-                                                        </td>
-                                                        <td>
-                                                            <small>
-                                                                {{$proyek->klasifikasi_pasdin ?? "-"}}
-                                                            </small>
-                                                        </td>
-                                                        <td>
-                                                            <small>
-                                                                @if ($proyek->klasifikasi_pasdin == "Proyek Kecil" || $proyek->klasifikasi_pasdin == "Proyek Menengah")
-                                                                    GM Pemasaran Operasi
-                                                                @else 
-                                                                    Kepala Divisi Operasi
-                                                                @endif
-                                                            </small>
-                                                        </td>
-                                                        <td>{{ $avg_score_assessment }}</td>
-                                                        <td>
-                                                            @if ($customer->proyekBerjalans->where("stage", "=", 8)->count() > 0)
-                                                                @if ($avg_score_assessment > 45)
-                                                                    A
-                                                                @elseif($avg_score_assessment < 45 && $avg_score_assessment > 25)
-                                                                    B
-                                                                @else 
-                                                                    C
-                                                                @endif
-                                                            @else 
-                                                                @if ($avg_score_assessment > 22.5)
-                                                                    A
-                                                                @elseif($avg_score_assessment < 22.5 && $avg_score_assessment > 15)
-                                                                    B
-                                                                @else 
-                                                                    C
-                                                                @endif
-                                                            @endif
-                                                        </td>
-                                                        <td>
-                                                            @if ($proyek->is_request_rekomendasi && !$proyek->review_assessment)
-                                                                @if (!empty(Auth::user()->Pegawai->MatriksApproval) && Auth::user()->Pegawai->MatriksApproval->contains("kategori", "Pengajuan"))
-                                                                    
-                                                                    <small class="badge badge-light-warning">Request Pengajuan</small>
-                                                                @else
-                                                                    <small class="badge badge-light-primary">Proses Pengajuan</small>
-                                                                @endif
-                                                            @elseif ($proyek->review_assessment && is_null($proyek->recommended_with_note))
-                                                                @if (!empty(Auth::user()->Pegawai->MatriksApproval) && Auth::user()->Pegawai->MatriksApproval->contains("kategori", "Verifikasi"))
-                                                                    <small class="badge badge-light-warning">Request Verifikasi</small>
-                                                                @else
-                                                                    <small class="badge badge-light-primary">Proses Verifikasi</small>
-                                                                @endif
-                                                            @elseif ($proyek->review_assessment && !is_null($proyek->recommended_with_note))
-                                                                <small class="badge badge-light-success">Pengajuan Disetujui</small>
-                                                            @endif
-                                                            {{-- @dump(!$proyek->is_recommended || !$proyek->is_recommended_with_note) --}}
-                                                            {{-- @if ($proyek->review_assessment && !$proyek->is_recommended && !$proyek->is_recommended_with_note)
-                                                                <small class="badge badge-light-success">Pengajuan Disetujui</small>
-                                                            @elseif($is_pending && $proyek->review_assessment && (!$proyek->is_recommended || !$proyek->is_recommended_with_note))
-                                                                <small class="badge badge-light-info">Proses Pengajuan</small>
-                                                            @elseif($is_review_assessment)
-                                                                <small class="badge badge-light-primary">Review Assessment</small>
-                                                            @elseif($proyek->is_recommended)
-                                                                <small class="badge badge-light-success">Direkomendasikan</small>
-                                                            @elseif($proyek->is_recommended_with_note)
-                                                                <small class="badge badge-light-success">Direkomendasikan dengan catatan</small>
-                                                            @elseif(!$proyek->is_recommended || !$is_approved)
-                                                                <small class="badge badge-light-danger">Tidak Direkomendasikan</small>
-                                                            @endif --}}
-                                                        </td>
-                                                        <td>
-                                                            @if ($proyek->is_disetujui)
-                                                                <small class="badge badge-light-success">Disetujui</small>
-                                                            @elseif($proyek->is_disetujui == false && !is_null($proyek->is_disetujui))
-                                                                <small class="badge badge-light-danger">Ditolak</small>
-                                                            @elseif($proyek->review_assessment == true && is_null($proyek->is_penyusun_approved))
-                                                                @if (!empty(Auth::user()->Pegawai->MatriksApproval) && Auth::user()->Pegawai->MatriksApproval->contains("kategori", "Penyusun"))
-                                                                    <small class="badge badge-light-warning">Request Penyusun</small>
-                                                                    
-                                                                @else
-                                                                    <small class="badge badge-light-primary">Proses Penyusun</small>
-                                                                @endif
-                                                            @elseif($proyek->is_penyusun_approved == true && is_null($proyek->is_recommended))
-                                                                @if (!empty(Auth::user()->Pegawai->MatriksApproval) && Auth::user()->Pegawai->MatriksApproval->contains("kategori", "Rekomendasi"))
-                                                                    <small class="badge badge-light-warning">Request Rekomendasi</small>
-                                                                    
-                                                                @else
-                                                                    <small class="badge badge-light-primary">Proses Rekomendasi</small>
-                                                                @endif
-                                                            @elseif($proyek->is_recommended == true && is_null($proyek->is_disetujui))
-                                                                @if (!empty(Auth::user()->Pegawai->MatriksApproval) && Auth::user()->Pegawai->MatriksApproval->contains("kategori", "Penyetujuan"))
-                                                                    <small class="badge badge-light-warning">Request Penyetujuan</small>
-                                                                @else
-                                                                    <small class="badge badge-light-primary">Proses Penyetujuan</small>
-                                                                @endif
-                                                            @endif
-                                                            {{-- @if ($proyek->is_disetujui)
-                                                                <small class="badge badge-light-success">Disetujui</small>
-                                                            @elseif(!is_null($proyek->is_disetujui) && ($proyek->is_recommended || $proyek->is_recommended_with_note))
-                                                                <small class="badge badge-light-danger">Ditolak</small>
-                                                            @elseif(!$proyek->is_recommended && empty($proyek->recommended_with_note))
-                                                                <small class="badge badge-light-warning">Need Review</small>
-                                                            @elseif(!$proyek->is_recommended && $is_pending || $proyek->review_assessment)
-                                                                <small class="badge badge-light-primary">Request</small>
-                                                            @endif --}}
-                                                        </td>
-                                                    </tr>
-                                                @empty
-                                                    {{-- <td><p>There is no data</p></td> --}}
-                                                @endforelse
-                                            @else
-                                            {{-- <td><p>There is no data</p></td> --}}
-                                            @endif
-                                            
-                                        </tbody>
-                                    </table>
-                                    <!--end::Table -->
-                                </div>
-                                {{-- End :: Tab Content Proyek Tabs Rekomendasi --}}
                                 
                                 {{-- Begin :: Tab Content Proyek Persetujuan Rekomendasi --}}
                                 <div class="tab-pane fade" id="kt_user_view_persetujuan" role="tabpanel">
@@ -781,7 +276,7 @@
                                         <!--end::Table head-->
                                         <!--begin::Table body-->
                                         <tbody class="fw-bold text-gray-600 fs-6">
-                                            @if (!empty($proyeks_persetujuan))
+                                            @if (!empty($proyeks_persetujuan) &&  $is_super_user)
                                                 @forelse ($proyeks_persetujuan as $proyek)
                                                     @php
                                                         $customer = $proyek->proyekBerjalan->Customer;
@@ -789,13 +284,6 @@
                                                         $is_approved = $approved_data->every(function($item) {
                                                             return !empty($item) && $item->status == "approved";
                                                         });
-                                                        $is_data_null = $approved_data->every(function($d) {
-                                                            return $d == null;
-                                                        });
-
-                                                        if($is_data_null) {
-                                                            $approved_data = collect();
-                                                        }
                                                         
                                                         // dd($approved_data);
                                                         if($is_approved) {
@@ -811,7 +299,7 @@
                                                     @endphp
                                                     <tr>
                                                         <td>
-                                                            <a href="#kt_modal_view_proyek_persetujuan_{{$proyek->kode_proyek}}" target="_blank" data-bs-toggle="modal" class="text-hover-primary">{{ $proyek->nama_proyek }}</a>
+                                                            <a href="#kt_modal_view_proyek_{{$proyek->kode_proyek}}" target="_blank" data-bs-toggle="modal" class="text-hover-primary">{{ $proyek->nama_proyek }}</a>
                                                         </td>
                                                         <td>
                                                             @php
@@ -857,50 +345,56 @@
                                                             </small>
                                                         </td>
                                                         <td>
-                                                            @if ($proyek->is_disetujui)
-                                                                <small class="badge badge-light-success">Disetujui</small>
-                                                            @elseif($proyek->is_disetujui == false && !is_null($proyek->is_disetujui))
-                                                                <small class="badge badge-light-danger">Ditolak</small>
-                                                            @elseif($proyek->review_assessment == true && is_null($proyek->is_penyusun_approved))
-                                                                @if (!empty(Auth::user()->Pegawai->MatriksApproval) && Auth::user()->Pegawai->MatriksApproval->contains("kategori", "Penyusun"))
-                                                                    <small class="badge badge-light-warning">Request Penyusun</small>
-                                                                    
+                                                            @php
+                                                                $msg = "";
+                                                                $is_approved = $approved_data->every(function($item) {
+                                                                    return !empty($item) && $item->status == "approved";
+                                                                }) && ($approved_data->count() == $all_super_user_counter);
+                                                                $is_pending = !$is_approved && ($approved_data->count() < $all_super_user_counter);
+                                                                if(!$is_approved) {
+                                                                    // $is_user_id_exist = $approved_data->map(function($d) {
+                                                                    //     $new_class = new stdClass();
+                                                                    //     if(!empty($d) && $d->status  == "rejected") {
+                                                                    //         $new_class->user_id = $d->user_id;
+                                                                    //         $new_class->status = $d->status;
+                                                                    //         return $new_class;
+                                                                    //     }
+                                                                    // });
+                                                                    if(!empty($approved_data) && !$is_approved) {
+                                                                        $nama_user = collect();
+                                                                        foreach ($approved_data as $item) {
+                                                                            if(!empty($item) && $item->status == "rejected") {
+                                                                                try {
+                                                                                    $user = App\Models\User::find($item->user_id)->name;
+                                                                                    if(!empty($user)) $nama_user->push($user);
+                                                                                } catch (\Throwable $th) {
+                                                                                    //throw $th;
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                        $nama_user = $nama_user->join(", ", " dan ");
+                                                                        if(!empty($nama_user)) {
+                                                                            $msg = "Rekomendasi ini ditolak oleh <b>$nama_user</b>";
+                                                                        }
+                                                                    }
+                                                                }   
+                                                            @endphp
+                                                            @if ($is_approved)
+                                                                @if ($is_approved)
+                                                                    <small class="badge badge-light-success">Disetujui</small>
+                                                                @elseif($is_pending)
+                                                                    <small class="badge badge-light-primary">Proses Pengajuan</small>
                                                                 @else
-                                                                    <small class="badge badge-light-primary">Proses Penyusun</small>
+                                                                    <small class="badge badge-light-danger" data-bs-toggle="tooltip" data-bs-html="true" data-bs-title="{{ $msg }}">Ditolak</small>
                                                                 @endif
-                                                            @elseif($proyek->is_penyusun_approved == true && is_null($proyek->is_recommended))
-                                                                @if (!empty(Auth::user()->Pegawai->MatriksApproval) && Auth::user()->Pegawai->MatriksApproval->contains("kategori", "Rekomendasi"))
-                                                                    <small class="badge badge-light-warning">Request Rekomendasi</small>
-                                                                    
+                                                            @else
+                                                                @if(!$is_pending && !$is_approved)
+                                                                    <small class="badge badge-light-danger"  data-bs-toggle="tooltip" data-bs-html="true" data-bs-title="{{ $msg }}">Ditolak</small>
+                                                                @elseif(!$is_pending && $is_approved)        
+                                                                    <small class="badge badge-light-success">Disetujui</small>
                                                                 @else
-                                                                    <small class="badge badge-light-primary">Proses Rekomendasi</small>
+                                                                    <small class="badge badge-light-primary">Proses Pengajuan</small>
                                                                 @endif
-                                                            @elseif($proyek->is_recommended == true && is_null($proyek->is_disetujui))
-                                                                @if (!empty(Auth::user()->Pegawai->MatriksApproval) && Auth::user()->Pegawai->MatriksApproval->contains("kategori", "Penyetujuan"))
-                                                                    <small class="badge badge-light-warning">Request Penyetujuan</small>
-                                                                @else
-                                                                    <small class="badge badge-light-primary">Proses Penyetujuan</small>
-                                                                @endif
-                                                            {{-- @elseif($proyek->is_recommended != null && $proyek->is_penyusun_approved && $proyek->is_disetujui == null)
-                                                                @if (Auth::user()->Pegawai->MatriksApproval->contains("kategori", "Persetujuan"))
-                                                                    <small class="badge badge-light-info">Procces in Rekomendasi</small>
-                                                                @elseif (Auth::user()->Pegawai->MatriksApproval->contains("kategori", "Rekomendasi"))
-                                                                    <small class="badge badge-warning">Need Rekomendasi</small>
-                                                                @else
-                                                                    <small class="badge badge-light-primary">Request to Rekomendasi</small>
-                                                                @endif
-                                                            @elseif($proyek->is_recommended == true && $proyek->review_assessment && $proyek->is_disetujui == null)
-                                                                @if (Auth::user()->Pegawai->MatriksApproval->contains("kategori", "Persetujuan"))
-                                                                    <small class="badge badge-warning">Need Approval</small>
-                                                                @elseif (Auth::user()->Pegawai->MatriksApproval->contains("kategori", "Rekomendasi"))
-                                                                    <small class="badge badge-light-primary">Request Persetujuan</small>
-                                                                @else
-                                                                    @if ($proyek->is_penyusun_approved)
-                                                                        <small class="badge badge-light-primary">Request Persetujuan</small>
-                                                                    @else
-                                                                        <small class="badge badge-warning">Need Submit</small>
-                                                                    @endif
-                                                                @endif --}}
                                                             @endif
                                                         </td>
                                                     </tr>
@@ -939,592 +433,1086 @@
     @php
         $proyeks = $is_super_user ? $proyeks_persetujuan : $proyeks_pengajuan;
     @endphp
-    @foreach ($proyeks_pengajuan as $proyek)
+    @foreach ($proyeks as $proyek)
         <div class="modal fade" id="kt_modal_view_proyek_{{$proyek->kode_proyek}}" tabindex="-1" aria-labelledby="kt_modal_view_proyek_{{$proyek->kode_proyek}}" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
-                <div class="modal-content">
-                    <div class="modal-header">
-                    <h5 class="modal-title">Detail Proyek (Readonly)</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr class="text-bg-dark">
-                                    <th>No</th>
-                                    <th>Item</th>
-                                    <th>Uraian</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Nama Proyek</td>
-                                    <td>{{ $proyek->nama_proyek }}</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Lokasi Proyek</td>
-                                    <td>{{ $proyek->Provinsi->province_name ?? "-" }}</td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>Nama Pemberi Kerja</td>
-                                    <td>{{ $proyek->proyekBerjalan->name_customer ?? "-"}}</td>
-                                </tr>
-                                <tr>
-                                    <td>4</td>
-                                    <td>Instansi Pemberi Kerja</td>
-                                    <td>{{ $proyek->proyekBerjalan->Customer->jenis_instansi ?? "-" }}</td>
-                                </tr>
-                                <tr>
-                                    <td>5</td>
-                                    <td>Sumber Pendanaan Proyek</td>
-                                    <td>{{ $proyek->sumber_dana }}</td>
-                                </tr>
-                                <tr>
-                                    <td>6</td>
-                                    <td>Nilai Proyek</td>
-                                    <td>Rp. {{ number_format($proyek->nilaiok_awal, 0, ".", ".") }}</td>
-                                </tr>
-                                <tr>
-                                    <td>7</td>
-                                    <td>Kategori Proyek</td>
-                                    <td>{{ $proyek->klasifikasi_pasdin ?? "-" }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        {{-- @if (!empty($proyek->file_rekomendasi))
-                            <hr>
-                            <h5>File Preview: </h5>
-                            <div class="text-center">
-                                <iframe src="{{asset("file-rekomendasi" . "\\" . $proyek->file_rekomendasi)}}" width="800px" height="600px" ></iframe>
-                            </div>
-                        @endif --}}
-                        @if (!empty($proyek->file_pengajuan))
-                            <hr>    
-                            <h5>File Preview: </h5>
-                            <div class="text-center">
-                                <iframe src="{{asset("file-pengajuan" . "\\" . $proyek->file_pengajuan)}}" width="800px" height="600px" ></iframe>
-                            </div>
-                        @endif
-                    </div>
-                    <div class="modal-footer">
-                        @php
-                            $approved_data = collect([json_decode($proyek->approved_rekomendasi)])->flatten();
-                            $is_data_null = $approved_data->every(function($d) {
-                                return $d == null;
-                            });
-                            $is_user_id_exist = $approved_data->map(function($d) {
-                                if(!empty($d) && $d->user_id == Auth::user()->id) {
-                                    $new_class = new stdClass();
-                                    $new_class->user_id = $d->user_id;
-                                    $new_class->status = $d->status;
-                                    return $new_class;
-                                }
-                                // if(is_array($d->user_id)) {
-                                //     return in_array(Auth::user()->id, $d->user_id);
-                                // }
-                                // return !empty($d->user_id) && $d->user_id == Auth::user()->id;
-                            })->firstWhere("user_id", "!=", null);
-                            if($is_data_null) {
-                                $approved_data = collect();
-                            }
-                            // dump($is_user_id_exist, $is_data_null, $approved_data->count() != $all_super_user_counter);
-                        @endphp
-                        @if ($is_user_exist_in_matriks_approval && empty($is_user_id_exist) && ($is_data_null || $approved_data->count() != $all_super_user_counter))
-                            <form action="" method="GET">
-                                @csrf
-                                <input type="hidden" name="kode-proyek" value="{{$proyek->kode_proyek}}">
-                                <input type="button" data-bs-toggle="modal" data-bs-target="#kt_modal_view_proyek_tolak_pengajuan_{{$proyek->kode_proyek}}" name="tolak" value="Tolak" class="btn btn-sm btn-danger">
-                                <input type="submit" name="setuju" value="Setujui" class="btn btn-sm btn-success">
-                            </form>
-                        @elseif(!empty($is_user_id_exist))
-                            {{-- @php
-                                $status_approval = $is_user_id_exist->first();
-                            @endphp --}}
-                            @switch($is_user_id_exist->status)
-                                @case("approved")
-                                    <small class="badge badge-light-success">Disetujui</small>
-                                    @break
-                                @case("rejected")
-                                    <small class="badge badge-light-danger">Ditolak</small>
-                                    @break
-                                @default
-                                    
-                            @endswitch
-                        @endif
-                    </div>
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title">Detail Proyek (Readonly)</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-            </div>
-        </div>
-
-        <div class="modal fade" id="kt_modal_view_proyek_history_{{$proyek->kode_proyek}}" tabindex="-1" aria-labelledby="kt_modal_view_proyek_{{$proyek->kode_proyek}}" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
-                <div class="modal-content">
-                    <div class="modal-header">
-                    <h5 class="modal-title">Pengajuan Rekomendasi History</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        @php
-                            $approved_pengajuan = collect(json_decode($proyek->approved_rekomendasi));
-                            $approved_penyusun= collect(json_decode($proyek->approved_penyusun));
-                            $approved_rekomendasi = collect(json_decode($proyek->approved_rekomendasi_final));
-                            $approved_persetujuan = collect(json_decode($proyek->approved_persetujuan));
-                            $data_approved_merged = collect()->mergeRecursive(["Pengajuan" => $approved_pengajuan->flatten(), "Penyusunan" => $approved_penyusun->flatten(), "Rekomendasi" => $approved_rekomendasi->flatten(), "Persetujuan" => $approved_persetujuan->flatten()]);
-                            // dump($approved_pengajuan, $approved_penyusun, $approved_rekomendasi, $approved_persetujuan);
-                        @endphp
-                        {{-- Begin :: History --}}
-                        <div class="row">
-                            @php
-                                $row = 1;
-                            @endphp
-                            <div class="timeline-centered">
-                                @forelse ($data_approved_merged as $key => $data)
-                                    @if($data->isNotEmpty())
-
-                                        {{-- @dd($data) --}}
-
-                                            <article class="timeline-entry {{$row % 2 == 0 ? "left-aligned" : ""}}">
-                                                
-                                                <div class="timeline-entry-inner">
-                                                    <time class="timeline-time"></time>
-                                                    @if ($data->contains("status", "rejected"))
-                                                        <div class="timeline-icon bg-danger">
-                                                            <i class="entypo-feather"></i>
-                                                        </div>
-                                                    @else
-                                                        <div class="timeline-icon bg-success">
-                                                            <i class="entypo-feather"></i>
-                                                        </div>
-                                                    @endif
-                                                    
-                                                    <div class="timeline-content">
-                                                        <div class="row">
-                                                            <h5>Tanggung jawab {{$key}} diberikan oleh:</h5>
-                                                            @foreach ($data as $d)
-                                                                <div class="card text-bg-light my-3">
-                                                                    <div class="card-body">
-                                                                        <small>
-                                                                            Nama: <b>{{App\Models\User::find($d->user_id)->name}}</b><br>
-                                                                            Status Approval: 
-                                                                            @if ($d->status == "approved")
-                                                                                <span><b class="text-success">Menyetujui</b></span>
-                                                                            @else
-                                                                                <span><b class="text-danger">Menolak</b></span>
-                                                                            @endif
-                                                                            <br>
-
-                                                                            @if (!empty($d->tanggal))
-                                                                                Tanggal: 
-                                                                                <b>{{Carbon\Carbon::create($d->tanggal)->translatedFormat("d F Y H:i:s")}}</b> <br>
-                                                                            @endif
-                                                                            @if (!empty($d->alasan))
-                                                                                Alasan:
-                                                                                <b>{!! $d->alasan !!}</b><br>
-                                                                            @endif
-                                                                        </small>
-                                                                    </div>
-                                                                </div>
-                                                            @endforeach
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </article>
-                                        @endif
-                                        @php
-                                            $row++;
-                                        @endphp
-                                    @empty
-                                @endforelse
-                            </div>
-                        </div>
-                        {{-- End :: History --}}
-                    </div>
-                    <div class="modal-footer">
-                        
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="modal fade" id="kt_modal_view_proyek_tolak_pengajuan_{{$proyek->kode_proyek}}" tabindex="-1" aria-labelledby="kt_modal_view_proyek_tolak_pengajuan_{{$proyek->kode_proyek}}" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
-                <div class="modal-content">
-                    
-                    <form action="" method="get">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Alasan Ditolak</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="row">
-                                @csrf
-                                <input type="hidden" name="kode-proyek" value="{{$proyek->kode_proyek}}">
-                                <textarea name="alasan-ditolak" class="form-control form-control-solid" id="alasan-ditolak" cols="1" rows="5"></textarea>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <input type="submit" name="tolak" class="btn btn-sm btn-danger" value="Ditolak dengan alasan">
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    @endforeach
-
-    @foreach ($proyeks_rekomendasi as $proyek)
-        @php
-            $hasil_assessment = collect(json_decode($proyek->hasil_assessment));
-            $internal_score = 0;
-            $eksternal_score = 0;
-            if($hasil_assessment->isNotEmpty()) {
-                $internal_score = $hasil_assessment->sum(function($ra) {
-                    if($ra->kategori == "Internal") {
-                        return $ra->score;
-                    }
-                });
-                $eksternal_score = $hasil_assessment->sum(function($ra) {
-                    if($ra->kategori == "Eksternal") {
-                        return $ra->score;
-                    }
-                });
-            }
-        @endphp
-        <div class="modal fade" id="kt_modal_view_proyek_rekomendasi_{{$proyek->kode_proyek}}" tabindex="-1" aria-labelledby="kt_modal_view_proyek_rekomendasi_{{$proyek->kode_proyek}}" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-xl">
-                <div class="modal-content">
-                    @if (!$proyek->recommended_with_note)
-                    <form action="" method="GET">
-                    @endif
-                        <div class="modal-header">
-                            <h5 class="modal-title">Detail Proyek (Readonly)</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr class="text-bg-dark">
-                                        <th>No</th>
-                                        <th>Item</th>
-                                        <th>Uraian</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Nama Proyek</td>
-                                        <td>{{ $proyek->nama_proyek }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>Lokasi Proyek</td>
-                                        <td>{{ $proyek->Provinsi->province_name ?? "-" }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>Nama Pemberi Kerja</td>
-                                        <td>{{ $proyek->proyekBerjalan->name_customer ?? "-"}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>4</td>
-                                        <td>Instansi Pemberi Kerja</td>
-                                        <td>{{ $proyek->proyekBerjalan->Customer->jenis_instansi ?? "-" }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>5</td>
-                                        <td>Sumber Pendanaan Proyek</td>
-                                        <td>{{ $proyek->sumber_dana }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>6</td>
-                                        <td>Nilai Proyek</td>
-                                        <td>Rp. {{ number_format($proyek->nilaiok_awal, 0, ".", ".") }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>7</td>
-                                        <td>Kategori Proyek</td>
-                                        <td>{{ $proyek->klasifikasi_pasdin ?? "-" }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>8</td>
-                                        <td>Assessment Eksternal Atas Pengguna Jasa</td>
-                                        <td>{{ $eksternal_score ?? "-" }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>9</td>
-                                        <td>Assessment Internal Atas Pengguna Jasa</td>
-                                        <td>{{ $internal_score ?? "-" }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>10</td>
-                                        <td>Uraian</td>
-                                        <td>{{ $proyek->recommended_with_note ?? "-" }}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <hr>
-                            
-                            {{-- <textarea name="note-rekomendasi" id="note-rekomendasi" rows="4" class="form-control form-control-solid"></textarea> --}}
-                            @if (!empty($proyek->file_pengajuan))
-                                <h5>Form Pengajuan Rekomendasi: </h5>
-                                <div class="text-center">
-                                    <iframe src="{{asset("file-pengajuan" . "\\" . $proyek->file_pengajuan)}}" width="800px" height="600px" ></iframe>
+                <div class="modal-body">
+                    <!--begin::Row Kanan+Kiri-->
+                    <div class="row fv-row">
+                        <!--begin::Col-->
+                        <div class="col-6">
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="required">Nama Proyek</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text"
+                                    class="form-control form-control-solid char-counter"
+                                    data-max-char="40" id="nama-proyek"
+                                    name="nama-proyek"
+                                    value="{{ $proyek->nama_proyek }}" />
+                                <!--end::Input-->
+                                <div class="d-flex flex-row justify-content-end">
+                                    <small class="">0/40</small>
                                 </div>
-                            @endif
-                            @if (!empty($proyek->file_rekomendasi))
-                                <hr>
-                                <h5>Hasil Assessment: </h5>
-                                <div class="text-center">
-                                    <iframe src="{{asset("file-rekomendasi" . "\\" . $proyek->file_rekomendasi)}}" width="800px" height="600px" ></iframe>
-                                </div>
-                            @endif
+                            </div>
+                            <!--end::Input group-->
                         </div>
-                        <div class="modal-footer row">
-                            {{-- @php
-                                $approved_penyusun = collect(json_decode($proyek->approved_penyusun));
-                                $is_user_exist = $approved_penyusun->contains("user_id", Auth::user()->id);
-                                dump($)
-                            @endphp --}}
-                            @if (is_null($proyek->is_recommended))
-                                <label for="note-rekomendasi" class="text-start">Catatan Rekomendasi: </label>
-                                <textarea class="form-control form-control-solid" id="note-rekomendasi" name="note-rekomendasi" {{$proyek->recommended_with_note ? 'readonly' : ''}} >{{$proyek->recommended_with_note}}</textarea>
-                                <br>
-                                @csrf
-                                <input type="hidden" name="kode-proyek" value="{{$proyek->kode_proyek}}">
-                                @if (!$proyek->recommended_with_note)
-                                    <input type="submit" name="input-rekomendasi-with-note" value="Submit" class="btn btn-sm btn-success">
-                                @endif
-                            @elseif(!$proyek->is_recommended)
-                                <span class="badge badge-light-danger">Ditolak</span>
-                            @elseif($proyek->is_recommended)
-                                <span class="badge badge-light-success">Direkomendasikan</span>
-                            @elseif($proyek->is_recommended_with_note)
-                                <span class="badge badge-light-success">Direkomendasikan dengan catatan</span>
-                            @endif
-                        </div>
-                    @if (!$proyek->recommended_with_note)
-                    </form>
-                    @endif
-                </div>
-            </div>
-        </div>
-    @endforeach
-
-    @foreach ($proyeks_persetujuan as $proyek)
-        @php
-            $hasil_assessment = collect(json_decode($proyek->hasil_assessment));
-            $internal_score = 0;
-            $eksternal_score = 0;
-            if($hasil_assessment->isNotEmpty()) {
-                $internal_score = $hasil_assessment->sum(function($ra) {
-                    if($ra->kategori == "Internal") {
-                        return $ra->score;
-                    }
-                });
-                $eksternal_score = $hasil_assessment->sum(function($ra) {
-                    if($ra->kategori == "Eksternal") {
-                        return $ra->score;
-                    }
-                });
-            }
-        @endphp
-        <div class="modal fade" id="kt_modal_view_proyek_persetujuan_{{$proyek->kode_proyek}}" tabindex="-1" aria-labelledby="kt_modal_view_proyek_rekomendasi_{{$proyek->kode_proyek}}" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-xl">
-                <div class="modal-content">
-                    <form action="" method="GET">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Detail Proyek (Readonly)</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr class="text-bg-dark">
-                                        <th>No</th>
-                                        <th>Item</th>
-                                        <th>Uraian</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Nama Proyek</td>
-                                        <td>{{ $proyek->nama_proyek }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>Lokasi Proyek</td>
-                                        <td>{{ $proyek->Provinsi->province_name ?? "-" }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>Nama Pemberi Kerja</td>
-                                        <td>{{ $proyek->proyekBerjalan->name_customer ?? "-"}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>4</td>
-                                        <td>Instansi Pemberi Kerja</td>
-                                        <td>{{ $proyek->proyekBerjalan->Customer->jenis_instansi ?? "-" }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>5</td>
-                                        <td>Sumber Pendanaan Proyek</td>
-                                        <td>{{ $proyek->sumber_dana }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>6</td>
-                                        <td>Nilai Proyek</td>
-                                        <td>Rp. {{ number_format($proyek->nilaiok_awal, 0, ".", ".") }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>7</td>
-                                        <td>Kategori Proyek</td>
-                                        <td>{{ $proyek->klasifikasi_pasdin ?? "-" }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>8</td>
-                                        <td>Assessment Eksternal Atas Pengguna Jasa</td>
-                                        <td>{{ $eksternal_score ?? "-" }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>9</td>
-                                        <td>Assessment Internal Atas Pengguna Jasa</td>
-                                        <td>{{ $internal_score ?? "-" }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>10</td>
-                                        <td>Catatan</td>
-                                        <td>{{ $proyek->recommended_with_note ?? "-" }}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <hr>
-                            
-                            @if (!empty($proyek->file_persetujuan))
-                                <hr>
-                                <h5>Hasil Rekomendasi: </h5>
-                                <div class="text-center">
-                                    <iframe src="{{asset("file-persetujuan" . "\\" . $proyek->file_persetujuan)}}" width="800px" height="600px" ></iframe>
-                                </div>
-                            @endif
-                        </div>
-                        <div class="modal-footer row">
-
-                            {{-- <label for="note-rekomendasi" class="text-start">Catatan Rekomendasi: </label>
-                            <textarea class="form-control" id="note-rekomendasi" name="note-rekomendasi"></textarea>
-                            <br> --}}
-                            @php
-                                $approved_penyusun = collect(json_decode($proyek->approved_penyusun));
-                                $is_user_exist_penyusun = $approved_penyusun->contains("user_id", Auth::user()->id);
-
-                                $approved_rekomendasi_final = collect(json_decode($proyek->approved_rekomendasi_final));
-                                $is_user_exist_rekomendasi = $approved_rekomendasi_final->contains("user_id", Auth::user()->id);
-
-                                $approved_persetujuan = collect(json_decode($proyek->approved_persetujuan));
-                                $is_user_exist_persetujuan = $approved_persetujuan->contains("user_id", Auth::user()->id);
-                            @endphp
-                            @if (is_null($proyek->is_penyusun_approved) && $matriks_user->contains("kategori", "Penyusun") && !$is_user_exist_penyusun)
-                                <form action="" method="get">
-                                    @csrf
-                                    <input type="hidden" value="{{$proyek->kode_proyek}}" name="kode-proyek" id="kode-proyek">
-                                    
-                                    <input type="submit" name="penyusun-setujui" value="Submit" class="btn btn-sm btn-success">
-                                    {{-- <input type="submit" name="penyusun-tolak" value="Ditolak" class="btn btn-sm btn-danger"> --}}
-                                </form>
-                            @elseif ((is_null($proyek->is_recommended)) && $matriks_user->contains("kategori", "Rekomendasi") && $proyek->is_penyusun_approved && !$is_user_exist_rekomendasi)
-                                <form action="" method="get">
-                                    @csrf
-                                    <input type="hidden" value="{{$proyek->kode_proyek}}" name="kode-proyek" id="kode-proyek">
-                                    <button type="button" data-bs-toggle="modal" id="show-modal-tolak" style="display: none" data-bs-target="#kt_modal_view_proyek_tolak_rekomendasi_{{$proyek->kode_proyek}}">clickhere</button>
-                                    <label for="kategori-rekomendasi" class="text-start">Kategori Rekomendasi: </label>
-                                    {{-- <select onchange="disableEnableTextArea(this)" id="kategori-rekomendasi" name="kategori-rekomendasi" --}}
-                                    <select id="kategori-rekomendasi" onchange="showModalTolakRekomendasi(this, '{{$proyek->kode_proyek}}')" name="kategori-rekomendasi"
-                                        class="form-select form-select-solid w-auto"
-                                        style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
-                                        data-placeholder="Direktorat" data-select2-id="select2-data-kategori-rekomendasi" tabindex="-1"
-                                        aria-hidden="true">
-                                        <option value=""></option>
-                                        <option value="Direkomendasikan" selected>Direkomendasikan</option>
-                                        <option value="Direkomendasikan dengan catatan">Direkomendasikan dengan catatan</option>
-                                        <option value="Rekomendasi Ditolak">Rekomendasi Ditolak</option>
-                                    </select>
-                                    <input type="submit" class="btn btn-sm btn-success" name="rekomendasi-setujui" value="Submit">
-                                </form>
-                            @elseif (is_null($proyek->is_disetujui) && $matriks_user->contains("kategori", "Persetujuan") && $proyek->is_recommended && !$is_user_exist_persetujuan)
-                                <form action="" method="get">
-                                    @csrf
-                                    @if (!empty($nip))
-                                        <input type="hidden" value="{{$nip}}" name="user" id="user">
+                        <!--End begin::Col-->
+                        <div class="col-6">
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="required">Unit Kerja <i
+                                            class="bi bi-lock"></i></span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                {{-- <select name="unit-kerja"
+                                        class="form-select form-select-solid"
+                                        data-control="select2" data-hide-search="true"
+                                        data-placeholder="Pilih Unit Kerja">
+                                        <option></option>
+                                        @foreach ($unitkerjas as $unitkerja)
+                                        @if ($unitkerja->divcode == $proyek->unit_kerja)
+                                        <option
+                                        value="{{ $unitkerja->divcode }}"
+                                        selected>{{ $unitkerja->unit_kerja }}
+                                    </option>
                                     @endif
-                                    <input type="hidden" value="{{$proyek->kode_proyek}}" name="kode-proyek" id="kode-proyek">
-                                    
-                                    <input type="submit" name="persetujuan-setujui" value="Disetujui" class="btn btn-sm btn-success">
-                                    <input type="button" data-bs-toggle="modal" data-bs-target="#kt_modal_view_proyek_tolak_persetujuan_{{$proyek->kode_proyek}}" name="persetujuan-tolak" value="Ditolak" class="btn btn-sm btn-danger">
-                                </form>
-                            @else 
-                                @if ($proyek->is_disetujui)
-                                    <small class="badge badge-light-success">Disetujui</small>
-                                @elseif ($proyek->review_assessment)
-                                    <small class="badge badge-light-primary">Request</small>
-                                @elseif($proyek->is_disetujui == false || $proyek->is_penyusun_approved == false || $proyek->is_recommended == false)
-                                    <small class="badge badge-light-danger">Ditolak</small>
-                                @endif
+                                    @endforeach
+                                    </select> --}}
+                                    <input type="text" readonly
+                                        class="form-control form-control-solid"
+                                        value="{{ $proyek->UnitKerja->unit_kerja }}"
+                                        readonly />
+                                <!--end::Input-->
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <!--End::Col-->
+                    </div>
+                    <!--End::Row Kanan+Kiri-->
+
+                    <!--begin::Row Kanan+Kiri-->
+                    <div class="d-flex flex-row align-items-center">
+                        {{-- <!--begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span class="required">Nama Pendek Proyek</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text"
+                                        class="form-control form-control-solid char-counter"
+                                        data-max-char="40"
+                                        id="short-name" name="short-name"
+                                        value="{{ $proyek->nama_pendek_proyek }}" />
+                                        <div class="d-flex flex-row justify-content-end">
+                                            <small class="">0/40</small>
+                                        </div>
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div> --}}
+
+                        <div class="col-6">
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="required">Kode Proyek <i
+                                            class="bi bi-lock"></i></span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                @isset($proyek->kode_proyek)
+                                    <input type="text"
+                                        class="form-control form-control-solid"
+                                        id="edit-kode-proyek" name="edit-kode-proyek"
+                                        value="{{ $proyek->kode_proyek }}" readonly />
+                                @endisset
+                                <!--end::Input-->
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+
+                        @php
+                            $proyekBerjalans = $proyek->proyekBerjalan;
+                            if(!empty($proyekBerjalans)) {
+                                $check_green_line = checkGreenLine($proyekBerjalans);
+                            } else {
+                                $check_green_line = false;
+                            }
+                        @endphp
+
+                        <div class="col-6 mt-5 ms-5">
+                            <div class="form-check">
+                                <input class="form-check-input" name="is-green-line" type="checkbox" {{(bool) $check_green_line ? "checked" : ""}} disabled id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Green Line
+                                </label>
+                            </div>
+                        </div>
+                        <!--End::Col-->
+                    </div>
+                    <!--End::Row Kanan+Kiri-->
+
+                    <!--begin::Row Kanan+Kiri-->
+                    <div class="row fv-row">
+                        <!--begin::Col-->
+                        <div class="col-4">
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span>Pelanggan</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                {{-- <option value="{{ $proyekberjalans->kode_proyek }}" selected>{{$proyekberjalans->kode_proyek }}</option> --}}
+                                <select id="customer_{{$proyek->kode_proyek}}" name="customer"
+                                    class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="false"
+                                    data-placeholder="Pilih Customer">
+                                    <option value="">{{$proyekBerjalans->name_customer}}</option>
+                                </select>
+                                <!--end::Input-->
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <!--End::Col-->
+                        <!--begin::Col-->
+                        @if (!empty($proyekberjalans))
+                            <div class="col-2">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="mt-12 fs-6 fw-bold form-label mt-3">
+                                        <a class="btn btn-sm btn-light btn-active-primary ms-2"
+                                            target="_blank"
+                                            href="/customer/view/{{ $proyekberjalans->id_customer }}/{{ $proyekberjalans->name_customer }}"
+                                            id="kt_toolbar_export"><i
+                                                class="bi bi-search"></i> Cek Pemberi Kerja
+                                        </a>
+                                    </label>
+                                    {{-- <a target="_blank" href="/customer/view/{{ $proyekberjalans->id_customer }}">
+                                        <span> Cek Pelanggan</span>
+                                    </a> --}}
+                                    <!--end::Label-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                        @endif
+                        <!--End::Col-->
+                    </div>
+                    <!--End::Row Kanan+Kiri-->
+
+                    <!--begin::Row Kanan+Kiri-->
+                    <div class="row fv-row">
+                        <!--begin::Col-->
+                        <div class="col-6">
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="required">Tipe Proyek <i
+                                            class="bi bi-lock"></i></span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <select id="tipe-proyek_{{$proyek->kode_proyek}}" name="tipe-proyek"
+                                    class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true"
+                                    data-placeholder="Pilih Tipe Proyek"
+                                    {{ auth()->user()->check_administrator ? '' : 'readonly' }}>
+                                    <option value="R"
+                                        {{ $proyek->tipe_proyek == 'R' ? 'selected' : '' }}>
+                                        Retail</option>
+                                    <option value="P"
+                                        {{ $proyek->tipe_proyek == 'P' ? 'selected' : '' }}>
+                                        Non-Retail</option>
+                                </select>
+                                {{-- <input type="text"
+                                        class="form-control form-control-solid"
+                                        id="tipe-proyek" name="tipe-proyek"
+                                        value="{{ $proyek->tipe_proyek == 'R' ? 'Retail' : 'Non-Retail' }}"
+                                        readonly /> --}}
+                                <!--end::Input-->
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <!--End begin::Col-->
+                        <div class="col-6">
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="required">Jenis Proyek <i
+                                            class="bi bi-key"></i></span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                {{-- @isset($proyek->jenis_proyek) --}}
+                                {{-- @dump($proyek->jenis_proyek) --}}
+                                <select id="jenis-proyek_{{$proyek->kode_proyek}}"
+                                    onchange="tampilJOCategory(this)" name="jenis-proyek"
+                                    class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true"
+                                    data-placeholder="Pilih Jenis Proyek"
+                                    {{ auth()->user()->check_administrator ? '' : 'readonly' }}>
+                                    <option value="I"
+                                        {{ $proyek->jenis_proyek == 'I' ? 'selected' : '' }}>
+                                        Internal</option>
+                                    <option value="N"
+                                        {{ $proyek->jenis_proyek == 'N' ? 'selected' : '' }}>
+                                        External</option>
+                                    <option value="J"
+                                        {{ $proyek->jenis_proyek == 'J' ? 'selected' : '' }}>
+                                        JO</option>
+                                </select>
+                                <input type="hidden" name="jo-category" id="jo-category"
+                                    value="">
+                                {{-- @php
+                                        $jenis_jo = "";
+                                        switch ($proyek->jenis_jo) {
+                                            case 30:
+                                                $jenis_jo = "JO Integrated Leader";
+                                                break;
+                                            case 31:
+                                                $jenis_jo = "JO Integrated Member";
+                                                break;
+                                            case 40:
+                                                $jenis_jo = "JO Portion Leader";
+                                                break;
+                                            case 41:
+                                                $jenis_jo = "JO Portion Member";
+                                                break;
+                                            case 50:
+                                                $jenis_jo = "JO Mix Integrated - Portion";
+                                                break;
+                                            default:
+                                                $jenis_jo = "Proyek ini bukan JO";
+                                                break;
+                                        }
+                                    @endphp
+                                    @if (!empty($proyek->jenis_jo))
+                                        <small>JO Category: <b>{{ $jenis_jo }}</b></small>
+                                    @else 
+                                        <small>JO Category: <b class="text-danger">{{ $jenis_jo }}</b></small>
+                                    @endif --}}
+                                {{-- @endisset --}}
+                                {{-- <input type="text"
+                                        class="form-control form-control-solid"
+                                        id="jenis-proyek" name="jenis-proyek"
+                                        value="{{ $proyek->jenis_proyek == 'I' ? 'Internal' : 'External' }}"
+                                        readonly /> --}}
+                                <!--end::Input-->
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <!--End::Col-->
+                    </div>
+                    <!--End::Row Kanan+Kiri-->
+
+
+                    <!--begin::Row Kanan+Kiri-->
+                    <div class="row fv-row">
+                        <!--begin::Col-->
+                        <div class="col-6">
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="required">RA Tahun Perolehan <i
+                                            class="bi bi-key"></i></span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                {{-- @php
+                                        $years = $proyek->tahun_perolehan;
+                                    @endphp --}}
+                                {{-- @for ($i = 2021; $i < $years + 20; $i++)
+                                        <option value="{{ $i }}" {{ $years == $i ? 'selected' : '' }}>
+                                            {{ $i }}</option>
+                                    @endfor --}}
+                                <input type="number"
+                                    class="form-control form-control-solid"
+                                    name="tahun-perolehan" min="2021"
+                                    max="{{ $proyek->tahun_perolehan + 10 }}"
+                                    step="1" value="{{ $proyek->tahun_perolehan }}"
+                                    {{ auth()->user()->check_administrator ? '' : 'readonly' }} />
+                                <!--begin::Input-->
+                                {{-- <select id="tahun-perolehan" name="tahun-perolehan"
+                                        class="form-select form-select-solid select2-hidden-accessible"
+                                        data-control="select2" data-hide-search="true" data-placeholder="Tahun"
+                                        data-select2-id="select2-data-tahun" tabindex="-1" aria-hidden="true" {{ auth()->user()->check_administrator ? '' : 'disabled'}}>
+                                        @for ($i = 2021; $i < $years + 20; $i++)
+                                            <option value="{{ $i }}" {{ $years == $i ? 'selected' : '' }}>
+                                                {{ $i }}</option>
+                                        @endfor
+                                    </select> --}}
+                                <!--end::Input-->
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <!--Begin::Col-->
+                        <div class="col-6">
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span>RA Klasifikasi Proyek</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <select id="ra-klasifikasi-proyek_{{$proyek->kode_proyek}}" name="ra-klasifikasi-proyek"
+                                    class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true"
+                                    data-placeholder="RA Klasifikasi Proyek">
+                                    <option value="" selected></option>
+                                    <option value="Proyek Besar"
+                                        {{ $proyek->klasifikasi_pasdin == 'Proyek Besar' ? 'selected' : '' }}>
+                                        Proyek Besar</option>
+                                    <option value="Proyek Menengah"
+                                        {{ $proyek->klasifikasi_pasdin == 'Proyek Menengah' ? 'selected' : '' }}>
+                                        Proyek Menengah</option>
+                                    <option value="Proyek Kecil"
+                                        {{ $proyek->klasifikasi_pasdin == 'Proyek Kecil' ? 'selected' : '' }}>
+                                        Proyek Kecil</option>
+                                    <option value="Mega Proyek"
+                                        {{ $proyek->klasifikasi_pasdin == 'Mega Proyek' ? 'selected' : '' }}>
+                                        Mega Proyek</option>
+                                </select>
+                                <!--end::Input-->
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <!--End::Col-->
+                        <div class="col-6">
+                            @if ($proyek->jenis_proyek == 'J')
                             @endif
-
+                            @if ($proyek->jenis_jo == null || $proyek->jenis_jo != 10 || $proyek->jenis_jo != 20)
+                                <!--begin::Input group-->
+                                <div id="kategori-jenis-jo" class="fv-row mb-7"
+                                    style="display: none">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span class="required">Kategori JO</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    {{-- @php
+                                            $years = $proyek->tahun_perolehan;
+                                        @endphp --}}
+                                    {{-- @for ($i = 2021; $i < $years + 20; $i++)
+                                            <option value="{{ $i }}" {{ $years == $i ? 'selected' : '' }}>
+                                                {{ $i }}</option>
+                                        @endfor --}}
+                                    @php
+                                        $jenis_jo = '';
+                                        switch ($proyek->jenis_jo) {
+                                            case 30:
+                                                $jenis_jo = 'JO Integrated Leader';
+                                                break;
+                                            case 31:
+                                                $jenis_jo = 'JO Integrated Member';
+                                                break;
+                                            case 40:
+                                                $jenis_jo = 'JO Portion Leader';
+                                                break;
+                                            case 41:
+                                                $jenis_jo = 'JO Portion Member';
+                                                break;
+                                            case 50:
+                                                $jenis_jo = 'JO Mix Integrated - Portion';
+                                                break;
+                                            default:
+                                                $jenis_jo = 'Proyek ini bukan JO';
+                                                break;
+                                        }
+                                    @endphp
+                                    {{-- <input type="text"
+                                            class="form-control form-control-solid"
+                                            name="preview-kategori-JO"
+                                            value="{{ $jenis_jo }}"
+                                            disabled
+                                            /> --}}
+                                    <label class="fs-6 fw-bold form-label">
+                                        {{-- <span><b>Pilih JO:</b></span> --}}
+                                        {{-- <span><b id="max-porsi" value="{{ $proyek->porsi_jo }}">Max Porsi JO : {{ $proyek->porsi_jo }}% </b></span> --}}
+                                    </label>
+                                    <select id="detail-jo_{{$proyek->kode_proyek}}" name="detail-jo"
+                                        class="form-select form-select-solid select2-hidden-accessible"
+                                        data-control="select2" data-hide-search="true"
+                                        data-placeholder="Pilih Jenis JO" readonly=""
+                                        tabindex="-1" aria-hidden="true">
+                                        <option value="" selected></option>
+                                        <option value="30">JO Integrated Leader
+                                        </option>
+                                        <option value="31">JO Integrated Member
+                                        </option>
+                                        <option value="40">JO Portion Leader</option>
+                                        <option value="41">JO Portion Member</option>
+                                        <option value="50">JO Mix Integrated - Portion
+                                        </option>
+                                    </select>
+                                </div>
+                                <!--end::Input group-->
+                            @endif
                         </div>
-                    </form>
+
+                    </div>
+                    <!--End::Row Kanan+Kiri-->
+
+
+                    <!--begin::Row Kanan+Kiri-->
+                    <div class="row fv-row">
+                        <!--End begin::Col-->
+                        <div class="col-6">
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span>RA Bulan Perolehan</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--Begin::Input-->
+                                <select id="bulan-pelaksanaan_{{$proyek->kode_proyek}}" name="bulan-pelaksanaan"
+                                    class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true"
+                                    data-placeholder="Pilih Bulan Perolehan">
+                                    <option></option>
+                                    <option value="1"
+                                        {{ $proyek->bulan_pelaksanaan == '1' ? 'selected' : '' }}>
+                                        Januari</option>
+                                    <option value="2"
+                                        {{ $proyek->bulan_pelaksanaan == '2' ? 'selected' : '' }}>
+                                        Februari</option>
+                                    <option value="3"
+                                        {{ $proyek->bulan_pelaksanaan == '3' ? 'selected' : '' }}>
+                                        Maret</option>
+                                    <option value="4"
+                                        {{ $proyek->bulan_pelaksanaan == '4' ? 'selected' : '' }}>
+                                        April</option>
+                                    <option value="5"
+                                        {{ $proyek->bulan_pelaksanaan == '5' ? 'selected' : '' }}>
+                                        Mei</option>
+                                    <option value="6"
+                                        {{ $proyek->bulan_pelaksanaan == '6' ? 'selected' : '' }}>
+                                        Juni</option>
+                                    <option value="7"
+                                        {{ $proyek->bulan_pelaksanaan == '7' ? 'selected' : '' }}>
+                                        Juli</option>
+                                    <option value="8"
+                                        {{ $proyek->bulan_pelaksanaan == '8' ? 'selected' : '' }}>
+                                        Agustus</option>
+                                    <option value="9"
+                                        {{ $proyek->bulan_pelaksanaan == '9' ? 'selected' : '' }}>
+                                        September</option>
+                                    <option value="10"
+                                        {{ $proyek->bulan_pelaksanaan == '10' ? 'selected' : '' }}>
+                                        Oktober</option>
+                                    <option value="11"
+                                        {{ $proyek->bulan_pelaksanaan == '11' ? 'selected' : '' }}>
+                                        November</option>
+                                    <option value="12"
+                                        {{ $proyek->bulan_pelaksanaan == '12' ? 'selected' : '' }}>
+                                        Desember</option>
+                                </select>
+                                <!--end::Input-->
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <!--End::Col-->
+                        <!--begin::Col-->
+                        <div class="col-6">
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span>Sumber Dana</span>
+                                </label>
+                                @php
+                                    // $sumberdanas = $sumberdanas->sortBy('created_at');
+                                @endphp
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <select id="sumber-dana_{{$proyek->kode_proyek}}" name="sumber-dana"
+                                    class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true"
+                                    data-placeholder="Pilih Sumber Dana">
+                                    <option value="" selected>{{$proyek->sumber_dana}}</option>
+                                </select>
+                                <!--end::Input-->
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <!--End begin::Col-->
+                        <div class="col-6">
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span>Nilai OK (Excludde Ppn) </span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text"
+                                    class="form-control reformat form-control-solid"
+                                    id="nilai-rkap" name="nilai-rkap"
+                                    value="{{ number_format((int) str_replace('.', '', $proyek->nilaiok_awal), 0, '.', '.') }}"
+                                    placeholder="Nilai OK (Excludde Ppn)" />
+                                <!--end::Input-->
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <!--End::Col-->
+                    </div>
+                    <!--End::Row Kanan+Kiri-->
+
+                    <!--begin::Row Kanan+Kiri-->
+                    <div class="row fv-row">
+                        <!--begin::Col-->
+                        <div class="col-6">
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span>Status Pasar Dini</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                {{-- <input type="text"
+                                        class="form-control form-control-solid"
+                                        id="status-pasardini" name="status-pasardini" placeholder="Status Pasar Dini"
+                                        value="{{ $proyek->status_pasdin }}" /> --}}
+                                <select id="status-pasardini_{{$proyek->kode_proyek}}" name="status-pasardini"
+                                    class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true"
+                                    data-placeholder="Status Pasar Dini">
+                                    <option value=""></option>
+                                    <option value="Cadangan"
+                                        {{ $proyek->status_pasdin == 'Cadangan' ? 'selected' : '' }}>
+                                        Cadangan</option>
+                                    <option value="Potensial"
+                                        {{ $proyek->status_pasdin == 'Potensial' ? 'selected' : '' }}>
+                                        Potensial</option>
+                                    <option value="Sasaran"
+                                        {{ $proyek->status_pasdin == 'Sasaran' ? 'selected' : '' }}>
+                                        Sasaran</option>
+                                </select>
+                                <!--end::Input-->
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <!--End begin::Col-->
+                        <div class="col-6">
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span>Asal Info Proyek</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text"
+                                    class="form-control form-control-solid"
+                                    id="info-proyek" name="info-proyek"
+                                    placeholder="Asal Info Proyek"
+                                    value="{{ $proyek->info_asal_proyek }}" />
+                                <!--end::Input-->
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <!--End::Col-->
+                    </div>
+                    <!--End::Row Kanan+Kiri-->
+
+
+                    <!--Begin::Title Biru Form: Nilai RKAP Review-->
+                    &nbsp;<br>
+                    <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                        Nilai RKAP Review &nbsp;
+                        <i onclick="hideReview()" id="hide-review"
+                            class="bi bi-arrows-collapse"></i><i onclick="showReview()"
+                            id="show-review" style="display: none"
+                            class="bi bi-arrows-expand"></i>
+                    </h3>
+                    <script>
+                        function hideReview() {
+                            document.getElementById("divRkapReview").style.display = "none";
+                            document.getElementById("hide-review").style.display = "none";
+                            document.getElementById("show-review").style.display = "";
+                        }
+
+                        function showReview() {
+                            document.getElementById("divRkapReview").style.display = "";
+                            document.getElementById("hide-review").style.display = "";
+                            document.getElementById("show-review").style.display = "none";
+                        }
+                    </script>
+                    <br>
+                    <div id="divRkapReview">
+                        <!--End::Title Biru Form: Nilai RKAP Review-->
+
+                        <!--begin::Row Kanan+Kiri-->
+                        <div class="row fv-row">
+                            <!--begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span>Nilai OK Review (Valas) (Exclude Tax)</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text" onkeyup="hitungReview()"
+                                        class="form-control form-control-solid reformat"
+                                        id="nilai-valas-review" name="nilai-valas-review"
+                                        value="{{ number_format((int) str_replace('.', '', $proyek->nilai_valas_review), 0, '.', '.') }}"
+                                        placeholder="Nilai OK Review (Valas) (Exclude Tax)" />
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span>Mata Uang Review</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--Begin::Input-->
+                                    <select id="mata-uang-review_{{$proyek->kode_proyek}}" name="mata-uang-review"
+                                        class="form-select form-select-solid"
+                                        data-control="select2" data-hide-search="true"
+                                        data-placeholder="Pilih Mata Uang">
+                                        <option value="" selected>{{$proyek->mata_uang_review}}</option>
+                                    </select>
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End::Col-->
+                        </div>
+                        <!--End::Row Kanan+Kiri-->
+
+                        <!--begin::Row Kanan+Kiri-->
+                        <div class="row fv-row">
+                            <!--begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span>Kurs Review <i class="bi bi-key"></i></span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input onkeyup="hitungReview()" type="text"
+                                        class="form-control form-control-solid reformat"
+                                        id="kurs-review" name="kurs-review"
+                                        value="{{ $proyek->kurs_review }}"
+                                        placeholder="Kurs Review"
+                                        {{ auth()->user()->check_administrator ? '' : 'readonly' }} />
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span>Bulan Pelaksanaan Review <i
+                                                class="bi bi-key"></i></span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--Begin::Input-->
+                                    <select id="bulan-pelaksanaan-review_{{$proyek->kode_proyek}}"
+                                        name="bulan-pelaksanaan-review"
+                                        class="form-select form-select-solid"
+                                        data-control="select2" data-hide-search="true"
+                                        data-placeholder="Pilih Bulan Pelaksanaan"
+                                        {{ auth()->user()->check_administrator ? '' : 'readonly' }}>
+                                        <option></option>
+                                        <option value="1"
+                                            {{ $proyek->bulan_review == '1' ? 'selected' : '' }}>
+                                            Januari</option>
+                                        <option value="2"
+                                            {{ $proyek->bulan_review == '2' ? 'selected' : '' }}>
+                                            Februari</option>
+                                        <option value="3"
+                                            {{ $proyek->bulan_review == '3' ? 'selected' : '' }}>
+                                            Maret</option>
+                                        <option value="4"
+                                            {{ $proyek->bulan_review == '4' ? 'selected' : '' }}>
+                                            April</option>
+                                        <option value="5"
+                                            {{ $proyek->bulan_review == '5' ? 'selected' : '' }}>
+                                            Mei</option>
+                                        <option value="6"
+                                            {{ $proyek->bulan_review == '6' ? 'selected' : '' }}>
+                                            Juni</option>
+                                        <option value="7"
+                                            {{ $proyek->bulan_review == '7' ? 'selected' : '' }}>
+                                            Juli</option>
+                                        <option value="8"
+                                            {{ $proyek->bulan_review == '8' ? 'selected' : '' }}>
+                                            Agustus</option>
+                                        <option value="9"
+                                            {{ $proyek->bulan_review == '9' ? 'selected' : '' }}>
+                                            September</option>
+                                        <option value="10"
+                                            {{ $proyek->bulan_review == '10' ? 'selected' : '' }}>
+                                            Oktober</option>
+                                        <option value="11"
+                                            {{ $proyek->bulan_review == '11' ? 'selected' : '' }}>
+                                            November</option>
+                                        <option value="12"
+                                            {{ $proyek->bulan_review == '12' ? 'selected' : '' }}>
+                                            Desember</option>
+                                    </select>
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End::Col-->
+                        </div>
+                        <!--End::Row Kanan+Kiri-->
+
+                        <!--begin::Row Kanan+Kiri-->
+                        <div class="row fv-row">
+                            <!--begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span>Nilai OK (Exclude PPN) <i
+                                                class="bi bi-key"></i></span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text"
+                                        class="form-control form-control-solid reformat"
+                                        id="nilaiok-review" name="nilaiok-review"
+                                        value="{{ number_format((int) str_replace('.', '', $proyek->nilaiok_review), 0, '.', '.') }}"
+                                        placeholder="Nilai OK (Exclude PPN)"
+                                        {{ auth()->user()->check_administrator ? '' : 'readonly' }} />
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End::Col-->
+                        </div>
+                        <!--End::Row Kanan+Kiri-->
+
+                        <script>
+                            function hitungReview() {
+                                let nilaiOkReview = document.getElementById("nilai-valas-review").value.replaceAll(".", "");
+                                // console.log(nilaiOkReview); 
+                                let kursReview = document.getElementById("kurs-review").value.replaceAll(".", "");
+                                let hasilOkReview = nilaiOkReview * kursReview;
+                                document.getElementById("nilaiok-review").value = Intl.NumberFormat(["id"]).format(hasilOkReview);
+                                // console.log(hasilOkReview);
+                            }
+                        </script>
+                    </div>
+                    <!--divRkapReview-->
+
+
+                    <!--Begin::Title Biru Form: Nilai RKAP Awal-->
+                    <br>
+                    <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                        Nilai RKAP Awal &nbsp;
+                        <i onclick="hideColumn()" id="hide-button"
+                            class="bi bi-arrows-collapse"></i><i onclick="showColumn()"
+                            id="show-button" style="display: none"
+                            class="bi bi-arrows-expand"></i>
+                    </h3>
+                    <script>
+                        function hideColumn() {
+                            document.getElementById("divRkapAwal").style.display = "none";
+                            document.getElementById("hide-button").style.display = "none";
+                            document.getElementById("show-button").style.display = "";
+                        }
+
+                        function showColumn() {
+                            document.getElementById("divRkapAwal").style.display = "";
+                            document.getElementById("hide-button").style.display = "";
+                            document.getElementById("show-button").style.display = "none";
+                        }
+                    </script>
+                    <br>
+                    <div id="divRkapAwal">
+                        <!--End::Title Biru Form: Nilai RKAP Awal-->
+
+                        <!--begin::Row Kanan+Kiri-->
+                        <div class="row fv-row">
+                            <!--begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span>Nilai RKAP Awal (Valas) (Exclude Tax) <i class="bi bi-lock"></i></span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text" onkeyup="hitungAwal()"
+                                        class="form-control form-control-solid reformat"
+                                        id="nilai-valas-awal" name="nilai-valas-awal"
+                                        value="{{ number_format((int) str_replace('.', '', $proyek->nilai_rkap), 0, '.', '.') }}"
+                                        placeholder="Nilai OK Awal (Valas) (Exclude Tax)"
+                                        readonly />
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span class="required">Mata Uang Awal</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--Begin::Input-->
+                                    <select id="mata-uang-awal_{{$proyek->kode_proyek}}" name="mata-uang-awal"
+                                        class="form-select form-select-solid"
+                                        data-control="select2" data-hide-search="true"
+                                        data-placeholder="Pilih Mata Uang">
+                                        <option value="" selected>{{$proyek->mata_uang_awal}}</option>
+                                        {{-- <option value="Rupiah"
+                                                {{ $proyek->mata_uang_awal == 'Rupiah' ? 'selected' : '' }}>
+                                                Rupiah</option>
+                                            <option value="US Dollar"
+                                                {{ $proyek->mata_uang_awal == 'US Dollar' ? 'selected' : '' }}>
+                                                US Dollar</option>
+                                            <option value="Chinese Yuan"
+                                                {{ $proyek->mata_uang_awal == 'Chinese Yuan' ? 'selected' : '' }}>
+                                                Chinese Yuan</option> --}}
+                                    </select>
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End::Col-->
+                        </div>
+                        <!--End::Row Kanan+Kiri-->
+
+                        <!--begin::Row Kanan+Kiri-->
+                        <div class="row fv-row">
+                            <!--begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span>Kurs Awal <i class="bi bi-lock"></i></span>
+                                    </label>
+                                    <!--end::Label-->
+
+                                    <!--begin::Input-->
+                                    <input onkeyup="hitungAwal()" type="text"
+                                        class="form-control form-control-solid reformat"
+                                        value="1"
+                                        placeholder="Kurs Awal" readonly />
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span>Bulan Pelaksanaan Awal <i
+                                                class="bi bi-lock"></i></span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--Begin::Input-->
+                                    <select id="bulan-pelaksanaan-awal_{{$proyek->kode_proyek}}"
+                                        name="bulan-pelaksanaan-awal"
+                                        class="form-select form-select-solid"
+                                        data-control="select2" data-hide-search="true"
+                                        data-placeholder="Bulan Pelaksanaan" readonly>
+                                        <option></option>
+                                        <option selected>
+                                            @switch($proyek->bulan_pelaksanaan)
+                                                @case('1')
+                                                    Januari
+                                                @break
+
+                                                @case('2')
+                                                    Februari
+                                                @break
+
+                                                @case('3')
+                                                    Maret
+                                                @break
+
+                                                @case('4')
+                                                    April
+                                                @break
+
+                                                @case('5')
+                                                    Mei
+                                                @break
+
+                                                @case('6')
+                                                    Juni
+                                                @break
+
+                                                @case('7')
+                                                    Juli
+                                                @break
+
+                                                @case('8')
+                                                    Agustus
+                                                @break
+
+                                                @case('9')
+                                                    September
+                                                @break
+
+                                                @case('10')
+                                                    Oktober
+                                                @break
+
+                                                @case('11')
+                                                    November
+                                                @break
+
+                                                @case('12')
+                                                    Desember
+                                                @break
+
+                                                @default
+                                                    *Bulan Belum Ditentukan
+                                            @endswitch
+                                        </option>
+                                    </select>
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End::Col-->
+                        </div>
+                        <!--End::Row Kanan+Kiri-->
+
+                        <!--begin::Row Kanan+Kiri-->
+                        <div class="row fv-row">
+                            <!--begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span>Nilai RKAP (Exclude PPN) <i
+                                                class="bi bi-lock"></i></span>
+                                    </label>
+                                    <!--end::Label-->
+
+                                    <!--begin::Input-->
+                                    <input type="text"
+                                        class="form-control form-control-solid reformat"
+                                        id="nilaiok-awal" name="nilaiok-awal"
+                                        value="{{ number_format((int) str_replace('.', '', $proyek->nilai_rkap), 0, '.', '.') }}"
+                                        placeholder="Nilai OK (Exclude PPN)" readonly />
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End::Col-->
+                        </div>
+                        {{-- <script>
+                            function hitungAwal() {
+                                let nilaiOkAwal = document.getElementById("nilai-valas-awal").value.replaceAll(".", "");
+                                let kursAwal = document.getElementById("kurs-awal").value.replaceAll(".", "");
+                                let hasilOkAwal = nilaiOkAwal * kursAwal;
+                                document.getElementById("nilaiok-awal").value = Intl.NumberFormat(["id"]).format(hasilOkAwal);
+                            }
+                        </script> --}}
+                        <!--End::Row Kanan+Kiri-->
+                    </div>
+                    <!--divRkapAwal-->
+
+
+                    <!--Begin::Title Biru Form: Laporan Kualitatif-->
+                    <br>
+                    <h3 class="fw-bolder m-0 required" id="HeadDetail"
+                        style="font-size:14px;">Laporan Kualitatif
+                    </h3>
+                    <br>
+                    <div class="form-group">
+                        <textarea id="laporan-kualitatif-pasdin" name="laporan-kualitatif-pasdin" class="form-control" rows="7">{!! $proyek->laporan_kualitatif_pasdin !!}</textarea>
+                    </div>
+                    <!--End::Title Biru Form: Laporan Kualitatif-->
+
+                    <h6 class="text-danger fw-normal">(*) Kolom Ini Harus Diisi !</h6>
+                </div>
+                <div class="modal-footer">
+                    @php
+                        $approved_data = collect([json_decode($proyek->approved_rekomendasi)])->flatten();
+                        $is_user_id_exist = $approved_data->map(function($d) {
+                            if(!empty($d) && $d->user_id == Auth::user()->id) {
+                                $new_class = new stdClass();
+                                $new_class->user_id = $d->user_id;
+                                $new_class->status = $d->status;
+                                return $new_class;
+                            }
+                            // if(is_array($d->user_id)) {
+                            //     return in_array(Auth::user()->id, $d->user_id);
+                            // }
+                            // return !empty($d->user_id) && $d->user_id == Auth::user()->id;
+                        })->firstWhere("user_id", "!=", null);
+                        // dump($is_user_id_exist)
+                    @endphp
+                    @if ($is_super_user && empty($is_user_id_exist) && $proyek->is_request_rekomendasi && $approved_data->count() != $all_super_user_counter)
+                        <form action="" method="GET">
+                            @csrf
+                            <input type="hidden" name="kode-proyek" value="{{$proyek->kode_proyek}}">
+                            <input type="submit" name="tolak" value="Tolak" class="btn btn-sm btn-danger">
+                            <input type="submit" name="setuju" value="Setujui" class="btn btn-sm btn-success">
+                        </form>
+                    @elseif(!empty($is_user_id_exist))
+                        {{-- @php
+                            $status_approval = $is_user_id_exist->first();
+                        @endphp --}}
+                        @switch($is_user_id_exist->status)
+                            @case("approved")
+                                <small class="badge badge-light-success">Disetujui</small>
+                                @break
+                            @case("rejected")
+                                <small class="badge badge-light-danger">Ditolak</small>
+                                @break
+                            @default
+                                
+                        @endswitch
+                    @endif
                 </div>
             </div>
-        </div>
-
-        <div class="modal fade" id="kt_modal_view_proyek_tolak_rekomendasi_{{$proyek->kode_proyek}}" tabindex="-1" aria-labelledby="kt_modal_view_proyek_tolak_rekomendasi_{{$proyek->kode_proyek}}" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
-                <div class="modal-content">
-                    
-                    <form action="" method="get">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Alasan Ditolak Rekomendasi</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="row">
-                                @csrf
-                                <input type="hidden" value="Rekomendasi Ditolak" name="kategori-rekomendasi" id="kategori-rekomendasi_{{$proyek->kode_proyek}}">
-                                <input type="hidden" name="kode-proyek" value="{{$proyek->kode_proyek}}">
-                                <textarea name="alasan-ditolak" class="form-control form-control-solid" id="alasan-ditolak_{{$proyek->kode_proyek}}" cols="1" rows="5"></textarea>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <input type="submit" name="rekomendasi-setujui" class="btn btn-sm btn-danger" value="Ditolak dengan alasan">
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <div class="modal fade" id="kt_modal_view_proyek_tolak_persetujuan_{{$proyek->kode_proyek}}" tabindex="-1" aria-labelledby="kt_modal_view_proyek_tolak_persetujuan_{{$proyek->kode_proyek}}" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
-                <div class="modal-content">
-                    
-                    <form action="" method="get">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Alasan Ditolak Persetujuan</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="row">
-                                @csrf
-                                <input type="hidden" name="kode-proyek" value="{{$proyek->kode_proyek}}">
-                                <textarea name="alasan-ditolak" class="form-control form-control-solid" id="alasan-ditolak" cols="1" rows="5"></textarea>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <input type="submit" name="persetujuan-tolak" class="btn btn-sm btn-danger" value="Ditolak dengan alasan">
-                        </div>
-                    </form>
-                </div>
             </div>
         </div>
     @endforeach
@@ -1534,90 +1522,36 @@
 @section('js-script')
     <!--begin::Data Tables-->
     <script src="/datatables/jquery.dataTables.min.js"></script>
-    <script src="/datatables/dataTables.buttons.min.js"></script>
+    {{-- <script src="/datatables/dataTables.buttons.min.js"></script>
     <script src="/datatables/buttons.html5.min.js"></script>
     <script src="/datatables/buttons.colVis.min.js"></script>
     <script src="/datatables/jszip.min.js"></script>
     <script src="/datatables/pdfmake.min.js"></script>
-    <script src="/datatables/vfs_fonts.js"></script>
+    <script src="/datatables/vfs_fonts.js"></script> --}}
     <!--end::Data Tables-->
 
     <script>
         $(document).ready(function() {
             $("#rekomendasi-pengajuan, #rekomendasi-persetujuan").DataTable( {
-                // dom: '<"float-start"f><"#example"t>rtip',
+                dom: '<"float-start"f><"#example"t>rtip',
                 // dom: 'Brti',
-                dom: 'Bfrtip',
-                pageLength : 20,
-                buttons: [
-                    'excel'
-                ],
-            });
-
-            setTimeout(() => {
-                const exportBtn = document.querySelectorAll(".buttons-excel");
-                exportBtn.forEach(item => {
-                    item.style.display = "none";
-                }); 
-            }, 0);
-
-            const rekomendasiOpen = "{{ $rekomendasi_open ?? null }}";
-            if(rekomendasiOpen) {
-                const modalOpen = document.querySelector(`#${rekomendasiOpen}`);
-                const modalOpenBoots = new bootstrap.Modal(modalOpen, {});
-                modalOpenBoots.show();
-            }
+                // dom: 'frtip',
+            pageLength : 20,
+            } );
         });
     </script>
     
 
     <script>
-        // const modals = document.querySelectorAll(".modal");
-        // setTimeout(() => {
-        //     modals.forEach(modal => {
-        //         const inputs = modal.querySelectorAll(".modal-dialog .modal-content .modal-body input, .modal-dialog .modal-content .modal-body select, .modal-dialog .modal-content .modal-body textarea");
-        //         inputs.forEach(input => {
-        //             input.setAttribute("readonly", true);
-        //         })
-        //     });
-        // }, 500);
+        const modals = document.querySelectorAll(".modal");
+        setTimeout(() => {
+            modals.forEach(modal => {
+                const inputs = modal.querySelectorAll(".modal-dialog .modal-content .modal-body input, .modal-dialog .modal-content .modal-body select, .modal-dialog .modal-content .modal-body textarea");
+                inputs.forEach(input => {
+                    input.setAttribute("readonly", true);
+                })
+            });
+        }, 500);
     </script>
-
-    {{-- Begin :: Export To Excel Data --}}
-    <script>
-        function exportToExcel(e, tableElt) {
-            // console.log(e.parentElement);
-            document.querySelector(`${tableElt}_wrapper .buttons-excel`).click();
-            return;
-        }
-    </script>
-    {{-- End :: Export To Excel Data --}}
-
-    <script>
-        function disableEnableTextArea(e) {
-            const value = e.value;
-            if(value == "Direkomendasikan" || value == "Rekomendasi Ditolak") {
-                // e.parentElement.querySelector("#note-rekomendasi").setAttribute("readonly", true);
-                if(!e.parentElement.querySelector("#note-rekomendasi").hasAttribute("disabled")) {
-                    e.parentElement.querySelector("#note-rekomendasi").setAttribute("disabled", true);
-                }
-            } else {
-                // e.parentElement.querySelector("#note-rekomendasi").removeAttribute("readonly");
-                e.parentElement.querySelector("#note-rekomendasi").removeAttribute("disabled");
-            }
-        }
-    </script>
-
-    {{-- Begin :: show modal rekomendasi ketika pilih ditolak --}}
-    <script>
-        function showModalTolakRekomendasi(e, kodeProyek) {
-            const value = e.value;
-            if(value == "Rekomendasi Ditolak") {
-                const button = document.getElementById("show-modal-tolak");
-                button.click();
-            }
-        }
-    </script>
-    {{-- End :: show modal rekomendasi ketika pilih ditolak --}}
 @endsection
 

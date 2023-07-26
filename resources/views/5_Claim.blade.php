@@ -3,7 +3,7 @@
 {{-- end:: template main --}}
 
 {{-- begin:: title --}}
-@section('title', 'Change Managements')
+@section('title', 'Claim Managements')
 {{-- end:: title --}}
 
 {{-- begin:: content --}}
@@ -25,7 +25,7 @@
                         data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                         class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
                         <!--begin::Title-->
-                        <h1 class="d-flex align-items-center fs-3 my-1">Change Managements
+                        <h1 class="d-flex align-items-center fs-3 my-1">Claim Managements
                         </h1>
                         <!--end::Title-->
                     </div>
@@ -71,133 +71,85 @@
                                 <div class="card-header border-0 pt-1">
                                     <!--begin::Card title-->
                                     <div class="card-title">
+                                        <!--begin::Search-->
+                                        {{-- <div class="d-flex align-items-center position-relative my-1">
+                                            <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
+                                            <span class="svg-icon svg-icon-1 position-absolute ms-6">
+                                                <i class="bi bi-search"></i>
+                                            </span>
+                                            <!--end::Svg Icon-->
+                                            <input type="text" data-kt-customer-table-filter="search"
+                                                class="form-control form-control-solid w-250px ps-15" placeholder="Search Addendum" />
+                                        </div> --}}
+                                        <!--end::Search-->
 
                                         <!--Begin:: BUTTON FILTER-->
-                                        <form action="" class="d-flex flex-row w-auto" method="get">
-                                            <!--begin::Select Options-->
-                                            <div style="" id="filterTahun" class="d-flex align-items-center position-relative me-3">
-                                                <select id="tahun-proyek" name="tahun-proyek"
-                                                    class="form-select form-select-solid select2-hidden-accessible mx-3"
+                                        <form action="#" class="d-flex flex-row w-auto" method="get">
+                                            <!--Begin:: Select Options-->
+                                            {{-- <select id="column" name="column" class="form-select form-select-solid select2-hidden-accessible" style="margin-right: 2rem" data-control="select2" data-hide-search="true" data-placeholder="Column" data-select2-id="select2-data-bulan" tabindex="-1" aria-hidden="true">
+                                                <option {{$column == "" ? "selected": ""}}></option>
+                                                <option value="id_contract" {{$column == "id_contract" ? "selected" : ""}}>ID Contract</option>
+                                                <option value="kode_proyek" {{$column ==    "kode_proyek" ? "selected" : ""}}>Kode Proyek</option>
+                                            </select> --}}
+                                            <!--End:: Select Options-->
+                                            
+                                            <!--begin:: Input Filter-->
+                                            {{-- <div class="d-flex align-items-center position-relative">
+                                                <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
+                                                <span class="svg-icon svg-icon-1 position-absolute ms-6">
+                                                    <i class="bi bi-search"></i>
+                                                </span>
+                                                <!--end::Svg Icon-->
+                                                <input type="text" data-kt-customer-table-filter="search" id="filter" name="filter"
+                                                class="form-control form-control-solid ms-2 ps-12 w-auto" placeholder="Input Filter" />
+                                            </div> --}}
+                                            <div class="d-flex">
+                                                <select id="tahun-proyek" name="tahun-perubahan" onchange="this.form.submit()"
+                                                    class="form-select form-select-solid select2-hidden-accessible"
                                                     data-control="select2" data-hide-search="true" data-placeholder="Tahun"
                                                     tabindex="-1" aria-hidden="true">
-                                                    <option value="" selected>{{date("Y")}}</option>
-                                                    @foreach ($tahun_proyeks as $tahun)
-                                                            <option value="{{$tahun}}" {{$filterTahun == $tahun ? "selected" : ""}}>{{$tahun}}</option>
-                                                        @endforeach
-                                                </select>
-                                            </div>
-                                            <!--end::Select Options-->
-                                            
-                                            <!--begin::Select Options-->
-                                            <div style="" id="filterBulan" class="d-flex align-items-center position-relative me-3">
-                                                <select id="bulan-proyek" name="bulan-proyek"
-                                                    class="form-select form-select-solid select2-hidden-accessible mx-3"
-                                                    data-control="select2" data-hide-search="true" data-placeholder="Bulan"
-                                                    tabindex="-1" aria-hidden="true">
-                                                    <option {{ $month == '' ? 'selected' : '' }}></option>
-                                                    <option value="1" {{ $filterBulan == 1 ? 'selected' : '' }}>Januari</option>
-                                                    <option value="2" {{ $filterBulan == 2 ? 'selected' : '' }}>Februari</option>
-                                                    <option value="3" {{ $filterBulan == 3 ? 'selected' : '' }}>Maret</option>
-                                                    <option value="4" {{ $filterBulan == 4 ? 'selected' : '' }}>April</option>
-                                                    <option value="5" {{ $filterBulan == 5 ? 'selected' : '' }}>Mei</option>
-                                                    <option value="6" {{ $filterBulan == 6 ? 'selected' : '' }}>Juni</option>
-                                                    <option value="7" {{ $filterBulan == 7 ? 'selected' : '' }}>Juli</option>
-                                                    <option value="8" {{ $filterBulan == 8 ? 'selected' : '' }}>Agustus</option>
-                                                    <option value="9" {{ $filterBulan == 9 ? 'selected' : '' }}>September</option>
-                                                    <option value="10" {{ $filterBulan == 10 ? 'selected' : '' }}>Oktober</option>
-                                                    <option value="11" {{ $filterBulan == 11 ? 'selected' : '' }}>November</option>
-                                                    <option value="12" {{ $filterBulan == 12 ? 'selected' : '' }}>Desember</option>
-                                                </select>
-                                            </div>
-                                            <!--end::Select Options-->
-
-                                            <!--begin:: Input Filter-->
-                                            <div id="filterUnit" class="d-flex align-items-center position-relative">
-                                                <select id="unit-kerja" onchange="this.form.submit()" name="filter-unit" class="form-select form-select-solid w-200px ms-2"
-                                                    data-control="select2" data-hide-search="true" data-placeholder="Unit Kerja">
                                                     <option></option>
-                                                    @foreach ($unit_kerjas_select as $unitkerja)
-                                                        <option value="{{ $unitkerja->divcode }}"
-                                                            {{ $filterUnitKerja == $unitkerja->divcode ? 'selected' : '' }}>
-                                                            {{ $unitkerja->unit_kerja }}</option>
+                                                    @foreach ($tahun_proyek as $tahun)
+                                                        <option value="{{ $tahun }}"{{$filterTahun == $tahun ? "selected" : ""}}>{{ $tahun }}</option>
+                                                    @endforeach
+                                                    
+                                                </select>
+                                            </div>
+                                            <div class="d-flex ms-4">
+                                                <select id="unit-kerja" name="unit-kerja" onchange="this.form.submit()"
+                                                    class="form-select form-select-solid select2-hidden-accessible"
+                                                    data-control="select2" data-hide-search="true" data-placeholder="Unit Kerja"
+                                                    tabindex="-1" aria-hidden="true">
+                                                    <option></option>
+                                                    @foreach ($unitkerjas as $unit)
+                                                        <option value="{{ $unit->divcode }}">{{ $unit->unit_kerja }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
-
+                                            <!--end:: Input Filter-->
+                                            
                                             <!--begin:: Filter-->
-                                            <button type="submit" class="btn btn-sm btn-light btn-active-primary ms-4"
-                                                id="kt_toolbar_primary_button">
-                                                Filter</button>
+                                            <button type="submit" class="btn btn-sm btn-light btn-active-primary ms-4" id="kt_toolbar_primary_button">
+                                            Filter</button>
                                             <!--end:: Filter-->
-
+                                            
                                             <!--begin:: RESET-->
-                                            <button type="button" class="btn btn-sm btn-light btn-active-primary ms-2"
-                                                onclick="resetFilter()" id="kt_toolbar_primary_button">Reset</button>
-                                                
+                                            <button type="submit" class="btn btn-sm btn-light btn-active-primary ms-2" 
+                                            onclick="resetFilter()"  id="kt_toolbar_primary_button">Reset</button>
                                             <script>
                                                 function resetFilter() {
-                                                    window.location.href = "/claim-management";
+                                                    // $("#column").select2({
+                                                    //     minimumResultsForSearch: -1
+                                                    // }).val("").trigger("change");
+                                                    
+                                                    $("#filter").text({
+                                                        minimumResultsForSearch: -1
+                                                    }).val("").trigger("change");
                                                 }
                                             </script>
                                             <!--end:: RESET-->
-                                                    <!--Begin:: Select Options-->
-                                                    {{-- <select style="display: none !important" id="column" name="column" onchange="changes(this)"
-                                                        class="form-select form-select-solid select2-hidden-accessible"
-                                                        style="margin-right: 2rem" data-control="select2" data-hide-search="true"
-                                                        data-placeholder="Column" data-select2-id="select2-data-bulan" tabindex="-1"
-                                                        aria-hidden="true">
-                                                        <option value="unit_kerja" {{$column == "unit_kerja" ? "selected" : ""}}>Unit Kerja</option>
-                                                        <option value="jenis_proyek" {{$column == "jenis_proyek" ? "selected" : ""}}>Jenis Proyek</option>
-
-                                                    </select> --}}
-                                                    <!--End:: Select Options-->
-
-                                                    <!--begin::Select Options-->
-                                                    {{-- <div style="" id="filterTahun" class="d-flex align-items-center position-relative me-3">
-                                                        <select id="tahun-proyek" name="tahun-proyek" onchange="selectFilter(this)"
-                                                            class="form-select form-select-solid select2-hidden-accessible mx-3"
-                                                            data-control="select2" data-hide-search="true" data-placeholder="Tahun"
-                                                            tabindex="-1" aria-hidden="true">
-                                                            <option value="" selected>{{date("Y")}}</option>
-                                                            @foreach ($tahun_proyek as $tahun)
-                                                                    <option value="{{$tahun}}" {{$filterTahun == $tahun ? "selected" : ""}}>{{$tahun}}</option>
-                                                                @endforeach
-                                                        </select>
-                                                    </div>
-                                                    <!--end::Select Options-->
-
-                                                    <!--begin:: Input Filter-->
-                                                    <div id="filterUnit" class="d-flex align-items-center position-relative">
-                                                        <select id="unit-kerja" onchange="selectFilter(this)" name="filter-unit" class="form-select form-select-solid w-200px ms-2"
-                                                            data-control="select2" data-hide-search="true" data-placeholder="Unit Kerja">
-                                                            <option></option>
-                                                            @foreach ($unitkerjas as $unit)
-                                                                <option value="{{ $unit->divcode }}"
-                                                                    {{ $filterUnitKerja == $unit->divcode ? 'selected' : '' }}>
-                                                                    {{ $unit->unit_kerja }}</option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-
-
-                                                    <!--begin:: Filter-->
-                                                    <button type="submit" class="btn btn-sm btn-light btn-active-primary ms-4"
-                                                        id="kt_toolbar_primary_button">
-                                                        Filter</button>
-                                                    <!--end:: Filter-->
-
-                                                    <!--begin:: RESET-->
-                                                    <button type="button" class="btn btn-sm btn-light btn-active-primary ms-2"
-                                                        onclick="resetFilter()" id="kt_toolbar_primary_button">Reset</button>
-                                                        
-                                                    <script>
-                                                        function resetFilter() {
-                                                            window.location.href = "/claim-management";
-                                                        }
-                                                    </script> --}}
-                                                    <!--end:: RESET-->
                                         </form>
-                                            <!--end:: BUTTON FILTER-->
+                                        <!--end:: BUTTON FILTER-->
                                     </div>
                                     <!--begin::Card title-->
 
@@ -212,11 +164,7 @@
                                                 <th class="min-w-auto">@sortablelink('kode_proyek','Kode Proyek')</th>
                                                 <th class="min-w-auto">Nama Proyek</th>
                                                 <th class="min-w-auto">Unit Kerja</th>
-                                                <th class="min-w-auto text-center">VO</th>
-                                                <th class="min-w-auto text-center">Klaim</th>
-                                                <th class="min-w-auto text-center">Anti Klaim</th>
-                                                <th class="min-w-auto text-center">Klaim Asuransi</th>
-                                                {{-- <th class="min-w-auto">@sortablelink('id_contract','ID Contract')</th> --}}
+                                                <th class="min-w-auto">@sortablelink('id_contract','ID Contract')</th>
                                             </tr>
                                             <!--end::Table row-->
                                         </thead>
@@ -252,34 +200,15 @@
                                                         </td>
                                                         <!--end::Action-->
                                                     </tr> --}}
-                                                    @php
-                                                        $total_vo = $claim->PerubahanKontrak->filter(function($item){
-                                                            return $item->jenis_perubahan == "VO";
-                                                        })->count();
-                                                        $total_klaim = $claim->PerubahanKontrak->filter(function($item){
-                                                            return $item->jenis_perubahan == "Klaim";
-                                                        })->count();
-                                                        $total_anti_klaim = $claim->PerubahanKontrak->filter(function($item){
-                                                            return $item->jenis_perubahan == "Anti Klaim";
-                                                        })->count();
-                                                        $total_klaim_asuransi = $claim->PerubahanKontrak->filter(function($item){
-                                                            return $item->jenis_perubahan == "Klaim Asuransi";
-                                                        })->count();
-                                                    @endphp
-                                                    {{-- @dump($total_vo, $total_klaim, $total_anti_klaim, $total_klaim_asuransi) --}}
                                                     <tr>
                                                         <td>
-                                                            <a href="/claim-management/proyek/{{ $claim->kode_proyek }}/{{ $claim->id_contract }}?link=kt_user_view_claim_VO" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $claim->kode_proyek }}</a>
+                                                            <a href="/claim-management/proyek/{{ $claim->kode_proyek }}/{{ $claim->id_contract }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $claim->kode_proyek }}</a>
                                                         </td>
                                                         <td>{{ $claim->nama_proyek }}</td>
                                                         <td>{{ $claim->UnitKerja->unit_kerja }}</td>
-                                                        <td class="text-center">{{ $total_vo }}</td>
-                                                        <td class="text-center">{{ $total_klaim }}</td>
-                                                        <td class="text-center">{{ $total_anti_klaim }}</td>
-                                                        <td class="text-center">{{ $total_klaim_asuransi }}</td>
-                                                        {{-- <td>
+                                                        <td>
                                                             <a href="/contract-management/view/{{ $claim->id_contract }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $claim->id_contract }}</a>
-                                                        </td> --}}
+                                                        </td>
                                                     </tr>
                                             @empty
                                                 <tr class="bg-gray-100 text-center">
@@ -320,23 +249,6 @@
 
 
 @section('js-script')
-
-<script>
-    function selectFilter(e) {
-        const value = e.value;
-        const type = e.getAttribute("id");
-        let url = "";
-        if(type == "tahun-proyek") {
-            url = `/claim-management?tahun-proyek=${value}`;
-        } else if(type == "unit-kerja") {
-            url = `/claim-management?unit-kerja=${value}`;
-        } else {
-            url = `/claim-management?jenis-proyek=${value}`;
-        }
-        window.location.href = url;
-        return;
-    }
-</script>
 
 <script src="{{ asset('/datatables/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset("/datatables/dataTables.buttons.min.js") }}"></script>

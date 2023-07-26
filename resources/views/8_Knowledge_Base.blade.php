@@ -146,10 +146,13 @@
                                     class="text-gray-500 text-hover-primary">
                                     {{ ++$i }}. {{ $faq->judul }}</h6>
                                 <pre class="card-text" style="font-family: Poppins;white-space: pre-wrap;word-wrap: break-word;">{{ $faq->deskripsi }}</pre>
+                                @if (!empty($faq->link))
+                                    <i><a target="_blank" href="{{ $faq->link }}" id="link1">klik disini untuk menuju link : {{ $faq->link }}</a></i>
+                                @endif
                                 
-                                <div class="d-flex justify-content-between d-inline align-items-center">
+                                <div class="mt-3 d-flex justify-content-between d-inline align-items-center">
                                     @if (!$faq->faq_attachment)
-                                    <a type="button" class="text-gray-500 text-hover-primary">
+                                    <a type="button" class="text-gray-500 text-hover-secondary">
                                     Attachement : <i> Attachment Tidak Tersedia </i></a>
                                     
                                         @if (auth()->user()->check_administrator)
@@ -167,7 +170,7 @@
                                     <a target="_blank" href="{{ asset('faqs/'.$faq->faq_attachment) }}" type="button" class="text-gray-500 text-hover-primary">
                                     Attachement : {{ $faq->faq_attachment }}</a>
                                         
-                                        @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)"))
+                                        @if (auth()->user()->check_administrator)
 
                                             {{-- <a type="submit" class="btn btn-sm btn-light btn-active-primary px-0px py-0px" id="proyek_new_save">Delete</a> --}}
                                                 <!--begin::Action=-->
@@ -200,7 +203,7 @@
 
 {{-- begin::modal Edit faq --}}
         @foreach ($faqs as $faq)
-            @if (auth()->user()->check_administrator)
+            @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)"))
                 <form action="/knowledge-base/update" method="post" enctype="multipart/form-data"> 
                     @csrf
 
@@ -255,7 +258,7 @@
                                             <!--end::Label-->
                 
                                             <!--begin::Input-->
-                                            <textarea class="form-control form-control-solid" name="deskripsi" id="deskripsi" style="min-height:100px;">{{ $faq->deskripsi }}</textarea>
+                                            <textarea rows="12" class="form-control form-control-solid" name="deskripsi" id="deskripsi" style="min-height:100px;">{{ $faq->deskripsi }}</textarea>
                                             <!--end::Input-->
 
                                             <!--begin::Label-->
@@ -269,6 +272,17 @@
                                             <a target="_blank" href="{{ asset('faqs/'.$faq->faq_attachment) }}" type="button" class="text-gray-500 text-hover-primary">
                                                 {{ $faq->faq_attachment }}</a>
                                            <!--end::Label-->
+                                           
+                                            <!--begin::Label-->
+                                            <label class="fs-6 fw-bold form-label mt-3">
+                                                <span style="font-weight: normal">Link :</span>
+                                            </label>
+                                            <!--end::Label-->
+                
+                                            <!--begin::Input-->
+                                            <input type="text" class="form-control form-control-solid" name="faq-link" id="faq-link"
+                                                style="font-weight: normal" value="{{ $faq->link }}" placeholder="Masukan Link Web ( Jika Ada )">
+                                            <!--end::Input-->
                 
                 
                                         </div><br>
@@ -339,7 +353,7 @@
                                         <!--begin::Input-->
                                         {{-- <input type="text" class="form-control form-control-solid" name="deskripsi" id="deskripsi"
                                             style="font-weight: normal" value="{{ $faq->deskripsi }}" placeholder="Input Deskripsi"> --}}
-                                        <textarea class="form-control form-control-solid" name="deskripsi" id="deskripsi" style="min-height:100px;" readonly>{{ $faq->deskripsi }}</textarea>
+                                        <textarea rows="12" class="form-control form-control-solid" name="deskripsi" id="deskripsi" style="min-height:100px;" readonly>{{ $faq->deskripsi }}</textarea>
                                         <!--end::Input-->
 
                                         <!--begin::Label-->
@@ -416,7 +430,7 @@
                             <!--end::Label-->
 
                             <!--begin::Input-->
-							<textarea class="form-control form-control-solid" name="deskripsi" id="deskripsi" style="min-height:100px;" placeholder="Input Deskripsi"></textarea>
+							<textarea rows="12" class="form-control form-control-solid" name="deskripsi" id="deskripsi" style="min-height:100px;" placeholder="Input Deskripsi"></textarea>
                             <!--end::Input-->
 
                             <!--begin::Label-->
@@ -427,9 +441,19 @@
                             
                             <!--begin::Input-->
                             <div>
-                                <label for="attachment" class="form-label"></label>
                                 <input class="form-control form-control-md form-control-solid" id="faq-attachment" name="faq-attachment" type="file">
                             </div>
+                            <!--end::Input-->
+
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-6">
+                                <span style="font-weight: normal">Link :</span>
+                            </label>
+                            <!--end::Label-->
+
+                            <!--begin::Input-->
+                            <input type="text" class="form-control form-control-solid" name="faq-link" id="faq-link"
+                                style="font-weight: normal" value="" placeholder="Masukan Link Web ( Jika Ada )">
                             <!--end::Input-->
 
 

@@ -32,6 +32,7 @@
 
     }
     
+    
 </style>
 
 
@@ -319,7 +320,7 @@
                             $proyeks = $proyeks->reverse();
                         @endphp
                         <!--begin::Card body-->
-                        <div class="overflow-scroll card-body px-3 pt-0">
+                        <div class="card-body px-3 pt-0">
                             <!--begin::Table Proyek-->
                             <table class="table table-striped table-hover align-middle table-row-dashed fs-6 gy-2" id="example">
                                 <!--begin::Table head-->
@@ -329,7 +330,9 @@
                                         <th class="min-w-auto ps-3"><small>Kode Proyek</small></th>
                                         <th class="w-20"><small>Nama Proyek</small></th>
                                         <th class="min-w-auto"><small>Unit Kerja</small></th>
+                                        <th class="w-5 "><small>Is RKAP</small></th>
                                         <th class="min-w-auto text-center"><small>Stage</small></th>
+                                        <th class="min-w-auto text-center"><small>Is Cancel</small></th>
                                         <th class="min-w-auto"><small>Tahun RA Perolehan</small></th>
                                         <th class="min-w-auto"><small>Bulan RA Perolehan</small></th>
                                         <th class="min-w-auto"><small>Nilai RKAP</small></th>
@@ -339,7 +342,9 @@
                                         <th class="min-w-auto"><small>Pelanggan</small></th>
                                         <th class="min-w-auto text-center"><small>Jenis Proyek</small></th>
                                         <th class="min-w-auto text-center"><small>Tipe Proyek</small></th>
-                                        @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)"))
+                                        <th class="min-w-auto text-center"><small>Jenis Terkontrak</small></th>
+                                        <th class="min-w-auto text-center"><small>Sistem Bayar</small></th>
+                                        @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)") || str_contains(auth()->user()->email, "@sunny"))
                                             <th class="min-w-auto text-center"><small>Action</small></th>
                                         @endif
                                     </tr>
@@ -374,6 +379,14 @@
                                             </td>
                                             <!--end::Company-->
 
+                                            <!--begin::Column-->
+                                            <td class="w-5 text-center" style="max-width: 120px">
+                                                <small class="badge {{ $proyek->is_rkap == true ? 'badge-light-success' : 'badge-light-danger' }}">
+                                                    {{ $proyek->is_rkap == true ? 'Rkap' : 'Non Rkap' }}
+                                                </small>
+                                            </td>
+                                            <!--end::Column-->
+
                                             <!--begin::Stage-->
                                             @php
                                                 if ($proyek->stage == 0 || $proyek->stage == 7 || $proyek->stage == 10 || $proyek->is_cancel ){
@@ -385,11 +398,11 @@
                                                 }                                                    
                                             @endphp
                                             <td class="text-center" style="max-width: 80px">
-                                                @if ($proyek->is_cancel)
+                                                {{-- @if ($proyek->is_cancel)
                                                 <small class="badge fs-8 {{ $stageColor }}">
                                                     Canceled
                                                 </small>
-                                                @else
+                                                @else --}}
                                                 <small class="badge {{ $stageColor }}">
                                                     @switch($proyek->stage)
                                                         @case('0')
@@ -440,9 +453,18 @@
                                                             *Belum Ditentukan
                                                     @endswitch
                                                 </small>
-                                                @endif
+                                                {{-- @endif --}}
                                             </td>
                                             <!--end::Stage-->
+                                            <td class="text-center" style="max-width: 80px">
+                                                @if ($proyek->is_cancel)
+                                                <small class="badge fs-8 badge-light-danger">
+                                                    Canceled
+                                                </small>
+                                                @else
+                                                <p>-</p>
+                                                @endif
+                                            </td>
                                             <!--begin::Pelaksanaan-->
                                             <td class="text-center {{ $proyek->tahun_perolehan >= 2021 ? '' : 'text-danger' }}">
                                                 <small>
@@ -621,7 +643,23 @@
                                             </td>
                                             <!--end::Tipe Proyek-->
 
-                                            @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)"))
+                                            <!--begin::Tipe Proyek-->
+                                            <td class="text-center">
+                                                <small>
+                                                    {{ $proyek->jenis_terkontrak ?? "-" }}
+                                                </small>
+                                            </td>
+                                            <!--end::Tipe Proyek-->
+
+                                            <!--begin::Tipe Proyek-->
+                                            <td class="text-center">
+                                                <small>
+                                                    {{ $proyek->sistem_bayar ?? "-" }}
+                                                </small>
+                                            </td>
+                                            <!--end::Tipe Proyek-->
+
+                                            @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)") || str_contains(auth()->user()->email, "@sunny"))
                                                 <!--begin::Action-->
                                                 <td class="text-center px-3">
                                                     <!--begin::Button-->
@@ -722,13 +760,9 @@
                                 </div>
                                 <!--end::Input group-->
                             </div>
-                            <!--End begin::Col-->
-                            
                         </div>
-                        <!--End::Row Kanan+Kiri-->
-
-                        <!--Begin::Row Kanan-->
                         <div class="row fv-row">
+                            <!--End begin::Col-->
                             <div class="col-6">
                                 <!--begin::Input group Website-->
                                 <div class="fv-row mb-7">
@@ -818,7 +852,7 @@
                                 // console.log(departemenElt)
                             }
                         </script>
-                        <!--ENd::Row Kanan-->
+                        <!--End::Row Kanan+Kiri-->
 
                         <!--begin::Row Kanan+Kiri-->
                         <div class="row fv-row">
@@ -1077,8 +1111,10 @@
 
     <!--begin::modal DELETE-->
     @foreach ($proyeks as $proyek)
+        @if ($proyek->is_rkap != true)
         <form action="/proyek/delete/{{ $proyek->kode_proyek }}" method="post" enctype="multipart/form-data">
             @method('delete')
+            @endif
             @csrf
             <div class="modal fade" id="kt_modal_delete{{ $proyek->kode_proyek }}" tabindex="-1" aria-hidden="true">
                 <!--begin::Modal dialog-->
@@ -1104,11 +1140,18 @@
                         <!--end::Modal header-->
                         <!--begin::Modal body-->
                         <div class="modal-body py-lg-6 px-lg-6">
+                            @if ($proyek->is_rkap == true)
+                            <h3 class="text-danger">Tidak Bisa Hapus Proyek RKAP !
+                            </h3>
+                            @else
                             Data yang dihapus tidak dapat dipulihkan, anda yakin ?
+                            @endif
                             <br>
                         </div>
                         <div class="modal-footer">
+                            @if ($proyek->is_rkap != true)
                             <button class="btn btn-sm btn-light btn-active-primary">Delete</button>
+                            @endif
                         </div>
                         <!--end::Input group-->
 
@@ -1119,7 +1162,9 @@
             </div>
             <!--end::Modal dialog-->
             </div>
+        @if ($proyek->is_rkap != true)
         </form>
+        @endif
     @endforeach
     <!--end::modal DELETE-->
 
@@ -1142,27 +1187,24 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script> 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script> 
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script> 
-    <script src="https://cdn.datatables.net/fixedcolumns/4.2.1/js/dataTables.fixedColumns.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.colVis.min.js"></script> 
     
     <script>
         $(document).ready(function() {
             $('#example').DataTable( {
-                // dom: 'Bfrtip',
-                dom: '<"float-start me-3"f><"#example"t>Brtip',
-                pageLength : 20,
-                order: [[0, 'desc']],
-                // scrollY : "1000px",
-                // scrollX : true,
-                // scrollCollapse: true,
-                // paging : false,
-                // fixedColumns:   {
-                //     left: 2,
-                //     right: 0
-                // },
+                dom: 'Bfrtip',
+                // dom: '<"float-start"f><"#example"t>rtip',
+                pageLength : 50,
+                scrollY : "1000px",
+                scrollX : true,
+                scrollCollapse: true,
+                paging : false,
+                fixedColumns:   {
+                    left: 2,
+                    right: 0
+                },
                 buttons: [
-                    'csv', 'excel', 'print'
-                    // 'copy', 'csv', 'excel', 'pdf', 'print'
+                    'copy', 'csv', 'excel', 'pdf', 'print'
                 ]
             } );
         } );

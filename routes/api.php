@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProyekController;
 use App\Http\Controllers\UserController;
 use App\Models\Customer;
@@ -28,6 +27,7 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
@@ -78,7 +78,7 @@ Route::middleware(["web"])->group(function () {
                 if(!empty($p->Proyek->departemen_proyek)) {
                     $departemen_kode = str_replace("0", "", $p->Proyek->departemen_proyek) . " ";
                 }
-                $p->proyek_name = $departemen_kode . " " .$p->nama_proyek;
+                $p->proyek_name = $departemen_kode . " " .$p->nama_proyek;  
                 $p->departemen_id = $p->unit_kerja;
                 $p->ap_id = "";
                 switch ($p->jenis_proyek) {
@@ -128,7 +128,7 @@ Route::middleware(["web"])->group(function () {
                 $p->rencana_perolehan = $p->tahun_perolehan . "-" . str_pad($p->bulan_pelaksanaan, 2, 0, STR_PAD_LEFT) . "-" . "01";
                 $p->perkiraan_durasi = date_create($p->tanggal_mulai_terkontrak)->diff(date_create($p->tanggal_akhir_terkontrak))->days;
                 $p->periode = $request->periode;
-                unset($p->jenis_proyek, $p->unit_kerja, $p->kode_proyek, $p->stage, $p->tanggal_mulai_terkontrak, $p->tanggal_akhir_terkontrak, $p->Forecasts,  $p->tahun_perolehan, $p->bulan_pelaksanaan);
+                unset($p->proyek_name, $p->jenis_proyek, $p->unit_kerja, $p->kode_proyek, $p->stage, $p->tanggal_mulai_terkontrak, $p->tanggal_akhir_terkontrak, $p->Forecasts,  $p->tahun_perolehan, $p->bulan_pelaksanaan);
 
                 return $p;
             });
@@ -403,6 +403,10 @@ Route::middleware(["web"])->group(function () {
 
     // Begin - RKAP
     Route::post('/rkap/save', function (Request $request) {
+        return response()->json([
+            "status" => 500,
+            "msg" => "Service Unavailable"
+        ]);
         $is_bpmcsrf_exist = $request->header("BPMCSRF");
         if (!isset($is_bpmcsrf_exist)) {
             return response()->json([
@@ -600,7 +604,6 @@ Route::middleware(["web"])->group(function () {
     });
     // End - POST Profit Center dan SPK Internal dari PIS
 
-
     // get periode year and month
     // function getPeriode($periode)
     // {
@@ -626,28 +629,3 @@ Route::middleware(["web"])->group(function () {
     //     return $xml_data->asXML();
     // }
 });
-
-// ROUTE FOR WIKA MOBILE
-Route::get('/get-unit-kerja/{direktorat}', function (string $direktorat) {
-    // $curYear = (int) date("Y");
-    $curYear = 2022;
-    $unit_kerjas = UnitKerja::with(["proyeks"])->get()->map(function($unit_kerja) {
-        $new_class = new stdClass();
-        $new_class->divcode = $unit_kerja->divcode;
-        $new_class->unit_kerja = $unit_kerja->unit_kerja;
-        $new_class->direktorat = $unit_kerja->dop;
-        $new_class->tahun = $unit_kerja->proyeks->isNotEmpty() ? $unit_kerja->proyeks->groupBy("tahun_perolehan")->keys()->max() : 0;
-        return $new_class;
-    })->whereNotIn("divcode", ["C", "B", "D", "8"]);
-    if($direktorat != "All Direktorat") {
-        $unit_kerjas = $unit_kerjas->where("direktorat", "=", $direktorat);
-    }
-    return response()->json($unit_kerjas->values());
-});
-
-Route::post("/login", [UserController::class, "authen"]);
-
-Route::get("/get-nilai-dashboard/{unit_kerja}", [DashboardController::class, "getNilaiDashboard"]);
-
-Route::get("/get-forecast-bulanan/{unit_kerja}/{year}/{month}", [DashboardController::class, "getForecastBulanan"]);
-

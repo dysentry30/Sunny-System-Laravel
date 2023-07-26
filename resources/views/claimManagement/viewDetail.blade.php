@@ -48,16 +48,19 @@
 <!--begin::Main-->
 @section('content')
     <!--begin::Root-->
-    <!--begin::Wrapper-->
-    <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
-            <!--begin::Page-->
-            
-            <!--begin::Header-->
-            @include('template.header')
-            <!--end::Header-->
-            
+    <div class=" d-flex flex-column flex-root">
+        <!--begin::Page-->
+        <div class="page d-flex flex-row flex-column-fluid">
+            <!--begin::Wrapper-->
+            <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
+
+                <!--begin::Header-->
+                @include('template.header')
+                <!--end::Header-->
+
+
                 <!--begin::Content-->
-                <div class="content d-flex flex-column flex-column-fluid" id="kt_content"">
+                <div class="container mx-3 mt-0">
                     <!--begin::Toolbar-->
                     <div class="toolbar" id="kt_toolbar">
                         <!--begin::Container-->
@@ -70,7 +73,7 @@
                                 @php
                                     // $contract = $contracts->values();
                                 @endphp
-                                <h1 class="d-flex align-items-center fs-3 my-1">Datail Change - &nbsp; <b>{{ $contracts->project->nama_proyek }}</b>
+                                <h1 class="d-flex align-items-center fs-3 my-1">Datail Claim - <b>{{ $contracts->project->nama_proyek }}</b>
                                 </h1>
                                 <!--end::Title-->
                             </div>
@@ -110,657 +113,625 @@
                         <!--end::Container-->
                     </div>
                     <!--end::Toolbar-->
+                    <div class="card card-flush h-lg-100 mt-7" id="kt_contacts_main">
+                        <div class="card-body pt-5 pb-0">
+                            <form action="" class="d-flex flex-row w-auto" method="get">
+                                <!--Begin:: Select Options-->
+                                {{-- <select style="display: none !important" id="column" name="column" onchange="changes(this)"
+                                    class="form-select form-select-solid select2-hidden-accessible"
+                                    style="margin-right: 2rem" data-control="select2" data-hide-search="true"
+                                    data-placeholder="Column" data-select2-id="select2-data-bulan" tabindex="-1"
+                                    aria-hidden="true">
+                                    <option value="unit_kerja" {{$column == "unit_kerja" ? "selected" : ""}}>Unit Kerja</option>
+                                    <option value="jenis_proyek" {{$column == "jenis_proyek" ? "selected" : ""}}>Jenis Proyek</option>
 
-                    <div class="post d-flex flex-column-fluid" id="kt_post">
-                        <div id="kt_content_container" class="container-fluid">
-                            <div class="row">
-                                <div class="col-xl-15">
-                                    <div class="card card-flush h-lg-100 mt-7" id="kt_contacts_main">
-                                        <div class="card-body pt-5 pb-0">
-                                            <form action="" class="d-flex flex-row w-auto" method="get">
-                                                <!--Begin:: Select Options-->
-                                                {{-- <select style="display: none !important" id="column" name="column" onchange="changes(this)"
-                                                    class="form-select form-select-solid select2-hidden-accessible"
-                                                    style="margin-right: 2rem" data-control="select2" data-hide-search="true"
-                                                    data-placeholder="Column" data-select2-id="select2-data-bulan" tabindex="-1"
-                                                    aria-hidden="true">
-                                                    <option value="unit_kerja" {{$column == "unit_kerja" ? "selected" : ""}}>Unit Kerja</option>
-                                                    <option value="jenis_proyek" {{$column == "jenis_proyek" ? "selected" : ""}}>Jenis Proyek</option>
-                
-                                                </select> --}}
-                                                <!--End:: Select Options-->
-                
-                                                 <!--begin::Select Options-->
-                                                 {{-- <div style="" id="filterBulan" class="d-flex align-items-center position-relative me-2"> --}}
-                                                    {{-- <select id="bulan-perubahan" name="bulan-perubahan" onchange="this.form.submit()"
-                                                        class="form-select form-select-solid select2-hidden-accessible"
-                                                        data-control="select2" data-hide-search="true" data-placeholder="Tahun"
-                                                        tabindex="-1" aria-hidden="true">
-                                                        <option></option>
-                                                        <option selected>{{date("M")}}</option>
-                                                    </select> --}}
-                                                {{-- </div> --}}
-                                                <!--end::Select Options-->
-                
-                                                <div id="filterStatus" class="d-flex align-items-center position-relative">
-                                                    <select name="stage"
-                                                        class="form-select form-select-solid select2-hidden-accessible w-auto"
-                                                        data-control="select2" data-hide-search="true" data-placeholder="Status"
-                                                        tabindex="-1" aria-hidden="true">
-                                                        <option></option>
-                                                        <option value="1">Draft</option>
-                                                        <option value="2">Diajukan</option>
-                                                        <option value="3">Revisi</option>
-                                                        <option value="4">Negoisasi</option>
-                                                        <option value="5">Diterima</option>
-                                                        <option value="6">Ditolak</option>
-                                                    </select>
-                                                </div>
-                                                <button type="submit" class="btn btn-sm btn-light btn-active-primary ms-4"
-                                                    id="kt_toolbar_primary_button">
-                                                    Filter</button>
-                                                <!--end:: Filter-->
-                
-                                                <!--begin:: RESET-->
-                                                <button type="button" class="btn btn-sm btn-light btn-active-primary ms-2"
-                                                    onclick="resetFilter()" id="kt_toolbar_primary_button">Reset</button>
-                                                    
-                                                <script>
-                                                    function resetFilter() {
-                                                        window.location.href = "/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $contracts->id_contract }}";
+                                </select> --}}
+                                <!--End:: Select Options-->
+
+                                 <!--begin::Select Options-->
+                                 <div style="" id="filterBulan" class="d-flex align-items-center position-relative me-2">
+                                    {{-- <select id="bulan-perubahan" name="bulan-perubahan" onchange="this.form.submit()"
+                                        class="form-select form-select-solid select2-hidden-accessible"
+                                        data-control="select2" data-hide-search="true" data-placeholder="Tahun"
+                                        tabindex="-1" aria-hidden="true">
+                                        <option></option>
+                                        <option selected>{{date("M")}}</option>
+                                    </select> --}}
+                                </div>
+                                <!--end::Select Options-->
+
+                                <div id="filterStatus" class="d-flex align-items-center position-relative">
+                                    <select name="stage"
+                                        class="form-select form-select-solid select2-hidden-accessible w-auto"
+                                        data-control="select2" data-hide-search="true" data-placeholder="Status"
+                                        tabindex="-1" aria-hidden="true">
+                                        <option></option>
+                                        <option value="1">Draft</option>
+                                        <option value="2">Diajukan</option>
+                                        <option value="3">Revisi</option>
+                                        <option value="4">Negoisasi</option>
+                                        <option value="5">Diterima</option>
+                                        <option value="6">Ditolak</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-sm btn-light btn-active-primary ms-4"
+                                    id="kt_toolbar_primary_button">
+                                    Filter</button>
+                                <!--end:: Filter-->
+
+                                <!--begin:: RESET-->
+                                <button type="button" class="btn btn-sm btn-light btn-active-primary ms-2"
+                                    onclick="resetFilter()" id="kt_toolbar_primary_button">Reset</button>
+                                    
+                                <script>
+                                    function resetFilter() {
+                                        window.location.href = "/contract-management";
+                                    }
+                                </script>
+                                <!--end:: RESET-->
+                            </form>
+                            <!--end:: BUTTON FILTER-->
+                            <!--begin:::Tabs Navigasi-->    
+                            <ul
+                            class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-0 p-0 mt-7">
+                            <!--begin:::Tab item Claim-->
+                                <li class="nav-item">
+                                    <a class="nav-link text-active-primary active" data-bs-toggle="tab" data-kt-countup-tabs="true"
+                                        href="#kt_user_view_claim_VO" style="font-size:14px;">VO</a>
+                                </li>
+                                <!--end:::Tab item Claim-->
+
+                                <!--begin:::Tab item Claim-->
+                                <li class="nav-item">
+                                    <a class="nav-link text-active-primary" data-bs-toggle="tab" data-kt-countup-tabs="true"
+                                        href="#kt_user_view_claim" style="font-size:14px;">Claim</a>
+                                </li>
+                                <!--end:::Tab item Claim-->
+
+                                <!--begin:::Tab item Anti Claim-->
+                                <li class="nav-item">
+                                    <a class="nav-link text-active-primary" data-kt-countup-tabs="true"
+                                        data-bs-toggle="tab" href="#kt_user_view_overview_anticlaim"
+                                        style="font-size:14px;">Anti Claim</a>
+                                </li>
+                                <!--end:::Tab item Anti Claim-->
+
+                                <!--begin:::Tab item -->
+                                <li class="nav-item">
+                                    <a class="nav-link text-active-primary" data-kt-countup-tabs="true"
+                                        data-bs-toggle="tab" href="#kt_user_view_overview_asuransi"
+                                        style="font-size:14px;">Claim Asuransi</a>
+                                </li>
+                                <!--end:::Tab item -->
+                            </ul>
+                            <!--end:::Tabs Navigasi-->
+                        </div>
+                        
+                        @php
+                            $uploadFilePerubahan = $contracts->UploadFinal->where('id_contract', '=', $contracts->id_contract)->where('category', '=', "perubahan-kontrak")->first();
+                        @endphp
+                        <!--End:Table: Review-->
+                        @if (!empty($uploadFilePerubahan))
+                        <div class="d-flex me-5 container">
+                        <p><b>Download File :</b> 
+                        <a target="_blank" href="{{ asset('words/'.$uploadFilePerubahan->id_document) }}" class="text-hover-primary">
+                        {{ $uploadFilePerubahan->nama_document }}
+                        </a></p>
+                        </div>
+                        @endif
+                        
+                        <div class="tab-content" id="myTabContent">
+                            <!--Begin::Tab Panel VO-->
+                            <div class="tab-pane fade show active" id="kt_user_view_claim_VO" role="tabpanel">
+                                <div class="container">
+                                    <table class="table align-middle table-row-dashed fs-6 gy-2 card-body" id="view_VO">
+                                        <thead>
+                                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                <th class="min-w-auto">Tanggal Perubahan</th>
+                                                <th class="min-w-auto">Uraian Perubahan</th>
+                                                <th class="min-w-auto">No Proposal Klaim</th>
+                                                <th class="min-w-auto">Tanggal Pengajuan</th>
+                                                <th class="min-w-auto">Biaya Pengajuan</th>
+                                                <th class="min-w-auto">Waktu Pengajuan</th>
+                                                <th class="min-w-auto">Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="fw-bold text-gray-600">
+                                            @if ($claims_vo->isNotEmpty())
+                                            @forelse ($claims_vo as $vo)
+                                            <tr>
+                                                <td>
+                                                    {{ Carbon\Carbon::parse($vo->tanggal_perubahan)->translatedFormat('d F Y') }}
+                                                </td>
+                                                <td>
+                                                    <a href="/contract-management/view/{{$vo->id_contract}}/perubahan-kontrak/{{$vo->id_perubahan_kontrak}}" id="click-name" class="text-gray-800 text-hover-primary mb-1">
+                                                    {{ $vo->uraian_perubahan }}
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    {{ $vo->proposal_klaim }}
+                                                </td>
+                                                <td>
+                                                    {{ Carbon\Carbon::parse($vo->tanggal_pengajuan)->translatedFormat('d F Y') }}
+                                                </td>
+                                                <td>
+                                                    {{ number_format($vo->biaya_pengajuan, 0, ".", ".") }}
+                                                </td>
+                                                <td>
+                                                    {{ Carbon\Carbon::parse($vo->waktu_pengajuan)->translatedFormat('d F Y') }}
+                                                </td>
+                                                @php
+                                                $stage = "";
+                                                $class_name = "";
+                                                if ($vo->is_dispute) {
+                                                    $stage = "Dispute";
+                                                    $class_name = "badge fs-8 badge-light-danger";
+                                                } else {
+                                                    switch ($vo->stage) {
+                                                        case 1:
+                                                            $stage = "Draft";
+                                                            $class_name = "badge fs-8 badge-light-primary";
+                                                            break;
+                                                        case 2:
+                                                            $stage = "Diajukan";
+                                                            $class_name = "badge fs-8 badge-light-primary";
+                                                            break;
+                                                        case 3:
+                                                            $stage = "Revisi";
+                                                            $class_name = "badge fs-8 badge-light-primary";
+                                                            break;
+                                                        case 4:
+                                                            $stage = "Negoisasi";
+                                                            $class_name = "badge fs-8 badge-light-primary";
+                                                            break;
+                                                        case 5:
+                                                            $stage = "Diterima";
+                                                            $class_name = "badge fs-8 badge-light-success";
+                                                            break;
+                                                        case 6:
+                                                            $stage = "Ditolak";
+                                                            $class_name = "badge fs-8 badge-light-danger";
+                                                            break;
                                                     }
-                                                </script>
-                                                <!--end:: RESET-->
-                                            </form>
-                                            <!--end:: BUTTON FILTER-->
-                                            <!--begin:::Tabs Navigasi-->    
-                                            <ul
-                                            class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-0 p-0 mt-7">
-                                            <!--begin:::Tab item Claim-->
-                                                <li class="nav-item">
-                                                    <a class="nav-link text-active-primary {{ $link == "kt_user_view_claim_VO" ? "active" : "" }}" data-bs-toggle="tab" data-kt-countup-tabs="true"
-                                                        href="#kt_user_view_claim_VO" style="font-size:14px;">VO</a>
-                                                </li>
-                                                <!--end:::Tab item Claim-->
-                
-                                                <!--begin:::Tab item Claim-->
-                                                <li class="nav-item">
-                                                    <a class="nav-link text-active-primary {{ $link == "kt_user_view_claim" ? "active" : "" }}" data-bs-toggle="tab" data-kt-countup-tabs="true"
-                                                        href="#kt_user_view_claim" style="font-size:14px;">Claim</a>
-                                                </li>
-                                                <!--end:::Tab item Claim-->
-                
-                                                <!--begin:::Tab item Anti Claim-->
-                                                <li class="nav-item">
-                                                    <a class="nav-link text-active-primary {{ $link == "kt_user_view_overview_anticlaim" ? "active" : "" }}" data-kt-countup-tabs="true"
-                                                        data-bs-toggle="tab" href="#kt_user_view_overview_anticlaim"
-                                                        style="font-size:14px;">Anti Claim</a>
-                                                </li>
-                                                <!--end:::Tab item Anti Claim-->
-                
-                                                <!--begin:::Tab item -->
-                                                <li class="nav-item">
-                                                    <a class="nav-link text-active-primary {{ $link == "kt_user_view_overview_asuransi" ? "active" : "" }}" data-kt-countup-tabs="true"
-                                                        data-bs-toggle="tab" href="#kt_user_view_overview_asuransi"
-                                                        style="font-size:14px;">Claim Asuransi</a>
-                                                </li>
-                                                <!--end:::Tab item -->
-                                            </ul>
-                                            <!--end:::Tabs Navigasi-->
-                                            @php
-                                                $uploadFilePerubahan = $contracts->UploadFinal->where('id_contract', '=', $contracts->id_contract)->where('category', '=', "perubahan-kontrak")->first();
-                                            @endphp
-                                            <!--End:Table: Review-->
-                                            @if (!empty($uploadFilePerubahan))
-                                            <div class="d-flex justify-content-end">
-                                            <p><b>Download File :</b> 
-                                            <a target="_blank" href="{{ asset('words/'.$uploadFilePerubahan->id_document) }}" class="text-hover-primary">
-                                            {{ $uploadFilePerubahan->nama_document }}
-                                            </a></p>
-                                            </div>
+                                                    }
+                                                @endphp
+                                                <td>
+                                                    <small class="{{$class_name}}">
+                                                        {{ $stage }}
+                                                    </small>
+                                                </td>
+                                            </tr>
+                                            @empty
+                                            <tr>
+                                                <td colspan="7" class="text-center"">
+                                                    <h6><b>There is no data</b></h6>
+                                                </td>
+                                            </tr>
+                                            @endforelse
+                                            @else
+                                            <tr>
+                                                <td colspan="7" class="text-center"">
+                                                    <h6><b>There is no data</b></h6>
+                                                </td>
+                                            </tr>
                                             @endif
-                                            
-                                            <div class="tab-content mt-5" id="myTabContent">
-                                                <!--Begin::Tab Panel VO-->
-                                                    <div class="tab-pane fade {{ $link == "kt_user_view_claim_VO" ? "show active" : "" }}" id="kt_user_view_claim_VO" role="tabpanel">
-                                                        <table class="table align-middle table-row-dashed fs-6 gy-2 card-body" id="view_VO">
-                                                            <thead>
-                                                                <tr class="text-center text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                    <th class="min-w-125px">Tanggal Kejadian Perubahan</th>
-                                                                    <th class="min-w-auto">Uraian Perubahan</th>
-                                                                    <th class="min-w-auto">No Proposal Klaim</th>
-                                                                    <th class="min-w-auto">Tanggal Pengajuan</th>
-                                                                    <th class="min-w-125px" colspan="2">Dampak Biaya</th>
-                                                                    <th class="min-w-125px" colspan="2">Dampak Waktu</th>
-                                                                    <th class="min-w-auto">Status</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody class="fw-bold text-gray-600">
-                                                                @if ($claims_vo->isNotEmpty())
-                                                                @forelse ($claims_vo as $vo)
-                                                                <tr>
-                                                                    <td>
-                                                                        {{ Carbon\Carbon::parse($vo->tanggal_perubahan)->translatedFormat('d F Y') }}
-                                                                    </td>
-                                                                    <td>
-                                                                        <a href="/contract-management/view/{{$vo->id_contract}}/perubahan-kontrak/{{$vo->id_perubahan_kontrak}}" id="click-name" class="text-gray-800 text-hover-primary mb-1">
-                                                                        {{ $vo->uraian_perubahan }}
-                                                                        </a>
-                                                                    </td>
-                                                                    <td>
-                                                                        {{ $vo->proposal_klaim }}
-                                                                    </td>
-                                                                    <td>
-                                                                        {{ Carbon\Carbon::parse($vo->tanggal_pengajuan)->translatedFormat('d F Y') }}
-                                                                    </td>
-                                                                     <!--Begin::Dampak Biaya-->
-                                                                     <td class="fw-bolder text-center">
-                                                                        {{ (int) $vo->biaya_pengajuan != 0 ? 'Yes' : 'No' }}
-                                                                    </td>
-                                                                    <td>
-                                                                        {{ number_format($vo->biaya_pengajuan, 0, ".", ".") }}
-                                                                    </td>
-                                                                    <!--end::Dampak Biaya-->
-                                                                    <!--begin::Dampak Waktu-->
-                                                                    <td class="fw-bolder text-center">
-                                                                        {{ !empty($vo->waktu_pengajuan) ? 'Yes' : 'No' }}
-                                                                    </td>
-                                                                    <td>
-                                                                        {{ Carbon\Carbon::parse($vo->waktu_pengajuan)->translatedFormat('d F Y') }}
-                                                                    </td>
-                                                                    <!--end::Dampak Waktu-->
-                                                                    @php
-                                                                    $stage = "";
-                                                                    $class_name = "";
-                                                                    if ($vo->is_dispute) {
-                                                                        $stage = "Dispute";
-                                                                        $class_name = "badge fs-8 badge-light-danger";
-                                                                    } else {
-                                                                        switch ($vo->stage) {
-                                                                            case 1:
-                                                                                $stage = "Draft";
-                                                                                $class_name = "badge fs-8 badge-light-primary";
-                                                                                break;
-                                                                            case 2:
-                                                                                $stage = "Diajukan";
-                                                                                $class_name = "badge fs-8 badge-light-primary";
-                                                                                break;
-                                                                            case 3:
-                                                                                $stage = "Revisi";
-                                                                                $class_name = "badge fs-8 badge-light-primary";
-                                                                                break;
-                                                                            case 4:
-                                                                                $stage = "Negoisasi";
-                                                                                $class_name = "badge fs-8 badge-light-primary";
-                                                                                break;
-                                                                            case 5:
-                                                                                $stage = "Diterima";
-                                                                                $class_name = "badge fs-8 badge-light-success";
-                                                                                break;
-                                                                            case 6:
-                                                                                $stage = "Ditolak";
-                                                                                $class_name = "badge fs-8 badge-light-danger";
-                                                                                break;
-                                                                        }
-                                                                        }
-                                                                    @endphp
-                                                                    <td>
-                                                                        <small class="{{$class_name}}">
-                                                                            {{ $stage }}
-                                                                        </small>
-                                                                    </td>
-                                                                </tr>
-                                                                @empty
-                                                                <tr>
-                                                                    <td colspan="7" class="text-center"">
-                                                                        <h6><b>There is no data</b></h6>
-                                                                    </td>
-                                                                </tr>
-                                                                @endforelse
-                                                                @else
-                                                                <tr>
-                                                                    <td colspan="7" class="text-center"">
-                                                                        <h6><b>There is no data</b></h6>
-                                                                    </td>
-                                                                </tr>
-                                                                @endif
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                <!--End::Tab Pan VO-->
-                        
-                                                <!--Begin::Tab Panel Klaim-->
-                                                    <div class="tab-pane fade {{ $link == "kt_user_view_claim" ? "show active" : "" }}" id="kt_user_view_claim" role="tabpanel">
-                                                        <table class="table align-middle table-row-dashed fs-6 gy-2 card-body" id="view_Klaim">
-                                                            <thead>
-                                                                <tr class="text-center text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                    <th class="min-w-125px">Tanggal Kejadian Perubahan</th>
-                                                                    <th class="min-w-auto">Uraian Perubahan</th>
-                                                                    <th class="min-w-auto">No Proposal Klaim</th>
-                                                                    <th class="min-w-auto">Tanggal Pengajuan</th>
-                                                                    <th class="min-w-125px" colspan="2">Dampak Biaya</th>
-                                                                    <th class="min-w-125px" colspan="2">Dampak Waktu</th>
-                                                                    <th class="min-w-auto">Status</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody class="fw-bold text-gray-600">
-                                                                @if ($claims_klaim->isNotEmpty())
-                                                                @forelse ($claims_klaim as $klaim)
-                                                                <tr>
-                                                                    <td>
-                                                                        {{ Carbon\Carbon::parse($klaim->tanggal_perubahan)->translatedFormat('d F Y') }}
-                                                                    </td>
-                                                                    <td>
-                                                                        <a href="/contract-management/view/{{$klaim->id_contract}}/perubahan-kontrak/{{$klaim->id_perubahan_kontrak}}" id="click-name" class="text-gray-800 text-hover-primary mb-1">
-                                                                        {{ $klaim->uraian_perubahan }}
-                                                                        </a>
-                                                                    </td>
-                                                                    <td>
-                                                                        {{ $klaim->proposal_klaim }}
-                                                                    </td>
-                                                                    <td>
-                                                                        {{ Carbon\Carbon::parse($klaim->tanggal_pengajuan)->translatedFormat('d F Y') }}
-                                                                    </td>
-                                                                    <!--Begin::Dampak Biaya-->
-                                                                     <td class="fw-bolder text-center">
-                                                                        {{ (int) $klaim->biaya_pengajuan != 0 ? 'Yes' : 'No' }}
-                                                                    </td>
-                                                                    <td>
-                                                                        {{ number_format($klaim->biaya_pengajuan, 0, ".", ".") }}
-                                                                    </td>
-                                                                    <!--end::Dampak Biaya-->
-                                                                    <!--begin::Dampak Waktu-->
-                                                                    <td class="fw-bolder text-center">
-                                                                        {{ !empty($klaim->waktu_pengajuan) ? 'Yes' : 'No' }}
-                                                                    </td>
-                                                                    <td>
-                                                                        {{ Carbon\Carbon::parse($klaim->waktu_pengajuan)->translatedFormat('d F Y') }}
-                                                                    </td>
-                                                                    <!--end::Dampak Waktu-->
-                                                                    @php
-                                                                    $stage = "";
-                                                                    $class_name = "";
-                                                                    if ($klaim->is_dispute) {
-                                                                        $stage = "Dispute";
-                                                                        $class_name = "badge fs-8 badge-light-danger";
-                                                                    } else {
-                                                                        switch ($klaim->stage) {
-                                                                            case 1:
-                                                                                $stage = "Draft";
-                                                                                $class_name = "badge fs-8 badge-light-primary";
-                                                                                break;
-                                                                            case 2:
-                                                                                $stage = "Diajukan";
-                                                                                $class_name = "badge fs-8 badge-light-primary";
-                                                                                break;
-                                                                            case 3:
-                                                                                $stage = "Revisi";
-                                                                                $class_name = "badge fs-8 badge-light-primary";
-                                                                                break;
-                                                                            case 4:
-                                                                                $stage = "Negoisasi";
-                                                                                $class_name = "badge fs-8 badge-light-primary";
-                                                                                break;
-                                                                            case 5:
-                                                                                $stage = "Diterima";
-                                                                                $class_name = "badge fs-8 badge-light-success";
-                                                                                break;
-                                                                            case 6:
-                                                                                $stage = "Ditolak";
-                                                                                $class_name = "badge fs-8 badge-light-danger";
-                                                                                break;
-                                                                        }
-                                                                        }
-                                                                    @endphp
-                                                                    <td>
-                                                                        <small class="{{$class_name}}">
-                                                                            {{ $stage }}
-                                                                        </small>
-                                                                    </td>
-                                                                </tr>
-                                                                @empty
-                                                                <tr>
-                                                                    <td colspan="7" class="text-center"">
-                                                                        <h6><b>There is no data</b></h6>
-                                                                    </td>
-                                                                </tr>
-                                                                @endforelse
-                                                                @else
-                                                                <tr>
-                                                                    <td colspan="7" class="text-center"">
-                                                                        <h6><b>There is no data</b></h6>
-                                                                    </td>
-                                                                </tr>
-                                                                @endif
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                <!--End::Tab Pan Klaim-->
-                        
-                                                <!--Begin::Tab Panel Anti Klaim-->
-                                                    <div class="tab-pane fade {{ $link == "kt_user_view_overview_anticlaim" ? "show active" : "" }}" id="kt_user_view_overview_anticlaim" role="tabpanel">
-                                                        <table class="table align-middle table-row-dashed fs-6 gy-2 card-body" id="view_AntiKlaim">
-                                                            <thead>
-                                                                <tr class="text-center text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                    <th class="min-w-125px">Tanggal Kejadian Perubahan</th>
-                                                                    <th class="min-w-auto">Uraian Perubahan</th>
-                                                                    <th class="min-w-auto">No Proposal Klaim</th>
-                                                                    <th class="min-w-auto">Tanggal Pengajuan</th>
-                                                                    <th class="min-w-125px" colspan="2">Dampak Biaya</th>
-                                                                    <th class="min-w-125px" colspan="2">Dampak Waktu</th>
-                                                                    <th class="min-w-auto">Status</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody class="fw-bold text-gray-600">
-                                                                @if ($claims_anti_klaim->isNotEmpty())
-                                                                @forelse ($claims_anti_klaim as $anti_klaim)
-                                                                <tr>
-                                                                    <td>
-                                                                        {{ Carbon\Carbon::parse($anti_klaim->tanggal_perubahan)->translatedFormat('d F Y') }}
-                                                                    </td>
-                                                                    <td>
-                                                                        <a href="/contract-management/view/{{$anti_klaim->id_contract}}/perubahan-kontrak/{{$anti_klaim->id_perubahan_kontrak}}" id="click-name" class="text-gray-800 text-hover-primary mb-1">
-                                                                        {{ $anti_klaim->uraian_perubahan }}
-                                                                        </a>
-                                                                    </td>
-                                                                    <td>
-                                                                        {{ $anti_klaim->proposal_klaim }}
-                                                                    </td>
-                                                                    <td>
-                                                                        {{ Carbon\Carbon::parse($anti_klaim->tanggal_pengajuan)->translatedFormat('d F Y') }}
-                                                                    </td>
-                                                                    <!--Begin::Dampak Biaya-->
-                                                                     <td class="fw-bolder text-center">
-                                                                        {{ (int) $anti_klaim->biaya_pengajuan != 0 ? 'Yes' : 'No' }}
-                                                                    </td>
-                                                                    <td>
-                                                                        (-) {{ number_format($anti_klaim->biaya_pengajuan, 0, ".", ".") }}
-                                                                    </td>
-                                                                    <!--end::Dampak Biaya-->
-                                                                    <!--begin::Dampak Waktu-->
-                                                                    <td class="fw-bolder text-center">
-                                                                        {{ !empty($anti_klaim->waktu_pengajuan) ? 'Yes' : 'No' }}
-                                                                    </td>
-                                                                    <td>
-                                                                        {{ Carbon\Carbon::parse($anti_klaim->waktu_pengajuan)->translatedFormat('d F Y') }}
-                                                                    </td>
-                                                                    <!--end::Dampak Waktu-->
-                                                                    @php
-                                                                    $stage = "";
-                                                                    $class_name = "";
-                                                                    if ($anti_klaim->is_dispute) {
-                                                                        $stage = "Dispute";
-                                                                        $class_name = "badge fs-8 badge-light-danger";
-                                                                    } else {
-                                                                        switch ($anti_klaim->stage) {
-                                                                            case 1:
-                                                                                $stage = "Draft";
-                                                                                $class_name = "badge fs-8 badge-light-primary";
-                                                                                break;
-                                                                            case 2:
-                                                                                $stage = "Diajukan";
-                                                                                $class_name = "badge fs-8 badge-light-primary";
-                                                                                break;
-                                                                            case 3:
-                                                                                $stage = "Revisi";
-                                                                                $class_name = "badge fs-8 badge-light-primary";
-                                                                                break;
-                                                                            case 4:
-                                                                                $stage = "Negoisasi";
-                                                                                $class_name = "badge fs-8 badge-light-primary";
-                                                                                break;
-                                                                            case 5:
-                                                                                $stage = "Diterima";
-                                                                                $class_name = "badge fs-8 badge-light-success";
-                                                                                break;
-                                                                            case 6:
-                                                                                $stage = "Ditolak";
-                                                                                $class_name = "badge fs-8 badge-light-danger";
-                                                                                break;
-                                                                        }
-                                                                        }
-                                                                    @endphp
-                                                                    <td>
-                                                                        <small class="{{$class_name}}">
-                                                                            {{ $stage }}
-                                                                        </small>
-                                                                    </td>
-                                                                </tr>
-                                                                @empty
-                                                                <tr>
-                                                                    <td colspan="7" class="text-center"">
-                                                                        <h6><b>There is no data</b></h6>
-                                                                    </td>
-                                                                </tr>
-                                                                @endforelse
-                                                                @else
-                                                                <tr>
-                                                                    <td colspan="7" class="text-center"">
-                                                                        <h6><b>There is no data</b></h6>
-                                                                    </td>
-                                                                </tr>
-                                                                @endif
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                <!--End::Tab Pan Anti Klaim-->
-                        
-                                                <!--Begin::Tab Panel Klaim Asuransi-->
-                                                    <div class="tab-pane fade {{ $link == "kt_user_view_overview_asuransi" ? "show active" : "" }}" id="kt_user_view_overview_asuransi" role="tabpanel">
-                                                        <table class="table align-middle table-row-dashed fs-6 gy-2 card-body" id="view_KlaimAsuransi">
-                                                            <thead>
-                                                                <tr class="text-center text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                    <th class="min-w-125px">Tanggal Kejadian Perubahan</th>
-                                                                    <th class="min-w-auto">Uraian Perubahan</th>
-                                                                    <th class="min-w-auto">No Proposal Klaim</th>
-                                                                    <th class="min-w-auto">Tanggal Pengajuan</th>
-                                                                    <th class="min-w-125px" colspan="2">Dampak Biaya</th>
-                                                                    <th class="min-w-125px" colspan="2">Dampak Waktu</th>
-                                                                    <th class="min-w-auto">Status</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody class="fw-bold text-gray-600">
-                                                                @if ($claims_klaim_asuransi->isNotEmpty())
-                                                                @forelse ($claims_klaim_asuransi as $klaim_asuransi)
-                                                                <tr>
-                                                                    <td>
-                                                                        {{ Carbon\Carbon::parse($klaim_asuransi->tanggal_perubahan)->translatedFormat('d F Y') }}
-                                                                    </td>
-                                                                    <td>
-                                                                        <a href="/contract-management/view/{{$klaim_asuransi->id_contract}}/perubahan-kontrak/{{$klaim_asuransi->id_perubahan_kontrak}}" id="click-name" class="text-gray-800 text-hover-primary mb-1">
-                                                                        {{ $klaim_asuransi->uraian_perubahan }}
-                                                                        </a>
-                                                                    </td>
-                                                                    <td>
-                                                                        {{ $klaim_asuransi->proposal_klaim }}
-                                                                    </td>
-                                                                    <td>
-                                                                        {{ Carbon\Carbon::parse($klaim_asuransi->tanggal_pengajuan)->translatedFormat('d F Y') }}
-                                                                    </td>
-                                                                    <!--Begin::Dampak Biaya-->
-                                                                     <td class="fw-bolder text-center">
-                                                                        {{ (int) $klaim_asuransi->biaya_pengajuan != 0 ? 'Yes' : 'No' }}
-                                                                    </td>
-                                                                    <td class="text-end">
-                                                                        {{ number_format($klaim_asuransi->biaya_pengajuan, 0, ".", ".") }}
-                                                                    </td>
-                                                                    <!--end::Dampak Biaya-->
-                                                                    <!--begin::Dampak Waktu-->
-                                                                    <td>
-                                                                        {{ !empty($klaim_asuransi->waktu_pengajuan) ? 'Yes' : 'No' }}
-                                                                    </td>
-                                                                    <td>
-                                                                        {{ Carbon\Carbon::parse($klaim_asuransi->waktu_pengajuan)->translatedFormat('d F Y') }}
-                                                                    </td>
-                                                                    <!--end::Dampak Waktu-->
-                                                                    @php
-                                                                    $stage = "";
-                                                                    $class_name = "";
-                                                                    if ($klaim_asuransi->is_dispute) {
-                                                                        $stage = "Dispute";
-                                                                        $class_name = "badge fs-8 badge-light-danger";
-                                                                    } else {
-                                                                        switch ($klaim_asuransi->stage) {
-                                                                            case 1:
-                                                                                $stage = "Draft";
-                                                                                $class_name = "badge fs-8 badge-light-primary";
-                                                                                break;
-                                                                            case 2:
-                                                                                $stage = "Diajukan";
-                                                                                $class_name = "badge fs-8 badge-light-primary";
-                                                                                break;
-                                                                            case 3:
-                                                                                $stage = "Revisi";
-                                                                                $class_name = "badge fs-8 badge-light-primary";
-                                                                                break;
-                                                                            case 4:
-                                                                                $stage = "Negoisasi";
-                                                                                $class_name = "badge fs-8 badge-light-primary";
-                                                                                break;
-                                                                            case 5:
-                                                                                $stage = "Diterima";
-                                                                                $class_name = "badge fs-8 badge-light-success";
-                                                                                break;
-                                                                            case 6:
-                                                                                $stage = "Ditolak";
-                                                                                $class_name = "badge fs-8 badge-light-danger";
-                                                                                break;
-                                                                        }
-                                                                        }
-                                                                    @endphp
-                                                                    <td>
-                                                                        <small class="{{$class_name}}">
-                                                                            {{ $stage }}
-                                                                        </small>
-                                                                    </td>
-                                                                </tr>
-                                                                @empty
-                                                                    <tr>
-                                                                        <td colspan="7" class="text-center"">
-                                                                            <h6><b>There is no data</b></h6>
-                                                                        </td>
-                                                                    </tr>
-                                                                @endforelse
-                                                                @else
-                                                                <tr>
-                                                                    <td colspan="7" class="text-center"">
-                                                                        <h6><b>There is no data</b></h6>
-                                                                    </td>
-                                                                </tr>
-                                                                @endif
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                <!--End::Tab Pan Klaim Asuransi-->
-                        
-                                                <!--Begin::Tab Panel Klaim Asuransi-->
-                                                    <div class="tab-pane fade" id="kt_user_view_overview_all" role="tabpanel">
-                                                        <table class="table align-middle table-row-dashed fs-6 gy-2 card-body" id="view_KlaimAll">
-                                                            <thead>
-                                                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                    <th class="min-w-125px">Jenis Perubahan</th>
-                                                                    <th class="min-w-auto">Uraian Perubahan</th>
-                                                                    <th class="min-w-auto">No Proposal Klaim</th>
-                                                                    <th class="min-w-auto">Tanggal Pengajuan</th>
-                                                                    <th class="min-w-125px" colspan="2">Dampak Biaya</th>
-                                                                    <th class="min-w-125px" colspan="2">Dampak Waktu</th>
-                                                                    <th class="min-w-auto">Status</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody class="fw-bold text-gray-600">
-                                                                @if ($claim_all->isNotEmpty())
-                                                                @forelse ($claim_all as $claim)
-                                                                <tr>
-                                                                    <td>
-                                                                        {{ $claim->jenis_perubahan }}
-                                                                    </td>
-                                                                    <td>
-                                                                        <a href="/contract-management/view/{{$claim->id_contract}}/perubahan-kontrak/{{$claim->id_perubahan_kontrak}}" id="click-name" class="text-gray-800 text-hover-primary mb-1">
-                                                                        {{ $claim->uraian_perubahan }}
-                                                                        </a>
-                                                                    </td>
-                                                                    <td>
-                                                                        {{ $claim->proposal_klaim }}
-                                                                    </td>
-                                                                    <td>
-                                                                        {{ Carbon\Carbon::parse($claim->tanggal_pengajuan)->translatedFormat('d F Y') }}
-                                                                    </td>
-                                                                    <td>
-                                                                        {{ (int) $claim->biaya_pengajuan != 0 ? 'Yes' : 'No' }} | {{ number_format($claim->biaya_pengajuan, 0, ".", ".") }}
-                                                                    </td>
-                                                                    <td>
-                                                                        {{ !empty($claim->waktu_pengajuan) ? 'Yes' : 'No' }} | {{ Carbon\Carbon::parse($claim->waktu_pengajuan)->translatedFormat('d F Y') }}
-                                                                    </td>
-                                                                    @php
-                                                                    $stage = "";
-                                                                    $class_name = "";
-                                                                    if ($claim->is_dispute) {
-                                                                        $stage = "Dispute";
-                                                                        $class_name = "badge fs-8 badge-light-danger";
-                                                                    } else {
-                                                                        switch ($claim->stage) {
-                                                                            case 1:
-                                                                                $stage = "Draft";
-                                                                                $class_name = "badge fs-8 badge-light-primary";
-                                                                                break;
-                                                                            case 2:
-                                                                                $stage = "Diajukan";
-                                                                                $class_name = "badge fs-8 badge-light-primary";
-                                                                                break;
-                                                                            case 3:
-                                                                                $stage = "Revisi";
-                                                                                $class_name = "badge fs-8 badge-light-primary";
-                                                                                break;
-                                                                            case 4:
-                                                                                $stage = "Negoisasi";
-                                                                                $class_name = "badge fs-8 badge-light-primary";
-                                                                                break;
-                                                                            case 5:
-                                                                                $stage = "Diterima";
-                                                                                $class_name = "badge fs-8 badge-light-success";
-                                                                                break;
-                                                                            case 6:
-                                                                                $stage = "Ditolak";
-                                                                                $class_name = "badge fs-8 badge-light-danger";
-                                                                                break;
-                                                                        }
-                                                                        }
-                                                                    @endphp
-                                                                    <td>
-                                                                        <small class="{{$class_name}}">
-                                                                            {{ $stage }}
-                                                                        </small>
-                                                                    </td>
-                                                                </tr>
-                                                                @empty
-                                                                    <tr>
-                                                                        <td colspan="7" class="text-center"">
-                                                                            <h6><b>There is no data</b></h6>
-                                                                        </td>
-                                                                    </tr>
-                                                                @endforelse
-                                                                @else
-                                                                <tr>
-                                                                    <td colspan="7" class="text-center"">
-                                                                        <h6><b>There is no data</b></h6>
-                                                                    </td>
-                                                                </tr>
-                                                                @endif
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                <!--End::Tab Pan Klaim Asuransi-->
-                                            </div>
-                                        </div>
-                                        
-                
-                                    </div>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
+                        <!--End::Tab Pan VO-->
+
+                        <!--Begin::Tab Panel Klaim-->
+                            <div class="tab-pane fade" id="kt_user_view_claim" role="tabpanel">
+                                <div class="container">
+                                    <table class="table align-middle table-row-dashed fs-6 gy-2 card-body" id="view_Klaim">
+                                        <thead>
+                                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                <th class="min-w-auto">Tanggal Perubahan</th>
+                                                <th class="min-w-auto">Uraian Perubahan</th>
+                                                <th class="min-w-auto">No Proposal Klaim</th>
+                                                <th class="min-w-auto">Tanggal Pengajuan</th>
+                                                <th class="min-w-auto">Biaya Pengajuan</th>
+                                                <th class="min-w-auto">Waktu Pengajuan</th>
+                                                <th class="min-w-auto">Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="fw-bold text-gray-600">
+                                            @if ($claims_klaim->isNotEmpty())
+                                            @forelse ($claims_klaim as $klaim)
+                                            <tr>
+                                                <td>
+                                                    {{ Carbon\Carbon::parse($klaim->tanggal_perubahan)->translatedFormat('d F Y') }}
+                                                </td>
+                                                <td>
+                                                    <a href="/contract-management/view/{{$klaim->id_contract}}/perubahan-kontrak/{{$klaim->id_perubahan_kontrak}}" id="click-name" class="text-gray-800 text-hover-primary mb-1">
+                                                    {{ $klaim->uraian_perubahan }}
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    {{ $klaim->proposal_klaim }}
+                                                </td>
+                                                <td>
+                                                    {{ Carbon\Carbon::parse($klaim->tanggal_pengajuan)->translatedFormat('d F Y') }}
+                                                </td>
+                                                <td>
+                                                    {{ number_format($klaim->biaya_pengajuan, 0, ".", ".") }}
+                                                </td>
+                                                <td>
+                                                    {{ Carbon\Carbon::parse($klaim->waktu_pengajuan)->translatedFormat('d F Y') }}
+                                                </td>
+                                                @php
+                                                $stage = "";
+                                                $class_name = "";
+                                                if ($klaim->is_dispute) {
+                                                    $stage = "Dispute";
+                                                    $class_name = "badge fs-8 badge-light-danger";
+                                                } else {
+                                                    switch ($klaim->stage) {
+                                                        case 1:
+                                                            $stage = "Draft";
+                                                            $class_name = "badge fs-8 badge-light-primary";
+                                                            break;
+                                                        case 2:
+                                                            $stage = "Diajukan";
+                                                            $class_name = "badge fs-8 badge-light-primary";
+                                                            break;
+                                                        case 3:
+                                                            $stage = "Revisi";
+                                                            $class_name = "badge fs-8 badge-light-primary";
+                                                            break;
+                                                        case 4:
+                                                            $stage = "Negoisasi";
+                                                            $class_name = "badge fs-8 badge-light-primary";
+                                                            break;
+                                                        case 5:
+                                                            $stage = "Diterima";
+                                                            $class_name = "badge fs-8 badge-light-success";
+                                                            break;
+                                                        case 6:
+                                                            $stage = "Ditolak";
+                                                            $class_name = "badge fs-8 badge-light-danger";
+                                                            break;
+                                                    }
+                                                    }
+                                                @endphp
+                                                <td>
+                                                    <small class="{{$class_name}}">
+                                                        {{ $stage }}
+                                                    </small>
+                                                </td>
+                                            </tr>
+                                            @empty
+                                            <tr>
+                                                <td colspan="7" class="text-center"">
+                                                    <h6><b>There is no data</b></h6>
+                                                </td>
+                                            </tr>
+                                            @endforelse
+                                            @else
+                                            <tr>
+                                                <td colspan="7" class="text-center"">
+                                                    <h6><b>There is no data</b></h6>
+                                                </td>
+                                            </tr>
+                                            @endif
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        <!--End::Tab Pan Klaim-->
+
+                        <!--Begin::Tab Panel Anti Klaim-->
+                            <div class="tab-pane fade" id="kt_user_view_overview_anticlaim" role="tabpanel">
+                                <div class="container">
+                                    <table class="table align-middle table-row-dashed fs-6 gy-2 card-body" id="view_AntiKlaim">
+                                        <thead>
+                                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                <th class="min-w-auto">Tanggal Perubahan</th>
+                                                <th class="min-w-auto">Uraian Perubahan</th>
+                                                <th class="min-w-auto">No Proposal Klaim</th>
+                                                <th class="min-w-auto">Tanggal Pengajuan</th>
+                                                <th class="min-w-auto">Biaya Pengajuan</th>
+                                                <th class="min-w-auto">Waktu Pengajuan</th>
+                                                <th class="min-w-auto">Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="fw-bold text-gray-600">
+                                            @if ($claims_anti_klaim->isNotEmpty())
+                                            @forelse ($claims_anti_klaim as $anti_klaim)
+                                            <tr>
+                                                <td>
+                                                    {{ Carbon\Carbon::parse($anti_klaim->tanggal_perubahan)->translatedFormat('d F Y') }}
+                                                </td>
+                                                <td>
+                                                    <a href="/contract-management/view/{{$anti_klaim->id_contract}}/perubahan-kontrak/{{$anti_klaim->id_perubahan_kontrak}}" id="click-name" class="text-gray-800 text-hover-primary mb-1">
+                                                    {{ $anti_klaim->uraian_perubahan }}
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    {{ $anti_klaim->proposal_klaim }}
+                                                </td>
+                                                <td>
+                                                    {{ Carbon\Carbon::parse($anti_klaim->tanggal_pengajuan)->translatedFormat('d F Y') }}
+                                                </td>
+                                                <td>
+                                                    {{ number_format($anti_klaim->biaya_pengajuan, 0, ".", ".") }}
+                                                </td>
+                                                <td>
+                                                    {{ Carbon\Carbon::parse($anti_klaim->waktu_pengajuan)->translatedFormat('d F Y') }}
+                                                </td>
+                                                @php
+                                                $stage = "";
+                                                $class_name = "";
+                                                if ($anti_klaim->is_dispute) {
+                                                    $stage = "Dispute";
+                                                    $class_name = "badge fs-8 badge-light-danger";
+                                                } else {
+                                                    switch ($anti_klaim->stage) {
+                                                        case 1:
+                                                            $stage = "Draft";
+                                                            $class_name = "badge fs-8 badge-light-primary";
+                                                            break;
+                                                        case 2:
+                                                            $stage = "Diajukan";
+                                                            $class_name = "badge fs-8 badge-light-primary";
+                                                            break;
+                                                        case 3:
+                                                            $stage = "Revisi";
+                                                            $class_name = "badge fs-8 badge-light-primary";
+                                                            break;
+                                                        case 4:
+                                                            $stage = "Negoisasi";
+                                                            $class_name = "badge fs-8 badge-light-primary";
+                                                            break;
+                                                        case 5:
+                                                            $stage = "Diterima";
+                                                            $class_name = "badge fs-8 badge-light-success";
+                                                            break;
+                                                        case 6:
+                                                            $stage = "Ditolak";
+                                                            $class_name = "badge fs-8 badge-light-danger";
+                                                            break;
+                                                    }
+                                                    }
+                                                @endphp
+                                                <td>
+                                                    <small class="{{$class_name}}">
+                                                        {{ $stage }}
+                                                    </small>
+                                                </td>
+                                            </tr>
+                                            @empty
+                                            <tr>
+                                                <td colspan="7" class="text-center"">
+                                                    <h6><b>There is no data</b></h6>
+                                                </td>
+                                            </tr>
+                                            @endforelse
+                                            @else
+                                            <tr>
+                                                <td colspan="7" class="text-center"">
+                                                    <h6><b>There is no data</b></h6>
+                                                </td>
+                                            </tr>
+                                            @endif
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        <!--End::Tab Pan Anti Klaim-->
+
+                        <!--Begin::Tab Panel Klaim Asuransi-->
+                            <div class="tab-pane fade" id="kt_user_view_overview_asuransi" role="tabpanel">
+                                <div class="container">
+                                    <table class="table align-middle table-row-dashed fs-6 gy-2 card-body" id="view_KlaimAsuransi">
+                                        <thead>
+                                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                <th class="min-w-auto">Tanggal Perubahan</th>
+                                                <th class="min-w-auto">Uraian Perubahan</th>
+                                                <th class="min-w-auto">No Proposal Klaim</th>
+                                                <th class="min-w-auto">Tanggal Pengajuan</th>
+                                                <th class="min-w-auto">Biaya Pengajuan</th>
+                                                <th class="min-w-auto">Waktu Pengajuan</th>
+                                                <th class="min-w-auto">Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="fw-bold text-gray-600">
+                                            @if ($claims_klaim_asuransi->isNotEmpty())
+                                            @forelse ($claims_klaim_asuransi as $klaim_asuransi)
+                                            <tr>
+                                                <td>
+                                                    {{ Carbon\Carbon::parse($klaim_asuransi->tanggal_perubahan)->translatedFormat('d F Y') }}
+                                                </td>
+                                                <td>
+                                                    <a href="/contract-management/view/{{$klaim_asuransi->id_contract}}/perubahan-kontrak/{{$klaim_asuransi->id_perubahan_kontrak}}" id="click-name" class="text-gray-800 text-hover-primary mb-1">
+                                                    {{ $klaim_asuransi->uraian_perubahan }}
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    {{ $klaim_asuransi->proposal_klaim }}
+                                                </td>
+                                                <td>
+                                                    {{ Carbon\Carbon::parse($klaim_asuransi->tanggal_pengajuan)->translatedFormat('d F Y') }}
+                                                </td>
+                                                <td class="text-end">
+                                                    {{ number_format($klaim_asuransi->biaya_pengajuan, 0, ".", ".") }}
+                                                </td>
+                                                <td>
+                                                    {{ Carbon\Carbon::parse($klaim_asuransi->waktu_pengajuan)->translatedFormat('d F Y') }}
+                                                </td>
+                                                @php
+                                                $stage = "";
+                                                $class_name = "";
+                                                if ($klaim_asuransi->is_dispute) {
+                                                    $stage = "Dispute";
+                                                    $class_name = "badge fs-8 badge-light-danger";
+                                                } else {
+                                                    switch ($klaim_asuransi->stage) {
+                                                        case 1:
+                                                            $stage = "Draft";
+                                                            $class_name = "badge fs-8 badge-light-primary";
+                                                            break;
+                                                        case 2:
+                                                            $stage = "Diajukan";
+                                                            $class_name = "badge fs-8 badge-light-primary";
+                                                            break;
+                                                        case 3:
+                                                            $stage = "Revisi";
+                                                            $class_name = "badge fs-8 badge-light-primary";
+                                                            break;
+                                                        case 4:
+                                                            $stage = "Negoisasi";
+                                                            $class_name = "badge fs-8 badge-light-primary";
+                                                            break;
+                                                        case 5:
+                                                            $stage = "Diterima";
+                                                            $class_name = "badge fs-8 badge-light-success";
+                                                            break;
+                                                        case 6:
+                                                            $stage = "Ditolak";
+                                                            $class_name = "badge fs-8 badge-light-danger";
+                                                            break;
+                                                    }
+                                                    }
+                                                @endphp
+                                                <td>
+                                                    <small class="{{$class_name}}">
+                                                        {{ $stage }}
+                                                    </small>
+                                                </td>
+                                            </tr>
+                                            @empty
+                                                <tr>
+                                                    <td colspan="7" class="text-center"">
+                                                        <h6><b>There is no data</b></h6>
+                                                    </td>
+                                                </tr>
+                                            @endforelse
+                                            @else
+                                            <tr>
+                                                <td colspan="7" class="text-center"">
+                                                    <h6><b>There is no data</b></h6>
+                                                </td>
+                                            </tr>
+                                            @endif
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        <!--End::Tab Pan Klaim Asuransi-->
+
+                        <!--Begin::Tab Panel Klaim Asuransi-->
+                            <div class="tab-pane fade" id="kt_user_view_overview_all" role="tabpanel">
+                                <div class="container">
+                                    <table class="table align-middle table-row-dashed fs-6 gy-2 card-body" id="view_KlaimAll">
+                                        <thead>
+                                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                <th class="min-w-auto">Jenis Perubahan</th>
+                                                <th class="min-w-auto">Uraian Perubahan</th>
+                                                <th class="min-w-auto">No Proposal Klaim</th>
+                                                <th class="min-w-auto">Tanggal Pengajuan</th>
+                                                <th class="min-w-auto">Biaya Pengajuan</th>
+                                                <th class="min-w-auto">Waktu Pengajuan</th>
+                                                <th class="min-w-auto">Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="fw-bold text-gray-600">
+                                            @if ($claim_all->isNotEmpty())
+                                            @forelse ($claim_all as $claim)
+                                            <tr>
+                                                <td>
+                                                    {{ $claim->jenis_perubahan }}
+                                                </td>
+                                                <td>
+                                                    <a href="/contract-management/view/{{$claim->id_contract}}/perubahan-kontrak/{{$claim->id_perubahan_kontrak}}" id="click-name" class="text-gray-800 text-hover-primary mb-1">
+                                                    {{ $claim->uraian_perubahan }}
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    {{ $claim->proposal_klaim }}
+                                                </td>
+                                                <td>
+                                                    {{ Carbon\Carbon::parse($claim->tanggal_pengajuan)->translatedFormat('d F Y') }}
+                                                </td>
+                                                <td>
+                                                    {{ number_format($claim->biaya_pengajuan, 0, ".", ".") }}
+                                                </td>
+                                                <td>
+                                                    {{ Carbon\Carbon::parse($claim->waktu_pengajuan)->translatedFormat('d F Y') }}
+                                                </td>
+                                                @php
+                                                $stage = "";
+                                                $class_name = "";
+                                                if ($claim->is_dispute) {
+                                                    $stage = "Dispute";
+                                                    $class_name = "badge fs-8 badge-light-danger";
+                                                } else {
+                                                    switch ($claim->stage) {
+                                                        case 1:
+                                                            $stage = "Draft";
+                                                            $class_name = "badge fs-8 badge-light-primary";
+                                                            break;
+                                                        case 2:
+                                                            $stage = "Diajukan";
+                                                            $class_name = "badge fs-8 badge-light-primary";
+                                                            break;
+                                                        case 3:
+                                                            $stage = "Revisi";
+                                                            $class_name = "badge fs-8 badge-light-primary";
+                                                            break;
+                                                        case 4:
+                                                            $stage = "Negoisasi";
+                                                            $class_name = "badge fs-8 badge-light-primary";
+                                                            break;
+                                                        case 5:
+                                                            $stage = "Diterima";
+                                                            $class_name = "badge fs-8 badge-light-success";
+                                                            break;
+                                                        case 6:
+                                                            $stage = "Ditolak";
+                                                            $class_name = "badge fs-8 badge-light-danger";
+                                                            break;
+                                                    }
+                                                    }
+                                                @endphp
+                                                <td>
+                                                    <small class="{{$class_name}}">
+                                                        {{ $stage }}
+                                                    </small>
+                                                </td>
+                                            </tr>
+                                            @empty
+                                                <tr>
+                                                    <td colspan="7" class="text-center"">
+                                                        <h6><b>There is no data</b></h6>
+                                                    </td>
+                                                </tr>
+                                            @endforelse
+                                            @else
+                                            <tr>
+                                                <td colspan="7" class="text-center"">
+                                                    <h6><b>There is no data</b></h6>
+                                                </td>
+                                            </tr>
+                                            @endif
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        <!--End::Tab Pan Klaim Asuransi-->
                         </div>
+
                     </div>
                 </div>
                 
+
+                
+
+            </div>
+            <!--end::Card body-->
+
+
             <!--Begin::Modal = Input VO-->
             <div class="modal fade" id="kt_modal_input_perubahan" tabindex="-1" aria-hidden="true">
                 <!--begin::Modal dialog-->
@@ -770,7 +741,7 @@
                         <!--begin::Modal header-->
                         <div class="modal-header">
                             <!--begin::Modal title-->
-                            <h2>Add Change Description</h2>
+                            <h2>Add Perubahan Kontrak</h2>
                             <!--end::Modal title-->
                             <!--begin::Close-->
                             <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
@@ -811,8 +782,8 @@
                                     </div>
         
                                     <div class="col">
-                                        <label class="text-center fw-bold form-label">
-                                            <span style="font-weight: normal">Tanggal Kejadian Perubahan</span>
+                                        <label class="fs-6 fw-bold form-label">
+                                            <span style="font-weight: normal">Tanggal Perubahan</span>
                                             <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
                                                 <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
                                             </a>
@@ -852,13 +823,13 @@
                                     </div>
                                     <div class="col mt-3">
                                         <label class="fs-6 fw-bold form-label">
-                                            <span style="font-weight: normal">Dampak Biaya</span>
+                                            <span style="font-weight: normal">Biaya Pengajuan</span>
                                         </label>
                                         <input type="text" name="biaya-pengajuan" class="form-control form-control-solid reformat"/>
                                     </div>
                                     <div class="col">
-                                        <label class="fs-6 fw-bold form-150pxbel">
-                                            <span style="font-weight: 150px">Dampak Waktu</span>
+                                        <label class="fs-6 fw-bold form-label">
+                                            <span style="font-weight: normal">Waktu Pengajuan</span>
                                             <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
                                                 <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
                                             </a>
@@ -893,7 +864,7 @@
                         <!--begin::Modal header-->
                         <div class="modal-header">
                             <!--begin::Modal title-->
-                            <h2>Upload Final | Change Description</h2>
+                            <h2>Upload Final | Perubahan Kontrak</h2>
                             <!--end::Modal title-->
                             <!--begin::Close-->
                             <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
@@ -943,6 +914,8 @@
                 <!--end::Modal dialog-->
             </div>
             <!--end::Modal - Upload Final Questions-->
+
+        </div>
         <!--end::Content-->
 
     </div>
@@ -995,7 +968,7 @@
                 buttons: [
                     {
                         extend: 'excelHtml5',
-                        title: 'Change Description VO'
+                        title: 'Perubahan Kontrak VO'
                     }
                     ]
             } );
@@ -1011,7 +984,7 @@
                 buttons: [
                     {
                         extend: 'excelHtml5',
-                        title: 'Change Description Klaim'
+                        title: 'Perubahan Kontrak Klaim'
                     }
                     ]
             } );
@@ -1027,7 +1000,7 @@
                 buttons: [
                     {
                         extend: 'excelHtml5',
-                        title: 'Change Description Anti Klaim'
+                        title: 'Perubahan Kontrak Anti Klaim'
                     }
                     ]
             } );
@@ -1043,7 +1016,7 @@
                 buttons: [
                     {
                         extend: 'excelHtml5',
-                        title: 'Change Description Klaim Asuransi'
+                        title: 'Perubahan Kontrak Klaim Asuransi'
                     }
                     ]
             } );
@@ -1059,7 +1032,7 @@
                 buttons: [
                     {
                         extend: 'excelHtml5',
-                        title: 'Change Description'
+                        title: 'Perubahan Kontrak'
                     }
                     ]
             } );

@@ -38,7 +38,7 @@ class UnitKerja extends Model
         return $this->belongsTo(Dop::class, "dop", "dop");
     }
     public function Departemen(){
-        return $this->hasOne(Departemen::class, "kode_sap", "kode_divisi");
+        return $this->hasOne(Departemen::class, "kode_divisi", "kode_sap");
     }
     public function Divisi() {
         return $this->hasOne(Divisi::class, "kode_sap", "kode_sap");

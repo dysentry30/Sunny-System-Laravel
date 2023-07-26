@@ -28,7 +28,6 @@ use App\Models\RiskTenderProyek;
 use Illuminate\Http\UploadedFile;
 use Illuminate\support\Facades\DB;
 use App\Models\ContractManagements;
-use App\Models\Departemen;
 use App\Models\DokumenDraft;
 use App\Models\DokumenEca;
 use App\Models\DokumenIca;
@@ -41,9 +40,9 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\DokumenPrakualifikasi;
 use App\Models\DokumenRks;
 use App\Models\JenisProyek;
-use App\Models\MatriksApprovalRekomendasi;
 use App\Models\Provinsi;
 use App\Models\TipeProyek;
+use App\Models\Departemen;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
@@ -137,12 +136,13 @@ class ProyekController extends Controller
 
         $proyeks = $proyeks->get();
         $filter = null;
-        // dd($filter);
-
+        
         if (empty($datatables)) {
             return view('3_Proyek', compact(["tahun_proyeks", "filterJenis", "filterTipe", "filterUnit", "filterStage", "selected_year", "proyeks", "cari", "column", "filter", "customers", "sumberdanas", "unitkerjas", "jenisProyek", "tipeProyek"]));
+        } else {
+            // dd($tahun_proyeks);
+            return view('3_DataSetProyek', compact(["tahun_proyeks", "filterJenis", "filterTipe", "filterUnit", "filterStage", "selected_year" ,"proyeks", "cari", "column", "filter", "customers", "sumberdanas", "unitkerjas", "jenisProyek", "tipeProyek"]));
         }
-        return view('3_DataSetProyek', compact(["tahun_proyeks", "filterJenis", "filterTipe", "filterUnit", "filterStage", "selected_year" ,"proyeks", "cari", "column", "filter", "customers", "sumberdanas", "unitkerjas", "jenisProyek", "tipeProyek"]));
     }
 
     public function save(Request $request, Proyek $newProyek)
@@ -233,20 +233,27 @@ class ProyekController extends Controller
         // Kondisi kalau tahun lebih besar dari 2021 maka O Selain itu A
         // $kode_tahun = $tahun == 2021 ? "A" : "O";
         $kode_tahun = get_year_code($tahun);
-
+        
         // Menggabungkan semua kode beserta nomor urut
         $kode_proyek = $unit_kerja . $jenis_proyek . $tipe_proyek . $kode_tahun;
+        // $kode_proyek = $jenis_proyek . $tipe_proyek . $kode_tahun;
 
         // $no_urut = $generateProyek->count(function($p) use($kode_proyek) {
         //     return str_contains($p->kode_proyek, $kode_proyek);
         // }) + 1;
 
-        $lastProyek = Proyek::where("kode_proyek", "like", "%".$kode_proyek."%")->get()->sortBy("created_at")->last();
+        $lastProyek = Proyek::select(["kode_proyek", "nama_proyek"])->where("kode_proyek", "like", "%".$kode_proyek."%")->get()->sortBy("kode_proyek")->last();
         $no_urut = (int) preg_replace("/[^0-9]/", "",$lastProyek->kode_proyek) + 1;
         $len = strlen($no_urut);
-        $no_urut = substr($no_urut, ($len-3), 3);
-
-        // dd($no_urut, $lastProyek); 
+        // dd($no_urut);
+        if(empty($lastProyek)){
+            $no_urut = 1;
+        }else{
+            // $no_urut = (int) trim($lastProyek->kode_proyek, $kode_proyek) + 1;
+            $no_urut = substr($no_urut, ($len-3), 3);
+        }
+        
+        // dd($lastProyek, $no_urut, $len);
 
         // Untuk membuat 3 digit nomor urut terakhir
         $no_urut = str_pad(strval($no_urut), 3, 0, STR_PAD_LEFT);
@@ -261,7 +268,7 @@ class ProyekController extends Controller
         // for ($i= $no_urut; $i < $no_urut+100; $i++) { 
             //     # code...
             // }
-            
+        // $kode_proyek = $unit_kerja . $kode_proyek;
         $existProyek = Proyek::find($kode_proyek . $no_urut);
         if (!empty($existProyek)) {
             $number = (int) $no_urut+1;
@@ -338,13 +345,14 @@ class ProyekController extends Controller
             Alert::warning('Warning', "Proyek Tidak Ditemukan");
             return redirect("/proyek");
         }
-        $historyForecast = HistoryForecast::where("periode_prognosa", "=", date("m"))->where("kode_proyek", "=", $kode_proyek)->get();
+        $historyForecastAll = HistoryForecast::where("kode_proyek", "=", $kode_proyek)->get();
+        $historyForecast = $historyForecastAll->where("periode_prognosa", "=", date("m"));
         $teamProyek = TeamProyek::where("kode_proyek", "=", $kode_proyek)->get();
         $kriteriaProyek = KriteriaPasarProyek::where("kode_proyek", "=", $kode_proyek)->get();
         $porsiJO = PorsiJO::where("kode_proyek", "=", $kode_proyek)->get();
         // $data_provinsi = json_decode(Storage::get("/public/data/provinsi.json"));
         $data_negara = json_decode(Storage::get("/public/data/country.json"));
-
+        $is_admin = Auth::user()->check_administrator || str_contains(Auth::user()->name, "PIC");
         $companies = Company::all();
         $sumberdanas = SumberDana::all();
         $dops = Dop::all();
@@ -389,28 +397,11 @@ class ProyekController extends Controller
             );
         } else {
             $periodePrognosa = $periodePrognosa == "" ? (int) date("m") : $periodePrognosa;
+            $historyForecastAll = $historyForecastAll->groupBy("periode_prognosa");
+            $listPeriodeExistInHistory = $historyForecastAll->keys()->sort()->values();
             $tabPane = "";
-            return view('Proyek/viewProyekRetail', ["proyek" => $proyek, "proyeks" => Proyek::all()], compact(["periodePrognosa", 'companies', 'sumberdanas', 'dops', 'sbus', 'unitkerjas', 'customers', 'users', 'kriteriapasar', 'kriteriapasarproyek', 'teams', 'pesertatender', 'proyekberjalans', 'historyForecast', 'porsiJO', 'data_negara', 'tabPane', "provinsi"]));
+            return view('Proyek/viewProyekRetail', ["proyek" => $proyek, "proyeks" => Proyek::all()], compact(['is_admin', "periodePrognosa", 'companies', 'sumberdanas', 'dops', 'sbus', 'unitkerjas', 'customers', 'users', 'kriteriapasar', 'kriteriapasarproyek', 'teams', 'pesertatender', 'proyekberjalans', 'historyForecast', 'porsiJO', 'data_negara', 'tabPane', "provinsi", "listPeriodeExistInHistory"]));
             // return redirect()->back();
-        }
-    }
-
-    public function getDataDepartemen($divcode)
-    {
-        $unit_kerja = UnitKerja::where("divcode", "=", $divcode)->first();
-        // dd($unit_kerja);
-        $departemen = Departemen::where("kode_divisi", "=", $unit_kerja->kode_sap)->get();
-        // dd($departemen);
-        if($departemen->isNotEmpty()){
-            return response()->json([
-                "status" => "success",
-                "data" => $departemen
-            ], 200);
-        }else{
-            return response()->json([
-                "status" => "error",
-                "data" => []
-            ], 404);
         }
     }
 
@@ -455,9 +446,9 @@ class ProyekController extends Controller
         $newProyek->kode_proyek = $dataProyek["kode-proyek"];
         $newProyek->tahun_perolehan = $dataProyek["tahun-perolehan"];
         $newProyek->sumber_dana = $dataProyek["sumber-dana"];
-        $newProyek->departemen_proyek = $dataProyek["departemen-proyek"];
         $newProyek->jenis_proyek = $dataProyek["jenis-proyek"];
         $newProyek->tipe_proyek = $dataProyek["tipe-proyek"];
+        $newProyek->departemen_proyek = $dataProyek["departemen-proyek"] ?? null;
         if ($dataProyek["tipe-proyek"] == "R") {
             $newProyek->stage = 8;
             $forecasts = Forecast::where("kode_proyek", "=", $newProyek->kode_proyek)->where("periode_prognosa", "=", $bulans)->whereYear("created_at", "=", $years)->first();
@@ -487,45 +478,8 @@ class ProyekController extends Controller
         // } else {
         //     $newProyek->jenis_jo = null;
         // }
-        if (isset($dataProyek["proyek-rekomendasi"]) && isset($dataProyek["confirm-send-wa"]) && isset($dataProyek["ra-klasifikasi-proyek"])&& isset($dataProyek["sumber-dana"]) ) {
-            $divisi = $newProyek->UnitKerja->Divisi->id_divisi;
-            $klasifikasi_proyek = $newProyek->klasifikasi_pasdin;
-            $matriks_approval = MatriksApprovalRekomendasi::where("unit_kerja", "=", $divisi)->where("klasifikasi_proyek", "=", $klasifikasi_proyek)->where("kategori", "=", "Pengajuan")->get();
-            foreach ($matriks_approval as $key => $user) {
-                $url = $request->schemeAndHttpHost() . "?redirectTo=/rekomendasi?open=kt_modal_view_proyek_$newProyek->kode_proyek";
-                $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
-                    "api_key" => "4DCR3IU2Eu70znFSvnuc3X3x9gJdcc",
-                    "sender" => "628188827008",
-                    // "number" => "085157875773",
-                    "number" => "085156341949",
-                    "message" => "Yth Bapak/Ibu .....\nDengan ini menyampaikan Pengajuan Nota Rekomendasi Tahap I untuk Proyek *$newProyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
-                    // "url" => $url
-                ]);
-                $send_msg_to_wa->onError(function ($error) {
-                    // dd($error);
-                    Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
-                    return redirect()->back();
-                });
-            }
-            // $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
-            //     "api_key" => "c15978155a6b4656c4c0276c5adbb5917eb033d5",
-            //     "sender" => "62811881227",
-            //     "number" => "081319736111",
-            //     "message" => "$newProyek->nama_proyek mengajukan rekomendasi.\nSilahkan tekan link di bawah ini untuk menyetujui atau tidak.\n\n$url",
-            //     // "url" => $url
-            // ]);
-            // $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
-            //     "api_key" => "c15978155a6b4656c4c0276c5adbb5917eb033d5",
-            //     "sender" => "62811881227",
-            //     "number" => "082125416666",
-            //     "message" => "$newProyek->nama_proyek mengajukan rekomendasi.\nSilahkan tekan link di bawah ini untuk menyetujui atau tidak.\n\n$url",
-            //     // "url" => $url
-            // ]);
-            // dd($send_msg_to_wa, "send");
-            
+        if(isset($dataProyek["proyek-rekomendasi"])) {
             $newProyek->is_request_rekomendasi  = true;
-
-            Alert::success('Success', "Proyek Berhasil Diajukan");
         }
         // $newProyek->nama_pendek_proyek = $dataProyek["short-name"];
 
@@ -534,7 +488,7 @@ class ProyekController extends Controller
         $newProyek->sbu = $dataProyek["sbu"];
         $newProyek->provinsi = $dataProyek["provinsi"];
         $newProyek->klasifikasi = $dataProyek["klasifikasi"];
-        $newProyek->status_pasar = $dataProyek["status-pasar"];
+        // $newProyek->status_pasar = $dataProyek["status-pasar"];
         $newProyek->sub_klasifikasi = $dataProyek["sub-klasifikasi"];
         $newProyek->proyek_strategis = $request->has("proyek-strategis");
         // $newProyek->dop = $dataProyek["dop"];
@@ -728,7 +682,7 @@ class ProyekController extends Controller
 
         // dd($dataProyek);
         // if ($dataProyek["nilai-perolehan"] != null && $newProyek->stage == 8 && $dataProyek["bulan-ri-perolehan"] != null){
-        if (!empty($newProyek->bulan_ri_perolehan) && !empty($newProyek->nilai_perolehan) && $newProyek->stage == 8) {
+        if (!empty($newProyek->bulan_ri_perolehan) && !empty($newProyek->nilai_perolehan) && $newProyek->stage == 8 && $newProyek->tahun_perolehan == $years) {
             $editForecast = Forecast::where("kode_proyek", "=", $newProyek->kode_proyek)->where("periode_prognosa", "=", $bulans)->where("tahun", "=", $years)->first();
             if (!empty($editForecast)) {
                 $oldestForecast = Forecast::where("kode_proyek", "=", $newProyek->kode_proyek)->where("periode_prognosa", "=", ($bulans - 1))->where("tahun", "=", $years)->first();
@@ -1361,10 +1315,19 @@ class ProyekController extends Controller
         $claimManagement = ClaimManagements::where('kode_proyek', "=", $deleteProyek->kode_proyek)->get();
         $forecasts = Forecast::where('kode_proyek', "=", $deleteProyek->kode_proyek)->get();
         $historyForecasts = HistoryForecast::where('kode_proyek', "=", $deleteProyek->kode_proyek)->get();
+        $data = [
+            "Proyek_Detail" => $deleteProyek->toArray(),
+            "Proyek_Berjalan_Detail" => !empty($proyekBerjalan) ? $proyekBerjalan->toArray() : null ,
+            "Contract_Management_Detail" => !empty($contractManagement) ? $contractManagement->toArray() : null,
+            "ClaimManagement_Detail" => !empty($claimManagement) ? $claimManagement->toArray() : null,
+            "Forecast_Detail" => !empty($forecasts) ? $forecasts->toArray() : null,
+            "History_Forcast" => !empty($historyForecasts) ? $historyForecasts->toArray() : null,
+        ];
+
         $claimManagement->each(function ($claim) {
             $claim->delete();
         });
-
+        
         Alert::success('Delete', $deleteProyek->nama_proyek . ", Berhasil Dihapus");
         if (!empty($proyekBerjalan)) {
             $proyekBerjalan->delete();
@@ -1382,6 +1345,7 @@ class ProyekController extends Controller
                 $hf->delete();
             }
         }
+        setLogging("proyek-delete", "Proyek ". $deleteProyek->kode_proyek . " - " . $deleteProyek->nama_proyek ." =>", $data);
         $deleteProyek->delete();
 
         // if ($proyekBerjalan != null && $contractManagement != null && $forecasts != null) {
@@ -1522,6 +1486,25 @@ class ProyekController extends Controller
         return redirect('excel/' . $file_name);
     }
 
+    public function getDataDepartemen($divcode)
+    {
+        $unit_kerja = UnitKerja::where("divcode", "=", $divcode)->first();
+        // dd($unit_kerja);
+        $departemen = Departemen::where("kode_divisi", "=", $unit_kerja->kode_sap)->get();
+        // dd($departemen);
+        if($departemen->isNotEmpty()){
+            return response()->json([
+                "status" => "success",
+                "data" => $departemen
+            ], 200);
+        }else{
+            return response()->json([
+                "status" => "error",
+                "data" => []
+            ], 404);
+        }
+    }
+
     public function stage(Request $request)
     {
         // $url = $request->url;
@@ -1534,6 +1517,13 @@ class ProyekController extends Controller
         $years = (int) date('Y');
         $forecasts = Forecast::where("kode_proyek", "=", $kodeProyek)->where("periode_prognosa", "=", $periode)->whereYear("created_at", "=", $years)->first();
         // $forecasts = $proyekStage->Forecasts->where("periode_prognosa", "=", $periode)->whereYear("created_at", "=", $years)->first();
+        if($request->stage >= 2 && empty($proyekStage->departemen_proyek)){
+            // $request->stage = 1;
+            Alert::error("Error", "Departemen Pada Pasar Dini Belum Diisi !");
+        } else if($request->stage == 2 && $proyekStage->departemen_proyek){
+            $request->stage = 2;
+            Alert::success("Success", "Stage berhasil diperbarui");
+        }
         if ($request->stage == 4) {
             if ($proyekStage->hps_pagu == 0) {
                 Alert::error("Error", "HPS Pagu Belum Diisi !");
@@ -1627,11 +1617,11 @@ class ProyekController extends Controller
                     if (empty($customer->npwp_company)) {
                         $error_msg->push("NPWP");
                     }
+                    // if (empty($proyekStage->Departemen)) {
+                    //     $error_msg->push("Departemen");
+                    // }
                     if (empty($customer->syarat_pembayaran)) {
                         $error_msg->push("Term Payment");
-                    }
-                    if (empty($proyekStage->Departemen)) {
-                        $error_msg->push("Departemen");
                     }
                     if ($customer->tax == null) {
                         $error_msg->push("Tax");
@@ -1799,7 +1789,7 @@ class ProyekController extends Controller
             
                                             "BANK_CTRY" => "",
             
-                                            "BANK_KEY" => "",
+                                            "BANK_KEY" => "CRM",
             
                                             "BANK_ACCT" => "",
             
@@ -1914,6 +1904,7 @@ class ProyekController extends Controller
                 } else {
                     $contractManagements = ContractManagements::get()->where("project_id", "=", $proyekStage->kode_proyek)->first();
                     if (str_contains(URL::full() , 'crm.wika.co.id')) {
+                        // setLogging();
                         $nasabah_online_response = Http::post("http://nasabah.wika.co.id/index.php/mod_excel/post_json_crm", $data_nasabah_online)->json();
                         // dd($nasabah_online_response);
                         if (!$nasabah_online_response["status"] && !str_contains($nasabah_online_response["msg"], "sudah ada dalam nasabah online")) {

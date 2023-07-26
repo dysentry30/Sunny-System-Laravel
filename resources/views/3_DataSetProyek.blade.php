@@ -121,10 +121,6 @@
 
         }
 
-        table, th, td, tr {
-            border: 0.5px solid #ACADBA !important;
-        }
-
     </style>
     {{-- end:: Disable Native Date Browser --}}
 </head>

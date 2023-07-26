@@ -40,6 +40,7 @@ class FaqsController extends Controller
         
         $newFaq->judul = $data["judul"];
         $newFaq->deskripsi = $data["deskripsi"];
+        $newFaq->link = $data["faq-link"];
         
         if ($file == null)
         {   
@@ -71,6 +72,8 @@ class FaqsController extends Controller
         $newFaq = Faqs::find($data["id"]);
         $newFaq->judul = $data["judul"];
         $newFaq->deskripsi = $data["deskripsi"];
+        $newFaq->link = $data["faq-link"];
+        
         if ($file == null)
         {   
             Alert::success('Success', "Tambah Knowledge Base Berhasil")->autoClose(3000);

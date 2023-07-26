@@ -16,6 +16,10 @@
         background-color: transparent !important;
     }
 
+    .form-control.form-control-solid:disabled {
+        background: #e7e7e7 !important;
+    }
+
     .form-select.form-select-solid {
         border-left: 0px !important;
         border-top: 0px !important;
@@ -521,11 +525,11 @@
                                                                     <!--begin::Input-->
                                                                     <input type="text"
                                                                         class="form-control form-control-solid char-counter"
-                                                                        data-max-char="40"
+                                                                        data-max-char="36"
                                                                         id="nama-proyek" name="nama-proyek"
                                                                         value="{{ $proyek->nama_proyek }}" />
                                                                     <div class="d-flex flex-row justify-content-end">
-                                                                        <small class="">0/40</small>
+                                                                        <small class="">0/36</small>
                                                                     </div>
                                                                     <!--end::Input-->
                                                                 </div>
@@ -596,6 +600,19 @@
                                                                 <!--end::Input group-->
                                                             </div>
                                                             <!--End::Col-->
+                                                            <div class="col-6 mt-5">
+                                                                <div>
+                                                                    @if ((bool) $proyek->is_rkap)
+                                                                        <span class="px-4 fs-4 badge badge-light-success">
+                                                                            Proyek RKAP
+                                                                        </span>
+                                                                    @else
+                                                                        <span class="px-4 fs-4 badge badge-light-danger">
+                                                                            Proyek Non RKAP
+                                                                        </span>
+                                                                    @endif
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                         <!--End::Row Kanan+Kiri-->
 
@@ -1528,14 +1545,14 @@
                         <div class="d-flex flex-row-reverse">
                             @php
                                 $now = Carbon\Carbon::now();
-                                $now = $now->setDays(1)->subMonths(2);
+                                $now = $now->setDays(1)->subMonths(5);
                             @endphp
                             <ul
                                 class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-5">
-                                @foreach (range(1,3) as $item)
+                                @foreach (range(1,6) as $item)
                                     <!--begin:::Tab item Pasar Dini-->
                                     <li class="nav-item">
-                                        <a class="nav-link text-active-primary {{$item == 3 ? "active" : ""}}" data-bs-toggle="tab"
+                                        <a class="nav-link text-active-primary {{$item == 6 ? "active" : ""}}" data-bs-toggle="tab"
                                             href="#kt_user_view_forecasts_{{(int) $now->format("m")}}_{{$now->format("Y")}}"
                                             style="font-size:14px;">{{$now->translatedFormat("F Y")}}</a>
                                     </li>
@@ -1554,12 +1571,12 @@
                         <hr>
 
                         @php
-                        $now_pane = Carbon\Carbon::now()->setDays(1)->subMonths(2);
+                        $now_pane = Carbon\Carbon::now()->setDays(1)->subMonths(5);
                         @endphp
                         <div class="tab-content">
-                            @foreach (range(1,3) as $item)
+                            @foreach (range(1,6) as $item)
                                 <!--begin:::Tab Pane Forecasts-->
-                                <div class="tab-pane fade {{$item == 3 ? "show active" : ""}}" id="kt_user_view_forecasts_{{(int) $now_pane->format("m")}}_{{$now_pane->format("Y")}}" role="tabpanel">
+                                <div class="tab-pane fade {{$item == 6 ? "show active" : ""}}" id="kt_user_view_forecasts_{{(int) $now_pane->format("m")}}_{{$now_pane->format("Y")}}" role="tabpanel">
                                     <!--begin::Table-->
                                         <table class="table align-middle table-row-dashed fs-6 gy-2" id="kt_customers_table">
                                             <!--begin::Table head-->
@@ -1644,6 +1661,11 @@
                                                                 $forecasts = $proyek->Forecasts->where("periode_prognosa", "=", (int) $now_pane->format("m"))->filter(function ($f) use ($i) {
                                                                     return $f->month_forecast == $i;
                                                                 });
+                                                                $history = $proyek->HistoryForecasts->where("periode_prognosa", (int) $now_pane->format("m"));
+                                                                $is_periode_unlock = $history->every(function($item) {
+                                                                    return empty($item->is_approved_1);
+                                                                });
+                                                                $currMonth = (int) date("m");
                                                             @endphp
                                                             @if (count($forecasts) > 0)
                                                                 @php
@@ -1656,7 +1678,7 @@
                                                                         id="nilaiok-{{ $i }}"
                                                                         name="nilaiok-{{ $i }}"
                                                                         value="{{ number_format((int) $forecast->rkap_forecast, 0, '.', '.') }}"
-                                                                        placeholder="Nilai Perolehan" />
+                                                                        placeholder="Nilai Perolehan" {{ $is_periode_unlock && $i < $forecast->periode_prognosa && !$is_admin ? "disabled" : "" }} />
                                                                 </td>
                                                                 <td class="text-dark">
                                                                     <input type="text"
@@ -1664,7 +1686,7 @@
                                                                         id="nilaiforecast-{{ $i }}"
                                                                         name="nilaiforecast-{{ $i }}"
                                                                         value="{{ number_format((int) $forecast->nilai_forecast, 0, '.', '.') }}"
-                                                                        placeholder="Nilai Forecast" />
+                                                                        placeholder="Nilai Forecast" {{ $is_periode_unlock && $i < $forecast->periode_prognosa && !$is_admin ? "disabled" : "" }} />
                                                                 </td>
                                                                 <td class="text-dark">
                                                                     <input type="text"
@@ -1672,7 +1694,7 @@
                                                                         id="nilairealisasi-{{ $i }}"
                                                                         name="nilairealisasi-{{ $i }}"
                                                                         value="{{ number_format((int) $forecast->realisasi_forecast, 0, '.', '.') }}"
-                                                                        placeholder="Nilai Realisasi" />
+                                                                        placeholder="Nilai Realisasi" {{ $is_periode_unlock && $i < $forecast->periode_prognosa && !$is_admin ? "disabled" : "" }} />
                                                                 </td>
                                                             @else
                                                                 <td class="text-dark">
@@ -1680,26 +1702,31 @@
                                                                         class="text-end form-control form-control-solid reformat-retail"
                                                                         id="nilaiok-{{ $i }}"
                                                                         name="nilaiok-{{ $i }}"
-                                                                        placeholder="Isi Nilai Perolehan" />
+                                                                        placeholder="Isi Nilai Perolehan" {{ ($i < $currMonth) && !$is_admin ? "disabled" : "" }} />
                                                                 </td>
                                                                 <td class="text-dark">
                                                                     <input type="text"
                                                                         class="text-end form-control form-control-solid reformat-retail"
                                                                         id="nilaiforecast-{{ $i }}"
                                                                         name="nilaiforecast-{{ $i }}"
-                                                                        placeholder="Isi Nilai Forecast" />
+                                                                        placeholder="Isi Nilai Forecast" {{ ($i < $currMonth) && !$is_admin ? "disabled" : "" }} 
+                                                                        {{-- placeholder="Isi Nilai Forecast"  --}}
+                                                                    />
                                                                 </td>
                                                                 <td class="text-dark">
                                                                     <input type="text"
                                                                         class="text-end form-control form-control-solid reformat-retail"
                                                                         id="nilairealisasi-{{ $i }}"
                                                                         name="nilairealisasi-{{ $i }}"
-                                                                        placeholder="Isi Nilai Realisasi" />
+                                                                        placeholder="Isi Nilai Realisasi" {{ ($i < $currMonth) && !$is_admin ? "disabled" : "" }} 
+                                                                        {{-- placeholder="Isi Nilai Realisasi" --}}
+                                                                    />
                                                                 </td>
                                                             @endif
                                                             <!--begin::input-->
                                                             <td>
-                                                                @if ($proyek->is_cancel == false)
+                                                                @if (($proyek->is_cancel != false || (!empty($forecast) && $i >= $forecast->periode_prognosa)) || $is_admin)
+                                                                {{-- @if ($proyek->is_cancel == false && !empty($forecast)) --}}
                                                                 <button type="submit" class="btn btn-sm btn-light btn-active-primary"
                                                                     id="forecast-save">
                                                                     Save</button>
@@ -1870,4 +1897,31 @@
         }
     </script>
     {{-- End :: JO Detail Save --}}
+
+    {{-- Begin :: Disabled Input Function --}}
+    <script>
+        const isPeriodeExistInHistory = JSON.parse(`{{ $listPeriodeExistInHistory->toJson() }}`);
+        isPeriodeExistInHistory.forEach(periode => disabledPeriodeInputs(periode)); 
+        function disabledPeriodeInputs(periode) {
+            const tab = document.querySelector(`a.nav-link[href="#kt_user_view_forecasts_${periode}_2023"]`);
+            if(tab) {
+                const inputs = document.querySelectorAll(`#kt_user_view_forecasts_${periode}_2023 input`);
+                const buttons = document.querySelectorAll(`#kt_user_view_forecasts_${periode}_2023 button`);
+                if(inputs.length > 0) {
+                    inputs.forEach(input => {
+                        input.setAttribute("disabled", "");
+                        const tooltip = new bootstrap.Tooltip(input);
+                        tooltip.show();
+                    });
+                }
+                if(buttons.length > 0) {
+                    buttons.forEach(button => button.style.display = "none");
+                }
+                tab.addEventListener('show.bs.tab', event => {
+                    
+                });
+            }
+        }
+    </script>
+    {{-- End :: Disabled Input Function --}}
 @endsection

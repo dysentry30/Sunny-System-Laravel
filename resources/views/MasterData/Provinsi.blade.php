@@ -3,7 +3,7 @@
 {{-- End::Extend Header --}}
 
 {{-- Begin::Title --}}
-@section('title', 'Provinsi')
+@section('title', 'Jenis Proyek')
 {{-- End::Title --}}
 
 <!--begin::Main-->
@@ -141,14 +141,14 @@
 
 
                             <!--begin::Table-->
-                            <table class="table align-middle table-bordered border-dark fs-6 gy-2" id="example">
+                            <table class="table align-middle table-row-dashed fs-6 gy-2" id="example">
                                 <!--begin::Table head-->
                                 <thead>
                                     <!--begin::Table row-->
-                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0 bg-primary">
-                                        <th class="min-w-auto text-white">Provinsi ID</th>
-                                        <th class="min-w-auto text-white">Negara ID</th>
-                                        <th class="min-w-auto text-white">Nama Provinsi</th>
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-auto">Provinsi ID</th>
+                                        <th class="min-w-auto">Negara ID</th>
+                                        <th class="min-w-auto">Nama Provinsi</th>
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>
