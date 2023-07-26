@@ -3,17 +3,12 @@
 {{-- End::Extend Header --}}
 
 {{-- Begin::Title --}}
-@section('title', 'Industry Attractiveness')
+@section('title', 'Industry Owner')
 {{-- End::Title --}}
 
 <!--begin::Main-->
 @section('content')
 
-    <style>
-        table, tr,td {
-            border: 1px solid black !important;
-        }
-    </style>
 
     <!--begin::Root-->
     <div class="d-flex flex-column flex-root">
@@ -38,7 +33,7 @@
                                 data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                                 class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
                                 <!--begin::Title-->
-                                <h1 class="d-flex align-items-center fs-3 my-1">Industry Attractiveness
+                                <h1 class="d-flex align-items-center fs-3 my-1">Industry Owner
                                 </h1>
                                 <!--end::Title-->
                             </div>
@@ -127,7 +122,7 @@
                                         data-placeholder="Column" data-select2-id="select2-data-bulan" tabindex="-1"
                                         aria-hidden="true">
                                         <option {{ $column == '' ? 'selected' : '' }}></option>
-                                        <option value="mata_uang" {{ $column == 'mata_uang' ? 'selected' : '' }}>Industry Attractiveness</option>
+                                        <option value="mata_uang" {{ $column == 'mata_uang' ? 'selected' : '' }}>Industry Owner</option>
 
                                     </select>
                                     <!--End:: Select Options-->
@@ -182,17 +177,17 @@
 
 
                             <!--begin::Table-->
-                            <table class="table align-middle fs-6 gy-2" id="">
+                            <table class="table align-middle table-row-dashed fs-6 gy-2" id="kt_customers_table">
                                 <!--begin::Table head-->
                                 <thead>
                                     <!--begin::Table row-->
-                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0 bg-primary">
-                                        <th class="min-w-auto text-white">Kode Owner</th>
-                                        {{-- <th class="min-w-auto text-white">@sortablelink('mata_uang', 'Industry Attractiveness ')</th> --}}
-                                        <th class="min-w-auto text-white">Deskripsi Owner</th>
-                                        <th class="min-w-auto text-white ">Owner Attractiveness</th>
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-auto">Kode Owner</th>
+                                        {{-- <th class="min-w-auto">@sortablelink('mata_uang', 'Industry Owner ')</th> --}}
+                                        <th class="min-w-auto">Deskripsi Owner</th>
+                                        <th class="min-w-auto ">Owner Attractiveness</th>
                                         @if (auth()->user()->check_administrator)
-                                            <th class="text-center text-white">
+                                            <th class="text-center">
                                                 Action
                                             </th>
                                         @endif
@@ -282,7 +277,7 @@
                     <!--begin::Modal header-->
                     <div class="modal-header">
                         <!--begin::Modal title-->
-                        <h2>New Industry Attractiveness</h2>
+                        <h2>New Industry Owner</h2>
                         <!--end::Modal title-->
                         <!--begin::Close-->
                         <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
@@ -308,12 +303,12 @@
                                 <div class="fv-row mb-7">
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Industry Attractiveness</span>
+                                        <span class="required">Industry Owner</span>
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
                                     <input type="text" class="form-control form-control-solid" id="mata-uang"
-                                        name="mata-uang" value="" placeholder="Industry Attractiveness" />
+                                        name="mata-uang" value="" placeholder="Industry Owner" />
                                     <!--end::Input-->
                                 </div>
                                 <!--end::Input group-->

@@ -792,7 +792,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                             });
 
                                                                                             $total_forecast_per_dop_tahunan = $dop->UnitKerjas->sum(function($unit_kerja) use($per_sejuta, $i, $periode, $filter, $year) {
-                                                                                                return $unit_kerja->Proyeks->sum(function($p) use($per_sejuta, $i, $periode, $filter) {
+                                                                                                return $unit_kerja->Proyeks->sum(function($p) use($per_sejuta, $i, $periode, $filter, $year) {
                                                                                                     if(preg_match("/$filter/i", $p->nama_proyek)) {
                                                                                                         return $p->Forecasts->where("tahun", "=", $year)->where("periode_prognosa", "=", $periode)->sum(function($f) use($per_sejuta, $i, $periode, $filter) {
                                                                                                             return (int) $f->nilai_forecast;
@@ -886,9 +886,9 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                     $total_ok_tahunan += (int) $total_ok_per_dop_tahunan;
                                                                                 @endphp 
                                                                             <!--begin::Total Coloumn-->
-                                                                            <td data-dop="{{$dop->dop}}" class="pinForecast HidePin">{{number_format($total_ok_per_dop_tahunan / $per_sejuta, 0, ".", ".")}}</td>
-                                                                            <td data-dop="{{$dop->dop}}" class="pinForecast HidePin">{{number_format($total_forecast_per_dop_tahunan / $per_sejuta, 0, ".", ".")}}</td>
-                                                                            <td data-dop="{{$dop->dop}}" class="pinForecast HidePin">{{number_format($total_realisasi_per_dop_tahunan / $per_sejuta, 0, ".", ".")}}</td>
+                                                                            <td data-dop="{{$dop->dop}}" class="pinForecast HidePin"><b>{{number_format($total_ok_per_dop_tahunan / $per_sejuta, 0, ".", ".")}}</b></td>
+                                                                            <td data-dop="{{$dop->dop}}" class="pinForecast HidePin"><b>{{number_format($total_forecast_per_dop_tahunan / $per_sejuta, 0, ".", ".")}}</b></td>
+                                                                            <td data-dop="{{$dop->dop}}" class="pinForecast HidePin"><b>{{number_format($total_realisasi_per_dop_tahunan / $per_sejuta, 0, ".", ".")}}</b></td>
                                                                             <td data-dop="{{$dop->dop}}" class="pinForecast ShowPin text-center"
                                                                                 style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
                                                                                     <b>{{number_format($total_ok_per_dop_tahunan / $per_sejuta, 0, ".", ".")}}</b>
@@ -1138,9 +1138,9 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                         style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
                                                                                         <b>0</b>
                                                                                     </td> --}}
-                                                                                    <td data-unit-kerja="{{$unitKerja->unit_kerja}}" class="pinForecast HidePin">{{number_format($total_ok_per_divisi_tahunan / $per_sejuta, 0, ".", ".")}}</td>
-                                                                                    <td data-unit-kerja="{{$unitKerja->unit_kerja}}" class="pinForecast HidePin">{{number_format($total_forecast_per_divisi_tahunan / $per_sejuta, 0, ".", ".")}}</td>
-                                                                                    <td data-unit-kerja="{{$unitKerja->unit_kerja}}" class="pinForecast HidePin">{{number_format($total_realisasi_per_divisi_tahunan / $per_sejuta, 0, ".", ".")}}</td>
+                                                                                    <td data-unit-kerja="{{$unitKerja->unit_kerja}}" class="pinForecast HidePin"><b>{{number_format($total_ok_per_divisi_tahunan / $per_sejuta, 0, ".", ".")}}</b></td>
+                                                                                    <td data-unit-kerja="{{$unitKerja->unit_kerja}}" class="pinForecast HidePin"><b>{{number_format($total_forecast_per_divisi_tahunan / $per_sejuta, 0, ".", ".")}}</b></td>
+                                                                                    <td data-unit-kerja="{{$unitKerja->unit_kerja}}" class="pinForecast HidePin"><b>{{number_format($total_realisasi_per_divisi_tahunan / $per_sejuta, 0, ".", ".")}}</b></td>
                                                                                     <td data-dop="{{$dop->dop}}" data-unit-kerja="{{$unitKerja->unit_kerja}}" class="pinForecast ShowPin text-center"
                                                                                         style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
                                                                                         <b>{{number_format($total_ok_per_divisi_tahunan / $per_sejuta, 0, ".", ".")}}</b>
@@ -1763,10 +1763,24 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                             $total_ok = 0;
                                                                                             $month_counter = 1;
                                                                                         @endphp
+
+                                                                                        @php
+                                                                                            $total_ok_formatted = $forecasts->sum(function($f) {
+                                                                                                return (int) round($f->rkap_forecast);
+                                                                                            });
+                                                                                            
+                                                                                        @endphp
+
                                                                                         <td class="pinForecast HidePin">
-                                                                                            <center>
-                                                                                                <b>{{ $total_ok_formatted }}</b>
-                                                                                            </center>
+                                                                                            @if ($proyek->is_rkap == true)
+                                                                                                <center>
+                                                                                                    <b>{{ number_format($total_ok_formatted, 0, ',', '.') }}</b>
+                                                                                                </center>
+                                                                                            @else 
+                                                                                                <center>
+                                                                                                    <b>0</b>
+                                                                                                </center>
+                                                                                            @endif
                                                                                         </td>
                                                                                         <td class="pinForecast HidePin"
                                                                                             data-id-proyek="{{ $proyek->kode_proyek }}">
@@ -1797,17 +1811,19 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                 @endif
                                                                                             @endif
                                                                                         </td>
-                                                                                        @php
-                                                                                            $total_ok_formatted = $forecasts->sum(function($f) {
-                                                                                                return (int) $f->rkap_forecast;
-                                                                                            });
-                                                                                        @endphp
+                                                                                        
                                                                                         <td class="pinForecast ShowPin"
                                                                                             data-id-proyek-ok-bulanan-total="{{ $proyek->kode_proyek }}"
                                                                                             style="position: -wekit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
-                                                                                            <center>
-                                                                                                <b>{{ number_format($total_ok_formatted, 0, ',', '.') }}</b>
-                                                                                            </center>
+                                                                                             @if ($proyek->is_rkap == true)
+                                                                                                <center>
+                                                                                                    <b>{{ number_format($total_ok_formatted, 0, ',', '.') }}</b>
+                                                                                                </center>
+                                                                                            @else 
+                                                                                                <center>
+                                                                                                    <b>0</b>
+                                                                                                </center>
+                                                                                            @endif
                                                                                         </td>
                                                                                         <td class="pinForecast ShowPin total-month-x-forecast"
                                                                                             data-id-proyek="{{ $proyek->kode_proyek }}"
@@ -1916,17 +1932,17 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                     @php
                                                                         $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja);
                                                                         if (str_contains(Request::path(), "internal")) {
-                                                                            $nilaiTotalRealisasiTahun = App\Models\Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("forecasts.periode_prognosa", "=", $periode)->where("forecasts.tahun", "=", $year)->get()->whereIn("unit_kerja", $unit_kerja_user->toArray())->whereNotIn("unit_kerja", ["B", "C", "D", "8"]);
+                                                                            $historyTotalTahunan = App\Models\Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("proyeks.tahun_perolehan", "=", $year)->where("forecasts.periode_prognosa", "=", $periode)->where("forecasts.tahun", "=", $year)->get()->whereIn("unit_kerja", $unit_kerja_user->toArray())->whereNotIn("unit_kerja", ["B", "C", "D", "8"]);
                                                                         } else {
-                                                                            $nilaiTotalRealisasiTahun = App\Models\Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("proyeks.jenis_proyek", "!=", "I")->where("forecasts.periode_prognosa", "=", $periode)->where("forecasts.tahun", "=", $year)->get()->whereIn("unit_kerja", $unit_kerja_user->toArray())->whereNotIn("unit_kerja", ["B", "C", "D", "8"]);
+                                                                            $historyTotalTahunan = App\Models\Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("proyeks.tahun_perolehan", "=", $year)->where("proyeks.jenis_proyek", "!=", "I")->where("forecasts.periode_prognosa", "=", $periode)->where("forecasts.tahun", "=", $year)->get()->whereIn("unit_kerja", $unit_kerja_user->toArray())->whereNotIn("unit_kerja", ["B", "C", "D", "8"]);
                                                                         }
-                                                                        $total_ok_tahunan = $nilaiTotalRealisasiTahun->where("is_rkap", "=", true)->where("month_rkap", "!=", 0)->sum(function($h) {
+                                                                        $total_ok_tahunan = $historyTotalTahunan->where("is_rkap", "=", true)->where("month_rkap", "!=", 0)->sum(function($h) {
                                                                             return (int) $h->rkap_forecast;
                                                                         });
-                                                                        $nilaiTotalForecastTahun = $nilaiTotalRealisasiTahun->where("month_forecast", "!=", 0)->sum(function($h) {
+                                                                        $nilaiTotalForecastTahun = $historyTotalTahunan->where("month_forecast", "!=", 0)->sum(function($h) {
                                                                             return (int) $h->nilai_forecast;
                                                                         });
-                                                                        $nilaiTotalRealisasiTahun = $nilaiTotalRealisasiTahun->where("month_realisasi", "!=", 0)->where("stage", "=", "8")->sum(function($h) {
+                                                                        $nilaiTotalRealisasiTahun = $historyTotalTahunan->where("month_realisasi", "!=", 0)->where("stage", "=", "8")->sum(function($h) {
                                                                             return (int) $h->realisasi_forecast;
                                                                         });
                                                                     @endphp
@@ -2037,6 +2053,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                         style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
                                                                         @if (isset($unitKerja))
                                                                             <center>
+                                                                                {{-- @dump("test") --}}
                                                                                 <b>{{number_format($nilaiTotalRealisasiTahun / $per_sejuta, 0, ".", ".")}}</b>
                                                                             </center>
                                                                         @else 
@@ -2203,9 +2220,12 @@ fill="none">
     const toastBody = document.querySelector(".toast-body")
     const toastBoots = new bootstrap.Toast(toaster, {});
     const perSejuta = Number("{{$per_sejuta}}");
-    [historyForecast].forEach(unitKerja => {
-        disabledAllInputs(unitKerja);
-    })
+    if (historyForecast.length > 0) {
+        historyForecast.forEach(unitKerja => {
+            disabledAllInputs(unitKerja);
+        })
+        // disabledAllInputs();
+    }
 
     function reformatNumber(elt) {
         const valueFormatted = Intl.NumberFormat(["id"], {

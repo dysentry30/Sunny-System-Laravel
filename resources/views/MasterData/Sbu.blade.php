@@ -197,13 +197,13 @@
 
 
                             <!--begin::Table-->
-                            <table class="align-middle table-bordered border-dark fs-6 gy-2" id="kt_customers_table">
+                            <table class="table align-middle table-row-dashed fs-6 gy-2" id="kt_customers_table">
                                 <!--begin::Table head-->
                                 <thead>
                                     <!--begin::Table row-->
-                                    <tr class="text-start text-white fw-bolder fs-7 text-uppercase gs-0">
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                         {{-- <th class="min-w-auto">@sortablelink('sbu', 'Nama')</th> --}}
-                                        <th class="min-w-auto">@sortablelink('kode_sbu', 'Kode SAP')</th>
+                                        <th class="min-w-auto">@sortablelink('kode_sbu', 'Kode')</th>
                                         <th class="min-w-auto">@sortablelink('klasifikasi', 'Klasifikasi')</th>
                                         <th class="min-w-auto">@sortablelink('referensi1', 'Referensi 1')</th>
                                         <th class="min-w-auto">@sortablelink('sub_klasifikasi', 'Sub-Klasifikasi')</th>

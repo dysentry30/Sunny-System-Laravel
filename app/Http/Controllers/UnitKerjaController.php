@@ -50,21 +50,26 @@ class UnitKerjaController extends Controller
         $dataUnitKerja = $request->all();
         $divcode = UnitKerja::where("divcode", "=", $dataUnitKerja["divcode"])->get()->first();
         if ($divcode == null) {
+            $messages = [
+                "required" => "This field is required",
+            ];
             $rules = [
                 "nomor-unit" => "required",
                 "unit-kerja" => "required",
                 "divcode" => "required",
                 "dop" => "required",
                 "company" => "required",
-                "profit-center" => "required",
-                "company-code" => "required",
             ];
-            
-            $is_invalid = validateInput($dataUnitKerja, $rules);
-            if(!empty($is_invalid)) {
-                Alert::html("Error", "Field <b>$is_invalid</b> harus terisi!", "error");
-                return redirect()->back()->with("modal", $dataUnitKerja["modal"]);
+            $validation = Validator::make($dataUnitKerja, $rules, $messages);
+            if ($validation->fails()) {
+                $request->old("nomor-unit");
+                $request->old("unit-kerja");
+                $request->old("divcode");
+                $request->old("dop");
+                $request->old("company");
+                Alert::error('Error', "Unit Kerja Gagal Dibuat, Periksa Kembali !");
             }
+            $validation->validate();   
             
             $newUnitKerja->nomor_unit = $dataUnitKerja["nomor-unit"];
             $newUnitKerja->unit_kerja = $dataUnitKerja["unit-kerja"];
@@ -106,30 +111,26 @@ class UnitKerjaController extends Controller
      */
     public function updateUnitKerja(Request $request) {
         $dataUnitKerja = $request->all();
+        $messages = [
+            "required" => "This field is required",
+        ];
         $rules = [
             "nomor-unit" => "required",
             "unit-kerja" => "required",
             "divcode" => "required",
             "dop" => "required",
             "company" => "required",
-            "profit-center" => "required",
-            "company-code" => "required",
         ];
-        $is_invalid = validateInput($dataUnitKerja, $rules);
-        if(!empty($is_invalid)) {
-            Alert::html("Error", "Field <b>$is_invalid</b> harus terisi!", "error");
-            return redirect()->back()->with("modal", $dataUnitKerja["modal"]);
+        $validation = Validator::make($dataUnitKerja, $rules, $messages);
+        if ($validation->fails()) {
+            $request->old("nomor-unit");
+            $request->old("unit-kerja");
+            $request->old("divcode");
+            $request->old("dop");
+            $request->old("company");
+            Alert::error('Error', "Unit Kerja Gagal Dibuat, Periksa Kembali !");
         }
-        // $validation = Validator::make($dataUnitKerja, $rules, $messages);
-        // if ($validation->fails()) {
-        //     $request->old("nomor-unit");
-        //     $request->old("unit-kerja");
-        //     $request->old("divcode");
-        //     $request->old("dop");
-        //     $request->old("company");
-        //     Alert::error('Error', "Unit Kerja Gagal Dibuat, Periksa Kembali !");
-        // }
-        // $validation->validate();   
+        $validation->validate();   
         $update_unit_kerja = UnitKerja::find($dataUnitKerja["divcode"]);
         $update_unit_kerja->nomor_unit = $dataUnitKerja["nomor-unit"];
         $update_unit_kerja->unit_kerja = $dataUnitKerja["unit-kerja"];

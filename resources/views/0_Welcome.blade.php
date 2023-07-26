@@ -21,8 +21,6 @@
         <div class="bg-illustration">
             @if (str_contains(Request::Path(), 'ccm'))
                 <img style="margin-top: 100px; margin-left: 50px" src="/media/logos/logo-ccm.png" alt="logo">
-            @elseif (str_contains(Request::Path(), 'csi')) 
-                <img style="margin-top: 100px; margin-left: 50px" src="/media/logos/logo-csi.png" alt="Belum ada Logo">
             @else
                 <img style="margin-top: 100px; margin-left: 50px" src="/media/logos/logo-wika.png" alt="logo">
             @endif
@@ -48,7 +46,6 @@
             <div class="login-form">
                 <form action="/login" method="post" class="form px-10" id="kt_sign_in_form" action="#">
                     @csrf
-                    <input type="hidden" name="redirect-to" value="{{Request::query("redirectTo")}}">
                     <!--begin::Heading-->
                     {{-- <div class="text-center mb-10">
                         <!--begin::Title-->

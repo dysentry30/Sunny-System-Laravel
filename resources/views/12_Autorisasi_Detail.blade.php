@@ -116,14 +116,14 @@
                             <!--Begin :: Filter-->
                             <div class="card">
                                 <div class="card-title">
-                                    <form action="/history-autorisasi" method="get">
+                                    <form action="" method="get">
                                         <div class="row">
                                             <div class="col-2">
                                                 <p class="mt-3 text-end">Periode Otorisasi : </p>
                                             </div>
                                             <div class="col-3">
                                                 <!--begin::Select Options-->
-                                                <select onchange="this.form.submit()" id="periode-prognosa" name="periode-prognosa"
+                                                <select onchange="window.location.href=`/history-autorisasi/{{$unit_kerja}}/{{$jenisProyek}}/${this.value}/detail`" id="periode-prognosa" name="periode-prognosa"
                                                     class="form-select form-select-solid w-100 ms-2 "
                                                     style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
                                                     data-placeholder="Bulan" data-select2-id="select2-data-bulan" tabindex="-1"
@@ -147,7 +147,7 @@
 
                                             <div class="col">
                                                 <!--begin::Select Options-->
-                                                <select onchange="this.form.submit()" id="jenis-proyek" name="jenis-proyek"
+                                                <select onchange="window.location.href=`/history-autorisasi/{{$unit_kerja}}/${this.value}/{{$periodeOtor}}/detail`" id="jenis-proyek" name="jenis-proyek"
                                                     class="form-select form-select-solid w-100 ms-2 "
                                                     style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
                                                     data-placeholder="Jenis Proyek" data-select2-id="select2-jenis-proyek" tabindex="-1"
@@ -183,6 +183,7 @@
                                 <thead>
                                     <!--begin::Table row-->
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-auto">Kode Proyek</th>
                                         <th class="min-w-auto">@sortablelink('unit_kerja','Unit Kerja')</th>
                                         {{-- <th class="min-w-auto text-center">DOP</th> --}}
                                         <th class="min-w-auto text-center">Bulan Pelaporan</th>
@@ -191,9 +192,8 @@
                                         <th class="min-w-auto text-center">Total OK Awal</th>
                                         <th class="min-w-auto text-center">Total Forecast</th>
                                         <th class="min-w-auto text-center">Total Realisasi</th>
-                                        <th class="min-w-auto text-center">Tanggal Locked</th>
-                                        <th class="min-w-auto text-center">Tanggal Unlocked</th>
-                                        <th class="min-w-auto text-center">Is Approve</th>
+                                        {{-- <th class="min-w-auto text-center">Tanggal Unlocked</th>
+                                        <th class="min-w-auto text-center">Is Approve</th> --}}
                                         {{-- <th class="min-w-auto text-center">@sortablelink('is_active','Is Locked')</th> --}}
                                         {{-- <th class="text-center">Action</th>
                                         <th class="text-center">Settings</th> --}}
@@ -203,11 +203,15 @@
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
                                 <tbody class="fw-bold text-gray-600">
-                                    @foreach ($history_forecasts as $unit_kerja => $history)
+                                    {{-- @dd($history_forecasts) --}}
+                                    @foreach ($history_forecasts as $nama_proyek => $history)
                                         <tr>
                                             <td class="">
-                                                <a href="/history-autorisasi/{{$history->first()->divcode}}/{{$jenisProyek}}/{{$periodeOtor}}/detail" id="click-name"
-                                                    class="text-hover-primary mb-1">{{ $unit_kerja }}</a>
+                                                {{ $history->first()->kode_proyek }}
+                                            </td>
+                                            <td class="">
+                                                <a href="/proyek/view/{{$history->first()->kode_proyek}}" id="click-name"
+                                                    class="text-hover-primary mb-1">{{ $nama_proyek }}</a>
                                             </td>
                                             {{-- <td class="text-center">
                                                 {{$history->dop}}
@@ -268,7 +272,6 @@
                                             </td>
                                             <td class="text-center">
                                                 {{ Carbon\Carbon::create($history->first()->created_at)->translatedFormat("Y")}}
-                                                {{-- 2022 --}}
                                             </td>
                                             {{-- <td class="text-center">
                                                 {{ number_format((int) $history->sum(function($f) {
@@ -295,28 +298,6 @@
                                                     }
                                                 }), 0, ".", ".")}}
                                             </td>
-                                            <td class="text-center">
-                                                {{-- @dd($history->first()) --}}
-                                                {{Carbon\Carbon::parse($history->first()->created_at)->translatedFormat("d F Y")}}
-                                            </td>
-                                            <td class="">
-                                                @if($history->first()->is_request_unlock == "t")
-                                                    {{Carbon\Carbon::parse($history->first()->updated_at)->translatedFormat("d F Y")}}
-                                                @else 
-                                                    <span class="badge badge-danger">Not request for unlock</span>
-                                                @endif
-                                            </td>
-                                            <td class="">
-                                                @if($history->first()->is_approved_1 == null) 
-                                                    <span class="badge badge-info">Pending</span>
-                                                @else
-                                                    @if($history->first()->is_approved_1 == true)
-                                                        <span class="badge badge-success">Approved</span>
-                                                    @else
-                                                        <span class="badge badge-danger">Not Approve</span>
-                                                    @endif
-                                                @endif
-                                            </td>
                                             {{-- <td class="text-center">
                                                 {{$history->dop}}
                                                 Yes
@@ -324,30 +305,42 @@
                                         </tr>
                                     @endforeach
                                     @php
-                                        $total_rkap = $history_forecasts->sum(function ($f) {
-                                            return $f->where("is_rkap", "=", true)->sum(function($f) {
-                                                return (int) $f->rkap_forecast;
+                                        $total_rkap = $history_forecasts->sum(function ($f) use($periodeOtor) {
+                                            return $f->sum(function($f) use($periodeOtor) {
+                                                if($f->periode_prognosa == $periodeOtor) {
+                                                    return (int) $f->rkap_forecast;
+                                                }
                                             });
                                         });
-                                        $total_forecast = $history_forecasts->sum(function ($f) {
-                                            return $f->where("is_cancel", "=", false)->sum(function($f) {
-                                                return (int) $f->nilai_forecast;
+                                        $total_forecast = $history_forecasts->sum(function ($f) use($periodeOtor) {
+                                            return $f->sum(function($f) use($periodeOtor) {
+                                                if($f->periode_prognosa == $periodeOtor) {
+                                                    return (int) $f->nilai_forecast;
+                                                }
                                             });
                                         });
                                         $total_realisasi = $history_forecasts->sum(function ($f) use($periodeOtor) {
                                             return $f->sum(function($f) use($periodeOtor) {
-                                                if($f->month_realisasi <= $periodeOtor) {
+                                                if($f->stage == 8 && $f->month_realisasi <= $periodeOtor) {
                                                     return (int) $f->realisasi_forecast;
                                                 }
                                             });
                                         });
+                                        $total_realisasi_before = $history_forecasts->sum(function ($f) use($periodeOtor) {
+                                            return $f->sum(function($f) use($periodeOtor) {
+                                                if($f->stage == 8 && $f->month_realisasi < $periodeOtor && $f->periode_prognosa < $periodeOtor) {
+                                                    return (int) $f->realisasi_forecast;
+                                                }
+                                            });
+                                        });
+                                        $selisih_realisasi = $total_realisasi - $total_realisasi_before;
                                     @endphp
                                     <tr class="bg-dark">
                                         <td class="text-white">Total</td>
-                                        <td colspan="2"></td>
+                                        <td colspan="3" class="text-dark">{{$total_realisasi."x".$total_realisasi_before}}</td>
                                         <td class="text-end text-white">{{ number_format($total_rkap, 0, ".", "."); }}</td>
                                         <td class="text-end text-white">{{ number_format($total_forecast, 0, ".", "."); }}</td>
-                                        <td class="text-end text-white">{{ number_format($total_realisasi, 0, ".", "."); }}</td>
+                                        <td class="text-end text-white">{{ number_format(($selisih_realisasi), 0, ".", "."); }}</td>
                                     </tr>
                                     {{-- @foreach ($proyeks as $proyekArray)
                                         @foreach ($proyekArray as $proyek)

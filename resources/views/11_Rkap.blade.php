@@ -3,7 +3,7 @@
 {{-- End::Extend Header --}}
 
 {{-- Begin::Title --}}
-@section('title', $title)
+@section('title', 'Group RKAP')
 {{-- End::Title --}}
 
 <!--begin::Main-->
@@ -39,7 +39,7 @@
                                 data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                                 class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
                                 <!--begin::Title-->
-                                <h1 class="d-flex align-items-center fs-3 my-1">{{$title}}
+                                <h1 class="d-flex align-items-center fs-3 my-1">Group RKAP
                                 </h1>
                                 <!--end::Title-->
                             </div>
@@ -144,11 +144,11 @@
                                 <thead>
                                     <!--begin::Table row-->
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                        <th class="min-w-auto">Unit Kerja</th>
+                                        <th class="min-w-auto">@sortablelink('unit_kerja','Unit Kerja')</th>
                                         <th class="min-w-auto text-center">Tahun Pelaksanaan</th>
                                         <th class="min-w-auto text-center">Total OK Awal</th>
                                         <th class="min-w-auto text-center">Total OK Review</th>
-                                        <th class="min-w-auto text-center">Is Locked</th>
+                                        <th class="min-w-auto text-center">@sortablelink('is_active','Is Locked')</th>
                                         {{-- <th class="text-center">Action</th>
                                         <th class="text-center">Settings</th> --}}
                                     </tr>
@@ -160,7 +160,7 @@
                                     @foreach ($proyeks as $proyekArray)
                                         @foreach ($proyekArray as $proyek)
                                         {{-- @dd($proyek)     --}}
-                                        <tr class="{{$proyek->first()->UnitKerja->is_active == 1 ? "bg-success" : ""}}">
+                                        <tr>
                                             <!--begin::Name-->
                                             <td class="">
                                                 <a target="_blank" href="/rkap/{{ $proyek->first()->UnitKerja->divcode }}/{{ $proyek->first()->tahun_perolehan }}" id="click-name"

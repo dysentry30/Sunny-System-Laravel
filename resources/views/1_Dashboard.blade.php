@@ -867,12 +867,12 @@
                                                         <thead class="bg-white" style="position: sticky; top:0">
                                                             <!--begin::Table row-->
                                                             <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                <th class="min-w-auto">Nama Proyek</th>
-                                                                <th class="min-w-auto">Unit Kerja</th>
-                                                                <th class="min-w-auto">Tipe Proyek</th>
-                                                                <th class="min-w-auto">Stage</th>
+                                                                <th class="min-w-auto">@sortablelink('nama_proyek', 'Nama Proyek')</th>
+                                                                <th class="min-w-auto">@sortablelink('unit_kerja', 'Unit Kerja')</th>
+                                                                <th class="min-w-auto">@sortablelink('tipe_proyek', 'Tipe Proyek')</th>
+                                                                <th class="min-w-auto">@sortablelink('stage', 'Stage')</th>
                                                                 <th class="min-w-auto">Bulan Forecast</th>
-                                                                <th class="min-w-auto text-end">Nilai Forecast</th>
+                                                                <th class="min-w-auto text-end">@sortablelink('forecast', 'Nilai Forecast')</th>
                                                             </tr>
                                                             <!--end::Table row-->
                                                         </thead>
@@ -1129,12 +1129,12 @@
                                                         <thead class="bg-white" style="position: sticky; top:0">
                                                             <!--begin::Table row-->
                                                             <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                <th class="min-w-auto">Nama Proyek</th>
-                                                                <th class="min-w-auto">Unit Kerja</th>
-                                                                <th class="min-w-auto">Tipe Proyek</th>
-                                                                <th class="min-w-auto">Stage</th>
+                                                                <th class="min-w-auto">@sortablelink('nama_proyek', 'Nama Proyek')</th>
+                                                                <th class="min-w-auto">@sortablelink('unit_kerja', 'Unit Kerja')</th>
+                                                                <th class="min-w-auto">@sortablelink('tipe_proyek', 'Tipe Proyek')</th>
+                                                                <th class="min-w-auto">@sortablelink('stage', 'Stage')</th>
                                                                 <th class="min-w-auto">Bulan Forecast</th>
-                                                                <th class="min-w-auto text-end">Nilai Reailisasi</th>
+                                                                <th class="min-w-auto text-end">@sortablelink('nilai_perolehan', 'Nilai Reailisasi')</th>
                                                             </tr>
                                                             <!--end::Table row-->
                                                         </thead>
@@ -1417,9 +1417,9 @@
                                                     <thead>
                                                         <!--begin::Table row-->
                                                         <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                            <th class="min-w-auto">Nama Proyek</th>
-                                                            <th class="min-w-auto">Unit Kerja</th>
-                                                            <th class="min-w-auto">Nilai Claim</th>
+                                                            <th class="min-w-auto">@sortablelink('kode_proyek', 'Nama Proyek')</th>
+                                                            <th class="min-w-auto">@sortablelink('kode_proyek', 'Unit Kerja')</th>
+                                                            <th class="min-w-auto">@sortablelink('nilai_claim', 'Nilai Claim')</th>
                                                         </tr>
                                                         <!--end::Table row-->
                                                     </thead>
@@ -1472,9 +1472,9 @@
                                                     <thead>
                                                         <!--begin::Table row-->
                                                         <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                            <th class="min-w-auto">Nama Proyek</th>
-                                                            <th class="min-w-auto">Unit Kerja</th>
-                                                            <th class="min-w-auto">Nilai Anti Claim</th>
+                                                            <th class="min-w-auto">@sortablelink('kode_proyek', 'Nama Proyek')</th>
+                                                            <th class="min-w-auto">@sortablelink('kode_proyek', 'Unit Kerja')</th>
+                                                            <th class="min-w-auto">@sortablelink('nilai_claim', 'Nilai Anti Claim')</th>
                                                         </tr>
                                                         <!--end::Table row-->
                                                     </thead>
@@ -1525,9 +1525,9 @@
                                                     <thead>
                                                         <!--begin::Table row-->
                                                         <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                            <th class="min-w-auto">Nama Proyek</th>
-                                                            <th class="min-w-auto">Unit Kerja</th>
-                                                            <th class="min-w-auto">Nilai Change Request</th>
+                                                            <th class="min-w-auto">@sortablelink('kode_proyek', 'Nama Proyek')</th>
+                                                            <th class="min-w-auto">@sortablelink('kode_proyek', 'Unit Kerja')</th>
+                                                            <th class="min-w-auto">@sortablelink('nilai_claim', 'Nilai Change Request')</th>
                                                         </tr>
                                                         <!--end::Table row-->
                                                     </thead>

@@ -194,18 +194,16 @@
 
 
                             <!--begin::Table-->
-                            <table class="table align-middle fs-6 gy-2" id="kt_customers_table">
+                            <table class="table align-middle table-row-dashed fs-6 gy-2" id="kt_customers_table">
                                 <!--begin::Table head-->
                                 <thead>
                                     <!--begin::Table row-->
-                                    <tr class="text-start text-white fw-bolder fs-7 text-uppercase gs-0">
-                                        <th class="min-w-auto ps-3">Instansi</th>
-                                        <th class="min-w-auto">Kategori</th>
-                                        <th class="min-w-auto">Unique Code</th>
-                                        <th class="min-w-auto">Sumber Dana Code</th>
-                                        <th class="min-w-auto">Kode Proyek ID</th>
-                                        <th class="text-center">Is Instansi?</th>
-                                        <th class="text-center">Is Sumber Dana?</th>
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-auto">@sortablelink('nama_sumber', 'Instansi')</th>
+                                        <th class="min-w-auto">@sortablelink('kategori', 'Kategori')</th>
+                                        <th class="min-w-auto">@sortablelink('unique_code', 'Unique Code')</th>
+                                        <th class="min-w-auto">@sortablelink('sumber_dana_id', 'Sumber Dana Code')</th>
+                                        <th class="min-w-auto">@sortablelink('kode_proyek_id', 'Kode Proyek ID')</th>
                                         @if (auth()->user()->check_administrator)
                                             <th class="text-center">Action</th>
                                         @endif
@@ -223,7 +221,7 @@
                                         <tr>
 
                                             <!--begin::Name=-->
-                                            <td class="ps-3">
+                                            <td>
                                                 <a type="button" data-bs-toggle="modal"
                                                     data-bs-target="#kt_edit_{{ $sumberdanas->id }}"
                                                     class="text-gray-600 text-gray text-hover-primary">{{ $sumberdanas->nama_sumber }}</a>
@@ -248,18 +246,6 @@
                                             <!--begin::Coloumn=-->
                                             <td>
                                                 {{ $sumberdanas->kode_proyek_id }}
-                                            </td>
-                                            <!--end::Coloumn=-->
-
-                                            <!--begin::Coloumn=-->
-                                            <td class="text-center">
-                                                {{ $sumberdanas->is_instansi ? "Yes" : "No" }}
-                                            </td>
-                                            <!--end::Coloumn=-->
-                                            
-                                            <!--begin::Coloumn=-->
-                                            <td class="text-center">
-                                                {{ $sumberdanas->is_sumber_dana ? "Yes" : "No" }}
                                             </td>
                                             <!--end::Coloumn=-->
 
@@ -544,24 +530,6 @@
                             </div>
                             <!--End::Col-->
                         </div>
-                        <div class="row">
-                            <div class="col">
-                                <div class="form-check">
-                                    <label class="form-check-label" for="is-instansi">
-                                        Is Instansi?
-                                    </label>
-                                    <input class="form-check-input" type="checkbox" value="" name="is-instansi" id="">
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="form-check">
-                                    <label class="form-check-label" for="is-sumber-dana">
-                                        Is Sumber Dana?
-                                    </label>
-                                    <input class="form-check-input" type="checkbox" value="" name="is-sumber-dana" id="">
-                                </div>
-                            </div>
-                        </div>
                         <!--End::Row Kanan+Kiri-->
 
                     </div>
@@ -839,24 +807,6 @@
                                     <!--end::Input group-->
                                 </div>
                                 <!--End::Col-->
-                            </div>
-                            <div class="row">
-                                <div class="col">
-                                    <div class="form-check">
-                                        <label class="form-check-label" for="is-instansi">
-                                            Is Instansi?
-                                        </label>
-                                        <input class="form-check-input" type="checkbox" {{ $sumberdanas->is_instansi ? "checked" : ""}} name="is-instansi" id="">
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="form-check">
-                                        <label class="form-check-label" for="is-sumber-dana">
-                                            Is Sumber Dana?
-                                        </label>
-                                        <input class="form-check-input" type="checkbox" {{ $sumberdanas->is_sumber_dana ? "checked" : ""}} name="is-sumber-dana" id="">
-                                    </div>
-                                </div>
                             </div>
                             <!--End::Row Kanan+Kiri-->
 

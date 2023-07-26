@@ -220,10 +220,6 @@ class CustomerController extends Controller
         // $data_provinsi = Http::get("https://emsifa.github.io/api-wilayah-indonesia/api/provinces.json")->json();
         // $data = Http::get("http://maps.googleapis.com/maps/api/geocode/xml?address=". "Boston, USA" . "&sensor=false");
 
-        $proyeks = $customer->proyekBerjalans->map(function($pb){
-            return $pb->proyek;
-        });
-
         $data_provinsi = json_decode(Storage::get("/public/data/provinsi.json"));
         if (!empty($customer->provinsi) && str_contains($customer->provinsi, "-")) {
             $kode_provinsi = explode("-", $customer->provinsi)[1];
@@ -253,7 +249,7 @@ class CustomerController extends Controller
         // dd($data_kabupaten);
         // dd($customer->negara, $data_negara, $customer->negara);
         
-        // $pic = CustomerPic::where("id_customer", "=", $id_customer)->get();
+        $pic = CustomerPic::where("id_customer", "=", $id_customer)->get();
         // dd($pic);
         $struktur = StrukturCustomer::where("id_customer", "=", $id_customer)->get();
         $proyeks = ProyekBerjalans::where("id_customer", "=", $id_customer)->get();
@@ -310,15 +306,11 @@ class CustomerController extends Controller
             foreach ($kategoriProyek as $kode_unit_kerja => $proyekBerjalans) {
                 if (!empty($proyekBerjalans)) {
                     foreach ($proyekBerjalans as $proyekBerjalan) {
-                        // dd($proyekBerjalan, $proyekBerjalan->proyek);
-                        if(!empty($proyekBerjalan->proyek->ProyekProgress)){
-                            $totalNilaiOKPerUnit += $proyekBerjalan->proyek->ProyekProgress->sortByDesc("created_at")->first()->ok_review ?? 0;
-                        }else{
-                            $totalNilaiOKPerUnit += 0;
-                        }
+                        // dump($proyekBerjalan->proyek);
                         
                         $proyek = $proyekBerjalan->proyek;
                         if(!empty($proyek)) {
+                            $totalNilaiOKPerUnit += (int) $proyekBerjalan->proyek->nilai_rkap ?? 0;
                             if ($proyek->stage <= 3) {
                                 $totalProyekOpportunity++;
                                 $totalAmountProyekOpportunity += $proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->sum(function($f) {
@@ -389,16 +381,9 @@ class CustomerController extends Controller
         foreach ($kategoriProyek as $kode_unit_kerja => $proyekBerjalans) {
             foreach ($proyekBerjalans as $proyekBerjalan) {
                 if(!empty($proyekBerjalan->proyek)) {
-                    $piutang = $proyekBerjalan->proyek->Piutang->sum(function($item){
-                        return $item->day_30 + $item->day_60 + $item->day_90 + $item->day_91; 
-                    });
-
-                    $laba_rugi = $proyekBerjalan->proyek->ProyekProgress->sum("laba_kotor_ri");
-                    // dump($piutang);
-
-                    $nilaiTotalLaba += $laba_rugi / $per ?? 0;
-                    // $nilaiTotalRugi += $proyekBerjalan->proyek->rugi / $per ?? 0;
-                    $nilaiTotalPiutang += $piutang ?? 0;
+                    $nilaiTotalLaba += $proyekBerjalan->proyek->laba / $per ?? 0;
+                    $nilaiTotalRugi += $proyekBerjalan->proyek->rugi / $per ?? 0;
+                    $nilaiTotalPiutang += $proyekBerjalan->proyek->piutang / $per ?? 0;
                 }
             }
             $unitKerja = UnitKerja::where("divcode", "=", $kode_unit_kerja)->first();
@@ -443,7 +428,7 @@ class CustomerController extends Controller
             // "proyekberjalan0" => $customer->proyekBerjalans->where('stage', ">", 0),
             // "proyekberjalan6" => $customer->proyekBerjalans->where('stage', ">", 6),
             "proyeks" => $proyeks,
-            // "pics" => $pic,
+            "pics" => $pic,
             "strukturs" => $struktur,
             "data_provinsi" => $data_provinsi,
             "data_kabupaten" => $data_kabupaten ?? null,
@@ -493,10 +478,10 @@ class CustomerController extends Controller
             return redirect()->back();
         }
 
-        if ($data["customer-loyalty-rate"] > 5 || $data["net-promoter-score"] > 5 || $data["customer-satisfaction-index"] > 5) {
-            Alert::error('Error', "CSI tidak boleh lebih dari 5 !");
-            return back();
-        }
+        // if ($data["customer-loyalty-rate"] > 5 || $data["net-promoter-score"] > 5 || $data["customer-satisfaction-index"] > 5) {
+        //     Alert::error('Error', "CSI tidak boleh lebih dari 5 !");
+        //     return back();
+        // }
 
 
         $editCustomer = Customer::find($data["id-customer"]);
@@ -550,9 +535,9 @@ class CustomerController extends Controller
         $editCustomer->rugi = $data["rugi-performance"];
 
         // CSI :: Tab Overview Section CSI
-        $editCustomer->customer_loyalty_rate = $data["customer-loyalty-rate"];
-        $editCustomer->net_promoter_score = $data["net-promoter-score"];
-        $editCustomer->customer_satisfaction_index = $data["customer-satisfaction-index"];
+        // $editCustomer->customer_loyalty_rate = $data["customer-loyalty-rate"];
+        // $editCustomer->net_promoter_score = $data["net-promoter-score"];
+        // $editCustomer->customer_satisfaction_index = $data["customer-satisfaction-index"];
 
         // CUSTOMER SAP :: Tab Company Information SAP
         // $is_exist_customer_sap = CustomerSAP::where("id_customer", '=', $editCustomer->id_customer)->first();
@@ -746,7 +731,7 @@ class CustomerController extends Controller
         $newPIC->email_pic = $data["email-pic"];
         $newPIC->phone_pic = $data["phone-number-pic"];
         $newPIC->ultah_pic = $data["ultah-pic"];
-        $newPIC->layer_segmentasi = $data["layer_segmentasi"];
+        // $newPIC->layer_segmentasi = $data["layer_segmentasi"];
 
         Alert::success("Success", $data["kode-pic"] . ": " . $data["name-pic"] . ", PIC Berhasil Ditambah");
 
@@ -828,26 +813,6 @@ class CustomerController extends Controller
         $newStruktur->proyek_struktur = $data["proyek-struktur"];
         $newStruktur->role_struktur = $data["role-struktur"];
 
-        $newCsi = new Csi();
-        $newCsi->id_customer = $data["id-customer"];
-        $newCsi->id_struktur_organisasi = null;
-        $newCsi->no_spk = $data["proyek-struktur"];
-        $newCsi->tanggal = now();
-        $newCsi->status = "Not Sent";
-        $newCsi->progress = mt_rand(20, 100);
-        $newCsi->save();
-        // $newCsi->score = $data["score_csi"];
-        // if ($data["kode-proyek-csi"] && $data["csi_date"] && $data["score_csi"] !== null) {
-        //     if ($newCsi->save()) {
-        //         Alert::success("Success", "CSI Berhasil Ditambahkan");
-        //         return redirect()->back();
-        //     }
-        //     Alert::error("Error", "CSI Gagal Ditambahkan!");
-        //     return redirect()->back();
-        // }
-        // Alert::error("Error", "Pastikan field-field CSI terisi!");
-        // return redirect()->back();
-
         Alert::success("Success", $data["jabatan-struktur"] . ": " . $data["name-struktur"] . ", Struktur Berhasil Ditambahkan");
 
         $newStruktur->save();
@@ -882,18 +847,6 @@ class CustomerController extends Controller
         $editStruktur->ultah_struktur = $data["ultah-struktur"];
         $editStruktur->proyek_struktur = $data["proyek-struktur"];
         $editStruktur->role_struktur = $data["role-struktur"];
-
-        $Csi = Csi::where("id_customer", "=", $editStruktur->id_customer)->where("id_struktur_organisasi", "=", $id)->where("no_spk", "=", $editStruktur->proyek_struktur)->first();
-        if (empty($Csi)) {
-            $newCsi = new Csi();
-            $newCsi->id_customer = $editStruktur->id_customer;
-            $newCsi->id_struktur_organisasi = $id;
-            $newCsi->no_spk = $editStruktur->proyek_struktur;
-            $newCsi->tanggal = now();
-            $newCsi->status = "Not Sent";
-            $newCsi->save();
-        }
-        
 
         Alert::success("Success", $data["jabatan-struktur"] . ": " . $data["name-struktur"] . ", Struktur Berhasil Ditambahkan");
 
@@ -955,26 +908,11 @@ class CustomerController extends Controller
         $proyeks = $customer->proyekBerjalans->map(function($pb) {
             return $pb->proyek;
         });
-        $proyeks = $proyeks->where("unit_kerja", "=", $unit_kerja->divcode)->sortByDesc("stage")->values();
-        $proyeks = $proyeks->map(function($proyek){
-            if (!empty($proyek->ProyekProgress)) {
-                $ok_review = $proyek->ProyekProgress->sortByDesc("updated_at")->first()->ok_review ?? 0;     
-            }else{
-                $ok_review = 0;
-            }
-            $data = new \StdClass();
-            $data->stage = $proyek->stage;
-            $data->kode_proyek = $proyek->kode_proyek;
-            $data->nama_proyek = $proyek->nama_proyek;
-            $data->status_pasdin = $proyek->status_pasdin;
-            $data->unit_kerja = $proyek->unit_kerja;
-            $data->ok_review = $ok_review;
-            return $data;          
-        });
+        $proyeks = $proyeks->where("unit_kerja", "=", $unit_kerja->divcode)->sortByDesc("nilai_rkap")->values();
         
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->getStyle("A1:D1")->getFill()
+        $sheet->getStyle("A1:F1")->getFill()
             ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
             ->getStartColor()->setARGB('0db0d9');
         $sheet->setCellValue('A1', 'Nama Proyek');
@@ -987,7 +925,7 @@ class CustomerController extends Controller
             $sheet->setCellValue('A' . $row, $p->nama_proyek);
             $sheet->setCellValue('B' . $row, $this->getProyekStage($p->stage));
             $sheet->setCellValue('C' . $row, $unit_kerja->unit_kerja);
-            $sheet->setCellValue('D' . $row, $p->ok_review);
+            $sheet->setCellValue('D' . $row, $p->nilai_rkap);
             // $p->nilai_ok = $nilai_ok;
             $p->unit_kerja = $unit_kerja->unit_kerja;
             $row++;
@@ -1000,7 +938,6 @@ class CustomerController extends Controller
         return response()->json(["href" => $file_name, "data" => $proyeks]);
     }
 
-    //Begin::Nilai Piutang
     public function getNilaiPiutangCustomer(Request $request) {
         $customer = Customer::find($request->id_customer);
         $unit_kerja = UnitKerja::where("unit_kerja", "=", $request->unit_kerja)->first();
@@ -1009,27 +946,9 @@ class CustomerController extends Controller
         });
         $proyeks = $proyeks->where("unit_kerja", "=", $unit_kerja->divcode)->sortByDesc("piutang")->values();
         
-        $dataClass = $proyeks->map(function($proyek){
-
-            $piutang = $proyek->Piutang->flatten()->sum(function($piutang){
-                return $piutang->day_30 + $piutang->day_60 + $piutang->day_90 + $piutang->day_91;
-            });
-            
-            $data = new \StdClass();
-            $data->stage = $proyek->stage;
-            $data->kode_proyek = $proyek->kode_proyek;
-            $data->nama_proyek = $proyek->nama_proyek;
-            $data->status_pasdin = $proyek->status_pasdin;
-            $data->unit_kerja = $proyek->unit_kerja;
-            $data->piutang = $piutang;
-            return $data;          
-        });
-      
-
-        
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->getStyle("A1:D1")->getFill()
+        $sheet->getStyle("A1:F1")->getFill()
             ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
             ->getStartColor()->setARGB('0db0d9');
         $sheet->setCellValue('A1', 'Nama Proyek');
@@ -1038,14 +957,11 @@ class CustomerController extends Controller
         $sheet->setCellValue('D1', "Nilai Piutang");
         
         $row = 2;
-        $proyeks->map(function ($p) use (&$row, $sheet, $unit_kerja) {
-            $piutangProyek = (int)$p->Piutang->sum(function($item){
-                return (int)$item->day_30 + (int)$item->day_60 + (int)$item->day_90 + (int)$item->day_91; 
-            });
+        $proyeks->each(function ($p) use (&$row, $sheet, $unit_kerja) {
             $sheet->setCellValue('A' . $row, $p->nama_proyek);
             $sheet->setCellValue('B' . $row, $this->getProyekStage($p->stage));
             $sheet->setCellValue('C' . $row, $unit_kerja->unit_kerja);
-            $sheet->setCellValue('D' . $row, $piutangProyek); 
+            $sheet->setCellValue('D' . $row, $p->piutang);
             // $p->nilai_ok = $nilai_ok;
             $p->unit_kerja = $unit_kerja->unit_kerja;
             $row++;
@@ -1055,11 +971,9 @@ class CustomerController extends Controller
         $file_name = "$unit_kerja_join-Nilai-Piutang-Pelanggan-" . date('dmYHis') . ".xlsx";
         $writer->save(public_path("excel/$file_name"));
 
-        return response()->json(["href" => $file_name, "data" => $dataClass]);
+        return response()->json(["href" => $file_name, "data" => $proyeks]);
     }
-    //End::Nilai Piutang
 
-    //Begin::Nilai Laba Rugi
     public function getNilaiLabaRugiCustomer(Request $request) {
         $customer = Customer::find($request->id_customer);
         $type = $request->type;
@@ -1069,23 +983,12 @@ class CustomerController extends Controller
         });
         if($type == "Laba") {
             $proyeks = $proyeks->where("unit_kerja", "=", $unit_kerja->divcode)->sortByDesc("laba")->values();
-            $proyeks = $proyeks->map(function($proyek){
-                $laba = $proyek->ProyekProgress->sum("laba_kotor_ri");     
-                $data = new \StdClass();
-                $data->stage = $proyek->stage;
-                $data->kode_proyek = $proyek->kode_proyek;
-                $data->nama_proyek = $proyek->nama_proyek;
-                $data->status_pasdin = $proyek->status_pasdin;
-                $data->unit_kerja = $proyek->unit_kerja;
-                $data->laba = $laba;
-                return $data;          
-            });
         } else {
             $proyeks = $proyeks->where("unit_kerja", "=", $unit_kerja->divcode)->sortByDesc("rugi")->values();
         }
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->getStyle("A1:D1")->getFill()
+        $sheet->getStyle("A1:F1")->getFill()
             ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
             ->getStartColor()->setARGB('0db0d9');
         $sheet->setCellValue('A1', 'Nama Proyek');
@@ -1122,7 +1025,6 @@ class CustomerController extends Controller
 
         return response()->json(["href" => $file_name, "data" => $proyeks]);
     }
-    //End::Nilai Laba Rugi
 
     private function uploadStrukturOrganisasi(UploadedFile $uploadedFile, $id_customer)
     {
@@ -1142,19 +1044,19 @@ class CustomerController extends Controller
     public function saveMasalahHukum(Request $request)
     {
         $data = $request->all();
-        $editMasalahHukum = new MasalahHukum();
-        $editMasalahHukum->id_customer = $data["id-customer"];
-        $editMasalahHukum->kode_proyek = $data["kode-proyek-hukum"];
-        $editMasalahHukum->bentuk_masalah = $data["bentuk_masalah_hukum"];
-        $editMasalahHukum->status = $data["status_hukum"];
-        // $editMasalahHukum = MasalahHukum::where("id_customer", "=", $data["id-customer"])->first();
-        // if(!empty($editMasalahHukum)) {
-        //     $editMasalahHukum->id_customer = $data["id-customer"];
-        //     $editMasalahHukum->kode_proyek = $data["kode-proyek-hukum"];
-        //     $editMasalahHukum->bentuk_masalah = $data["bentuk_masalah_hukum"];
-        //     $editMasalahHukum->status = $data["status_hukum"];
-        // } else {
-        // }
+        $editMasalahHukum = MasalahHukum::where("id_customer", "=", $data["id-customer"])->first();
+        if(!empty($editMasalahHukum)) {
+            $editMasalahHukum->id_customer = $data["id-customer"];
+            $editMasalahHukum->kode_proyek = $data["kode-proyek-hukum"];
+            $editMasalahHukum->bentuk_masalah = $data["bentuk_masalah_hukum"];
+            $editMasalahHukum->status = $data["status_hukum"];
+        } else {
+            $editMasalahHukum = new MasalahHukum();
+            $editMasalahHukum->id_customer = $data["id-customer"];
+            $editMasalahHukum->kode_proyek = $data["kode-proyek-hukum"];
+            $editMasalahHukum->bentuk_masalah = $data["bentuk_masalah_hukum"];
+            $editMasalahHukum->status = $data["status_hukum"];
+        }
         if ($data["kode-proyek-hukum"] && $data["bentuk_masalah_hukum"] && $data["status_hukum"] !== null) {
             if($editMasalahHukum->save()) {
                 Alert::success("Success", "Masalah Hukum Berhasil Ditambahkan");
@@ -1170,15 +1072,15 @@ class CustomerController extends Controller
     public function saveCSI(Request $request)
     {
         $data = $request->all();
-        $editCSI = Csi::where("id_customer", "=", $data["id-customer"])->where("no_spk", "=", $data["kode-proyek-csi"])->first();
+        $editCSI = Csi::where("id_customer", "=", $data["id-customer"])->where("kode_proyek", "=", $data["kode-proyek-csi"])->first();
         // dd($editCSI);
         // $is_exist_code_proyek = Csi::where("kode_proyek", "=", $data["kode-proyek-csi"])->first();
         // dd($is_exist_code_proyek);
         if(!empty($editCSI)) {
             $editCSI->id_customer = $data["id-customer"];
-            $editCSI->no_spk = $data["kode-proyek-csi"];
+            $editCSI->kode_proyek = $data["kode-proyek-csi"];
             $editCSI->tanggal = $data["csi_date"];
-            // $editCSI->score = $data["score_csi"];
+            $editCSI->score = $data["score_csi"];
             if ($data["kode-proyek-csi"] && $data["csi_date"] && $data["score_csi"] !== null) {
                 if($editCSI->save()) {
                     Alert::success("Success", "CSI Berhasil Diperbaharui");
@@ -1192,9 +1094,9 @@ class CustomerController extends Controller
         } else {
             $newCSI = new Csi();
             $newCSI->id_customer = $data["id-customer"];
-            $newCSI->no_spk = $data["kode-proyek-csi"];
+            $newCSI->kode_proyek = $data["kode-proyek-csi"];
             $newCSI->tanggal = $data["csi_date"];
-            // $newCSI->score = $data["score_csi"];
+            $newCSI->score = $data["score_csi"];
             if ($data["kode-proyek-csi"] && $data["csi_date"] && $data["score_csi"] !== null) {
                 if($newCSI->save()) {
                     Alert::success("Success", "CSI Berhasil Ditambahkan");
@@ -1327,18 +1229,18 @@ class CustomerController extends Controller
 
     public function getKodeNasabah(Request $request) {
         $response = Http::post("http://nasabah.wika.co.id/index.php/mod_excel/post_json_crm", $request->all())->body();
-        // $response = Http::post("http://nasabah.wika.co.id/index.php/mod_excel/get_json_pmcs", $request->all())->body();
-        // dd($response);
+        // $response = Http::get("http://nasabah.wika.co.id/index.php/mod_excel/get_json_pmcs", $request->all())->body();
         return response($response);
     }
 
+    
     public function getKodeBP(Request $request) {
         // $response = collect(Http::get("http://nasabah.wika.co.id/index.php/mod_excel/get_json_pmcs")->json());
-        $response = collect(Http::get("http://nasabah.wika.co.id/index.php/mod_excel/get_json_kdnasabah?kd=:$request->kode_nasabah")->json()[0]);
+        $response = collect(Http::get("http://nasabah.wika.co.id/index.php/mod_excel/get_json_kdnasabah?kd=:$request->kode_nasabah")->json());
         if($response->isEmpty()) {
             return response()->json([
                 "status" => false,
-                "msg" => "Customer tidak ditemukan di PIS",
+                "msg" => "Customer tidak ditemukan di Nasabah Online",
             ]);
         } else if(empty($response["kdbp_sap"])) {
             return response()->json([
@@ -1348,7 +1250,7 @@ class CustomerController extends Controller
         }
         return response([
             "status" => true,
-            "kode_bp" => $response["kdbp_sap"],
+            "kode_bp" => $response[0]["kdbp_sap"],
         ]);
     }
 

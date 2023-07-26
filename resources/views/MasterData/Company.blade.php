@@ -181,8 +181,8 @@
                                 <thead>
                                     <!--begin::Table row-->
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                        <th class="min-w-auto">Kode SAP</th>
-                                        <th class="min-w-auto">Nama Company</th>
+                                        <th class="min-w-auto">No.</th>
+                                        <th class="min-w-auto">@sortablelink('nama_company', 'Nama Company')</th>
                                         @if (auth()->user()->check_administrator)
                                             <th class="text-center">Action</th>
                                         @endif
@@ -199,11 +199,11 @@
                                     @foreach ($companies as $company)
                                         <tr>
 
-                                            <!--begin::Nama Company=-->
+                                            <!--begin::No=-->
                                             <td>
-                                                {{ $company->UnitKerja->company_code ?? "-" }}
+                                                {{ $no++ }}
                                             </td>
-                                            <!--end::Nama Company=-->
+                                            <!--end::No=-->
 
                                             <!--begin::Nama Company=-->
                                             <td>

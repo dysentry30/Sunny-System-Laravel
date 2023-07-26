@@ -128,7 +128,7 @@
 
                                     @php
                                         $total_ok_awal = $rkap_istrue->where('tahun_perolehan', '=', $rkap_istrue->first()->tahun_perolehan)->map(function ($data) {
-                                            return (int) str_replace(',', '', $data->nilaiok_awal);
+                                            return (int) str_replace(',', '', $data->nilai_rkap);
                                         });
                                         $total_ok_awal = $total_ok_awal->sum();
                                     @endphp
@@ -159,11 +159,32 @@
                                         });
                                         $total_forecast = $total_forecast->sum();
                                         
-                                        $total_realisasi = $rkap_istrue->where('tahun_perolehan', '=', $rkap_istrue->first()->tahun_perolehan)->map(function ($data) {
-                                            return (int) str_replace(',', '', $data->nilai_kontrak_keseluruhan);
-                                        });
-                                        $total_realisasi = $total_realisasi->sum();
+                                        // $total_realisasi = $rkap_istrue->where('tahun_perolehan', '=', $rkap_istrue->first()->tahun_perolehan)->map(function ($data) {
+                                        //     return (int) str_replace(',', '', $data->perolehan);
+                                        // });
+                                        // $total_realisasi = $total_realisasi->sum();
+                                        $realisasi = 0;
+                                        foreach ($proyeks as $proyek) {
+                                            if ($proyek->stage == 8) {
+                                                $total_realisasi = $proyek->Forecasts->filter(function($f) use($tahun_pelaksanaan){
+                                                    if($tahun_pelaksanaan < (int) date("Y")) {
+                                                        $month = 12;
+                                                    } else {
+                                                        $month = (int) date("m");
+                                                    }
+                                                    return $f->periode_prognosa == $month && $f->tahun == (int) $tahun_pelaksanaan ;
+                                                })->sum(function($f) {
+                                                    return (int) $f->realisasi_forecast;
+                                                });
+                                            } else {
+                                                $total_realisasi = 0;
+                                            }
+                                            // dump((int) $total_realisasi);
+                                            $realisasi = $realisasi+=$total_realisasi;
+                                        }
+
                                     @endphp
+                                    
 
                                     <!--begin::Col-->
                                     <div class="col">
@@ -180,6 +201,7 @@
                                         </div>
                                         <!--end::Input group Name-->
                                     </div>
+                                    
                                     <!--begin::Col-->
                                     <div class="col-6">
                                         <div class="d-flex align-items-center">
@@ -187,7 +209,7 @@
                                                 <span class="">Total Realisasi: </span>
                                             </div>
                                             <div class="text-dark text-start">
-                                                <b>{{ number_format($total_realisasi, 0, '.', '.') }}</b>
+                                                <b>{{ number_format($realisasi, 0, '.', '.') }}</b>
                                             </div>
                                         </div>
                                         <!--begin::Input group Website-->

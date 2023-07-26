@@ -115,13 +115,13 @@
                                             <!--end:::Tab Item Tab Pane-->
                                             <!--begin:::Tab Item Tab Pane-->
                                             <li class="nav-item">
-                                                <a class="nav-link text-active-primary pb-4 active"
+                                                <a class="nav-link text-active-primary pb-4"
                                                     href="/dashboard-ccm/pelaksanaan-kontrak" style="font-size:14px;">Pelaksanaan Kontrak</a>
                                             </li>
                                             <!--end:::Tab Item Tab Pane-->
                                             <!--begin:::Tab Item Tab Pane-->
                                             <li class="nav-item">
-                                                <a class="nav-link text-active-primary pb-4"
+                                                <a class="nav-link text-active-primary pb-4 active"
                                                     href="/dashboard-ccm/pemeliharaan-kontrak" style="font-size:14px;">Pemeliharaan Kontrak</a>
                                             </li>
                                             <!--end:::Tab Item Tab Pane-->
@@ -145,85 +145,11 @@
                     <!--begin::Body Dashboard-->
                     <div id="dashboard-body" style="overflow-x: hidden" class="mt-3">
 
-                        {{-- <!--Begin :: Filter-->
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="row">
-                                    <form action="" class="row" method="GET">
-                                        <div class="col-2">
-                                            <select id="dop" onchange="filterUnitKerja(this)" name="dop"
-                                                    class="form-select form-select-solid w-auto"
-                                                    style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
-                                                    data-placeholder="Direktorat" data-select2-id="select2-data-dop" tabindex="-1"
-                                                    aria-hidden="true">
-                                                    <option value="" selected></option>
-                                                    @foreach ($dops as $dop)
-                                                        <option value="{{ $dop->dop }}" {{ $dop_get == $dop->dop ? 'selected' : '' }} >{{ $dop->dop }}</option>
-                                                    @endforeach
-                                            </select>
-                                        </div>
-    
-                                        <div class="col-2">
-                                            <select id="unit-kerja" name="unit-kerja"
-                                                    class="form-select form-select-solid w-auto"
-                                                    style="margin-right: 2rem;" data-control="select2" data-hide-search="false"
-                                                    data-placeholder="Unit Kerja" data-select2-id="select2-data-unit-kerja" tabindex="-1"
-                                                    aria-hidden="true">
-                                                    <option value="" selected></option>
-                                                    @foreach ($unit_kerjas as $unit_kerja)
-                                                        <option value="{{ $unit_kerja->divcode }}" {{ $unit_kerja_get == $unit_kerja->divcode ? 'selected' : '' }} >{{ $unit_kerja->unit_kerja }}</option>
-                                                    @endforeach
-                                            </select>
-                                        </div>
-                                        <div class="col-2">
-                                            <select id="tahun" name="tahun"
-                                                    class="form-select form-select-solid w-auto"
-                                                    style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
-                                                    data-placeholder="Tahun" data-select2-id="select2-data-tahun" tabindex="-1"
-                                                    aria-hidden="true">
-                                                    <option value="" selected></option>
-                                                    @foreach ($tahun as $t)
-                                                        <option value="{{$t}}" {{ $tahun_get == $t ? 'selected' : '' }}>{{$t}}</option>
-                                                    @endforeach 
-                                            </select>
-                                        </div>
-
-                                        <div class="col-2">
-                                            <select id="bulan" name="bulan"
-                                                    class="form-select form-select-solid w-auto"
-                                                    style="margin-right: 2rem;" data-control="select2" data-hide-search="false"
-                                                    data-placeholder="Tahun" data-select2-id="select2-data-bulan" tabindex="-1"
-                                                    aria-hidden="true">
-                                                    <option value="" selected></option>
-                                                    @foreach (range(1, 12) as $m)
-                                                        @php
-                                                            $full_month = Carbon\Carbon::createFromFormat("m", $m)->translatedFormat("F");
-                                                        @endphp
-                                                        <option value="{{$m}}" {{ $bulan_get == $m ? 'selected' : '' }}>{{$full_month}}</option>
-                                                    @endforeach
-                                            </select>
-                                        </div>
-
-                                        <div class="col-1">
-                                            <button type="submit" class="btn btn-primary">Filter</button>
-                                        </div>
-                                        <div class="col">
-                                            <form action=""></form>
-                                            <form action="" method="GET">
-                                                <button type="submit" class="btn btn-secondary">Reset</button>
-                                            </form>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        <!--End :: Filter--> --}}
-
                         <!--Begin :: Filter-->
                         <div class="card">
                             <div class="card-body">
                                 <div class="row">
-                                    <div class="col-2">
+                                    <div class="col-3">
                                         <select onchange="selectFilter(this)" id="dop" name="dop"
                                                 class="form-select form-select-solid w-auto"
                                                 style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
@@ -262,21 +188,8 @@
                                                 @endforeach
                                         </select>
                                     </div>
-
-                                    <div class="col-2">
-                                        <select id="tahun" name="tahun"
-                                                class="form-select form-select-solid w-auto"
-                                                style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
-                                                data-placeholder="Tahun" data-select2-id="select2-data-tahun" tabindex="-1"
-                                                aria-hidden="true">
-                                                <option value="" selected></option>
-                                                @foreach ($tahun as $t)
-                                                    <option value="{{$t}}" {{ $tahun_get == $t ? 'selected' : '' }}>{{$t}}</option>
-                                                @endforeach 
-                                        </select>
-                                    </div>
                                     
-                                    <div class="col-2">
+                                    <div class="col-3">
                                         <form action="" method="GET">
                                             <button type="submit" class="btn btn-secondary">Reset</button>
                                         </form>
@@ -289,7 +202,7 @@
                         <br>
 
                         <!--begin::Card Line col-12-->
-                        <div class="row mx-1">
+                        <div class="row mx-3">
                             <!--begin::Card column-->
                             <div class="col">
                                 <!--begin::Card body-->
@@ -311,148 +224,96 @@
 
                         <!--begin::Card Diagram Column dan Donut-->
                         <div class="row mx-3">
-                            <!--begin::Card column-->
-                            <div class="col-6">
-                                <!--begin::COLUMN CHART-->
-                                <div id="contract-stage"></div>
-                                <!-- data table is inserted here -->
-                                <!--end::COLUMN CHART-->
+                            <!--begin::Card body-->
+                            <div class="row">
+                                <!--begin::Card column-->
+                                <div class="col-4">
+                                        <!--begin::COLUMN CHART-->
+                                        <div id="contract-stage">
+                                            <!-- data table is inserted here -->
+                                        </div>
+                                        <!--end::COLUMN CHART-->
+                                </div>
+                                <!--end-begin::Card column-->
+                                <div class="col-4">
+                                        <!--begin::PIE CHART-->
+                                        <div id="kso">
+                                            <!-- data table is inserted here -->
+                                        </div>
+                                        <!--end::PIE CHART-->
+                                </div>
+                                <!--end-begin::Card column-->
+                                <div class="col-4">
+                                        <!--begin::PIE CHART-->
+                                            <div id="contract-classification">
+                                                <!-- data table is inserted here -->
+                                            </div>
+                                        <!--end::PIE CHART-->
+                                </div>
+                                <!--end::Card column-->
                             </div>
-                            <div class="col-6">
-                                <!--begin::PIE CHART-->
-                                <figure class="highcharts-figure">
-                                    <div id="tender-menang"></div>
-                                    <!-- data table is inserted here -->
-                                </figure>
-                                <!--end::PIE CHART-->
-                            </div>
-                            <!--end::Card column-->
-                        </div>
-                        <!--end::Card Diagram Column dan Donut-->
-
-                        <br>
-
-                        <!--begin::Card Diagram Column dan Donut-->
-                        <div class="row mx-3">
-                            <!--begin::Card column-->
-                            <div class="col-6">
-                                <!--begin::PIE CHART-->
-                                <figure class="highcharts-figure">
-                                    <div id="contract-jo"></div>
-                                    <!-- data table is inserted here -->
-                                </figure>
-                                <!--end::PIE CHART-->
-                            </div>
-                            <!--end::Card column-->
-                            <!--end-begin::Card column-->
-                            <div class="col-6">
-                                <!--begin::COLUMN CHART-->
-                                <div id="contract-classification"></div>
-                                <!-- data table is inserted here -->
-                                <!--end::COLUMN CHART-->
-                            </div>
-                            <!--end-begin::Card column-->
+                            <!--end::Card body-->
+                            <!--begin::Card body-->
+                            {{-- <div class="row">
+                                <!--begin::Card column-->
+                                <div class="col-6">
+                                        <!--begin::COLUMN CHART-->
+                                        <div id="contract-classification"></div>
+                                        <!-- data table is inserted here -->
+                                        <!--end::COLUMN CHART-->
+                                </div>
+                                <!--end-begin::Card column-->
+                                <div class="col-6">
+                                        <!--begin::PIE CHART-->
+                                            <div id="contract-jo"></div>
+                                            <!-- data table is inserted here -->
+                                        <!--end::PIE CHART-->
+                                </div>
+                                <!--end::Card column-->
+                            </div> --}}
+                            <!--end::Card body-->
                         </div>
                         <!--end::Card Diagram Column dan Donut-->
                         
                         <br>
-
+                        
                         <!--begin::Title-->
                         <div class="mb-4">
                             <div class="col-12">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-secondary">
-                                    <h2 class="m-0 text-center">Resume CCM</h2>
+                                    <h2 class="m-0 text-center">Resume <i class="h2 px-1">Outstanding</i> CCM</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
                         </div>
                         <!--end::Title-->
 
+
                         <!--begin::Card Diagram Column dan Donut-->
                         <div class="row mx-3">
-                            <!--begin::Card column-->
-                            <div class="col-6">
-                                <!--begin::PIE CHART-->
-                                <figure class="highcharts-figure">
+                            <!--begin::Card body-->
+                            <div class="row">
+                                <!--begin::Card column-->
+                                <div class="col-6">
+                                    <!--begin::COLUMN CHART-->
                                     <div id="contract-divisi"></div>
                                     <!-- data table is inserted here -->
-                                </figure>
-                                <!--end::PIE CHART-->
-                            </div>
-                            <!--end::begin::Card column-->
-                            <!--begin::Card column-->
-                            <div class="col-6">
-                                <!--begin::PIE CHART-->
-                                <figure class="highcharts-figure">
+                                    <!--end::COLUMN CHART-->
+                                </div>
+                                <div class="col-6">
+                                    <!--begin::COLUMN CHART-->
                                     <div id="changes-status"></div>
                                     <!-- data table is inserted here -->
-                                </figure>
-                                <!--end::PIE CHART-->
+                                    <!--end::COLUMN CHART-->
+                                </div>
                             </div>
-                            <!--end::Card column-->
+                            <!--end::Card body-->
                         </div>
                         <!--end::Card Diagram Column dan Donut-->
-                        
-                        <!--begin::Tabel Header-->
-                        <div class="row mb-4">
-                            <div class="col-9">
-                                <!--begin::Title body-->
-                                <div style="border-radius: 0px" class="card-body bg-warning">
-                                    <h2 class="m-0 text-center">CCM STATUS</h2>
-                                </div>
-                                <!--end::Title body-->
-                            </div>
-                            <div class="col-3">
-                                <!--begin::Title body-->
-                                <div style="border-radius: 0px" class="card-body bg-warning">
-                                    <h2 class="m-0 text-center"><i class="bi bi-percent text-dark fs-3"></i> PERUBAHAN</h2>
-                                </div>
-                                <!--end::Title body-->
-                            </div>
-                        </div>
-                        <!--end::Tabel Header-->
 
-                        <!--begin::Table Body-->
-                        {{-- @foreach ($nilai_perubahan_table as $table) --}}
-                        @foreach ($kategori_kontrak as $table)
-                        <div class="row mb-4">
-                            <div class="col-3">
-                                <!--begin::Title body-->
-                                <div style="border-radius: 0px" class="card-body bg-warning">
-                                    {{-- <h2 class="m-0 text-center">{{ $table->jenis_claim }}</h2> --}}
-                                    <h2 class="m-0 text-center">{{ $table["jenis_perubahan"] }}</h2>
-                                </div>
-                                <!--end::Title body-->
-                            </div>
-                            <div class="col-1">
-                                <!--begin::Title body-->
-                                <div style="border-radius: 0px" class="card-body bg-secondary">
-                                    {{-- <h2 class="m-0 text-center">{{ $table->total_proyek }}</h2> --}}
-                                    <h2 class="m-0 text-center">{{ $table["total_item"] }}</h2>
-                                </div>
-                                <!--end::Title body-->
-                            </div>
-                            <div class="col-5">
-                                <!--begin::Title body-->
-                                <div style="border-radius: 0px" class="card-body bg-secondary">
-                                    {{-- <h2 class="m-0 text-center">Rp {{ number_format($table->total_nilai, 0, ".", ".") }}</h2> --}}
-                                    <h2 class="m-0 text-center">Rp {{ number_format($table["total_nilai"], 0, ".", ".") }}</h2>
-                                </div>
-                                <!--end::Title body-->
-                            </div>
-                            <div class="col-3">
-                                <!--begin::Title body-->
-                                <div style="border-radius: 0px" class="card-body bg-secondary">
-                                    {{-- <h2 class="m-0 text-center">{{ $table->total_persen }}</h2> --}}
-                                    <h2 class="m-0 text-center">{{ $table["persen"] }} </h2>
-                                </div>
-                                <!--end::Title body-->
-                            </div>
-                        </div>
-                        @endforeach
-                        <!--end::Table Body-->
-                        
+                        <br>
+
                         <!--begin::Tabel Header-->
                         <div class="row mb-4">
                             <div class="col-9">
@@ -471,63 +332,50 @@
                             </div>
                         </div>
                         <!--end::Tabel Header-->
-                        
-                        <!--begin::Card Line col-12-->
-                        {{-- <div class="card mx-8">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col table-responsive">
-                                        <table class="table text-center table-row-bordered">
-                                            <thead>
-                                                <tr class="text-center">
-                                                    <th class="fw-bolder">Kategori</th>
-                                                    <th class="fw-bolder">Total</th>
-                                                    <th class="fw-bolder">Nilai</th>
-                                                    <th class="fw-bolder">Nilai (dalam persen)</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach ($nilai_perubahan_table as $perubahan)
-                                                    <tr>
-                                                        <th>{{$perubahan->jenis_claim}}</th>
-                                                        <td>{{$perubahan->total_proyek}}</td>
-                                                        <td class="text-end">{{$perubahan->total_nilai}}</td>
-                                                        <td>{{$perubahan->total_persen}}</td>
-                                                    </tr>
-                                                @endforeach
-                                                <tr>
-                                                    <th>Klaim</th>
-                                                    <td>10</td>
-                                                    <td class="text-end">Rp. 500.000.000</td>
-                                                    <td>10%</td>
-                                                </tr>
-                                                <tr>
-                                                    <th>Anti Klaim</th>
-                                                    <td>10</td>
-                                                    <td class="text-end">Rp. 500.000.000</td>
-                                                    <td>10%</td>
-                                                </tr>
-                                                <tr>
-                                                    <th>Asuransi</th>
-                                                    <td>10</td>
-                                                    <td class="text-end">Rp. 500.000.000</td>
-                                                    <td>10%</td>
-                                                </tr>
-                                                <tr class="text-bg-dark">
-                                                    <th scope="row">Total Nilai</th>
-                                                    <th>40</th>
-                                                    <th class="text-end">Rp. 200.000.000.000</th>
-                                                    <th>40%</th>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
+
+                        <!--begin::Table Body-->
+                        {{-- @foreach ($nilai_perubahan_table as $table) --}}
+                        @foreach ($kategori_kontrak as $table)
+                        <div class="row mb-4">
+                            <div class="col-3">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-warning">
+                                    {{-- <h2 class="m-0 text-center">{{ $table->jenis_claim }}</h2> --}}
+                                    <h2 class="m-0 text-center">{{ $table[0] }}</h2>
                                 </div>
+                                <!--end::Title body-->
                             </div>
-                        </div> --}}
-                        <!--end::Card Line col-12-->
+                            <div class="col-1">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-secondary">
+                                    {{-- <h2 class="m-0 text-center">{{ $table->total_proyek }}</h2> --}}
+                                    <h2 class="m-0 text-center">{{ $table[1] }}</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col-5">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-secondary">
+                                    {{-- <h2 class="m-0 text-center">Rp {{ number_format($table->total_nilai, 0, ".", ".") }}</h2> --}}
+                                    <h2 class="m-0 text-center">Rp {{ number_format($table[2], 0, ".", ".") }}</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col-3">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-secondary">
+                                    {{-- <h2 class="m-0 text-center">{{ $table->total_persen }}</h2> --}}
+                                    <h2 class="m-0 text-center">{{ $table[3] }} %</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                        </div>
+                        @endforeach
+                        <!--end::Table Body-->
+
                     </div>
                     <!--end::Body Dashboard-->
+                    
                     <!--end::Content-->
 
                 </div>
@@ -542,28 +390,28 @@
     </div>
     <!--end::Root-->
 
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+<script src="https://code.highcharts.com/highcharts-3d.js"></script>
+<script src="https://rawgit.com/highcharts/rounded-corners/master/rounded-corners.js"></script>
+<script>
+    Highcharts.setOptions({
+        chart: {
+            style: {
+                fontFamily: 'Poppins'
+            }
+        },
+        colors: ["#017EB8", "#28B3AC", "#F7AD1A", "#9FE7F5", "#E86340", "#063F5C"],
+        // colors: ["#239DB5", "#71B383", "#EE8E52", "#EBC44F", "#8D5690", "#E85170",  "#4282A6"],
+        // colors: ["#009EF7", "#50CD89", "#F1416C", "#FFC700", "#7239EA", "#43CED7", "#FA8B28"],
+    });
+</script>
+
 @endsection
 {{-- End::Main --}}
 @section('js-script')
-
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
-    <script src="https://code.highcharts.com/modules/export-data.js"></script>
-    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
-    <script src="https://code.highcharts.com/highcharts-3d.js"></script>
-    <script src="https://rawgit.com/highcharts/rounded-corners/master/rounded-corners.js"></script>
-    <script>
-        Highcharts.setOptions({
-            chart: {
-                style: {
-                    fontFamily: 'Poppins'
-                }
-            },
-            colors: ["#017EB8", "#28B3AC", "#F7AD1A", "#9FE7F5", "#E86340", "#063F5C"],
-            // colors: ["#239DB5", "#71B383", "#EE8E52", "#EBC44F", "#8D5690", "#E85170",  "#4282A6"],
-            // colors: ["#009EF7", "#50CD89", "#F1416C", "#FFC700", "#7239EA", "#43CED7", "#FA8B28"],
-        });
-    </script>
 
     <!--begin::Highchart Donut Pemilik Pekerjaan-->
     <script>
@@ -578,7 +426,7 @@
                 }
             },
             title: {
-                text: 'Kategori Pemilik Proyek',
+                text: 'Kategori Pemilik Pekerjaan',
                 style: {
                     fontWeight: 'bold',
                     fontSize: '20px'
@@ -597,7 +445,7 @@
             },
             plotOptions: {
                 pie: {
-                    innerSize: 0,
+                    // innerSize: 150,
                     depth: 5,
                     showInLegend: false,
                     dataLabels: {
@@ -631,7 +479,7 @@
 
     <!--begin::Highchart Donut Changes Overview-->
     <script>
-        const changesOverview = JSON.parse('{!! $changes_overview->toJson() !!}');
+        const kategoriKontrak = JSON.parse('{!! $kategori_kontrak->toJson() !!}');
         Highcharts.chart('contract-divisi', {
             chart: {
                 // height: 250,
@@ -661,7 +509,7 @@
             },
             plotOptions: {
                 pie: {
-                    innerSize: 0,
+                    // innerSize: 150,
                     depth: 5,
                     showInLegend: false,
                     dataLabels: {
@@ -687,7 +535,7 @@
             },
             series: [{
                 name: 'Kontrak',
-                data: changesOverview
+                data: kategoriKontrak
             }]
         });
     </script>
@@ -725,7 +573,7 @@
             },
             plotOptions: {
                 pie: {
-                    innerSize: 0,
+                    // innerSize: 120,
                     depth: 5,
                     showInLegend: false,
                     dataLabels: {
@@ -759,71 +607,6 @@
 
     <!--begin::Highchart Donut Bentuk Proyek -->
     <script>
-        const jenisMenang = JSON.parse('{!! $menang_kontrak->toJson() !!}');
-        Highcharts.chart('tender-menang', {
-            chart: {
-                type: 'pie',
-                // height: 250,
-                options3d: {
-                    enabled: true,
-                    alpha: 5
-                }
-            },
-            title: {
-                text: 'Kategori Menang',
-                style: {
-                    fontWeight: 'bold',
-                    fontSize: '20px'
-                }
-            },
-            subtitle: {
-                // text: '3D donut in Highcharts'
-            },
-            tooltip: {
-                headerFormat: '<span style="font-size:15px">{point.key}</span><table>',
-                pointFormat: '<tr><td style="padding:0">{series.name}: </td>' +
-                    '<td style="padding:0"><b>&nbsp;{point.y}</b></td></tr>',
-                footerFormat: '</table>',
-                shared: true,
-                useHTML: true
-            },
-            plotOptions: {
-                pie: {
-                    innerSize: 0,
-                    depth: 5,
-                    showInLegend: false,
-                    dataLabels: {
-                        enabled: true,
-                    }
-                }
-            },
-            legend: {
-                layout: 'horizontal',
-                align: 'center',
-                verticalAlign: 'bottom',
-                format : '<b>{point.key}</b><br>',
-                itemStyle: {
-                    fontSize:'15px',
-                },
-            },
-            credits: {
-                enabled: false
-            },
-            exporting: {
-                showTable: false,
-                allowHTML: true
-            },
-            series: [{
-                name: 'Kontrak',
-                data: jenisMenang
-            }]
-        });
-    </script>
-    <!--end::Highchart Donut Bentuk Proyek -->
-
-    <!--begin::Highchart Donut Bentuk Proyek -->
-    <script>
-        const jenisProyek = JSON.parse('{!! $jenis_proyek->toJson() !!}');
         Highcharts.chart('contract-jo', {
             chart: {
                 type: 'pie',
@@ -853,7 +636,7 @@
             },
             plotOptions: {
                 pie: {
-                    innerSize: 0,
+                    // innerSize: 150,
                     depth: 5,
                     showInLegend: false,
                     dataLabels: {
@@ -879,7 +662,10 @@
             },
             series: [{
                 name: 'Kontrak',
-                data: jenisProyek
+                data: [
+                    ['JO', 8],
+                    ['Non-JO', 16],
+                ]
             }]
         });
     </script>
@@ -887,7 +673,6 @@
     
     <!--begin::Highchart Donut Changes Status -->
     <script>
-        const changeStatus = JSON.parse('{!! $change_status_out->toJson() !!}');
         Highcharts.chart('changes-status', {
             chart: {
                 type: 'pie',
@@ -917,7 +702,7 @@
             },
             plotOptions: {
                 pie: {
-                    innerSize: 0,
+                    // innerSize: 120,
                     depth: 5,
                     showInLegend: false,
                     dataLabels: {
@@ -943,7 +728,12 @@
             },
             series: [{
                 name: 'Kontrak',
-                data: changeStatus
+                data: [
+                    ['Dispute', 8],
+                    ['Revision', 16],
+                    ['Reject', 2],
+                    ['Approve', 10],
+                ]
             }]
         });
     </script>
@@ -956,9 +746,13 @@
         Highcharts.chart('chart-line', {
             chart: {
                 type: 'column',
+                options3d: {
+                    enabled: true,
+                    alpha: 5
+                }
             },
             title: {
-                text: 'Total Nilai Kontrak : Rp '+ Intl.NumberFormat(["id"]).format(Math.round(sumTender)),
+                text: 'TOTAL NILAI KONTRAK : Rp '+ Intl.NumberFormat(["id"]).format(Math.round(sumTender)),
                 style: {
                     fontWeight: 'bold',
                     fontSize: '20px'
@@ -990,13 +784,6 @@
             credits: {
                 enabled: false
             },
-            plotOptions: {
-                column: {
-                    dataLabels: {
-                        enabled: true,
-                    }
-                }
-            },
             exporting: {
                 showTable: false,
                 allowHTML: true
@@ -1011,6 +798,72 @@
         });
     </script>
     <!--end::Highchart Block Nilai Tender -->
+
+    <!--begin::Highchart KSO dan Non-KSO -->
+    <script>
+        Highcharts.chart('kso', {
+            chart: {
+                type: 'pie',
+                // height: 330,
+                options3d: {
+                    enabled: true,
+                    alpha: 5
+                }
+            },
+            title: {
+                text: 'KSO/NON-KSO',
+                style: {
+                    fontWeight: 'bold',
+                    fontSize: '20px'
+                }
+            },
+            subtitle: {
+                // text: '3D donut in Highcharts'
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:15px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>&nbsp;{point.y}</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                pie: {
+                    // innerSize: 150,
+                    depth: 5,
+                    showInLegend: false,
+                    dataLabels: {
+                        enabled: true,
+                    }
+                }
+            },
+            legend: {
+                layout: 'horizontal',
+                align: 'center',
+                verticalAlign: 'bottom',
+                format : '<b>{point.key}</b><br>',
+                itemStyle: {
+                    fontSize:'15px',
+                },
+            },
+            credits: {
+                enabled: false
+            },
+            exporting: {
+                showTable: false,
+                allowHTML: true
+            },
+            series: [{
+                name: 'Kontrak',
+                data: [
+                    ['KSO', 8],
+                    ['Non-KSO', 16],
+                ]
+            }]
+        });
+    </script>
+    <!--end::Highchart KSO dan KON -->
 
     <!--begin::Highchart Line-->
     {{-- <script>
@@ -1111,18 +964,58 @@
     </script> --}}
     <!--end::Highchart Line-->
 
-    <!-- Begin :: Animation Progress Bar -->
+    {{-- Begin :: Animation Progress Bar --}}
     <script>
+        function animateProgressBar() {
+            const progressbarElts = document.querySelectorAll("div[role='progressbar']");
+            progressbarElts.forEach(item => {
+                const dataPersen = item.parentElement.parentElement.querySelector("#data-persen");
+                let width = Number(dataPersen.innerText.replace("%", ""));
+                item.style.width = width + "%";
+            });
+        }
         animateProgressBar();
     </script>
-    <!-- End :: Animation Progress Bar -->
+    {{-- End :: Animation Progress Bar --}}
 
-    <!-- Begin :: Animation Counter Number -->
+    {{-- Begin :: Animation Counter Number --}}
     <script>
-        animateCounterNumber("#data-persen", "", "%");
-        animateCounterNumber("#data-items", "Rp. ");
+        function animateCounterNumber(selector, firstPrefix = "", lastPrefix = "") {
+            const animateCounterElts = document.querySelectorAll(`${selector}`);
+            animateCounterElts.forEach(item => {
+                let data;
+                if(firstPrefix != ""){
+                    data = Number(item.innerText.replaceAll(firstPrefix, "").replaceAll(".", ""));
+                } else {
+                    data = Number(item.innerText.replaceAll(lastPrefix, ""));
+                }
+                item.innerText = `${firstPrefix}0${lastPrefix}`;
+                let i = 0;
+                const interval = setInterval(() => {
+                    console.log({i, data});
+                    if(i == data || i >= data) {
+                        clearInterval(interval);
+                        if(firstPrefix == "Rp. "){
+                            data = Intl.NumberFormat(["id"]).format(data);
+                        }
+                        item.innerText = `${firstPrefix}${data}${lastPrefix}`;
+                        return;
+                    };
+                    if(firstPrefix == "Rp. "){
+                        // i+= Math.floor((data / 15) + data);
+                        i+= Math.floor(data/15);
+                        item.innerText = `${firstPrefix}${Intl.NumberFormat(["id"]).format(i)}${lastPrefix}`;
+                    } else {
+                        i++;
+                        item.innerText = `${firstPrefix}${i}${lastPrefix}`;
+                    }
+                }, 15);
+            });
+        }
+        // animateCounterNumber("#data-persen", "", "%");
+        // animateCounterNumber("#data-items", "Rp. ");
     </script>
-    <!-- End :: Animation Counter Number -->
+    {{-- End :: Animation Counter Number --}}
 
     <!-- Begin :: Select Filter Dropdown -->
     <script>
@@ -1131,11 +1024,11 @@
             const type = e.getAttribute("id");
             let url = "";
             if(type == "dop") {
-                url = `/dashboard-ccm/pelaksanaan-kontrak?dop=${value}`;
+                url = `/dashboard-ccm/pemeliharaan-kontrak?dop=${value}`;
             } else if(type == "unit-kerja") {
-                url = `/dashboard-ccm/pelaksanaan-kontrak?unit-kerja=${value}`;
+                url = `/dashboard-ccm/pemeliharaan-kontrak?unit-kerja=${value}`;
             } else {
-                url = `/dashboard-ccm/pelaksanaan-kontrak?kode-proyek=${value}`;
+                url = `/dashboard-ccm/pemeliharaan-kontrak?kode-proyek=${value}`;
             }
             window.location.href = url;
             return;

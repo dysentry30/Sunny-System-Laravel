@@ -231,22 +231,22 @@
 
 
                             <!--begin::Table-->
-                            <table class="align-middle table-bordered border-dark fs-6 gy-2" id="">
+                            <table class="table align-middle table-row-dashed fs-6 gy-2" id="kt_customers_table">
                                 <!--begin::Table head-->
                                 <thead>
                                     <!--begin::Table row-->
-                                    <tr class="text-start text-white fw-bolder fs-7 text-uppercase gs-0">
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                         <th class="w-60px text-center">@sortablelink('nomor_unit', 'No.Unit')</th>
                                         <th class="min-w-auto">@sortablelink('unit_kerja', 'Nama Unit')</th>
                                         <th class="min-w-auto">@sortablelink('divcode', 'Divcode')</th>
                                         <th class="min-w-auto">@sortablelink('dop', 'DOP')</th>
                                         <th class="min-w-auto">@sortablelink('company', 'Company')</th>
                                         <th class="min-w-auto">@sortablelink('divisi', 'Divisi PIC')</th>
-                                        <th class="min-w-auto">@sortablelink('is_active', 'Tahun Active')</th>
+                                        <th class="min-w-auto">@sortablelink('is_active', 'Is Active')</th>
                                         <th class="min-w-auto">@sortablelink('id_profit_center', 'ID Profit Center')</th>
                                         <th class="min-w-auto">@sortablelink('company_code', 'Company Code')</th>
                                         @if (auth()->user()->check_administrator)
-                                            {{-- <th class="text-center">Settings</th> --}}
+                                            <th class="text-center">Settings</th>
                                             <th class="text-center">Action</th>
                                         @endif
                                     </tr>
@@ -294,7 +294,7 @@
                                             <!--end::Coloumn-->
                                             <!--begin::Coloumn-->
                                             <td>
-                                                {{ Carbon\Carbon::create($unitkerja->created_at)->translatedFormat("Y") }}
+                                                {{ $unitkerja->is_active == 1 ? 'Yes' : 'No' }}
                                             </td>
                                             <!--end::Coloumn-->
                                             <!--begin::Coloumn-->
@@ -309,7 +309,7 @@
                                             <!--end::Coloumn-->
 
                                             @if (auth()->user()->check_administrator)
-                                                {{-- <td class="text-center">
+                                                <td class="text-center">
                                                     <!--begin::Button-->
                                                     <button data-bs-toggle="modal"
                                                         data-bs-target="#kt_modal_unit_kerja{{ $unitkerja->id }}"
@@ -317,7 +317,7 @@
                                                         class="btn btn-sm btn-light btn-active-success">Setting Approval
                                                     </button>
                                                     <!--end::Button-->
-                                                </td> --}}
+                                                </td>
                                                 <!--end::Action=-->
                                                 <!--begin::Action=-->
                                                 <td class="text-center">

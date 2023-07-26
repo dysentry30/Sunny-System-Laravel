@@ -64,8 +64,6 @@ class SumberDanaController extends Controller
         $newSumber->kode_proyek_id = $dataSumber["kode-proyek-id"];
         $newSumber->tipe_perusahaan = $dataSumber["tipe-perusahaan"];
         $newSumber->cot_id = $dataSumber["cot-id"];
-        $newSumber->is_sumber_dana = !empty($dataSumber["is-sumber-dana"]) ? true : false ;
-        $newSumber->is_instansi = !empty($dataSumber["is-instansi"]) ? true : false;
 
         Alert::success('Success', $dataSumber["nama-sumber"].", Berhasil Ditambahkan");
 
@@ -121,8 +119,6 @@ class SumberDanaController extends Controller
         $editSumber->kode_proyek_id = $dataSumber["kode-proyek-id"];
         $editSumber->tipe_perusahaan = $dataSumber["tipe-perusahaan"];
         $editSumber->cot_id = $dataSumber["cot-id"];
-        $editSumber->is_sumber_dana = !empty($dataSumber["is-sumber-dana"]) ? true : false ;
-        $editSumber->is_instansi = !empty($dataSumber["is-instansi"]) ? true : false;
 
         Alert::success('Success', $dataSumber["nama-sumber"].", Berhasil Ditambahkan");
 

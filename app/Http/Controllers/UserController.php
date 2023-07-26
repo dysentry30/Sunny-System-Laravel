@@ -16,30 +16,13 @@ use Illuminate\Support\Facades\Mail;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Events\NotificationPasswordReset;
 use App\Models\Dop;
-use Exception;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Validator;
 
 
 class UserController extends Controller
 {
-    public function welcome(Request $request)
+    public function welcome()
     {
-        $data = $request->all();
-        if(!empty($data["redirectTo"]) && !empty($data["token"])) {
-            try{
-                $credentials = (array) json_decode(decrypt($data["token"]));
-                $user = User::where("email", $credentials["email"])->first();
-                if(Auth::loginUsingId($user->id)) {
-                    return redirect($data["redirectTo"]);
-                }
-                Alert::error("Error", "User Tidak Ditemukan!");
-                return redirect("/");
-            }catch(Exception $e) {
-                Alert::error("Error", "User Tidak Ditemukan!");
-                return redirect("/");
-            }
-        }
         return view('0_Welcome');
     }
 
@@ -54,7 +37,7 @@ class UserController extends Controller
 
     public function authen(Request $request)
     {
-        if (str_contains($request->url(), "api") && !$request->isMobile) {
+        if (str_contains($request->url(), "api")) {
             // $request->email = $request->UserName;
             // $request->password = $request->UserPassword;
             $credentials = $request->validate([
@@ -78,8 +61,6 @@ class UserController extends Controller
                     "user" => $user,
                 ])->cookie("BPMCSRF", $token, 60);
             }
-        } else if((bool) $request->isMobile)  {
-            return self::loginForMobile($request);
         } else {
             
             $credentials = $request->validate([
@@ -98,36 +79,18 @@ class UserController extends Controller
             if (Auth::attempt($credentials) && Auth::check()) {
                 // dd(Auth::user());
                 $request->session()->regenerate();
-                if (!str_contains(Auth::user()->email, "@wika-customer")) {
-                    if (Auth::user()->is_active) {
-                        $redirect = $request->schemeAndHttpHost() . $request->get("redirect-to");
-                        if(!empty($redirect)) {
-                            return redirect()->intended( $redirect );
-                        }
-                        return redirect()->intended("/dashboard");
-                    }else{
-                        Auth::logout();
-                        Alert::error("USER NON ACTIVE", "Hubungi Admin (PIC)");
-                        return redirect()->intended("/");
-                    }
-                } else {
-                    // Alert::success('Selamat Datang', "Silahkan Mengisi Survey Berikut");
-                    return redirect()->intended("/csi/customer-survey");
+                if (Auth::user()->is_active) {
+                    return redirect()->intended("/dashboard");
+                }else{
+                    Auth::logout();
+                    Alert::error("USER NON ACTIVE", "Hubungi Admin (PIC)");
+                    return redirect()->intended("/");
                 }
             }
         }
         Alert::error("Login Gagal", "Pastikan Email dan Password Benar");
         // dd("gagal login");
         return back();
-    }
-
-    function loginForMobile(Request $request) {
-        $data = $request->all();
-        $user = User::select(["*"])->where("email", "=", $data["UserName"])->get()->first();
-        if(!empty($user) && Hash::check($data["UserPassword"], $user->password)) {
-            return response()->json($user);
-        }
-        return response()->json("Gagal");
     }
     
     public function logout(Request $request)
@@ -249,7 +212,6 @@ class UserController extends Controller
     public function update(Request $request)
     {
         $data = $request->all();
-        // dd($data);
         $messages = [
             "required" => "This field is required",
         ];
@@ -258,7 +220,6 @@ class UserController extends Controller
             "name-user" => "required",
             "email" => "required",
             "phone-number" => "required",
-            "upload-ttd" => "required",
         ];
         $validation = Validator::make($data, $rules, $messages);
 
@@ -298,40 +259,14 @@ class UserController extends Controller
             $validation->validate();
         }
 
-        // // loading the source image
-        // // $src = imagecreatetruecolor(150, 150);
-        // // $color = imagecolorat($src, 0, 0);
-        // // $hex = dechex($color);
-        
-        // // dd($hex);
-        // $white = imagecolorallocatealpha($src, 255, 255, 255, 127);
-        // $_transColor = imagecolortransparent($src, $white);
-        // imagefill($src, 0, 0, $_transColor);
-        // // saving the image to public folder
-        // $file_name = "tanda-tangan-" . $data["nip"] . "." . "png";
-        // imagesavealpha($src, true);
-        
-        // $file_name = "tanda-tangan-" . $data["nip"] . "." . $data["upload-ttd"]->clientExtension();
-        // $src = imagecreatefromjpeg($data["upload-ttd"]);
-        // $new = imagescale($src,100);
-
-        // imagejpeg($new, public_path("/file-ttd/$file_name"), 100);
-        // $data["upload-ttd"]->storeAs("/", $file_name, ["disk" => "public/ttd"]);
-
         $user = User::find($data["user-id"]);
         $user->nip = $data["nip"];
         $user->name = $data["name-user"];
         $user->email = $data["email"];
         $user->no_hp = $data["phone-number"];
-        // $user->file_ttd = $file_name;
         $user->is_active = $request->has("is-active");
         // if (!Auth::user()->check_administrator) {
-        if (str_contains($user->email, "@wika-customer")) {
-            $user->unit_kerja = null;
-        } else {
-            $user->unit_kerja = count($data["unit-kerja"]) > 1 ? join(",", $data["unit-kerja"]) : $data["unit-kerja"][0];
-        }
-        
+        $user->unit_kerja = count($data["unit-kerja"]) > 1 ? join(",", $data["unit-kerja"]) : $data["unit-kerja"][0];
         // }
         $user->check_administrator = $is_administrator;
         $user->check_admin_kontrak = $is_admin_kontrak;

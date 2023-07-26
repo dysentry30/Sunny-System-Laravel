@@ -90,7 +90,7 @@
                             <!--begin::Card title-->
                             <div class="card-title">
                                 <!--Begin:: BUTTON FILTER-->
-                                <form action="" class="d-flex flex-row w-auto mt-6" method="get">
+                                <form action="" class="d-flex flex-row w-auto" method="get">
                                     <!--Begin:: Select Options-->
                                     {{-- <select style="display: none !important" id="column" name="column" onchange="changes(this)"
                                         class="form-select form-select-solid select2-hidden-accessible"
@@ -105,7 +105,7 @@
 
                                      <!--begin::Select Options-->
                                      <div style="" id="filterTahun" class="d-flex align-items-center position-relative me-3">
-                                        <select id="tahun-proyek" name="tahun-proyek"
+                                        <select id="tahun-proyek" name="tahun-proyek" onchange="this.form.submit()"
                                             class="form-select form-select-solid select2-hidden-accessible mx-3"
                                             data-control="select2" data-hide-search="true" data-placeholder="Tahun"
                                             tabindex="-1" aria-hidden="true">
@@ -116,36 +116,13 @@
                                         </select>
                                     </div>
                                     <!--end::Select Options-->
-                                     
-                                    <!--begin::Select Options-->
-                                     <div style="" id="filterBulan" class="d-flex align-items-center position-relative me-3">
-                                        <select id="bulan-proyek" name="bulan-proyek"
-                                            class="form-select form-select-solid select2-hidden-accessible mx-3"
-                                            data-control="select2" data-hide-search="true" data-placeholder="Bulan"
-                                            tabindex="-1" aria-hidden="true">
-                                            <option {{ $month == '' ? 'selected' : '' }}></option>
-                                            <option value="1" {{ $filterBulan == 1 ? 'selected' : '' }}>Januari</option>
-                                            <option value="2" {{ $filterBulan == 2 ? 'selected' : '' }}>Februari</option>
-                                            <option value="3" {{ $filterBulan == 3 ? 'selected' : '' }}>Maret</option>
-                                            <option value="4" {{ $filterBulan == 4 ? 'selected' : '' }}>April</option>
-                                            <option value="5" {{ $filterBulan == 5 ? 'selected' : '' }}>Mei</option>
-                                            <option value="6" {{ $filterBulan == 6 ? 'selected' : '' }}>Juni</option>
-                                            <option value="7" {{ $filterBulan == 7 ? 'selected' : '' }}>Juli</option>
-                                            <option value="8" {{ $filterBulan == 8 ? 'selected' : '' }}>Agustus</option>
-                                            <option value="9" {{ $filterBulan == 9 ? 'selected' : '' }}>September</option>
-                                            <option value="10" {{ $filterBulan == 10 ? 'selected' : '' }}>Oktober</option>
-                                            <option value="11" {{ $filterBulan == 11 ? 'selected' : '' }}>November</option>
-                                            <option value="12" {{ $filterBulan == 12 ? 'selected' : '' }}>Desember</option>
-                                        </select>
-                                    </div>
-                                    <!--end::Select Options-->
 
                                     <!--begin:: Input Filter-->
                                     <div id="filterUnit" class="d-flex align-items-center position-relative">
-                                        <select id="unit-kerja" onchange="this.form.submit()" name="filter-unit" class="form-select form-select-solid w-200px ms-2"
+                                        <select onchange="this.form.submit()" name="filter-unit" class="form-select form-select-solid w-200px ms-2"
                                             data-control="select2" data-hide-search="true" data-placeholder="Unit Kerja">
                                             <option></option>
-                                            @foreach ($unit_kerjas_select as $unitkerja)
+                                            @foreach ($unitkerjas as $unitkerja)
                                                 <option value="{{ $unitkerja->divcode }}"
                                                     {{ $filterUnit == $unitkerja->divcode ? 'selected' : '' }}>
                                                     {{ $unitkerja->unit_kerja }}</option>
@@ -154,7 +131,7 @@
                                     </div>
 
                                     <div id="filterJenis" class="d-flex align-items-center position-relative">
-                                        <select id="jenis-proyek" onchange="this.form.submit()" name="filter-jenis"
+                                        <select onchange="this.form.submit()" name="filter-jenis"
                                             class="form-select form-select-solid select2-hidden-accessible w-auto ms-2"
                                             data-control="select2" data-hide-search="true" data-placeholder="Jenis Proyek"
                                             tabindex="-1" aria-hidden="true">
@@ -558,12 +535,12 @@
                                                     <!--end::Nilai OK=-->
                                                     <!--begin::Tanggal Mulai=-->
                                                     <td>
-                                                        {{ Carbon\Carbon::create($proyek->tanggal_mulai_terkontrak)->translatedFormat("d F Y") ?? "-" }}
+                                                        {{ $proyek->tanggal_mulai_terkontrak }}
                                                     </td>
                                                     <!--end::Tanggal Mulai=-->
                                                     <!--begin::Tanggal Selesai=-->
                                                     <td>
-                                                        {{ Carbon\Carbon::create($proyek->tanggal_akhir_terkontrak)->translatedFormat("d F Y") ?? "-" }}
+                                                        {{ $proyek->tanggal_akhir_terkontrak }}
                                                     </td>
                                                     <!--end::Tanggal Selesai=-->
                                                 </tr>
@@ -598,23 +575,6 @@
 @endsection
 
 @section('js-script')
-
-<script>
-    function selectFilter(e) {
-        const value = e.value;
-        const type = e.getAttribute("id");
-        let url = "";
-        if(type == "tahun-proyek") {
-            url = `/contract-management?tahun-proyek=${value}`;
-        } else if(type == "unit-kerja") {
-            url = `/contract-management?unit-kerja=${value}`;
-        } else {
-            url = `/contract-management?jenis-proyek=${value}`;
-        }
-        window.location.href = url;
-        return;
-    }
-</script>
     <!--begin::Data Tables-->
     <script src="/datatables/jquery.dataTables.min.js"></script>
     <script src="/datatables/dataTables.buttons.min.js"></script>
