@@ -390,20 +390,29 @@ class ContractApprovalController extends Controller
 
         $approval->is_approved = $data["approve"];
 
-        if($this->sendDataSAP($id_contract)){
-            if($approval->save()){
-                Alert::success("success", "Contract berhasil di Approve");
-                return response()->json([
-                    "status" => "success",
-                    "link" => true,
-                ]);
-            }else{
-                Alert::error("error", "Contract gagal di Approve");
-                return response()->json([
-                    "status" => "error",
-                    "link" => false,
-                ]);
+        $approval->save();
+
+        if($data["approve"] == 't'){
+            if($this->sendDataSAP($id_contract)){
+                if($approval->save()){
+                    Alert::success("success", "Contract berhasil di Approve");
+                    return response()->json([
+                        "status" => "success",
+                        "link" => true,
+                    ]);
+                }else{
+                    Alert::error("error", "Contract gagal di Approve");
+                    return response()->json([
+                        "status" => "error",
+                        "link" => false,
+                    ]);
+                }
             }
+        }else{
+            return response()->json([
+                "status" => "success",
+                "link" => true,
+            ]);
         }
 
     }

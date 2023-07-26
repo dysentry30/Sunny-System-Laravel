@@ -1113,7 +1113,7 @@
                                 <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
-                                        <h2 class="m-0 text-center">{{ !empty($table["potensial_value"]) ? number_format($table["potensial_value"]/1000000, 0, ".", ".") : 0 }}</h2>
+                                        <h2 class="m-0 text-center {{ $table["jenis_perubahan"] == "Anti Klaim" && $table["potensial_value"] != 0 ? 'text-danger' : '' }}">{{ !empty($table["potensial_value"]) ? number_format($table["potensial_value"]/1000000, 0, ".", ".") : 0 }}</h2>
                                     </div>
                                     <!--end::Title body-->
                                 </a>
@@ -1124,7 +1124,7 @@
                                 <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
-                                        <h2 class="m-0 text-center">{{ !empty($table["subs_value"]) ? number_format($table["subs_value"]/1000000, 0, ".", ".") : 0 }}</h2>
+                                        <h2 class="m-0 text-center {{ $table["jenis_perubahan"] == "Anti Klaim" && $table["subs_value"] != 0 ? 'text-danger' : '' }}">{{ !empty($table["subs_value"]) ? number_format($table["subs_value"]/1000000, 0, ".", ".") : 0 }}</h2>
                                     </div>
                                     <!--end::Title body-->
                                 </a>
@@ -1135,7 +1135,7 @@
                                 <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
-                                        <h2 class="m-0 text-center">{{ !empty($table["revisi_value"]) ? number_format($table["revisi_value"]/1000000, 0, ".", ".") : 0 }}</h2>
+                                        <h2 class="m-0 text-center {{ $table["jenis_perubahan"] == "Anti Klaim" && $table["revisi_value"] != 0 ? 'text-danger' : '' }}">{{ !empty($table["revisi_value"]) ? number_format($table["revisi_value"]/1000000, 0, ".", ".") : 0 }}</h2>
                                     </div>
                                     <!--end::Title body-->
                                 </a>
@@ -1146,7 +1146,7 @@
                                 <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
-                                        <h2 class="m-0 text-center">{{ !empty($table["nego_value"]) ? number_format($table["nego_value"]/1000000, 0, ".", ".") : 0 }}</h2>
+                                        <h2 class="m-0 text-center {{ $table["jenis_perubahan"] == "Anti Klaim" && $table["nego_value"] != 0 ? 'text-danger' : '' }}">{{ !empty($table["nego_value"]) ? number_format($table["nego_value"]/1000000, 0, ".", ".") : 0 }}</h2>
                                     </div>
                                     <!--end::Title body-->
                                 </a>
@@ -1157,7 +1157,7 @@
                                 <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
-                                        <h2 class="m-0 text-center">{{ !empty($table["setuju_value"]) ? number_format($table["setuju_value"]/1000000, 0, ".", ".") : 0 }}</h2>
+                                        <h2 class="m-0 text-center {{ $table["jenis_perubahan"] == "Anti Klaim" && $table["setuju_value"] != 0 ? 'text-danger' : '' }}">{{ !empty($table["setuju_value"]) ? number_format($table["setuju_value"]/1000000, 0, ".", ".") : 0 }}</h2>
                                     </div>
                                     <!--end::Title body-->
                                 </a>
@@ -1168,7 +1168,7 @@
                                 <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
-                                        <h2 class="m-0 text-center">{{ !empty($table["tolak_value"]) ? number_format($table["tolak_value"]/1000000, 0, ".", ".") : 0 }}</h2>
+                                        <h2 class="m-0 text-center {{ $table["jenis_perubahan"] == "Anti Klaim" && $table["tolak_value"] != 0 ? 'text-danger' : '' }}">{{ !empty($table["tolak_value"]) ? number_format($table["tolak_value"]/1000000, 0, ".", ".") : 0 }}</h2>
                                     </div>
                                     <!--end::Title body-->
                                 </a>
@@ -1179,7 +1179,7 @@
                                 <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
-                                        <h2 class="m-0 text-center">{{ !empty($table["tolak_value"]) ? number_format($table["dispute_value"]/1000000, 0, ".", ".") : 0 }}</h2>
+                                        <h2 class="m-0 text-center {{ $table["jenis_perubahan"] == "Anti Klaim" && $table["dispute_value"] != 0 ? 'text-danger' : '' }}">{{ !empty($table["dispute_value"]) ? number_format($table["dispute_value"]/1000000, 0, ".", ".") : 0 }}</h2>
                                     </div>
                                     <!--end::Title body-->
                                 </a>

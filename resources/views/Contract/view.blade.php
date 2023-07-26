@@ -373,21 +373,21 @@
                 <!--begin::Actions-->
                 <div class="d-flex align-items-center py-1">
                     @if (auth()->user()->is_pic != true)
-                    <!--begin::Button-->
-                    @if ($contract->where("id_contract", "=", $contract->id_contract)->where("stages", "!=", 1)->get()->isNotEmpty())
-                    @if ($is_approved->isEmpty())
-                    <button type="button" class="btn btn-sm btn-primary" id="kt_toolbar_primary_button" onclick="lockBulananContract()"
-                        style="background-color:#008CB4;">
-                        <span>Lock</span>
-                        <i class="bi bi-lock-fill text-white"></i>
-                    </button>
-                    @else
-                    <button type="button" class="btn btn-sm btn-primary disabled" id="kt_toolbar_primary_button"
-                        style="background-color:#008CB4;">
-                        <span>Unlock</span>
-                        <i class="bi bi-unlock-fill text-white"></i>
-                    </button>
-                    @endif
+                        <!--begin::Button-->
+                        @if ($contract->where("id_contract", "=", $contract->id_contract)->where("stages", "!=", 1)->get()->isNotEmpty())
+                            @if ($is_approved->isEmpty())
+                            <button type="button" class="btn btn-sm btn-primary" id="kt_toolbar_primary_button" onclick="lockBulananContract()"
+                                style="background-color:#008CB4;">
+                                <span>Lock</span>
+                                <i class="bi bi-lock-fill text-white"></i>
+                            </button>
+                            @else
+                            <button type="button" class="btn btn-sm btn-primary disabled" id="kt_toolbar_primary_button"
+                                style="background-color:#008CB4;">
+                                <span>Unlock</span>
+                                <i class="bi bi-unlock-fill text-white"></i>
+                            </button>
+                        @endif
                     @endif
                     <!--end::Button-->
 
@@ -3624,7 +3624,7 @@
                                                 <!--begin::Nomor Dokumen-->
                                                 <td>
                                                     <a target="_blank" href="{{ asset('words/'.$site_instruction->id_document) }}" class="text-hover-primary">
-                                                        {{ $site_instruction->id_document }}
+                                                        {{ $site_instruction->nama_document }}
                                                     </a>
                                                 </td>
                                                 <!--end::Nomor Dokumen-->

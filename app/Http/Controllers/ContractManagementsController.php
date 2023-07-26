@@ -1379,9 +1379,11 @@ class ContractManagementsController extends Controller
     // Upload Dokumen Site Instruction to server or database
     public function siteInstruction(Request $request, SiteInstruction $siteInstruction)
     {
-        $file = $request->file("file-dokumen-instruction");
         $data = $request->all();
+        $file = $request->file("file-dokumen-instruction");
         $id_document = date("His_") . $file->getClientOriginalName();
+        $nama_file = $file->getClientOriginalName();
+
         $messages = [
             "required" => "Field di atas wajib diisi",
             "numeric" => "Field di atas harus numeric",
@@ -1414,13 +1416,27 @@ class ContractManagementsController extends Controller
             // return Redirect::back();
         }
 
+        if(isset($data['file-dokumen-instruction'])){
+            $uploadFinal = new ContractUploadFinal();
+            $uploadFinal->id_contract = $data["id-contract"];
+            $uploadFinal->id_document = $id_document;
+            $uploadFinal->nama_document = $nama_file;
+            $uploadFinal->category = "Dokumen Site Instruction";
+
+            $siteInstruction->nama_document = $nama_file;
+            $siteInstruction->id_document = $id_document;
+
+                
+        }
+
         $siteInstruction->id_contract = $data["id-contract"];
-        $siteInstruction->id_document = $id_document;
+        // $siteInstruction->id_document = $id_document;
         $siteInstruction->nomor_dokumen = $data["nomor-dokumen-instruction"];
         $siteInstruction->tanggal_dokumen = $data["tanggal-dokumen-instruction"];
         $siteInstruction->uraian_dokumen = $data["uraian-dokumen-instruction"];
-        if ($siteInstruction->save()) {
-            moveFileTemp($file, explode(".", $id_document)[0]);
+        if ($siteInstruction->save() && $uploadFinal->save()) {
+            // moveFileTemp($file, explode(".", $id_document)[0]);
+            $file->move(public_path('words'), $id_document);
             Alert::success('Success', "Dokumen Site Instruction berhasil ditambahkan");
             return Redirect::back();
         }
@@ -1433,6 +1449,7 @@ class ContractManagementsController extends Controller
     {
         $file = $request->file("file-technical-form");
         $data = $request->all();
+        $nama_file = $file->getClientOriginalName();
         $id_document = date("His_") . $file->getClientOriginalName();
 
         $messages = [
@@ -1468,13 +1485,26 @@ class ContractManagementsController extends Controller
             // return Redirect::back();
         }
 
+        if(isset($data['file-technical-form'])){
+            $uploadFinal = new ContractUploadFinal();
+            $uploadFinal->id_contract = $data["id-contract"];
+            $uploadFinal->id_document = $id_document;
+            $uploadFinal->nama_document = $nama_file;
+            $uploadFinal->category = "Dokumen Technical Form";
+
+            $technicalForm->nama_document = $nama_file;
+            $technicalForm->id_document = $id_document;
+                
+        }
+
         $technicalForm->id_contract = $data["id-contract"];
-        $technicalForm->id_document = $id_document;
+        // $technicalForm->id_document = $id_document;
         $technicalForm->nomor_dokumen = $data["nomor-technical-form"];
         $technicalForm->tanggal_dokumen = $data["tanggal-technical-form"];
         $technicalForm->uraian_dokumen = $data["uraian-technical-form"];
-        if ($technicalForm->save()) {
-            moveFileTemp($file, explode(".", $id_document)[0]);
+        if ($technicalForm->save() && $uploadFinal->save()) {
+            // moveFileTemp($file, explode(".", $id_document)[0]);
+            $file->move(public_path('words'), $id_document);
             Alert::success('Success', "Dokumen Technical Form berhasil ditambahkan");
             return Redirect::back();
         }
@@ -1487,6 +1517,7 @@ class ContractManagementsController extends Controller
     {
         $file = $request->file("file-technical-query");
         $data = $request->all();
+        $nama_file = $file->getClientOriginalName();
         $id_document = date("His_") . $file->getClientOriginalName();
 
         $messages = [
@@ -1522,13 +1553,27 @@ class ContractManagementsController extends Controller
             // return Redirect::back();
         }
 
+        if(isset($data['file-technical-query'])){
+            $uploadFinal = new ContractUploadFinal();
+            $uploadFinal->id_contract = $data["id-contract"];
+            $uploadFinal->id_document = $id_document;
+            $uploadFinal->nama_document = $nama_file;
+            $uploadFinal->category = "Dokumen Technical Query";
+
+            $technicalQuery->nama_document = $nama_file;
+            $technicalQuery->id_document = $id_document;
+
+                
+        }
+
         $technicalQuery->id_contract = $data["id-contract"];
         $technicalQuery->id_document = $id_document;
         $technicalQuery->nomor_dokumen = $data["nomor-technical-query"];
         $technicalQuery->tanggal_dokumen = $data["tanggal-technical-query"];
         $technicalQuery->uraian_dokumen = $data["uraian-technical-query"];
-        if ($technicalQuery->save()) {
-            moveFileTemp($file, explode(".", $id_document)[0]);
+        if ($technicalQuery->save() && $uploadFinal->save()) {
+            $file->move(public_path('words'), $id_document);
+            // moveFileTemp($file, explode(".", $id_document)[0]);
             Alert::success('Success', "Dokumen Technical Query berhasil ditambahkan");
             return Redirect::back();
         }
@@ -1541,6 +1586,7 @@ class ContractManagementsController extends Controller
     {
         $file = $request->file("file-field-design-change");
         $data = $request->all();
+        $nama_file = $file->getClientOriginalName();
         $id_document = date("His_") . $file->getClientOriginalName();
 
         $messages = [
@@ -1575,14 +1621,26 @@ class ContractManagementsController extends Controller
             return Redirect::back()->with("modal", $data["modal-name"]);
             // return Redirect::back();
         }
+        if(isset($data['file-field-design-change'])){
+            $uploadFinal = new ContractUploadFinal();
+            $uploadFinal->id_contract = $data["id-contract"];
+            $uploadFinal->id_document = $id_document;
+            $uploadFinal->nama_document = $nama_file;
+            $uploadFinal->category = "Dokumen Field Design Change";
+
+            $fieldChange->nama_document = $nama_file;
+            $fieldChange->id_document = $id_document;
+                
+        }
 
         $fieldChange->id_contract = $data["id-contract"];
         $fieldChange->id_document = $id_document;
         $fieldChange->nomor_dokumen = $data["nomor-field-design-change"];
         $fieldChange->tanggal_dokumen = $data["tanggal-field-design-change"];
         $fieldChange->uraian_dokumen = $data["uraian-field-design-change"];
-        if ($fieldChange->save()) {
-            moveFileTemp($file, explode(".", $id_document)[0]);
+        if ($fieldChange->save() && $uploadFinal->save()) {
+            $file->move(public_path('words'), $id_document);
+            // moveFileTemp($file, explode(".", $id_document)[0]);
             Alert::success('Success', "Dokumen Field Design Change berhasil ditambahkan");
             return Redirect::back();
         }
@@ -1595,6 +1653,7 @@ class ContractManagementsController extends Controller
     {
         $file = $request->file("file-contract-change-notice");
         $data = $request->all();
+        $nama_file = $file->getClientOriginalName();
         $id_document = date("His_") . $file->getClientOriginalName();
 
         $messages = [
@@ -1628,14 +1687,27 @@ class ContractManagementsController extends Controller
             return Redirect::back()->with("modal", $data["modal-name"]);
             // return Redirect::back();
         }
+        if(isset($data['file-contract-change-notice'])){
+            $uploadFinal = new ContractUploadFinal();
+            $uploadFinal->id_contract = $data["id-contract"];
+            $uploadFinal->id_document = $id_document;
+            $uploadFinal->nama_document = $nama_file;
+            $uploadFinal->category = "Dokumen Contract Change Notice";
+
+            $changeNotice->nama_document = $nama_file;
+            $changeNotice->id_document = $id_document;
+
+                
+        }
 
         $changeNotice->id_contract = $data["id-contract"];
         $changeNotice->id_document = $id_document;
         $changeNotice->nomor_dokumen = $data["nomor-contract-change-notice"];
         $changeNotice->tanggal_dokumen = $data["tanggal-contract-change-notice"];
         $changeNotice->uraian_dokumen = $data["uraian-contract-change-notice"];
-        if ($changeNotice->save()) {
-            moveFileTemp($file, explode(".", $id_document)[0]);
+        if ($changeNotice->save() && $uploadFinal->save()) {
+            $file->move(public_path('words'), $id_document);
+            // moveFileTemp($file, explode(".", $id_document)[0]);
             Alert::success('Success', "Dokumen Change Notice berhasil ditambahkan");
             return Redirect::back();
         }
@@ -1648,6 +1720,7 @@ class ContractManagementsController extends Controller
     {
         $file = $request->file("file-contract-change-order");
         $data = $request->all();
+        $nama_file = $file->getClientOriginalName();
         $id_document = date("His_") . $file->getClientOriginalName();
 
         $messages = [
@@ -1681,14 +1754,26 @@ class ContractManagementsController extends Controller
             return Redirect::back()->with("modal", $data["modal-name"]);
             // return Redirect::back();
         }
+        if(isset($data['file-contract-change-order'])){
+            $uploadFinal = new ContractUploadFinal();
+            $uploadFinal->id_contract = $data["id-contract"];
+            $uploadFinal->id_document = $id_document;
+            $uploadFinal->nama_document = $nama_file;
+            $uploadFinal->category = "Dokumen Contract Change Order";
+
+            $changeOrder->nama_document = $nama_file;
+            $changeOrder->id_document = $id_document;
+                
+        }
 
         $changeOrder->id_contract = $data["id-contract"];
         $changeOrder->id_document = $id_document;
         $changeOrder->nomor_dokumen = $data["nomor-contract-change-order"];
         $changeOrder->tanggal_dokumen = $data["tanggal-contract-change-order"];
         $changeOrder->uraian_dokumen = $data["uraian-contract-change-order"];
-        if ($changeOrder->save()) {
-            moveFileTemp($file, explode(".", $id_document)[0]);
+        if ($changeOrder->save() && $uploadFinal->save()) {
+            $file->move(public_path('words'), $id_document);
+            // moveFileTemp($file, explode(".", $id_document)[0]);
             Alert::success('Success', "Dokumen Change Order berhasil ditambahkan");
             return Redirect::back();
         }
@@ -1701,6 +1786,7 @@ class ContractManagementsController extends Controller
     {
         $file = $request->file("file-contract-change-proposal");
         $data = $request->all();
+        $nama_file = $file->getClientOriginalName();
         $id_document = date("His_") . $file->getClientOriginalName();
 
         $messages = [
@@ -1735,13 +1821,26 @@ class ContractManagementsController extends Controller
             // return Redirect::back();
         }
 
+        if(isset($data['file-contract-change-proposal'])){
+            $uploadFinal = new ContractUploadFinal();
+            $uploadFinal->id_contract = $data["id-contract"];
+            $uploadFinal->id_document = $id_document;
+            $uploadFinal->nama_document = $nama_file;
+            $uploadFinal->category = "Dokumen Contract Change Proposal";
+
+            $changeProposal->nama_document = $nama_file;
+            $changeProposal->id_document = $id_document;
+                
+        }
+
         $changeProposal->id_contract = $data["id-contract"];
         $changeProposal->id_document = $id_document;
         $changeProposal->nomor_dokumen = $data["nomor-contract-change-proposal"];
         $changeProposal->tanggal_dokumen = $data["tanggal-contract-change-proposal"];
         $changeProposal->uraian_dokumen = $data["uraian-contract-change-proposal"];
-        if ($changeProposal->save()) {
-            moveFileTemp($file, explode(".", $id_document)[0]);
+        if ($changeProposal->save() && $uploadFinal->save()) {
+            $file->move(public_path('words'), $id_document);
+            // moveFileTemp($file, explode(".", $id_document)[0]);
             Alert::success('Success', "Dokumen Change Proposal berhasil ditambahkan");
             return Redirect::back();
         }
@@ -3100,7 +3199,7 @@ class ContractManagementsController extends Controller
         $kategori = ContractUploadFinal::where([['id_contract', '=', $data['id-contract']],['category', '=', $data['kategori']]])->first();
         // dd($kategori);
 
-        if ($data["kategori"] == "Dokumen Kontrak" || $data["kategori"] == "Dokumen Amandemen" || $data["kategori"] == "Dokumen Bill Of Quantity"){
+        if ($data["kategori"] == "Dokumen Kontrak" || $data["kategori"] == "Dokumen Amandemen" || $data["kategori"] == "Dokumen Bill Of Quantity" || $data["kategori"] == "Dokumen Amandemen - Pemeliharaan"|| $data["kategori"] == "Dokumen Bill Of Quantity - Pemeliharaan"){
             // if(!empty($data["kategori"]) && $data["kategori"] == "resiko-pelaksanaan") {
             //     $periode = $data["periode-resiko"] . "-" . $data["tahun-resiko"];
             //     $kategori->periode = $periode;
@@ -3111,7 +3210,8 @@ class ContractManagementsController extends Controller
             $uploadFinal->nama_document = $nama_file;
             $uploadFinal->category = $data["kategori"];
             if ($uploadFinal->save()) {
-                moveFileTemp($file, explode(".", $id_document)[0]);
+                // moveFileTemp($file, explode(".", $id_document)[0]);
+                $file->move(public_path('words'), $id_document);
                 Alert::success("Success", "Dokumen berhasil ditambahkan");
                 return redirect()->back();
             }
