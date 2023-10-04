@@ -24,11 +24,11 @@ class UserNotAuthenticatedMiddleware
             }
             return $next($request);
         }
-        
-        if(auth()->user() == null) {
+
+        if (auth()->user() == null) {
             return $next($request);
         }
-        
+
         return redirect("/dashboard");
     }
 }
