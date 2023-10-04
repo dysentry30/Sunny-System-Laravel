@@ -22,7 +22,7 @@
             @if (str_contains(Request::Path(), 'ccm'))
                 <img style="margin-top: 100px; margin-left: 50px" src="/media/logos/logo-ccm.png" alt="logo">
             @elseif (str_contains(Request::Path(), 'csi')) 
-                <img style="margin-top: 100px; margin-left: 50px" src="/media/logos/logo-csi.png" alt="Belum ada Logo">
+                <img style="margin-top: 100px; margin-left: 50px" src="/media/logos/logo-csi-1.png" alt="logo">
             @else
                 <img style="margin-top: 100px; margin-left: 50px" src="/media/logos/logo-wika.png" alt="logo">
             @endif
@@ -41,7 +41,9 @@
                 @if (str_contains(Request::Path(), 'ccm'))
                 <br><br><br><br>
                 @else
-                <img src="media/logos/logo-gray.png" alt="" style="height: 50px; margin-top:100px"/>
+                <br><br><br><br>
+                {{-- <img src="media/logos/logo-gray.png" alt="" style="height: 50px; margin-top:100px"/> --}}
+
                 @endif
             </div>
             <br>

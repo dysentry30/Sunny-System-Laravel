@@ -63,7 +63,7 @@
                     <!--begin::Post-->
                     <!--begin::Container-->
                     <!--begin::Card "style edited"-->
-                    <div class="card container" Id="List-vv" style="position: relative; overflow: hidden;">
+                    <div class="card card-flush container" id="kt_contacts_main" Id="List-vv">
 
                         <!--begin::Card title-->
                         <div class="card-title">
@@ -144,8 +144,8 @@
                         <!--begin::Card title-->
 
 
-                        @if ($contract_approval->isNotEmpty())
-                        @foreach ($contract_approval as $history)
+                        @if ($approvals->isNotEmpty())
+                        @foreach ($approvals as $history)
                             <!--begin::Card body-->    
                             <div class="card-body pt-0">
                                 <div class="mt-6">
@@ -157,59 +157,19 @@
                                                     <div class="row">
                                                         <div class="col-3">
                                                             <p class="m-0">Nama Proyek</p>
-                                                            <p><b>{{ $history->ContractManagements->project->nama_proyek }}</b></p>
+                                                            <p><b>{{ $history['nama_proyek'] }}</b></p>
                                                         </div>
-                                                        @php
-                                                            switch ($history->periode) {
-                                                                case 1:
-                                                                    $month = "Januari";
-                                                                    break;
-                                                                case 2:
-                                                                    $month = "Februari";
-                                                                    break;
-                                                                case 3:
-                                                                    $month = "Maret";
-                                                                    break;
-                                                                case 4:
-                                                                    $month = "April";
-                                                                    break;
-                                                                case 5:
-                                                                    $month = "Mei";
-                                                                    break;
-                                                                case 6:
-                                                                    $month = "Juni";
-                                                                    break;
-                                                                case 7:
-                                                                    $month = "Juli";
-                                                                    break;
-                                                                case 8:
-                                                                    $month = "Agustus";
-                                                                    break;
-                                                                case 9:
-                                                                    $month = "September";
-                                                                    break;
-                                                                case 10:
-                                                                    $month = "Oktober";
-                                                                    break;
-                                                                case 11:
-                                                                    $month = "November";
-                                                                    break;
-                                                                case 12:
-                                                                    $month = "Desember";
-                                                                    break;
-                                                            }
-                                                        @endphp
                                                         <div class="col-3">
                                                             <p class="m-0">Bulan Periode</p>
-                                                            <p><b>{{ $month }}</b></p>
+                                                            <p><b>{{ $history['periode'] }}</b></p>
                                                         </div>
                                                         <div class="col-3">
                                                             <p class="m-0">Nilai Kontrak</p>
-                                                            <p><b>Rp.{{ number_format($history->nilai_kontrak, 0, ",", ".") }}</b></p>
+                                                            <p><b>Rp.{{ $history['nilai_kontrak'] != 0 ? number_format($history['nilai_kontrak'], 0, ",", ".") : 0 }}</b></p>
                                                         </div>
                                                         <div class="col-3">
                                                             <p class="m-0">Unit Kerja</p>
-                                                            <p><b>{{ $history->ContractManagements->project->UnitKerja->unit_kerja }}</b></p>
+                                                            <p><b>{{ $history['unit_kerja'] }}</b></p>
                                                         </div>
                                                     </div>
                                                     <hr class="m-0">
@@ -218,19 +178,19 @@
                                                     <div class="row">
                                                         <div class="col-3">
                                                             <p class="m-0">Total VO</p>
-                                                            <p><b>{{ $history->total_vo }}</b></p>
+                                                            <p><b>{{ $history['total_vo'] }}</b></p>
                                                         </div>
                                                         <div class="col-3">
                                                             <p class="m-0">Total Klaim</p>
-                                                            <p><b>{{ $history->total_klaim }}</b></p>
+                                                            <p><b>{{ $history['total_klaim'] }}</b></p>
                                                         </div>
                                                         <div class="col-3">
                                                             <p class="m-0">Total Anti Klaim</p>
-                                                            <p><b>{{ $history->total_anti_klaim }}</b></p>
+                                                            <p><b>{{ $history['total_anti_klaim'] }}</b></p>
                                                         </div>
                                                         <div class="col-3">
                                                             <p class="m-0">Total Klaim Asuransi</p>
-                                                            <p><b>{{ $history->total_klaim_asuransi }}</b></p>
+                                                            <p><b>{{ $history['total_klaim_asuransi'] }}</b></p>
                                                         </div>
                                                     </div>
                                                     <hr class="m-0">
@@ -239,19 +199,19 @@
                                                     <div class="row">
                                                         <div class="col-3">
                                                             <p class="m-0">Jumlah VO</p>
-                                                            <p><b>Rp.{{ number_format($history->jumlah_vo, 0, ",", "." ) }}</b></p>
+                                                            <p><b>Rp.{{ number_format($history['jumlah_vo'], 0, ",", "." ) }}</b></p>
                                                         </div>
                                                         <div class="col-3">
                                                             <p class="m-0">Jumlah Klaim</p>
-                                                            <p><b>Rp.{{ number_format($history->jumlah_klaim, 0, ",", ".") }}</b></p>
+                                                            <p><b>Rp.{{ number_format($history['jumlah_klaim'], 0, ",", ".") }}</b></p>
                                                         </div>
                                                         <div class="col-3">
                                                             <p class="m-0">Jumlah Anti Klaim</p>
-                                                            <p><b>Rp.{{ number_format($history->jumlah_anti_klaim, 0, ",", ".") }}</b></p>
+                                                            <p class="text-danger"><b>Rp.{{ number_format($history['jumlah_anti_klaim'], 0, ",", ".") }} ( - )</b></p>
                                                         </div>
                                                         <div class="col-3">
                                                             <p class="m-0">Jumlah Klaim Asuransi</p>
-                                                            <p><b>Rp.{{ number_format($history->jumlah_klaim_asuransi, 0, ",", ".") }}</b></p>
+                                                            <p><b>Rp.{{ number_format($history['jumlah_klaim_asuransi'], 0, ",", ".") }}</b></p>
                                                         </div>
                                                     </div>
                                                     <!--End::Jumlah Claim Contract-->
@@ -259,38 +219,38 @@
 
 
                                                 <div class="col-3 ps-5">
-                                                    @if (Auth::user()->check_administrator || (Auth::user()->check_admin_kontrak && Auth::user()->is_pic))
+                                                    @if ($user->check_administrator || ($user->Pegawai->kode_jabatan == 410 && $user->Pegawai->kode_fungsi_bidang == 30100))
                                                         <div class="d-flex flex-column flex-md-row gap-4 justify-content-center">
-                                                            @if ($history->is_approved == "t")
+                                                            @if ($history['is_approved'] == "t")
                                                                     <a class="btn btn-success btn-sm disabled d-flex align-items-center">Approved</a>
-                                                                    @if($history->is_request_unlock == "t")
+                                                                    @if($history['is_request_unlock'] == "t")
                                                                         <form action="/history-approval/set-unlock" method="post">
                                                                             @csrf
-                                                                            <input type="hidden" name="id_contract" value="{{ $history->id_contract }}">
+                                                                            <input type="hidden" name="id_contract" value="{{ $history['id_contract'] }}">
                                                                             <button type="submit" class="btn btn-secondary btn-sm d-flex align-items-center">Unlock</button>
                                                                         </form>
                                                                     @endif
-                                                            @elseif($history->is_approved == "f")
+                                                            @elseif($history['is_approved'] == "f")
                                                                 <button class="btn btn-danger btn-sm disabled">Approval Ditolak</button>
                                                             @else
-                                                                <a class="btn btn-primary btn-sm d-flex align-items-center" onclick="confirmAction(this, '{{ $history->id_contract }}')">Approve</a>
-                                                                <a class="btn btn-secondary btn-sm d-flex align-items-center" onclick="confirmAction(this, '{{ $history->id_contract }}')">Cancel</a>
+                                                                <a class="btn btn-primary btn-sm d-flex align-items-center" onclick="confirmAction(this, '{{ $history['id_contract'] }}')">Approve</a>
+                                                                <a class="btn btn-secondary btn-sm d-flex align-items-center" onclick="confirmAction(this, '{{ $history['id_contract'] }}')">Cancel</a>
                                                             @endif
                                                         </div>
                                                     @else
                                                         <div class="d-flex flex-column flex-md-row gap-4 justify-content-center">
-                                                            @if ($history->is_approved == "t")
+                                                            @if ($history['is_approved'] == "t")
                                                                 <a class="btn btn-success btn-sm d-flex align-items-center disabled">Approved</a>
-                                                                @if($history->is_request_unlock == "t")
+                                                                @if($history['is_request_unlock'] == "t")
                                                                 <a class="btn btn-success btn-sm d-flex align-items-center disabled">Menunggu Unlock...</a>
                                                                 @else
                                                                 <form action="/history-approval/request-unlock" method="POST">
                                                                     @csrf
-                                                                    <input type="hidden" name="id_contract" value="{{ $history->id_contract }}">
+                                                                    <input type="hidden" name="id_contract" value="{{ $history['id_contract'] }}">
                                                                     <button type="submit" class="btn btn-secondary btn-sm d-flex align-items-center">Request Unlock</button>
                                                                 </form>
                                                                 @endif
-                                                            @elseif($history->is_approved == "f")
+                                                            @elseif($history['is_approved'] == "f")
                                                                 <a class="btn btn-danger btn-sm d-flex align-items-center disabled">Approve Ditolak</a>
                                                             @else
                                                                 <a class="btn btn-success btn-sm d-flex align-items-center disabled">Menunggu untuk approval...</a>
@@ -347,6 +307,7 @@
                     const formData = new FormData();
                     formData.append("_token", "{{ csrf_token() }}");
                     formData.append("approve", "t");
+                    formData.append("periode", "{{ $filterBulan }}");
                     const sendData = await fetch(`/history-approval/set-approve/${id_contract}`,{
                         method: "POST",
                         body: formData

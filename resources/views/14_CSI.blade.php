@@ -101,7 +101,7 @@
                                         <!--begin::Table body-->
                                         <tbody class="fw-bold text-gray-600 fs-6">
                                             @foreach ($proyeks as $proyek)
-                                                {{-- @if ((int) $proyek->progress >= 20 && (int) $proyek->progress <= 40) --}}
+                                            @if (!empty($proyek->Csi) && (int) $proyek->progress >= 5 && (int) $proyek->progress <= 89)
                                                 @if (!empty($proyek->proyekBerjalan) && !empty($proyek->proyekBerjalan->name_customer))
                                                     <tr>
                                                         <td>
@@ -114,34 +114,49 @@
                                                         <td>{{ $proyek->UnitKerja->unit_kerja }}</td>
                                                         <td
                                                             class="text-center {{ empty($proyek->Csi->progress) ? 'text-danger' : '' }}">
-                                                            {{ $proyek->Csi->progress ?? 'Belum Get Progress' }}</td>
+                                                            {{ $proyek->Csi->progress ?? 'Belum Get Progress' }}
+                                                        </td>
                                                         <td class="text-center">
                                                         @empty(!$proyek->Csi)
                                                             <span
-                                                                class="px-4 fs-7 badge {{ $proyek->Csi->status == 'Not Sent' ? 'badge-light-danger' : ($proyek->Csi->status == 'Requested' ? 'badge-light-primary' : 'badge-light-success') }}">
+                                                                class="px-4 fs-7 badge {{ $proyek->Csi->status == 'Not Sent' ? 'badge-light-danger' : ($proyek->Csi->status == 'Requested' ? 'badge-light-primary' : 'badge-light-success') }} {{ $proyek->Csi->is_setuju == 'f' ? 'badge-light-danger' : ''}}">
+                                                                @if ($proyek->Csi->is_setuju == "f")
+                                                                Rejected                                                                
+                                                                @else
                                                                 {{ $proyek->Csi->status }}
+                                                                @endif
                                                             </span>
-                                                        @endempty
-                                                    </td>
-                                                    <td class="text-center">
-                                                    @empty(!$proyek->Csi)
-                                                        @if ($proyek->Csi->status == 'Done')
-                                                            <a target="_blank"
-                                                                href="/csi/customer-survey/{{ $proyek->Csi->id_csi }}"
-                                                                class="btn fs-8 btn-sm btn-light btn-active-primary text-hover-white">Cek
-                                                                CSI &nbsp; <i class="bi bi-search"></i></a>
-                                                        @else
-                                                            <button class="btn btn-sm btn-light btn-active-primary" data-bs-toggle="modal"
-                                                                data-bs-target="#modal-send-{{ $proyek->Csi->id_csi }}">Send</button>
-                                                        @endif
-                                                    @else
+                                                            @endempty
+                                                        </td>
+                                                        <td class="text-center">
+                                                        @if ($proyek->Csi->is_setuju == "f")
                                                         <button class="btn btn-sm btn-light btn-active-primary" data-bs-toggle="modal"
-                                                            data-bs-target="#modal-create-{{ $proyek->kode_proyek }}">Get Progress</button>
-                                                    @endempty
-                                                </td>
-                                            </tr>
-                                        @endif
-                                    @endforeach
+                                                            data-bs-target="#modal-send-{{ $proyek->Csi->id_csi }}">Send</button>
+                                                        @else
+                                                            @empty(!$proyek->Csi)
+                                                                @if ($proyek->Csi->status == 'Done')
+                                                                    <a target="_blank"
+                                                                        href="/csi/customer-survey/{{ $proyek->Csi->id_csi }}"
+                                                                        class="btn fs-8 btn-sm btn-light btn-active-primary text-hover-white">Cek
+                                                                        CSI &nbsp; <i class="bi bi-search"></i></a>
+                                                                @elseif ($proyek->Csi->status == 'Requested')
+                                                                    <span class="px-4 fs-8 badge badge-light-warning">
+                                                                        Waiting for Customer
+                                                                    </span>
+                                                                @else
+                                                                    <button class="btn btn-sm btn-light btn-active-primary" data-bs-toggle="modal"
+                                                                        data-bs-target="#modal-send-{{ $proyek->Csi->id_csi }}">Send</button>
+                                                                @endif
+                                                            @else
+                                                                {{-- <button class="btn btn-sm btn-light btn-active-primary" data-bs-toggle="modal"
+                                                                    data-bs-target="#modal-create-{{ $proyek->kode_proyek }}">Get Progress</button> --}}
+                                                            @endempty
+                                                        @endif
+                                                        </td>
+                                                    </tr>
+                                                @endif
+                                            @endif
+                                        @endforeach
                                 </tbody>
                             </table>
                             <!--end::Table CSI-->
@@ -427,6 +442,7 @@
 
                     <input type="hidden" name="id-customer" value="{{ $p->proyekBerjalan->id_customer ?? null }}" />
                     <input type="hidden" name="kode-proyek" value="{{ $p->kode_proyek }}" />
+                    <input type="hidden" name="kode-spk" value="{{ $p->kode_spk ?? '' }}" />
 
                     <p>Nama Proyek : <b>{{ $p->nama_proyek }}</b></p>
                     <p>Pemberi Kerja : <b>{{ $p->proyekBerjalan->name_customer ?? '-' }}</b></p>

@@ -179,4 +179,9 @@ class Proyek extends Model
     {
         return $this->hasOne(Csi::class, "no_spk", "kode_proyek");
     }
+
+    public function ContractApproval()
+    {
+        return $this->hasMany(ContractApproval::class, "kode_proyek");
+    }
 }

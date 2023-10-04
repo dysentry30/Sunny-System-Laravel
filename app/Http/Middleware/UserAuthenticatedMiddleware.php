@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 
-class UserAuthenticatedMiddleware
+class UserNotAuthenticatedMiddleware
 {
     /**
      * Handle an incoming request.
@@ -18,18 +18,17 @@ class UserAuthenticatedMiddleware
     {
         if(str_contains($request->url(), "api")) {
             if(auth()->user() != null) {
-                return $next($request);
+                return response()->json([
+                    "status" => "Terautentikasi",
+                ]);
             }
-            $resp = [
-                "status_code" => 401,
-                "msg" => "Tidak terautentikasi"
-            ];
-            return response()->json($resp, 401);
-        }
-
-        if(auth()->user() != null) {
             return $next($request);
         }
-        return redirect("/");
+
+        if (auth()->user() == null) {
+            return $next($request);
+        }
+
+        return redirect("/dashboard");
     }
 }

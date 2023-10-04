@@ -1067,20 +1067,20 @@
                                             
                                             <!--begin::NDA-->
                                             @php
-                                                $dokumenCRM_NDA = $proyek->DokumenNda->first();
+                                                // $dokumenCRM_NDA = $proyek->is_rfa_nda;
                                                 $dokumenNDA = $contract->UploadFinal->where('category', '=', 'Dokumen NDA')->first();
-                                                if(!empty($dokumenNDA) && !empty($dokumenCRM_NDA)){
+                                                if(!empty($dokumenNDA) && $proyek->is_rfa_nda == true){
                                                     $statusWaktuUpload = new DateTime($dokumenNDA->created_at);
-                                                    $currentDate = new DateTime($dokumenCRM_NDA->created_at);
+                                                    $currentDate = new DateTime($proyek->tgl_rfa_nda);
                                                     $limitWaktu = $statusWaktuUpload->diff($currentDate)->d;
                                                     // dump($limitWaktu);
                                                 }
                                             @endphp
                                             <td class="text-center">
-                                                <small class="{{ !empty($dokumenCRM_NDA) ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
-                                                    @if (!empty($dokumenCRM_NDA))
+                                                <small class="{{ $proyek->is_rfa_nda == true ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
+                                                    @if ($proyek->is_rfa_nda == true)
                                                     RFA <br>
-                                                    {{ Carbon\Carbon::create($dokumenCRM_NDA->created_at)->format('d/m/Y') }}
+                                                    {{ Carbon\Carbon::create($proyek->tgl_rfa_nda)->format('d/m/Y') }}
                                                     @else
                                                     Open
                                                     @endif
@@ -1096,11 +1096,11 @@
                                                 </small>
                                                 <br>
                                                 <small class="{{ !empty($dokumenNDA) ? 'badge badge-light-primary' : 'badge badge-light-danger' }} my-1">
-                                                    @if (!empty($dokumenNDA) && (!empty($dokumenCRM_NDA) && $limitWaktu > 14))
+                                                    @if (!empty($dokumenNDA) && ($proyek->is_rfa_nda == true && $limitWaktu > 14))
                                                         Late
-                                                    @elseif (!empty($dokumenNDA) && (!empty($dokumenCRM_NDA) && $limitWaktu <= 14))
+                                                    @elseif (!empty($dokumenNDA) && ($proyek->is_rfa_nda == true && $limitWaktu <= 14))
                                                         On Time
-                                                    @elseif (!empty($dokumenCRM_NDA))
+                                                    @elseif (!empty($proyek->tgl_rfa_nda))
                                                         On Going
                                                     @else
                                                         Open
@@ -1153,20 +1153,20 @@
                                             <!--end::LOI-->
                                             <!--begin::MOU-->
                                             @php
-                                                $dokumenCRM_MOU = $proyek->DokumenMou->first();
+                                                // $dokumenCRM_MOU = $proyek->DokumenMou->first();
                                                 $dokumenMOU = $contract->UploadFinal->where('category', '=', 'Dokumen MOU')->first();
-                                                if(!empty($dokumenMOU) && !empty($dokumenCRM_MOU)){
+                                                if(!empty($dokumenMOU) && $proyek->is_rfa_mou == true){
                                                     $statusWaktuUpload = new DateTime($dokumenMOU->created_at);
-                                                    $currentDate = new DateTime($dokumenCRM_MOU->created_at);
+                                                    $currentDate = new DateTime($proyek->tgl_rfa_mou);
                                                     $limitWaktu = $statusWaktuUpload->diff($currentDate)->d;
                                                 }
                                             @endphp
                                             {{-- @dump($statusWaktuUpload) --}}
                                             <td class="text-center">
-                                                <small class="{{ !empty($dokumenCRM_MOU) ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
-                                                    @if (!empty($dokumenCRM_MOU))
+                                                <small class="{{ $proyek->is_rfa_mou == true ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
+                                                    @if ($proyek->is_rfa_mou == true)
                                                     RFA <br>
-                                                    {{ Carbon\Carbon::create($dokumenCRM_MOU->created_at)->format('d/m/Y') }}
+                                                    {{ Carbon\Carbon::create($proyek->tgl_rfa_mou)->format('d/m/Y') }}
                                                     @else
                                                     Open
                                                     @endif
@@ -1182,11 +1182,11 @@
                                                 </small>
                                                 <br>
                                                 <small class="{{ !empty($dokumenMOU) ? 'badge badge-light-primary' : 'badge badge-light-danger' }} my-1">
-                                                    @if (!empty($dokumenMOU) && (!empty($dokumenCRM_MOU) && $limitWaktu > 14))
+                                                    @if (!empty($dokumenMOU) && ($proyek->is_rfa_mou == true && $limitWaktu > 14))
                                                         Late
-                                                    @elseif (!empty($dokumenMOU) && (!empty($dokumenCRM_MOU) && $limitWaktu <= 14))
+                                                    @elseif (!empty($dokumenMOU) && ($proyek->is_rfa_mou == true && $limitWaktu <= 14))
                                                         On Time
-                                                    @elseif (!empty($dokumenCRM_MOU))
+                                                    @elseif (!empty($proyek->tgl_rfa_mou))
                                                         On Going
                                                     @else
                                                         Open
@@ -1196,20 +1196,20 @@
                                             <!--end::MOU-->
                                             <!--begin::ECA-->
                                             @php
-                                                $dokumenCRM_ECA = $proyek->DokumenEca->first();
+                                                // $dokumenCRM_ECA = $proyek->DokumenEca->first();
                                                 $dokumenECA = $contract->UploadFinal->where('category', '=', 'Dokumen ECA')->first();
-                                                if(!empty($dokumenECA) && !empty($dokumenCRM_ECA)){
+                                                if(!empty($dokumenECA) && $proyek->is_rfa_eca == true){
                                                     $statusWaktuUpload = new DateTime($dokumenECA->created_at);
-                                                    $currentDate = new DateTime($dokumenCRM_ECA->created_at);
+                                                    $currentDate = new DateTime($proyek->tgl_rfa_eca);
                                                     $limitWaktu = $statusWaktuUpload->diff($currentDate)->d;
                                                 }
                                             @endphp
                                             {{-- @dump($statusWaktuUpload) --}}
                                             <td class="text-center">
-                                                <small class="{{ !empty($dokumenCRM_ECA) ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
-                                                    @if (!empty($dokumenCRM_ECA))
+                                                <small class="{{ $proyek->is_rfa_eca == true ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
+                                                    @if ($proyek->is_rfa_eca == true)
                                                     RFA <br>
-                                                    {{ Carbon\Carbon::create($dokumenCRM_ECA->created_at)->format('d/m/Y') }}
+                                                    {{ Carbon\Carbon::create($proyek->tgl_rfa_eca)->format('d/m/Y') }}
                                                     @else
                                                     Open
                                                     @endif
@@ -1225,11 +1225,11 @@
                                                 </small>
                                                 <br>
                                                 <small class="{{ !empty($dokumenECA) ? 'badge badge-light-primary' : 'badge badge-light-danger' }} my-1">
-                                                    @if (!empty($dokumenECA) && (!empty($dokumenCRM_ECA) && $limitWaktu > 14))
+                                                    @if (!empty($dokumenECA) && ($proyek->is_rfa_eca == true && $limitWaktu > 14))
                                                         Late
-                                                    @elseif (!empty($dokumenECA) && (!empty($dokumenCRM_ECA) && $limitWaktu <= 14))
+                                                    @elseif (!empty($dokumenECA) && ($proyek->is_rfa_eca == true && $limitWaktu <= 14))
                                                         On Time
-                                                    @elseif (!empty($dokumenCRM_ECA))
+                                                    @elseif (!empty($proyek->tgl_rfa_eca))
                                                         On Going
                                                     @else
                                                         Open
@@ -1239,20 +1239,20 @@
                                             <!--end::ECA-->
                                             <!--begin::ICA-->
                                             @php
-                                                $dokumenCRM_ICA = $proyek->DokumenIca->first();
+                                                // $dokumenCRM_ICA = $proyek->DokumenIca->first();
                                                 $dokumenICA = $contract->UploadFinal->where('category', '=', 'Dokumen ICA')->first();
-                                                if(!empty($dokumenICA) && !empty($dokumenCRM_ICA)){
+                                                if(!empty($dokumenICA) && $proyek->is_rfa_ica == true){
                                                     $statusWaktuUpload = new DateTime($dokumenICA->created_at);
-                                                    $currentDate = new DateTime($dokumenCRM_ICA->created_at);
+                                                    $currentDate = new DateTime($proyek->tgl_rfa_ica);
                                                     $limitWaktu = $statusWaktuUpload->diff($currentDate)->d;
                                                 }
                                             @endphp
                                             {{-- @dump($statusWaktuUpload) --}}
                                             <td class="text-center">
-                                                <small class="{{ !empty($dokumenCRM_ICA) ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
-                                                    @if (!empty($dokumenCRM_ICA))
+                                                <small class="{{ $proyek->is_rfa_ica == true ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
+                                                    @if ($proyek->is_rfa_ica == true)
                                                     RFA <br>
-                                                    {{ Carbon\Carbon::create($dokumenCRM_ICA->created_at)->format('d/m/Y') }}
+                                                    {{ Carbon\Carbon::create($proyek->tgl_rfa_ica)->format('d/m/Y') }}
                                                     @else
                                                     Open
                                                     @endif
@@ -1268,11 +1268,11 @@
                                                 </small>
                                                 <br>
                                                 <small class="{{ !empty($dokumenICA) ? 'badge badge-light-primary' : 'badge badge-light-danger' }} my-1">
-                                                    @if (!empty($dokumenICA) && (!empty($dokumenCRM_ICA) && $limitWaktu > 14))
+                                                    @if (!empty($dokumenICA) && ($proyek->is_rfa_ica == true && $limitWaktu > 14))
                                                         Late
-                                                    @elseif (!empty($dokumenICA) && (!empty($dokumenCRM_ICA) && $limitWaktu <= 14))
+                                                    @elseif (!empty($dokumenICA) && ($proyek->is_rfa_ica == true && $limitWaktu <= 14))
                                                         On Time
-                                                    @elseif (!empty($dokumenCRM_ICA))
+                                                    @elseif (!empty($proyek->tgl_rfa_ica))
                                                         On Going
                                                     @else
                                                         Open
@@ -1325,20 +1325,20 @@
                                             <!--end::DRAFT-->
                                             <!--begin::RKS-->
                                             @php
-                                                $dokumenCRM_RKS = $proyek->DokumenRks->first();
+                                                // $dokumenCRM_RKS = $proyek->DokumenRks->first();
                                                 $dokumenRKS = $contract->UploadFinal->where('category', '=', 'Dokumen RKS / Project Spesification')->first();
-                                                if(!empty($dokumenRKS) && !empty($dokumenCRM_RKS)){
+                                                if(!empty($dokumenRKS) && $proyek->is_rfa_rks == true){
                                                     $statusWaktuUpload = new DateTime($dokumenRKS->created_at);
-                                                    $currentDate = new DateTime($dokumenCRM_RKS->created_at);
+                                                    $currentDate = new DateTime($proyek->tgl_rfa_rks);
                                                     $limitWaktu = $statusWaktuUpload->diff($currentDate)->d;
                                                 }
                                             @endphp
                                             {{-- @dump($statusWaktuUpload) --}}
                                             <td class="text-center">
-                                                <small class="{{ !empty($dokumenCRM_RKS) ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
-                                                    @if (!empty($dokumenCRM_RKS))
+                                                <small class="{{ $proyek->is_rfa_rks == true ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
+                                                    @if ($proyek->is_rfa_rks == true)
                                                     RFA <br>
-                                                    {{ Carbon\Carbon::create($dokumenCRM_RKS->created_at)->format('d/m/Y') }}
+                                                    {{ Carbon\Carbon::create($proyek->tgl_rfa_rks)->format('d/m/Y') }}
                                                     @else
                                                     Open
                                                     @endif
@@ -1354,11 +1354,11 @@
                                                 </small>
                                                 <br>
                                                 <small class="{{ !empty($dokumenRKS) ? 'badge badge-light-primary' : 'badge badge-light-danger' }} my-1">
-                                                    @if (!empty($dokumenRKS) && (!empty($dokumenCRM_RKS) && $limitWaktu > 14))
+                                                    @if (!empty($dokumenRKS) && ($proyek->is_rfa_rks == true && $limitWaktu > 14))
                                                         Late
-                                                    @elseif (!empty($dokumenRKS) && (!empty($dokumenCRM_RKS) && $limitWaktu <= 14))
+                                                    @elseif (!empty($dokumenRKS) && ($proyek->is_rfa_rks == true && $limitWaktu <= 14))
                                                         On Time
-                                                    @elseif (!empty($dokumenCRM_RKS))
+                                                    @elseif (!empty($$proyek->tgl_rfa_rks))
                                                         On Going
                                                     @else
                                                         Open
@@ -1368,20 +1368,20 @@
                                             <!--end::RKS-->
                                             <!--begin::ITB-->
                                             @php
-                                                $dokumenCRM_ITB = $proyek->DokumenItbTor->first();
+                                                // $dokumenCRM_ITB = $proyek->DokumenItbTor->first();
                                                 $dokumenITB = $contract->UploadFinal->where('category', '=', 'Dokumen ITB/TOR')->first();
-                                                if(!empty($dokumenITB) && !empty($dokumenCRM_ITB)){
+                                                if(!empty($dokumenITB) && $proyek->is_rfa_itb_tor == true){
                                                     $statusWaktuUpload = new DateTime($dokumenITB->created_at);
-                                                    $currentDate = new DateTime($dokumenCRM_ITB->created_at);
+                                                    $currentDate = new DateTime($proyek->tgl_rfa_itb_tor);
                                                     $limitWaktu = $statusWaktuUpload->diff($currentDate)->d;
                                                 }
                                             @endphp
                                             {{-- @dump($statusWaktuUpload) --}}
                                             <td class="text-center">
-                                                <small class="{{ !empty($dokumenCRM_ITB) ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
-                                                    @if (!empty($dokumenCRM_ITB))
+                                                <small class="{{ $proyek->is_rfa_itb_tor == true ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
+                                                    @if ($proyek->is_rfa_itb_tor == true)
                                                     RFA <br>
-                                                    {{ Carbon\Carbon::create($dokumenCRM_ITB->created_at)->format('d/m/Y') }}
+                                                    {{ Carbon\Carbon::create($proyek->tgl_rfa_itb_tor)->format('d/m/Y') }}
                                                     @else
                                                     Open
                                                     @endif
@@ -1397,11 +1397,11 @@
                                                 </small>
                                                 <br>
                                                 <small class="{{ !empty($dokumenITB) ? 'badge badge-light-primary' : 'badge badge-light-danger' }} my-1">
-                                                    @if (!empty($dokumenITB) && (!empty($dokumenCRM_ITB) && $limitWaktu > 14))
+                                                    @if (!empty($dokumenITB) && ($proyek->is_rfa_itb_tor == true && $limitWaktu > 14))
                                                         Late
-                                                    @elseif (!empty($dokumenITB) && (!empty($dokumenCRM_ITB) && $limitWaktu <= 14))
+                                                    @elseif (!empty($dokumenITB) && ($proyek->is_rfa_itb_tor == true && $limitWaktu <= 14))
                                                         On Time
-                                                    @elseif (!empty($dokumenCRM_ITB))
+                                                    @elseif (!empty($proyek->tgl_rfa_itb_tor))
                                                         On Going
                                                     @else
                                                         Open
@@ -1454,20 +1454,20 @@
                                             <!--end::TENDER-->
                                             <!--begin::RISK-->
                                             @php
-                                                $dokumenCRM_Risk = $proyek->RiskTenderProyek->first();
+                                                // $dokumenCRM_Risk = $proyek->RiskTenderProyek->first();
                                                 $dokumenRisk = $contract->UploadFinal->where('category', '=', 'Dokumen Resiko - Perolehan')->first();
                                                 if(!empty($dokumenRisk) && !empty($dokumenCRM_Risk)){
                                                     $statusWaktuUpload = new DateTime($dokumenRisk->created_at);
-                                                    $currentDate = new DateTime($dokumenCRM_Risk->created_at);
+                                                    $currentDate = new DateTime($proyek->tgl_rfa_risk);
                                                     $limitWaktu = $statusWaktuUpload->diff($currentDate)->d;
                                                 }
                                             @endphp
                                             {{-- @dump($statusWaktuUpload) --}}
                                             <td class="text-center">
-                                                <small class="{{ !empty($dokumenCRM_Risk) ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
-                                                    @if (!empty($dokumenCRM_Risk))
+                                                <small class="{{ $proyek->is_rfa_risk == true ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
+                                                    @if ($proyek->is_rfa_risk == true)
                                                     RFA <br>
-                                                    {{ Carbon\Carbon::create($dokumenCRM_Risk->created_at)->format('d/m/Y') }}
+                                                    {{ Carbon\Carbon::create($proyek->tgl_rfa_risk)->format('d/m/Y') }}
                                                     @else
                                                     Open
                                                     @endif
@@ -1482,12 +1482,12 @@
                                                     @endif
                                                 </small>
                                                 <br>
-                                                <small class="{{ !empty($dokumenRisk) ? 'badge badge-light-primary' : 'badge badge-light-danger' }} my-1">
-                                                    @if (!empty($dokumenRisk) && (!empty($dokumenCRM_Risk) && $limitWaktu > 14))
+                                                <small class="{{ $proyek->is_rfa_risk == true ? 'badge badge-light-primary' : 'badge badge-light-danger' }} my-1">
+                                                    @if (!empty($dokumenRisk) && ($proyek->is_rfa_risk == true && $limitWaktu > 14))
                                                         Late
-                                                    @elseif (!empty($dokumenRisk) && (!empty($dokumenCRM_Risk) && $limitWaktu <= 14))
+                                                    @elseif (!empty($dokumenRisk) && ($proyek->is_rfa_risk == true && $limitWaktu <= 14))
                                                         On Time
-                                                    @elseif (!empty($dokumenCRM_Risk))
+                                                    @elseif (!empty($proyek->tgl_rfa_risk))
                                                         On Going
                                                     @else
                                                         Open

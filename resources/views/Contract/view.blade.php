@@ -351,7 +351,7 @@
 <!--begin::Content-->
 @php
     $month = (int)date("m") == 1 ? 12 : (int)date("m")-1;
-    $is_approved = $contract->ContractApproval->where("periode", "=", $month)->where("is_locked", "=", true);
+    $is_approved = $contract->ContractApproval?->where("periode", "=", $month)?->where("is_locked", "=", true);
 @endphp
 {{-- @dump($is_approved) --}}
 <form action="/contract-management/update" method="post" id="form-1">@csrf</form>
@@ -372,10 +372,10 @@
                 <!--end::Page title-->
                 <!--begin::Actions-->
                 <div class="d-flex align-items-center py-1">
-                    @if (auth()->user()->is_pic != true)
+                    {{-- @if (auth()->user()->is_pic != true)
                         <!--begin::Button-->
                         @if ($contract->where("id_contract", "=", $contract->id_contract)->where("stages", "!=", 1)->get()->isNotEmpty())
-                            @if ($is_approved->isEmpty())
+                            @if ( empty($is_approved) || $is_approved->isEmpty() )
                             <button type="button" class="btn btn-sm btn-primary" id="kt_toolbar_primary_button" onclick="lockBulananContract()"
                                 style="background-color:#008CB4;">
                                 <span>Lock</span>
@@ -388,10 +388,10 @@
                                 <i class="bi bi-unlock-fill text-white"></i>
                             </button>
                         @endif
-                    @endif
+                    @endif --}}
                     <!--end::Button-->
 
-                    <script>
+                    {{-- <script>
                         async function lockBulananContract() {
                             Swal.fire({
                                 title: '',
@@ -420,12 +420,12 @@
 
                             })
                         }
-                    </script>
+                    </script> --}}
                     @endif
 
                     <!--begin::Button-->
                     @if ($contract->where("id_contract", "=", $contract->id_contract)->where("stages", "!=", 1)->get()->isNotEmpty())
-                    <button type="submit" form="form-1" class="btn btn-sm btn-primary {{ $is_approved->isEmpty() ? "" : "disabled" }}" id="kt_toolbar_primary_button"
+                    <button type="submit" form="form-1" class="btn btn-sm btn-primary {{ empty($is_approved) || $is_approved->isEmpty() ? "" : "disabled" }}" id="kt_toolbar_primary_button"
                         style="background-color:#008CB4;margin-left:10px;">
                         Save</button>
                     @endif
@@ -512,7 +512,7 @@
                                             style="outline: 0px; cursor: pointer;">
                                             Serah Terima Pekerjaan
                                         </a> --}}
-                                        @if ($is_approved->isEmpty())
+                                        @if (empty($is_approved) || $is_approved->isEmpty())
                                         <a href="#" role="link" class="stage-button color-is-default"
                                             style="outline: 0px;">
                                             Pemeliharaan
@@ -910,12 +910,12 @@
                                 @if (!empty($contract->questionsProjects->toArray()))
                                     <a href="#" onclick="exportToExcel(this, '#data-aanwitjzing')" class="">(Klik di sini untuk Export ke Excel)</a>
                                 @endif
-                                {{-- @if ($is_approved->isEmpty()) --}}
+                                {{-- @if (empty($is_approved) || $is_approved->isEmpty()) --}}
                                 <a href="#" Id="Plus" data-bs-toggle="modal"
-                                    data-bs-target="#kt_modal_question_proyek">+</a>
+                                    data-bs-target="#kt_modal_create_aanwitjzing">+</a>
                                 {{-- @endif --}}
                                 @if (!empty($contract->questionsProjects->toArray()))
-                                {{-- @if ($is_approved->isEmpty()) --}}
+                                {{-- @if (empty($is_approved) || $is_approved->isEmpty()) --}}
                                 <a href="#" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_upload_aanwitjzing" class="btn btn-primary btn-sm p-2 mx-3 text-end">Upload</a>  
                                 {{-- @endif --}}
@@ -928,10 +928,9 @@
                                 <thead>
                                     <!--begin::Table row-->
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                        <th class="min-w-125px">No.</th>
-                                        <th class="min-w-125px">Item</th>
-                                        <th class="min-w-125px">Sub Pasal</th>
-                                        <th class="min-w-125px">Daftar Pertanyaan</th>
+                                        <th class="min-w-125px">Nama File</th>
+                                        <th class="min-w-125px">Tanggal Upload</th>
+                                        <th class="min-w-125px">Action</th>
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>
@@ -939,15 +938,13 @@
                                 
                                 <!--begin::Table body-->
                                 @php
-                                    $no = 1;
+                                    $dokumen_aanwitjzing = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Aanwitjzing");
                                 @endphp
                                 <tbody class="fw-bold text-gray-400">
-                                    @if (isset($contract))
+                                    {{-- @if (isset($contract))
                                         @forelse ($contract->questionsProjects as $questionProject)
                                             @if ($questionProject->tender_menang == 0)
                                                 <tr>
-                                                    {{-- @dump($questionProject->where('tender_menang', '=', 0)->get())
-                                                    @dump($contract->questionsProjects->count()) --}}
                                                     <td>
                                                         {{ $no++ }}
                                                     </td>
@@ -967,25 +964,61 @@
                                                     </td>
                                                     <!--end::Column-->
                                                     <!--begin::Kode=-->
-                                                    {{-- <td>
-                                                        <a href="#" class="text-gray-400 text-hover-primary mb-1">
-                                                            {{ Carbon\Carbon::createFromTimeString($questionProject->created_at)->translatedFormat("d F Y") }}</a>
-                                                    </td> --}}
                                                     <!--end::Kode=-->
                                                 </tr>
                                             @endif
                                         @empty
                                             
                                         @endforelse
+                                    @else    
+                                    @endif --}}
+                                    @if (!empty($dokumen_aanwitjzing))
+                                        @forelse ($dokumen_aanwitjzing as $dc)
+                                            <tr>
+                                                <!--begin::Column-->
+                                                <td>
+                                                    <a target="_blank" href="{{ asset('words/'.$dc->id_document) }}" class="text-hover-primary">
+                                                        {{ $dc->nama_document }}
+                                                    </a>
+                                                </td>
+                                                <!--end::Column-->
+                                                <!--begin::Column-->
+                                                <td>
+                                                    <p class="text-gray-600 mb-1">{{ Carbon\Carbon::parse($dc->created_at)->translatedFormat("d F Y") }}</p>
+                                                </td>
+                                                <!--end::Column-->
+                                                <!--begin::Action-->
+                                                <td class="text-center">
+                                                    <div class="d-flex flex-row justify-content-center gap-2 flex-wrap">
+                                                        <a href="#" data-bs-toggle="modal"
+                                                            data-bs-target="#kt_modal_create_aanwitjzing_{{ $dc->id }}"
+                                                            {{-- class="btn btn-primary p-2 text-white {{ empty($is_approved) || $is_approved->isEmpty() ? '' : 'disabled' }}">Edit</a> --}}
+                                                            class="btn btn-sm btn-primary p-2 text-white">Edit</a>
+                                                        <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dc->id }}')">Delete</button>
+                                                    </div>
+                                                </td>
+                                                <!--end::Action-->
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="5" class="text-center">
+                                                    <h6><b>There is no data</b></h6>
+                                                </td>
+                                            </tr>
+                                        @endforelse
                                     @else
-                                        
+                                        <tr>
+                                            <td colspan="5" class="text-center">
+                                                <h6><b>There is no data</b></h6>
+                                            </td>
+                                        </tr>
                                     @endif
                                 </tbody>
                                 <!--end::Table body-->
 
                             </table>
                             @php
-                                $uploadFileAanwitjzing = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Aanwitjzing")->first();
+                                $uploadFileAanwitjzing = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Aanwitjzing")->where('status', '=', 'Final')->first();
                             @endphp
                             <!--End:Table: Review-->
                             @if (!empty($uploadFileAanwitjzing))
@@ -994,7 +1027,7 @@
                             </small></a>
                             @endif
 
-                            <br><br>
+                            <br>
 
                             {{-- <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Draft Kontrak
@@ -1077,27 +1110,98 @@
                             <br>
                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Tinjauan Dokumen Kontrak - Perolehan
-                                {{-- @dump($contract->reviewProjects) --}}
-                                @if ($contract->reviewProjects->isEmpty() && $contract->project->DokumenTender->isNotEmpty())
-                                {{-- @if ($is_approved->isEmpty()) --}}
-                                <a href="/review-contract/view/{{ $contract->id_contract }}/1" target="_blank" Id="Plus">+</a>
-                                {{-- @endif --}}
-                                @elseif ($contract->reviewProjects->isNotEmpty() && $contract->project->DokumenTender->isNotEmpty())
-                                    <a class="btn btn-primary btn-sm p-2 gap-3" href="/review-contract/view/{{ $contract->id_contract }}/1" target="_blank">view</a>
-                                    {{-- <a class="btn btn-primary btn-sm p-2 px-3 mx-3" data-kt-countup-tabs="true" data-bs-toggle="tab"
-                                    href="#kt_user_view_overview_pelaksanaan">Lihat Pelaksanaan</a>     --}}
-                                    {{-- <small>(Lanjutkan isi di Pelaksanaan)</small> --}}
+                                @php
+                                    /*    
+                                        {{-- @dump($contract->reviewProjects) --}}
+                                        @if ($contract->reviewProjects->isEmpty() && $contract->project->DokumenTender->isNotEmpty())
+                                        {{-- @if (empty($is_approved) || $is_approved->isEmpty()) --}}
+                                        <a href="/review-contract/view/{{ $contract->id_contract }}/1" target="_blank" Id="Plus">+</a>
+                                        {{-- @endif --}}
+                                        @elseif ($contract->reviewProjects->isNotEmpty() && $contract->project->DokumenTender->isNotEmpty())
+                                            <a class="btn btn-primary btn-sm p-2 gap-3" href="/review-contract/view/{{ $contract->id_contract }}/1" target="_blank">view</a>
+                                            {{-- <a class="btn btn-primary btn-sm p-2 px-3 mx-3" data-kt-countup-tabs="true" data-bs-toggle="tab"
+                                            href="#kt_user_view_overview_pelaksanaan">Lihat Pelaksanaan</a>     --}}
+                                            {{-- <small>(Lanjutkan isi di Pelaksanaan)</small> --}}
+                                        @endif
+                                        {{-- @if (empty($is_approved) || $is_approved->isEmpty()) --}}
+                                        {{-- @endif --}}
+                                    */
+                                @endphp
+                                @if (!empty($contract->project->DokumenTender) || $contract->project->DokumenTender->isNotEmpty())
+                                    <a href="#" Id="Plus" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_create_tinjauan_dokumen_perolehan">+</a>
                                 @endif
-                                {{-- @if ($is_approved->isEmpty()) --}}
                                 @if (!empty($contract->reviewProjects->toArray()))
-                                        <a href="#" data-bs-toggle="modal"
-                                        data-bs-target="#kt_modal_upload_tinjauan_perolehan" class="btn btn-primary btn-sm p-2 text-end me-3">Upload</a>
+                                    <a href="#" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_upload_tinjauan_perolehan" class="btn btn-primary btn-sm p-2 text-end me-3">Upload</a>
                                 @endif
-                                {{-- @endif --}}
                             </h3>
+                            <!--begin:Table: Review-->
+                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="data-aanwitjzing">
+                                <!--begin::Table head-->
+                                <thead>
+                                    <!--begin::Table row-->
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-125px">Nama File</th>
+                                        <th class="min-w-125px">Tanggal Upload</th>
+                                        <th class="min-w-125px">Action</th>
+                                    </tr>
+                                    <!--end::Table row-->
+                                </thead>
+                                <!--end::Table head-->
+                                
+                                <!--begin::Table body-->
+                                @php
+                                    $dokumen_tinjauan_perolehan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Tinjauan Dokumen Kontrak - Perolehan")->where('status', '!=', 'Final');
+                                @endphp
+                                <tbody class="fw-bold text-gray-400">
+                                    @if (!empty($dokumen_tinjauan_perolehan))
+                                        @forelse ($dokumen_tinjauan_perolehan as $dc)
+                                            <tr>
+                                                <!--begin::Column-->
+                                                <td>
+                                                    <a target="_blank" href="{{ asset('words/'.$dc->id_document) }}" class="text-hover-primary">
+                                                        {{ $dc->nama_document }}
+                                                    </a>
+                                                </td>
+                                                <!--end::Column-->
+                                                <!--begin::Column-->
+                                                <td>
+                                                    <p class="text-gray-600 mb-1">{{ Carbon\Carbon::parse($dc->created_at)->translatedFormat("d F Y") }}</p>
+                                                </td>
+                                                <!--end::Column-->
+                                                <!--begin::Action-->
+                                                <td class="text-center">
+                                                    <div class="d-flex flex-row justify-content-center gap-2 flex-wrap">
+                                                        <a href="#" data-bs-toggle="modal"
+                                                            data-bs-target="#kt_modal_create_tinjauan_dokumen_perolehan_{{ $dc->id }}"
+                                                            {{-- class="btn btn-primary p-2 text-white {{ empty($is_approved) || $is_approved->isEmpty() ? '' : 'disabled' }}">Edit</a> --}}
+                                                            class="btn btn-sm btn-primary p-2 text-white">Edit</a>
+                                                        <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dc->id }}')">Delete</button>
+                                                    </div>
+                                                </td>
+                                                <!--end::Action-->
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="5" class="text-center">
+                                                    <h6><b>There is no data</b></h6>
+                                                </td>
+                                            </tr>
+                                        @endforelse
+                                    @else
+                                        <tr>
+                                            <td colspan="5" class="text-center">
+                                                <h6><b>There is no data</b></h6>
+                                            </td>
+                                        </tr>
+                                    @endif
+                                </tbody>
+                                <!--end::Table body-->
 
+                            </table>
                             @php
-                                $uploadFilePerubahan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Tinjauan Dokumen Kontrak - Perolehan")->first();
+                                $uploadFilePerubahan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Tinjauan Dokumen Kontrak - Perolehan")->where('status', '=', "Final")->first();
                             @endphp
                             <!--End:Table: Review-->
                             @if (!empty($uploadFilePerubahan))
@@ -1225,11 +1329,11 @@
 
                         <h3 class="fw-bolder m-0 mb-3" id="HeadDetail" style="font-size:14px;">
                             Input Resiko - Perolehan (<i class="text-hover-primary text-gray"><a 
-                                                            href="https://crm.wika.co.id/faqs/104625_RiskTender_Input-Kosong.rev.xlsx"> Download
+                                href="{{ asset('template/RiskTender_Input-Kosong.rev.xlsx') }}"> Download
                                                             Template Risk Tender </a></i>)
                             {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_input_resiko_perolehan">+</a> --}}
-                                {{-- @if ($is_approved->isEmpty()) --}}
+                                {{-- @if (empty($is_approved) || $is_approved->isEmpty()) --}}
                                 @if ($contract->project->RiskTenderProyek->isNotEmpty())
                                     <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_upload_resiko_perolehan">+</a>
@@ -1290,11 +1394,12 @@
                                 @if (!empty($contract->UsulanPerubahanDraft->toArray()))
                                     <a href="#" onclick="exportToExcel(this, '#usulan-draft')" class="">(Klik di sini untuk Export ke Excel)</a>
                                 @endif
-                                {{-- @if ($is_approved->isEmpty()) --}}
+                                {{-- @if (empty($is_approved) || $is_approved->isEmpty()) --}}
                                 <a href="#" Id="Plus" data-bs-toggle="modal"
-                                    data-bs-target="#kt_modal_usulan_perubahan_draft_kontrak">+</a>
+                                    data-bs-target="#kt_modal_create_usulan_perubahan_draft_kontrak">+</a>
+
                                 {{-- @endif --}}
-                                {{-- @if ($is_approved->isEmpty()) --}}
+                                {{-- @if (empty($is_approved) || $is_approved->isEmpty()) --}}
                                 @if (!empty($contract->UsulanPerubahanDraft->toArray()))
                                     <a href="#" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_upload_perubahan_kontrak" class="btn btn-primary btn-sm p-2 mx-3 text-end">Upload</a>
@@ -1305,7 +1410,7 @@
                             <!--begin:Table: Review-->
                             <table class="table align-middle table-row-dashed fs-6 gy-5" id="usulan-draft">
                                 <!--begin::Table head-->
-                                <thead>
+                                {{-- <thead>
                                     <!--begin::Table row-->
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                         <th class="min-w-auto">Isu</th>
@@ -1315,10 +1420,19 @@
                                         <th class="min-w-auto">Keterangan</th>
                                     </tr>
                                     <!--end::Table row-->
+                                </thead> --}}
+                                <thead>
+                                    <!--begin::Table row-->
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-125px">Nama File</th>
+                                        <th class="min-w-125px">Tanggal Upload</th>
+                                        <th class="min-w-125px">Action</th>
+                                    </tr>
+                                    <!--end::Table row-->
                                 </thead>
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
-                                <tbody class="fw-bold text-gray-600">
+                                {{-- <tbody class="fw-bold text-gray-600">
                                     @foreach ($contract->UsulanPerubahanDraft as $perubahan_draft)
                                         @php
                                             switch ($perubahan_draft->kategori) {
@@ -1343,13 +1457,61 @@
                                             <td>{{$perubahan_draft->keterangan}}</td>
                                         </tr>
                                     @endforeach
+                                </tbody> --}}
+                                <!--begin::Table body-->
+                                @php
+                                    $dokumen_usulan_perubahan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Usulan Perubahan Draft Kontrak")->where('status', '!=', 'Final');
+                                @endphp
+                                <tbody class="fw-bold text-gray-400">
+                                    @if (!empty($dokumen_usulan_perubahan))
+                                        @forelse ($dokumen_usulan_perubahan as $dc)
+                                            <tr>
+                                                <!--begin::Column-->
+                                                <td>
+                                                    <a target="_blank" href="{{ asset('words/'.$dc->id_document) }}" class="text-hover-primary">
+                                                        {{ $dc->nama_document }}
+                                                    </a>
+                                                </td>
+                                                <!--end::Column-->
+                                                <!--begin::Column-->
+                                                <td>
+                                                    <p class="text-gray-600 mb-1">{{ Carbon\Carbon::parse($dc->created_at)->translatedFormat("d F Y") }}</p>
+                                                </td>
+                                                <!--end::Column-->
+                                                <!--begin::Action-->
+                                                <td class="text-center">
+                                                    <div class="d-flex flex-row justify-content-center gap-2 flex-wrap">
+                                                        <a href="#" data-bs-toggle="modal"
+                                                            data-bs-target="#kt_modal_create_usulan_perubahan_draft_kontrak_{{ $dc->id }}"
+                                                            {{-- class="btn btn-primary p-2 text-white {{ empty($is_approved) || $is_approved->isEmpty() ? '' : 'disabled' }}">Edit</a> --}}
+                                                            class="btn btn-sm btn-primary p-2 text-white">Edit</a>
+                                                        <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dc->id }}')">Delete</button>
+                                                    </div>
+                                                </td>
+                                                <!--end::Action-->
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="5" class="text-center">
+                                                    <h6><b>There is no data</b></h6>
+                                                </td>
+                                            </tr>
+                                        @endforelse
+                                    @else
+                                        <tr>
+                                            <td colspan="5" class="text-center">
+                                                <h6><b>There is no data</b></h6>
+                                            </td>
+                                        </tr>
+                                    @endif
                                 </tbody>
+                                <!--end::Table body-->
                                 <!--end::Table body-->
 
                             </table>
                             <!--End:Table: Review-->
                             @php
-                            $uploadFilePerubahan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Usulan Perubahan Draft Kontrak")->first();
+                            $uploadFilePerubahan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Usulan Perubahan Draft Kontrak")->where('status', '=', "Final")->first();
                             @endphp
                             <!--End:Table: Review-->
                             @if (!empty($uploadFilePerubahan))
@@ -1941,10 +2103,14 @@
 
                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Perjanjian KSO
-                                {{-- @if ($is_approved->isEmpty()) --}}
+                                {{-- @if (empty($is_approved) || $is_approved->isEmpty()) --}}
                                 <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_input_perjanjian_kso">+</a>
                                 {{-- @endif --}}
+                                @if (!empty($contract->PerjanjianKSO->toArray()))
+                                    <a href="#" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_upload_kso" class="btn btn-primary btn-sm p-2 mx-3 text-end">Upload</a>
+                                @endif
                             </h3>
 
                             <!--begin:Table: Review-->
@@ -1969,7 +2135,7 @@
                                                 <!--begin::Column-->
                                                 <td>
                                                     <a target="_blank"
-                                                        href="/document/view/{{ $perjanjian_kso->id_perjanjian_kso }}/{{ $perjanjian_kso->id_document }}"
+                                                    href="/contract-management/download/kso/{{ $perjanjian_kso->id_document }}"
                                                         class="text-gray-600 text-hover-primary mb-1">
                                                         {{ $perjanjian_kso->document_name }}
                                                     </a>
@@ -1989,7 +2155,7 @@
                                                 <!--end::Kode=-->
                                                 <!--begin::Unit=-->
                                                 <td>
-                                                    <p class="text-gray-600 mb-1">{{ $perjanjian_kso->note }}</p>
+                                                    <p class="text-gray-600 mb-1">{!! $perjanjian_kso->note !!}</p>
                                                 </td>
                                                 <!--end::Unit=-->
                                             </tr>
@@ -2011,6 +2177,15 @@
                                 <!--end::Table body-->
 
                             </table>
+                            @php
+                            $uploadFile = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Perjanjian KSO")->first();
+                            @endphp
+                            <!--End:Table: Review-->
+                            @if (!empty($uploadFile))
+                            <a target="_blank" href="{{ asset('words/'.$uploadFile->id_document) }}" class="text-hover-primary">
+                            <small><b>Download File :</b> {{ $uploadFile->nama_document }}</small>
+                            </a>
+                            @endif
                             <!--End:Table: Review-->
 
                             {{-- <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
@@ -2392,7 +2567,7 @@
 
                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Dokumen Kontrak
-                                @if ($is_approved->isEmpty())
+                                @if (empty($is_approved) || $is_approved->isEmpty())
                                 <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_upload_dokumen_kontrak">+</a>
                                 @endif
@@ -2406,17 +2581,19 @@
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                         <th class="min-w-125px">Nama File</th>
                                         <th class="min-w-125px">Tanggal Upload</th>
+                                        <th class="min-w-125px">Status Dokumen</th>
+                                        <th class="min-w-125px">Action</th>
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
                                 @php
-                                    $dokumen = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Kontrak");
+                                    $dokumen_kontrak = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Kontrak");
                                 @endphp
                                 <tbody class="fw-bold text-gray-400">
-                                    @if (!empty($dokumen))
-                                        @forelse ($dokumen as $dc)
+                                    @if (!empty($dokumen_kontrak))
+                                        @forelse ($dokumen_kontrak as $dc)
                                             <tr>
                                                 <!--begin::Column-->
                                                 <td>
@@ -2430,17 +2607,33 @@
                                                     <p class="text-gray-600 mb-1">{{ Carbon\Carbon::parse($dc->created_at)->translatedFormat("d F Y") }}</p>
                                                 </td>
                                                 <!--end::Column-->
+                                                <!--Begin::Column-->
+                                                <td>
+                                                    <p class="text-gray-600 mb-1 text-center">{{ $dc->status_dokumen }}</p>
+                                                </td>
+                                                <!--End::Column-->
+                                                <!--begin::Action-->
+                                                <td class="text-center">
+                                                    <div class="d-flex flex-row justify-content-center gap-2 flex-wrap">
+                                                        <a href="#" data-bs-toggle="modal"
+                                                            data-bs-target="#kt_modal_upload_dokumen_kontrak_{{ $dc->id }}"
+                                                            {{-- class="btn btn-primary p-2 text-white {{ empty($is_approved) || $is_approved->isEmpty() ? '' : 'disabled' }}">Edit</a> --}}
+                                                            class="btn btn-sm btn-primary p-2 text-white">Edit</a>
+                                                        <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dc->id }}')">Delete</button>
+                                                    </div>
+                                                </td>
+                                                <!--end::Action-->
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="3" class="text-center">
+                                                <td colspan="5" class="text-center">
                                                     <h6><b>There is no data</b></h6>
                                                 </td>
                                             </tr>
                                         @endforelse
                                     @else
                                         <tr>
-                                            <td colspan="3" class="text-center">
+                                            <td colspan="5" class="text-center">
                                                 <h6><b>There is no data</b></h6>
                                             </td>
                                         </tr>
@@ -2455,7 +2648,7 @@
 
                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Dokumen Amandemen
-                                @if ($is_approved->isEmpty())
+                                @if (empty($is_approved) || $is_approved->isEmpty())
                                 <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_upload_dokumen_amandemen">+</a>
                                 @endif
@@ -2469,17 +2662,19 @@
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                         <th class="min-w-125px">Nama File</th>
                                         <th class="min-w-125px">Tanggal Upload</th>
+                                        <th class="min-w-125px">Status Dokumen</th>
+                                        <th class="min-w-125px">Action</th>
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
                                 @php
-                                    $dokumen = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Amandemen");
+                                    $dokumen_amandemen = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Amandemen");
                                 @endphp
                                 <tbody class="fw-bold text-gray-400">
-                                    @if (!empty($dokumen))
-                                        @forelse ($dokumen as $dc)
+                                    @if (!empty($dokumen_amandemen))
+                                        @forelse ($dokumen_amandemen as $dc)
                                             <tr>
                                                 <!--begin::Column-->
                                                 <td>
@@ -2493,17 +2688,33 @@
                                                     <p class="text-gray-600 mb-1">{{ Carbon\Carbon::parse($dc->created_at)->translatedFormat("d F Y") }}</p>
                                                 </td>
                                                 <!--end::Column-->
+                                                <!--Begin::Column-->
+                                                <td>
+                                                    <p class="text-gray-600 mb-1 text-center">{{ $dc->status_dokumen }}</p>
+                                                </td>
+                                                <!--End::Column-->
+                                                <!--begin::Action-->
+                                                <td class="text-center">
+                                                    <div class="d-flex flex-row justify-content-center gap-2 flex-wrap">
+                                                        <a href="#" data-bs-toggle="modal"
+                                                            data-bs-target="#kt_modal_upload_dokumen_amandemen_{{ $dc->id }}"
+                                                            {{-- class="btn btn-primary p-2 text-white {{ empty($is_approved) || $is_approved->isEmpty() ? '' : 'disabled' }}">Edit</a> --}}
+                                                            class="btn btn-sm btn-primary p-2 text-white">Edit</a>
+                                                        <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dc->id }}')">Delete</button>
+                                                    </div>
+                                                </td>
+                                                <!--end::Action-->
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="3" class="text-center">
+                                                <td colspan="5" class="text-center">
                                                     <h6><b>There is no data</b></h6>
                                                 </td>
                                             </tr>
                                         @endforelse
                                     @else
                                         <tr>
-                                            <td colspan="3" class="text-center">
+                                            <td colspan="5" class="text-center">
                                                 <h6><b>There is no data</b></h6>
                                             </td>
                                         </tr>
@@ -2518,7 +2729,7 @@
 
                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Dokumen Bill Of Quantity
-                                @if ($is_approved->isEmpty())
+                                @if (empty($is_approved) || $is_approved->isEmpty())
                                 <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_upload_dokumen_boq">+</a>
                                 @endif
@@ -2585,7 +2796,7 @@
                                 <div class="col-6">
                                     <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                         <span>LAW</span>
-                                        @if ($is_approved->isNotEmpty())
+                                        @if ($is_approved?->isNotEmpty())
                                             <i class="bi bi-lock-fill text-grey" data-bs-toggle="tooltip" data-bs-title="Contract sudah dilock, silahkan request unlock jika ingin mengubah"></i>
                                         @endif
                                     </h3>
@@ -2593,7 +2804,7 @@
                                 <div class="col-6">
                                     <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                         <span>LD</span>
-                                        @if ($is_approved->isNotEmpty())
+                                        @if ($is_approved?->isNotEmpty())
                                             <i class="bi bi-lock-fill text-grey" data-bs-toggle="tooltip" data-bs-title="Contract sudah dilock, silahkan request unlock jika ingin mengubah"></i>
                                         @endif
                                     </h3>
@@ -2615,7 +2826,7 @@
                                     <!--end::Label-->
                                     <!--begin::Input-->
                                     <input type="text" id="governing-law" name="governing-law" class="form-control form-control-solid" 
-                                    value="{{ !empty($contract->law_governing) ? $contract->law_governing : "" }}" form="form-1" {{ $is_approved->isEmpty() ? "" : "readonly" }}>
+                                    value="{{ !empty($contract->law_governing) ? $contract->law_governing : "" }}" form="form-1" {{ empty($is_approved) || $is_approved->isEmpty() ? "" : "readonly" }}>
                                     <!--end::Input-->
     
                                     <br>
@@ -2627,7 +2838,7 @@
                                     <!--end::Label-->
                                     <!--begin::Input-->
                                     <input type="text" id="dispute-resolution" name="dispute-resolution" class="form-control form-control-solid"
-                                    value="{{ !empty($contract->law_dispute_resolution) ? $contract->law_dispute_resolution : "" }}" form="form-1" {{ $is_approved->isEmpty() ? "" : "readonly" }}>
+                                    value="{{ !empty($contract->law_dispute_resolution) ? $contract->law_dispute_resolution : "" }}" form="form-1" {{ empty($is_approved) || $is_approved->isEmpty() ? "" : "readonly" }}>
                                     <!--end::Input-->
                                     
                                     <br>
@@ -2639,7 +2850,7 @@
                                     <!--end::Label-->
                                     <!--begin::Input-->
                                     <input type="text" id="prevailing-language" name="prevailing-language" class="form-control form-control-solid"
-                                    value="{{ !empty($contract->law_prevailing_language) ? $contract->law_prevailing_language : "" }}" form="form-1" {{ $is_approved->isEmpty() ? "" : "readonly" }}>
+                                    value="{{ !empty($contract->law_prevailing_language) ? $contract->law_prevailing_language : "" }}" form="form-1" {{ empty($is_approved) || $is_approved->isEmpty() ? "" : "readonly" }}>
                                     <!--end::Input-->
                                     </div>
                                     <div class="col-6">
@@ -2655,7 +2866,7 @@
                                         <!--end::Label-->
                                         <!--begin::Input-->
                                         <input type="text" id="delay" name="delay" class="form-control form-control-solid"
-                                        value="{{ !empty($contract->ld_delay) ? $contract->ld_delay : "" }}" form="form-1" {{ $is_approved->isEmpty() ? "" : "readonly" }}>
+                                        value="{{ !empty($contract->ld_delay) ? $contract->ld_delay : "" }}" form="form-1" {{ empty($is_approved) || $is_approved->isEmpty() ? "" : "readonly" }}>
                                         <!--end::Input-->
         
                                         <br>
@@ -2667,7 +2878,7 @@
                                         <!--end::Label-->
                                         <!--begin::Input-->
                                         <input type="text" id="performance" name="performance" class="form-control form-control-solid"
-                                        value="{{ !empty($contract->ld_performance) ? $contract->ld_performance : "" }}" form="form-1" {{ $is_approved->isEmpty() ? "" : "readonly" }}>
+                                        value="{{ !empty($contract->ld_performance) ? $contract->ld_performance : "" }}" form="form-1" {{ empty($is_approved) || $is_approved->isEmpty() ? "" : "readonly" }}>
                                         <!--end::Input-->
                                     </div>
                                 </div>
@@ -2688,7 +2899,7 @@
                                     <br>
                                     <select name="scope-of-work" class="form-select form-select-solid"
                                         data-control="select2" data-hide-search="true" data-placeholder="Pilih kategori"
-                                        tabindex="-1" aria-hidden="true" {{ $is_approved->isEmpty() ? "" : "disabled" }}>
+                                        tabindex="-1" aria-hidden="true" {{ empty($is_approved) || $is_approved->isEmpty() ? "" : "disabled" }}>
                                         @if (!empty($contract->jo_scope_of_work))
                                         <option value="Job Allocation" {{ $contract->jo_scope_of_work == "Job Allocation" ? 'selected' : '' }}>Job Allocation</option>
                                         <option value="Full Integrated" {{ $contract->jo_scope_of_work == "Full Integrated" ? 'selected' : '' }}>Full Integrated</option>
@@ -2714,9 +2925,9 @@
 
                             <h3 class="fw-bolder m-0 mb-3" id="HeadDetail" style="font-size:14px;">
                                 Input Resiko - Pelaksanaan (<i class="text-hover-primary text-gray"><a 
-                                    href="https://crm.wika.co.id/faqs/104625_RiskTender_Input-Kosong.rev.xlsx"> Download
+                                    href="{{ asset('template/RiskTender_Input-Kosong.rev.xlsx') }}"> Download
                                     Template Risk Tender </a></i>)
-                                @if ($is_approved->isEmpty())
+                                @if (empty($is_approved) || $is_approved->isEmpty())
                                 <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_input_resiko_pelaksanaan">+</a>
                                 @endif
@@ -2776,7 +2987,7 @@
 
                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Rencana Kerja Manajemen Kontrak (RKAP - BAB 12)
-                                @if ($is_approved->isEmpty())
+                                @if (empty($is_approved) || $is_approved->isEmpty())
                                 <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_input_rencana_kerja_kontrak">+</a>
                                 @endif
@@ -2790,6 +3001,8 @@
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                         <th class="min-w-125px">Nama File</th>
                                         <th class="min-w-125px">Tanggal Upload</th>
+                                        <th class="min-w-125px">Status Dokumen</th>
+                                        <th class="min-w-125px">Action</th>
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>
@@ -2814,10 +3027,26 @@
                                                     <p class="text-gray-600 mb-1">{{ Carbon\Carbon::parse($rencana_kerja->created_at)->translatedFormat("d F Y") }}</p>
                                                 </td>
                                                 <!--end::Column-->
+                                                <!--Begin::Column-->
+                                                <td>
+                                                    <p class="text-gray-600 mb-1 text-center">{{ $rencana_kerja->status_dokumen }}</p>
+                                                </td>
+                                                <!--End::Column-->
+                                                <!--begin::Action-->
+                                                <td class="text-center">
+                                                    <div class="d-flex flex-row justify-content-center gap-2 flex-wrap">
+                                                        <a href="#" data-bs-toggle="modal"
+                                                            data-bs-target="#kt_modal_input_rencana_kerja_kontrak_{{ $rencana_kerja->id }}"
+                                                            {{-- class="btn btn-primary p-2 text-white {{ empty($is_approved) || $is_approved->isEmpty() ? '' : 'disabled' }}">Edit</a> --}}
+                                                            class="btn btn-sm btn-primary p-2 text-white">Edit</a>
+                                                        <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $rencana_kerja->id }}')">Delete</button>
+                                                    </div>
+                                                </td>
+                                                <!--end::Action-->
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="3" class="text-center">
+                                                <td colspan="5" class="text-center">
                                                     <h6><b>There is no data</b></h6>
                                                 </td>
                                             </tr>
@@ -2836,16 +3065,97 @@
                             <!--End:Table: Review-->
 
                             <br>
+                            @php
+                                $dokumen_tinjauan_pelaksanaan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->whereIn('category', ["Tinjauan Dokumen Kontrak - Perolehan", "Tinjauan Dokumen Kontrak - Pelaksanaan"])->where('status', '!=', 'Final');
+                            @endphp
                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Tinjauan Dokumen Kontrak - Pelaksanaan
-                                @if ($contract->reviewProjects->where("stage", "=", 1)->isNotEmpty())
-                                @if ($is_approved->isEmpty())
+                                {{-- @if ($contract->reviewProjects->where("stage", "=", 1)->isNotEmpty())
+                                @if (empty($is_approved) || $is_approved->isEmpty())
                                 <a Id="Plus" href="/review-contract/view/{{ $contract->id_contract }}/2">+</a>
                                 @else
                                 <a class="btn btn-primary btn-sm p-2 gap-3" href="/review-contract/view/{{ $contract->id_contract }}/2" target="_blank">view</a>
                                 @endif
+                                @endif --}}
+                                @if (!empty($dokumen_tinjauan_pelaksanaan) || $dokumen_tinjauan_pelaksanaan->isNotEmpty())
+                                    <a href="#" Id="Plus" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_create_tinjauan_dokumen_pelaksanaan">+</a>
+                                @endif
+                                @if (!empty($contract->reviewProjects->toArray()))
+                                    <a href="#" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_upload_tinjauan_pelaksanaan" class="btn btn-primary btn-sm p-2 text-end me-3">Upload</a>
                                 @endif
                             </h3>
+                            <!--begin:Table: Review-->
+                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="data-aanwitjzing">
+                                <!--begin::Table head-->
+                                <thead>
+                                    <!--begin::Table row-->
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-125px">Nama File</th>
+                                        <th class="min-w-125px">Tanggal Upload</th>
+                                        <th class="min-w-125px">Action</th>
+                                    </tr>
+                                    <!--end::Table row-->
+                                </thead>
+                                <!--end::Table head-->
+                                
+                                <!--begin::Table body-->
+                                <tbody class="fw-bold text-gray-400">
+                                    @if (!empty($dokumen_tinjauan_pelaksanaan))
+                                        @forelse ($dokumen_tinjauan_pelaksanaan as $dc)
+                                            <tr>
+                                                <!--begin::Column-->
+                                                <td>
+                                                    <a target="_blank" href="{{ asset('words/'.$dc->id_document) }}" class="text-hover-primary">
+                                                        {{ $dc->nama_document }}
+                                                    </a>
+                                                </td>
+                                                <!--end::Column-->
+                                                <!--begin::Column-->
+                                                <td>
+                                                    <p class="text-gray-600 mb-1">{{ Carbon\Carbon::parse($dc->created_at)->translatedFormat("d F Y") }}</p>
+                                                </td>
+                                                <!--end::Column-->
+                                                <!--begin::Action-->
+                                                <td class="text-center">
+                                                    <div class="d-flex flex-row justify-content-center gap-2 flex-wrap">
+                                                        <a href="#" data-bs-toggle="modal"
+                                                            data-bs-target="#kt_modal_create_tinjauan_dokumen_pelaksanaan_{{ $dc->id }}"
+                                                            {{-- class="btn btn-primary p-2 text-white {{ empty($is_approved) || $is_approved->isEmpty() ? '' : 'disabled' }}">Edit</a> --}}
+                                                            class="btn btn-sm btn-primary p-2 text-white">Edit</a>
+                                                        <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dc->id }}')">Delete</button>
+                                                    </div>
+                                                </td>
+                                                <!--end::Action-->
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="5" class="text-center">
+                                                    <h6><b>There is no data</b></h6>
+                                                </td>
+                                            </tr>
+                                        @endforelse
+                                    @else
+                                        <tr>
+                                            <td colspan="5" class="text-center">
+                                                <h6><b>There is no data</b></h6>
+                                            </td>
+                                        </tr>
+                                    @endif
+                                </tbody>
+                                <!--end::Table body-->
+
+                            </table>
+                            @php
+                                $uploadFilePerubahanFinal = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Tinjauan Dokumen Kontrak - Pelaksanaan")->where('status', '=', "Final")->first();
+                            @endphp
+                            <!--End:Table: Review-->
+                            @if (!empty($uploadFilePerubahanFinal))
+                                <a target="_blank" href="{{ asset('words/'.$uploadFilePerubahanFinal->id_document) }}" class="text-hover-primary">
+                                <small><b>Download File :</b> {{ $uploadFilePerubahanFinal->nama_document }}</small>
+                                </a>
+                            @endif
 
                             {{-- @dump($contract->reviewProjects->where("stage", "=", 1)->isNotEmpty()) --}}
 
@@ -2855,12 +3165,12 @@
                                 @if ($contract->PasalKontraktual->isNotEmpty())
                                 <a href="#" onclick="exportToExcel(this, '#table-pasal-kontraktual')" class="">(Klik di sini untuk Export ke Excel)</a>
                                 @endif
-                                @if ($is_approved->isEmpty())
+                                @if (empty($is_approved) || $is_approved->isEmpty())
                                 <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_input_pasal_kontraktual">+</a>
                                 @endif
                                 @if (!empty($contract->PasalKontraktual->toArray()))
-                                @if ($is_approved->isEmpty())
+                                @if (empty($is_approved) || $is_approved->isEmpty())
                                 <a href="#" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_upload_pasal_kontraktual" class="btn btn-primary btn-sm p-2 mx-3 text-end">Upload</a>
                                 @endif
@@ -2958,12 +3268,12 @@
                                 @if (!empty($contract->PendingIssue->toArray()))
                                     <a href="#" onclick="exportToExcel(this, '#pending-issue-pelaksanaan')" class="">(Klik di sini untuk Export ke Excel)</a>
                                 @endif
-                                @if ($is_approved->isEmpty())
+                                @if (empty($is_approved) || $is_approved->isEmpty())
                                 <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_pending_issue_pelaksanaan">+</a>
                                 @endif
                                 @if (!empty($contract->PendingIssue->toArray()))
-                                @if ($is_approved->isEmpty())
+                                @if (empty($is_approved) || $is_approved->isEmpty())
                                 <a href="#" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_upload_pending_issue_pelaksanaan" class="btn btn-primary btn-sm p-2 mx-3 text-end">Upload</a>
                                 @endif
@@ -3253,7 +3563,7 @@
                             <!--Begin::Klaim Jaminan-->
                             <h3 class="fw-bolder m-0 mb-3 " id="HeadDetail" style="font-size:14px;">
                                 Jaminan
-                                @if ($is_approved->isEmpty())
+                                @if (empty($is_approved) || $is_approved->isEmpty())
                                 <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_jaminan">+</a>
                                 @endif
@@ -3347,7 +3657,7 @@
                                         </td>
                                         <td>
                                             <a href="#" data-bs-toggle="modal"
-                                            data-bs-target="#kt_modal_edit_jaminan_{{ $jaminan->id_jaminan }}" class="btn btn-sm btn-primary text-white {{ $is_approved->isEmpty() ? "" : "disabled" }}">
+                                            data-bs-target="#kt_modal_edit_jaminan_{{ $jaminan->id_jaminan }}" class="btn btn-sm btn-primary text-white {{ empty($is_approved) || $is_approved->isEmpty() ? "" : "disabled" }}">
                                             Edit
                                             </a>
                                         </td>
@@ -3379,7 +3689,7 @@
                         <!--Begin::Klaim Asuransi-->
                         <h3 class="fw-bolder m-0 mb-3 " id="HeadDetail" style="font-size:14px;">
                             Asuransi
-                            @if ($is_approved->isEmpty())
+                            @if (empty($is_approved) || $is_approved->isEmpty())
                             <a href="#" Id="Plus" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_asuransi">+</a>
                             @endif
@@ -3478,7 +3788,7 @@
                                     </td>
                                      <td>
                                          <a href="#" data-bs-toggle="modal"
-                                         data-bs-target="#kt_modal_edit_asuransi_{{ $asuransi->id_asuransi }}" class="btn btn-sm btn-primary text-white {{ $is_approved->isEmpty() ? "" : "disabled" }}">
+                                         data-bs-target="#kt_modal_edit_asuransi_{{ $asuransi->id_asuransi }}" class="btn btn-sm btn-primary text-white {{ empty($is_approved) || $is_approved->isEmpty() ? "" : "disabled" }}">
                                          Edit
                                          </a>
                                      </td>
@@ -3508,12 +3818,12 @@
 
                             <h3 class="fw-bolder m-0 mb-3 " id="HeadDetail" style="font-size:14px;">
                                 Checklist Manajemen Kontrak
-                                @if ($is_approved->isEmpty())
+                                @if (empty($is_approved) || $is_approved->isEmpty())
                                 <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_input_checklist_manajemen">+</a>
                                 @endif
                                 @if (!empty($contract->ChecklistManajemen->toArray()))
-                                @if ($is_approved->isEmpty())
+                                @if (empty($is_approved) || $is_approved->isEmpty())
                                 <a href="#" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_upload_checklist_manajemen" class="btn btn-primary btn-sm p-2 text-end ml-2">Upload</a>
                                 @endif
@@ -3571,7 +3881,7 @@
                             <!--Begin::Document Site Instruction-->
                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Dokumen Site Instruction
-                                @if ($is_approved->isEmpty())
+                                @if (empty($is_approved) || $is_approved->isEmpty())
                                 <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_dokumen_site_instruction">+</a>
                                 @endif
@@ -3654,7 +3964,7 @@
                             <!--Begin::Document Technical Form-->
                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Dokumen Technical Form
-                                @if ($is_approved->isEmpty())
+                                @if (empty($is_approved) || $is_approved->isEmpty())
                                 <a target="_blank" href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_dokumen_technical_form">+</a>
                                 @endif
@@ -3736,7 +4046,7 @@
                             <!--Begin::Document Technical Query-->
                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Dokumen Technical Query
-                                @if ($is_approved->isEmpty())
+                                @if (empty($is_approved) || $is_approved->isEmpty())
                                 <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_dokumen_technical_query">+</a>
                                 @endif
@@ -3817,7 +4127,7 @@
                             <!--Begin::Document Field Design Change-->
                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Dokumen Field Design Change
-                                @if ($is_approved->isEmpty())
+                                @if (empty($is_approved) || $is_approved->isEmpty())
                                 <a target="_blank" href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_dokumen_field_design_change">+</a>
                                 @endif
@@ -3898,7 +4208,7 @@
                             <!--Begin::Document Contract Change Notice-->
                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Dokumen Contract Change Notice
-                                @if ($is_approved->isEmpty())
+                                @if (empty($is_approved) || $is_approved->isEmpty())
                                 <a target="_blank" href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_dokumen_contract_change_notice">+</a>
                                 @endif
@@ -3979,7 +4289,7 @@
                             <!--Begin::Document Contract Change Proposal-->
                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Dokumen Contract Change Proposal
-                                @if ($is_approved->isEmpty())
+                                @if (empty($is_approved) || $is_approved->isEmpty())
                                 <a target="_blank" href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_dokumen_contract_change_proposal">+</a>
                                 @endif
@@ -4060,7 +4370,7 @@
                             <!--Begin::Document Contract Change Order-->
                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Dokumen Contract Change Order
-                                @if ($is_approved->isEmpty())
+                                @if (empty($is_approved) || $is_approved->isEmpty())
                                 <a target="_blank" href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_dokumen_contract_change_order">+</a>
                                 @endif
@@ -4136,6 +4446,223 @@
                                 <!--end::Table body-->
                             </table>
                             <!--end:: Table Dokumen Table Dokumen Contract Change Order-->
+                            <br>
+                            <br>
+
+                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                Dokumen Bast 1
+                                @if (empty($is_approved) || $is_approved->isEmpty())
+                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_bast_1">+</a>
+                                @endif
+                            </h3>
+
+                            <!--begin::Table-->
+                            <table class="table align-middle table-row-dashed fs-6 gy-2"
+                            id="kt_customers_table">
+                            <!--begin::Table head-->
+                            <thead>
+                                <!--begin::Table row-->
+                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                    <th class="w-50px">No.</th>
+                                    <th class="w-auto">Jenis Dokumen</th>
+                                    <th class="w-auto">File</th>
+                                    <th class="w-auto">Tanggal</th>
+                                    <th class="w-auto">Action</th>
+                                </tr>
+                                <!--end::Table row-->
+                            </thead>
+                            <!--end::Table head-->
+                            <!--begin::Table body-->
+                            <tbody class="fw-bold text-gray-400">
+                                @foreach ($contract->ContractBast as $dokumen)
+                                    @if ($dokumen->bast == 1)
+                                    <tr>
+                                        <!--begin::Nomor-->
+                                        <td class="text-center">
+                                            {{ $dokumen->nomor_dokumen }}
+                                        </td>
+                                        <!--end::Nomor-->
+                                        <!--begin::Column-->
+                                        <td>
+                                            {{ $dokumen->jenis_dokumen }}
+                                        </td>
+                                        <!--end::Column-->
+                                        <!--begin::Name-->
+                                        <td>
+                                            @if (str_contains("$dokumen->nama_dokumen", '.pdf'))
+                                                <a href="{{ asset('words/' . $dokumen->id_document . '.pdf') }}"
+                                                    class="text-hover-primary">{{ $dokumen->nama_dokumen }}</a>
+                                            @else
+                                                <a target="_blank" href="{{ asset('words/' . $dokumen->id_document . '.docx') }}"
+                                                    class="text-hover-primary">{{ $dokumen->nama_dokumen }}</a>
+                                            @endif
+                                        </td>
+                                        <!--end::Name-->
+                                        <td>
+                                            {{ Carbon\Carbon::parse($dokumen->tanggal_dokumen)->translatedFormat("d F Y") }}
+                                        </td>
+                                        <!--begin::Action-->
+                                        <td class="text-center">
+                                            <div class="d-flex flex-row justify-content-center gap-2 flex-wrap">
+                                                <a href="#" data-bs-toggle="modal"
+                                                    data-bs-target="#kt_modal_bast_1_{{ $dokumen->id_document }}"
+                                                    {{-- class="btn btn-primary p-2 text-white {{ empty($is_approved) || $is_approved->isEmpty() ? '' : 'disabled' }}">Edit</a> --}}
+                                                    class="btn btn-sm btn-primary p-2 text-white">Edit</a>
+                                                <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDelete('{{ $dokumen->id_document }}')">Delete</button>
+                                            </div>
+                                        </td>
+                                        <!--end::Action-->
+                                    </tr>
+                                    @endif
+                                @endforeach
+                                @if ($contract->ContractBast->where("bast", "=", 1)->isEmpty())
+                                <tr>
+                                    <td colspan="5" class="text-center">
+                                        <h6><b>There is no data</b></h6>
+                                    </td>
+                                </tr>
+                                @endif
+                            </tbody>
+                            <!--end::Table body-->
+                        </table>
+                        <!--end::Table-->
+                        <!--Begin::MOM-->
+                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                            Dokumen Minutes of Meeting (MoM)
+                            @if (empty($is_approved) || $is_approved->isEmpty())
+                            <a href="#" Id="Plus" data-bs-toggle="modal"
+                                data-bs-target="#kt_modal_upload_mom">+</a>
+                            @endif
+                        </h3>
+
+                        <!--begin::Table-->
+                        <table class="table align-middle table-row-dashed fs-6 gy-2"
+                        id="kt_customers_table">
+                            <!--begin::Table head-->
+                            <thead>
+                                <!--begin::Table row-->
+                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                    <th class="w-auto">File</th>
+                                    <th class="w-auto">Tanggal</th>
+                                    <th class="w-auto">Action</th>
+                                </tr>
+                                <!--end::Table row-->
+                            </thead>
+                            <!--end::Table head-->
+                            <!--begin::Table body-->
+                            <tbody class="fw-bold text-gray-400">
+                                @php
+                                    $dokumen_mom = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Minutes of Meeting (MoM)");
+                                @endphp
+                                @forelse ($dokumen_mom as $dokumen)
+                                    <tr>
+                                        <!--begin::Name-->
+                                        <td>
+                                            @if (str_contains("$dokumen->nama_document", '.pdf'))
+                                                <a href="{{ asset('words/' . $dokumen->id_document) }}"
+                                                    class="text-hover-primary">{{ $dokumen->nama_document }}</a>
+                                            @else
+                                                <a target="_blank" href="{{ asset('words/' . $dokumen->id_document . '.docx') }}"
+                                                    class="text-hover-primary">{{ $dokumen->nama_document }}</a>
+                                            @endif
+                                        </td>
+                                        <!--end::Name-->
+                                        <td>
+                                            {{ Carbon\Carbon::parse($dokumen->tanggal_dokumen)->translatedFormat("d F Y") }}
+                                        </td>
+                                        <!--begin::Action-->
+                                        <td class="text-center">
+                                            <div class="d-flex flex-row justify-content-center gap-2 flex-wrap">
+                                                <a href="#" data-bs-toggle="modal"
+                                                    data-bs-target="#kt_modal_upload_mom_{{ $dokumen->id }}"
+                                                    {{-- class="btn btn-primary p-2 text-white {{ empty($is_approved) || $is_approved->isEmpty() ? '' : 'disabled' }}">Edit</a> --}}
+                                                    class="btn btn-sm btn-primary p-2 text-white">Edit</a>
+                                                <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dokumen->id }}')">Delete</button>
+                                            </div>
+                                        </td>
+                                        <!--end::Action-->
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="5" class="text-center">
+                                            <h6><b>There is no data</b></h6>
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                            <!--end::Table body-->
+                        </table>
+                        <!--end::Table-->
+                        <!--End::MOM-->
+                        <!--Begin::Kickoff Meeting-->
+                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                            Dokumen Kick Off Meeting
+                            @if (empty($is_approved) || $is_approved->isEmpty())
+                            <a href="#" Id="Plus" data-bs-toggle="modal"
+                                data-bs-target="#kt_modal_upload_kickoff">+</a>
+                            @endif
+                        </h3>
+
+                        <!--begin::Table-->
+                        <table class="table align-middle table-row-dashed fs-6 gy-2"
+                        id="kt_customers_table">
+                            <!--begin::Table head-->
+                            <thead>
+                                <!--begin::Table row-->
+                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                    <th class="w-auto">File</th>
+                                    <th class="w-auto">Tanggal</th>
+                                    <th class="w-auto">Action</th>
+                                </tr>
+                                <!--end::Table row-->
+                            </thead>
+                            <!--end::Table head-->
+                            <!--begin::Table body-->
+                            <tbody class="fw-bold text-gray-400">
+                                @php
+                                    $dokumen_kickoff = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Kick Off Meeting");
+                                @endphp
+                                @forelse ($dokumen_kickoff as $dokumen)
+                                    <tr>
+                                        <!--begin::Name-->
+                                        <td>
+                                            @if (str_contains("$dokumen->nama_document", '.pdf'))
+                                                <a href="{{ asset('words/' . $dokumen->id_document) }}"
+                                                    class="text-hover-primary">{{ $dokumen->nama_document }}</a>
+                                            @else
+                                                <a target="_blank" href="{{ asset('words/' . $dokumen->id_document . '.docx') }}"
+                                                    class="text-hover-primary">{{ $dokumen->nama_document }}</a>
+                                            @endif
+                                        </td>
+                                        <!--end::Name-->
+                                        <td>
+                                            {{ Carbon\Carbon::parse($dokumen->tanggal_dokumen)->translatedFormat("d F Y") }}
+                                        </td>
+                                        <!--begin::Action-->
+                                        <td class="text-center">
+                                            <div class="d-flex flex-row justify-content-center gap-2 flex-wrap">
+                                                <a href="#" data-bs-toggle="modal"
+                                                    data-bs-target="#kt_modal_upload_kickoff_{{ $dokumen->id }}"
+                                                    {{-- class="btn btn-primary p-2 text-white {{ empty($is_approved) || $is_approved->isEmpty() ? '' : 'disabled' }}">Edit</a> --}}
+                                                    class="btn btn-sm btn-primary p-2 text-white">Edit</a>
+                                                <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dokumen->id }}')">Delete</button>
+                                            </div>
+                                        </td>
+                                        <!--end::Action-->
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="5" class="text-center">
+                                            <h6><b>There is no data</b></h6>
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                            <!--end::Table body-->
+                        </table>
+                        <!--end::Table-->
+                        <!--End::Kickoff Meeting-->
                             <!--End::Document Table Dokumen Contract Change Order-->
                         </div>
                     </div>
@@ -4143,9 +4670,9 @@
 
                     <!--begin:::Tab pane Serah Terima-->
                     <div class="tab-pane fade" id="kt_user_view_overview_pemeliharaan" role="tabpanel">
-                        {{-- <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                             Dokumen Kontrak
-                            @if ($is_approved->isEmpty())
+                            @if (empty($is_approved) || $is_approved->isEmpty())
                             <a href="#" Id="Plus" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_upload_dokumen_kontrak_pemeliharaan">+</a>
                             @endif
@@ -4159,34 +4686,55 @@
                                 <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                     <th class="min-w-125px">Nama File</th>
                                     <th class="min-w-125px">Tanggal Upload</th>
+                                    <th class="min-w-125px">Status Dokumen</th>
+                                    <th class="min-w-125px">Action</th>
                                 </tr>
                                 <!--end::Table row-->
                             </thead>
                             <!--end::Table head-->
                             <!--begin::Table body-->
                             @php
-                                $dokumen = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Kontrak");
+                            $dokumen_kontrak_pemeliharaan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', 'Dokumen Kontrak');
                             @endphp
                             <tbody class="fw-bold text-gray-400">
-                                @if (!empty($dokumen))
-                                    @forelse ($dokumen as $dc)
+                                @if (!empty($dokumen_kontrak_pemeliharaan))
+                                    @forelse ($dokumen_kontrak_pemeliharaan as $dc)
                                         <tr>
                                             <!--begin::Column-->
                                             <td>
-                                                <a target="_blank" href="{{ asset('words/'.$dc->id_document) }}" class="text-hover-primary">
+                                                <a target="_blank" href="{{ asset('words/' . $dc->id_document) }}"
+                                                    class="text-hover-primary">
                                                     {{ $dc->nama_document }}
                                                 </a>
                                             </td>
                                             <!--end::Column-->
                                             <!--begin::Column-->
                                             <td>
-                                                <p class="text-gray-600 mb-1">{{ Carbon\Carbon::parse($dc->created_at)->translatedFormat("d F Y") }}</p>
+                                                <p class="text-gray-600 mb-1">
+                                                    {{ Carbon\Carbon::parse($dc->created_at)->translatedFormat('d F Y') }}
+                                                </p>
                                             </td>
                                             <!--end::Column-->
+                                            <!--Begin::Column-->
+                                            <td>
+                                                <p class="text-gray-600 mb-1 text-center">{{ $dc->status_dokumen }}</p>
+                                            </td>
+                                            <!--End::Column-->
+                                            <!--begin::Action-->
+                                            <td class="text-center">
+                                                <div class="d-flex flex-row justify-content-center gap-2 flex-wrap">
+                                                    <a href="#" data-bs-toggle="modal"
+                                                        data-bs-target="#kt_modal_upload_dokumen_kontrak_{{ $dc->id }}"
+                                                        {{-- class="btn btn-primary p-2 text-white {{ empty($is_approved) || $is_approved->isEmpty() ? '' : 'disabled' }}">Edit</a> --}}
+                                                        class="btn btn-sm btn-primary p-2 text-white">Edit</a>
+                                                    <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dc->id }}')">Delete</button>
+                                                </div>
+                                            </td>
+                                            <!--end::Action-->
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="3" class="text-center">
+                                            <td colspan="5" class="text-center">
                                                 <h6><b>There is no data</b></h6>
                                             </td>
                                         </tr>
@@ -4204,11 +4752,11 @@
                         </table>
                         <!--End:Table: Review-->
 
-                        <br> --}}
+                        <br>
 
                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                             Dokumen Amandemen
-                            @if ($is_approved->isEmpty())
+                            @if (empty($is_approved) || $is_approved->isEmpty())
                             <a href="#" Id="Plus" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_upload_dokumen_amandemen_pemeliharaan">+</a>
                             @endif
@@ -4222,17 +4770,19 @@
                                 <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                     <th class="min-w-125px">Nama File</th>
                                     <th class="min-w-125px">Tanggal Upload</th>
+                                    <th class="min-w-125px">Status Dokumen</th>
+                                    <th class="min-w-125px">Action</th>
                                 </tr>
                                 <!--end::Table row-->
                             </thead>
                             <!--end::Table head-->
                             <!--begin::Table body-->
                             @php
-                                $dokumen = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Amandemen");
+                                $dokumen_amandemen_pemeliharaan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Amandemen");
                             @endphp
                             <tbody class="fw-bold text-gray-400">
-                                @if (!empty($dokumen))
-                                    @forelse ($dokumen as $dc)
+                                @if (!empty($dokumen_amandemen_pemeliharaan))
+                                    @forelse ($dokumen_amandemen_pemeliharaan as $dc)
                                         <tr>
                                             <!--begin::Column-->
                                             <td>
@@ -4246,17 +4796,33 @@
                                                 <p class="text-gray-600 mb-1">{{ Carbon\Carbon::parse($dc->created_at)->translatedFormat("d F Y") }}</p>
                                             </td>
                                             <!--end::Column-->
+                                            <!--Begin::Column-->
+                                            <td>
+                                                <p class="text-gray-600 mb-1 text-center">{{ $dc->status_dokumen }}</p>
+                                            </td>
+                                            <!--End::Column-->
+                                            <!--begin::Action-->
+                                            <td class="text-center">
+                                                <div class="d-flex flex-row justify-content-center gap-2 flex-wrap">
+                                                    <a href="#" data-bs-toggle="modal"
+                                                        data-bs-target="#kt_modal_upload_dokumen_amandemen_pemeliharaan_{{ $dc->id }}"
+                                                        {{-- class="btn btn-primary p-2 text-white {{ empty($is_approved) || $is_approved->isEmpty() ? '' : 'disabled' }}">Edit</a> --}}
+                                                        class="btn btn-sm btn-primary p-2 text-white">Edit</a>
+                                                    <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dc->id }}')">Delete</button>
+                                                </div>
+                                            </td>
+                                            <!--end::Action-->
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="3" class="text-center">
+                                            <td colspan="5" class="text-center">
                                                 <h6><b>There is no data</b></h6>
                                             </td>
                                         </tr>
                                     @endforelse
                                 @else
                                     <tr>
-                                        <td colspan="3" class="text-center">
+                                        <td colspan="5" class="text-center">
                                             <h6><b>There is no data</b></h6>
                                         </td>
                                     </tr>
@@ -4281,7 +4847,7 @@
 
                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                             Dokumen Bill Of Quantity
-                            @if ($is_approved->isEmpty())
+                            @if (empty($is_approved) || $is_approved->isEmpty())
                             <a href="#" Id="Plus" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_upload_dokumen_boq_pemeliharaan">+</a>
                             @endif
@@ -4354,7 +4920,7 @@
 
                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                             Dokumen Faktur Pajak Lunas
-                            @if ($is_approved->isEmpty())
+                            @if (empty($is_approved) || $is_approved->isEmpty())
                             <a href="#" Id="Plus" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_upload_dokumen_faktur">+</a>
                             @endif
@@ -4425,7 +4991,7 @@
 
                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                             Dokumen Bukti Setor PPh Lunas
-                            @if ($is_approved->isEmpty())
+                            @if (empty($is_approved) || $is_approved->isEmpty())
                             <a href="#" Id="Plus" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_upload_dokumen_pph">+</a>
                             @endif
@@ -4494,7 +5060,7 @@
                                         
                                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                             Daftar BA Defect
-                                            @if ($is_approved->isEmpty())
+                                            @if (empty($is_approved) || $is_approved->isEmpty())
                                             <a href="#" Id="Plus" data-bs-toggle="modal"
                                                 data-bs-target="#kt_modal_defect_ba">+</a>
                                             @endif
@@ -4552,14 +5118,14 @@
                                 
                                 <br>
                                     <div class="row">
-                                        <div class="col">
-                                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                        {{-- <div class="col"> --}}
+                                            {{-- <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                                 Dokumen Bast 1
-                                                @if ($is_approved->isEmpty())
+                                                @if (empty($is_approved) || $is_approved->isEmpty())
                                                 <a href="#" Id="Plus" data-bs-toggle="modal"
                                                     data-bs-target="#kt_modal_bast_1">+</a>
                                                 @endif
-                                            </h3>
+                                            </h3> --}}
                                             {{-- <input type="file" name="dokumen-bast-1" accept=".docx"
                                                 class="form-control form-control-solid"> --}}
                                             {{-- @if (!empty($contract->dokumen_bast_1))
@@ -4571,11 +5137,11 @@
                                             @else
                                                 <small>Belum mendapatkan Dokumen Bast 1</small>
                                             @endif --}}
-                                        </div>
+                                        {{-- </div> --}}
                                         <div class="col">
                                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                                 Dokumen Bast 2
-                                                @if ($is_approved->isEmpty())
+                                                @if (empty($is_approved) || $is_approved->isEmpty())
                                                 <a href="#" Id="Plus" data-bs-toggle="modal"
                                                     data-bs-target="#kt_modal_bast_2">+</a>
                                                 @endif
@@ -4592,7 +5158,7 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-6">
+                                        {{-- <div class="col-6">
                                             <!--begin::Table-->
                                             <table class="table align-middle table-row-dashed fs-6 gy-2"
                                                 id="kt_customers_table">
@@ -4604,14 +5170,10 @@
                                                         <th class="w-auto">Jenis Dokumen</th>
                                                         <th class="w-auto">File</th>
                                                         <th class="w-auto">Tanggal</th>
-                                                        {{-- <th class="w-auto text-center"></th> --}}
                                                     </tr>
                                                     <!--end::Table row-->
                                                 </thead>
                                                 <!--end::Table head-->
-                                                {{-- @php
-                                                    // $no = 1;
-                                                @endphp --}}
                                                 <!--begin::Table body-->
                                                 <tbody class="fw-bold text-gray-400">
                                                     @foreach ($contract->ContractBast as $dokumen)
@@ -4638,18 +5200,6 @@
                                                                 @endif
                                                             </td>
                                                             <!--end::Name-->
-                                                            <!--begin::Action-->
-                                                            {{-- <td class="text-center">
-                                                                <small>
-                                                                    <p data-bs-toggle="modal"
-                                                                        data-bs-target="#kt_dokumen_rks_delete"
-                                                                        id="modal-delete"
-                                                                        class="btn btn-sm btn-light btn-active-primary">
-                                                                        Delete
-                                                                    </p>
-                                                                </small>
-                                                            </td> --}}
-                                                            <!--end::Action-->
                                                             <td>
                                                                 {{ Carbon\Carbon::parse($dokumen->tanggal_dokumen)->translatedFormat("d F Y") }}
                                                             </td>
@@ -4667,8 +5217,8 @@
                                                 <!--end::Table body-->
                                             </table>
                                             <!--end::Table-->
-                                        </div>
-                                        <div class="col-6">
+                                        </div> --}}
+                                        <div class="col">
                                             <!--begin::Table-->
                                             <table class="table align-middle table-row-dashed fs-6 gy-2"
                                                 id="kt_customers_table">
@@ -4677,7 +5227,7 @@
                                                     <!--begin::Table row-->
                                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                                         <th class="w-50px">No.</th>
-                                                        {{-- <th class="w-auto">Jenis Dokumen</th> --}}
+                                                        <th class="w-auto">Jenis Dokumen</th>
                                                         <th class="w-auto">File</th>
                                                         <th class="w-auto">Tanggal</th>
                                                         <th class="w-auto">Action</th>
@@ -4692,7 +5242,7 @@
                                                 <!--begin::Table body-->
                                                 <tbody class="fw-bold text-gray-400">
                                                         @foreach ($contract->ContractBast as $dokumen)
-                                                            @if ($dokumen->bast == 2)
+                                                            {{-- @if ($dokumen->bast == 2) --}}
                                                             <tr>
                                                                 <!--begin::Nomor-->
                                                                 <td class="text-center">
@@ -4700,9 +5250,9 @@
                                                                 </td>
                                                                 <!--end::Nomor-->
                                                                 <!--begin::Column-->
-                                                                {{-- <td>
+                                                                <td>
                                                                     {{ $dokumen->jenis_dokumen }}
-                                                                </td> --}}
+                                                                </td>
                                                                 <!--end::Column-->
                                                                 <!--begin::Name-->
                                                                 <td>
@@ -4715,28 +5265,27 @@
                                                                     @endif
                                                                 </td>
                                                                 <!--end::Name-->
-                                                                <!--begin::Action-->
-                                                                {{-- <td class="text-center">
-                                                                    <small>
-                                                                        <p data-bs-toggle="modal"
-                                                                            data-bs-target="#kt_dokumen_rks_delete"
-                                                                            id="modal-delete"
-                                                                            class="btn btn-sm btn-light btn-active-primary">
-                                                                            Delete
-                                                                        </p>
-                                                                    </small>
-                                                                </td> --}}
-                                                                <!--end::Action-->
                                                                 <td>
                                                                     {{ Carbon\Carbon::parse($dokumen->tanggal_dokumen)->translatedFormat("d F Y") }}
                                                                 </td>
-                                                                <td>
-                                                                    <a href="/contract-management/bast-2/{{ $dokumen->id_document }}/delete" class="btn btn-sm text-white btn-danger">Delete</a>
+                                                                <!--begin::Action-->
+                                                                <td class="text-center">
+                                                                    <div class="d-flex flex-row justify-content-center gap-2 flex-wrap">
+                                                                        <a href="#" data-bs-toggle="modal"
+                                                                            data-bs-target="#kt_modal_bast_2_{{ $dokumen->id_document }}"
+                                                                            {{-- class="btn btn-primary p-2 text-white {{ empty($is_approved) || $is_approved->isEmpty() ? '' : 'disabled' }}">Edit</a> --}}
+                                                                            class="btn btn-sm btn-primary p-2 text-white">Edit</a>
+                                                                        <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDelete('{{ $dokumen->id_document }}')">Delete</button>
+                                                                    </div>
                                                                 </td>
+                                                                <!--end::Action-->
+                                                                {{-- <td class="text-center">
+                                                                    <a href="/contract-management/bast-2/{{ $dokumen->id_document }}/delete" class="btn btn-sm text-white btn-danger">Delete</a>
+                                                                </td> --}}
                                                             </tr>
-                                                            @endif
+                                                            {{-- @endif --}}
                                                         @endforeach
-                                                        @if ($contract->ContractBast->where("bast", "=", 2)->isEmpty())
+                                                        @if ($contract->ContractBast->isEmpty())
                                                         <tr>
                                                             <td colspan="4" class="text-center">
                                                                 <h6><b>There is no data</b></h6>
@@ -4754,6 +5303,145 @@
                                 {{-- <button type="submit" class="btn btn-sm btn-active-primary text-white"
                                     style="background-color: #008cb4;">Save Dokumen Bast</button> --}}
                             {{-- </form> --}}
+
+                            <!--Begin::Leasson Learned-->
+                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                Dokumen Lesson Learned
+                                @if (empty($is_approved) || $is_approved->isEmpty())
+                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_upload_lesson_learned">+</a>
+                                @endif
+                            </h3>
+
+                            <!--begin::Table-->
+                            <table class="table align-middle table-row-dashed fs-6 gy-2"
+                            id="kt_customers_table">
+                                <!--begin::Table head-->
+                                <thead>
+                                    <!--begin::Table row-->
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="w-auto">File</th>
+                                        <th class="w-auto">Tanggal</th>
+                                        <th class="w-auto">Action</th>
+                                    </tr>
+                                    <!--end::Table row-->
+                                </thead>
+                                <!--end::Table head-->
+                                <!--begin::Table body-->
+                                <tbody class="fw-bold text-gray-400">
+                                    @php
+                                        $dokumen_lesson_learned = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Lesson Learned");
+                                    @endphp
+                                    @forelse ($dokumen_lesson_learned as $dokumen)
+                                        <tr>
+                                            <!--begin::Name-->
+                                            <td>
+                                                @if (str_contains("$dokumen->nama_document", '.pdf'))
+                                                    <a href="{{ asset('words/' . $dokumen->id_document) }}"
+                                                        class="text-hover-primary">{{ $dokumen->nama_document }}</a>
+                                                @else
+                                                    <a target="_blank" href="{{ asset('words/' . $dokumen->id_document . '.docx') }}"
+                                                        class="text-hover-primary">{{ $dokumen->nama_document }}</a>
+                                                @endif
+                                            </td>
+                                            <!--end::Name-->
+                                            <td>
+                                                {{ Carbon\Carbon::parse($dokumen->tanggal_dokumen)->translatedFormat("d F Y") }}
+                                            </td>
+                                            <!--begin::Action-->
+                                            <td class="text-center">
+                                                <div class="d-flex flex-row justify-content-center gap-2 flex-wrap">
+                                                    <a href="#" data-bs-toggle="modal"
+                                                        data-bs-target="#kt_modal_upload_lesson_learned_{{ $dokumen->id }}"
+                                                        {{-- class="btn btn-primary p-2 text-white {{ empty($is_approved) || $is_approved->isEmpty() ? '' : 'disabled' }}">Edit</a> --}}
+                                                        class="btn btn-sm btn-primary p-2 text-white">Edit</a>
+                                                    <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dokumen->id }}')">Delete</button>
+                                                </div>
+                                            </td>
+                                            <!--end::Action-->
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="5" class="text-center">
+                                                <h6><b>There is no data</b></h6>
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                                <!--end::Table body-->
+                            </table>
+                            <!--end::Table-->
+                            <!--End::Lesson Learned-->
+                            <br>
+                            <!--Begin::Leasson Learned-->
+                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                Dokumen Monitoring Status
+                                @if (empty($is_approved) || $is_approved->isEmpty())
+                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_upload_monitoring_status">+</a>
+                                @endif
+                            </h3>
+
+                            <!--begin::Table-->
+                            <table class="table align-middle table-row-dashed fs-6 gy-2"
+                            id="kt_customers_table">
+                                <!--begin::Table head-->
+                                <thead>
+                                    <!--begin::Table row-->
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="w-auto">File</th>
+                                        <th class="w-auto">Tanggal</th>
+                                        <th class="w-auto">Action</th>
+                                    </tr>
+                                    <!--end::Table row-->
+                                </thead>
+                                <!--end::Table head-->
+                                <!--begin::Table body-->
+                                <tbody class="fw-bold text-gray-400">
+                                    @php
+                                        $dokumen_monitoring_status = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Monitoring Status");
+                                    @endphp
+                                    @forelse ($dokumen_monitoring_status as $dokumen)
+                                        <tr>
+                                            <!--begin::Name-->
+                                            <td>
+                                                @if (str_contains("$dokumen->nama_document", '.pdf'))
+                                                    <a href="{{ asset('words/' . $dokumen->id_document) }}"
+                                                        class="text-hover-primary">{{ $dokumen->nama_document }}</a>
+                                                @else
+                                                    <a target="_blank" href="{{ asset('words/' . $dokumen->id_document . '.docx') }}"
+                                                        class="text-hover-primary">{{ $dokumen->nama_document }}</a>
+                                                @endif
+                                            </td>
+                                            <!--end::Name-->
+                                            <td>
+                                                {{ Carbon\Carbon::parse($dokumen->tanggal_dokumen)->translatedFormat("d F Y") }}
+                                            </td>
+                                            <!--begin::Action-->
+                                            <td class="text-center">
+                                                <div class="d-flex flex-row justify-content-center gap-2 flex-wrap">
+                                                    <a href="#" data-bs-toggle="modal"
+                                                        data-bs-target="#kt_modal_upload_monitoring_status_{{ $dokumen->id }}"
+                                                        {{-- class="btn btn-primary p-2 text-white {{ empty($is_approved) || $is_approved->isEmpty() ? '' : 'disabled' }}">Edit</a> --}}
+                                                        class="btn btn-sm btn-primary p-2 text-white">Edit</a>
+                                                    <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dokumen->id }}')">Delete</button>
+                                                </div>
+                                            </td>
+                                            <!--end::Action-->
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="5" class="text-center">
+                                                <h6><b>There is no data</b></h6>
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                                <!--end::Table body-->
+                            </table>
+                            <!--end::Table-->
+                            <!--End::Lesson Learned-->
+
                             <br>    
 
                             <!--Begin:: Row Defact List-->
@@ -4830,12 +5518,7 @@
                                                 </tr>
                                             @endforelse --}}
                                             <tr>
-                                                <td>1</td>
-                                                <td>10</td>
-                                                <td>Lorem, ipsum.</td>
-                                                <td>Lorem, ipsum dolor.</td>
-                                                <td>00/00/00</td>
-                                                <td>0%</td>
+                                                <td colspan="6" class="text-center"><b>There is no data</b></td>
                                             </tr>
                                         </tbody>
                                         <!--end::Table body-->
@@ -4851,9 +5534,9 @@
                                 <div class="col">
                                     <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                         Input Resiko - Pemeliharaan (<i class="text-hover-primary text-gray"><a 
-                                            href="https://crm.wika.co.id/faqs/104625_RiskTender_Input-Kosong.rev.xlsx"> Download
+                                            href="{{ asset('template/RiskTender_Input-Kosong.rev.xlsx') }}"> Download
                                             Template Risk Tender </a></i>)
-                                            @if ($is_approved->isEmpty())
+                                            @if (empty($is_approved) || $is_approved->isEmpty())
                                             <a href="#" Id="Plus" data-bs-toggle="modal"
                                                 data-bs-target="#kt_modal_input_resiko_pemeliharaan">+</a>
                                             @endif
@@ -4969,7 +5652,7 @@
                             @if (!empty($contract->PendingIssue->toArray()))
                                 <a href="#" onclick="exportToExcel(this, '#pending-issue-pemeliharaan')" class="">(Klik di sini untuk Export ke Excel)</a>
                             @endif
-                            @if ($is_approved->isEmpty())
+                            @if (empty($is_approved) || $is_approved->isEmpty())
                             <a href="#" Id="Plus" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_pending_issue_pemeliharaan">+</a>
                             @if (!empty($contract->PendingIssue->toArray()))
@@ -5044,7 +5727,7 @@
 
                                             <td>
                                                 <a href="#" data-bs-toggle="modal"
-                                                data-bs-target="#kt_modal_pending_issue_pemeliharaan_{{ $pending_issue->id_pending_issue }}" class="btn btn-primary p-2 text-white {{ $is_approved->isEmpty() ? "" : "disabled" }}">Edit</a>
+                                                data-bs-target="#kt_modal_pending_issue_pemeliharaan_{{ $pending_issue->id_pending_issue }}" class="btn btn-primary p-2 text-white {{ empty($is_approved) || $is_approved->isEmpty() ? "" : "disabled" }}">Edit</a>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -5103,7 +5786,7 @@
 
                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                             Dokumen Lainnya
-                            @if ($is_approved->isEmpty())
+                            @if (empty($is_approved) || $is_approved->isEmpty())
                             <a href="#" Id="Plus" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_dokumen_pendukung_serah_terima">+</a>
                             @endif
@@ -5170,10 +5853,10 @@
                                 @csrf
                                 <input type="hidden" value="{{ $contract->id_contract }}" name="id-contract">
                                 <input type="file" accept=".docx" multiple name="kontrak-dan-addendum-file[]"
-                                    class="form-control form-control-solid" {{ $is_approved->isEmpty() ? "" : "disabled" }}>
+                                    class="form-control form-control-solid" {{ empty($is_approved) || $is_approved->isEmpty() ? "" : "disabled" }}>
                                 <small>* Support multiple file upload</small>
                                 <br><br>
-                                <button type="submit" class="btn btn-sm btn-active-primary text-white {{ $is_approved->isEmpty() ? "" : "disabled" }}"
+                                <button type="submit" class="btn btn-sm btn-active-primary text-white {{ empty($is_approved) || $is_approved->isEmpty() ? "" : "disabled" }}"
                                     style="background-color: #008CB4;">Save Dokumen</button>
                             </form>
                             <hr>
@@ -5227,7 +5910,7 @@
 <!--end::Page-->
 </div>
 <!--end::Root-->
-@endisset
+{{-- @endisset --}}
 
 <!--begin::Modal-->
 
@@ -5794,25 +6477,12 @@
                             </label>
                             <!--end::Label-->
                             <!--begin::Input-->
-                            <input type="text" class="form-control form-control-solid" name="note"
+                            <textarea class="form-control form-control-solid" name="note"
                                 id="note" value="" style="font-weight: normal"
-                                placeholder="Catatan" />
+                                placeholder="Catatan" ></textarea>
                             <!--end::Input-->
                             <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
 
-
-                            {{-- begin::Froala Editor --}}
-                            <div id="froala-editor-perjanjian-kso">
-                                <h1>Attach file with <b>.DOCX</b> format only</h1>
-                            </div>
-                            {{-- end::Froala Editor --}}
-                            {{-- begin::Read File --}}
-                            <script>
-                                document.getElementById("attach-file-perjanjian-kso").addEventListener("change", async function() {
-                                    await readFile(this.files[0], "#froala-editor-perjanjian-kso");
-                                });
-                            </script>
-                            {{-- end::Read File --}}
                     </div>
                     <!--end::Input group-->
 
@@ -7573,6 +8243,25 @@
                         <input type="date" class="form-control form-control-solid mb-3" name="tanggal-dokumen"
                         id="tanggal_dokumen" value="" placeholder="Tanggal Dokumen" style="font-weight: normal" />
 
+                        <br>
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span class="">Status Dokumen</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <select name="status_dokumen"
+                            class="form-select form-select-solid w-50"
+                            data-control="select2" data-hide-search="true"
+                            data-placeholder="Status Dokumen">
+                            <option value=""></option>
+                            <option value="Draft">Draft</option>
+                            <option value="Review">Review</option>
+                            <option value="Revisi">Revisi</option>
+                            <option value="Final">Final</option>
+                        </select>
+                        <!--end::Input-->
+
                     </div>
                     <div class="modal-footer">
                         <button type="submit" id="save-risk" class="btn btn-sm btn-primary"
@@ -7666,6 +8355,24 @@
 
                         <input type="date" class="form-control form-control-solid mb-3" name="tanggal-dokumen"
                         id="tanggal_dokumen" value="" placeholder="Tanggal Dokumen" style="font-weight: normal" />
+                        <br>
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span class="">Status Dokumen</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <select name="status_dokumen"
+                            class="form-select form-select-solid w-50"
+                            data-control="select2" data-hide-search="true"
+                            data-placeholder="Status Dokumen">
+                            <option value=""></option>
+                            <option value="Draft">Draft</option>
+                            <option value="Review">Review</option>
+                            <option value="Revisi">Revisi</option>
+                            <option value="Final">Final</option>
+                        </select>
+                        <!--end::Input-->
 
                     </div>
                     <div class="modal-footer">
@@ -7683,6 +8390,260 @@
         <!--end::Modal content-->
     </div>
     <!--end::Modal - Input BAST 2-->
+
+    <!--begin::Modal - Edit BAST 1-->
+    @if (!empty($contract->ContractBast))
+        @foreach ($contract->ContractBast as $dokumen)
+            <!--begin::Modal - Update BAST 2-->
+            <div class="modal fade" id="kt_modal_bast_1_{{ $dokumen->id_document }}" tabindex="-1" aria-hidden="true">
+                <!--begin::Modal dialog-->
+                <div class="modal-dialog modal-dialog-centered mw-600px">
+                    <!--begin::Modal content-->
+                    <div class="modal-content">
+                        <!--begin::Modal header-->
+                        <div class="modal-header">
+                            <!--begin::Modal title-->
+                            <h2>Update Dokumen BAST 1</h2>
+                            <!--end::Modal title-->
+                            <!--begin::Close-->
+                            <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                                <span class="svg-icon svg-icon-1">
+                                    <i class="bi bi-x-lg"></i>
+                                </span>
+                                <!--end::Svg Icon-->
+                            </div>
+                            <!--end::Close-->
+                        </div>
+                        <!--end::Modal header-->
+                        <!--begin::Modal body-->
+                        <form action="/contract-management/document-bast/{{ $dokumen->id }}/edit" method="POST"
+                            enctype="multipart/form-data">
+                            @csrf
+                            <div class="modal-body py-lg-6 px-lg-6">
+
+                                <input type="hidden" name="bast" value="1">
+                                <input type="hidden" class="modal-name" name="modal-name">
+                                <input type="hidden" name="id-contract" value="{{ $contract->id_contract }}">
+
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="">Nomor</span>
+                                </label>
+
+                                <input type="text" class="form-control form-control-solid mb-3" name="nomor-dokumen"
+                                    id="nomor_dokumen" value="{{ $dokumen->nomor_dokumen }}" placeholder="Nomor Dokumen"
+                                    style="font-weight: normal" />
+
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="">Jenis Dokumen</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <select name="jenis-bast"
+                                    class="form-select form-select-solid w-50"
+                                    data-control="select2" data-hide-search="true"
+                                    data-placeholder="Jenis Dokumen">
+                                    <option value=""></option>
+                                    <option value="Mechanical Completion" {{ $dokumen->jenis_bast == "Mechanical Completion" ? 'selected' : '' }}>Mechanical Completion</option>
+                                    <option value="Commisioning" {{ $dokumen->jenis_bast == "Commisioning" ? 'selected' : '' }}>Commisioning</option>
+                                    <option value="Performance Test" {{ $dokumen->jenis_bast == "Performance Test" ? 'selected' : '' }}>Performance Test</option>
+                                    <option value="BAST 1 / PHO" {{ $dokumen->jenis_bast == "BAST 1 / PHO" ? 'selected' : '' }}>BAST 1 / PHO</option>
+                                </select>
+                                <!--end::Input-->
+                                <br>
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Edit Dokumen</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="file" multiple accept=".docx, .pdf" name="dokumen-bast-1" id="dokumen-bast-1"
+                                    class="form-control form-control-solid" value="">
+                                <label for="dokumen-bast-1">
+                                    <small class="fs-8 text-primary">
+                                        {{ !empty($dokumen->id_document) ? 'File sebelumnya: '.$dokumen->nama_dokumen : '' }}
+                                    </small>
+                                </label>
+                                <!--end::Input-->
+                                <br>
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Tanggal</span>
+                                    <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem"
+                                        onclick="showCalendarModal(this)" id="tanggal_dokumen">
+                                        <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center"
+                                            style="color: #008CB4"></i>
+                                    </a>
+                                </label>
+
+                                <input type="date" class="form-control form-control-solid mb-3" name="tanggal-dokumen"
+                                    id="tanggal_dokumen" value="{{ Carbon\Carbon::parse($dokumen->tanggal_dokumen)->translatedFormat('Y-m-d') }}" placeholder="Tanggal Dokumen"
+                                    style="font-weight: normal" />
+                                <br>
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="">Status Dokumen</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <select name="status_dokumen"
+                                    class="form-select form-select-solid w-50"
+                                    data-control="select2" data-hide-search="true"
+                                    data-placeholder="Status Dokumen">
+                                    <option value=""></option>
+                                    <option value="Draft" {{ $dokumen->status_dokumen == "Draft" ? 'selected' : '' }}>Draft</option>
+                                    <option value="Review" {{ $dokumen->status_dokumen == "Review" ? 'selected' : '' }}>Review</option>
+                                    <option value="Revisi" {{ $dokumen->status_dokumen == "Revisi" ? 'selected' : '' }}>Revisi</option>
+                                    <option value="Final" {{ $dokumen->status_dokumen == "Final" ? 'selected' : '' }}>Final</option>
+                                </select>
+                                <!--end::Input-->
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" id="save-risk" class="btn btn-sm btn-primary"
+                                    data-bs-dismiss="modal">Save</button>
+                            </div>
+
+                        </form>
+                        <!--end::Input group-->
+
+
+                    </div>
+                    <!--end::Modal body-->
+                </div>
+                <!--end::Modal content-->
+            </div>
+            <!--end::Modal - update BAST 2-->
+        @endforeach
+    @endif
+    <!--end::Modal - Edit BAST 1-->
+
+    <!--begin::Modal - Edit BAST 2-->
+    @if (!empty($contract->ContractBast))
+        @foreach ($contract->ContractBast as $dokumen)
+            <!--begin::Modal - Update BAST 2-->
+            <div class="modal fade" id="kt_modal_bast_2_{{ $dokumen->id_document }}" tabindex="-1" aria-hidden="true">
+                <!--begin::Modal dialog-->
+                <div class="modal-dialog modal-dialog-centered mw-600px">
+                    <!--begin::Modal content-->
+                    <div class="modal-content">
+                        <!--begin::Modal header-->
+                        <div class="modal-header">
+                            <!--begin::Modal title-->
+                            <h2>Update Dokumen BAST 2</h2>
+                            <!--end::Modal title-->
+                            <!--begin::Close-->
+                            <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                                <span class="svg-icon svg-icon-1">
+                                    <i class="bi bi-x-lg"></i>
+                                </span>
+                                <!--end::Svg Icon-->
+                            </div>
+                            <!--end::Close-->
+                        </div>
+                        <!--end::Modal header-->
+                        <!--begin::Modal body-->
+                        <form action="/contract-management/document-bast/{{ $dokumen->id }}/edit" method="POST"
+                            enctype="multipart/form-data">
+                            @csrf
+                            <div class="modal-body py-lg-6 px-lg-6">
+
+                                <input type="hidden" name="bast" value="2">
+                                <input type="hidden" class="modal-name" name="modal-name">
+                                <input type="hidden" name="id-contract" value="{{ $contract->id_contract }}">
+
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="">Nomor</span>
+                                </label>
+
+                                <input type="text" class="form-control form-control-solid mb-3" name="nomor-dokumen"
+                                    id="nomor_dokumen" value="{{ $dokumen->nomor_dokumen }}" placeholder="Nomor Dokumen"
+                                    style="font-weight: normal" />
+
+                                {{-- <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="">Jenis Dokumen</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <select name="jenis-bast"
+                                    class="form-select form-select-solid w-50"
+                                    data-control="select2" data-hide-search="true"
+                                    data-placeholder="Jenis Dokumen">
+                                    <option value=""></option>
+                                    <option value="Mechanical Completion">Mechanical Completion</option>
+                                    <option value="Commisioning">Commisioning</option>
+                                    <option value="Performance Test">Performance Test</option>
+                                    <option value="BAST 1 / PHO">BAST 1 / PHO</option>
+                                </select>
+                                <!--end::Input--> --}}
+                                <br>
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Edit Dokumen</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="file" multiple accept=".docx, .pdf" name="dokumen-bast-1" id="dokumen-bast-1"
+                                    class="form-control form-control-solid" value="">
+                                <label for="dokumen-bast-1">
+                                    <small class="fs-8 text-primary">
+                                        {{ !empty($dokumen->id_document) ? 'File sebelumnya: '.$dokumen->nama_dokumen : '' }}
+                                    </small>
+                                </label>
+                                <!--end::Input-->
+                                <br>
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Tanggal</span>
+                                    <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem"
+                                        onclick="showCalendarModal(this)" id="tanggal_dokumen">
+                                        <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center"
+                                            style="color: #008CB4"></i>
+                                    </a>
+                                </label>
+
+                                <input type="date" class="form-control form-control-solid mb-3" name="tanggal-dokumen"
+                                    id="tanggal_dokumen" value="{{ Carbon\Carbon::parse($dokumen->tanggal_dokumen)->translatedFormat('Y-m-d') }}" placeholder="Tanggal Dokumen"
+                                    style="font-weight: normal" />
+                                <br>
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="">Status Dokumen</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <select name="status_dokumen"
+                                    class="form-select form-select-solid w-50"
+                                    data-control="select2" data-hide-search="true"
+                                    data-placeholder="Status Dokumen">
+                                    <option value=""></option>
+                                    <option value="Draft" {{ $dokumen->status_dokumen == "Draft" ? 'selected' : '' }}>Draft</option>
+                                    <option value="Review" {{ $dokumen->status_dokumen == "Review" ? 'selected' : '' }}>Review</option>
+                                    <option value="Revisi" {{ $dokumen->status_dokumen == "Revisi" ? 'selected' : '' }}>Revisi</option>
+                                    <option value="Final" {{ $dokumen->status_dokumen == "Final" ? 'selected' : '' }}>Final</option>
+                                </select>
+                                <!--end::Input-->
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" id="save-risk" class="btn btn-sm btn-primary"
+                                    data-bs-dismiss="modal">Save</button>
+                            </div>
+
+                        </form>
+                        <!--end::Input group-->
+
+
+                    </div>
+                    <!--end::Modal body-->
+                </div>
+                <!--end::Modal content-->
+            </div>
+            <!--end::Modal - update BAST 2-->
+        @endforeach
+    @endif
+    <!--end::Modal - Edit BAST 2-->
 
     <!--begin::Modal - Input Dokumen Lainnya Serah Terima-->
     <div class="modal fade" id="kt_modal_dokumen_pendukung_serah_terima" tabindex="-1" aria-hidden="true">
@@ -8524,6 +9485,21 @@
                                 <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract" name="id-contract">
                                 <input type="hidden" name="kategori" value="Dokumen Rencana Kerja Manajemen Kontrak (BAB 12)">
 
+                                <label for="ketentuan-rencana-kerja" class="fs-6 fw-bold form-label">
+                                    <span style="font-weight: normal">Status</span>
+                                </label>
+
+                                <!--begin::Input-->
+                                <select name="status_dokumen"
+                                    class="form-select form-select-solid w-50"
+                                    data-control="select2" data-hide-search="true"
+                                    data-placeholder="Jenis Dokumen">
+                                    <option value=""></option>
+                                    <option value="Awal">Awal</option>
+                                    <option value="Update">Update</option>
+                                </select>
+                                <!--end::Input-->
+
                                 <!--end::Input-->
                             </div>
                             {{-- 
@@ -8568,6 +9544,125 @@
         <!--end::Modal dialog-->
     </div>
     <!--end::Modal - Question Tender Menang-->
+
+    <!--end::Modal - Question Tender Menang-->
+    @if (!empty($uploadFile))
+        @foreach ($uploadFile as $item)
+            <!--begin::Modal - Question Tender Menang-->
+        <div class="modal fade" id="kt_modal_input_rencana_kerja_kontrak_{{ $item->id }}" tabindex="-1" aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-500px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header">
+                        <!--begin::Modal title-->
+                        <h2>Update Rencana Kerja Manajemen Kontrak (RKAP - BAB 12)</h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <i class="bi bi-x-lg"></i>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
+                    </div>
+                    <!--end::Modal header-->
+                    <!--begin::Modal body-->
+                    <div class="modal-body py-lg-6 px-lg-6">
+
+                        <!--begin::Input group Website-->
+                        <form action="/contract-management/final-dokumen/{{ $item->id }}/edit" method="POST"
+                            enctype="multipart/form-data">
+                            <div class="row">
+                                @csrf
+                                <div class="col mt-4">
+                                    <!--begin::Label-->
+                                    <label for="ketentuan-rencana-kerja" class="fs-6 fw-bold form-label">
+                                        <span style="font-weight: normal">Upload RKAP Bab 12</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    {{-- <input type="hidden" value="1" name="is-tender-menang">
+                                    <input type="hidden" class="modal-name" name="modal-name">
+                                    --}}
+                                    {{-- <textarea name="ketentuan-rencana-kerja" id="ketentuan-rencana-kerja" rows="10"
+                                    class="form-control form-control-solid"></textarea> --}}
+                                    <input type="hidden" name="modal-name" value="kt_modal_input_rencana_kerja_kontrak">
+                                    <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
+                                    <label for="dokumen-bast-1">
+                                        <small class="fs-8 text-primary">
+                                            {{ !empty($item->id_document) ? 'File sebelumnya: '.$item->nama_document : '' }}
+                                        </small>
+                                    </label>
+                                    <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract" name="id-contract">
+                                    <input type="hidden" name="kategori" value="Dokumen Rencana Kerja Manajemen Kontrak (BAB 12)">
+                                    <br>
+                                    <label for="ketentuan-rencana-kerja" class="fs-6 fw-bold form-label">
+                                        <span style="font-weight: normal">Status</span>
+                                    </label>
+
+                                    <!--begin::Input-->
+                                    <select name="status_dokumen"
+                                        class="form-select form-select-solid w-50"
+                                        data-control="select2" data-hide-search="true"
+                                        data-placeholder="Jenis Dokumen">
+                                        <option value=""></option>
+                                        <option value="Awal" {{ $item->status_dokumen == "Awal" ? "selected" : "" }}>Awal</option>
+                                        <option value="Update" {{ $item->status_dokumen == "Update" ? "selected" : "" }}>Update</option>
+                                    </select>
+                                    <!--end::Input-->
+
+
+
+                                    <!--end::Input-->
+                                </div>
+                                {{-- 
+    {{-- 
+                                {{-- 
+    {{-- 
+                                {{-- 
+    {{-- 
+                                {{-- 
+                                <br><br>
+
+                                <div class="col">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label">
+                                        <span style="font-weight: normal">Informasi Kelengkapan <i>Check List</i>
+                                            ADKON</span>
+                                    </label> --}}
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    {{-- <input type="hidden" value="1" name="is-tender-menang">
+                                    <input type="hidden" class="modal-name" name="modal-name">
+                                    --}}
+                                    {{-- <textarea name="kelengkapan-adkon" id="kelengkapan-adkon" rows="10"
+                                        class="form-control form-control-solid"></textarea> --}}
+                                    <!--end::Input-->
+                                </div>
+
+                            </div>
+                            <!--end::Input group-->
+                            <div class="modal-footer mt-4">
+                                <button type="submit" id="save-question-tender-menang"
+                                    class="btn btn-sm btn-primary">Save</button>
+                            </div>
+                        </form>
+
+
+                    </div>
+                    <!--end::Modal body-->
+                </div>
+                <!--end::Modal content-->
+            </div>
+            <!--end::Modal dialog-->
+        </div>
+        <!--end::Modal - Question Tender Menang-->
+        @endforeach
+    @endif
 
     <br><br>
     <!--Begin::Modal - Dokumen Site Instruction-->
@@ -13061,6 +14156,24 @@
                             <input type="hidden" name="kategori" value="Dokumen Kontrak">
                             <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                             <!--end::Input-->
+                            <br>
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span class="">Status Dokumen</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <select name="status_dokumen"
+                                class="form-select form-select-solid w-50"
+                                data-control="select2" data-hide-search="true"
+                                data-placeholder="Status Dokumen">
+                                <option value=""></option>
+                                <option value="Draft">Draft</option>
+                                <option value="Review">Review</option>
+                                <option value="Revisi">Revisi</option>
+                                <option value="Final">Final</option>
+                            </select>
+                            <!--end::Input-->
                         </div>
                             <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
                                 name="id-contract">
@@ -13081,6 +14194,94 @@
     <!--end::Modal dialog-->
 </div>
 <!--end::Modal - Upload Dokumen Kontrak-->
+
+@if (!empty($dokumen_kontrak))
+    @foreach ($dokumen_kontrak as $dokumen)
+        <!--begin::Modal - Upload Dokumen Kontrak-->
+        <div class="modal fade" id="kt_modal_upload_dokumen_kontrak_{{ $dokumen->id }}" tabindex="-1" aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-500px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header">
+                        <!--begin::Modal title-->
+                        <h2>Upload Dokumen Kontrak</h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <i class="bi bi-x-lg"></i>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
+                    </div>
+                    <!--end::Modal header-->
+                    <!--begin::Modal body-->
+                    <div class="modal-body py-lg-6 px-lg-6">
+                        <!--begin::Input group Website-->
+                        <form action="/contract-management/final-dokumen/{{ $dokumen->id }}/edit" method="POST"
+                            enctype="multipart/form-data">
+                            <div class="row">
+                                @csrf
+                                <div class="col mt-4">
+                                    <!--begin::Label-->
+                                    <label for="ketentuan-rencana-kerja" class="fs-6 fw-bold form-label">
+                                        <span style="font-weight: normal">Upload Dokumen</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="hidden" name="kategori" value="Dokumen Kontrak">
+                                    <input type="hidden" name="id-contract" value="{{ $contract->id_contract }}">
+                                    <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
+                                    <label for="dokumen-bast-1">
+                                        <small class="fs-8 text-primary">
+                                            {{ !empty($dokumen->id_document) ? 'File sebelumnya: '.$dokumen->nama_document : '' }}
+                                        </small>
+                                    </label>
+                                    <!--end::Input-->
+                                    <br>
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span class="">Status Dokumen</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <select name="status_dokumen"
+                                        class="form-select form-select-solid w-50"
+                                        data-control="select2" data-hide-search="true"
+                                        data-placeholder="Status Dokumen">
+                                        <option value=""></option>
+                                        <option value="Draft" {{ $dokumen->status_dokumen == "Draft" ? 'selected' : '' }}>Draft</option>
+                                        <option value="Review" {{ $dokumen->status_dokumen == "Review" ? 'selected' : '' }}>Review</option>
+                                        <option value="Revisi" {{ $dokumen->status_dokumen == "Revisi" ? 'selected' : '' }}>Revisi</option>
+                                        <option value="Final" {{ $dokumen->status_dokumen == "Final" ? 'selected' : '' }}>Final</option>
+                                    </select>
+                                    <!--end::Input-->
+                                </div>
+                                    <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                        name="id-contract">
+                                    <input type="hidden" class="modal-name" name="modal-name">
+                                </div>
+                            </div>
+                            <!--end::Input group-->
+                            <div class="modal-footer mt-4">
+                                <button type="submit" id="save-question-tender-menang"
+                                    class="btn btn-sm btn-primary">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                    <!--end::Modal body-->
+                </div>
+                <!--end::Modal content-->
+            </div>
+            <!--end::Modal dialog-->
+        </div>
+        <!--end::Modal - Upload Dokumen Kontrak-->
+    @endforeach
+@endif
 
 <!--begin::Modal - Upload Dokumen Kontrak Pemeliharaan-->
 <div class="modal fade" id="kt_modal_upload_dokumen_kontrak_pemeliharaan" tabindex="-1" aria-hidden="true">
@@ -13121,6 +14322,24 @@
                             <input type="hidden" name="kategori" value="Dokumen Kontrak - Pemeliharaan">
                             <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                             <!--end::Input-->
+                            <br>
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span class="">Status Dokumen</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <select name="status_dokumen"
+                                class="form-select form-select-solid w-50"
+                                data-control="select2" data-hide-search="true"
+                                data-placeholder="Status Dokumen">
+                                <option value=""></option>
+                                <option value="Draft">Draft</option>
+                                <option value="Review">Review</option>
+                                <option value="Revisi">Revisi</option>
+                                <option value="Final">Final</option>
+                            </select>
+                            <!--end::Input-->
                         </div>
                             <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
                                 name="id-contract">
@@ -13141,6 +14360,94 @@
     <!--end::Modal dialog-->
 </div>
 <!--end::Modal - Upload Dokumen Kontrak Pemeliharaan-->
+
+@if (!empty($dokumen_kontrak_pemeliharaan))
+    @foreach ($dokumen_kontrak_pemeliharaan as $dokumen)
+        <!--begin::Modal - Upload Dokumen Kontrak Pemeliharaan-->
+        <div class="modal fade" id="kt_modal_upload_dokumen_kontrak_pemeliharaan_{{ $dokumen->id }}" tabindex="-1" aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-500px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header">
+                        <!--begin::Modal title-->
+                        <h2>Edit Dokumen Kontrak Pemeliharaan</h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <i class="bi bi-x-lg"></i>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
+                    </div>
+                    <!--end::Modal header-->
+                    <!--begin::Modal body-->
+                    <div class="modal-body py-lg-6 px-lg-6">
+                        <!--begin::Input group Website-->
+                        <form action="/contract-management/final-dokumen/{{ $dokumen->id }}/edit" method="POST"
+                            enctype="multipart/form-data">
+                            <div class="row">
+                                @csrf
+                                <div class="col mt-4">
+                                    <!--begin::Label-->
+                                    <label for="ketentuan-rencana-kerja" class="fs-6 fw-bold form-label">
+                                        <span style="font-weight: normal">Upload Dokumen</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="hidden" name="kategori" value="Dokumen Kontrak - Pemeliharaan">
+                                    <input type="hidden" name="id-contract" value="{{ $contract->id_contract }}">
+                                    <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
+                                    <label for="dokumen-bast-1">
+                                        <small class="fs-8 text-primary">
+                                            {{ !empty($dokumen->id_document) ? 'File sebelumnya: '.$dokumen->nama_document : '' }}
+                                        </small>
+                                    </label>
+                                    <!--end::Input-->
+                                    <br>
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span class="">Status Dokumen</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <select name="status_dokumen"
+                                        class="form-select form-select-solid w-50"
+                                        data-control="select2" data-hide-search="true"
+                                        data-placeholder="Status Dokumen">
+                                        <option value=""></option>
+                                        <option value="Draft" {{ $dokumen->status_dokumen == "Draft" ? 'selected' : '' }}>Draft</option>
+                                        <option value="Review" {{ $dokumen->status_dokumen == "Review" ? 'selected' : '' }}>Review</option>
+                                        <option value="Revisi" {{ $dokumen->status_dokumen == "Revisi" ? 'selected' : '' }}>Revisi</option>
+                                        <option value="Final" {{ $dokumen->status_dokumen == "Final" ? 'selected' : '' }}>Final</option>
+                                    </select>
+                                    <!--end::Input-->
+                                </div>
+                                    <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                        name="id-contract">
+                                    <input type="hidden" class="modal-name" name="modal-name">
+                                </div>
+                            </div>
+                            <!--end::Input group-->
+                            <div class="modal-footer mt-4">
+                                <button type="submit" id="save-question-tender-menang"
+                                    class="btn btn-sm btn-primary">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                    <!--end::Modal body-->
+                </div>
+                <!--end::Modal content-->
+            </div>
+            <!--end::Modal dialog-->
+        </div>
+        <!--end::Modal - Upload Dokumen Kontrak Pemeliharaan-->
+    @endforeach
+@endif
 
 <!--begin::Modal - Upload Dokumen Amandemen-->
 <div class="modal fade" id="kt_modal_upload_dokumen_amandemen" tabindex="-1" aria-hidden="true">
@@ -13181,6 +14488,24 @@
                             <input type="hidden" name="kategori" value="Dokumen Amandemen">
                             <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                             <!--end::Input-->
+                            <br>
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span class="">Status Dokumen</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <select name="status_dokumen"
+                                class="form-select form-select-solid w-50"
+                                data-control="select2" data-hide-search="true"
+                                data-placeholder="Status Dokumen">
+                                <option value=""></option>
+                                <option value="Draft">Draft</option>
+                                <option value="Review">Review</option>
+                                <option value="Revisi">Revisi</option>
+                                <option value="Final">Final</option>
+                            </select>
+                            <!--end::Input-->
                         </div>
                             <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
                                 name="id-contract">
@@ -13201,6 +14526,94 @@
     <!--end::Modal dialog-->
 </div>
 <!--end::Modal - Upload Dokumen Amandemen-->
+
+@if (!empty($dokumen_amandemen))
+    @foreach ($dokumen_amandemen as $dokumen)
+       <!--begin::Modal - Upload Dokumen Amandemen-->
+        <div class="modal fade" id="kt_modal_upload_dokumen_amandemen_{{ $dokumen->id }}" tabindex="-1" aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-500px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header">
+                        <!--begin::Modal title-->
+                        <h2>Upload Dokumen Amandemen</h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <i class="bi bi-x-lg"></i>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
+                    </div>
+                    <!--end::Modal header-->
+                    <!--begin::Modal body-->
+                    <div class="modal-body py-lg-6 px-lg-6">
+                        <!--begin::Input group Website-->
+                        <form action="/contract-management/final-dokumen/{{ $dokumen->id }}/edit" method="POST"
+                            enctype="multipart/form-data">
+                            <div class="row">
+                                @csrf
+                                <div class="col mt-4">
+                                    <!--begin::Label-->
+                                    <label for="ketentuan-rencana-kerja" class="fs-6 fw-bold form-label">
+                                        <span style="font-weight: normal">Upload Dokumen</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="hidden" name="kategori" value="Dokumen Amandemen">
+                                    <input type="hidden" name="id-contract" value="{{ $contract->id_contract }}">
+                                    <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
+                                    <label for="dokumen-bast-1">
+                                        <small class="fs-8 text-primary">
+                                            {{ !empty($dokumen->id_document) ? 'File sebelumnya: '.$dokumen->nama_document : '' }}
+                                        </small>
+                                    </label>
+                                    <!--end::Input-->
+                                    <br>
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span class="">Status Dokumen</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <select name="status_dokumen"
+                                        class="form-select form-select-solid w-50"
+                                        data-control="select2" data-hide-search="true"
+                                        data-placeholder="Status Dokumen">
+                                        <option value=""></option>
+                                        <option value="Draft" {{ $dokumen->status_dokumen == "Draft" ? 'selected' : '' }}>Draft</option>
+                                        <option value="Review" {{ $dokumen->status_dokumen == "Review" ? 'selected' : '' }}>Review</option>
+                                        <option value="Revisi" {{ $dokumen->status_dokumen == "Revisi" ? 'selected' : '' }}>Revisi</option>
+                                        <option value="Final" {{ $dokumen->status_dokumen == "Final" ? 'selected' : '' }}>Final</option>
+                                    </select>
+                                    <!--end::Input-->
+                                </div>
+                                    <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                        name="id-contract">
+                                    <input type="hidden" class="modal-name" name="modal-name">
+                                </div>
+                            </div>
+                            <!--end::Input group-->
+                            <div class="modal-footer mt-4">
+                                <button type="submit" id="save-question-tender-menang"
+                                    class="btn btn-sm btn-primary">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                    <!--end::Modal body-->
+                </div>
+                <!--end::Modal content-->
+            </div>
+            <!--end::Modal dialog-->
+        </div>
+        <!--end::Modal - Upload Dokumen Amandemen--> 
+    @endforeach
+@endif
 
 <!--begin::Modal - Upload Dokumen Amandemen Pemeliharaan-->
 <div class="modal fade" id="kt_modal_upload_dokumen_amandemen_pemeliharaan" tabindex="-1" aria-hidden="true">
@@ -13241,6 +14654,24 @@
                             <input type="hidden" name="kategori" value="Dokumen Amandemen - Pemeliharaan">
                             <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                             <!--end::Input-->
+                            <br>
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span class="">Status Dokumen</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <select name="status_dokumen"
+                                class="form-select form-select-solid w-50"
+                                data-control="select2" data-hide-search="true"
+                                data-placeholder="Status Dokumen">
+                                <option value=""></option>
+                                <option value="Draft">Draft</option>
+                                <option value="Review">Review</option>
+                                <option value="Revisi">Revisi</option>
+                                <option value="Final">Final</option>
+                            </select>
+                            <!--end::Input-->
                         </div>
                             <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
                                 name="id-contract">
@@ -13261,6 +14692,595 @@
     <!--end::Modal dialog-->
 </div>
 <!--end::Modal - Upload Dokumen Amandemen Pemeliharaan-->
+
+@if (!empty($dokumen_amandemen_pemeliharaan))
+    @foreach ($dokumen_amandemen_pemeliharaan as $dokumen)
+        <!--begin::Modal - Upload Dokumen Amandemen Pemeliharaan-->
+        <div class="modal fade" id="kt_modal_upload_dokumen_amandemen_pemeliharaan_{{ $dokumen->id }}" tabindex="-1" aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-500px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header">
+                        <!--begin::Modal title-->
+                        <h2>Upload Dokumen Amandemen - Pemeliharaan</h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <i class="bi bi-x-lg"></i>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
+                    </div>
+                    <!--end::Modal header-->
+                    <!--begin::Modal body-->
+                    <div class="modal-body py-lg-6 px-lg-6">
+                        <!--begin::Input group Website-->
+                        <form action="/contract-management/final-dokumen/{{ $dokumen->id }}/edit" method="POST"
+                            enctype="multipart/form-data">
+                            <div class="row">
+                                @csrf
+                                <div class="col mt-4">
+                                    <!--begin::Label-->
+                                    <label for="ketentuan-rencana-kerja" class="fs-6 fw-bold form-label">
+                                        <span style="font-weight: normal">Upload Dokumen</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="hidden" name="id-contract" value="{{ $contract->id_contract }}">
+                                    <input type="hidden" name="kategori" value="Dokumen Amandemen - Pemeliharaan">
+                                    <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
+                                    <label for="dokumen-bast-1">
+                                        <small class="fs-8 text-primary">
+                                            {{ !empty($dokumen->id_document) ? 'File sebelumnya: '.$dokumen->nama_document : '' }}
+                                        </small>
+                                    </label>
+                                    <!--end::Input-->
+                                    <br>
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span class="">Status Dokumen</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <select name="status_dokumen"
+                                        class="form-select form-select-solid w-50"
+                                        data-control="select2" data-hide-search="true"
+                                        data-placeholder="Status Dokumen">
+                                        <option value=""></option>
+                                        <option value="Draft" {{ $dokumen->status_dokumen == "Draft" ? 'selected' : '' }}>Draft</option>
+                                        <option value="Review" {{ $dokumen->status_dokumen == "Review" ? 'selected' : '' }}>Review</option>
+                                        <option value="Revisi" {{ $dokumen->status_dokumen == "Revisi" ? 'selected' : '' }}>Revisi</option>
+                                        <option value="Final" {{ $dokumen->status_dokumen == "Final" ? 'selected' : '' }}>Final</option>
+                                    </select>
+                                    <!--end::Input-->
+                                </div>
+                                    <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                        name="id-contract">
+                                    <input type="hidden" class="modal-name" name="modal-name">
+                                </div>
+                            </div>
+                            <!--end::Input group-->
+                            <div class="modal-footer mt-4">
+                                <button type="submit" id="save-question-tender-menang"
+                                    class="btn btn-sm btn-primary">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                    <!--end::Modal body-->
+                </div>
+                <!--end::Modal content-->
+            </div>
+            <!--end::Modal dialog-->
+        </div>
+        <!--end::Modal - Upload Dokumen Amandemen Pemeliharaan-->
+    @endforeach
+@endif
+
+<!--begin::Modal - Upload Dokumen MOM-->
+<div class="modal fade" id="kt_modal_upload_mom" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog modal-dialog-centered mw-500px">
+        <!--begin::Modal content-->
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header">
+                <!--begin::Modal title-->
+                <h2>Upload File Dokumen MOM</h2>
+                <!--end::Modal title-->
+                <!--begin::Close-->
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                        <i class="bi bi-x-lg"></i>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--end::Modal header-->
+            <!--begin::Modal body-->
+            <div class="modal-body py-lg-6 px-lg-6">
+                <!--begin::Input group Website-->
+                <form action="/contract-management/final-dokumen/upload" method="POST"
+                    enctype="multipart/form-data">
+                    <div class="row">
+                        @csrf
+                        <div class="col mt-4">
+                            <!--begin::Label-->
+                            <label for="ketentuan-rencana-kerja" class="fs-6 fw-bold form-label">
+                                <span style="font-weight: normal">Upload Dokumen</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="hidden" name="kategori" value="Dokumen Minutes of Meeting (MoM)">
+                            <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
+                            <!--end::Input-->
+                        </div>
+                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                name="id-contract">
+                            <input type="hidden" class="modal-name" name="modal-name">
+                        </div>
+                    </div>
+                    <!--end::Input group-->
+                    <div class="modal-footer mt-4">
+                        <button type="submit" id="save-question-tender-menang"
+                            class="btn btn-sm btn-primary">Save</button>
+                    </div>
+                </form>
+            </div>
+            <!--end::Modal body-->
+        </div>
+        <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+</div>
+@if (!empty($dokumen_mom))
+    @foreach ($dokumen_mom as $dokumen)
+    <div class="modal fade" id="kt_modal_upload_mom_{{ $dokumen->id }}" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-500px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Update File Dokumen MOM</h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <i class="bi bi-x-lg"></i>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
+                    <!--begin::Input group Website-->
+                    <form action="/contract-management/final-dokumen/{{ $dokumen->id }}/edit" method="POST"
+                        enctype="multipart/form-data">
+                        <div class="row">
+                            @csrf
+                            <div class="col mt-4">
+                                <!--begin::Label-->
+                                <label for="ketentuan-rencana-kerja" class="fs-6 fw-bold form-label">
+                                    <span style="font-weight: normal">Upload Dokumen</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="hidden" name="kategori" value="Dokumen Minutes of Meeting (MoM)">
+                                <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
+                                <label for="dokumen-bast-1">
+                                    <small class="fs-8 text-primary">
+                                        {{ !empty($dokumen->id_document) ? 'File sebelumnya: '.$dokumen->nama_document : '' }}
+                                    </small>
+                                </label>
+                                <!--end::Input-->
+                            </div>
+                                <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                    name="id-contract">
+                                <input type="hidden" class="modal-name" name="modal-name">
+                            </div>
+                        </div>
+                        <!--end::Input group-->
+                        <div class="modal-footer mt-4">
+                            <button type="submit" id="save-question-tender-menang"
+                                class="btn btn-sm btn-primary">Save</button>
+                        </div>
+                    </form>
+                </div>
+                <!--end::Modal body-->
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+    </div>
+    @endforeach
+@endif
+<!--end::Modal - Upload Dokumen MOM-->
+<!--begin::Modal - Upload Dokumen Kick Off Meeting-->
+<div class="modal fade" id="kt_modal_upload_kickoff" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog modal-dialog-centered mw-500px">
+        <!--begin::Modal content-->
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header">
+                <!--begin::Modal title-->
+                <h2>Upload File Dokumen Kick Off Meeting</h2>
+                <!--end::Modal title-->
+                <!--begin::Close-->
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                        <i class="bi bi-x-lg"></i>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--end::Modal header-->
+            <!--begin::Modal body-->
+            <div class="modal-body py-lg-6 px-lg-6">
+                <!--begin::Input group Website-->
+                <form action="/contract-management/final-dokumen/upload" method="POST"
+                    enctype="multipart/form-data">
+                    <div class="row">
+                        @csrf
+                        <div class="col mt-4">
+                            <!--begin::Label-->
+                            <label for="ketentuan-rencana-kerja" class="fs-6 fw-bold form-label">
+                                <span style="font-weight: normal">Upload Dokumen</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="hidden" name="kategori" value="Dokumen Kick Off Meeting">
+                            <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
+                            <!--end::Input-->
+                        </div>
+                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                name="id-contract">
+                            <input type="hidden" class="modal-name" name="modal-name">
+                        </div>
+                    </div>
+                    <!--end::Input group-->
+                    <div class="modal-footer mt-4">
+                        <button type="submit" id="save-question-tender-menang"
+                            class="btn btn-sm btn-primary">Save</button>
+                    </div>
+                </form>
+            </div>
+            <!--end::Modal body-->
+        </div>
+        <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+</div>
+@if (!empty($dokumen_kickoff))
+    @foreach ($dokumen_kickoff as $dokumen)
+    <div class="modal fade" id="kt_modal_upload_kickoff_{{ $dokumen->id }}" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-500px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Update File Dokumen Kick Off Meeting</h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <i class="bi bi-x-lg"></i>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
+                    <!--begin::Input group Website-->
+                    <form action="/contract-management/final-dokumen/{{ $dokumen->id }}/edit" method="POST"
+                        enctype="multipart/form-data">
+                        <div class="row">
+                            @csrf
+                            <div class="col mt-4">
+                                <!--begin::Label-->
+                                <label for="ketentuan-rencana-kerja" class="fs-6 fw-bold form-label">
+                                    <span style="font-weight: normal">Upload Dokumen</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="hidden" name="kategori" value="Dokumen Kick Off Meeting">
+                                <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
+                                <label for="dokumen-bast-1">
+                                    <small class="fs-8 text-primary">
+                                        {{ !empty($dokumen->id_document) ? 'File sebelumnya: '.$dokumen->nama_document : '' }}
+                                    </small>
+                                </label>
+                                <!--end::Input-->
+                            </div>
+                                <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                    name="id-contract">
+                                <input type="hidden" class="modal-name" name="modal-name">
+                            </div>
+                        </div>
+                        <!--end::Input group-->
+                        <div class="modal-footer mt-4">
+                            <button type="submit" id="save-question-tender-menang"
+                                class="btn btn-sm btn-primary">Save</button>
+                        </div>
+                    </form>
+                </div>
+                <!--end::Modal body-->
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+    </div>
+    @endforeach
+@endif
+<!--end::Modal - Upload Dokumen Kick Off Meeting-->
+<!--begin::Modal - Upload Dokumen Lesson Learned-->
+<div class="modal fade" id="kt_modal_upload_lesson_learned" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog modal-dialog-centered mw-500px">
+        <!--begin::Modal content-->
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header">
+                <!--begin::Modal title-->
+                <h2>Upload Dokumen Lesson Learned</h2>
+                <!--end::Modal title-->
+                <!--begin::Close-->
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                        <i class="bi bi-x-lg"></i>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--end::Modal header-->
+            <!--begin::Modal body-->
+            <div class="modal-body py-lg-6 px-lg-6">
+                <!--begin::Input group Website-->
+                <form action="/contract-management/final-dokumen/upload" method="POST"
+                    enctype="multipart/form-data">
+                    <div class="row">
+                        @csrf
+                        <div class="col mt-4">
+                            <!--begin::Label-->
+                            <label for="ketentuan-rencana-kerja" class="fs-6 fw-bold form-label">
+                                <span style="font-weight: normal">Upload Dokumen</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="hidden" name="kategori" value="Dokumen Lesson Learned">
+                            <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
+                            <!--end::Input-->
+                        </div>
+                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                name="id-contract">
+                            <input type="hidden" class="modal-name" name="modal-name">
+                        </div>
+                    </div>
+                    <!--end::Input group-->
+                    <div class="modal-footer mt-4">
+                        <button type="submit" id="save-question-tender-menang"
+                            class="btn btn-sm btn-primary">Save</button>
+                    </div>
+                </form>
+            </div>
+            <!--end::Modal body-->
+        </div>
+        <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+</div>
+@if (!empty($dokumen_lesson_learned))
+    @foreach ($dokumen_lesson_learned as $dokumen)
+    <div class="modal fade" id="kt_modal_upload_lesson_learned_{{ $dokumen->id }}" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-500px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Update Dokumen Lesson Learned</h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <i class="bi bi-x-lg"></i>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
+                    <!--begin::Input group Website-->
+                    <form action="/contract-management/final-dokumen/{{ $dokumen->id }}/edit" method="POST"
+                        enctype="multipart/form-data">
+                        <div class="row">
+                            @csrf
+                            <div class="col mt-4">
+                                <!--begin::Label-->
+                                <label for="ketentuan-rencana-kerja" class="fs-6 fw-bold form-label">
+                                    <span style="font-weight: normal">Upload Dokumen</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="hidden" name="kategori" value="Dokumen Lesson Learned">
+                                <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
+                                <label for="dokumen-bast-1">
+                                    <small class="fs-8 text-primary">
+                                        {{ !empty($dokumen->id_document) ? 'File sebelumnya: '.$dokumen->nama_document : '' }}
+                                    </small>
+                                </label>
+                                <!--end::Input-->
+                            </div>
+                                <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                    name="id-contract">
+                                <input type="hidden" class="modal-name" name="modal-name">
+                            </div>
+                        </div>
+                        <!--end::Input group-->
+                        <div class="modal-footer mt-4">
+                            <button type="submit" id="save-question-tender-menang"
+                                class="btn btn-sm btn-primary">Save</button>
+                        </div>
+                    </form>
+                </div>
+                <!--end::Modal body-->
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+    </div>
+    @endforeach
+@endif
+<!--end::Modal - Upload Dokumen Lesson Learned-->
+<!--begin::Modal - Upload Dokumen Monitoring Status-->
+<div class="modal fade" id="kt_modal_upload_monitoring_status" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog modal-dialog-centered mw-500px">
+        <!--begin::Modal content-->
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header">
+                <!--begin::Modal title-->
+                <h2>Upload Dokumen Monitoring Status</h2>
+                <!--end::Modal title-->
+                <!--begin::Close-->
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                        <i class="bi bi-x-lg"></i>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--end::Modal header-->
+            <!--begin::Modal body-->
+            <div class="modal-body py-lg-6 px-lg-6">
+                <!--begin::Input group Website-->
+                <form action="/contract-management/final-dokumen/upload" method="POST"
+                    enctype="multipart/form-data">
+                    <div class="row">
+                        @csrf
+                        <div class="col mt-4">
+                            <!--begin::Label-->
+                            <label for="ketentuan-rencana-kerja" class="fs-6 fw-bold form-label">
+                                <span style="font-weight: normal">Upload Dokumen</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="hidden" name="kategori" value="Dokumen Monitoring Status">
+                            <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
+                            <!--end::Input-->
+                        </div>
+                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                name="id-contract">
+                            <input type="hidden" class="modal-name" name="modal-name">
+                        </div>
+                    </div>
+                    <!--end::Input group-->
+                    <div class="modal-footer mt-4">
+                        <button type="submit" id="save-question-tender-menang"
+                            class="btn btn-sm btn-primary">Save</button>
+                    </div>
+                </form>
+            </div>
+            <!--end::Modal body-->
+        </div>
+        <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+</div>
+@if (!empty($dokumen_monitoring_status))
+    @foreach ($dokumen_monitoring_status as $dokumen)
+    <div class="modal fade" id="kt_modal_upload_monitoring_status_{{ $dokumen->id }}" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-500px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Update Dokumen Monitoring Status</h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <i class="bi bi-x-lg"></i>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
+                    <!--begin::Input group Website-->
+                    <form action="/contract-management/final-dokumen/{{ $dokumen->id }}/edit" method="POST"
+                        enctype="multipart/form-data">
+                        <div class="row">
+                            @csrf
+                            <div class="col mt-4">
+                                <!--begin::Label-->
+                                <label for="ketentuan-rencana-kerja" class="fs-6 fw-bold form-label">
+                                    <span style="font-weight: normal">Upload Dokumen</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="hidden" name="kategori" value="Dokumen Monitoring Status">
+                                <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
+                                <label for="dokumen-bast-1">
+                                    <small class="fs-8 text-primary">
+                                        {{ !empty($dokumen->id_document) ? 'File sebelumnya: '.$dokumen->nama_document : '' }}
+                                    </small>
+                                </label>
+                                <!--end::Input-->
+                            </div>
+                                <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                    name="id-contract">
+                                <input type="hidden" class="modal-name" name="modal-name">
+                            </div>
+                        </div>
+                        <!--end::Input group-->
+                        <div class="modal-footer mt-4">
+                            <button type="submit" id="save-question-tender-menang"
+                                class="btn btn-sm btn-primary">Save</button>
+                        </div>
+                    </form>
+                </div>
+                <!--end::Modal body-->
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+    </div>
+    @endforeach
+@endif
+<!--end::Modal - Upload Dokumen Monitoring Status-->
 
 <!--begin::Modal - Upload Dokumen Bill of Quality-->
 <div class="modal fade" id="kt_modal_upload_dokumen_boq" tabindex="-1" aria-hidden="true">
@@ -13503,7 +15523,7 @@
 <!--end::Modal - Upload Dokumen Bill of Quality Pemeliharaan-->
 
 
-<!--begin::Modal - List Questions-->
+{{-- <!--begin::Modal - List Questions-->
     <div class="modal fade" id="kt_modal_question_proyek" tabindex="-1" aria-hidden="true">
         <!--begin::Modal dialog-->
         <div class="modal-dialog modal-dialog-centered mw-500px">
@@ -13571,19 +15591,6 @@
                                         placeholder="Pertanyaan"></textarea>
                                     <!--end::Input-->
                                     <small id="file-error-msg-question" style="color: rgb(199, 42, 42); display:none"></small>
-
-                                    {{-- begin::Froala Editor --}}
-                                    {{-- <div id="froala-editor-question">
-                                        <h1>Attach file with <b>.DOCX</b> format only</h1>
-                                    </div> --}}
-                                    {{-- end::Froala Editor --}}
-                                    {{-- begin::Read File --}}
-                                    {{-- <script>
-                                        document.getElementById("attach-file-question").addEventListener("change", async function() {
-                                            await readFile(this.files[0], "#froala-editor-question");
-                                        });
-                                    </script> --}}
-                                    {{-- end::Read File --}}
                                     <br><br>
                                     <button type="submit" id="save-question" class="btn btn-sm btn-primary"
                                         data-bs-dismiss="modal">Save</button>
@@ -13598,8 +15605,139 @@
         </div>
         <!--end::Modal dialog-->
     </div>
-<!--end::Modal - List Questions-->
+<!--end::Modal - List Questions--> --}}
 
+<!--begin::Modal - Upload Questions-->
+<div class="modal fade" id="kt_modal_create_aanwitjzing" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog modal-dialog-centered mw-500px">
+        <!--begin::Modal content-->
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header">
+                <!--begin::Modal title-->
+                <h2>Upload Aanwitjzing</h2>
+                <!--end::Modal title-->
+                <!--begin::Close-->
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                        <i class="bi bi-x-lg"></i>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--end::Modal header-->
+            <!--begin::Modal body-->
+            <div class="modal-body py-lg-6 px-lg-6">
+                <!--begin::Input group Website-->
+                <form action="/contract-management/final-dokumen/upload" method="POST"
+                    enctype="multipart/form-data">
+                    <div class="row">
+                        @csrf
+                        <div class="col mt-4">
+                            <!--begin::Label-->
+                            <label for="ketentuan-rencana-kerja" class="fs-6 fw-bold form-label">
+                                <span style="font-weight: normal">Upload Dokumen</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="hidden" name="kategori" value="Dokumen Aanwitjzing">
+                            {{-- <input type="hidden" name="status" value="Final"> --}}
+                            <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
+                            <!--end::Input-->
+                        </div>
+                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                name="id-contract">
+                            <input type="hidden" class="modal-name" name="modal-name">
+                        </div>
+                    </div>
+                    <!--end::Input group-->
+                    <div class="modal-footer mt-4">
+                        <button type="submit" id="save-question-tender-menang"
+                            class="btn btn-sm btn-primary">Save</button>
+                    </div>
+                </form>
+            </div>
+            <!--end::Modal body-->
+        </div>
+        <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+</div>
+<!--end::Modal - Upload Questions-->
+<!--begin::Modal - Edit Questions-->
+@if (!empty($dokumen_aanwitjzing) || $dokumen_aanwitjzing->isNotEmpty())
+    @forelse ($dokumen_aanwitjzing as $dokumen)
+    <div class="modal fade" id="kt_modal_create_aanwitjzing_{{ $dokumen->id }}" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-500px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Edit Aanwitjzing</h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <i class="bi bi-x-lg"></i>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
+                    <!--begin::Input group Website-->
+                    <form action="/contract-management/final-dokumen/{{ $dokumen->id }}/edit" method="POST"
+                        enctype="multipart/form-data">
+                        <div class="row">
+                            @csrf
+                            <div class="col mt-4">
+                                <!--begin::Label-->
+                                <label for="ketentuan-rencana-kerja" class="fs-6 fw-bold form-label">
+                                    <span style="font-weight: normal">Upload Dokumen</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="hidden" name="kategori" value="Dokumen Aanwitjzing">
+                                {{-- <input type="hidden" name="status" value="Final"> --}}
+                                <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
+                                <label for="file-document">
+                                    <small class="fs-8 text-primary">
+                                        {{ !empty($dokumen->id_document) ? 'File sebelumnya: '.$dokumen->nama_document : '' }}
+                                    </small>
+                                </label>
+                                <!--end::Input-->
+                            </div>
+                                <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                    name="id-contract">
+                                <input type="hidden" class="modal-name" name="modal-name">
+                            </div>
+                        </div>
+                        <!--end::Input group-->
+                        <div class="modal-footer mt-4">
+                            <button type="submit" id="save-question-tender-menang"
+                                class="btn btn-sm btn-primary">Save</button>
+                        </div>
+                    </form>
+                </div>
+                <!--end::Modal body-->
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+    </div>
+    @empty
+        
+    @endforelse
+@endif
+<!--end::Modal - Edit Questions-->
 <!--begin::Modal - Upload Final Questions-->
 <div class="modal fade" id="kt_modal_upload_aanwitjzing" tabindex="-1" aria-hidden="true">
     <!--begin::Modal dialog-->
@@ -13720,6 +15858,399 @@
     <!--end::Modal dialog-->
 </div>
 <!--end::Modal - Upload Final Questions-->
+<!--begin::Modal - Upload Tinjauan Dokumen-->
+<div class="modal fade" id="kt_modal_create_tinjauan_dokumen_perolehan" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog modal-dialog-centered mw-500px">
+        <!--begin::Modal content-->
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header">
+                <!--begin::Modal title-->
+                <h2>Upload Dokumen Tinjauan Kontrak Perolehan</h2>
+                <!--end::Modal title-->
+                <!--begin::Close-->
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                        <i class="bi bi-x-lg"></i>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--end::Modal header-->
+            <!--begin::Modal body-->
+            <div class="modal-body py-lg-6 px-lg-6">
+                <!--begin::Input group Website-->
+                <form action="/contract-management/final-dokumen/upload" method="POST"
+                    enctype="multipart/form-data">
+                    <div class="row">
+                        @csrf
+                        <div class="col mt-4">
+                            <!--begin::Label-->
+                            <label for="ketentuan-rencana-kerja" class="fs-6 fw-bold form-label">
+                                <span style="font-weight: normal">Upload Dokumen</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="hidden" name="kategori" value="Tinjauan Dokumen Kontrak - Perolehan">
+                            {{-- <input type="hidden" name="status" value="Final"> --}}
+                            <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
+                            <!--end::Input-->
+                        </div>
+                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                name="id-contract">
+                            <input type="hidden" class="modal-name" name="modal-name">
+                        </div>
+                    </div>
+                    <!--end::Input group-->
+                    <div class="modal-footer mt-4">
+                        <button type="submit" id="save-question-tender-menang"
+                            class="btn btn-sm btn-primary">Save</button>
+                    </div>
+                </form>
+            </div>
+            <!--end::Modal body-->
+        </div>
+        <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+</div>
+<!--end::Modal - Upload Tinjauan Dokumen-->
+<!--begin::Modal - Edit Tinjauan Dokumen-->
+@if (!empty($dokumen_tinjauan_perolehan) || $dokumen_tinjauan_perolehan->isNotEmpty())
+    @forelse ($dokumen_tinjauan_perolehan as $dokumen)
+    <div class="modal fade" id="kt_modal_create_tinjauan_dokumen_perolehan_{{ $dokumen->id }}" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-500px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Edit Dokumen Tinjauan Kontrak Perolehan</h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <i class="bi bi-x-lg"></i>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
+                    <!--begin::Input group Website-->
+                    <form action="/contract-management/final-dokumen/{{ $dokumen->id }}/edit" method="POST"
+                        enctype="multipart/form-data">
+                        <div class="row">
+                            @csrf
+                            <div class="col mt-4">
+                                <!--begin::Label-->
+                                <label for="ketentuan-rencana-kerja" class="fs-6 fw-bold form-label">
+                                    <span style="font-weight: normal">Upload Dokumen</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="hidden" name="kategori" value="Tinjauan Dokumen Kontrak - Perolehan">
+                                {{-- <input type="hidden" name="status" value="Final"> --}}
+                                <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
+                                <label for="file-document">
+                                    <small class="fs-8 text-primary">
+                                        {{ !empty($dokumen->id_document) ? 'File sebelumnya: '.$dokumen->nama_document : '' }}
+                                    </small>
+                                </label>
+                                <!--end::Input-->
+                            </div>
+                                <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                    name="id-contract">
+                                <input type="hidden" class="modal-name" name="modal-name">
+                            </div>
+                        </div>
+                        <!--end::Input group-->
+                        <div class="modal-footer mt-4">
+                            <button type="submit" id="save-question-tender-menang"
+                                class="btn btn-sm btn-primary">Save</button>
+                        </div>
+                    </form>
+                </div>
+                <!--end::Modal body-->
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+    </div>
+    @empty
+        
+    @endforelse
+@endif
+<!--end::Modal - Edit Tinjauan Dokumen-->
+<!--begin::Modal - Upload Tinjauan Dokumen-->
+<div class="modal fade" id="kt_modal_create_tinjauan_dokumen_pelaksanaan" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog modal-dialog-centered mw-500px">
+        <!--begin::Modal content-->
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header">
+                <!--begin::Modal title-->
+                <h2>Upload Dokumen Tinjauan Kontrak Pelaksanaan</h2>
+                <!--end::Modal title-->
+                <!--begin::Close-->
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                        <i class="bi bi-x-lg"></i>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--end::Modal header-->
+            <!--begin::Modal body-->
+            <div class="modal-body py-lg-6 px-lg-6">
+                <!--begin::Input group Website-->
+                <form action="/contract-management/final-dokumen/upload" method="POST"
+                    enctype="multipart/form-data">
+                    <div class="row">
+                        @csrf
+                        <div class="col mt-4">
+                            <!--begin::Label-->
+                            <label for="ketentuan-rencana-kerja" class="fs-6 fw-bold form-label">
+                                <span style="font-weight: normal">Upload Dokumen</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="hidden" name="kategori" value="Tinjauan Dokumen Kontrak - Pelaksanaan">
+                            {{-- <input type="hidden" name="status" value="Final"> --}}
+                            <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
+                            <!--end::Input-->
+                        </div>
+                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                name="id-contract">
+                            <input type="hidden" class="modal-name" name="modal-name">
+                        </div>
+                    </div>
+                    <!--end::Input group-->
+                    <div class="modal-footer mt-4">
+                        <button type="submit" id="save-question-tender-menang"
+                            class="btn btn-sm btn-primary">Save</button>
+                    </div>
+                </form>
+            </div>
+            <!--end::Modal body-->
+        </div>
+        <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+</div>
+<!--end::Modal - Upload Tinjauan Dokumen-->
+<!--begin::Modal - Edit Tinjauan Dokumen-->
+@if (!empty($dokumen_tinjauan_pelaksanaan) || $dokumen_tinjauan_pelaksanaan->isNotEmpty())
+    @forelse ($dokumen_tinjauan_pelaksanaan as $dokumen)
+    <div class="modal fade" id="kt_modal_create_tinjauan_dokumen_pelaksanaan_{{ $dokumen->id }}" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-500px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Edit Dokumen Tinjauan Kontrak Pelaksanaan</h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <i class="bi bi-x-lg"></i>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
+                    <!--begin::Input group Website-->
+                    <form action="/contract-management/final-dokumen/{{ $dokumen->id }}/edit" method="POST"
+                        enctype="multipart/form-data">
+                        <div class="row">
+                            @csrf
+                            <div class="col mt-4">
+                                <!--begin::Label-->
+                                <label for="ketentuan-rencana-kerja" class="fs-6 fw-bold form-label">
+                                    <span style="font-weight: normal">Upload Dokumen</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="hidden" name="kategori" value="Tinjauan Dokumen Kontrak - Pelaksanaan">
+                                {{-- <input type="hidden" name="status" value="Final"> --}}
+                                <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
+                                <label for="file-document">
+                                    <small class="fs-8 text-primary">
+                                        {{ !empty($dokumen->id_document) ? 'File sebelumnya: '.$dokumen->nama_document : '' }}
+                                    </small>
+                                </label>
+                                <!--end::Input-->
+                            </div>
+                                <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                    name="id-contract">
+                                <input type="hidden" class="modal-name" name="modal-name">
+                            </div>
+                        </div>
+                        <!--end::Input group-->
+                        <div class="modal-footer mt-4">
+                            <button type="submit" id="save-question-tender-menang"
+                                class="btn btn-sm btn-primary">Save</button>
+                        </div>
+                    </form>
+                </div>
+                <!--end::Modal body-->
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+    </div>
+    @empty
+        
+    @endforelse
+@endif
+<!--end::Modal - Edit Tinjauan Dokumen-->
+<!--begin::Modal - Upload Usulan Perubahan Draft-->
+<div class="modal fade" id="kt_modal_create_usulan_perubahan_draft_kontrak" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog modal-dialog-centered mw-500px">
+        <!--begin::Modal content-->
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header">
+                <!--begin::Modal title-->
+                <h2>Upload Dokumen Usulan Perubahan Draft Kontrak</h2>
+                <!--end::Modal title-->
+                <!--begin::Close-->
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                        <i class="bi bi-x-lg"></i>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--end::Modal header-->
+            <!--begin::Modal body-->
+            <div class="modal-body py-lg-6 px-lg-6">
+                <!--begin::Input group Website-->
+                <form action="/contract-management/final-dokumen/upload" method="POST"
+                    enctype="multipart/form-data">
+                    <div class="row">
+                        @csrf
+                        <div class="col mt-4">
+                            <!--begin::Label-->
+                            <label for="ketentuan-rencana-kerja" class="fs-6 fw-bold form-label">
+                                <span style="font-weight: normal">Upload Dokumen</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="hidden" name="kategori" value="Usulan Perubahan Draft Kontrak">
+                            {{-- <input type="hidden" name="status" value="Final"> --}}
+                            <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
+                            <!--end::Input-->
+                        </div>
+                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                name="id-contract">
+                            <input type="hidden" class="modal-name" name="modal-name">
+                        </div>
+                    </div>
+                    <!--end::Input group-->
+                    <div class="modal-footer mt-4">
+                        <button type="submit" id="save-question-tender-menang"
+                            class="btn btn-sm btn-primary">Save</button>
+                    </div>
+                </form>
+            </div>
+            <!--end::Modal body-->
+        </div>
+        <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+</div>
+<!--end::Modal - Upload Usulan Perubahan Draft-->
+<!--begin::Modal - Edit Usulan Perubahan Draft-->
+@if (!empty($dokumen_usulan_perubahan) || $dokumen_usulan_perubahan->isNotEmpty())
+    @forelse ($dokumen_tinjauan_perolehan as $dokumen)
+    <div class="modal fade" id="kt_modal_create_usulan_perubahan_draft_kontrak_{{ $dokumen->id }}" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-500px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Edit Dokumen Tinjauan Kontrak Perolehan</h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <i class="bi bi-x-lg"></i>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
+                    <!--begin::Input group Website-->
+                    <form action="/contract-management/final-dokumen/{{ $dokumen->id }}/edit" method="POST"
+                        enctype="multipart/form-data">
+                        <div class="row">
+                            @csrf
+                            <div class="col mt-4">
+                                <!--begin::Label-->
+                                <label for="ketentuan-rencana-kerja" class="fs-6 fw-bold form-label">
+                                    <span style="font-weight: normal">Upload Dokumen</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="hidden" name="kategori" value="Usulan Perubahan Draft Kontrak">
+                                {{-- <input type="hidden" name="status" value="Final"> --}}
+                                <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
+                                <label for="file-document">
+                                    <small class="fs-8 text-primary">
+                                        {{ !empty($dokumen->id_document) ? 'File sebelumnya: '.$dokumen->nama_document : '' }}
+                                    </small>
+                                </label>
+                                <!--end::Input-->
+                            </div>
+                                <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                    name="id-contract">
+                                <input type="hidden" class="modal-name" name="modal-name">
+                            </div>
+                        </div>
+                        <!--end::Input group-->
+                        <div class="modal-footer mt-4">
+                            <button type="submit" id="save-question-tender-menang"
+                                class="btn btn-sm btn-primary">Save</button>
+                        </div>
+                    </form>
+                </div>
+                <!--end::Modal body-->
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+    </div>
+    @empty
+        
+    @endforelse
+@endif
+<!--end::Modal - Edit Usulan Perubahan Draft-->
 
 <!--begin::Modal - Upload Final Tinjauan Perolehan-->
 <div class="modal fade" id="kt_modal_upload_tinjauan_perolehan" tabindex="-1" aria-hidden="true">
@@ -13758,6 +16289,66 @@
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="hidden" name="kategori" value="Tinjauan Dokumen Kontrak - Perolehan">
+                            <input type="hidden" name="status" value="Final">
+                            <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
+                            <!--end::Input-->
+                        </div>
+                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                name="id-contract">
+                            <input type="hidden" class="modal-name" name="modal-name">
+                        </div>
+                    </div>
+                    <!--end::Input group-->
+                    <div class="modal-footer mt-4">
+                        <button type="submit" id="save-question-tender-menang"
+                            class="btn btn-sm btn-primary">Save</button>
+                    </div>
+                </form>
+            </div>
+            <!--end::Modal body-->
+        </div>
+        <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+</div>
+<!--end::Modal - Upload Final Tinjauan Perolehan-->
+<!--begin::Modal - Upload Final Tinjauan Perolehan-->
+<div class="modal fade" id="kt_modal_upload_tinjauan_pelaksanaan" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog modal-dialog-centered mw-500px">
+        <!--begin::Modal content-->
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header">
+                <!--begin::Modal title-->
+                <h2>Upload Final | Tinjauan Dokumen Pelaksanaan</h2>
+                <!--end::Modal title-->
+                <!--begin::Close-->
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                        <i class="bi bi-x-lg"></i>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--end::Modal header-->
+            <!--begin::Modal body-->
+            <div class="modal-body py-lg-6 px-lg-6">
+                <!--begin::Input group Website-->
+                <form action="/contract-management/final-dokumen/upload" method="POST"
+                    enctype="multipart/form-data">
+                    <div class="row">
+                        @csrf
+                        <div class="col mt-4">
+                            <!--begin::Label-->
+                            <label for="ketentuan-rencana-kerja" class="fs-6 fw-bold form-label">
+                                <span style="font-weight: normal">Upload Dokumen</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="hidden" name="kategori" value="Tinjauan Dokumen Kontrak - Pelaksanaan">
                             <input type="hidden" name="status" value="Final">
                             <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                             <!--end::Input-->
@@ -14685,6 +17276,67 @@
 </div>
 <!--end::Modal - Upload Final Dokumen Draft Kontrak-->
 
+<!--begin::Modal - Upload Final Dokumen Draft Kontrak-->
+<div class="modal fade" id="kt_modal_upload_kso" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog modal-dialog-centered mw-500px">
+        <!--begin::Modal content-->
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header">
+                <!--begin::Modal title-->
+                <h2>Upload Final | Dokumen Perjanjian KSO</h2>
+                <!--end::Modal title-->
+                <!--begin::Close-->
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                        <i class="bi bi-x-lg"></i>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--end::Modal header-->
+            <!--begin::Modal body-->
+            <div class="modal-body py-lg-6 px-lg-6">
+                <!--begin::Input group Website-->
+                <form action="/contract-management/final-dokumen/upload" method="POST"
+                    enctype="multipart/form-data">
+                    <div class="row">
+                        @csrf
+                        <div class="col mt-4">
+                            <!--begin::Label-->
+                            <label for="ketentuan-rencana-kerja" class="fs-6 fw-bold form-label">
+                                <span style="font-weight: normal">Upload Dokumen</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="hidden" name="kategori" value="Dokumen Perjanjian KSO">
+                            <input type="hidden" name="status" value="Final">
+                            <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
+                            <!--end::Input-->
+                        </div>
+                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                name="id-contract">
+                            <input type="hidden" class="modal-name" name="modal-name">
+                        </div>
+                    </div>
+                    <!--end::Input group-->
+                    <div class="modal-footer mt-4">
+                        <button type="submit" id="save-question-tender-menang"
+                            class="btn btn-sm btn-primary">Save</button>
+                    </div>
+                </form>
+            </div>
+            <!--end::Modal body-->
+        </div>
+        <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+</div>
+<!--end::Modal - Upload Final Dokumen Draft Kontrak-->
+
 <!--begin::Modal - Upload Final Perubahan Kontrak-->
 <div class="modal fade" id="kt_modal_upload_perubahan" tabindex="-1" aria-hidden="true">
     <!--begin::Modal dialog-->
@@ -15224,6 +17876,75 @@ aria-hidden="true">
                 }).then(res => res.json());
                 if(sendData.link){
                     window.location.reload();
+                }
+            }
+
+        })
+    }
+</script>
+
+<script>
+    async function confirmDelete(id_document) {
+        Swal.fire({
+            title: '',
+            text: "Apakah anda yakin?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: '#008CB4',
+            cancelButtonColor: '#BABABA',
+            confirmButtonText: 'Ya'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                const formData = new FormData();
+                formData.append("_token", "{{ csrf_token() }}");
+                formData.append("id_document", id_document);
+                const sendData = await fetch(`{{ url('/contract-management/bast-2') }}/${id_document}/delete`, {
+                    method: "POST",
+                    body: formData
+                }).then(res => res.json());
+                if (sendData.success) {
+                    Swal.fire({title: sendData.message, icon: 'success'}).then(()=>{
+                        location.reload();
+                    })
+                } else{
+                    Swal.fire({title: sendData.message, icon: 'error'}).then(()=>{
+                        location.reload();
+                    })
+                }
+            }
+
+        })
+    }
+</script>
+
+<script>
+    async function confirmDeleteFinalDokumen(id) {
+        Swal.fire({
+            title: '',
+            text: "Apakah anda yakin?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: '#008CB4',
+            cancelButtonColor: '#BABABA',
+            confirmButtonText: 'Ya'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                const formData = new FormData();
+                formData.append("_token", "{{ csrf_token() }}");
+                formData.append("id", id);
+                formData.append("id-contract", "{{ $contract->id_contract }}");
+                const sendData = await fetch(`{{ url('/contract-management/final-dokumen') }}/${id}/delete`, {
+                    method: "POST",
+                    body: formData
+                }).then(res => res.json());
+                if (sendData.success) {
+                    Swal.fire({title: sendData.message, icon: 'success'}).then(()=>{
+                        location.reload();
+                    })
+                } else{
+                    Swal.fire({title: sendData.message, icon: 'error'}).then(()=>{
+                        location.reload();
+                    })
                 }
             }
 

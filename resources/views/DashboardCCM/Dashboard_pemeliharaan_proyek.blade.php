@@ -1301,7 +1301,7 @@
                                 <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
-                                        <h2 class="m-0 text-center">{{ !empty($table["potensial_value"]) ? number_format($table["potensial_value"]/1000000, 0, ".", ".") : 0 }}</h2>
+                                        <h2 class="m-0 text-center {{ $table["jenis_perubahan"] == "Anti Klaim" && (!empty($table["potensial_value"]) && $table["potensial_value"] != 0) ? 'text-danger' : '' }}">{{ !empty($table["potensial_value"]) ? number_format($table["potensial_value"]/1000000, 0, ".", ".") : 0 }}</h2>
                                     </div>
                                     <!--end::Title body-->
                                 </a>
@@ -1312,7 +1312,7 @@
                                 <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
-                                        <h2 class="m-0 text-center">{{ !empty($table["subs_value"]) ? number_format($table["subs_value"]/1000000, 0, ".", ".") : 0 }}</h2>
+                                        <h2 class="m-0 text-center {{ $table["jenis_perubahan"] == "Anti Klaim" && (!empty($table["subs_value"]) && $table["subs_value"] != 0) ? 'text-danger' : '' }}">{{ !empty($table["subs_value"]) ? number_format($table["subs_value"]/1000000, 0, ".", ".") : 0 }}</h2>
                                     </div>
                                     <!--end::Title body-->
                                 </a>
@@ -1323,7 +1323,7 @@
                                 <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
-                                        <h2 class="m-0 text-center">{{ !empty($table["revisi_value"]) ? number_format($table["revisi_value"]/1000000, 0, ".", ".") : 0 }}</h2>
+                                        <h2 class="m-0 text-center {{ $table["jenis_perubahan"] == "Anti Klaim" && (!empty($table["revisi_value"]) && $table["revisi_value"] != 0) ? 'text-danger' : '' }}">{{ !empty($table["revisi_value"]) ? number_format($table["revisi_value"]/1000000, 0, ".", ".") : 0 }}</h2>
                                     </div>
                                     <!--end::Title body-->
                                 </a>
@@ -1334,7 +1334,7 @@
                                 <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
-                                        <h2 class="m-0 text-center">{{ !empty($table["nego_value"]) ? number_format($table["nego_value"]/1000000, 0, ".", ".") : 0 }}</h2>
+                                        <h2 class="m-0 text-center {{ $table["jenis_perubahan"] == "Anti Klaim" && (!empty($table["nego_value"]) && $table["nego_value"] != 0) ? 'text-danger' : '' }}">{{ !empty($table["nego_value"]) ? number_format($table["nego_value"]/1000000, 0, ".", ".") : 0 }}</h2>
                                     </div>
                                     <!--end::Title body-->
                                 </a>
@@ -1345,7 +1345,7 @@
                                 <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
-                                        <h2 class="m-0 text-center">{{ !empty($table["setuju_value"]) ? number_format($table["setuju_value"]/1000000, 0, ".", ".") : 0 }}</h2>
+                                        <h2 class="m-0 text-center {{ $table["jenis_perubahan"] == "Anti Klaim" && (!empty($table["setuju_value"]) && $table["setuju_value"] != 0) ? 'text-danger' : '' }}">{{ !empty($table["setuju_value"]) ? number_format($table["setuju_value"]/1000000, 0, ".", ".") : 0 }}</h2>
                                     </div>
                                     <!--end::Title body-->
                                 </a>
@@ -1356,7 +1356,7 @@
                                 <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
-                                        <h2 class="m-0 text-center">{{ !empty($table["tolak_value"]) ? number_format($table["tolak_value"]/1000000, 0, ".", ".") : 0 }}</h2>
+                                        <h2 class="m-0 text-center {{ $table["jenis_perubahan"] == "Anti Klaim" && (!empty($table["tolak_value"]) && $table["tolak_value"] != 0) ? 'text-danger' : '' }}">{{ !empty($table["tolak_value"]) ? number_format($table["tolak_value"]/1000000, 0, ".", ".") : 0 }}</h2>
                                     </div>
                                     <!--end::Title body-->
                                 </a>
@@ -1367,7 +1367,7 @@
                                 <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
-                                        <h2 class="m-0 text-center">{{ !empty($table["tolak_value"]) ? number_format($table["dispute_value"]/1000000, 0, ".", ".") : 0 }}</h2>
+                                        <h2 class="m-0 text-center {{ $table["jenis_perubahan"] == "Anti Klaim" && (!empty($table["dispute_value"]) && $table["dispute_value"] != 0) ? 'text-danger' : '' }}">{{ !empty($table["dispute_value"]) ? number_format($table["dispute_value"]/1000000, 0, ".", ".") : 0 }}</h2>
                                     </div>
                                     <!--end::Title body-->
                                 </a>
@@ -1481,7 +1481,7 @@
                                         @if($potensial_total_value == 0)
                                             <h2 class="m-0 text-center">0%</h2>
                                         @else
-                                            <h2 class="m-0 text-center">{{ number_format((($potensial_total_value / $proyek->nilai_perolehan) * 100), 2, ".", ".") . "%" ?? 0 }}</h2>
+                                            <h2 class="m-0 text-center">{{ $potensial_total_value != 0 && $proyek->nilai_perolehan != 0 ? number_format((($potensial_total_value / $proyek->nilai_perolehan) * 100), 2, ".", ".") . "%" : 0 }}</h2>
                                         @endif
                                     </div>
                                     <!--end::Title body-->
@@ -1496,7 +1496,7 @@
                                         @if($submission_total_value == 0)
                                             <h2 class="m-0 text-center">0%</h2>
                                         @else
-                                            <h2 class="m-0 text-center">{{ number_format((($submission_total_value / $proyek->nilai_perolehan) * 100), 2, ".", ".") . "%" ?? 0 }}</h2>
+                                            <h2 class="m-0 text-center">{{ $submission_total_value != 0 && $proyek->nilai_perolehan != 0 ? number_format((($submission_total_value / $proyek->nilai_perolehan) * 100), 2, ".", ".") . "%" : 0 }}</h2>
                                         @endif
                                     </div>
                                     <!--end::Title body-->
@@ -1511,7 +1511,7 @@
                                         @if($revision_total_value == 0)
                                             <h2 class="m-0 text-center">0%</h2>
                                         @else
-                                            <h2 class="m-0 text-center">{{ number_format((($revision_total_value / $proyek->nilai_perolehan) * 100), 2, ".", ".") . "%" ?? 0 }}</h2>
+                                            <h2 class="m-0 text-center">{{ $revision_total_value != 0 && $proyek->nilai_perolehan != 0 ? number_format((($revision_total_value / $proyek->nilai_perolehan) * 100), 2, ".", ".") . "%" : 0 }}</h2>
                                         @endif
                                     </div>
                                     <!--end::Title body-->
@@ -1526,7 +1526,7 @@
                                         @if($negotiation_total_value == 0)
                                             <h2 class="m-0 text-center">0%</h2>
                                         @else
-                                            <h2 class="m-0 text-center">{{ number_format((($negotiation_total_value / $proyek->nilai_perolehan) * 100), 2, ".", ".") . "%" ?? 0 }}</h2>
+                                            <h2 class="m-0 text-center">{{ $negotiation_total_value != 0 && $proyek->nilai_perolehan != 0 ? number_format((($negotiation_total_value / $proyek->nilai_perolehan) * 100), 2, ".", ".") . "%" : 0 }}</h2>
                                         @endif
                                     </div>
                                     <!--end::Title body-->
@@ -1541,7 +1541,7 @@
                                         @if($approve_total_value == 0)
                                             <h2 class="m-0 text-center">0%</h2>
                                         @else
-                                            <h2 class="m-0 text-center">{{ number_format((($approve_total_value / $proyek->nilai_perolehan) * 100), 2, ".", ".") . "%" ?? 0 }}</h2>
+                                            <h2 class="m-0 text-center">{{ $approve_total_value != 0 && $proyek->nilai_perolehan != 0 ? number_format((($approve_total_value / $proyek->nilai_perolehan) * 100), 2, ".", ".") . "%" : 0 }}</h2>
                                         @endif
                                     </div>
                                     <!--end::Title body-->
@@ -1556,7 +1556,7 @@
                                         @if($reject_total_value == 0)
                                             <h2 class="m-0 text-center">0%</h2>
                                         @else
-                                            <h2 class="m-0 text-center">{{ number_format((($reject_total_value / $proyek->nilai_perolehan) * 100), 2, ".", ".") . "%" ?? 0 }}</h2>
+                                            <h2 class="m-0 text-center">{{ $reject_total_value != 0 && $proyek->nilai_perolehan != 0 ? number_format((($reject_total_value / $proyek->nilai_perolehan) * 100), 2, ".", ".") . "%" : 0 }}</h2>
                                         @endif
                                     </div>
                                     <!--end::Title body-->
@@ -1571,7 +1571,7 @@
                                         @if($dispute_total_value == 0)
                                             <h2 class="m-0 text-center">0%</h2>
                                         @else
-                                            <h2 class="m-0 text-center">{{ number_format((($dispute_total_value / $proyek->nilai_perolehan) * 100), 2, ".", ".") . "%" ?? 0 }}</h2>
+                                            <h2 class="m-0 text-center">{{ $potential_total_value != 0 && $proyek->nilai_perolehan != 0 ? number_format((($dispute_total_value / $proyek->nilai_perolehan) * 100), 2, ".", ".") . "%" : 0 }}</h2>
                                         @endif
                                     </div>
                                     <!--end::Title body-->

@@ -411,9 +411,11 @@ Route::middleware(["web"])->group(function () {
             ]);
         }
         setLogging("api", "INSERT GROUP RKAP => ", $request->toArray());
-        $data = $request->UsrApprovalGroup;
+        $data = $request->all();
         $list_proyek = collect($data["UsrListProyek"]);
-        $unit_kerja = UnitKerja::find($data["UsrUnitKerja"]);
+        // $unit_kerja = UnitKerja::find($data["UsrUnitKerja"]);
+        $unit_kerja = UnitKerja::where("id_profit_center", "=", $data["UsrUnitKerja"])->first();
+        // dd($unit_kerja);
         // $month = (int) date("m") == 1 ? 12 : (int) date("m");
         // $year = (int) date("m") == 1 ? (int) date("Y") - 1: (int) date("Y");
         $month = (int) date("m");
@@ -444,7 +446,10 @@ Route::middleware(["web"])->group(function () {
         // $bulan = (int) $periode[1];
         // $is_data_inserted = false;
         $list_proyek->each(function ($proyek) use ($data, $bulan, $tahun, $unit_kerja, &$is_data_inserted) {
-            $p = new Proyek();
+            $p = Proyek::find($proyek["UsrCodeProyek"]);
+            if (empty($p)) {
+                $p = new Proyek();
+            }
             $p->kode_proyek = $proyek["UsrCodeProyek"];
             $p->nama_proyek = $proyek["UsrName"];
             $p->is_rkap = true;
@@ -460,14 +465,15 @@ Route::middleware(["web"])->group(function () {
             $p->tipe_proyek = $tipe_proyek;
             // $p->nilaiok_awal = round((int) $proyek["UsrNilaiOKAwal"]);
             $p->nilaiok_awal = 0;
-            $p->nilai_rkap = round((int) $proyek["UsrNilaiOKAwal"]);
-            $p->bulan_pelaksanaan = $proyek["UsrBulanRealisasiAwal"];
-            $p->bulan_awal = $proyek["UsrBulanRealisasiAwal"];
-            // $p->nilaiok_review = round((int) $proyek["UsrNilaiOKReview"]);
+            $p->nilai_rkap = !empty($proyek["UsrNilaiOKAwal"]) ? round((int) $proyek["UsrNilaiOKAwal"]) : 0;
+            $p->nilaiok_review = !empty($proyek["UsrNilaiOKReview"]) ? (int) $proyek["UsrNilaiOKReview"] : 0;
+            // $p->bulan_pelaksanaan = $proyek["UsrBulanRealisasiAwal"];
+            // $p->bulan_awal = $proyek["UsrBulanRealisasiAwal"];
             // $p->nilai_valas_review = round((int) $proyek["UsrNilaiOKReview"]);
-            $p->nilaiok_review = 0;
+            // $p->nilaiok_review = 0;
             $p->nilai_valas_review = 0;
-            $p->bulan_review = $proyek["UsrBulanPelaksanaan"];
+            $p->bulan_pelaksanaan = $proyek["UsrBulanPelaksanaan"] ?? 1;
+            // $p->bulan_review = $proyek["UsrBulanPelaksanaan"];
             $p->unit_kerja = $unit_kerja->divcode;
             $p->tahun_perolehan = $tahun;
             $p->dop = $p->UnitKerja->dop;
@@ -499,20 +505,8 @@ Route::middleware(["web"])->group(function () {
                 }
             }
 
-            $req_forecasts = collect($proyek["UsrNilaiOKRetail"]);
-            if($req_forecasts->isEmpty()) {
-                $forecast = new Forecast();
-                $forecast->kode_proyek = $proyek["UsrCodeProyek"];
-                $forecast->nilai_forecast = 0;
-                $forecast->month_forecast = null;
-                $forecast->rkap_forecast = $proyek["UsrNilaiOKAwal"];
-                $forecast->month_rkap = $proyek["UsrBulanPelaksanaan"];
-                $forecast->realisasi_forecast = 0;
-                $forecast->month_realisasi = null;
-                $forecast->periode_prognosa = $bulan;
-                $forecast->tahun = $tahun;
-                $forecast->save();
-            } else {
+            if ($tipe_proyek == "R") {
+                $req_forecasts = collect($proyek["UsrNilaiOKRetail"]);
                 $req_forecasts->each(function ($f) use ($proyek, $bulan, $tahun, &$is_data_inserted) {
                     $forecast = new Forecast();
                     $forecast->kode_proyek = $proyek["UsrCodeProyek"];
@@ -530,6 +524,20 @@ Route::middleware(["web"])->group(function () {
                         $is_data_inserted = false;
                     }
                 });
+            } else {
+                $forecast = new Forecast();
+                $forecast->kode_proyek = $proyek["UsrCodeProyek"];
+                $forecast->nilai_forecast = 0;
+                $forecast->month_forecast = null;
+                $forecast->rkap_forecast = $proyek["UsrNilaiOKAwal"];
+                $forecast->month_rkap = $proyek["UsrBulanPelaksanaan"];
+                $forecast->realisasi_forecast = 0;
+                $forecast->month_realisasi = null;
+                $forecast->periode_prognosa = $bulan;
+                $forecast->tahun = $tahun;
+                $forecast->save();
+                // if($req_forecasts->isEmpty()) {
+                // }
             }
             if($p->save()) {
                 $is_data_inserted = true;
@@ -540,7 +548,7 @@ Route::middleware(["web"])->group(function () {
                 "InsertGroupRKAPResult" => [
                     "Success"=> true,
                     "StatusCode"=> 1,
-                    "Message"=> "Insert Data RKAP Unit Kerja Divisi Infrastruktur 1 Success"
+                    "Message" => "Insert Data RKAP Unit Kerja $unit_kerja->unit_kerja Success"
                 ]
             ], 200);
         }

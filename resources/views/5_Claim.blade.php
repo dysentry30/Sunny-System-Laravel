@@ -227,63 +227,27 @@
                                             })
                                         @endphp --}}
                                         <!--begin::Table body-->
+                                        {{-- @dd($filterBulan) --}}
                                         <tbody class="fw-bold text-gray-600">
                                             @forelse ($claims as $claim)
-                                            {{-- @dump($claim->ContractManagements) --}}
-                                                    {{-- <tr>
-                                                        <!--begin::Name-->
-                                                        <td>
-                                                            <a href="/claim-management/proyek/{{ $proyekClaims->ContractManagement->project->kode_proyek }}/Klaim" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekClaims->ContractManagement->project->kode_proyek }}</a>
-                                                        </td>
-                                                        <!--end::Name-->
-                                                        <!--begin::Name Proyek-->
-                                                        <td>
-                                                            {{ $proyekClaims->ContractManagement->project->nama_proyek }}
-                                                        </td>
-                                                        <!--end::Name Proyek-->
-                                                        <!--begin::Unit Kerja-->
-                                                        <td>
-                                                            {{ $proyekClaims->ContractManagement->project->UnitKerja->unit_kerja }}
-                                                        </td>
-                                                        <!--end::Unit Kerja-->
-                                                        <!--begin::Action-->
-                                                        <td>
-                                                            <a href="/contract-management/view/{{ $proyekClaims->ContractManagement->id_contract }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekClaims->ContractManagement->id_contract }}</a>
-                                                        </td>
-                                                        <!--end::Action-->
-                                                    </tr> --}}
-                                                    @php
-                                                        $total_vo = $claim->PerubahanKontrak->filter(function($item){
-                                                            return $item->jenis_perubahan == "VO";
-                                                        })->count();
-                                                        $total_klaim = $claim->PerubahanKontrak->filter(function($item){
-                                                            return $item->jenis_perubahan == "Klaim";
-                                                        })->count();
-                                                        $total_anti_klaim = $claim->PerubahanKontrak->filter(function($item){
-                                                            return $item->jenis_perubahan == "Anti Klaim";
-                                                        })->count();
-                                                        $total_klaim_asuransi = $claim->PerubahanKontrak->filter(function($item){
-                                                            return $item->jenis_perubahan == "Klaim Asuransi";
-                                                        })->count();
-                                                    @endphp
-                                                    {{-- @dump($total_vo, $total_klaim, $total_anti_klaim, $total_klaim_asuransi) --}}
-                                                    <tr>
-                                                        <td>
-                                                            <a href="/claim-management/proyek/{{ $claim->kode_proyek }}/{{ $claim->id_contract }}?link=kt_user_view_claim_VO" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $claim->kode_proyek }}</a>
-                                                        </td>
-                                                        <td>{{ $claim->nama_proyek }}</td>
-                                                        <td>{{ $claim->UnitKerja->unit_kerja }}</td>
-                                                        <td class="text-center">{{ $total_vo }}</td>
-                                                        <td class="text-center">{{ $total_klaim }}</td>
-                                                        <td class="text-center">{{ $total_anti_klaim }}</td>
-                                                        <td class="text-center">{{ $total_klaim_asuransi }}</td>
-                                                        {{-- <td>
-                                                            <a href="/contract-management/view/{{ $claim->id_contract }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $claim->id_contract }}</a>
-                                                        </td> --}}
-                                                    </tr>
+                                                   
+                                            <tr>
+                                                <td>
+                                                    <a href="/claim-management/proyek/{{ $claim['kode_proyek'] }}/{{ $claim['id_contract'] }}?link=kt_user_view_claim_VO&periode={{ $filterBulan }}&tahun={{ $filterTahun }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $claim['kode_proyek'] }}</a>
+                                                </td>
+                                                <td>{{ $claim['nama_proyek'] }}</td>
+                                                <td>{{ $claim['unit_kerja'] }}</td>
+                                                <td class="text-center">{{ $claim['total_vo'] }}</td>
+                                                <td class="text-center">{{ $claim['total_klaim'] }}</td>
+                                                <td class="text-center">{{ $claim['total_anti_klaim'] }}</td>
+                                                <td class="text-center">{{ $claim['total_klaim_asuransi'] }}</td>
+                                                {{-- <td>
+                                                    <a href="/contract-management/view/{{ $claim->id_contract }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $claim->id_contract }}</a>
+                                                </td> --}}
+                                            </tr>
                                             @empty
                                                 <tr class="bg-gray-100 text-center">
-                                                    <td colspan="4">
+                                                    <td colspan="7">
                                                         <b>There is no data</b>
                                                     </td>
                                                 </tr>

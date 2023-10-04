@@ -70,7 +70,7 @@
                                 @php
                                     // $contract = $contracts->values();
                                 @endphp
-                                <h1 class="d-flex align-items-center fs-3 my-1">Datail Change - &nbsp; <b>{{ $contracts->project->nama_proyek }}</b>
+                                <h1 class="d-flex align-items-center fs-3 my-1">Datail Change&nbsp;  - &nbsp; <b>{{ $contracts->project->nama_proyek }}</b>
                                 </h1>
                                 <!--end::Title-->
                             </div>
@@ -89,6 +89,64 @@
                                     data-bs-target="#kt_modal_upload_final">
                                     Upload</a>
                                 </div>
+                                @php
+                                    $month = (int) date('m') == 1 ? 12 : ((int)date('d') < 15 ? (int) date('m') : (int) date('m') - 1);
+                                    $is_periode = !empty($periode) ? $periode : $month;
+                                    $is_approved = $contracts->ContractApproval?->where('periode', '=', $is_periode)?->where('is_locked', '=', true);
+                                @endphp
+                                {{-- @dump($periode) --}}
+                                
+                                {{-- @if (auth()->user()->is_pic != true) --}}
+                                @if ($user->is_pic != true)
+                                    <!--begin::Button-->
+                                    @if ($contracts->where('id_contract', '=', $contracts->id_contract)->where('stages', '!=', 1)->get()->isNotEmpty())
+                                        @if (empty($is_approved) ||$is_approved->isEmpty())
+                                            <button type="button" class="btn btn-sm btn-primary" id="kt_toolbar_primary_button"
+                                                onclick="lockBulananContract()" style="background-color:#008CB4;">
+                                                <span>Lock</span>
+                                                <i class="bi bi-lock-fill text-white"></i>
+                                            </button>
+                                        @else
+                                            <button type="button" class="btn btn-sm btn-primary disabled"
+                                                id="kt_toolbar_primary_button" style="background-color:#008CB4;">
+                                                <span>Unlock</span>
+                                                <i class="bi bi-unlock-fill text-white"></i>
+                                            </button>
+                                        @endif
+                                    @endif
+                                    <!--end::Button-->
+                                    {{-- @dump($periode) --}}
+                                    <script>
+                                        async function lockBulananContract() {
+                                            Swal.fire({
+                                                title: '',
+                                                text: "Yakin Lock Bulan Ini?",
+                                                icon: "warning",
+                                                showCancelButton: true,
+                                                confirmButtonColor: '#008CB4',
+                                                cancelButtonColor: '#BABABA',
+                                                confirmButtonText: 'Ya'
+                                            }).then(async (result) => {
+                                                if (result.isConfirmed) {
+                                                    const formData = new FormData();
+                                                    formData.append("_token", "{{ csrf_token() }}");
+                                                    formData.append("id_contract", "{{ $contracts->id_contract }}")
+                                                    formData.append("kode_proyek", "{{ $contracts->project_id }}")
+                                                    formData.append("periode", "{{ $periode }}")
+                                                    formData.append("tahun", "{{ $tahun }}")
+                                                    const sendData = await fetch("/contract-management/set-lock", {
+                                                        method: "POST",
+                                                        body: formData
+                                                    }).then(res => res.json());
+                                                    if (sendData.link) {
+                                                        window.location.reload();
+                                                    }
+                                                }
+
+                                            })
+                                        }
+                                    </script>
+                                @endif
                                 @if ($claim_all->isNotEmpty())
                                 <div class="d-flex">
                                     <a href="#" onclick="exportToExcel(this, '#view_KlaimAll')" class="btn btn-sm btn-primary"
@@ -243,7 +301,7 @@
                                                                         {{ Carbon\Carbon::parse($vo->tanggal_perubahan)->translatedFormat('d F Y') }}
                                                                     </td>
                                                                     <td>
-                                                                        <a href="/contract-management/view/{{$vo->id_contract}}/perubahan-kontrak/{{$vo->id_perubahan_kontrak}}" id="click-name" class="text-gray-800 text-hover-primary mb-1">
+                                                                        <a href="/contract-management/view/{{$vo->id_contract}}/perubahan-kontrak/{{$vo->id_perubahan_kontrak}}?{{ isset($vo->periode) ? "periode=".$vo->periode : "" }}{{ isset($vo->tahun) ? "&tahun=".$vo->tahun : "" }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">
                                                                         {{ $vo->uraian_perubahan }}
                                                                         </a>
                                                                     </td>
@@ -334,7 +392,7 @@
                                                         <table class="table align-middle table-row-dashed fs-6 gy-2 card-body" id="view_Klaim">
                                                             <thead>
                                                                 <tr class="text-center text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                    <th class="min-w-125px">Tanggal Kejadian Perubahan</th>
+                                                                    <th class="min-w-auto">Tanggal Kejadian Perubahan</th>
                                                                     <th class="min-w-auto">Uraian Perubahan</th>
                                                                     <th class="min-w-auto">No Proposal Klaim</th>
                                                                     <th class="min-w-auto">Tanggal Pengajuan</th>
@@ -351,7 +409,7 @@
                                                                         {{ Carbon\Carbon::parse($klaim->tanggal_perubahan)->translatedFormat('d F Y') }}
                                                                     </td>
                                                                     <td>
-                                                                        <a href="/contract-management/view/{{$klaim->id_contract}}/perubahan-kontrak/{{$klaim->id_perubahan_kontrak}}" id="click-name" class="text-gray-800 text-hover-primary mb-1">
+                                                                        <a href="/contract-management/view/{{$klaim->id_contract}}/perubahan-kontrak/{{$klaim->id_perubahan_kontrak}}?{{ isset($klaim->periode) ? "periode=".$klaim->periode : "" }}{{ isset($klaim->tahun) ? "&tahun=".$klaim->tahun : "" }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">
                                                                         {{ $klaim->uraian_perubahan }}
                                                                         </a>
                                                                     </td>
@@ -459,7 +517,7 @@
                                                                         {{ Carbon\Carbon::parse($anti_klaim->tanggal_perubahan)->translatedFormat('d F Y') }}
                                                                     </td>
                                                                     <td>
-                                                                        <a href="/contract-management/view/{{$anti_klaim->id_contract}}/perubahan-kontrak/{{$anti_klaim->id_perubahan_kontrak}}" id="click-name" class="text-gray-800 text-hover-primary mb-1">
+                                                                        <a href="/contract-management/view/{{$anti_klaim->id_contract}}/perubahan-kontrak/{{$anti_klaim->id_perubahan_kontrak}}?{{ isset($anti_klaim->periode) ? "periode=".$anti_klaim->periode : "" }}{{ isset($anti_klaim->tahun) ? "&tahun=".$anti_klaim->tahun : "" }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">
                                                                         {{ $anti_klaim->uraian_perubahan }}
                                                                         </a>
                                                                     </td>
@@ -567,7 +625,7 @@
                                                                         {{ Carbon\Carbon::parse($klaim_asuransi->tanggal_perubahan)->translatedFormat('d F Y') }}
                                                                     </td>
                                                                     <td>
-                                                                        <a href="/contract-management/view/{{$klaim_asuransi->id_contract}}/perubahan-kontrak/{{$klaim_asuransi->id_perubahan_kontrak}}" id="click-name" class="text-gray-800 text-hover-primary mb-1">
+                                                                        <a href="/contract-management/view/{{$klaim_asuransi->id_contract}}/perubahan-kontrak/{{$klaim_asuransi->id_perubahan_kontrak}}?{{ isset($klaim_asuransi->periode) ? "periode=".$klaim_asuransi->periode : "" }}{{ isset($klaim_asuransi->tahun) ? "&tahun=".$klaim_asuransi->tahun : "" }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">
                                                                         {{ $klaim_asuransi->uraian_perubahan }}
                                                                         </a>
                                                                     </td>
@@ -662,8 +720,10 @@
                                                                     <th class="min-w-auto">Uraian Perubahan</th>
                                                                     <th class="min-w-auto">No Proposal Klaim</th>
                                                                     <th class="min-w-auto">Tanggal Pengajuan</th>
-                                                                    <th class="min-w-125px" colspan="2">Dampak Biaya</th>
-                                                                    <th class="min-w-125px" colspan="2">Dampak Waktu</th>
+                                                                    <th class="min-w-auto"></th>
+                                                                    <th class="min-w-125px">Dampak Biaya</th>
+                                                                    <th class="min-w-auto"></th>
+                                                                    <th class="min-w-125px">Dampak Waktu</th>
                                                                     <th class="min-w-auto">Status</th>
                                                                 </tr>
                                                             </thead>
@@ -686,10 +746,16 @@
                                                                         {{ Carbon\Carbon::parse($claim->tanggal_pengajuan)->translatedFormat('d F Y') }}
                                                                     </td>
                                                                     <td>
-                                                                        {{ (int) $claim->biaya_pengajuan != 0 ? 'Yes' : 'No' }} | {{ number_format($claim->biaya_pengajuan, 0, ".", ".") }}
+                                                                        {{ (int) $claim->biaya_pengajuan != 0 ? 'Yes' : 'No' }}
                                                                     </td>
                                                                     <td>
-                                                                        {{ !empty($claim->waktu_pengajuan) ? 'Yes' : 'No' }} | {{ Carbon\Carbon::parse($claim->waktu_pengajuan)->translatedFormat('d F Y') }}
+                                                                        {{ number_format($claim->biaya_pengajuan, 0, ".", ".") }}
+                                                                    </td>
+                                                                    <td>
+                                                                        {{ !empty($claim->waktu_pengajuan) ? 'Yes' : 'No' }}
+                                                                    </td>
+                                                                    <td>
+                                                                        {{ Carbon\Carbon::parse($claim->waktu_pengajuan)->translatedFormat('d F Y') }}
                                                                     </td>
                                                                     @php
                                                                     $stage = "";

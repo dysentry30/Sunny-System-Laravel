@@ -56,6 +56,7 @@ use Google\Service\FactCheckTools\Resource\Claims;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\URL;
+use DateTime;
 
 class ProyekController extends Controller
 {
@@ -364,6 +365,7 @@ class ProyekController extends Controller
         // $data_negara = $data_negara;
         // dd($proyek); //tes log hasil 
         if ($proyek->tipe_proyek == "P") {
+            // dd($teamProyek, $kriteriaProyek, $porsiJO, $pesertatender, $proyekberjalans, $departemen);
             return view(
                 'Proyek/viewProyek',
                 ["proyek" => $proyek, "proyeks" => Proyek::all()],
@@ -2383,6 +2385,45 @@ class ProyekController extends Controller
         Alert::success("Success", "History Adendum Berhasil Diubah");
         return redirect()->back();
     }
+    
+    // public function updateRfaDocument($kode_proyek, $kategori)
+    // {
+    //     $proyek = Proyek::where('kode_proyek', '=', $kode_proyek)->first();
+    //     switch ($kategori) {
+    //         case "nda":
+    //             $proyek->is_rfa_nda = true;
+    //             $proyek->tgl_rfa_nda = new DateTime();
+    //             break;
+    //         case "mou":
+    //             $proyek->is_rfa_mou = true;
+    //             $proyek->tgl_rfa_mou = new DateTime();
+    //             break;
+    //         case "eca":
+    //             $proyek->is_rfa_eca = true;
+    //             $proyek->tgl_rfa_eca = new DateTime();
+    //             break;
+    //         case "ica":
+    //             $proyek->is_rfa_ica = true;
+    //             $proyek->tgl_rfa_ica = new DateTime();
+    //             break;
+    //         case "rks":
+    //             $proyek->is_rfa_rks = true;
+    //             $proyek->tgl_rfa_rks = new DateTime();
+    //             break;
+    //         case "itb-tor":
+    //             $proyek->is_rfa_itb_tor = true;
+    //             $proyek->tgl_rfa_itb_tor = new DateTime();
+    //             break;
+    //         case "risk":
+    //             $proyek->is_rfa_risk = true;
+    //             $proyek->tgl_rfa_risk = new DateTime();
+    //             break;
+    //     }
+    //     if ($proyek->save()) {
+    //         Alert::success("Success", "Request for Approval Berhasil");
+    //         return redirect()->back();
+    //     }
+    // }
 
     public function deleteAdendum($id)
     {
@@ -2485,5 +2526,44 @@ class ProyekController extends Controller
         }
 
         return sprintf('%04X%04X%04X%04X%04X%04X%04X%04X', mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479), mt_rand(32768, 49151), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535));
+    }
+
+    public function updateRfaDocument($kode_proyek, $kategori)
+    {
+        $proyek = Proyek::where('kode_proyek', '=', $kode_proyek)->first();
+        switch ($kategori) {
+            case "nda":
+                $proyek->is_rfa_nda = true;
+                $proyek->tgl_rfa_nda = new DateTime();
+                break;
+            case "mou":
+                $proyek->is_rfa_mou = true;
+                $proyek->tgl_rfa_mou = new DateTime();
+                break;
+            case "eca":
+                $proyek->is_rfa_eca = true;
+                $proyek->tgl_rfa_eca = new DateTime();
+                break;
+            case "ica":
+                $proyek->is_rfa_ica = true;
+                $proyek->tgl_rfa_ica = new DateTime();
+                break;
+            case "rks":
+                $proyek->is_rfa_rks = true;
+                $proyek->tgl_rfa_rks = new DateTime();
+                break;
+            case "itb-tor":
+                $proyek->is_rfa_itb_tor = true;
+                $proyek->tgl_rfa_itb_tor = new DateTime();
+                break;
+            case "risk":
+                $proyek->is_rfa_risk = true;
+                $proyek->tgl_rfa_risk = new DateTime();
+                break;
+        }
+        if ($proyek->save()) {
+            Alert::success("Success", "Request for Approval Berhasil");
+            return redirect()->back();
+        }
     }
 }

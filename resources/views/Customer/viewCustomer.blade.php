@@ -1043,6 +1043,62 @@
 
                                                         <br>
 
+                                                        <!--begin::Data Porsi Saham-->
+                                                        <div id="container-porsi-saham">
+                                                            <!--begin::INPUT PIC-->
+                                                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                                                Porsi Saham
+                                                                <a href="#" Id="Plus" data-bs-toggle="modal" data-bs-target="#kt_modal_porsi_saham">+</a>
+                                                            </h3>
+                                                            <!--end::INPUT PIC-->
+                                                            <!--begin::Table-->
+                                                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_porsi_saham">
+                                                                <!--begin::Table head-->
+                                                                <thead>
+                                                                    <!--begin::Table row-->
+                                                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                        <th class="text-center">No.</th>
+                                                                        <th class="min-w-auto">Nama</th>
+                                                                        <th class="min-w-auto">Porsi Saham</th>
+                                                                        <th class="min-w-auto">Action</th>
+                                                                    </tr>
+                                                                    <!--end::Table row-->
+                                                                </thead>
+                                                                <!--end::Table head-->
+                                                                <!--begin::Table body-->
+                                                                @php
+                                                                    $no = 1;
+                                                                @endphp
+                                                                <tbody class="fw-bold text-gray-600">
+                                                                    <tr>
+                                                                        <td class="text-center">
+                                                                            1
+                                                                        </td>
+                                                                        <td>
+                                                                            <a href="#" class="text-gray-800 text-hover-primary">Bagas</a>
+                                                                        </td>
+                                                                        <td class="text-center">
+                                                                            50%
+                                                                        </td>
+                                                                        <td class="text-center">
+                                                                            <small>
+                                                                                <p class="btn btn-sm btn-light btn-active-primary">
+                                                                                    Delete
+                                                                                </p>
+                                                                                {{-- <p data-bs-toggle="modal" data-bs-target="#kt_pic_delete_{{ $pic->id }}" id="modal-delete"
+                                                                                    class="btn btn-sm btn-light btn-active-primary">
+                                                                                    Delete
+                                                                                </p> --}}
+                                                                            </small>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                                <!--end::Table body-->
+                                                            </table>
+                                                            <!--end::Table-->
+                                                        </div>
+                                                        <!--end::Data Porsi Saham-->
+
                                                         <!--begin::Data PIC MANRISK-->
                                                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">MANRISK
                                                             <i onclick="hideColumn(this, '#divMANRISK')" id="hide-button" style="display: none" class="bi bi-arrows-collapse"></i><i
@@ -2673,17 +2729,17 @@
                                                                                     <!--end::Tanggal CSI-->
                                                                                     <!--begin::Score CSI-->
                                                                                     <td class="text-center">
-                                                                                        {{ $item->score_csi }}
+                                                                                        {{ number_format($item->score_csi, 3, '.', '.') }}
                                                                                     </td>
                                                                                     <!--end::Score CSI-->  
                                                                                     <!--begin::Score CSI-->
                                                                                     <td class="text-center">
-                                                                                        {{ $item->score_cli }}
+                                                                                        {{ number_format($item->score_cli, 3, '.', '.') }}
                                                                                     </td>
                                                                                     <!--end::Score CSI-->  
                                                                                     <!--begin::Score CSI-->
                                                                                     <td class="text-center">
-                                                                                        {{ $item->score_nps }}
+                                                                                        {{ number_format($item->score_nps, 3, '.', '.') }}
                                                                                     </td>
                                                                                     <!--end::Score CSI-->  
                                                                                     <!--begin::Progress-->
@@ -5432,11 +5488,11 @@
                 $nilai_nps += $item->score_nps;
             }
         }
-        $nilai_cli = (int) $nilai_cli / $countItem;
-        $nilai_csi = (int) $nilai_csi / $countItem;
-        $nilai_nps = (int) $nilai_nps / $countItem;
+        $nilai_cli = number_format(((float) $nilai_cli / $countItem), 2, '.', '.');
+        $nilai_csi = number_format(((float) $nilai_csi / $countItem), 2, '.', '.');
+        $nilai_nps = number_format(((float) $nilai_nps / $countItem), 2, '.', '.');
     }
-    // dump($nilai_cli, $nilai_csi, $nilai_nps, $countItem )
+    // dd($nilai_cli, $nilai_csi, $nilai_nps, $countItem )
 @endphp
 
 
@@ -5869,7 +5925,7 @@
     
     <script>
         //let nilaiClr = Number("{{ $customer->customer_loyalty_rate == 0 || $customer->customer_loyalty_rate == null ? 1 : $customer->customer_loyalty_rate }}");
-        let nilaiClr = Number("{{ $nilai_cli }}");
+        let nilaiClr = parseFloat("{{ $nilai_cli }}");
         let bgColorClr = "";
         // nilaiClr >= 1 ? '#a9b8eb' : nilaiClr >= 1.8 ? '#8092cf' : nilaiClr >= 2.6 ? "#8092cf" : nilaiClr >= 3.4 ? "#2f448a" : nilaiClr >= 4.2 ? "#152866" : "" 
         if (nilaiClr >= 1 && nilaiClr < 1.8) {
@@ -6047,7 +6103,7 @@
     <!--begin::Score Net Promoter Score-->
     <script>
         //let nilaiNps = Number("{{ $customer->net_promoter_score == 0 || $customer->net_promoter_score == null ? 1 : $customer->net_promoter_score }}");
-        let nilaiNps = Number("{{ $nilai_nps }}");
+        let nilaiNps = parseFloat("{{ $nilai_nps }}");
         let bgColorNps = "";
         // nilaiClr >= 1 ? '#a9b8eb' : nilaiClr >= 1.8 ? '#8092cf' : nilaiClr >= 2.6 ? "#8092cf" : nilaiClr >= 3.4 ? "#2f448a" : nilaiClr >= 4.2 ? "#152866" : "" 
         if (nilaiNps >= 1 && nilaiNps < 1.8) {
@@ -6225,7 +6281,8 @@
     <!--begin::Score nps-->
     <script>
         //let nilaiCsi = Number("{{ $customer->customer_satisfaction_index == 0 || $customer->customer_satisfaction_index == null ? 1 : $customer->customer_satisfaction_index }}");
-        let nilaiCsi = Number("{{ $nilai_csi }}");
+        let nilaiCsi = parseFloat("{{ $nilai_csi }}");
+        console.log(nilaiCsi);
         let bgColorCsi = "";
         if (nilaiCsi >= 1 && nilaiCsi < 1.8) {
             bgColorCsi = "#FBD791";
@@ -7469,6 +7526,8 @@
         const value = e.value;
         console.log(value);
         if(value.includes("BUMN")) {
+            document.querySelector("#group-tier-div").style.display = "";
+        } else if(value.includes("Anak dan Turunan BUMN")) {
             document.querySelector("#group-tier-div").style.display = "";
         } else {
             document.querySelector("#group-tier-div").style.display = "none";

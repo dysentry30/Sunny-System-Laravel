@@ -67,7 +67,7 @@
                     <h1>
                         Add Tinjauan Dokumen Kontrak - {{ $stage == 1 ? "Perolehan" : "Pelaksanaan" }}
                         @if ($is_approved->isNotEmpty())
-                        <span><i class="bi bi-info-circle-fill p-3" data-bs-toggle="tooltip" data-bs-title="Contract sudah dilock, silahkan request unlock jika ingin mengubah"></i></span>
+                        <span><i class="bi bi-info-circle-fill p-3" data-bs-toggle="tooltip" data-bs-title="Kontrak sudah dilock, silahkan request unlock jika ingin mengubah"></i></span>
                         @endif
                     </h1>
                 </div>

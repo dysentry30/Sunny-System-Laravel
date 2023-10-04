@@ -8,9 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class ContractApproval extends Model
 {
     use HasFactory;
-    protected $table = "contract_approval";
+  protected $table = "contract_approval";
+  public $timestamps = false;
+  protected $hidden = ['created_at', 'updated_at'];
 
-    public function ContractManagements(){
-      return  $this->belongsTo(ContractManagements::class, "id_contract");
-    }
+  public function ContractManagements()
+  {
+    return  $this->belongsTo(ContractManagements::class, "id_contract");
+  }
+  public function Proyeks()
+  {
+    return  $this->belongsTo(Proyek::class, "kode_proyek");
+  }
 }

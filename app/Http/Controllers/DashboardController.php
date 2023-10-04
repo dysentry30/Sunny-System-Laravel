@@ -1198,7 +1198,7 @@ class DashboardController extends Controller
             $contracts_perubahan = $kategori_kontrak;
             // dd($contracts_perubahan);
             if(!empty($contracts_perubahan->toArray())){
-                $perubahan = $kategori->map(function($p) use($contracts_perubahan) {
+                $cat_kontrak = $kategori->map(function ($p) use ($contracts_perubahan) {
                     $result = collect();
                     $counter = 0;
                     $potensial = 0;
@@ -1216,168 +1216,221 @@ class DashboardController extends Controller
                     $dispute = 0;
                     $dispute_value = 0;
                     $nilai = 0;
-                    foreach($contracts_perubahan as $cp) {
-                        // $qualified_kontrak = collect();
-                        if(!empty($cp->jenis_perubahan)){
-                            // dd($result);
-                            if($cp->jenis_perubahan == $p) {
-                                // dd("true");
-                                if(!empty($result[$p])) {
-                                    $data = $result[$p];
-                                    // dump($setuju);
-                                    $data["jenis_perubahan"] = $data["jenis_perubahan"];
-                                    $data["total_item"] = $data["total_item"] + 1;
-                                    if($data["jenis_perubahan"] == "Anti Klaim") {
-                                        $data["total_nilai"] = $data["total_nilai"] - $cp->biaya_pengajuan;
-                                    } else {
-                                        $data["total_nilai"] = $data["total_nilai"] + $cp->biaya_pengajuan;
-                                    }
-                                    if($cp->stage == 1){
-                                        $data["potensial"] = $data["potensial"] + 1;
-                                        if($data["jenis_perubahan"] == "Anti Klaim") {
-                                            $data["potensial_value"] = $data["potensial_value"] - $cp->biaya_pengajuan;
-                                        } else {
-                                            $data["potensial_value"] = $data["potensial_value"] + $cp->biaya_pengajuan;
-                                        }
-                                    }elseif($cp->stage == 2){
-                                        $data["subs"] = $data["subs"] + 1;
-                                        if($data["jenis_perubahan"] == "Anti Klaim") {
-                                            $data["subs_value"] = $data["subs_value"] - $cp->biaya_pengajuan;
-                                        } else {
-                                            $data["subs_value"] = $data["subs_value"] + $cp->biaya_pengajuan;
-                                        }
-                                    }elseif($cp->stage == 3){
-                                        $data["revisi"] = $data["revisi"] + 1;
-                                        if($data["jenis_perubahan"] == "Anti Klaim") {
-                                            $data["revisi_value"] = $data["revisi_value"] - $cp->biaya_pengajuan;
-                                        } else {
-                                            $data["revisi_value"] = $data["revisi_value"] + $cp->biaya_pengajuan;
-                                        }
-                                    }elseif($cp->stage == 4){
-                                        $data["nego"] = $data["nego"] + 1;
-                                        if($data["jenis_perubahan"] == "Anti Klaim") {
-                                            $data["nego_value"] = $data["nego_value"] - $cp->biaya_pengajuan;
-                                        } else {
-                                            $data["nego_value"] = $data["nego_value"] + $cp->biaya_pengajuan;
-                                        }
-                                    }elseif($cp->stage == 5){
-                                        $data["setuju"] = $data["setuju"] + 1;
-                                        if($data["jenis_perubahan"] == "Anti Klaim") {
-                                            $data["setuju_value"] = $data["setuju_value"] - $cp->biaya_pengajuan;
-                                        } else {
-                                            $data["setuju_value"] = $data["setuju_value"] + $cp->biaya_pengajuan;
-                                        }
-                                    }elseif($cp->stage == 6 && $cp->is_dispute == false){
-                                        $data["tolak"] = $data["tolak"] + 1;
-                                        if($data["jenis_perubahan"] == "Anti Klaim") {
-                                            $data["tolak_value"] = $data["tolak_value"] - $cp->biaya_pengajuan;
-                                        } else {
-                                            $data["tolak_value"] = $data["tolak_value"] + $cp->biaya_pengajuan;
-                                        }
-                                    }else{
-                                        $data["dispute"] = $data["dispute"] + 1;
-                                        if($data["jenis_perubahan"] == "Anti Klaim") {
-                                            $data["dispute_value"] = $data["dispute_value"] - $cp->biaya_pengajuan;
-                                        } else {
-                                            $data["dispute_value"] = $data["dispute_value"] + $cp->biaya_pengajuan;
-                                        }
-                                    }
-                                    // dump($data);
-                                    $result[$p] = $data ;
-                                    // dump($potensial);
-                                } else {
-                                    if($cp->stage == 1){
-                                        $potensial += 1;
-                                        if($p == "Anti Klaim") {
-                                            $potensial_value -= $cp->biaya_pengajuan;
-                                        } else {
-                                            $potensial_value += $cp->biaya_pengajuan;
-                                        }
-                                    }elseif($cp->stage == 2){
-                                        $subs += 1;
-                                        if($p == "Anti Klaim") {
-                                            $subs_value -= $cp->biaya_pengajuan;
-                                        } else {
-                                            $subs_value += $cp->biaya_pengajuan;
-                                        }
-                                    }elseif($cp->stage == 3){
-                                        $revisi += 1;
-                                        if($p == "Anti Klaim") {
-                                            $revisi_value -= $cp->biaya_pengajuan;
-                                        } else {
-                                            $revisi_value += $cp->biaya_pengajuan;
-                                        }
-                                    }elseif($cp->stage == 4){
-                                        $nego += 1;
-                                        if($p == "Anti Klaim") {
-                                            $nego_value -= $cp->biaya_pengajuan;
-                                        } else {
-                                            $nego_value += $cp->biaya_pengajuan;
-                                        }
-                                    }elseif($cp->stage == 5){
-                                        $setuju += 1;
-                                        if($p == "Anti Klaim") {
-                                            $setuju_value -= $cp->biaya_pengajuan;
-                                        } else {
-                                            $setuju_value += $cp->biaya_pengajuan;
-                                        }
-                                    }elseif($cp->stage == 6 && $cp->is_dispute == false){
-                                        $tolak += 1;
-                                        if($p == "Anti Klaim") {
-                                            $tolak_value -= $cp->biaya_pengajuan;
-                                        } else {
-                                            $tolak_value += $cp->biaya_pengajuan;
-                                        }
-                                    }else{
-                                        $dispute += 1;
-                                        if($p == "Anti Klaim") {
-                                            $dispute_value -= $cp->biaya_pengajuan;
-                                        } else {
-                                            $dispute_value += $cp->biaya_pengajuan;
-                                        }
-                                    }
-                                    $result[$p] = ["jenis_perubahan" => $p, "total_item" => ++$counter, "total_nilai" => $nilai += $cp->biaya_pengajuan, "potensial"=>$potensial, "subs" => $subs, "revisi" => $revisi, "nego" => $nego, "setuju" => $setuju, "tolak" => $tolak, "dispute" => $dispute, "potensial_value"=>$potensial_value, "subs_value" => $subs_value, "revisi_value" => $revisi_value, "nego_value" => $nego_value, "setuju_value" => $setuju_value, "tolak_value" => $tolak_value, "dispute_value" => $dispute_value];
-                                }
-                            } else {
-                                if(!empty($result[$p])) {
-                                    $data = $result[$p];
-                                    $data["jenis_perubahan"] = $data["jenis_perubahan"];
-                                    $data["total_item"] = $data["total_item"] + 1;
-                                    $data["total_nilai"] = $data["total_nilai"];
-                                    // dump($data);
-                                } else {
-                                    $result[$p] = ["jenis_perubahan" => $p, "total_item" => 0, "total_nilai" => 0, "potensial" => 0, "subs" => 0, "revisi" => 0, "nego" => 0, "setuju" => 0, "tolak" => 0, "dispute" => 0, "potensial_value" => 0, "subs_value" => 0, "revisi_value" => 0, "nego_value" => 0, "setuju_value" => 0, "tolak_value" => 0, "dispute_value" => 0];
-                                }
-                            }
-                            // foreach($cp->PerubahanKontrak as $pk) {
-                            //     if($pk->jenis_perubahan == $p) {
-                            //         $result[$p] = ["jenis_perubahan" => $p, "total_item" => ++$counter, "total_nilai" => $nilai += $pk->biaya_pengajuan];
-                            //     } else {
-                            //         if(!empty($result[$p])) {
-                            //             $data = $result[$p];
-                            //             $data["jenis_perubahan"] = $data["jenis_perubahan"];
-                            //             $data["total_item"] = $data["total_item"];
-                            //             $data["total_nilai"] = $data["total_nilai"];
-                            //         } else {
-                            //             $result[$p] = ["jenis_perubahan" => $p, "total_item" => 0, "total_nilai" => 0];
-                            //         }
-                            //     }
-                            //     // dump($pk->jenis_perubahan == $p);
-                            // }
-                            // dump($result);
-                        }else{
-                            $result[$p] = ["jenis_perubahan" => $p, "total_item" => 0, "total_nilai" => 0, "potensial" => 0, "subs" => 0, "revisi" => 0, "nego" => 0, "setuju" => 0, "tolak" => 0, "dispute" => 0, "potensial_value" => 0, "subs_value" => 0, "revisi_value" => 0, "nego_value" => 0, "setuju_value" => 0, "tolak_value" => 0, "dispute_value" => 0];
-                        }
-                    }
+
+                    // $data = $result[];
+                    $result["jenis_perubahan"] = $p;
+                    $filterJenisPerubahan = $contracts_perubahan->filter(function ($item) use ($p) {
+                        return $item->jenis_perubahan == $p;
+                    });
+
+                    $result["potensial"] = $filterJenisPerubahan->count();
+                    $result["potensial_value"] = $filterJenisPerubahan->sum("biaya_pengajuan");
+
+                    $filterSubs = $filterJenisPerubahan->filter(function ($subs) {
+                        return $subs->stage >= 2;
+                    });
+
+                    $result["subs"] = $filterSubs->count();
+                    $result["subs_value"] = $filterSubs->sum("biaya_pengajuan");
+
+                    $filterRevision = $filterJenisPerubahan->filter(function ($revisi) {
+                        return $revisi->stage == 3;
+                    });
+
+                    $result["revisi"] = $filterRevision->count();
+                    $result["revisi_value"] = $filterRevision->sum("biaya_pengajuan");
+
+                    $filterNego = $filterJenisPerubahan->filter(function ($nego) {
+                        return $nego->stage == 4;
+                    });
+
+                    $result["nego"] = $filterNego->count();
+                    $result["nego_value"] = $filterNego->sum("biaya_pengajuan");
+
+                    $filterApprove = $filterJenisPerubahan->filter(function ($setuju) {
+                        return $setuju->stage == 5;
+                    });
+
+                    $result["setuju"] = $filterApprove->count();
+                    $result["setuju_value"] = $filterApprove->sum("biaya_pengajuan");
+
+                    $filterTolak = $filterJenisPerubahan->filter(function ($tolak) {
+                        return $tolak->stage == 6 && $tolak->is_dispute == false;
+                    });
+
+                    $result["tolak"] = $filterTolak->count();
+                    $result["tolak_value"] = $filterTolak->sum("biaya_pengajuan");
+
+                    $filterDispute = $filterJenisPerubahan->filter(function ($dispute) {
+                        return $dispute->stage == 6 && $dispute->is_dispute == true;
+                    });
+
+                    $result["dispute"] = $filterDispute->count();
+                    $result["dispute_value"] = $filterDispute->sum("biaya_pengajuan");
+
+                    // return $data;
+                    // foreach($contracts_perubahan as $cp) {
+                    //     // $qualified_kontrak = collect();
+                    //     if(!empty($cp->jenis_perubahan)){
+                    //         // dd($result);
+                    //         if($cp->jenis_perubahan == $p) {
+                    //             // dd("true");
+                    //             if(!empty($result[$p])) {
+                    //                 $data = $result[$p];
+                    //                 // dump($setuju);
+                    //                 $data["jenis_perubahan"] = $data["jenis_perubahan"];
+                    //                 $data["total_item"] = $data["total_item"] + 1;
+                    //                 if($data["jenis_perubahan"] == "Anti Klaim") {
+                    //                     $data["total_nilai"] = $data["total_nilai"] - $cp->biaya_pengajuan;
+                    //                 } else {
+                    //                     $data["total_nilai"] = $data["total_nilai"] + $cp->biaya_pengajuan;
+                    //                 }
+                    //                 if($cp->stage == 1){
+                    //                     $data["potensial"] = $data["potensial"] + 1;
+                    //                     if($data["jenis_perubahan"] == "Anti Klaim") {
+                    //                         $data["potensial_value"] = $data["potensial_value"] - $cp->biaya_pengajuan;
+                    //                     } else {
+                    //                         $data["potensial_value"] = $data["potensial_value"] + $cp->biaya_pengajuan;
+                    //                     }
+                    //                 }elseif($cp->stage == 2){
+                    //                     $data["subs"] = $data["subs"] + 1;
+                    //                     if($data["jenis_perubahan"] == "Anti Klaim") {
+                    //                         $data["subs_value"] = $data["subs_value"] - $cp->biaya_pengajuan;
+                    //                     } else {
+                    //                         $data["subs_value"] = $data["subs_value"] + $cp->biaya_pengajuan;
+                    //                     }
+                    //                 }elseif($cp->stage == 3){
+                    //                     $data["revisi"] = $data["revisi"] + 1;
+                    //                     if($data["jenis_perubahan"] == "Anti Klaim") {
+                    //                         $data["revisi_value"] = $data["revisi_value"] - $cp->biaya_pengajuan;
+                    //                     } else {
+                    //                         $data["revisi_value"] = $data["revisi_value"] + $cp->biaya_pengajuan;
+                    //                     }
+                    //                 }elseif($cp->stage == 4){
+                    //                     $data["nego"] = $data["nego"] + 1;
+                    //                     if($data["jenis_perubahan"] == "Anti Klaim") {
+                    //                         $data["nego_value"] = $data["nego_value"] - $cp->biaya_pengajuan;
+                    //                     } else {
+                    //                         $data["nego_value"] = $data["nego_value"] + $cp->biaya_pengajuan;
+                    //                     }
+                    //                 }elseif($cp->stage == 5){
+                    //                     $data["setuju"] = $data["setuju"] + 1;
+                    //                     if($data["jenis_perubahan"] == "Anti Klaim") {
+                    //                         $data["setuju_value"] = $data["setuju_value"] - $cp->biaya_pengajuan;
+                    //                     } else {
+                    //                         $data["setuju_value"] = $data["setuju_value"] + $cp->biaya_pengajuan;
+                    //                     }
+                    //                 }elseif($cp->stage == 6 && $cp->is_dispute == false){
+                    //                     $data["tolak"] = $data["tolak"] + 1;
+                    //                     if($data["jenis_perubahan"] == "Anti Klaim") {
+                    //                         $data["tolak_value"] = $data["tolak_value"] - $cp->biaya_pengajuan;
+                    //                     } else {
+                    //                         $data["tolak_value"] = $data["tolak_value"] + $cp->biaya_pengajuan;
+                    //                     }
+                    //                 }else{
+                    //                     $data["dispute"] = $data["dispute"] + 1;
+                    //                     if($data["jenis_perubahan"] == "Anti Klaim") {
+                    //                         $data["dispute_value"] = $data["dispute_value"] - $cp->biaya_pengajuan;
+                    //                     } else {
+                    //                         $data["dispute_value"] = $data["dispute_value"] + $cp->biaya_pengajuan;
+                    //                     }
+                    //                 }
+                    //                 // dump($data);
+                    //                 $result[$p] = $data ;
+                    //                 // dump($potensial);
+                    //             } else {
+                    //                 if($cp->stage == 1){
+                    //                     $potensial += 1;
+                    //                     if($p == "Anti Klaim") {
+                    //                         $potensial_value -= $cp->biaya_pengajuan;
+                    //                     } else {
+                    //                         $potensial_value += $cp->biaya_pengajuan;
+                    //                     }
+                    //                 }elseif($cp->stage == 2){
+                    //                     $subs += 1;
+                    //                     if($p == "Anti Klaim") {
+                    //                         $subs_value -= $cp->biaya_pengajuan;
+                    //                     } else {
+                    //                         $subs_value += $cp->biaya_pengajuan;
+                    //                     }
+                    //                 }elseif($cp->stage == 3){
+                    //                     $revisi += 1;
+                    //                     if($p == "Anti Klaim") {
+                    //                         $revisi_value -= $cp->biaya_pengajuan;
+                    //                     } else {
+                    //                         $revisi_value += $cp->biaya_pengajuan;
+                    //                     }
+                    //                 }elseif($cp->stage == 4){
+                    //                     $nego += 1;
+                    //                     if($p == "Anti Klaim") {
+                    //                         $nego_value -= $cp->biaya_pengajuan;
+                    //                     } else {
+                    //                         $nego_value += $cp->biaya_pengajuan;
+                    //                     }
+                    //                 }elseif($cp->stage == 5){
+                    //                     $setuju += 1;
+                    //                     if($p == "Anti Klaim") {
+                    //                         $setuju_value -= $cp->biaya_pengajuan;
+                    //                     } else {
+                    //                         $setuju_value += $cp->biaya_pengajuan;
+                    //                     }
+                    //                 }elseif($cp->stage == 6 && $cp->is_dispute == false){
+                    //                     $tolak += 1;
+                    //                     if($p == "Anti Klaim") {
+                    //                         $tolak_value -= $cp->biaya_pengajuan;
+                    //                     } else {
+                    //                         $tolak_value += $cp->biaya_pengajuan;
+                    //                     }
+                    //                 }else{
+                    //                     $dispute += 1;
+                    //                     if($p == "Anti Klaim") {
+                    //                         $dispute_value -= $cp->biaya_pengajuan;
+                    //                     } else {
+                    //                         $dispute_value += $cp->biaya_pengajuan;
+                    //                     }
+                    //                 }
+                    //                 $result[$p] = ["jenis_perubahan" => $p, "total_item" => ++$counter, "total_nilai" => $nilai += $cp->biaya_pengajuan, "potensial"=>$potensial, "subs" => $subs, "revisi" => $revisi, "nego" => $nego, "setuju" => $setuju, "tolak" => $tolak, "dispute" => $dispute, "potensial_value"=>$potensial_value, "subs_value" => $subs_value, "revisi_value" => $revisi_value, "nego_value" => $nego_value, "setuju_value" => $setuju_value, "tolak_value" => $tolak_value, "dispute_value" => $dispute_value];
+                    //             }
+                    //         } else {
+                    //             if(!empty($result[$p])) {
+                    //                 $data = $result[$p];
+                    //                 $data["jenis_perubahan"] = $data["jenis_perubahan"];
+                    //                 $data["total_item"] = $data["total_item"] + 1;
+                    //                 $data["total_nilai"] = $data["total_nilai"];
+                    //                 // dump($data);
+                    //             } else {
+                    //                 $result[$p] = ["jenis_perubahan" => $p, "total_item" => 0, "total_nilai" => 0, "potensial" => 0, "subs" => 0, "revisi" => 0, "nego" => 0, "setuju" => 0, "tolak" => 0, "dispute" => 0, "potensial_value" => 0, "subs_value" => 0, "revisi_value" => 0, "nego_value" => 0, "setuju_value" => 0, "tolak_value" => 0, "dispute_value" => 0];
+                    //             }
+                    //         }
+                    //         // foreach($cp->PerubahanKontrak as $pk) {
+                    //         //     if($pk->jenis_perubahan == $p) {
+                    //         //         $result[$p] = ["jenis_perubahan" => $p, "total_item" => ++$counter, "total_nilai" => $nilai += $pk->biaya_pengajuan];
+                    //         //     } else {
+                    //         //         if(!empty($result[$p])) {
+                    //         //             $data = $result[$p];
+                    //         //             $data["jenis_perubahan"] = $data["jenis_perubahan"];
+                    //         //             $data["total_item"] = $data["total_item"];
+                    //         //             $data["total_nilai"] = $data["total_nilai"];
+                    //         //         } else {
+                    //         //             $result[$p] = ["jenis_perubahan" => $p, "total_item" => 0, "total_nilai" => 0];
+                    //         //         }
+                    //         //     }
+                    //         //     // dump($pk->jenis_perubahan == $p);
+                    //         // }
+                    //         // dump($result);
+                    //     }else{
+                    //         $result[$p] = ["jenis_perubahan" => $p, "total_item" => 0, "total_nilai" => 0, "potensial" => 0, "subs" => 0, "revisi" => 0, "nego" => 0, "setuju" => 0, "tolak" => 0, "dispute" => 0, "potensial_value" => 0, "subs_value" => 0, "revisi_value" => 0, "nego_value" => 0, "setuju_value" => 0, "tolak_value" => 0, "dispute_value" => 0];
+                    //     }
+                    // }
                     return $result;
-                });
-                // dd($perubahan);
-                $cat_kontrak = $perubahan->map(function($p, $key) use($perubahan, $totalKontrakFull) {
-                    $data = $perubahan[$key]->first();
-                    // $data["persen"] = ($data["total_nilai"] / $totalKontrakFull) * 100;
-                    $data["persen"] = $data["total_nilai"] != 0 ? Percentage::fromFractionAndTotal($data["total_nilai"], $totalKontrakFull)->asString() : "0%";
-                    return $data;
                 })->values();
+                // dd($perubahan);
+                // $cat_kontrak = $perubahan->map(function($p, $key) use($perubahan, $totalKontrakFull) {
+                //     $data = $perubahan[$key]->first();
+                //     // $data["persen"] = ($data["total_nilai"] / $totalKontrakFull) * 100;
+                //     // $data["persen"] = $data["total_nilai"] != 0 ? Percentage::fromFractionAndTotal($data["total_nilai"], $totalKontrakFull)->asString() : "0%";
+                //     return $data;
+                // })->values();
                 // dd($cat_kontrak);
                 $perubahan_total = $cat_kontrak->sum('total_nilai');
                 // $kategori_kontrak = $perubahan->groupBy("jenis_perubahan")->map(function($item, $key) use ($totalKontrakFull){
@@ -1477,11 +1530,11 @@ class DashboardController extends Controller
 
 
             $potensial_total_item = $contracts_perubahan->filter(function($cp){
-                return $cp->stage == 1;
+                return $cp->stage >= 1;
             })->groupBy('jenis_perubahan')->flatten()->count();
 
             $submission_total_item = $contracts_perubahan->filter(function($cp){
-                return $cp->stage == 2;
+                return $cp->stage >= 2;
             })->groupBy('jenis_perubahan')->flatten()->count();
 
             $revision_total_item = $contracts_perubahan->filter(function($cp){
@@ -2338,7 +2391,7 @@ class DashboardController extends Controller
             $contracts_perubahan = $kategori_kontrak;
             // dd($contracts_perubahan);
             if(!empty($contracts_perubahan->toArray())){
-                $perubahan = $kategori->map(function($p) use($contracts_perubahan) {
+                $cat_kontrak = $kategori->map(function ($p) use ($contracts_perubahan) {
                     $result = collect();
                     $counter = 0;
                     $potensial = 0;
@@ -2356,168 +2409,221 @@ class DashboardController extends Controller
                     $dispute = 0;
                     $dispute_value = 0;
                     $nilai = 0;
-                    foreach($contracts_perubahan as $cp) {
-                        // $qualified_kontrak = collect();
-                        if(!empty($cp->jenis_perubahan)){
-                            // dd($result);
-                            if($cp->jenis_perubahan == $p) {
-                                // dd("true");
-                                if(!empty($result[$p])) {
-                                    $data = $result[$p];
-                                    // dump($setuju);
-                                    $data["jenis_perubahan"] = $data["jenis_perubahan"];
-                                    $data["total_item"] = $data["total_item"] + 1;
-                                    if($data["jenis_perubahan"] == "Anti Klaim") {
-                                        $data["total_nilai"] = $data["total_nilai"] - $cp->biaya_pengajuan;
-                                    } else {
-                                        $data["total_nilai"] = $data["total_nilai"] + $cp->biaya_pengajuan;
-                                    }
-                                    if($cp->stage == 1){
-                                        $data["potensial"] = $data["potensial"] + 1;
-                                        if($data["jenis_perubahan"] == "Anti Klaim") {
-                                            $data["potensial_value"] = $data["potensial_value"] - $cp->biaya_pengajuan;
-                                        } else {
-                                            $data["potensial_value"] = $data["potensial_value"] + $cp->biaya_pengajuan;
-                                        }
-                                    }elseif($cp->stage == 2){
-                                        $data["subs"] = $data["subs"] + 1;
-                                        if($data["jenis_perubahan"] == "Anti Klaim") {
-                                            $data["subs_value"] = $data["subs_value"] - $cp->biaya_pengajuan;
-                                        } else {
-                                            $data["subs_value"] = $data["subs_value"] + $cp->biaya_pengajuan;
-                                        }
-                                    }elseif($cp->stage == 3){
-                                        $data["revisi"] = $data["revisi"] + 1;
-                                        if($data["jenis_perubahan"] == "Anti Klaim") {
-                                            $data["revisi_value"] = $data["revisi_value"] - $cp->biaya_pengajuan;
-                                        } else {
-                                            $data["revisi_value"] = $data["revisi_value"] + $cp->biaya_pengajuan;
-                                        }
-                                    }elseif($cp->stage == 4){
-                                        $data["nego"] = $data["nego"] + 1;
-                                        if($data["jenis_perubahan"] == "Anti Klaim") {
-                                            $data["nego_value"] = $data["nego_value"] - $cp->biaya_pengajuan;
-                                        } else {
-                                            $data["nego_value"] = $data["nego_value"] + $cp->biaya_pengajuan;
-                                        }
-                                    }elseif($cp->stage == 5){
-                                        $data["setuju"] = $data["setuju"] + 1;
-                                        if($data["jenis_perubahan"] == "Anti Klaim") {
-                                            $data["setuju_value"] = $data["setuju_value"] - $cp->biaya_pengajuan;
-                                        } else {
-                                            $data["setuju_value"] = $data["setuju_value"] + $cp->biaya_pengajuan;
-                                        }
-                                    }elseif($cp->stage == 6 && $cp->is_dispute == false){
-                                        $data["tolak"] = $data["tolak"] + 1;
-                                        if($data["jenis_perubahan"] == "Anti Klaim") {
-                                            $data["tolak_value"] = $data["tolak_value"] - $cp->biaya_pengajuan;
-                                        } else {
-                                            $data["tolak_value"] = $data["tolak_value"] + $cp->biaya_pengajuan;
-                                        }
-                                    }else{
-                                        $data["dispute"] = $data["dispute"] + 1;
-                                        if($data["jenis_perubahan"] == "Anti Klaim") {
-                                            $data["dispute_value"] = $data["dispute_value"] - $cp->biaya_pengajuan;
-                                        } else {
-                                            $data["dispute_value"] = $data["dispute_value"] + $cp->biaya_pengajuan;
-                                        }
-                                    }
-                                    // dump($data);
-                                    $result[$p] = $data ;
-                                    // dump($potensial);
-                                } else {
-                                    if($cp->stage == 1){
-                                        $potensial += 1;
-                                        if($p == "Anti Klaim") {
-                                            $potensial_value -= $cp->biaya_pengajuan;
-                                        } else {
-                                            $potensial_value += $cp->biaya_pengajuan;
-                                        }
-                                    }elseif($cp->stage == 2){
-                                        $subs += 1;
-                                        if($p == "Anti Klaim") {
-                                            $subs_value -= $cp->biaya_pengajuan;
-                                        } else {
-                                            $subs_value += $cp->biaya_pengajuan;
-                                        }
-                                    }elseif($cp->stage == 3){
-                                        $revisi += 1;
-                                        if($p == "Anti Klaim") {
-                                            $revisi_value -= $cp->biaya_pengajuan;
-                                        } else {
-                                            $revisi_value += $cp->biaya_pengajuan;
-                                        }
-                                    }elseif($cp->stage == 4){
-                                        $nego += 1;
-                                        if($p == "Anti Klaim") {
-                                            $nego_value -= $cp->biaya_pengajuan;
-                                        } else {
-                                            $nego_value += $cp->biaya_pengajuan;
-                                        }
-                                    }elseif($cp->stage == 5){
-                                        $setuju += 1;
-                                        if($p == "Anti Klaim") {
-                                            $setuju_value -= $cp->biaya_pengajuan;
-                                        } else {
-                                            $setuju_value += $cp->biaya_pengajuan;
-                                        }
-                                    }elseif($cp->stage == 6 && $cp->is_dispute == false){
-                                        $tolak += 1;
-                                        if($p == "Anti Klaim") {
-                                            $tolak_value -= $cp->biaya_pengajuan;
-                                        } else {
-                                            $tolak_value += $cp->biaya_pengajuan;
-                                        }
-                                    }else{
-                                        $dispute += 1;
-                                        if($p == "Anti Klaim") {
-                                            $dispute_value -= $cp->biaya_pengajuan;
-                                        } else {
-                                            $dispute_value += $cp->biaya_pengajuan;
-                                        }
-                                    }
-                                    $result[$p] = ["jenis_perubahan" => $p, "total_item" => ++$counter, "total_nilai" => $nilai += $cp->biaya_pengajuan, "potensial"=>$potensial, "subs" => $subs, "revisi" => $revisi, "nego" => $nego, "setuju" => $setuju, "tolak" => $tolak, "dispute" => $dispute, "potensial_value"=>$potensial_value, "subs_value" => $subs_value, "revisi_value" => $revisi_value, "nego_value" => $nego_value, "setuju_value" => $setuju_value, "tolak_value" => $tolak_value, "dispute_value" => $dispute_value];
-                                }
-                            } else {
-                                if(!empty($result[$p])) {
-                                    $data = $result[$p];
-                                    $data["jenis_perubahan"] = $data["jenis_perubahan"];
-                                    $data["total_item"] = $data["total_item"] + 1;
-                                    $data["total_nilai"] = $data["total_nilai"];
-                                    // dump($data);
-                                } else {
-                                    $result[$p] = ["jenis_perubahan" => $p, "total_item" => 0, "total_nilai" => 0, "potensial" => 0, "subs" => 0, "revisi" => 0, "nego" => 0, "setuju" => 0, "tolak" => 0, "dispute" => 0, "potensial_value" => 0, "subs_value" => 0, "revisi_value" => 0, "nego_value" => 0, "setuju_value" => 0, "tolak_value" => 0, "dispute_value" => 0];
-                                }
-                            }
-                            // foreach($cp->PerubahanKontrak as $pk) {
-                            //     if($pk->jenis_perubahan == $p) {
-                            //         $result[$p] = ["jenis_perubahan" => $p, "total_item" => ++$counter, "total_nilai" => $nilai += $pk->biaya_pengajuan];
-                            //     } else {
-                            //         if(!empty($result[$p])) {
-                            //             $data = $result[$p];
-                            //             $data["jenis_perubahan"] = $data["jenis_perubahan"];
-                            //             $data["total_item"] = $data["total_item"];
-                            //             $data["total_nilai"] = $data["total_nilai"];
-                            //         } else {
-                            //             $result[$p] = ["jenis_perubahan" => $p, "total_item" => 0, "total_nilai" => 0];
-                            //         }
-                            //     }
-                            //     // dump($pk->jenis_perubahan == $p);
-                            // }
-                            // dump($result);
-                        }else{
-                            $result[$p] = ["jenis_perubahan" => $p, "total_item" => 0, "total_nilai" => 0, "potensial" => 0, "subs" => 0, "revisi" => 0, "nego" => 0, "setuju" => 0, "tolak" => 0, "dispute" => 0, "potensial_value" => 0, "subs_value" => 0, "revisi_value" => 0, "nego_value" => 0, "setuju_value" => 0, "tolak_value" => 0, "dispute_value" => 0];
-                        }
-                    }
+
+                    // $data = $result[];
+                    $result["jenis_perubahan"] = $p;
+                    $filterJenisPerubahan = $contracts_perubahan->filter(function ($item) use ($p) {
+                        return $item->jenis_perubahan == $p;
+                    });
+
+                    $result["potensial"] = $filterJenisPerubahan->count();
+                    $result["potensial_value"] = $filterJenisPerubahan->sum("biaya_pengajuan");
+
+                    $filterSubs = $filterJenisPerubahan->filter(function ($subs) {
+                        return $subs->stage >= 2;
+                    });
+
+                    $result["subs"] = $filterSubs->count();
+                    $result["subs_value"] = $filterSubs->sum("biaya_pengajuan");
+
+                    $filterRevision = $filterJenisPerubahan->filter(function ($revisi) {
+                        return $revisi->stage == 3;
+                    });
+
+                    $result["revisi"] = $filterRevision->count();
+                    $result["revisi_value"] = $filterRevision->sum("biaya_pengajuan");
+
+                    $filterNego = $filterJenisPerubahan->filter(function ($nego) {
+                        return $nego->stage == 4;
+                    });
+
+                    $result["nego"] = $filterNego->count();
+                    $result["nego_value"] = $filterNego->sum("biaya_pengajuan");
+
+                    $filterApprove = $filterJenisPerubahan->filter(function ($setuju) {
+                        return $setuju->stage == 5;
+                    });
+
+                    $result["setuju"] = $filterApprove->count();
+                    $result["setuju_value"] = $filterApprove->sum("biaya_pengajuan");
+
+                    $filterTolak = $filterJenisPerubahan->filter(function ($tolak) {
+                        return $tolak->stage == 6 && $tolak->is_dispute == false;
+                    });
+
+                    $result["tolak"] = $filterTolak->count();
+                    $result["tolak_value"] = $filterTolak->sum("biaya_pengajuan");
+
+                    $filterDispute = $filterJenisPerubahan->filter(function ($dispute) {
+                        return $dispute->stage == 6 && $dispute->is_dispute == true;
+                    });
+
+                    $result["dispute"] = $filterDispute->count();
+                    $result["dispute_value"] = $filterDispute->sum("biaya_pengajuan");
+
+                    // return $data;
+                    // foreach($contracts_perubahan as $cp) {
+                    //     // $qualified_kontrak = collect();
+                    //     if(!empty($cp->jenis_perubahan)){
+                    //         // dd($result);
+                    //         if($cp->jenis_perubahan == $p) {
+                    //             // dd("true");
+                    //             if(!empty($result[$p])) {
+                    //                 $data = $result[$p];
+                    //                 // dump($setuju);
+                    //                 $data["jenis_perubahan"] = $data["jenis_perubahan"];
+                    //                 $data["total_item"] = $data["total_item"] + 1;
+                    //                 if($data["jenis_perubahan"] == "Anti Klaim") {
+                    //                     $data["total_nilai"] = $data["total_nilai"] - $cp->biaya_pengajuan;
+                    //                 } else {
+                    //                     $data["total_nilai"] = $data["total_nilai"] + $cp->biaya_pengajuan;
+                    //                 }
+                    //                 if($cp->stage == 1){
+                    //                     $data["potensial"] = $data["potensial"] + 1;
+                    //                     if($data["jenis_perubahan"] == "Anti Klaim") {
+                    //                         $data["potensial_value"] = $data["potensial_value"] - $cp->biaya_pengajuan;
+                    //                     } else {
+                    //                         $data["potensial_value"] = $data["potensial_value"] + $cp->biaya_pengajuan;
+                    //                     }
+                    //                 }elseif($cp->stage == 2){
+                    //                     $data["subs"] = $data["subs"] + 1;
+                    //                     if($data["jenis_perubahan"] == "Anti Klaim") {
+                    //                         $data["subs_value"] = $data["subs_value"] - $cp->biaya_pengajuan;
+                    //                     } else {
+                    //                         $data["subs_value"] = $data["subs_value"] + $cp->biaya_pengajuan;
+                    //                     }
+                    //                 }elseif($cp->stage == 3){
+                    //                     $data["revisi"] = $data["revisi"] + 1;
+                    //                     if($data["jenis_perubahan"] == "Anti Klaim") {
+                    //                         $data["revisi_value"] = $data["revisi_value"] - $cp->biaya_pengajuan;
+                    //                     } else {
+                    //                         $data["revisi_value"] = $data["revisi_value"] + $cp->biaya_pengajuan;
+                    //                     }
+                    //                 }elseif($cp->stage == 4){
+                    //                     $data["nego"] = $data["nego"] + 1;
+                    //                     if($data["jenis_perubahan"] == "Anti Klaim") {
+                    //                         $data["nego_value"] = $data["nego_value"] - $cp->biaya_pengajuan;
+                    //                     } else {
+                    //                         $data["nego_value"] = $data["nego_value"] + $cp->biaya_pengajuan;
+                    //                     }
+                    //                 }elseif($cp->stage == 5){
+                    //                     $data["setuju"] = $data["setuju"] + 1;
+                    //                     if($data["jenis_perubahan"] == "Anti Klaim") {
+                    //                         $data["setuju_value"] = $data["setuju_value"] - $cp->biaya_pengajuan;
+                    //                     } else {
+                    //                         $data["setuju_value"] = $data["setuju_value"] + $cp->biaya_pengajuan;
+                    //                     }
+                    //                 }elseif($cp->stage == 6 && $cp->is_dispute == false){
+                    //                     $data["tolak"] = $data["tolak"] + 1;
+                    //                     if($data["jenis_perubahan"] == "Anti Klaim") {
+                    //                         $data["tolak_value"] = $data["tolak_value"] - $cp->biaya_pengajuan;
+                    //                     } else {
+                    //                         $data["tolak_value"] = $data["tolak_value"] + $cp->biaya_pengajuan;
+                    //                     }
+                    //                 }else{
+                    //                     $data["dispute"] = $data["dispute"] + 1;
+                    //                     if($data["jenis_perubahan"] == "Anti Klaim") {
+                    //                         $data["dispute_value"] = $data["dispute_value"] - $cp->biaya_pengajuan;
+                    //                     } else {
+                    //                         $data["dispute_value"] = $data["dispute_value"] + $cp->biaya_pengajuan;
+                    //                     }
+                    //                 }
+                    //                 // dump($data);
+                    //                 $result[$p] = $data ;
+                    //                 // dump($potensial);
+                    //             } else {
+                    //                 if($cp->stage == 1){
+                    //                     $potensial += 1;
+                    //                     if($p == "Anti Klaim") {
+                    //                         $potensial_value -= $cp->biaya_pengajuan;
+                    //                     } else {
+                    //                         $potensial_value += $cp->biaya_pengajuan;
+                    //                     }
+                    //                 }elseif($cp->stage == 2){
+                    //                     $subs += 1;
+                    //                     if($p == "Anti Klaim") {
+                    //                         $subs_value -= $cp->biaya_pengajuan;
+                    //                     } else {
+                    //                         $subs_value += $cp->biaya_pengajuan;
+                    //                     }
+                    //                 }elseif($cp->stage == 3){
+                    //                     $revisi += 1;
+                    //                     if($p == "Anti Klaim") {
+                    //                         $revisi_value -= $cp->biaya_pengajuan;
+                    //                     } else {
+                    //                         $revisi_value += $cp->biaya_pengajuan;
+                    //                     }
+                    //                 }elseif($cp->stage == 4){
+                    //                     $nego += 1;
+                    //                     if($p == "Anti Klaim") {
+                    //                         $nego_value -= $cp->biaya_pengajuan;
+                    //                     } else {
+                    //                         $nego_value += $cp->biaya_pengajuan;
+                    //                     }
+                    //                 }elseif($cp->stage == 5){
+                    //                     $setuju += 1;
+                    //                     if($p == "Anti Klaim") {
+                    //                         $setuju_value -= $cp->biaya_pengajuan;
+                    //                     } else {
+                    //                         $setuju_value += $cp->biaya_pengajuan;
+                    //                     }
+                    //                 }elseif($cp->stage == 6 && $cp->is_dispute == false){
+                    //                     $tolak += 1;
+                    //                     if($p == "Anti Klaim") {
+                    //                         $tolak_value -= $cp->biaya_pengajuan;
+                    //                     } else {
+                    //                         $tolak_value += $cp->biaya_pengajuan;
+                    //                     }
+                    //                 }else{
+                    //                     $dispute += 1;
+                    //                     if($p == "Anti Klaim") {
+                    //                         $dispute_value -= $cp->biaya_pengajuan;
+                    //                     } else {
+                    //                         $dispute_value += $cp->biaya_pengajuan;
+                    //                     }
+                    //                 }
+                    //                 $result[$p] = ["jenis_perubahan" => $p, "total_item" => ++$counter, "total_nilai" => $nilai += $cp->biaya_pengajuan, "potensial"=>$potensial, "subs" => $subs, "revisi" => $revisi, "nego" => $nego, "setuju" => $setuju, "tolak" => $tolak, "dispute" => $dispute, "potensial_value"=>$potensial_value, "subs_value" => $subs_value, "revisi_value" => $revisi_value, "nego_value" => $nego_value, "setuju_value" => $setuju_value, "tolak_value" => $tolak_value, "dispute_value" => $dispute_value];
+                    //             }
+                    //         } else {
+                    //             if(!empty($result[$p])) {
+                    //                 $data = $result[$p];
+                    //                 $data["jenis_perubahan"] = $data["jenis_perubahan"];
+                    //                 $data["total_item"] = $data["total_item"] + 1;
+                    //                 $data["total_nilai"] = $data["total_nilai"];
+                    //                 // dump($data);
+                    //             } else {
+                    //                 $result[$p] = ["jenis_perubahan" => $p, "total_item" => 0, "total_nilai" => 0, "potensial" => 0, "subs" => 0, "revisi" => 0, "nego" => 0, "setuju" => 0, "tolak" => 0, "dispute" => 0, "potensial_value" => 0, "subs_value" => 0, "revisi_value" => 0, "nego_value" => 0, "setuju_value" => 0, "tolak_value" => 0, "dispute_value" => 0];
+                    //             }
+                    //         }
+                    //         // foreach($cp->PerubahanKontrak as $pk) {
+                    //         //     if($pk->jenis_perubahan == $p) {
+                    //         //         $result[$p] = ["jenis_perubahan" => $p, "total_item" => ++$counter, "total_nilai" => $nilai += $pk->biaya_pengajuan];
+                    //         //     } else {
+                    //         //         if(!empty($result[$p])) {
+                    //         //             $data = $result[$p];
+                    //         //             $data["jenis_perubahan"] = $data["jenis_perubahan"];
+                    //         //             $data["total_item"] = $data["total_item"];
+                    //         //             $data["total_nilai"] = $data["total_nilai"];
+                    //         //         } else {
+                    //         //             $result[$p] = ["jenis_perubahan" => $p, "total_item" => 0, "total_nilai" => 0];
+                    //         //         }
+                    //         //     }
+                    //         //     // dump($pk->jenis_perubahan == $p);
+                    //         // }
+                    //         // dump($result);
+                    //     }else{
+                    //         $result[$p] = ["jenis_perubahan" => $p, "total_item" => 0, "total_nilai" => 0, "potensial" => 0, "subs" => 0, "revisi" => 0, "nego" => 0, "setuju" => 0, "tolak" => 0, "dispute" => 0, "potensial_value" => 0, "subs_value" => 0, "revisi_value" => 0, "nego_value" => 0, "setuju_value" => 0, "tolak_value" => 0, "dispute_value" => 0];
+                    //     }
+                    // }
                     return $result;
-                });
-                // dd($perubahan);
-                $cat_kontrak = $perubahan->map(function($p, $key) use($perubahan, $totalKontrakFull) {
-                    $data = $perubahan[$key]->first();
-                    // $data["persen"] = ($data["total_nilai"] / $totalKontrakFull) * 100;
-                    $data["persen"] = $data["total_nilai"] != 0 ? Percentage::fromFractionAndTotal($data["total_nilai"], $totalKontrakFull)->asString() : "0%";
-                    return $data;
                 })->values();
+                // dd($perubahan);
+                // $cat_kontrak = $perubahan->map(function($p, $key) use($perubahan, $totalKontrakFull) {
+                //     $data = $perubahan[$key]->first();
+                //     // $data["persen"] = ($data["total_nilai"] / $totalKontrakFull) * 100;
+                //     // $data["persen"] = $data["total_nilai"] != 0 ? Percentage::fromFractionAndTotal($data["total_nilai"], $totalKontrakFull)->asString() : "0%";
+                //     return $data;
+                // })->values();
                 // dd($cat_kontrak);
                 $perubahan_total = $cat_kontrak->sum('total_nilai');
                 // $kategori_kontrak = $perubahan->groupBy("jenis_perubahan")->map(function($item, $key) use ($totalKontrakFull){
@@ -2818,8 +2924,8 @@ class DashboardController extends Controller
             $percen_pre_claim = Percentage::fromFractionAndTotal($submission_total_value, $potensial_total_value)->asString();
             $percen_during_claim = Percentage::fromFractionAndTotal($approve_total_value, $potensial_total_value)->asString();
             $percen_post_claim = Percentage::fromFractionAndTotal($approve_total_value, $submission_total_value)->asString();
-            
-            $proyek_progress =$proyek->ProyekProgress->sortByDesc("created_at")->first();
+
+            $proyek_progress = $proyek->ProyekProgress?->sortByDesc("created_at")->first();
             if($proyek_progress){
                 $total_ok_review = $proyek_progress->ok_review ?? 0;
                 $total_progress_fisik_ri = $proyek_progress->progress_fisik_ri ?? 0;

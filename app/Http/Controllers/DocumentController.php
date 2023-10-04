@@ -50,7 +50,7 @@ class DocumentController extends Controller
 
         $documents = $contracts->map(function ($item){
             return $item->UploadFinal;
-        })->flatten(); 
+        })->flatten()->sortByDesc('created_at');
         
         if(!empty($jenis_dokumen)){
             $documents = $documents->where("category", "=", $jenis_dokumen);
