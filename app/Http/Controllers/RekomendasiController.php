@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Models\MatriksApprovalRekomendasi;
+use App\Models\UnitKerja;
 use Illuminate\Support\Facades\URL;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -64,20 +65,20 @@ class RekomendasiController extends Controller
 
 
                 $url = $request->schemeAndHttpHost() . "?redirectTo=/rekomendasi?open=kt_modal_view_proyek_rekomendasi_".$proyek->kode_proyek;
-                $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
-                    "api_key" => "4DCR3IU2Eu70znFSvnuc3X3x9gJdcc",
-                    "sender" => "628188827008",
-                    "number" => "085157875773",
-                    // "number" => "085156341949",
-                    "message" => "Yth Bapak/Ibu .....\nDengan ini menyampaikan Hasil Assessment Nota Rekomendasi Tahap I untuk Proyek *$proyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
-                    // "url" => $url
-                ]);
+                // $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
+                //     "api_key" => "4DCR3IU2Eu70znFSvnuc3X3x9gJdcc",
+                //     "sender" => "628188827008",
+                //     // "number" => "085157875773",
+                //     "number" => "085156341949",
+                //     "message" => "Yth Bapak/Ibu .....\nDengan ini menyampaikan Hasil Assessment Nota Rekomendasi Tahap I untuk Proyek *$proyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
+                //     // "url" => $url
+                // ]);
 
-                $send_msg_to_wa->onError(function ($error) {
-                    // dd($error);
-                    Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
-                    return redirect()->back();
-                });
+                // $send_msg_to_wa->onError(function ($error) {
+                //     dd($error);
+                //     Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
+                //     return redirect()->back();
+                // });
 
                 createWordPengajuan($proyek, $hasil_assessment, $is_proyek_mega);
                 createWordRekomendasi($proyek, $hasil_assessment, $is_proyek_mega);
@@ -154,20 +155,20 @@ class RekomendasiController extends Controller
             // }
 
             $url = $request->schemeAndHttpHost() . "?redirectTo=/rekomendasi?open=kt_modal_view_proyek_rekomendasi_" . $proyek->kode_proyek;
-            $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
-                "api_key" => "4DCR3IU2Eu70znFSvnuc3X3x9gJdcc",
-            "sender" => "628188827008",
-                "number" => "085157875773",
-                // "number" => "085156341949",
-                "message" => "Yth Bapak/Ibu .....\nDengan ini menyampaikan Hasil Verifikasi Nota Rekomendasi Tahap I untuk Proyek *$proyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
-                // "url" => $url
-            ]);
+            // $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
+            //     "api_key" => "4DCR3IU2Eu70znFSvnuc3X3x9gJdcc",
+            // "sender" => "628188827008",
+            //     "number" => "085157875773",
+            //     // "number" => "085156341949",
+            //     "message" => "Yth Bapak/Ibu .....\nDengan ini menyampaikan Hasil Verifikasi Nota Rekomendasi Tahap I untuk Proyek *$proyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
+            //     // "url" => $url
+            // ]);
 
-            $send_msg_to_wa->onError(function ($error) {
-                // dd($error);
-                Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
-                return redirect()->back();
-            });
+            // $send_msg_to_wa->onError(function ($error) {
+            //     // dd($error);
+            //     Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
+            //     return redirect()->back();
+            // });
 
             if (empty($data["note-rekomendasi"])) {
                 $proyek->recommended_with_note = "-";
@@ -176,10 +177,11 @@ class RekomendasiController extends Controller
             }
             
             if($proyek->save()) {
-                // createWordPersetujuan($proyek, $hasil_assessment, $is_proyek_besar, $is_proyek_mega);
+                Alert::html("Failed", "Verifikasi dengan nama proyek <b>$proyek->nama_proyek</b> berhasil", "success");
+            // createWordPersetujuan($proyek, $hasil_assessment, $is_proyek_besar, $is_proyek_mega);
                 return redirect()->back();
             }
-            Alert::html("Failed", "Rekomendasi dengan nama proyek <b>$proyek->nama_proyek</b> gagal ditolak", "error");
+            Alert::html("Failed", "Verifikasi dengan nama proyek <b>$proyek->nama_proyek</b> gagal ditolak", "error");
             return redirect()->back();
         } else if(!empty($request["penyusun-setujui"])) {
             $proyek = Proyek::find($request->get("kode-proyek"));
@@ -194,20 +196,20 @@ class RekomendasiController extends Controller
             $is_checked = self::checkMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, $approved_penyusun, "Penyusun");
             if($is_checked) {
                 $url = $request->schemeAndHttpHost() . "?redirectTo=/rekomendasi?open=kt_user_view_persetujuan" . $proyek->kode_proyek;
-                $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
-                    "api_key" => "4DCR3IU2Eu70znFSvnuc3X3x9gJdcc",
-                    "sender" => "628188827008",
-                    "number" => "085157875773",
-                    // "number" => "085156341949",
-                    "message" => "Yth Bapak/Ibu .....\nDengan ini menyampaikan menyampaikan permohonan tanda tangan rekomendasi untuk Nota Rekomendasi Tahap I Proyek *$proyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
-                    // "url" => $url
-                ]);
+                // $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
+                //     "api_key" => "4DCR3IU2Eu70znFSvnuc3X3x9gJdcc",
+                //     "sender" => "628188827008",
+                //     "number" => "085157875773",
+                //     // "number" => "085156341949",
+                //     "message" => "Yth Bapak/Ibu .....\nDengan ini menyampaikan menyampaikan permohonan tanda tangan rekomendasi untuk Nota Rekomendasi Tahap I Proyek *$proyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
+                //     // "url" => $url
+                // ]);
 
-                $send_msg_to_wa->onError(function ($error) {
-                    // dd($error);
-                    Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
-                    return redirect()->back();
-                });
+                // $send_msg_to_wa->onError(function ($error) {
+                //     // dd($error);
+                //     Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
+                //     return redirect()->back();
+                // });
                 $proyek->is_penyusun_approved = true;
             }
             
@@ -261,20 +263,20 @@ class RekomendasiController extends Controller
                         URL::forceScheme("https");
                         $url = URL::temporarySignedRoute("rekomendasi", now()->addHours(3), ["open" => "kt_modal_view_proyek_persetujuan_" . $proyek->kode_proyek, "user" => $user->nip]);
                         // $url = $request->schemeAndHttpHost() . "?redirectTo=/rekomendasi?open=kt_user_view_persetujuan" . $proyek->kode_proyek . "&token=$token";
-                        $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
-                            "api_key" => "4DCR3IU2Eu70znFSvnuc3X3x9gJdcc",
-                            "sender" => "628188827008",
-                            "number" => "085157875773",
-                            // "number" => "085156341949",
-                            "message" => "Yth Bapak/Ibu .....\nDengan ini menyampaikan Permohonan tanda tangan Persetujuan Nota Rekomendasi Tahap I untuk Proyek *$proyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
-                            // "url" => $url
-                        ]);
+                        // $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
+                        //     "api_key" => "4DCR3IU2Eu70znFSvnuc3X3x9gJdcc",
+                        //     "sender" => "628188827008",
+                        //     "number" => "085157875773",
+                        //     // "number" => "085156341949",
+                        //     "message" => "Yth Bapak/Ibu .....\nDengan ini menyampaikan Permohonan tanda tangan Persetujuan Nota Rekomendasi Tahap I untuk Proyek *$proyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
+                        //     // "url" => $url
+                        // ]);
     
-                        $send_msg_to_wa->onError(function ($error) {
-                            // dd($error);
-                            Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
-                            return redirect()->back();
-                        });
+                        // $send_msg_to_wa->onError(function ($error) {
+                        //     // dd($error);
+                        //     Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
+                        //     return redirect()->back();
+                        // });
                     }
                     // createWordPersetujuan($proyek, $hasil_assessment, $is_proyek_besar, $is_proyek_mega);
                     $proyek->is_recommended_with_note = true;
@@ -312,20 +314,20 @@ class RekomendasiController extends Controller
                         URL::forceScheme("https");
                         $url = URL::temporarySignedRoute("rekomendasi", now()->addHours(3), ["open" => "kt_modal_view_proyek_persetujuan_" . $proyek->kode_proyek, "user" => $user->nip]);
                         // $url = $request->schemeAndHttpHost() . "?redirectTo=/rekomendasi?open=kt_user_view_persetujuan" . $proyek->kode_proyek . "&token=$token";
-                        $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
-                            "api_key" => "4DCR3IU2Eu70znFSvnuc3X3x9gJdcc",
-                            "sender" => "628188827008",
-                            "number" => "085157875773",
-                            // "number" => "085156341949",
-                            "message" => "Yth Bapak/Ibu .....\nDengan ini menyampaikan Permohonan tanda tangan Persetujuan Nota Rekomendasi Tahap I untuk Proyek *$proyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
-                            // "url" => $url
-                        ]);
+                        // $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
+                        //     "api_key" => "4DCR3IU2Eu70znFSvnuc3X3x9gJdcc",
+                        //     "sender" => "628188827008",
+                        //     "number" => "085157875773",
+                        //     // "number" => "085156341949",
+                        //     "message" => "Yth Bapak/Ibu .....\nDengan ini menyampaikan Permohonan tanda tangan Persetujuan Nota Rekomendasi Tahap I untuk Proyek *$proyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
+                        //     // "url" => $url
+                        // ]);
     
-                        $send_msg_to_wa->onError(function ($error) {
-                            // dd($error);
-                            Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
-                            return redirect()->back();
-                        });
+                        // $send_msg_to_wa->onError(function ($error) {
+                        //     // dd($error);
+                        //     Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
+                        //     return redirect()->back();
+                        // });
                     }
                     // createWordPersetujuan($proyek, $hasil_assessment, $is_proyek_besar, $is_proyek_mega);
                     $proyek->is_recommended = true;
@@ -453,10 +455,9 @@ class RekomendasiController extends Controller
         }
 
         $is_super_user = str_contains(Auth::user()->name, "PIC") || Auth::user()->check_administrator;
-        $unit_kerjas = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja);
+        $unit_kerjas = $is_super_user && str_contains(Auth::user()->name, "Admin") ? UnitKerja::addSelect(["divcode"])->get()->toArray() : (str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja))->toArray();
         $matriks_user = Auth::user()->Pegawai->MatriksApproval ?? null;
-        // dd($matriks_user);
-
+        
         if($is_super_user) {
             $proyeks_pengajuan = Proyek::whereIn("unit_kerja", $unit_kerjas)->where("stage", "=", 1)->get()->filter(function($p) {
                 return ($p->is_request_rekomendasi || !empty($p->approved_rekomendasi)) && !$p->review_assessment;

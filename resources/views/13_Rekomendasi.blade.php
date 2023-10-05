@@ -538,12 +538,16 @@
                                                                 </small>
                                                             @elseif($proyek->is_request_rekomendasi && !$proyek->review_assessment)
                                                                 <small class="badge badge-light-primary">Proses Pengajuan</small>
+                                                                <a href="#kt_modal_view_proyek_history_{{$proyek->kode_proyek}}" data-bs-toggle="modal"><i class="bi bi-pencil-fill"></i></a>
                                                             @elseif($proyek->review_assessment == true && is_null($proyek->is_penyusun_approved))
                                                                 <small class="badge badge-light-primary">Proses Penyusun</small>
+                                                                <a href="#kt_modal_view_proyek_history_{{$proyek->kode_proyek}}" data-bs-toggle="modal"><i class="bi bi-pencil-fill"></i></a>
                                                             @elseif($proyek->is_penyusun_approved == true && is_null($proyek->is_recommended))
                                                                 <small class="badge badge-light-primary">Proses Rekomendasi</small>
+                                                                <a href="#kt_modal_view_proyek_history_{{$proyek->kode_proyek}}" data-bs-toggle="modal"><i class="bi bi-pencil-fill"></i></a>
                                                             @elseif($proyek->is_recommended == true && is_null($proyek->is_disetujui))
                                                                 <small class="badge badge-light-primary">Proses Penyetujuan</small>
+                                                                <a href="#kt_modal_view_proyek_history_{{$proyek->kode_proyek}}" data-bs-toggle="modal"><i class="bi bi-pencil-fill"></i></a>
                                                             @endif
                                                         </td>
                                                     </tr>
@@ -1072,8 +1076,10 @@
                             $approved_penyusun= collect(json_decode($proyek->approved_penyusun));
                             $approved_rekomendasi = collect(json_decode($proyek->approved_rekomendasi_final));
                             $approved_persetujuan = collect(json_decode($proyek->approved_persetujuan));
-                            $data_approved_merged = collect()->mergeRecursive(["Pengajuan" => $approved_pengajuan->flatten(), "Penyusunan" => $approved_penyusun->flatten(), "Rekomendasi" => $approved_rekomendasi->flatten(), "Persetujuan" => $approved_persetujuan->flatten()]);
-                            // dump($approved_pengajuan, $approved_penyusun, $approved_rekomendasi, $approved_persetujuan);
+                            $data_approved_merged = collect();
+                            if($approved_pengajuan->isNotEmpty() || $approved_penyusun->isNotEmpty() || $approved_rekomendasi->isNotEmpty() || $approved_persetujuan->isNotEmpty()) {
+                                $data_approved_merged = collect()->mergeRecursive(["Pengajuan" => $approved_pengajuan->flatten(), "Penyusunan" => $approved_penyusun->flatten(), "Rekomendasi" => $approved_rekomendasi->flatten(), "Persetujuan" => $approved_persetujuan->flatten()]);
+                            }
                         @endphp
                         {{-- Begin :: History --}}
                         <div class="row">
@@ -1132,11 +1138,13 @@
                                                     </div>
                                                 </div>
                                             </article>
+                                        @else
                                         @endif
                                         @php
                                             $row++;
                                         @endphp
                                     @empty
+                                        <p class="text-center"><b>Belum ada history rekomendasi</b></p>
                                 @endforelse
                             </div>
                         </div>

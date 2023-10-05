@@ -23,6 +23,7 @@ use App\Models\JenisPerusahaan;
 use App\Models\KaryaInovasi;
 use App\Models\MasalahHukum;
 use App\Models\Nps;
+use App\Models\PorsiSaham;
 use App\Models\Provinsi;
 use App\Models\StrukturAttachment;
 use App\Models\SyaratPembayaran;
@@ -516,7 +517,7 @@ class CustomerController extends Controller
 
         // form company information
         $editCustomer->jenis_instansi = $data["jenis-instansi"];
-        $editCustomer->kode_bp = $data["kode-bp"];
+        // $editCustomer->kode_bp = $data["kode-bp"];
         $editCustomer->kode_pelanggan = $data["kodepelanggan-company"];
         $editCustomer->npwp_company = $data["npwp-company"];
         $editCustomer->npwp_address = $data["npwp-address"];
@@ -1323,6 +1324,39 @@ class CustomerController extends Controller
             Alert::error("Error", "Pastikan field-field Karya Inovasi terisi!");
             return redirect()->back();
         }
+    }
+
+    public function savePorsiSaham(Request $request)
+    {
+        $data = $request->all();
+        $id = $data["id-porsi"];
+        $porsiSaham = PorsiSaham::find($id);
+        if(!empty($porsiSaham)) {
+            $porsiSaham->id_customer = $data["id-customer"];
+            $porsiSaham->nama = $data["name-porsi-saham"];
+            $porsiSaham->porsi_saham = $data["porsi"];
+            Alert::success("Success", "Porsi Saham Berhasil Diperbarui");
+        } else {
+            $porsiSaham = new PorsiSaham();
+            $porsiSaham->id_customer = $data["id-customer"];
+            $porsiSaham->nama = $data["name-porsi-saham"];
+            $porsiSaham->porsi_saham = $data["porsi"];
+            Alert::success("Success", "Porsi Saham Berhasil Dibuat");
+        }
+        if($porsiSaham->save()) {
+            return redirect()->back();
+        }
+        Alert::error("Error", "Porsi Saham Gagal Diperbarui / Dibuat!");
+        return redirect()->back();
+    }
+
+    public function deletePorsiSaham(Request $request, PorsiSaham $porsi_saham) {
+        if($porsi_saham->delete()) {
+            Alert::success("Success", "Porsi Saham Berhasil dihapus");
+            return redirect()->back();
+        }
+        Alert::error("Error", "Porsi Saham Gagal dihapus!");
+        return redirect()->back();
     }
 
     public function getKodeNasabah(Request $request) {

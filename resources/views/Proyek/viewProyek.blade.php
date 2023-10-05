@@ -110,22 +110,28 @@
                                 @if ($proyek->is_request_rekomendasi == false && !$check_green_line && $proyek->stage == 1)
                                     <input type="button" name="proyek-rekomendasi" value="Pengajuan Rekomendasi" class="btn btn-sm btn-success ms-2" id="proyek-rekomendasi" data-bs-toggle="modal" data-bs-target="#modal-send-pengajuan"
                                         style="background-color:#00b48d">
+                                @elseif($proyek->stage > 1 && $proyek->is_disetujui == true &&  $proyek->is_recommended_with_note)
+                                    <div class="" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" data-bs-title="<b>Rekomendasi Aproved</b><br>Silahkan Lanjut Stage Selanjutnya">
+                                        <p class="mt-4 btn btn-sm btn-success ms-2">
+                                            Direkomendasikan dengan catatan
+                                        </p>
+                                    </div>
                                 @elseif($proyek->stage > 1 && $proyek->is_disetujui == true )
                                     <div class="" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" data-bs-title="<b>Rekomendasi Aproved</b><br>Silahkan Lanjut Stage Selanjutnya">
                                         <p class="mt-4 btn btn-sm btn-success ms-2">
-                                            Rekomendasi Approved
+                                            Direkomendasikan
                                         </p>
                                     </div>
                                 @elseif($proyek->stage > 1 && $proyek->is_disetujui == false )
                                     <div class="" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" data-bs-title="<b>Rekomendasi Rejected</b><br>Silahkan Lanjut Stage Selanjutnya">
                                         <p class="mt-4 btn btn-sm btn-danger ms-2">
-                                            Rekomendasi Rejected
+                                            Tidak Direkomendasikan
                                         </p>
                                     </div>
                                 @elseif($proyek->stage > 1 && !$check_green_line)
                                     <div class="" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" data-bs-title="<b>Rekomendasi Aproved</b><br>Silahkan Lanjut Stage Selanjutnya">
                                         <p class="mt-4 btn btn-sm btn-success ms-2">
-                                            Rekomendasi Approved
+                                            Direkomendasikan
                                         </p>
                                     </div>
                                 @elseif($proyek->stage == 1 && $check_green_line)
@@ -225,8 +231,9 @@
                                         $jenis_instansi = $proyek->proyekBerjalan->customer->jenis_instansi ?? null;
                                         $custNegara = $proyek->proyekBerjalan->customer->negara ?? null;
                                         $custProvinsi = $proyek->proyekBerjalan->customer->Provinsi->province_name ?? null;
-                                        $forbes_rank = $proyek->proyekBerjalan->customer->forbes_rank ?? null;
-                                        $lq_rank = $proyek->proyekBerjalan->customer->lq_rank ?? null;
+                                        // $forbes_rank = $proyek->proyekBerjalan->customer->forbes_rank ?? null;
+                                        // $lq_rank = $proyek->proyekBerjalan->customer->lq_rank ?? null;
+                                        $industrySector = $proyek->proyekBerjalan->customer->IndustryOwner ?? null;
                                         $masalahHukum = $proyek->proyekBerjalan->customer->MasalahHukum ?? collect([]);
                                     @endphp
 
@@ -238,13 +245,14 @@
                                     <p>Instansi Pemberi Kerja : <b class="{{ $jenis_instansi ?? "text-danger" }}">{{ $jenis_instansi ?? "*Belum Ditentukan" }}</b></p>
                                     <p>ID Negara Pemberi Kerja : <b class="{{ $custNegara ?? "text-danger" }}">{{ $custNegara ?? "*Belum Ditentukan" }}</b></p>
                                     <p>Provinsi Pemberi Kerja : <b class="{{ $custProvinsi ?? "text-danger" }}">{{ $custProvinsi ?? "*Belum Ditentukan" }}</b></p>
-                                    <p>Fortune Rank Pemberi Kerja : <b class="{{ $forbes_rank ?? "text-danger" }}">{{ $forbes_rank ?? "*Belum Ditentukan" }}</b></p>
-                                    <p>LQ Rank Pemberi Kerja : <b class="{{ $lq_rank ?? "text-danger" }}">{{ $lq_rank ?? "*Belum Ditentukan" }}</b></p>
+                                    <p>Industry Sector Pemberi Kerja : <b class="{{ $industrySector ?? "text-danger" }}">{{ $industrySector->owner_description ?? "*Belum Ditentukan" }}</b></p>
+                                    <p>Industry Attractiveness Pemberi Kerja : <b class="{{ $industrySector ?? "text-danger" }}">{{ $industrySector->owner_attractiveness ?? "*Belum Ditentukan" }}</b></p>
                                     <p>Masalah Hukum Pemberi Kerja : <b class="{{ $masalahHukum->count() == 0 ? "text-success" : "text-danger" }}">{{ $masalahHukum->count() == 0 ? "0 Kasus" : $masalahHukum->count()." Kasus" }}</b></p>
 
                                     <br>
 
-                                    @if (!empty($name_customer) && !empty($proyek->klasifikasi_pasdin) && !empty($proyek->SumberDana->nama_sumber) && !empty($jenis_instansi) && !empty($custNegara) && !empty($custProvinsi) && !empty($forbes_rank) && !empty($lq_rank))
+                                    {{-- @if (!empty($name_customer) && !empty($proyek->klasifikasi_pasdin) && !empty($proyek->SumberDana->nama_sumber) && !empty($jenis_instansi) && !empty($custNegara) && !empty($custProvinsi) && !empty($forbes_rank) && !empty($lq_rank)) --}}
+                                    @if (!empty($name_customer) && !empty($proyek->klasifikasi_pasdin) && !empty($proyek->SumberDana->nama_sumber) && !empty($jenis_instansi) && !empty($custNegara) && !empty($custProvinsi) && !empty($industrySector))
                                         <input class="form-check-input" onclick="sendWa(this)" id="confirm-send-wa" name="confirm-send-wa" type="checkbox">
                                         <i class="fs-6 text-primary">
                                             Saya Setuju Melakukan Pengajuan dan Data Sudah Sudah Terisi Dengan Benar
@@ -2990,7 +2998,7 @@
                                                         Document NDA <i class="bi bi-journal-text"></i>
                                                         <i class="bi-exclamation-circle" data-bs-toggle="tooltip" data-bs-title="Status ini akan berubah menjadi <b>Waiting for Approval</b> secara otomatis ketika Dokumen sudah diupload dan akan muncul button download dokumen final ketika dokumen final nya sudah tersedia di <b>CCM</b>" data-bs-html="true"></i>
                                                         @php
-                                                            $upload_final = $proyek->ContractManagements->UploadFinal->where("category", "=", "Dokumen NDA")->first();
+                                                            $upload_final = $proyek->ContractManagements?->UploadFinal->where("category", "=", "Dokumen NDA")->first();
                                                             // $status = $proyek->DokumenNda->count() < 1 ? "Document belum diupload" : (empty($upload_final) ? "Waiting for Approval" : "Approved");
                                                             // $class_button = $proyek->DokumenNda->count() <a 1 ? "bg-danger" : (empty($upload_final) ? "bg-info" : "bg-success");
                                                         @endphp
@@ -3088,7 +3096,7 @@
                                                         Document MOU <i class="bi bi-journal-text"></i>
                                                         <i class="bi-exclamation-circle" data-bs-toggle="tooltip" data-bs-title="Status ini akan berubah menjadi <b>Waiting for Approval</b> secara otomatis ketika Dokumen sudah diupload dan akan muncul button download dokumen final ketika dokumen final nya sudah tersedia di <b>CCM</b>" data-bs-html="true"></i>
                                                         @php
-                                                            $upload_final = $proyek->ContractManagements->UploadFinal->where("category", "=", "Dokumen MOU")->first();
+                                                            $upload_final = $proyek->ContractManagements?->UploadFinal->where("category", "=", "Dokumen MOU")->first();
                                                             // $status = $proyek->DokumenMou->count() < 1 ? "Document belum diupload" : (empty($upload_final) ? "Waiting for Approval" : "Approved");
                                                             // $class_button = $proyek->DokumenMou->count() < 1 ? "bg-danger" : (empty($upload_final) ? "bg-info" : "bg-success");
                                                         @endphp
@@ -3186,7 +3194,7 @@
                                                         Document ECA <i class="bi bi-journal-text"></i>
                                                         <i class="bi-exclamation-circle" data-bs-toggle="tooltip" data-bs-title="Status ini akan berubah menjadi <b>Waiting for Approval</b> secara otomatis ketika Dokumen sudah diupload dan akan muncul button download dokumen final ketika dokumen final nya sudah tersedia di <b>CCM</b>" data-bs-html="true"></i>
                                                         @php
-                                                            $upload_final = $proyek->ContractManagements->UploadFinal->where("category", "=", "Dokumen ECA")->first();
+                                                            $upload_final = $proyek->ContractManagements?->UploadFinal->where("category", "=", "Dokumen ECA")->first();
                                                             // $status = $proyek->DokumenEca->count() < 1 ? "Document belum diupload" : (empty($upload_final) ? "Waiting for Approval" : "Approved");
                                                             // $class_button = $proyek->DokumenEca->count() < 1 ? "bg-danger" : (empty($upload_final) ? "bg-info" : "bg-success");
                                                         @endphp
@@ -3285,7 +3293,7 @@
                                                         Document ICA <i class="bi bi-journal-text"></i>
                                                         <i class="bi-exclamation-circle" data-bs-toggle="tooltip" data-bs-title="Status ini akan berubah menjadi <b>Waiting for Approval</b> secara otomatis ketika Dokumen sudah diupload dan akan muncul button download dokumen final ketika dokumen final nya sudah tersedia di <b>CCM</b>" data-bs-html="true"></i>
                                                         @php
-                                                            $upload_final = $proyek->ContractManagements->UploadFinal->where("category", "=", "Dokumen ICA")->first();
+                                                            $upload_final = $proyek->ContractManagements?->UploadFinal->where("category", "=", "Dokumen ICA")->first();
                                                             // $status = $proyek->DokumenIca->count() < 1 ? "Document belum diupload" : (empty($upload_final) ? "Waiting for Approval" : "Approved");
                                                             // $class_button = $proyek->DokumenIca->count() < 1 ? "bg-danger" : (empty($upload_final) ? "bg-info" : "bg-success");
                                                         @endphp
@@ -3383,7 +3391,7 @@
                                                         Document RKS <i class="bi bi-journal-text"></i>
                                                         <i class="bi-exclamation-circle" data-bs-toggle="tooltip" data-bs-title="Status ini akan berubah menjadi <b>Waiting for Approval</b> secara otomatis ketika Dokumen sudah diupload dan akan muncul button download dokumen final ketika dokumen final nya sudah tersedia di <b>CCM</b>" data-bs-html="true"></i>
                                                         @php
-                                                            $upload_final = $proyek->ContractManagements->UploadFinal->where("category", "=", "Dokumen RKS")->first();
+                                                            $upload_final = $proyek->ContractManagements?->UploadFinal->where("category", "=", "Dokumen RKS")->first();
                                                             // $status = $proyek->DokumenRks->count() < 1 ? "Document belum diupload" : (empty($upload_final) ? "Waiting for Approval" : "Approved");
                                                             // $class_button = $proyek->DokumenRks->count() < 1 ? "bg-danger" : (empty($upload_final) ? "bg-info" : "bg-success");
                                                         @endphp
@@ -3480,7 +3488,7 @@
                                                         Document ITB TOR <i class="bi bi-journal-text"></i>
                                                         <i class="bi-exclamation-circle" data-bs-toggle="tooltip" data-bs-title="Status ini akan berubah menjadi <b>Waiting for Approval</b> secara otomatis ketika Dokumen sudah diupload dan akan muncul button download dokumen final ketika dokumen final nya sudah tersedia di <b>CCM</b>" data-bs-html="true"></i>
                                                         @php
-                                                            $upload_final = $proyek->ContractManagements->UploadFinal->where("category", "=", "Dokumen ITB/TOR")->first();
+                                                            $upload_final = $proyek->ContractManagements?->UploadFinal->where("category", "=", "Dokumen ITB/TOR")->first();
                                                             // $status = $proyek->DokumenItbTor->count() < 1 ? "Document belum diupload" : (empty($upload_final) ? "Waiting for Approval" : "Approved");
                                                             // $class_button = $proyek->DokumenItbTor->count() < 1 ? "bg-danger" : (empty($upload_final) ? "bg-info" : "bg-success");
                                                         @endphp
@@ -3998,7 +4006,7 @@
                                                         Risk Tender
                                                         <i class="bi-exclamation-circle" data-bs-toggle="tooltip" data-bs-title="Status ini akan berubah menjadi <b>Waiting for Approval</b> secara otomatis ketika Dokumen sudah diupload dan akan muncul button download dokumen final ketika dokumen final nya sudah tersedia di <b>CCM</b>" data-bs-html="true"></i>
                                                         @php
-                                                            $upload_final = $proyek->ContractManagements->UploadFinal->where("category", "=", "Dokumen Resiko - Perolehan")->first();
+                                                            $upload_final = $proyek->ContractManagements?->UploadFinal->where("category", "=", "Dokumen Resiko - Perolehan")->first();
                                                             // $class_button = $proyek->RiskTenderProyek->count() < 1 ? "bg-danger" : (empty($upload_final) ? "bg-info" : "bg-success");
                                                             // $status = $proyek->RiskTenderProyek->count() < 1 ? "Document belum diupload" : (empty($upload_final) ? "Waiting for Approval" : "Approved");
                                                         @endphp

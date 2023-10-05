@@ -274,7 +274,6 @@ class UserController extends Controller
             $request->old("email");
             $request->old("phone-number");
             // return redirect()->back();
-
             Alert::error('Error', "User Gagal Dibuat, Periksa Kembali !");
 
             $validation->validate();

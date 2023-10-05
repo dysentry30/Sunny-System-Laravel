@@ -53,11 +53,17 @@ use App\Models\ContractChangeProposal;
 use App\Models\FieldChange;
 use App\Models\IndustrySector;
 use App\Models\ClaimManagements;
+use App\Models\Departemen;
+use App\Models\Divisi;
+use App\Models\Dop;
+use App\Models\Jabatan;
 use App\Models\JenisProyek;
 use App\Models\PerjanjianKso;
 use App\Models\KriteriaAssessment;
 use App\Models\KriteriaGreenLine;
 use App\Models\MataUang;
+use App\Models\MatriksApprovalRekomendasi;
+use App\Models\Pegawai;
 use App\Models\Provinsi;
 use App\Models\ProyekBerjalans;
 use App\Models\Sbu;
@@ -540,6 +546,11 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post('/customer/nps/save', [CustomerController::class, 'saveNPS']);
 
     Route::post('/customer/karya-inovasi/save', [CustomerController::class, 'saveInovasi']);
+    
+    Route::post('/customer/porsi-saham/save', [CustomerController::class, 'savePorsiSaham']);
+    Route::post('/customer/porsi-saham/edit', [CustomerController::class, 'savePorsiSaham']);
+    Route::delete('/customer/porsi-saham/{porsi_saham}/delete', [CustomerController::class, 'deletePorsiSaham']);
+
 
 
     // Begin :: get Kabupaten
@@ -1977,6 +1988,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     // Begin :: Master Data Kriteria Assessment
     Route::post('/kriteria-assessment/save', function (Request $request) {
         $data = $request->collect();
+        // dd($data);
         $data = $data->map(function($d, $key) use($data) {
             if(is_array($d)) {
                 $d = collect($d)->filter(function($d_item) {
@@ -2069,9 +2081,165 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         return redirect()->back();
     });
 
+    Route::post('/kriteria-assessment/delete', function (Request $request) {
+        $data = $request->collect();
+        $kriteria = KriteriaAssessment::find($data["id-kriteria"]);
+        if($kriteria->delete()) {
+            Alert::success('Success', "Kriteria Assessment berhasil dihapus");
+            return redirect()->back();
+        }
+        Alert::error('Error', "Kriteria Assessment gagal dihapus");
+        return redirect()->back();
+    });
+
     Route::get('/kriteria-assessment', function (Request $request) {
         $kriteria_assessments = KriteriaAssessment::all();
         return view("MasterData/KriteriaAssessment", compact(["kriteria_assessments"]));
+    });
+
+    Route::get('/matriks-approval-rekomendasi', function () {
+        $approval_rekomendasi = MatriksApprovalRekomendasi::with(["Pegawai", "Divisi"])->where("tahun", "=", (int) date("Y"))->get();
+        // $jabatans = Jabatan::where("tahun", "=", (int) date("Y"))->get();
+        // $unit_kerjas = UnitKerja::whereNotIn("divcode", ["B", "C", "D", "O", "U", "F", "L"])->get();
+        $divisi_all = Divisi::all();
+        $pegawai_all = Pegawai::all();
+        $departemens = Departemen::all();
+        // dd($approval_rekomendasi);
+        return view("MasterData/MatriksApprovalRekomendasi", compact(["approval_rekomendasi", "divisi_all", "pegawai_all", "departemens"]));
+    });
+
+    Route::post('/matriks-approval-rekomendasi/save', function (Request $request) {
+        $data = $request->all();
+        $rules = [
+            "tahun" => "required|numeric",
+            "nama-pegawai" => "required",
+            "unit-kerja" => "required",
+            "klasifikasi-proyek" => "required",
+            "departemen" => "required",
+            "kategori" => "required",
+        ];
+        // $is_validate = $request->validateWithBag("post", [
+        //     "tahun" => "required|numeric",
+        //     "jabatan" => "required",
+        //     "unit-kerja" => "required",
+        // ]);
+        $is_invalid = validateInput($data, $rules);
+
+        if(!empty($is_invalid)) {
+            Alert::html("Error", "Field <b>$is_invalid</b> harus terisi!", "error");
+            return redirect()->back()->with("modal", $data["modal"]);
+        }
+
+        $approval_rekomendasi = new MatriksApprovalRekomendasi();
+        $approval_rekomendasi->tahun = $data["tahun"];
+        // $approval_rekomendasi->jabatan = $data["jabatan"];
+        $approval_rekomendasi->nama_pegawai = $data["nama-pegawai"];
+        $approval_rekomendasi->unit_kerja = $data["unit-kerja"];
+        $approval_rekomendasi->klasifikasi_proyek = $data["klasifikasi-proyek"];
+        $approval_rekomendasi->kategori = $data["kategori"];
+        $approval_rekomendasi->departemen = $data["departemen"];
+
+        if($approval_rekomendasi->save()) {
+            Alert::success('Success', "Matriks Approval Rekomendasi berhasil ditambahkan");
+            return redirect()->back();
+        }
+        Alert::error('Error', "Matriks Approval Rekomendasi gagal ditambahkan");
+        return redirect()->back();
+    });
+
+    Route::post('/matriks-approval-rekomendasi/update', function (Request $request) {
+        $data = $request->all();
+        $rules = [
+            "tahun" => "required|numeric",
+            "nama-pegawai" => "required",
+            "unit-kerja" => "required",
+            "klasifikasi-proyek" => "required",
+            "kategori" => "required",
+            "departemen" => "required"
+        ];
+        // $is_validate = $request->validateWithBag("post", [
+        //     "tahun" => "required|numeric",
+        //     "jabatan" => "required",
+        //     "unit-kerja" => "required",
+        // ]);
+        $is_invalid = validateInput($data, $rules);
+
+        if(!empty($is_invalid)) {
+            Alert::html("Error", "Field <b>$is_invalid</b> harus terisi!", "error");
+            return redirect()->back()->with("modal", $data["modal"]);
+        }
+
+        $approval_rekomendasi = MatriksApprovalRekomendasi::find($data["id-matriks-approval"]);
+        $approval_rekomendasi->tahun = $data["tahun"];
+        // $approval_rekomendasi->jabatan = $data["jabatan"];
+        $approval_rekomendasi->nama_pegawai = $data["nama-pegawai"];
+        $approval_rekomendasi->unit_kerja = $data["unit-kerja"];
+        $approval_rekomendasi->klasifikasi_proyek = $data["klasifikasi-proyek"];
+        $approval_rekomendasi->departemen = $data["departemen"];
+        $approval_rekomendasi->kategori = $data["kategori"];
+
+        // dd($approval_rekomendasi);
+
+        if($approval_rekomendasi->save()) {
+            Alert::success('Success', "Matriks Approval Rekomendasi berhasil diperbarui");
+            return redirect()->back();
+        }
+        Alert::error('Error', "Matriks Approval Rekomendasi gagal diperbarui");
+        return redirect()->back();
+    });
+
+    Route::post('/matriks-approval-rekomendasi/delete', function (Request $request) {
+        $data = $request->all();
+        // dd($data);
+        $approval_rekomendasi = MatriksApprovalRekomendasi::find($data["id-matriks-approval"]);
+
+        if($approval_rekomendasi->delete()) {
+            Alert::success('Success', "Matriks Approval Rekomendasi berhasil dihapus");
+            return redirect()->back();
+        }
+        Alert::error('Error', "Matriks Approval Rekomendasi gagal dihapus");
+        return redirect()->back();
+    });
+
+    // Begin :: Master Data Jabatan
+    Route::get('/jabatan', function () {
+        $jabatans = Jabatan::where("tahun", "=", (int) date("Y"))->get();
+        $dops = Dop::all();
+        return view("MasterData/Jabatan", compact(["jabatans", "dops"]));
+    });
+
+    Route::post('/jabatan/save', function (Request $request) {
+        $data = $request->collect();
+        // dd($data);
+        $rules = [
+            "tahun" => "required|numeric",
+            "nama-jabatan" => "required",
+            "unit-kerja" => "required",
+        ];
+        $is_invalid = validateInput($data->toArray(), $rules);
+
+        if(!empty($is_invalid)) {
+            Alert::html("Error", "Field <b>$is_invalid</b> harus terisi!", "error");
+            return redirect()->back()->with("modal", $data["modal"]);
+        }
+        $data = $data->map(function($d) {
+            if(is_array($d)) {
+                return collect($d)->join(",");
+            }
+            return $d;
+        });
+
+        $update_jabatan = Jabatan::find($data["id-jabatan"]);
+        $update_jabatan->nama_jabatan = $data["nama-jabatan"];
+        $update_jabatan->unit_kerja = $data["unit-kerja"];
+        $update_jabatan->tahun = $data["tahun"];
+
+        if($update_jabatan->save()) {
+            Alert::success('Success', "Jabatan berhasil diperbarui");
+            return redirect()->back();
+        }
+        Alert::error('Error', "Jabatan gagal diperbarui");
+        return redirect()->back();
     });
 
     Route::get('/otomasi-approval', [OtomasiApprovalController::class, 'index']);

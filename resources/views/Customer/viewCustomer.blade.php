@@ -1044,11 +1044,11 @@
                                                         <br>
 
                                                         <!--begin::Data Porsi Saham-->
-                                                        <div id="container-porsi-saham">
+                                                        <div id="container-porsi-saham" style="display: ">
                                                             <!--begin::INPUT PIC-->
                                                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                                                 Porsi Saham
-                                                                <a href="#" Id="Plus" data-bs-toggle="modal" data-bs-target="#kt_modal_porsi_saham">+</a>
+                                                                <a href="#" Id="Plus" data-bs-toggle="modal" data-bs-target="#kt_modal_input_porsi_saham">+</a>
                                                             </h3>
                                                             <!--end::INPUT PIC-->
                                                             <!--begin::Table-->
@@ -1057,7 +1057,7 @@
                                                                 <thead>
                                                                     <!--begin::Table row-->
                                                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                        <th class="text-center">No.</th>
+                                                                        <th class="text-center">No</th>
                                                                         <th class="min-w-auto">Nama</th>
                                                                         <th class="min-w-auto">Porsi Saham</th>
                                                                         <th class="min-w-auto">Action</th>
@@ -1070,28 +1070,21 @@
                                                                     $no = 1;
                                                                 @endphp
                                                                 <tbody class="fw-bold text-gray-600">
-                                                                    <tr>
-                                                                        <td class="text-center">
-                                                                            1
-                                                                        </td>
-                                                                        <td>
-                                                                            <a href="#" class="text-gray-800 text-hover-primary">Bagas</a>
-                                                                        </td>
-                                                                        <td class="text-center">
-                                                                            50%
-                                                                        </td>
-                                                                        <td class="text-center">
-                                                                            <small>
-                                                                                <p class="btn btn-sm btn-light btn-active-primary">
-                                                                                    Delete
-                                                                                </p>
-                                                                                {{-- <p data-bs-toggle="modal" data-bs-target="#kt_pic_delete_{{ $pic->id }}" id="modal-delete"
-                                                                                    class="btn btn-sm btn-light btn-active-primary">
-                                                                                    Delete
-                                                                                </p> --}}
-                                                                            </small>
-                                                                        </td>
-                                                                    </tr>
+                                                                    @foreach ($customer->PorsiSaham as $key => $item)
+                                                                        <tr>
+                                                                            <td class="text-center">
+                                                                                {{ $key + 1 }}
+                                                                            </td>
+                                                                            <td>
+                                                                                <a href="#" class="text-gray-800 text-hover-primary" data-bs-toggle="modal"
+                                                                                data-bs-target="#kt_modal_edit_porsi_saham_{{ $item->id }}">{{ $item->nama}} </a>
+                                                                            </td>
+                                                                            <td class="text-center">{{ $item->porsi_saham }} %</td>
+                                                                            <td class="text-center">
+                                                                                <button type="button" class="btn btn-sm btn-light btn-active-danger" data-bs-toggle="modal" data-bs-target="#kt_porsi_saham_delete_{{ $item->id }}">Delete</button>
+                                                                            </td>
+                                                                        </tr>
+                                                                    @endforeach
                                                                 </tbody>
                                                                 <!--end::Table body-->
                                                             </table>
@@ -5473,6 +5466,178 @@
     @endforeach
 </div>
 <!--End:: Modal Karya Inovasi-->
+
+<!--Begin:: Modal Porsi Saham New-->
+<div class="pop-up porsi-saham-new">
+    <form action="/customer/porsi-saham/save" method="POST">
+        @csrf
+        <input type="hidden" name="id-customer" value="{{ $customer->id_customer }}">
+        <div class="modal fade" id="kt_modal_input_porsi_saham" tabindex="-1" aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-500px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header">
+                        <!--begin::Modal title-->
+                        <h2>Add Porsi Saham</h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <i class="bi bi-x-lg"></i>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
+                    </div>
+                    <!--end::Modal header-->
+                    <!--begin::Modal body-->
+                    <div class="modal-body py-lg-6 px-lg-6" style="overflow:hidden;">
+                        <!--Begin:Nama Proyek-->
+                        <div class="row">
+                            <div class="d-flex flex-column">
+                                <p>Nama</p>
+                                <input type="text" name="name-porsi-saham" class="form-control form-control-sm">
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="d-flex flex-column">
+                                <p>Porsi</p>
+                                <input type="text" name="porsi" oninput="digitsOnly(this, 3)" class="form-control form-control-sm">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-sm btn-primary">Save</button>
+                    </div>
+                    <!--end::Input group-->
+    
+                </div>
+                <!--end::Modal body-->
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+        </div>
+    </form>
+</div>
+<!--End:: Modal Porsi Saham New-->
+
+<!--Begin:: Modal Porsi Saham Edit-->
+@foreach ($customer->PorsiSaham as $item)
+<div class="pop-up porsi-saham-edit">
+    <form action="/customer/porsi-saham/edit" method="POST">
+        @csrf
+        <input type="hidden" name="id-porsi" value="{{ $item->id }}">
+        <input type="hidden" name="id-customer" value="{{ $customer->id_customer }}">
+        <div class="modal fade" id="kt_modal_edit_porsi_saham_{{ $item->id }}" tabindex="-1" aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-500px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header">
+                        <!--begin::Modal title-->
+                        <h2>Edit Porsi Saham</h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <i class="bi bi-x-lg"></i>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
+                    </div>
+                    <!--end::Modal header-->
+                    <!--begin::Modal body-->
+                    <div class="modal-body py-lg-6 px-lg-6" style="overflow:hidden;">
+                        <!--Begin:Nama Proyek-->
+                        <div class="row">
+                            <div class="d-flex flex-column">
+                                <p>Nama</p>
+                                <input type="text" name="name-porsi-saham" value="{{ $item->nama }}" class="form-control form-control-sm">
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="d-flex flex-column">
+                                <p>Porsi</p>
+                                <input type="text" name="porsi" value="{{ $item->porsi_saham}}" oninput="digitsOnly(this, 3)" class="form-control form-control-sm">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-sm btn-primary">Save</button>
+                    </div>
+                    <!--end::Input group-->
+    
+                </div>
+                <!--end::Modal body-->
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+        </div>
+    </form>
+</div>
+@endforeach
+<!--End:: Modal Porsi Saham Edit-->
+
+<!--Begin:: Modal Porsi Saham Delete-->
+@foreach ($customer->PorsiSaham as $item)
+<form action="/customer/porsi-saham/{{ $item->id }}/delete" method="post">
+    @method("delete")
+    @csrf
+    <div class="modal fade" id="kt_porsi_saham_delete_{{ $item->id }}" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-800px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Hapus : {{ $item->nama }}
+                    </h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <i class="bi bi-x-lg"></i>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
+                    Data yang dihapus tidak dapat dipulihkan, anda yakin ?
+                    <br>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-sm btn-light btn-active-danger">Delete</button>
+                </div>
+                <!--end::Input group-->
+
+            </div>
+            <!--end::Modal body-->
+        </div>
+        <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+    </div>
+
+</form>
+@endforeach
+<!--End:: Modal Porsi Saham Delete-->
+
+
 <!--End::Modal-->
 
 @php
@@ -7524,13 +7689,20 @@
 <script>
     function getValueInstansi(e) {
         const value = e.value;
-        console.log(value);
         if(value.includes("BUMN")) {
             document.querySelector("#group-tier-div").style.display = "";
         } else if(value.includes("Anak dan Turunan BUMN")) {
             document.querySelector("#group-tier-div").style.display = "";
         } else {
             document.querySelector("#group-tier-div").style.display = "none";
+            $("#group-tier").select2({
+                minimumResultsForSearch: -1
+            }).val("").trigger("change");
+        }
+        if(value == "Anak dan Turunan BUMN") {
+            document.querySelector("#container-porsi-saham").style.display = "";
+        } else {
+            document.querySelector("#container-porsi-saham").style.display = "none";
             $("#group-tier").select2({
                 minimumResultsForSearch: -1
             }).val("").trigger("change");
@@ -7576,4 +7748,16 @@
     });
 </script>
 <!--end::Enable Search Bar Select2-->
+
+<!--start::Digit Only function-->
+<script>
+    function digitsOnly(e, maxLength) {
+        if(e.value.match(/\D/gi)) Toast.fire("Invalid Format!", "Tidak boleh mengandung karakter atau simbol", "error");
+        const formattedVal = e.value.replaceAll(/\D/gi, "");
+        if(formattedVal.length > maxLength) Toast.fire("Invalid Format!", "Tidak boleh lebih dari 3 digit", "error");
+        e.value = formattedVal.substring(0, maxLength);
+    }
+</script>
+<!--end::Digit Only function-->
+
 @endsection

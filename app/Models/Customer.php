@@ -98,6 +98,10 @@ class Customer extends Model
     public function Piutang() {
         return $this->hasMany(Piutang::class, "debitor", "kode_nasabah");
     }
+    
+    public function PorsiSaham() {
+        return $this->hasMany(PorsiSaham::class, "id_customer", "id_customer");
+    }
 
     public function Provinsi()
     {
