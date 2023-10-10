@@ -778,7 +778,7 @@
                                     </div>
                                 </div>
                                 <!--begin::Input group Website-->
-                                <div class="fv-row mt-7 {{ $kriteria->is_active ? 'd-none' : '' }}" id="finish-periode-edit">
+                                <div class="fv-row mt-7 {{ $kriteria->is_active ? 'd-none' : '' }}" id="finish-periode-edit-{{ $kriteria->id_kriteria_green_line }}">
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
                                         <span class="required">Finish Periode</span>
@@ -829,7 +829,7 @@
                             <div class="row ms-1 my-7">
                                 <!--Begin::Input Checkbox-->
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="edit" id="active-periode" name="isActive" onchange="setActive(this)" {{ !empty($kriteria->is_active) && $kriteria->is_active ? "checked" : "" }}>
+                                    <input class="form-check-input" type="checkbox" value="edit" id="active-periode" name="isActive" onchange="setActive(this, '{{ $kriteria->id_kriteria_green_line }}')" {{ !empty($kriteria->is_active) && $kriteria->is_active ? "checked" : "" }}>
                                     <label class="form-check-label" for="active-periode">
                                         Active
                                     </label>
@@ -1160,7 +1160,7 @@
             // minimumResultsForSearch: Infinity,
         });
     });
-    function setActive(e) {
+    function setActive(e, id = null) {
         if (e.value == "create") {
             const elementFinish = document.querySelector('#finish-periode');
             if(e.checked){
@@ -1173,8 +1173,7 @@
                 elementFinish.querySelector('select[name="tahun_finish"]').removeAttribute('disabled');
             }
         } else {
-            console.log(e.checked);
-            const elementFinish = document.querySelector('#finish-periode-edit');
+            const elementFinish = document.querySelector(`#finish-periode-edit-${id}`);
             if(e.checked){
                 console.log("Tess");
                 elementFinish.classList.add('d-none');

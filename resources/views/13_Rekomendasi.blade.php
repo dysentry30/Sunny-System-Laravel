@@ -1448,7 +1448,8 @@
                                     <button type="button" data-bs-toggle="modal" id="show-modal-tolak" style="display: none" data-bs-target="#kt_modal_view_proyek_tolak_rekomendasi_{{$proyek->kode_proyek}}">clickhere</button>
                                     <label for="kategori-rekomendasi" class="text-start">Kategori Rekomendasi: </label>
                                     {{-- <select onchange="disableEnableTextArea(this)" id="kategori-rekomendasi" name="kategori-rekomendasi" --}}
-                                    <select id="kategori-rekomendasi" onchange="showModalTolakRekomendasi(this, '{{$proyek->kode_proyek}}')" name="kategori-rekomendasi"
+                                    {{-- <select id="kategori-rekomendasi" onchange="showModalTolakRekomendasi(this, '{{$proyek->kode_proyek}}')" name="kategori-rekomendasi" --}}
+                                    <select id="kategori-rekomendasi" name="kategori-rekomendasi"
                                         class="form-select form-select-solid w-auto"
                                         style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
                                         data-placeholder="Direktorat" data-select2-id="select2-data-kategori-rekomendasi" tabindex="-1"
@@ -1456,8 +1457,12 @@
                                         <option value=""></option>
                                         <option value="Direkomendasikan" selected>Direkomendasikan</option>
                                         <option value="Direkomendasikan dengan catatan">Direkomendasikan dengan catatan</option>
-                                        <option value="Rekomendasi Ditolak">Rekomendasi Ditolak</option>
+                                        <option value="Tidak Direkomendasikan">Tidak Direkomendasikan</option>
                                     </select>
+                                    <br>
+                                    <label for="kategori-rekomendasi" class="text-start"><span class="required">Catatan: </span></label>
+                                    <textarea name="alasan-ditolak" class="form-control form-control-solid"cols="1" rows="5"></textarea>
+                                    <br>
                                     <input type="submit" class="btn btn-sm btn-success" name="rekomendasi-setujui" value="Submit">
                                 </form>
                             @elseif (is_null($proyek->is_disetujui) && $matriks_user->contains("kategori", "Persetujuan") && $proyek->is_recommended && !$is_user_exist_persetujuan)
@@ -1499,13 +1504,63 @@
                         <div class="modal-body">
                             <div class="row">
                                 @csrf
-                                <input type="hidden" value="Rekomendasi Ditolak" name="kategori-rekomendasi" id="kategori-rekomendasi_{{$proyek->kode_proyek}}">
+                                <input type="hidden" value="Tidak Direkomendasikan" name="kategori-rekomendasi" id="kategori-rekomendasi_{{$proyek->kode_proyek}}">
                                 <input type="hidden" name="kode-proyek" value="{{$proyek->kode_proyek}}">
                                 <textarea name="alasan-ditolak" class="form-control form-control-solid" id="alasan-ditolak_{{$proyek->kode_proyek}}" cols="1" rows="5"></textarea>
                             </div>
                         </div>
                         <div class="modal-footer">
                             <input type="submit" name="rekomendasi-setujui" class="btn btn-sm btn-danger" value="Ditolak dengan alasan">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="kt_modal_view_proyek_di_rekomendasikan_{{$proyek->kode_proyek}}" tabindex="-1" aria-labelledby="kt_modal_view_proyek_di_rekomendasikan_{{$proyek->kode_proyek}}" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+                <div class="modal-content">
+                    
+                    <form action="" method="get">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Alasan Di Rekomendasikan</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                @csrf
+                                <input type="hidden" value="Direkomendasikan" name="kategori-rekomendasi" id="kategori-rekomendasi_{{$proyek->kode_proyek}}">
+                                <input type="hidden" name="kode-proyek" value="{{$proyek->kode_proyek}}">
+                                <textarea name="alasan-ditolak" class="form-control form-control-solid" id="alasan-ditolak_{{$proyek->kode_proyek}}" cols="1" rows="5"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="submit" name="rekomendasi-setujui" class="btn btn-sm btn-success" value="Direkomendasikan">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="kt_modal_view_proyek_rekomendasi_dengan_catatan_{{$proyek->kode_proyek}}" tabindex="-1" aria-labelledby="kt_modal_view_proyek_rekomendasi_dengan_catatan_{{$proyek->kode_proyek}}" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+                <div class="modal-content">
+                    
+                    <form action="" method="get">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Alasan Rekomendasi</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                @csrf
+                                <input type="hidden" value="Direkomendasikan dengan catatan" name="kategori-rekomendasi" id="kategori-rekomendasi_{{$proyek->kode_proyek}}">
+                                <input type="hidden" name="kode-proyek" value="{{$proyek->kode_proyek}}">
+                                <textarea name="alasan-ditolak" class="form-control form-control-solid" id="alasan-ditolak_{{$proyek->kode_proyek}}" cols="1" rows="5"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="submit" name="rekomendasi-setujui" class="btn btn-sm btn-success" value="Direkomendasikan dengan alasan">
                         </div>
                     </form>
                 </div>
@@ -1604,7 +1659,7 @@
     <script>
         function disableEnableTextArea(e) {
             const value = e.value;
-            if(value == "Direkomendasikan" || value == "Rekomendasi Ditolak") {
+            if(value == "Direkomendasikan" || value == "Tidak Direkomendasikan") {
                 // e.parentElement.querySelector("#note-rekomendasi").setAttribute("readonly", true);
                 if(!e.parentElement.querySelector("#note-rekomendasi").hasAttribute("disabled")) {
                     e.parentElement.querySelector("#note-rekomendasi").setAttribute("disabled", true);
@@ -1620,8 +1675,14 @@
     <script>
         function showModalTolakRekomendasi(e, kodeProyek) {
             const value = e.value;
-            if(value == "Rekomendasi Ditolak") {
+            if(value == "Tidak Direkomendasikan") {
                 const button = document.getElementById("show-modal-tolak");
+                button.click();
+            }else if(value == "Direkomendasikan") {
+                const button = document.getElementById("show-modal-direkomendasikan");
+                button.click();
+            }else {
+                const button = document.getElementById("show-modal-rekomendasi-dengan-catatan");
                 button.click();
             }
         }

@@ -86,6 +86,7 @@
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0 bg-primary">
                                         <th class="min-w-auto text-white">No.</th>
                                         <th class="min-w-auto text-white">Kategori</th>
+                                        <th class="min-w-auto text-white">Item</th>
                                         <th class="min-w-auto text-white">Bobot</th>
                                         <th class="min-w-auto text-white">Kriteria 1</th>
                                         <th class="min-w-auto text-white">Kriteria 2</th>
@@ -107,6 +108,7 @@
                                         <tr>
                                             <td class="text-center align-middle">{{$no++}}</td>
                                             <td class="align-middle">{{$item->kategori}}</td>
+                                            <td class="align-middle">{{$item->item}}</td>
                                             <td class="text-center align-middle">{{ $item->bobot }}</td>
                                             <td class="text-center align-middle">{{ $item->kriteria_1 }}</td>
                                             <td class="text-center align-middle">{{ $item->kriteria_2 }}</td>
@@ -195,11 +197,35 @@
                                         <select id="kategori" name="kategori"
                                             class="form-select form-select-solid select2-hidden-accessible"
                                             data-control="select2" data-hide-search="true" data-placeholder="Pilh Nota Rekomendasi..."
-                                            data-select2-id="select2-feature-kategori" tabindex="-1" aria-hidden="true">
+                                            data-select2-id="select2-feature-kategori" tabindex="-1" aria-hidden="true" onchange="setItem(this)">
                                             <option value="" selected></option>
                                             <option value="Legalitas Perusahaan">Legalitas Perusahaan</option>
                                             <option value="Reputasi Pemberi Kerja">Reputasi Pemberi Kerja</option>
                                             <option value="Financial">Financial</option>
+                                        </select>
+                                        <!--end::Input-->
+                                    </div>
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End begin::Col-->
+                            
+                            <!--begin::Col-->
+                            <div class="">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span class="required">Item</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <div class="d-flex flex-row gap-2">
+                                        <!--begin::Input-->
+                                        <select id="item" name="item"
+                                            class="form-select form-select-solid select2-hidden-accessible"
+                                            data-control="select2" data-hide-search="true" data-placeholder="Pilh Item"
+                                            data-select2-id="select2-item" tabindex="-1" aria-hidden="true">
+                                            <option value="" selected></option>
                                         </select>
                                         <!--end::Input-->
                                     </div>
@@ -327,7 +353,7 @@
                                             <select id="kategori" name="kategori"
                                                 class="form-select form-select-solid select2-hidden-accessible"
                                                 data-control="select2" data-hide-search="true" data-placeholder="Pilh Nota Rekomendasi..."
-                                                data-select2-id="select2-feature-edit-{{ $item->id }}" tabindex="-1" aria-hidden="true">
+                                                data-select2-id="select2-feature-edit-{{ $item->id }}" tabindex="-1" aria-hidden="true" onchange="setItem(this, '{{ $item->id }}')">
                                                 <option value="" selected></option>
                                                 <option value="Legalitas Perusahaan" {{ $item->kategori == "Legalitas Perusahaan" ? "selected" : "" }}>Legalitas Perusahaan</option>
                                                 <option value="Reputasi Pemberi Kerja" {{ $item->kategori == "Reputasi Pemberi Kerja" ? "selected" : "" }}>Reputasi Pemberi Kerja</option>
@@ -339,6 +365,37 @@
                                     <!--end::Input group-->
                                 </div>
                                 <!--End begin::Col-->
+
+                                <!--begin::Col-->
+                            <div class="">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span class="required">Item</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <div class="d-flex flex-row gap-2">
+                                        <!--begin::Input-->
+                                        <select id="item-{{ $item->id }}" name="item"
+                                            class="form-select form-select-solid select2-hidden-accessible"
+                                            data-control="select2" data-hide-search="true" data-placeholder="Pilh Item" tabindex="-1" aria-hidden="true">
+                                            @if ($item->kategori != "Financial")
+                                                <option value="{{ $item->item }}" selected>{{ $item->item }}</option>
+                                            @else
+                                                <option value="Current Ratio" {{ $item->item == "Current Ratio" ? 'selected' : '' }}></option>
+                                                <option value="Cash Ratio" {{ $item->item == "Cash Ratio" ? 'selected' : '' }}></option>
+                                                <option value="Debt to Equity Ratio" {{ $item->item == "Debt to Equity Ratio" ? 'selected' : '' }}></option>
+                                                <option value="Kepatuhan Pembayaran Pajak" {{ $item->item == "Kepatuhan Pembayaran Pajak" ? 'selected' : '' }}></option>
+                                            @endif
+
+                                        </select>
+                                        <!--end::Input-->
+                                    </div>
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End begin::Col-->
     
                                 <div class="row mb-7">
                                     <label class="fs-6 fw-bold form-label mt-3">
@@ -475,6 +532,85 @@
                 }
             }
         })
+    }
+
+    function setItem(elt, id=null, text=null) {
+        if (elt.value == "Legalitas Perusahaan") {
+            let data = [
+                {
+                    id: "Legalitas Institusi / Perusahaan",
+                    text: 'Legalitas Institusi / Perusahaan'
+                }
+            ]
+            if (id != null) {
+                $(`#item-${id}`).empty() 
+                $(`#item-${id}`)
+                $(`#item-${id}`).select2({
+                    minimumResultsForSearch: -1,
+                    data: data
+                })
+            } else {
+                $(`#item`).empty() 
+                $(`#item`).select2({
+                    minimumResultsForSearch: -1,
+                    data: data
+                }) 
+            }
+        } else if(elt.value == "Reputasi Pemberi Kerja") {
+            let data = [
+                {
+                    id: "Reputasi Pemberi Kerja Dalam Pemenuhan Kontrak (Historical)",
+                    text: 'Reputasi Pemberi Kerja Dalam Pemenuhan Kontrak (Historical)'
+                }
+            ]
+            if (id != null) {
+                $(`#item-${id}`).empty() 
+                $(`#item-${id}`)
+                $(`#item-${id}`).select2({
+                    minimumResultsForSearch: -1,
+                    data: data
+                })
+            } else {
+                $(`#item`).empty() 
+                $(`#item`).select2({
+                    minimumResultsForSearch: -1,
+                    data: data
+                }) 
+            }
+        } else {
+            let data = [
+                {
+                    id: 'Current Ratio',
+                    text: 'Current Ratio'
+                },
+                {
+                    id: 'Cash Ratio',
+                    text: 'Cash Ratio'
+                },
+                {
+                    id: 'Debt to Equity Ratio',
+                    text: 'Debt to Equity Ratio'
+                },
+                {
+                    id: 'Kepatuhan Pembayaran Pajak',
+                    text: 'Kepatuhan Pembayaran Pajak'
+                }
+            ]
+            if (id != null) {
+                $(`#item-${id}`).empty() 
+                $(`#item-${id}`).select2({
+                    minimumResultsForSearch: -1,
+                    data: data
+                })
+                $(`#item-${id}`).val()
+            } else {
+                $(`#item`).empty() 
+                $(`#item`).select2({
+                    minimumResultsForSearch: -1,
+                    data: data
+                }) 
+            }
+        }
     }
 </script>
 @endsection

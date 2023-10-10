@@ -1373,24 +1373,48 @@
                                                                 </label>
                                                                 <!--end::Label-->
                                                                 <!--begin::Input-->
+                                                                @php
+                                                                    if (!empty($proyek->nilai_rkap)) {
+                                                                        $klasifikasi = $proyek->nilai_rkap;
+                                                                    }else if(!empty($proyek->nilaiok_awal)){
+                                                                        $klasifikasi = $proyek->nilaiok_awal;
+                                                                    }else{
+                                                                        $klasifikasi = 0;
+                                                                    }
+
+                                                                    // if ($proyek->klasifikasi_pasdin == 'Proyek Besar' || (!empty($klasifikasi) && ($klasifikasi > 500000000000 && $klasifikasi <= 2000000000000))) {
+                                                                    //     $value = "Proyek Besar";
+                                                                    // }elseif ($proyek->klasifikasi_pasdin == 'Proyek Menengah' || (!empty($klasifikasi) && ($klasifikasi > 250000000000 && $klasifikasi <= 500000000000))) {
+                                                                    //     $value = "Proyek Menengah";
+                                                                    // }elseif ($proyek->klasifikasi_pasdin == 'Proyek Kecil' || (!empty($klasifikasi) && ( $klasifikasi > 0 && $klasifikasi <= 250000000000))) {
+                                                                    //     $value = "Proyek Kecil";
+                                                                    // }elseif($proyek->klasifikasi_pasdin == 'Mega Proyek' || (!empty($klasifikasi) && $klasifikasi > 2000000000000)) {
+                                                                    //     $value = "Mega Proyek";
+                                                                    // }
+                                                                @endphp
                                                                 <select id="ra-klasifikasi-proyek" name="ra-klasifikasi-proyek"
                                                                     class="form-select form-select-solid"
                                                                     data-control="select2" data-hide-search="true"
                                                                     data-placeholder="RA Klasifikasi Proyek">
                                                                     <option value="" selected></option>
                                                                     <option value="Proyek Besar"
-                                                                        {{ $proyek->klasifikasi_pasdin == 'Proyek Besar' ? 'selected' : '' }}>
+                                                                        {{ $proyek->klasifikasi_pasdin == 'Proyek Besar' || (!empty($klasifikasi) && ($klasifikasi > 500000000000 && $klasifikasi <= 2000000000000)) ? 'selected' : '' }}>
                                                                         Proyek Besar</option>
                                                                     <option value="Proyek Menengah"
-                                                                        {{ $proyek->klasifikasi_pasdin == 'Proyek Menengah' ? 'selected' : '' }}>
+                                                                        {{ $proyek->klasifikasi_pasdin == 'Proyek Menengah' || (!empty($klasifikasi) && ($klasifikasi > 250000000000 && $klasifikasi <= 500000000000)) ? 'selected' : '' }}>
                                                                         Proyek Menengah</option>
                                                                     <option value="Proyek Kecil"
-                                                                        {{ $proyek->klasifikasi_pasdin == 'Proyek Kecil' ? 'selected' : '' }}>
+                                                                        {{ $proyek->klasifikasi_pasdin == 'Proyek Kecil' || (!empty($klasifikasi) && ( $klasifikasi > 0 && $klasifikasi <= 250000000000)) ? 'selected' : '' }}>
                                                                         Proyek Kecil</option>
                                                                     <option value="Mega Proyek"
-                                                                        {{ $proyek->klasifikasi_pasdin == 'Mega Proyek' ? 'selected' : '' }}>
+                                                                        {{ $proyek->klasifikasi_pasdin == 'Mega Proyek' || (!empty($klasifikasi) && $klasifikasi > 2000000000000) ? 'selected' : '' }}>
                                                                         Mega Proyek</option>
                                                                 </select>
+                                                                {{-- <input type="text"
+                                                                    class="form-control reformat form-control-solid"
+                                                                    id="ra-klasifikasi-proyek" name="ra-klasifikasi-proyek"
+                                                                    value="{{ $value }}"
+                                                                    placeholder="RA Klasifikasi Proyek" readonly/> --}}
                                                                 <!--end::Input-->
                                                             </div>
                                                             <!--end::Input group-->

@@ -145,12 +145,13 @@
                                 <thead>
                                     <!--begin::Table row-->
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                        <th class="min-w-auto">Tahun</th>
-                                        <th class="min-w-auto">Nama Pegawai</th>
-                                        <th class="min-w-auto">Unit Kerja</th>
+                                        <th class="min-w-125px">Nama Pegawai</th>
+                                        <th class="min-w-100px">Unit Kerja</th>
                                         <th class="min-w-auto">Departemen</th>
                                         <th class="min-w-auto">Klasifikasi Proyek</th>
                                         <th class="min-w-auto">Kategori</th>
+                                        <th class="min-w-auto text-white">Start Periode</th>
+                                        <th class="min-w-auto text-white">Finish Periode</th>
                                         <th class="min-w-auto">Action</th>
                                     </tr>
                                     <!--end::Table row-->
@@ -163,9 +164,90 @@
                                 @endphp
                                 <tbody class="fw-bold text-gray-600">
                                     @foreach ($approval_rekomendasi as $approval)
+                                        @php
+                                            switch($approval->start_bulan){
+                                            case "1":
+                                            $start_bulan = "Januari"."-".$approval->start_tahun;
+                                            break;
+                                            case "2":
+                                            $start_bulan = "Februari"."-".$approval->start_tahun;
+                                            break;
+                                            case "3":
+                                            $start_bulan = "Maret"."-".$approval->start_tahun;
+                                            break;
+                                            case "4":
+                                            $start_bulan = "April"."-".$approval->start_tahun;
+                                            break;
+                                            case "5":
+                                            $start_bulan = "Mei"."-".$approval->start_tahun;
+                                            break;
+                                            case "6":
+                                            $start_bulan = "Juni"."-".$approval->start_tahun;
+                                            break;
+                                            case "7":
+                                            $start_bulan = "Juli"."-".$approval->start_tahun;
+                                            break;
+                                            case "8":
+                                            $start_bulan = "Agustus"."-".$approval->start_tahun;
+                                            break;
+                                            case "9":
+                                            $start_bulan = "September"."-".$approval->start_tahun;
+                                            break;
+                                            case "10":
+                                            $start_bulan = "Oktober"."-".$approval->start_tahun;
+                                            break;
+                                            case "11":
+                                            $start_bulan = "November"."-".$approval->start_tahun;
+                                            break;
+                                            case "12":
+                                            $start_bulan = "Desember"."-".$approval->start_tahun;
+                                            break;
+                                            default:
+                                            $start_bulan = "-";
+                                        }
+                                        switch($approval->finish_bulan){
+                                            case "1":
+                                            $finish_bulan = "Januari"."-".$approval->finish_tahun;
+                                            break;
+                                            case "2":
+                                            $finish_bulan = "Februari"."-".$approval->finish_tahun;
+                                            break;
+                                            case "3":
+                                            $finish_bulan = "Maret"."-".$approval->finish_tahun;
+                                            break;
+                                            case "4":
+                                            $finish_bulan = "April"."-".$approval->finish_tahun;
+                                            break;
+                                            case "5":
+                                            $finish_bulan = "Mei"."-".$approval->finish_tahun;
+                                            break;
+                                            case "6":
+                                            $finish_bulan = "Juni"."-".$approval->finish_tahun;
+                                            break;
+                                            case "7":
+                                            $finish_bulan = "Juli"."-".$approval->finish_tahun;
+                                            break;
+                                            case "8":
+                                            $finish_bulan = "Agustus"."-".$approval->finish_tahun;
+                                            break;
+                                            case "9":
+                                            $finish_bulan = "September"."-".$approval->finish_tahun;
+                                            break;
+                                            case "10":
+                                            $finish_bulan = "Oktober"."-".$approval->finish_tahun;
+                                            break;
+                                            case "11":
+                                            $finish_bulan = "November"."-".$approval->finish_tahun;
+                                            break;
+                                            case "12":
+                                            $finish_bulan = "Desember"."-".$approval->finish_tahun;
+                                            break;
+                                            default:
+                                            $finish_bulan = "-";
+                                        }
+                                        @endphp
                                         <tr>
                                             {{-- @dump($approval->Departemen) --}}
-                                            <td>{{$approval->tahun}}</td>
                                             <td>
                                                 <a href="#" class="text-hover-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_matriks_update_{{$approval->id_matriks_approval_rekomendasi}}">{{$approval->Pegawai->nama_pegawai}}</a>
                                             </td>
@@ -180,7 +262,10 @@
                                             </td>
                                             <td>{{$approval->klasifikasi_proyek}}</td>
                                             <td>{{$approval->kategori}}</td>
-                                            <td>
+                                            <td class="text-center">{{$start_bulan}}</td>
+                                            <td class="text-center">{{$finish_bulan}}</td>
+                                            <td class="d-flex flex-column align-items-center gap-2">
+                                                <a href="#kt_modal_edit_{{$approval->id_matriks_approval_rekomendasi }}" data-bs-toggle="modal" class="btn btn-sm btn-primary text-white" style="background-color: #008CB4;">Edit</a>
                                                 <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#kt_modal_matriks_delete_{{$approval->id_matriks_approval_rekomendasi}}">Delete</button>
                                             </td>
                                         </tr>
@@ -250,26 +335,48 @@
                                 <div class="fv-row mb-7">
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Tahun</span>
+                                        <span class="required">Start Periode</span>
                                     </label>
                                     @php
                                         $tahun = (int) date("Y");
                                     @endphp
                                     <!--end::Label-->
-                                    <!--begin::Input-->
-                                    <select id="tahun" name="tahun"
-                                        class="form-select form-select-solid select2-hidden-accessible"
-                                        data-control="select2" data-hide-search="true" data-placeholder="Pilh Tahun..."
-                                        data-select2-id="select2-tahun" tabindex="-1" aria-hidden="true">
-                                        <option value="" selected></option>
-                                        @foreach (range(1, 2) as $item)
-                                            <option value="{{$tahun}}">{{$tahun}}</option>
-                                            @php
-                                                $tahun++;
-                                            @endphp
-                                        @endforeach
-                                    </select>
-                                <!--end::Input-->
+                                    <div class="d-flex flex-row gap-2">
+                                        <!--begin::Input-->
+                                        <select id="bulan_start" name="bulan_start"
+                                            class="form-select form-select-solid select2-hidden-accessible"
+                                            data-control="select2" data-hide-search="true" data-placeholder="Pilh Bulan..."
+                                            data-select2-id="select2-bulan-start" tabindex="-1" aria-hidden="true">
+                                            <option value="" selected></option>
+                                            <option value="1">Januari</option>
+                                            <option value="2">Februari</option>
+                                            <option value="3">Maret</option>
+                                            <option value="4">April</option>
+                                            <option value="5">Mei</option>
+                                            <option value="6">Juni</option>
+                                            <option value="7">Juli</option>
+                                            <option value="8">Agustus</option>
+                                            <option value="9">September</option>
+                                            <option value="10">Oktober</option>
+                                            <option value="11">November</option>
+                                            <option value="12">Desember</option>
+                                        </select>
+                                        <!--end::Input-->
+                                        <!--begin::Input-->
+                                        <select id="tahun_start" name="tahun_start"
+                                            class="form-select form-select-solid select2-hidden-accessible"
+                                            data-control="select2" data-hide-search="true" data-placeholder="Pilh Tahun..."
+                                            data-select2-id="select2_tahun_start" tabindex="-1" aria-hidden="true">
+                                            <option value="" selected></option>
+                                            @foreach (range(1, 2) as $item)
+                                                <option value="{{$tahun}}">{{$tahun}}</option>
+                                                @php
+                                                    $tahun++;
+                                                @endphp
+                                            @endforeach
+                                        </select>
+                                        <!--end::Input-->
+                                    </div>
                                 </div>
                                 <!--end::Input group-->
                             </div>
@@ -335,7 +442,7 @@
                                             <select id="unit-kerja" name="unit-kerja"
                                                 class="form-select form-select-solid select2-hidden-accessible"
                                                 data-control="select2" data-hide-search="false" data-placeholder="Pilih Unit Kerja..."
-                                                data-select2-id="select2-unit-kerja" tabindex="-1" aria-hidden="true" onchange="setDepartemen(this)">
+                                                data-select2-id="select2-unit-kerja" tabindex="-1" aria-hidden="true">
                                                 <option value="" selected></option>
                                                 @foreach ($divisi_all as $divisi)
                                                     <option value="{{$divisi->id_divisi}}">{{$divisi->nama_kantor}}</option>
@@ -431,6 +538,64 @@
                                     </div>
                                 </div>
                             </div>
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7 d-none" id="finish-periode">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="">Finish Periode</span>
+                                </label>
+                                @php
+                                    $tahun = (int) date("Y");
+                                @endphp
+                                <!--end::Label-->
+                                <div class="d-flex flex-row gap-2">
+                                    <!--begin::Input-->
+                                    <select id="bulan_finish" name="bulan_finish"
+                                        class="form-select form-select-solid select2-hidden-accessible"
+                                        data-control="select2" data-hide-search="true" data-placeholder="Pilh Bulan..."
+                                        data-select2-id="select2_bulan_finish" tabindex="-1" aria-hidden="true" disabled>
+                                        <option value="" selected></option>
+                                        <option value="1">Januari</option>
+                                        <option value="2">Februari</option>
+                                        <option value="3">Maret</option>
+                                        <option value="4">April</option>
+                                        <option value="5">Mei</option>
+                                        <option value="6">Juni</option>
+                                        <option value="7">Juli</option>
+                                        <option value="8">Agustus</option>
+                                        <option value="9">September</option>
+                                        <option value="10">Oktober</option>
+                                        <option value="11">November</option>
+                                        <option value="12">Desember</option>
+                                    </select>
+                                    <!--end::Input-->
+                                    <!--begin::Input-->
+                                    <select id="tahun_finish" name="tahun_finish"
+                                        class="form-select form-select-solid select2-hidden-accessible"
+                                        data-control="select2" data-hide-search="true" data-placeholder="Pilh Tahun..."
+                                        data-select2-id="select2_tahun_finish" tabindex="-1" aria-hidden="true" disabled>
+                                        <option value="" selected></option>
+                                        @foreach (range(1, 2) as $item)
+                                            <option value="{{$tahun}}">{{$tahun}}</option>
+                                            @php
+                                                $tahun++;
+                                            @endphp
+                                        @endforeach
+                                    </select>
+                                    <!--end::Input-->
+                                </div>
+                            </div>
+                            <!--end::Input group-->
+                            <div class="row ms-1">
+                                <!--Begin::Input Checkbox-->
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="create" name="isActive" id="active-periode" onchange="setActive(this)" checked>
+                                    <label class="form-check-label" for="active-periode">
+                                        Active
+                                    </label>
+                                </div>
+                                <!--End::Input Checkbox-->
+                            </div>
                         </div>
                         <!--End::Row Kanan+Kiri-->
     
@@ -450,6 +615,326 @@
         <!--end::Modal dialog-->
     </div>
     <!--end::Modal Tambah Kriteria Green Line-->
+
+    @foreach ($approval_rekomendasi as $approval)
+        <!--begin::Modal Tambah Kriteria Green Line-->
+    <div class="modal fade" id="kt_modal_edit_{{ $approval->id_matriks_approval_rekomendasi }}" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-800px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Edit Matriks Approval Rekomendasi</h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <i class="bi bi-x-lg"></i>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+
+                <form action="/matriks-approval-rekomendasi/update" method="POST">
+                    @csrf
+                    <input type="hidden" name="modal" value="kt_modal_edit_{{ $approval->id_matriks_approval_rekomendasi }}">
+                    <!--begin::Modal body-->
+                    <div class="modal-body py-lg-6 px-lg-6">
+    
+                        <input type="hidden" name="id-matriks-approval" value="{{ $approval->id_matriks_approval_rekomendasi }}">
+                        <!--begin::Row Kanan+Kiri-->
+                        <div class="row fv-row">
+                            <!--begin::Col-->
+                            <div class="">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span class="required">Start Periode</span>
+                                    </label>
+                                    @php
+                                        $tahun = (int) date("Y");
+                                    @endphp
+                                    <!--end::Label-->
+                                    <div class="d-flex flex-row gap-2">
+                                        <!--begin::Input-->
+                                        <select id="bulan_start_{{ $approval->id_matriks_approval_rekomendasi }}" name="bulan_start"
+                                            class="form-select form-select-solid select2-hidden-accessible"
+                                            data-control="select2" data-hide-search="true" data-placeholder="Pilh Bulan..."
+                                            data-select2-id="select2-bulan-start-{{ $approval->id_matriks_approval_rekomendasi }}" tabindex="-1" aria-hidden="true">
+                                            <option value="1" {{ $approval->start_bulan == "1" ? "selected" : "" }}>Januari</option>
+                                            <option value="2" {{ $approval->start_bulan == "2" ? "selected" : "" }}>Februari</option>
+                                            <option value="3" {{ $approval->start_bulan == "3" ? "selected" : "" }}>Maret</option>
+                                            <option value="4" {{ $approval->start_bulan == "4" ? "selected" : "" }}>April</option>
+                                            <option value="5" {{ $approval->start_bulan == "5" ? "selected" : "" }}>Mei</option>
+                                            <option value="6" {{ $approval->start_bulan == "6" ? "selected" : "" }}>Juni</option>
+                                            <option value="7" {{ $approval->start_bulan == "7" ? "selected" : "" }}>Juli</option>
+                                            <option value="8" {{ $approval->start_bulan == "8" ? "selected" : "" }}>Agustus</option>
+                                            <option value="9" {{ $approval->start_bulan == "9" ? "selected" : "" }}>September</option>
+                                            <option value="10" {{ $approval->start_bulan == "10" ? "selected" : "" }}>Oktober</option>
+                                            <option value="11" {{ $approval->start_bulan == "11" ? "selected" : "" }}>November</option>
+                                            <option value="12" {{ $approval->start_bulan == "12" ? "selected" : "" }}>Desember</option>
+                                        </select>
+                                        <!--end::Input-->
+                                        <!--begin::Input-->
+                                        <select id="tahun_start_{{ $approval->id_matriks_approval_rekomendasi }}" name="tahun_start"
+                                            class="form-select form-select-solid select2-hidden-accessible"
+                                            data-control="select2" data-hide-search="true" data-placeholder="Pilh Tahun..."
+                                            data-select2-id="select2_tahun_start_{{ $approval->id_matriks_approval_rekomendasi }}" tabindex="-1" aria-hidden="true">
+                                            <option value="" selected></option>
+                                            @foreach (range(1, 2) as $item)
+                                                <option value="{{$tahun}}" {{$approval->start_tahun == $tahun ? "selected" : "" }}>{{$tahun}}</option>
+                                                @php
+                                                    $tahun++;
+                                                @endphp
+                                            @endforeach
+                                        </select>
+                                        <!--end::Input-->
+                                    </div>
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End begin::Col-->
+                            <div class="">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span class="required">Nama Pegawai</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                        
+                                    <select id="nama-pegawai-{{ $approval->id_matriks_approval_rekomendasi }}" name="nama-pegawai"
+                                        class="form-select form-select-solid select2-hidden-accessible"
+                                        data-control="select2" data-hide-search="false" data-placeholder="Pilih Nama Pegawai..."
+                                        data-select2-id="select2-nama-pegawai-{{ $approval->id_matriks_approval_rekomendasi }}" tabindex="-1" aria-hidden="true">
+                                        <option value="" selected></option>
+                                        @foreach ($pegawai_all as $pegawai)
+                                            <option value="{{$pegawai->nip}}" {{ $pegawai->nip == $approval->nama_pegawai ? 'selected' : '' }}>{{$pegawai->nama_pegawai}}</option>
+                                        @endforeach
+                                    </select>
+                                    <!--end::Input-->
+                                </div>
+                                {{-- <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span class="required">Jabatan</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                        
+                                    <select id="jabatan" name="jabatan"
+                                        class="form-select form-select-solid select2-hidden-accessible"
+                                        data-control="select2" data-hide-search="false" data-placeholder="Pilih Jabatan..."
+                                        data-select2-id="select2-jabatan" tabindex="-1" aria-hidden="true">
+                                        <option value="" selected></option>
+                                        @foreach ($jabatans as $jabatan)
+                                            <option value="{{$jabatan->kode_jabatan}}">{{$jabatan->nama_jabatan}}</option>
+                                        @endforeach
+                                        @foreach ($sumber_danas as $sd)
+                                            <option value="{{$sd->kode}}">{{$sd->kode}}</option>
+                                        @endforeach
+                                    </select>
+                                    <!--end::Input-->
+                                </div> --}}
+                                <!--end::Input group-->
+                            </div>
+                            <!--End begin::Col-->
+    
+                            <div class="row mb-7">
+                                <div class="col">
+                                    <div id="tier">
+                                        <!--begin::Label-->
+                                        <label class="fs-6 fw-bold form-label mt-3">
+                                            <span class="required">Unit Kerja</span>
+                                        </label>
+                                        <!--end::Label-->
+    
+                                        <!--begin::Input-->
+                                        <div id="kriteria-penilaian-internal">
+                                            <select id="unit-kerja-{{ $approval->id_matriks_approval_rekomendasi }}" name="unit-kerja"
+                                                class="form-select form-select-solid select2-hidden-accessible"
+                                                data-control="select2" data-hide-search="false" data-placeholder="Pilih Unit Kerja..."
+                                                data-select2-id="select2-unit-kerja-{{ $approval->id_matriks_approval_rekomendasi }}" tabindex="-1" aria-hidden="true">
+                                                <option value="" selected></option>
+                                                @foreach ($divisi_all as $divisi)
+                                                    <option value="{{$divisi->id_divisi}}" {{ $divisi->id_divisi == $approval->unit_kerja }}>{{$divisi->nama_kantor}}</option>
+                                                @endforeach
+                                                {{-- @foreach ($sumber_danas as $sd)
+                                                    <option value="{{$sd->kode}}">{{$sd->kode}}</option>
+                                                @endforeach --}}
+                                            </select>
+                                        </div>
+                                        <!--end::Input-->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-7" id="div-departemen">
+                                <div class="col">
+                                    <div id="tier">
+                                        <!--begin::Label-->
+                                        <label class="fs-6 fw-bold form-label mt-3">
+                                            <span class="required">Departemen</span>
+                                        </label>
+                                        <!--end::Label-->
+    
+                                        <!--begin::Input-->
+                                        <div id="kriteria-penilaian-internal">
+                                            <select id="departemen-proyek-{{ $approval->id_matriks_approval_rekomendasi }}" name="departemen"
+                                                class="form-select form-select-solid select2-hidden-accessible"
+                                                data-control="select2" data-hide-search="false" data-placeholder="Pilih Departemen"
+                                                data-select2-id="select2-departemen-{{ $approval->id_matriks_approval_rekomendasi }}" tabindex="-1" aria-hidden="true">
+                                                <option value=""></option>
+                                                @foreach ($departemens as $departemen)
+                                                    <option value="{{$departemen->kode_departemen}}" {{ $departemen->kode_departemen == $approval->departemen ? 'selected' : '' }}>{{$departemen->nama_departemen}} ({{ $departemen->UnitKerja->unit_kerja ?? "-" }})</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <!--end::Input-->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-7">
+                                <div class="col">
+                                    <div id="tier">
+                                        <!--begin::Label-->
+                                        <label class="fs-6 fw-bold form-label mt-3">
+                                            <span class="required">Klasifikasi Proyek</span>
+                                        </label>
+                                        <!--end::Label-->
+    
+                                        <!--begin::Input-->
+                                        <select id="klasifikasi-proyek-{{ $approval->id_matriks_approval_rekomendasi }}" name="klasifikasi-proyek"
+                                            class="form-select form-select-solid select2-hidden-accessible"
+                                            data-control="select2" data-hide-search="false" data-placeholder="Pilih Klasifikasi Proyek..."
+                                            data-select2-id="select2-klasifikasi-proyek-{{ $approval->id_matriks_approval_rekomendasi }}" tabindex="-1" aria-hidden="true">
+                                            <option value="" selected></option>
+                                            <option value="Proyek Kecil" {{ $approval->klasifikasi_proyek == "Proyek Kecil" ? 'selected' : '' }}>Proyek Kecil</option>
+                                            <option value="Proyek Menengah" {{ $approval->klasifikasi_proyek == "Proyek Menengah" ? 'selected' : '' }}>Proyek Menengah</option>
+                                            <option value="Proyek Besar" {{ $approval->klasifikasi_proyek == "Proyek Besar" ? 'selected' : '' }}>Proyek Besar</option>
+                                            <option value="Mega Proyek" {{ $approval->klasifikasi_proyek == "Mega Proyek" ? 'selected' : '' }}>Mega Proyek</option>
+
+                                            {{-- @foreach ($sumber_danas as $sd)
+                                                <option value="{{$sd->kode}}">{{$sd->kode}}</option>
+                                            @endforeach --}}
+                                        </select>
+                                        <!--end::Input-->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-7">
+                                <div class="col">
+                                    <div id="tier">
+                                        <!--begin::Label-->
+                                        <label class="fs-6 fw-bold form-label mt-3">
+                                            <span class="required">Kategori</span>
+                                        </label>
+                                        <!--end::Label-->
+    
+                                        <!--begin::Input-->
+                                        <select id="kategori-{{$approval->id_matriks_approval_rekomendasi  }}" name="kategori"
+                                            class="form-select form-select-solid select2-hidden-accessible"
+                                            data-control="select2" data-hide-search="false" data-placeholder="Pilih Kategori..."
+                                            data-select2-id="select2-kategori-{{ $approval->id_matriks_approval_rekomendasi }}" tabindex="-1" aria-hidden="true">
+                                            <option value="" selected></option>
+                                            <option value="Pengajuan" {{ $approval->kategori == "Pengajuan" ? 'selected' : '' }}>Pengajuan</option>
+                                            <option value="Verifikasi" {{ $approval->kategori == "Verifikasi" ? 'selected' : '' }}>Verifikasi</option>
+                                            <option value="Penyusun" {{ $approval->kategori == "Penyusun" ? 'selected' : '' }}>Penyusun</option>
+                                            <option value="Rekomendasi" {{ $approval->kategori == "Rekomendasi" ? 'selected' : '' }}>Rekomendasi</option>
+                                            <option value="Persetujuan" {{ $approval->kategori == "Persetujuan" ? 'selected' : '' }}>Persetujuan</option>
+                                            {{-- @foreach ($sumber_danas as $sd)
+                                                <option value="{{$sd->kode}}">{{$sd->kode}}</option>
+                                            @endforeach --}}
+                                        </select>
+                                        <!--end::Input-->
+                                    </div>
+                                </div>
+                            </div>
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7 d-none" id="finish-periode-edit-{{ $approval->id_matriks_approval_rekomendasi }}">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="">Finish Periode</span>
+                                </label>
+                                @php
+                                    $tahun = (int) date("Y");
+                                @endphp
+                                <!--end::Label-->
+                                <div class="d-flex flex-row gap-2">
+                                    <!--begin::Input-->
+                                    <select id="bulan_finish_{{ $approval->id_matriks_approval_rekomendasi }}" name="bulan_finish"
+                                        class="form-select form-select-solid select2-hidden-accessible"
+                                        data-control="select2" data-hide-search="true" data-placeholder="Pilh Bulan..."
+                                        data-select2-id="select2_bulan_finish_{{ $approval->id_matriks_approval_rekomendasi }}" tabindex="-1" aria-hidden="true" disabled>
+                                        <option value="" selected></option>
+                                        <option value="1" {{ $approval->finish_bulan == "1" ? "selected" : "" }}>Januari</option>
+                                        <option value="2" {{ $approval->finish_bulan == "2" ? "selected" : "" }}>Februari</option>
+                                        <option value="3" {{ $approval->finish_bulan == "3" ? "selected" : "" }}>Maret</option>
+                                        <option value="4" {{ $approval->finish_bulan == "4" ? "selected" : "" }}>April</option>
+                                        <option value="5" {{ $approval->finish_bulan == "5" ? "selected" : "" }}>Mei</option>
+                                        <option value="6" {{ $approval->finish_bulan == "6" ? "selected" : "" }}>Juni</option>
+                                        <option value="7" {{ $approval->finish_bulan == "7" ? "selected" : "" }}>Juli</option>
+                                        <option value="8" {{ $approval->finish_bulan == "8" ? "selected" : "" }}>Agustus</option>
+                                        <option value="9" {{ $approval->finish_bulan == "9" ? "selected" : "" }}>September</option>
+                                        <option value="10" {{ $approval->finish_bulan == "10" ? "selected" : "" }}>Oktober</option>
+                                        <option value="11" {{ $approval->finish_bulan == "11" ? "selected" : "" }}>November</option>
+                                        <option value="12" {{ $approval->finish_bulan == "12" ? "selected" : "" }}>Desember</option>
+                                    </select>
+                                    <!--end::Input-->
+                                    <!--begin::Input-->
+                                    <select id="tahun_finish_{{ $approval->id_matriks_approval_rekomendasi }}" name="tahun_finish"
+                                        class="form-select form-select-solid select2-hidden-accessible"
+                                        data-control="select2" data-hide-search="true" data-placeholder="Pilh Tahun..."
+                                        data-select2-id="select2_tahun_finish_{{ $approval->id_matriks_approval_rekomendasi }}" tabindex="-1" aria-hidden="true" disabled>
+                                        <option value="" selected></option>
+                                        @foreach (range(1, 2) as $item)
+                                            <option value="{{$tahun}}" {{ $approval->finish_tahun == $tahun ? "selected" : "" }}>{{$tahun}}</option>
+                                            @php
+                                                $tahun++;
+                                            @endphp
+                                        @endforeach
+                                    </select>
+                                    <!--end::Input-->
+                                </div>
+                            </div>
+                            <!--end::Input group-->
+                            <div class="row ms-1">
+                                <!--Begin::Input Checkbox-->
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="edit" name="isActive" id="active-periode" onchange="setActive(this, '{{ $approval->id_matriks_approval_rekomendasi }}')" {{ $approval->is_active ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="active-periode">
+                                        Active
+                                    </label>
+                                </div>
+                                <!--End::Input Checkbox-->
+                            </div>
+                        </div>
+                        <!--End::Row Kanan+Kiri-->
+    
+    
+    
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white" id="new_save"
+                            style="background-color:#008CB4">Save</button>
+    
+                    </div>
+                    <!--end::Modal body-->
+                </form>
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+    </div>
+    <!--end::Modal Tambah Kriteria Green Line-->
+    @endforeach
     
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
@@ -493,223 +978,6 @@
                         </div>
                         <div class="modal-footer">
                             <button class="btn btn-sm btn-light btn-active-danger min-w-100px fs-6">Delete</button>
-                        </div>
-                        <!--end::Input group-->
-
-                    </div>
-                    <!--end::Modal body-->
-                </div>
-                <!--end::Modal content-->
-            </div>
-            <!--end::Modal dialog-->
-            </div>
-        </form>
-
-        <form action="/matriks-approval-rekomendasi/update" method="post" enctype="multipart/form-data">
-            @csrf
-            <input type="hidden" name="id-matriks-approval" value="{{$approval->id_matriks_approval_rekomendasi}}">
-            <div class="modal fade" id="kt_modal_matriks_update_{{ $approval->id_matriks_approval_rekomendasi  }}" tabindex="-1" aria-hidden="true">
-                <!--begin::Modal dialog-->
-                <div class="modal-dialog modal-dialog-centered mw-750px">
-                    <!--begin::Modal content-->
-                    <div class="modal-content">
-                        <!--begin::Modal header-->
-                        <div class="modal-header">
-                            <!--begin::Modal title-->
-                            <h2>Edit Matriks Approval Rekomendasi</h2>
-                            <!--end::Modal title-->
-                            <!--begin::Close-->
-                            <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                                <span class="svg-icon svg-icon-1">
-                                    <i class="bi bi-x-lg"></i>
-                                </span>
-                                <!--end::Svg Icon-->
-                            </div>
-                            <!--end::Close-->
-                        </div>
-                        <!--end::Modal header-->
-                        <!--begin::Modal body-->
-                        <div class="modal-body py-lg-6 px-lg-6">
-    
-                            <!--begin::Row Kanan+Kiri-->
-                            <div class="row fv-row">
-                                <!--begin::Col-->
-                                <div class="">
-                                    <!--begin::Input group Website-->
-                                    <div class="fv-row mb-7">
-                                        <!--begin::Label-->
-                                        <label class="fs-6 fw-bold form-label mt-3">
-                                            <span class="required">Tahun</span>
-                                        </label>
-                                        @php
-                                            $tahun = (int) date("Y");
-                                        @endphp
-                                        <!--end::Label-->
-                                        <!--begin::Input-->
-                                        <select id="tahun_{{$approval->id_matriks_approval_rekomendasi}}" name="tahun"
-                                            class="form-select form-select-solid select2-hidden-accessible"
-                                            data-control="select2" data-hide-search="true" data-placeholder="Pilh Tahun..."
-                                            data-select2-id="select2-tahun_{{$approval->id_matriks_approval_rekomendasi}}" tabindex="-1" aria-hidden="true">
-                                            <option value="" selected></option>
-                                            @foreach (range(1, 2) as $item)
-                                                <option value="{{$tahun}}" {{$tahun == $approval->tahun ? "selected" : ""}}>{{$tahun}}</option>
-                                                @php
-                                                    $tahun++;
-                                                @endphp
-                                            @endforeach
-                                        </select>
-                                    <!--end::Input-->
-                                    </div>
-                                    <!--end::Input group-->
-                                </div>
-                                <!--End begin::Col-->
-                                <div class="">
-                                    <!--begin::Input group Website-->
-                                    <!--end::Input group-->
-                                    <!--begin::Input group Website-->
-                                    <div class="fv-row mb-7">
-                                        <!--begin::Label-->
-                                        <label class="fs-6 fw-bold form-label mt-3">
-                                            <span class="required">Nama Pegawai</span>
-                                        </label>
-                                        <!--end::Label-->
-                                        <!--begin::Input-->
-                                        
-                                        <select id="nama-pegawai_{{$approval->id_matriks_approval_rekomendasi}}" name="nama-pegawai"
-                                            class="form-select form-select-solid select2-hidden-accessible"
-                                            data-control="select2" data-hide-search="false" data-placeholder="Pilih Nama Pegawai..."
-                                            data-select2-id="select2-nama-pegawai_{{$approval->id_matriks_approval_rekomendasi}}" tabindex="-1" aria-hidden="true">
-                                            <option value="" selected></option>
-                                            @foreach ($pegawai_all as $pegawai)
-                                                <option value="{{$pegawai->nip}}" {{$pegawai->nip == $approval->nama_pegawai ? "selected" : ""}}>{{$pegawai->nama_pegawai}}</option>
-                                            @endforeach
-                                            {{-- @foreach ($sumber_danas as $sd)
-                                                <option value="{{$sd->kode}}">{{$sd->kode}}</option>
-                                            @endforeach --}}
-                                        </select>
-                                        <!--end::Input-->
-                                    </div>
-                                    <!--end::Input group-->
-                                </div>
-                                <!--End begin::Col-->
-        
-                                <div class="row  mb-7">
-                                    <div class="col">
-                                        <div id="tier">
-                                            <!--begin::Label-->
-                                            <label class="fs-6 fw-bold form-label mt-3">
-                                                <span class="required">Unit Kerja</span>
-                                            </label>
-                                            <!--end::Label-->
-        
-                                            <!--begin::Input-->
-                                            <div id="kriteria-penilaian-internal">
-                                                <select id="unit-kerja_{{$approval->id_matriks_approval_rekomendasi}}" name="unit-kerja"
-                                                    class="form-select form-select-solid select2-hidden-accessible"
-                                                    data-control="select2" data-hide-search="false" data-placeholder="Pilih Unit Kerja..."
-                                                    data-select2-id="select2-unit-kerja_{{$approval->id_matriks_approval_rekomendasi}}" tabindex="-1" aria-hidden="true">
-                                                    <option value="" selected></option>
-                                                    @foreach ($divisi_all as $divisi)
-                                                        <option value="{{$divisi->id_divisi}}" {{$divisi->id_divisi == $approval->unit_kerja ? "selected" : ""}}>{{$divisi->nama_kantor}}</option>
-                                                    @endforeach
-                                                    {{-- @foreach ($sumber_danas as $sd)
-                                                        <option value="{{$sd->kode}}">{{$sd->kode}}</option>
-                                                    @endforeach --}}
-                                                </select>
-                                            </div>
-                                            <!--end::Input-->
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row mb-7">
-                                    <div class="col">
-                                        <div id="tier">
-                                            <!--begin::Label-->
-                                            <label class="fs-6 fw-bold form-label mt-3">
-                                                <span class="required">Departemen</span>
-                                            </label>
-                                            <!--end::Label-->
-        
-                                            <!--begin::Input-->
-                                            <div id="departemen">
-                                                <select id="departemen-proyek-{{ $approval->id_matriks_approval_rekomendasi }}" name="departemen"
-                                                    class="form-select form-select-solid select2-hidden-accessible"
-                                                    data-control="select2" data-hide-search="false" data-placeholder="Pilih Departemen"
-                                                    data-select2-id="select2-departemen" tabindex="-1" aria-hidden="true">
-                                                    <option value=""></option>
-                                                    @foreach ($departemens as $departemen)
-                                                        <option value="{{$departemen->kode_departemen}}" {{ $departemen->kode_departemen == $approval->departemen ? "selected" : "" }} >{{$departemen->nama_departemen}} ({{ $departemen->UnitKerja->unit_kerja ?? "-" }})</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                            <!--end::Input-->
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="row">
-                                    <div class="col">
-                                        <div id="tier">
-                                            <!--begin::Label-->
-                                            <label class="fs-6 fw-bold form-label mt-3">
-                                                <span class="required">Klasifikasi Proyek</span>
-                                            </label>
-                                            <!--end::Label-->
-        
-                                            <!--begin::Input-->
-                                            <select id="klasifikasi-proyek_{{$approval->id_matriks_approval_rekomendasi}}" name="klasifikasi-proyek"
-                                                class="form-select form-select-solid select2-hidden-accessible"
-                                                data-control="select2" data-hide-search="false" data-placeholder="Pilih Klasifikasi Proyek..."
-                                                data-select2-id="select2-klasifikasi-proyek_{{$approval->id_matriks_approval_rekomendasi}}" tabindex="-1" aria-hidden="true">
-                                                <option value="" selected></option>
-                                                <option value="Proyek Kecil" {{"Proyek Kecil" == $approval->klasifikasi_proyek ? "selected" : ""}}>Proyek Kecil</option>
-                                                <option value="Proyek Menengah" {{"Proyek Menengah" == $approval->klasifikasi_proyek ? "selected" : ""}}>Proyek Menengah</option>
-                                                <option value="Proyek Besar" {{"Proyek Besar" == $approval->klasifikasi_proyek ? "selected" : ""}}>Proyek Besar</option>
-                                                <option value="Mega Proyek" {{"Mega Proyek" == $approval->klasifikasi_proyek ? "selected" : ""}}>Mega Proyek</option>
-    
-                                                {{-- @foreach ($sumber_danas as $sd)
-                                                    <option value="{{$sd->kode}}">{{$sd->kode}}</option>
-                                                @endforeach --}}
-                                            </select>
-                                            <!--end::Input-->
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <div id="tier">
-                                            <!--begin::Label-->
-                                            <label class="fs-6 fw-bold form-label mt-3">
-                                                <span class="required">Kategori</span>
-                                            </label>
-                                            <!--end::Label-->
-        
-                                            <!--begin::Input-->
-                                            <select id="kategori_{{$approval->id_matriks_approval_rekomendasi}}" name="kategori"
-                                                class="form-select form-select-solid select2-hidden-accessible"
-                                                data-control="select2" data-hide-search="false" data-placeholder="Pilih Kategori..."
-                                                data-select2-id="select2-kategori_{{$approval->id_matriks_approval_rekomendasi}}" tabindex="-1" aria-hidden="true">
-                                                <option value="" selected></option>
-                                                <option value="Pengajuan" {{"Pengajuan" == $approval->kategori ? "selected" : ""}}>Pengajuan</option>
-                                                <option value="Verifikasi" {{"Verifikasi" == $approval->kategori ? "selected" : ""}}>Verifikasi</option>
-                                                <option value="Penyusun" {{"Penyusun" == $approval->kategori ? "selected" : ""}}>Penyusun</option>
-                                                <option value="Rekomendasi" {{"Rekomendasi" == $approval->kategori ? "selected" : ""}}>Rekomendasi</option>
-                                                <option value="Persetujuan" {{"Persetujuan" == $approval->kategori ? "selected" : ""}}>Persetujuan</option>
-                                                {{-- @foreach ($sumber_danas as $sd)
-                                                    <option value="{{$sd->kode}}">{{$sd->kode}}</option>
-                                                @endforeach --}}
-                                            </select>
-                                            <!--end::Input-->
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--End::Row Kanan+Kiri-->
-                        </div>
-                        <div class="modal-footer">
-                            <button class="btn btn-sm btn-light btn-active-primary min-w-100px fs-6">Save</button>
                         </div>
                         <!--end::Input group-->
 
@@ -855,6 +1123,33 @@
             dropdownParent: $('#kt_modal_input_kriteria_green_line'),
         });
     });
+
+    function setActive(e, id = null) {
+        if (e.value == "create") {
+            const elementFinish = document.querySelector('#finish-periode');
+            if(e.checked){
+                elementFinish.classList.add('d-none');
+                elementFinish.querySelector('select[name="bulan_finish"]').setAttribute('disabled', true);
+                elementFinish.querySelector('select[name="tahun_finish"]').setAttribute('disabled', true);
+            }else{
+                elementFinish.classList.remove('d-none');
+                elementFinish.querySelector('select[name="bulan_finish"]').removeAttribute('disabled');
+                elementFinish.querySelector('select[name="tahun_finish"]').removeAttribute('disabled');
+            }
+        } else {
+            const elementFinish = document.querySelector(`#finish-periode-edit-${id}`);
+            if(e.checked){
+                elementFinish.classList.add('d-none');
+                elementFinish.querySelector('select[name="bulan_finish"]').setAttribute('disabled', true);
+                elementFinish.querySelector('select[name="tahun_finish"]').setAttribute('disabled', true);
+            }else{
+                console.log(elementFinish);
+                elementFinish.classList.remove('d-none');
+                elementFinish.querySelector('select[name="bulan_finish"]').removeAttribute('disabled');
+                elementFinish.querySelector('select[name="tahun_finish"]').removeAttribute('disabled');
+            }    
+        }
+    }
 </script>
 @endsection
 

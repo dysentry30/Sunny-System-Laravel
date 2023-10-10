@@ -40,11 +40,15 @@ use App\Http\Controllers\AddendumContractController;
 use App\Http\Controllers\ContractApprovalController;
 use App\Http\Controllers\ContractManagementsController;
 use App\Http\Controllers\CSIController;
+use App\Http\Controllers\DepartemenController;
+use App\Http\Controllers\DirektoratController;
+use App\Http\Controllers\DivisiController;
 use App\Http\Controllers\JenisProyekController;
 use App\Http\Controllers\KriteriaPenggunaJasaController;
 use App\Http\Controllers\PenilaianPenggunaJasaController;
 use App\Http\Controllers\MataUangController;
 use App\Http\Controllers\OtomasiApprovalController;
+use App\Http\Controllers\PegawaiController;
 use App\Http\Controllers\RekomendasiController;
 use App\Http\Controllers\TipeProyekController;
 use App\Models\ContractChangeNotice;
@@ -2098,7 +2102,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     });
 
     Route::get('/matriks-approval-rekomendasi', function () {
-        $approval_rekomendasi = MatriksApprovalRekomendasi::with(["Pegawai", "Divisi"])->where("tahun", "=", (int) date("Y"))->get();
+        $approval_rekomendasi = MatriksApprovalRekomendasi::with(["Pegawai", "Divisi"])->where("start_tahun", "=", (int) date("Y"))->get();
         // $jabatans = Jabatan::where("tahun", "=", (int) date("Y"))->get();
         // $unit_kerjas = UnitKerja::whereNotIn("divcode", ["B", "C", "D", "O", "U", "F", "L"])->get();
         $divisi_all = Divisi::all();
@@ -2111,7 +2115,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post('/matriks-approval-rekomendasi/save', function (Request $request) {
         $data = $request->all();
         $rules = [
-            "tahun" => "required|numeric",
+            "tahun_start" => "required|numeric",
+            "bulan_start" => "required|numeric",
             "nama-pegawai" => "required",
             "unit-kerja" => "required",
             "klasifikasi-proyek" => "required",
@@ -2119,7 +2124,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             "kategori" => "required",
         ];
         // $is_validate = $request->validateWithBag("post", [
-        //     "tahun" => "required|numeric",
+        //     "start_tahun" => "required|numeric",
         //     "jabatan" => "required",
         //     "unit-kerja" => "required",
         // ]);
@@ -2131,7 +2136,13 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         }
 
         $approval_rekomendasi = new MatriksApprovalRekomendasi();
-        $approval_rekomendasi->tahun = $data["tahun"];
+        $approval_rekomendasi->start_tahun = $data["tahun_start"];
+        $approval_rekomendasi->start_bulan = $data["bulan_start"];
+        if (isset($data["tahun_finish"]) && isset($data["bulan_finish"])) {
+            $approval_rekomendasi->finish_tahun = $data["tahun_finish"];
+            $approval_rekomendasi->finish_bulan = $data["bulan_finish"];
+        }
+        $approval_rekomendasi->is_active = isset($data["isActive"]) ? true : false;
         // $approval_rekomendasi->jabatan = $data["jabatan"];
         $approval_rekomendasi->nama_pegawai = $data["nama-pegawai"];
         $approval_rekomendasi->unit_kerja = $data["unit-kerja"];
@@ -2150,7 +2161,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post('/matriks-approval-rekomendasi/update', function (Request $request) {
         $data = $request->all();
         $rules = [
-            "tahun" => "required|numeric",
+            "tahun_start" => "required|numeric",
+            "bulan_start" => "required|numeric",
             "nama-pegawai" => "required",
             "unit-kerja" => "required",
             "klasifikasi-proyek" => "required",
@@ -2170,13 +2182,17 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         }
 
         $approval_rekomendasi = MatriksApprovalRekomendasi::find($data["id-matriks-approval"]);
-        $approval_rekomendasi->tahun = $data["tahun"];
         // $approval_rekomendasi->jabatan = $data["jabatan"];
         $approval_rekomendasi->nama_pegawai = $data["nama-pegawai"];
         $approval_rekomendasi->unit_kerja = $data["unit-kerja"];
         $approval_rekomendasi->klasifikasi_proyek = $data["klasifikasi-proyek"];
         $approval_rekomendasi->departemen = $data["departemen"];
         $approval_rekomendasi->kategori = $data["kategori"];
+        $approval_rekomendasi->is_active = isset($data["isActive"]) ? true : false;
+        if (isset($data["tahun_finish"]) && isset($data["bulan_finish"])) {
+            $approval_rekomendasi->finish_tahun = $data["tahun_finish"];
+            $approval_rekomendasi->finish_bulan = $data["bulan_finish"];
+        }
 
         // dd($approval_rekomendasi);
 
@@ -2241,6 +2257,57 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         Alert::error('Error', "Jabatan gagal diperbarui");
         return redirect()->back();
     });
+
+
+    // Begin :: Master Data Pegawai
+    Route::get("/pegawai", [
+        PegawaiController::class, "index"
+    ]);
+    // End :: Master Data Pegawai
+
+    // Begin :: Master Data Divisi
+    Route::get(
+        "/divisi",
+        [
+            DivisiController::class, "index"
+        ]
+    );
+    Route::post(
+        "/divisi/save",
+        [DivisiController::class, "save"]
+    );
+    Route::post("/divisi/{divisi}/save", [DivisiController::class, "edit"]);
+    Route::post("/divisi/{divisi}/delete", [DivisiController::class, "delete"]);
+    // End :: Master Data Divisi
+
+    // Begin :: Master Data Direktorat
+    Route::get("/direktorat", [DirektoratController::class, "index"]);
+    Route::post(
+        "/direktorat/save",
+        [DirektoratController::class, "save"]
+    );
+    Route::post("/direktorat/{direktorat}/save", [DirektoratController::class, "edit"]);
+    Route::post("/direktorat/{direktorat}/delete", [DirektoratController::class, "delete"]);
+    // End :: Master Data Direktorat
+
+    //Begin :: Master Data Departemen
+    Route::get(
+        "/departemen",
+        [
+            DepartemenController::class, "index"
+        ]
+    );
+    Route::post(
+        "/departemen/save",
+        [DepartemenController::class, "createDepartemen"]
+    );
+    Route::post(
+        "/departemen/{id}/edit",
+        [DepartemenController::class, "editDepartemen"]
+    );
+    Route::post("/departemen/{kode_departemen}/delete", [DepartemenController::class, "deleteDepartemen"]);
+    //End:: Master Data Departemen
+
 
     Route::get('/otomasi-approval', [OtomasiApprovalController::class, 'index']);
     Route::post('/otomasi-approval/save', [OtomasiApprovalController::class, 'store']);

@@ -31,6 +31,7 @@ class KriteriaPenggunaJasaController extends Controller
         $kriteriaPenggunaJasa = new KriteriaPenggunaJasa();
         $kriteriaPenggunaJasa->kategori = $data["kategori"];
         $kriteriaPenggunaJasa->bobot = $data["bobot"];
+        $kriteriaPenggunaJasa->item = $data["item"];
         $kriteriaPenggunaJasa->kriteria_1 = $data["kriteria_1"];
         $kriteriaPenggunaJasa->kriteria_2 = $data["kriteria_2"];
         $kriteriaPenggunaJasa->kriteria_3 = $data["kriteria_3"];
@@ -67,6 +68,7 @@ class KriteriaPenggunaJasaController extends Controller
 
         $kriteriaPenggunaJasa->kategori = $data["kategori"];
         $kriteriaPenggunaJasa->bobot = $data["bobot"];
+        $kriteriaPenggunaJasa->item = $data["item"];
         $kriteriaPenggunaJasa->kriteria_1 = $data["kriteria_1"];
         $kriteriaPenggunaJasa->kriteria_2 = $data["kriteria_2"];
         $kriteriaPenggunaJasa->kriteria_3 = $data["kriteria_3"];
