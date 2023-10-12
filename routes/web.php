@@ -2002,7 +2002,6 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             return $d;
         })->toArray();
         $rules = [
-            "tahun" => "required",
             "kategori" => "required",
             "kriteria-penilaian" => "required",
             "nilai" => "required",
@@ -2047,7 +2046,6 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             return $d;
         })->toArray();
         $rules = [
-            "tahun" => "required",
             "kategori" => "required",
             "kriteria-penilaian" => "required",
             "nilai" => "required",
@@ -2318,7 +2316,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post('/kriteria-pengguna-jasa/save', [KriteriaPenggunaJasaController::class, 'store']);
     Route::post('/kriteria-pengguna-jasa/update/{id}', [KriteriaPenggunaJasaController::class, 'update']);
     Route::post('/kriteria-pengguna-jasa/delete/{id}', [KriteriaPenggunaJasaController::class, 'destroy']);
-
+    Route::post('/kriteria-pengguna-jasa/detail/save', [KriteriaPenggunaJasaController::class, 'detailSave']);
+    
     Route::get('/penilaian-pengguna-jasa', [PenilaianPenggunaJasaController::class, 'index']);
     Route::post('/penilaian-pengguna-jasa/save', [PenilaianPenggunaJasaController::class, 'store']);
     Route::post('/penilaian-pengguna-jasa/update/{id}', [PenilaianPenggunaJasaController::class, 'update']);

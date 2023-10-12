@@ -110,10 +110,10 @@
                                             <td class="align-middle">{{$item->kategori}}</td>
                                             <td class="align-middle">{{$item->item}}</td>
                                             <td class="text-center align-middle">{{ $item->bobot }}</td>
-                                            <td class="text-center align-middle">{!! $item->kriteria_1 !!}</td>
-                                            <td class="text-center align-middle">{!! $item->kriteria_2 !!}</td>
-                                            <td class="text-center align-middle">{!! $item->kriteria_3 !!}</td>
-                                            <td class="text-center align-middle">{!! $item->kriteria_4 !!}</td>
+                                            <td class="">{!! nl2br($item->kriteria_1) !!}</td>
+                                            <td class="">{!! nl2br($item->kriteria_2) !!}</td>
+                                            <td class="">{!! nl2br($item->kriteria_3) !!}</td>
+                                            <td class="">{!! nl2br($item->kriteria_4) !!}</td>
                                             <td class="text-center align-middle">{{ $item->nota_rekomendasi }}</td>
                                             <td class="text-center align-middle">
                                                 <div class="d-flex justify-content-center">

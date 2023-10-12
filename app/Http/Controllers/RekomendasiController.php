@@ -176,14 +176,25 @@ class RekomendasiController extends Controller
             } else {
                 $proyek->recommended_with_note = $data["note-rekomendasi"];
             }
+
+            $proyek->is_draft_recommend_note == false;
             
             if($proyek->save()) {
-                Alert::html("Failed", "Verifikasi dengan nama proyek <b>$proyek->nama_proyek</b> berhasil", "success");
+                Alert::html("Success", "Verifikasi dengan nama proyek <b>$proyek->nama_proyek</b> berhasil", "success");
             // createWordPersetujuan($proyek, $hasil_assessment, $is_proyek_besar, $is_proyek_mega);
                 return redirect()->back();
             }
             Alert::html("Failed", "Verifikasi dengan nama proyek <b>$proyek->nama_proyek</b> gagal ditolak", "error");
             return redirect()->back();
+        } else if (!empty($request["save-draft-note-rekomendasi"])) {
+            $proyek = Proyek::find($request->get("kode-proyek"));
+            $proyek->is_draft_recommend_note = true;
+            $proyek->recommended_with_note = !empty($data["note-rekomendasi"]) ? $data["note-rekomendasi"] : null;
+            if ($proyek->save()) {
+                Alert::html("Success", "Verifikasi dengan nama proyek <b>$proyek->nama_proyek</b> berhasil disimpan sebagai draft", "success");
+                // createWordPersetujuan($proyek, $hasil_assessment, $is_proyek_besar, $is_proyek_mega);
+                return redirect()->back();
+            }
         } else if(!empty($request["penyusun-setujui"])) {
             $proyek = Proyek::find($request->get("kode-proyek"));
 
@@ -517,7 +528,7 @@ class RekomendasiController extends Controller
     }
 
     private function checkMatriksApproval($unit_kerja, $klasifikasi_proyek, $approved_data, $kategori): bool {
-        $matriks_approval = MatriksApprovalRekomendasi::where("tahun", "=", (int) date("Y"))->get();
+        $matriks_approval = MatriksApprovalRekomendasi::where("start_tahun", "=", (int) date("Y"))->get();
         if($kategori == "Penyusun") {
             return $matriks_approval->where("klasifikasi_proyek", "=", $klasifikasi_proyek)->where("kategori", "=", $kategori)->count() == $approved_data->count();
         }

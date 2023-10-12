@@ -81,7 +81,40 @@ class AdminAuth
                                                 "asuransi-pelaksanaan",
                                                 "jaminan-pelaksanaan"
                                             ]);
-        $allowed_url_user_sales = join(" ", ["rekomendasi", "rkap", "history-autorisasi", "check-current-password", "user", "tipe-proyek","jenis-proyek", "mata-uang", "request-approval-history", "dashboard", "customer", "forecast", "forecast-kumulatif-eksternal", "forecast-kumulatif-eksternal-internal", "proyek", "knowledge-base", "company", "sumber-dana", "pasal", "team-proyek", "dop", "sbu", "unit-kerja", "kriteria-pasar", "get-kabupaten", "get-kabupaten-coordinate", "document", "forecast-internal", "download-pareto", "download", "proyek-datatables"]);
+        $allowed_url_user_sales = join(" ", [
+            "rekomendasi",
+            "rkap",
+            "history-autorisasi",
+            "check-current-password",
+            "user",
+            "tipe-proyek",
+            "jenis-proyek",
+            "mata-uang",
+            "request-approval-history",
+            "dashboard",
+            "customer",
+            "forecast",
+            "forecast-kumulatif-eksternal",
+            "forecast-kumulatif-eksternal-internal",
+            "proyek",
+            "knowledge-base",
+            "company",
+            "sumber-dana",
+            "pasal",
+            "team-proyek",
+            "dop",
+            "sbu",
+            "unit-kerja",
+            "kriteria-pasar",
+            "get-kabupaten",
+            "get-kabupaten-coordinate",
+            "document",
+            "forecast-internal",
+            "download-pareto",
+            "download",
+            "proyek-datatables",
+            "kriteria-pengguna-jasa"
+        ]);
         $allowed_url_team_proyek = join(" ", ["dashboard", "proyek", "contract-management", "review-contract", "draft-contract", "issue-project", "question", "input-risk", "laporan-bulanan", "serah-terima", "claim-management", "approval-claim", "detail-claim", "claim", "document", "user"]);
         $concat_allowed_url = "";
 

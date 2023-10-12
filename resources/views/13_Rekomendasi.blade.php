@@ -262,6 +262,15 @@
                         --bs-tooltip-bg: var(--bd-violet-bg);
                         --bs-tooltip-color: var(--bs-white);
                     }
+
+                    input[type="number"]::-webkit-outer-spin-button,
+                    input[type="number"]::-webkit-inner-spin-button {
+                        -webkit-appearance: none;
+                        margin: 0;
+                    }
+                    input[type="number"] {
+                        -moz-appearance: textfield;
+                    }
 </style>
 {{-- End :: css --}}
 
@@ -424,7 +433,7 @@
                                                 <th class="min-w-auto">Nilai OK</th>
                                                 <th class="min-w-auto">Kategori Proyek</th>
                                                 <th class="min-w-auto">Mengusulkan</th>
-                                                <th class="min-w-auto">Resiko</th>
+                                                <th class="min-w-auto">Risiko</th>
                                                 <th class="min-w-auto">Status Pengajuan</th>
                                                 <th class="min-w-auto">Status Persetujuan</th>
                                                 {{-- <th class="min-w-auto">ID Contract</th> --}}
@@ -508,7 +517,7 @@
                                                             -
                                                         </td>
                                                         <td>
-                                                            @if ($proyek->is_request_rekomendasi && !$proyek->review_assessment)
+                                                            @if (($proyek->is_request_rekomendasi && !$proyek->review_assessment) || (is_null($proyek->is_draft_recommend_note) || $proyek->is_draft_recommend_note))
                                                                 @if (!empty(Auth::user()->Pegawai->MatriksApproval) && Auth::user()->Pegawai->MatriksApproval->contains("kategori", "Pengajuan"))
                                                                     <small class="badge badge-light-warning">Request Pengajuan</small>
                                                                 @else
@@ -516,7 +525,7 @@
                                                                 @endif
                                                             @elseif ($proyek->review_assessment && is_null($proyek->recommended_with_note))
                                                                 <small class="badge badge-light-primary">Proses Verifikasi</small>
-                                                            @elseif ($proyek->review_assessment && !is_null($proyek->recommended_with_note))
+                                                            @elseif ($proyek->review_assessment && (!is_null($proyek->is_draft_recommend_note) && !$proyek->is_draft_recommend_note))
                                                                 <small class="badge badge-light-success">Pengajuan Disetujui</small>
                                                             @elseif ($proyek->review_assessment == false && $proyek->is_recommended == false && $proyek->is_disetujui == false)
                                                                 <small class="badge badge-light-danger">Pengajuan Ditolak</small>
@@ -623,7 +632,12 @@
                                                     @endphp
                                                     <tr>
                                                         <td>
-                                                            <a href="#kt_modal_view_proyek_rekomendasi_{{$proyek->kode_proyek}}" target="_blank" data-bs-toggle="modal" class="text-hover-primary">{{ $proyek->nama_proyek }}</a>
+                                                            {{-- <a href="#kt_modal_view_proyek_rekomendasi_{{$proyek->kode_proyek}}" target="_blank" data-bs-toggle="modal" class="text-hover-primary">{{ $proyek->nama_proyek }}</a>    --}}
+                                                            @if ($proyek->KriteriaPenggunaJasaDetail->count() == 6)
+                                                                <a href="#kt_modal_view_proyek_rekomendasi_{{$proyek->kode_proyek}}" target="_blank" data-bs-toggle="modal" class="text-hover-primary">{{ $proyek->nama_proyek }}</a>   
+                                                            @else
+                                                                <a href="#kt_user_view_kriteria_{{ $proyek->kode_proyek }}" target="_blank" data-bs-toggle="modal" class="text-hover-primary">{{ $proyek->nama_proyek }}</a>
+                                                            @endif
                                                         </td>
                                                         <td>
                                                             @php
@@ -689,7 +703,7 @@
                                                             @endif
                                                         </td>
                                                         <td>
-                                                            @if ($proyek->is_request_rekomendasi && !$proyek->review_assessment)
+                                                            @if (($proyek->is_request_rekomendasi && !$proyek->review_assessment) || (is_null($proyek->is_draft_recommend_note) || $proyek->is_draft_recommend_note))
                                                                 @if (!empty(Auth::user()->Pegawai->MatriksApproval) && Auth::user()->Pegawai->MatriksApproval->contains("kategori", "Pengajuan"))
                                                                     
                                                                     <small class="badge badge-light-warning">Request Pengajuan</small>
@@ -702,7 +716,7 @@
                                                                 @else
                                                                     <small class="badge badge-light-primary">Proses Verifikasi</small>
                                                                 @endif
-                                                            @elseif ($proyek->review_assessment && !is_null($proyek->recommended_with_note))
+                                                            @elseif ($proyek->review_assessment && (!is_null($proyek->is_draft_recommend_note) && !$proyek->is_draft_recommend_note))
                                                                 <small class="badge badge-light-success">Pengajuan Disetujui</small>
                                                             @endif
                                                             {{-- @dump(!$proyek->is_recommended || !$proyek->is_recommended_with_note) --}}
@@ -929,6 +943,208 @@
                                     <!--end::Table -->
                                 </div>
                                 {{-- End :: Tab Content Proyek Persetujuan Rekomendasi --}}
+
+                                {{-- Begin::Tab Content Kriteria Pengguna Jasa --}}
+                                @foreach ($proyeks_rekomendasi as $proyek)
+                                    <div class="modal fade" id="kt_user_view_kriteria_{{ $proyek->kode_proyek }}" tabindex="-1" aria-hidden="true">
+                                        <!--begin::Modal dialog-->
+                                        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-fullscreen">
+                                            <!--begin::Modal content-->
+                                            <div class="modal-content">
+                                                <!--begin::Modal header-->
+                                                <div class="modal-header">
+                                                    <!--begin::Modal title-->
+                                                    <h2>Form Kriteria Pengguna Jasa</h2>
+                                                    <!--end::Modal title-->
+                                                    <!--begin::Close-->
+                                                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                                                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                                                        <span class="svg-icon svg-icon-1">
+                                                            <i class="bi bi-x-lg"></i>
+                                                        </span>
+                                                        <!--end::Svg Icon-->
+                                                    </div>
+                                                    <!--end::Close-->
+                                                </div>
+                                                <!--end::Modal header-->
+                                
+                                                <!--begin::Modal body-->
+                                                <div class="modal-body py-lg-6 px-lg-6">
+                                                    <form action="/kriteria-pengguna-jasa/detail/save" method="POST" id="form-kriteria" enctype="multipart/form-data">
+                                                    @csrf
+                                                        <input type="hidden" name="modal" value="#kt_user_view_kriteria_{{ $proyek->kode_proyek }}">
+                                                        <!--begin::Row Kanan+Kiri-->
+                                                        {{-- <div class="row fv-row">
+                                                            
+                                                            <!--begin::Col-->
+                                                            <div class="">
+                                                                <!--begin::Input group Website-->
+                                                                <input type="hidden" name="kode_proyek" value="{{ $proyek->kode_proyek }}">
+                                                                <input type="hidden" name="modal" value="kt_user_view_kriteria_{{ $proyek->kode_proyek }}">
+                                                                <div class="fv-row mb-7">
+                                                                    <!--begin::Label-->
+                                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                                        <span class="required">Item</span>
+                                                                    </label>
+                                                                    <!--end::Label-->
+                                                                    <!--begin::Input-->
+                                                                    <select id="item" name="item"
+                                                                        class="form-select form-select-solid select2-hidden-accessible"
+                                                                        data-control="select2" data-hide-search="true" data-placeholder="Pilh Item"
+                                                                        data-select2-id="select2-item-{{ $proyek->kode_proyek }}" tabindex="-1" aria-hidden="true">
+                                                                        <option value="" selected></option>
+                                                                        <optgroup label="Legalitas Perusahaan">
+                                                                            <option value="Legalitas institusi / perusahaan" {{ $proyek->KriteriaPenggunaJasaDetail?->where('item', '=', 'Legalitas institusi / perusahaan')->isNotEmpty() ? 'disabled' : '' }}>Legalitas institusi / perusahaan</option>
+                                                                        </optgroup>
+                                                                        <optgroup label="Reputasi Pemberi Kerja">
+                                                                            <option value="Reputasi Pemberi Kerja Dalam Pemenuhan Kontrak (Historical)"
+                                                                            {{ $proyek->KriteriaPenggunaJasaDetail?->where('item', '=', 'Reputasi Pemberi Kerja Dalam Pemenuhan Kontrak (Historical)')->isNotEmpty() && $proyek->KriteriaPenggunaJasaDetail?->where('item', '=', 'Reputasi Pemberi Kerja Dalam Pemenuhan Kontrak (Historical)')->count() == 4  ? 'disabled' : '' }}>
+                                                                            Reputasi Pemberi Kerja Dalam Pemenuhan Kontrak (Historical)
+                                                                            </option>
+                                                                        </optgroup>
+                                                                        <optgroup label="Financial">
+                                                                            <option value="Current Ratio"
+                                                                            {{ $proyek->KriteriaPenggunaJasaDetail?->where('item', '=', 'Current Ratio')->isNotEmpty() && $proyek->KriteriaPenggunaJasaDetail?->where('item', '=', 'Current Ratio')->count() == 4 ? 'disabled' : '' }}>
+                                                                                Current Ratio
+                                                                            </option>
+                                                                            <option value="Cash Ratio"
+                                                                            {{ $proyek->KriteriaPenggunaJasaDetail?->where('item', '=', 'Cash Ratio')->isNotEmpty() && $proyek->KriteriaPenggunaJasaDetail?->where('item', '=', 'Cash Ratio')->count() == 4 ? 'disabled' : '' }}>
+                                                                                Cash Ratio
+                                                                            </option>
+                                                                            <option value="Debt to Equity Ratio"
+                                                                            {{ $proyek->KriteriaPenggunaJasaDetail?->where('item', '=', 'Debt to Equity Ratio')->isNotEmpty() && $proyek->KriteriaPenggunaJasaDetail?->where('item', '=', 'Debt to Equity Ratio')->count() == 4 ? 'disabled' : '' }}>
+                                                                                Debt to Equity Ratio
+                                                                            </option>
+                                                                            <option value="Kepatuhan Pembayaran Pajak"
+                                                                            {{ $proyek->KriteriaPenggunaJasaDetail?->where('item', '=', 'Kepatuhan Pembayaran Pajak')->isNotEmpty() && $proyek->KriteriaPenggunaJasaDetail?->where('item', '=', 'Kepatuhan Pembayaran Pajak')->count() == 2 ? 'disabled' : '' }}>
+                                                                                Kepatuhan Pembayaran Pajak
+                                                                            </option>
+                                                                        </optgroup>
+                                                                    </select>
+                                                                    <!--end::Input-->
+                                                                </div>
+                                                                <!--end::Input group-->
+                                                            </div>
+                                                            <!--End begin::Col-->
+                                
+                                                            <div class="row mb-7">
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span class="required">Nilai</span>
+                                                                </label>
+                                                                <input type="number" name="nilai" min="1" max="5" class="form-control form-control-solid">
+                                                            </div>
+                                
+                                                            <div class="row mb-7">
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span class="required">Kriteria</span>
+                                                                </label>
+                                                                <div class="">
+                                                                    <div class="form-check mb-4">
+                                                                        <input class="form-check-input" type="radio" name="kriteria" value="1" id="is_kriteria_1">
+                                                                        <label class="form-check-label" for="is_kriteria_1">
+                                                                        Kriteria 1
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="">
+                                                                    <div class="form-check mb-4">
+                                                                        <input class="form-check-input" type="radio" name="kriteria" value="2" id="is_kriteria_2">
+                                                                        <label class="form-check-label" for="is_kriteria_2">
+                                                                        Kriteria 2
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="">
+                                                                    <div class="form-check mb-4">
+                                                                        <input class="form-check-input" type="radio" name="kriteria" value="3" id="is_kriteria_3">
+                                                                        <label class="form-check-label" for="is_kriteria_3">
+                                                                        Kriteria 3
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="">
+                                                                    <div class="form-check mb-4">
+                                                                        <input class="form-check-input" type="radio" name="kriteria" value="4" id="is_kriteria_4">
+                                                                        <label class="form-check-label" for="is_kriteria_4">
+                                                                        Kriteria 4
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                
+                                                            <div class="row mb-7">
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span class="required">Keterangan</span>
+                                                                </label>
+                                                                <textarea name="keterangan" id="keterangan" cols="30" rows="10"></textarea>
+                                                            </div>
+                                
+                                                            <div class="row mb-7">
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span class="required">Upload Dokumen</span>
+                                                                </label>
+                                                                <input type="file" name="dokumen_kriteria" id="dokumen_kriteria" class="form-control form-control-solid">
+                                                            </div>
+                                                        </div> --}}
+                                                        <!--End::Row Kanan+Kiri-->
+                                                        <div class="row fv-row">
+                                                            <table>
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th class="min-w-auto">Kategori</th>
+                                                                        <th class="min-w-50px">Item</th>
+                                                                        <th class="min-w-auto">Kriteria 1</th>
+                                                                        <th class="min-w-auto">Kriteria 2</th>
+                                                                        <th class="min-w-auto">Kriteria 3</th>
+                                                                        <th class="min-w-auto">Kriteria 4</th>
+                                                                        <th class="min-w-auto">Nilai</th>
+                                                                        <th class="min-w-auto">Keterangan</th>
+                                                                        <th class="min-w-auto">Upload Dokumen</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @php
+                                                                        $kriteriaPengguna = App\Models\KriteriaPenggunaJasa::all();
+                                                                    @endphp
+                                                                    @foreach ($kriteriaPengguna as $key=>$item)
+                                                                        <tr>
+                                                                            <td>{{ $item->kategori }}</td>
+                                                                            <td>{{ $item->item }}</td>
+                                                                            <td>{!! nl2br($item->kriteria_1) !!}</td>
+                                                                            <td>{!! nl2br($item->kriteria_2) !!}</td>
+                                                                            <td>{!! nl2br($item->kriteria_3) !!}</td>
+                                                                            <td>{!! nl2br($item->kriteria_4) !!}</td>
+                                                                            <td>
+                                                                                <input type="number" name="nilai[]" id="nilai" min="0" max="5" class="">
+                                                                            </td>
+                                                                            <td>
+                                                                                <textarea name="keterangan[]" id="" cols="30" rows="10"></textarea>
+                                                                            </td>
+                                                                            <td>
+                                                                                <input type="file" name="dokumen_kriteria[]" id="dokumen_kriteria" class="form-control form-control-sm form-control-solid">
+                                                                            </td>
+                                                                        </tr>
+                                                                    @endforeach
+                                                                </tbody>
+                                                            </table>
+                                                            <input type="hidden" name="kode_proyek" value="{{ $proyek->kode_proyek }}">
+                                                        </div>
+                                                    </form>
+                                    
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white" form="form-kriteria" id="new_save"
+                                                        style="background-color:#008CB4">Save</button>
+                                
+                                                </div>
+                                                    <!--end::Modal body-->
+                                            </div>
+                                            <!--end::Modal content-->
+                                        </div>
+                                        <!--end::Modal dialog-->
+                                    </div>    
+                                @endforeach
+                                {{-- End::Tab Content Kriteria Pengguna Jasa --}}
                             </div>
                         </div>
                         <!--end::Card body-->
@@ -1226,7 +1442,7 @@
         <div class="modal fade" id="kt_modal_view_proyek_rekomendasi_{{$proyek->kode_proyek}}" tabindex="-1" aria-labelledby="kt_modal_view_proyek_rekomendasi_{{$proyek->kode_proyek}}" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-xl">
                 <div class="modal-content">
-                    @if (!$proyek->recommended_with_note)
+                    @if (is_null($proyek->is_draft_recommend_note) || $proyek->is_draft_recommend_note)
                     <form action="" method="GET">
                     @endif
                         <div class="modal-header">
@@ -1320,11 +1536,12 @@
                             @endphp --}}
                             @if (is_null($proyek->is_recommended))
                                 <label for="note-rekomendasi" class="text-start">Catatan Rekomendasi: </label>
-                                <textarea class="form-control form-control-solid" id="note-rekomendasi" name="note-rekomendasi" {{$proyek->recommended_with_note ? 'readonly' : ''}} >{{$proyek->recommended_with_note}}</textarea>
+                                <textarea class="form-control form-control-solid" id="note-rekomendasi" name="note-rekomendasi" {{ !is_null($proyek->is_draft_recommend_note) && !$proyek->is_draft_recommend_note ? 'readonly' : ''}} >{{$proyek->recommended_with_note}}</textarea>
                                 <br>
                                 @csrf
                                 <input type="hidden" name="kode-proyek" value="{{$proyek->kode_proyek}}">
-                                @if (!$proyek->recommended_with_note)
+                                @if (is_null($proyek->is_draft_recommend_note) || $proyek->is_draft_recommend_note)
+                                    <input type="submit" name="save-draft-note-rekomendasi" value="Simpan Sebagai Draft" class="btn btn-sm btn-primary">
                                     <input type="submit" name="input-rekomendasi-with-note" value="Submit" class="btn btn-sm btn-success">
                                 @endif
                             @elseif(!$proyek->is_recommended)
@@ -1335,7 +1552,7 @@
                                 <span class="badge badge-light-success">Direkomendasikan dengan catatan</span>
                             @endif
                         </div>
-                    @if (!$proyek->recommended_with_note)
+                    @if (is_null($proyek->is_draft_recommend_note) || $proyek->is_draft_recommend_note)
                     </form>
                     @endif
                 </div>
@@ -1670,13 +1887,13 @@
     </script>
 
     {{-- Begin :: Export To Excel Data --}}
-    <script>
+    {{-- <script>
         function exportToExcel(e, tableElt) {
             // console.log(e.parentElement);
             document.querySelector(`${tableElt}_wrapper .buttons-excel`).click();
             return;
         }
-    </script>
+    </script> --}}
     {{-- End :: Export To Excel Data --}}
 
     <script>

@@ -1060,6 +1060,7 @@
                                                                         <th class="text-center">No</th>
                                                                         <th class="min-w-auto">Nama</th>
                                                                         <th class="min-w-auto">Porsi Saham</th>
+                                                                        <th class="min-w-auto">Kategori</th>
                                                                         <th class="min-w-auto">Action</th>
                                                                     </tr>
                                                                     <!--end::Table row-->
@@ -1080,6 +1081,7 @@
                                                                                 data-bs-target="#kt_modal_edit_porsi_saham_{{ $item->id }}">{{ $item->nama}} </a>
                                                                             </td>
                                                                             <td class="text-center">{{ $item->porsi_saham }} %</td>
+                                                                            <td class="text-center">{{ $item->kategori_porsi }}</td>
                                                                             <td class="text-center">
                                                                                 <button type="button" class="btn btn-sm btn-light btn-active-danger" data-bs-toggle="modal" data-bs-target="#kt_porsi_saham_delete_{{ $item->id }}">Delete</button>
                                                                             </td>
@@ -5499,14 +5501,26 @@
                         <div class="row">
                             <div class="d-flex flex-column">
                                 <p>Nama</p>
-                                <input type="text" name="name-porsi-saham" class="form-control form-control-sm">
+                                <input type="text" name="name-porsi-saham" class="form-control form-control-sm form-control-solid">
                             </div>
                         </div>
                         <br>
                         <div class="row">
                             <div class="d-flex flex-column">
                                 <p>Porsi</p>
-                                <input type="text" name="porsi" oninput="digitsOnly(this, 3)" class="form-control form-control-sm">
+                                <input type="text" name="porsi" oninput="digitsOnly(this, 3)" class="form-control form-control-sm form-control-solid">
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="d-flex flex-column">
+                                <p>Kategori</p>
+                                <select name="kategori-porsi" id="kategori-porsi" class="form-select form-select-sm form-select-solid" data-hide-search="true" data-control="select2"
+                                data-placeholder="Pilih kategori" tabindex="-1">
+                                    <option value=""></option>
+                                    <option value="Holding">Holding</option>
+                                    <option value="Other">Other</option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -5560,15 +5574,26 @@
                         <div class="row">
                             <div class="d-flex flex-column">
                                 <p>Nama</p>
-                                <input type="text" name="name-porsi-saham" value="{{ $item->nama }}" class="form-control form-control-sm">
+                                <input type="text" name="name-porsi-saham" value="{{ $item->nama }}" class="form-control form-control-sm form-control-solid">
                             </div>
                         </div>
                         <br>
                         <div class="row">
                             <div class="d-flex flex-column">
                                 <p>Porsi</p>
-                                <input type="text" name="porsi" value="{{ $item->porsi_saham}}" oninput="digitsOnly(this, 3)" class="form-control form-control-sm">
+                                <input type="text" name="porsi" value="{{ $item->porsi_saham}}" oninput="digitsOnly(this, 3)" class="form-control form-control-sm form-control-solid">
                             </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <p>Kategori</p>
+                            <select name="kategori-porsi" id="kategori-porsi" data-select2-id="select2-klasifikasi-proyek-{{ $item->id }}" class="form-select form-select-sm form-select-solid" data-hide-search="true" data-control="select2"
+                            data-placeholder="Pilih kategori" tabindex="-1">
+                                <option value=""></option>
+                                <option value="Holding" {{ $item->kategori_porsi == "Holding" ? 'selected' : '' }}>Holding</option>
+                                <option value="Other" {{ $item->kategori_porsi == "Other" ? 'selected' : '' }}>Other</option>
+                            </select>
+                            
                         </div>
                     </div>
                     <div class="modal-footer">

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\KriteriaPenggunaJasa;
+use App\Models\KriteriaPenggunaJasaDetail;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -103,5 +104,41 @@ class KriteriaPenggunaJasaController extends Controller
             "Success" => false,
             "Message" => "Failed"
         ];
+    }
+
+    public function detailSave(Request $request)
+    {
+        $data = $request->all();
+        // dd($data);
+
+        if (!isset($data['dokumen_kriteria'])) {
+            Alert::error("Success", "Harap masukkan semua dokumen!");
+            return redirect()->back()->with("modal", $data["modal"]);
+        }
+
+        $masterKriteriaPenggunaJasa = KriteriaPenggunaJasa::all();
+
+        $collectKriteriaDetail = [];
+        $files = $request->file("dokumen_kriteria");
+        foreach ($files as $key => $item) {
+            $id_document = date("His_") . $key . '_' . str_replace(' ', '-', $item->getClientOriginalName());
+            $kriteria_detail = new KriteriaPenggunaJasaDetail();
+            $kriteria_detail->kode_proyek = $data['kode_proyek'];
+            $kriteria_detail->item = $masterKriteriaPenggunaJasa[$key]->item;
+            $kriteria_detail->keterangan = $data['nilai'][$key];
+            $kriteria_detail->keterangan = $data['keterangan'][$key];
+            $kriteria_detail->id_document = $id_document;
+
+            $item->move(public_path('file-kriteria-pengguna-jasa'), $id_document);
+            $collectKriteriaDetail[] = $kriteria_detail->attributesToArray();
+        }
+
+        if (KriteriaPenggunaJasaDetail::insert($collectKriteriaDetail)) {
+            Alert::success("Success", "Form Kriteria Pengguna Jasa berhasil dibuat!");
+            return redirect()->back();
+        }
+
+        Alert::error("Error", "Form Kriteria Pengguna Jasa gagal dibuat!");
+        return redirect()->back();
     }
 }

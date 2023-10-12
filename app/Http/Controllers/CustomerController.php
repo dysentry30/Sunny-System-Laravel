@@ -1336,17 +1336,19 @@ class CustomerController extends Controller
         } else {
             $porsiSaham = null;
         }
-        
+
         if(!empty($porsiSaham)) {
             $porsiSaham->id_customer = $data["id-customer"];
             $porsiSaham->nama = $data["name-porsi-saham"];
             $porsiSaham->porsi_saham = $data["porsi"];
+            $porsiSaham->kategori_porsi = $data["kategori-porsi"];
             Alert::success("Success", "Porsi Saham Berhasil Diperbarui");
         } else {
             $porsiSaham = new PorsiSaham();
             $porsiSaham->id_customer = $data["id-customer"];
             $porsiSaham->nama = $data["name-porsi-saham"];
             $porsiSaham->porsi_saham = $data["porsi"];
+            $porsiSaham->kategori_porsi = $data["kategori-porsi"];
             Alert::success("Success", "Porsi Saham Berhasil Dibuat");
         }
         if($porsiSaham->save()) {

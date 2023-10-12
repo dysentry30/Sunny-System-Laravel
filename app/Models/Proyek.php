@@ -184,4 +184,9 @@ class Proyek extends Model
     {
         return $this->hasMany(ContractApproval::class, "kode_proyek");
     }
+
+    public function KriteriaPenggunaJasaDetail()
+    {
+        return $this->hasMany(KriteriaPenggunaJasaDetail::class, 'kode_proyek');
+    }
 }

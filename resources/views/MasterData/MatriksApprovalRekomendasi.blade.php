@@ -667,6 +667,7 @@
                                             class="form-select form-select-solid select2-hidden-accessible"
                                             data-control="select2" data-hide-search="true" data-placeholder="Pilh Bulan..."
                                             data-select2-id="select2-bulan-start-{{ $approval->id_matriks_approval_rekomendasi }}" tabindex="-1" aria-hidden="true">
+                                            <option value=""></option>
                                             <option value="1" {{ $approval->start_bulan == "1" ? "selected" : "" }}>Januari</option>
                                             <option value="2" {{ $approval->start_bulan == "2" ? "selected" : "" }}>Februari</option>
                                             <option value="3" {{ $approval->start_bulan == "3" ? "selected" : "" }}>Maret</option>
