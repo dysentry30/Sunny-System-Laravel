@@ -11569,6 +11569,12 @@
                                             Bulanan
                                         </label>
                                     </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="Weekly/Mingguan" name="jawaban-8[]" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Weekly/Mingguan
+                                        </label>
+                                    </div>
                                     <br>
                                     <div class="input-group">
                                         <div class="input-group-text">

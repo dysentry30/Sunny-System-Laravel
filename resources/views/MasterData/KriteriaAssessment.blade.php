@@ -252,6 +252,52 @@
     
                         <!--begin::Row Kanan+Kiri-->
                         <div class="row fv-row">
+                            <div class="fv-row">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="required">Start Periode</span>
+                                </label>
+                                @php
+                                    $tahun = (int) date("Y");
+                                @endphp
+                                <!--end::Label-->
+                                <div class="d-flex flex-row gap-2">
+                                    <!--begin::Input-->
+                                    <select id="bulan_start" name="bulan_start"
+                                        class="form-select form-select-solid select2-hidden-accessible"
+                                        data-control="select2" data-hide-search="true" data-placeholder="Pilh Bulan..."
+                                        data-select2-id="select2-bulan-start" tabindex="-1" aria-hidden="true">
+                                        <option value="" selected></option>
+                                        <option value="1">Januari</option>
+                                        <option value="2">Februari</option>
+                                        <option value="3">Maret</option>
+                                        <option value="4">April</option>
+                                        <option value="5">Mei</option>
+                                        <option value="6">Juni</option>
+                                        <option value="7">Juli</option>
+                                        <option value="8">Agustus</option>
+                                        <option value="9">September</option>
+                                        <option value="10">Oktober</option>
+                                        <option value="11">November</option>
+                                        <option value="12">Desember</option>
+                                    </select>
+                                    <!--end::Input-->
+                                    <!--begin::Input-->
+                                    <select id="tahun_start" name="tahun_start"
+                                        class="form-select form-select-solid select2-hidden-accessible"
+                                        data-control="select2" data-hide-search="true" data-placeholder="Pilh Tahun..."
+                                        data-select2-id="select2_tahun_start" tabindex="-1" aria-hidden="true">
+                                        <option value="" selected></option>
+                                        @foreach (range(1, 2) as $item)
+                                            <option value="{{$tahun}}">{{$tahun}}</option>
+                                            @php
+                                                $tahun++;
+                                            @endphp
+                                        @endforeach
+                                    </select>
+                                    <!--end::Input-->
+                                </div>
+                            </div>
                             <div class="">
                                 <!--begin::Input group Website-->
                                 <div class="fv-row mb-7">
@@ -514,53 +560,6 @@
                                 </div>
                             </div>
 
-                            <div class="fv-row">
-                                <!--begin::Label-->
-                                <label class="fs-6 fw-bold form-label mt-3">
-                                    <span class="required">Start Periode</span>
-                                </label>
-                                @php
-                                    $tahun = (int) date("Y");
-                                @endphp
-                                <!--end::Label-->
-                                <div class="d-flex flex-row gap-2">
-                                    <!--begin::Input-->
-                                    <select id="bulan_start" name="bulan_start"
-                                        class="form-select form-select-solid select2-hidden-accessible"
-                                        data-control="select2" data-hide-search="true" data-placeholder="Pilh Bulan..."
-                                        data-select2-id="select2-bulan-start" tabindex="-1" aria-hidden="true">
-                                        <option value="" selected></option>
-                                        <option value="1">Januari</option>
-                                        <option value="2">Februari</option>
-                                        <option value="3">Maret</option>
-                                        <option value="4">April</option>
-                                        <option value="5">Mei</option>
-                                        <option value="6">Juni</option>
-                                        <option value="7">Juli</option>
-                                        <option value="8">Agustus</option>
-                                        <option value="9">September</option>
-                                        <option value="10">Oktober</option>
-                                        <option value="11">November</option>
-                                        <option value="12">Desember</option>
-                                    </select>
-                                    <!--end::Input-->
-                                    <!--begin::Input-->
-                                    <select id="tahun_start" name="tahun_start"
-                                        class="form-select form-select-solid select2-hidden-accessible"
-                                        data-control="select2" data-hide-search="true" data-placeholder="Pilh Tahun..."
-                                        data-select2-id="select2_tahun_start" tabindex="-1" aria-hidden="true">
-                                        <option value="" selected></option>
-                                        @foreach (range(1, 2) as $item)
-                                            <option value="{{$tahun}}">{{$tahun}}</option>
-                                            @php
-                                                $tahun++;
-                                            @endphp
-                                        @endforeach
-                                    </select>
-                                    <!--end::Input-->
-                                </div>
-                            </div>
-
                             <div class="fv-row d-none"  id="finish-periode">
                                 <!--begin::Label-->
                                 <label class="fs-6 fw-bold form-label mt-3">
@@ -679,26 +678,47 @@
                                     <div class="fv-row mb-7">
                                         <!--begin::Label-->
                                         <label class="fs-6 fw-bold form-label mt-3">
-                                            <span class="required">Tahun</span>
+                                            <span class="required">Start Periode</span>
                                         </label>
                                         @php
                                             $tahun = (int) date("Y");
                                         @endphp
                                         <!--end::Label-->
-                                        <!--begin::Input-->
-                                        <select id="tahun_{{ $kriteria->id_kriteria_assessment }}" name="tahun"
-                                            class="form-select form-select-solid select2-hidden-accessible"
-                                            data-control="select2" data-hide-search="true" data-placeholder="Pilh Tahun..."
-                                            data-select2-id="select2-tahun_{{ $kriteria->id_kriteria_assessment }}" tabindex="-1" aria-hidden="true">
-                                            <option value="" selected></option>
-                                            @foreach (range(1, 2) as $item)
-                                                <option value="{{$tahun}}" {{ $kriteria->tahun == $tahun ? "selected" : "" }}>{{$tahun}}</option>
-                                                @php
-                                                    $tahun++;
-                                                @endphp
-                                            @endforeach
-                                        </select>
-                                    <!--end::Input-->
+                                        <div class="d-flex flex-row gap-2">
+                                            <!--begin::Input-->
+                                            <select id="bulan_start" name="bulan_start"
+                                                class="form-select form-select-solid select2-hidden-accessible"
+                                                data-control="select2" data-hide-search="true" data-placeholder="Pilh Bulan..."
+                                                data-select2-id="select2_bulan_start_{{ $kriteria->id_kriteria_assessment }}" tabindex="-1" aria-hidden="true">
+                                                <option value="" selected></option>
+                                                <option value="1" {{ $kriteria->start_bulan == "1" ? "selected" : "" }}>Januari</option>
+                                                <option value="2" {{ $kriteria->start_bulan == "2" ? "selected" : "" }}>Februari</option>
+                                                <option value="3" {{ $kriteria->start_bulan == "3" ? "selected" : "" }}>Maret</option>
+                                                <option value="4" {{ $kriteria->start_bulan == "4" ? "selected" : "" }}>April</option>
+                                                <option value="5" {{ $kriteria->start_bulan == "5" ? "selected" : "" }}>Mei</option>
+                                                <option value="6" {{ $kriteria->start_bulan == "6" ? "selected" : "" }}>Juni</option>
+                                                <option value="7" {{ $kriteria->start_bulan == "7" ? "selected" : "" }}>Juli</option>
+                                                <option value="8" {{ $kriteria->start_bulan == "8" ? "selected" : "" }}>Agustus</option>
+                                                <option value="9" {{ $kriteria->start_bulan == "9" ? "selected" : "" }}>September</option>
+                                                <option value="10" {{ $kriteria->start_bulan == "10" ? "selected" : "" }}>Oktober</option>
+                                                <option value="11" {{ $kriteria->start_bulan == "11" ? "selected" : "" }}>November</option>
+                                                <option value="12" {{ $kriteria->start_bulan == "12" ? "selected" : "" }}>Desember</option>
+                                            </select>
+                                            <!--end::Input-->
+                                            <!--begin::Input-->
+                                            <select id="tahun_start_{{$kriteria->id_kriteria_assessment }}" name="tahun_start"
+                                                class="form-select form-select-solid select2-hidden-accessible"
+                                                data-control="select2" data-hide-search="true" data-placeholder="Pilh Tahun..."
+                                                data-select2-id="select2_tahun_start_{{$kriteria->id_kriteria_assessment }}" tabindex="-1" aria-hidden="true">
+                                                @foreach (range(1, 2) as $item)
+                                                    <option value="{{$tahun}}" {{$kriteria->start_tahun == $tahun ? "selected" : "" }}>{{$tahun}}</option>
+                                                    @php
+                                                        $tahun++;
+                                                    @endphp
+                                                @endforeach
+                                            </select>
+                                            <!--end::Input-->
+                                        </div>
                                     </div>
                                     <!--end::Input group-->
                                 </div>

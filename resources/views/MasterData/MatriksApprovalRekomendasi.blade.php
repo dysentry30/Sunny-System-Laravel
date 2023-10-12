@@ -764,7 +764,7 @@
                                                 data-select2-id="select2-unit-kerja-{{ $approval->id_matriks_approval_rekomendasi }}" tabindex="-1" aria-hidden="true">
                                                 <option value="" selected></option>
                                                 @foreach ($divisi_all as $divisi)
-                                                    <option value="{{$divisi->id_divisi}}" {{ $divisi->id_divisi == $approval->unit_kerja }}>{{$divisi->nama_kantor}}</option>
+                                                    <option value="{{$divisi->id_divisi}}" {{ $divisi->id_divisi == (int)$approval->unit_kerja ? 'selected' : '' }}>{{$divisi->nama_kantor}}</option>
                                                 @endforeach
                                                 {{-- @foreach ($sumber_danas as $sd)
                                                     <option value="{{$sd->kode}}">{{$sd->kode}}</option>

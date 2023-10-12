@@ -258,6 +258,10 @@
                         -ms-filter: alpha(opacity=60);
                         filter: alpha(opacity=60);
                     }
+                    .custom-tooltip {
+                        --bs-tooltip-bg: var(--bd-violet-bg);
+                        --bs-tooltip-color: var(--bs-white);
+                    }
 </style>
 {{-- End :: css --}}
 
@@ -405,7 +409,7 @@
                             <div id="tab-content" class="tab-content">
                                 {{-- Begin :: Tab Content Proyek Pengajuan Rekomendasi --}}
                                 <div class="tab-pane fade show active" id="kt_user_view_pengajuan" role="tabpanel">
-                                    <a href="#" onclick="exportToExcel(this, '#rekomendasi-pengajuan')" class="btn btn-sm btn-success"><i class="bi bi-file-spreadsheet-fill"></i>Export to Excel</a>
+                                    {{-- <a href="#" onclick="exportToExcel(this, '#rekomendasi-pengajuan')" class="btn btn-sm btn-success"><i class="bi bi-file-spreadsheet-fill"></i>Export to Excel</a> --}}
                                     <!--begin::Table Claim-->
                                     <table class="table align-middle table-row-dashed fs-6" id="rekomendasi-pengajuan">
                                         <!--begin::Table head-->
@@ -420,6 +424,7 @@
                                                 <th class="min-w-auto">Nilai OK</th>
                                                 <th class="min-w-auto">Kategori Proyek</th>
                                                 <th class="min-w-auto">Mengusulkan</th>
+                                                <th class="min-w-auto">Resiko</th>
                                                 <th class="min-w-auto">Status Pengajuan</th>
                                                 <th class="min-w-auto">Status Persetujuan</th>
                                                 {{-- <th class="min-w-auto">ID Contract</th> --}}
@@ -500,6 +505,9 @@
                                                             </small>
                                                         </td>
                                                         <td>
+                                                            -
+                                                        </td>
+                                                        <td>
                                                             @if ($proyek->is_request_rekomendasi && !$proyek->review_assessment)
                                                                 @if (!empty(Auth::user()->Pegawai->MatriksApproval) && Auth::user()->Pegawai->MatriksApproval->contains("kategori", "Pengajuan"))
                                                                     <small class="badge badge-light-warning">Request Pengajuan</small>
@@ -527,8 +535,8 @@
                                                                 <small class="badge badge-light-danger">Tidak Direkomendasikan</small>
                                                             @endif --}}
                                                         </td>
-                                                        <td>
-                                                            @if ($proyek->is_disetujui)
+                                                        <td class="text-center">
+                                                            {{-- @if ($proyek->is_disetujui)
                                                                 <small class="badge badge-light-success">
                                                                     <a href="#kt_modal_view_proyek_history_{{$proyek->kode_proyek}}" data-bs-toggle="modal" class="text-success">Disetujui</a>
                                                                 </small>
@@ -548,7 +556,8 @@
                                                             @elseif($proyek->is_recommended == true && is_null($proyek->is_disetujui))
                                                                 <small class="badge badge-light-primary">Proses Penyetujuan</small>
                                                                 <a href="#kt_modal_view_proyek_history_{{$proyek->kode_proyek}}" data-bs-toggle="modal"><i class="bi bi-pencil-fill"></i></a>
-                                                            @endif
+                                                            @endif --}}
+                                                            <a href="#kt_modal_view_proyek_history_{{$proyek->kode_proyek}}" data-bs-toggle="modal"><i class="bi bi-exclamation-circle-fill fa-lg text-primary" data-bs-toggle="tooltip"  data-bs-placement="bottom" title="Show Status"></i></i></a>
                                                         </td>
                                                     </tr>
                                                 @empty
@@ -1114,6 +1123,7 @@
                                                                     <div class="card-body">
                                                                         <small>
                                                                             Nama: <b>{{App\Models\User::find($d->user_id)->name}}</b><br>
+                                                                            Jabatan: <b>{{App\Models\User::find($d->user_id)->Pegawai->Jabatan->nama_jabatan}}</b><br>
                                                                             Status Approval: 
                                                                             @if ($d->status == "approved")
                                                                                 <span><b class="text-success">Menyetujui</b></span>
@@ -1126,6 +1136,19 @@
                                                                                 Tanggal: 
                                                                                 <b>{{Carbon\Carbon::create($d->tanggal)->translatedFormat("d F Y H:i:s")}}</b> <br>
                                                                             @endif
+
+                                                                            @if ($key == "Rekomendasi")
+                                                                                Status :
+                                                                                @if ($proyek->is_recommended && $proyek->is_recommended_with_note)
+                                                                                    <b>Direkomendasikan Dengan Catatan</b>
+                                                                                @elseif ($proyek->is_recommended)
+                                                                                    <b>Direkomendasikan</b>
+                                                                                @else
+                                                                                    <b class="text-danger">Tidak Direkomendasikan</b>
+                                                                                @endif
+                                                                            @endif
+                                                                            <br>
+
                                                                             @if (!empty($d->alasan))
                                                                                 Alasan:
                                                                                 <b>{!! $d->alasan !!}</b><br>
@@ -1465,7 +1488,7 @@
                                     <br>
                                     <input type="submit" class="btn btn-sm btn-success" name="rekomendasi-setujui" value="Submit">
                                 </form>
-                            @elseif (is_null($proyek->is_disetujui) && $matriks_user->contains("kategori", "Persetujuan") && $proyek->is_recommended && !$is_user_exist_persetujuan)
+                            @elseif (is_null($proyek->is_disetujui) && $matriks_user?->contains("kategori", "Persetujuan") && $proyek->is_recommended && !$is_user_exist_persetujuan)
                                 <form action="" method="get">
                                     @csrf
                                     @if (!empty($nip))

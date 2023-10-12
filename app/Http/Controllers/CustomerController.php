@@ -1329,8 +1329,14 @@ class CustomerController extends Controller
     public function savePorsiSaham(Request $request)
     {
         $data = $request->all();
-        $id = $data["id-porsi"];
-        $porsiSaham = PorsiSaham::find($id);
+
+        if (isset($data["id-porsi"])) {
+            $id = $data["id-porsi"];
+            $porsiSaham = PorsiSaham::find($id);
+        } else {
+            $porsiSaham = null;
+        }
+        
         if(!empty($porsiSaham)) {
             $porsiSaham->id_customer = $data["id-customer"];
             $porsiSaham->nama = $data["name-porsi-saham"];

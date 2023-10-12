@@ -1374,25 +1374,27 @@
                                                                 <!--end::Label-->
                                                                 <!--begin::Input-->
                                                                 @php
-                                                                    if (!empty($proyek->nilai_rkap)) {
-                                                                        $klasifikasi = $proyek->nilai_rkap;
-                                                                    }else if(!empty($proyek->nilaiok_awal)){
-                                                                        $klasifikasi = $proyek->nilaiok_awal;
-                                                                    }else{
-                                                                        $klasifikasi = 0;
-                                                                    }
-
-                                                                    // if ($proyek->klasifikasi_pasdin == 'Proyek Besar' || (!empty($klasifikasi) && ($klasifikasi > 500000000000 && $klasifikasi <= 2000000000000))) {
-                                                                    //     $value = "Proyek Besar";
-                                                                    // }elseif ($proyek->klasifikasi_pasdin == 'Proyek Menengah' || (!empty($klasifikasi) && ($klasifikasi > 250000000000 && $klasifikasi <= 500000000000))) {
-                                                                    //     $value = "Proyek Menengah";
-                                                                    // }elseif ($proyek->klasifikasi_pasdin == 'Proyek Kecil' || (!empty($klasifikasi) && ( $klasifikasi > 0 && $klasifikasi <= 250000000000))) {
-                                                                    //     $value = "Proyek Kecil";
-                                                                    // }elseif($proyek->klasifikasi_pasdin == 'Mega Proyek' || (!empty($klasifikasi) && $klasifikasi > 2000000000000)) {
-                                                                    //     $value = "Mega Proyek";
+                                                                    // if (!empty($proyek->nilai_rkap)) {
+                                                                    //     $klasifikasi = $proyek->nilai_rkap;
+                                                                    // }else if(!empty($proyek->nilaiok_awal)){
+                                                                    //     $klasifikasi = $proyek->nilaiok_awal;
+                                                                    // }else{
+                                                                    //     $klasifikasi = 0;
                                                                     // }
+
+                                                                    if ($proyek->klasifikasi_pasdin == 'Proyek Besar' || (!empty($klasifikasi) && ($klasifikasi > 500000000000 && $klasifikasi <= 2000000000000))) {
+                                                                        $value = "Proyek Besar";
+                                                                    }elseif ($proyek->klasifikasi_pasdin == 'Proyek Menengah' || (!empty($klasifikasi) && ($klasifikasi > 250000000000 && $klasifikasi <= 500000000000))) {
+                                                                        $value = "Proyek Menengah";
+                                                                    }elseif ($proyek->klasifikasi_pasdin == 'Proyek Kecil' || (!empty($klasifikasi) && ( $klasifikasi > 0 && $klasifikasi <= 250000000000))) {
+                                                                        $value = "Proyek Kecil";
+                                                                    }elseif($proyek->klasifikasi_pasdin == 'Mega Proyek' || (!empty($klasifikasi) && $klasifikasi > 2000000000000)) {
+                                                                        $value = "Mega Proyek";
+                                                                    }else{
+                                                                        $value = null;
+                                                                    }
                                                                 @endphp
-                                                                <select id="ra-klasifikasi-proyek" name="ra-klasifikasi-proyek"
+                                                                {{-- <select id="ra-klasifikasi-proyek" name="ra-klasifikasi-proyek"
                                                                     class="form-select form-select-solid"
                                                                     data-control="select2" data-hide-search="true"
                                                                     data-placeholder="RA Klasifikasi Proyek">
@@ -1409,12 +1411,12 @@
                                                                     <option value="Mega Proyek"
                                                                         {{ $proyek->klasifikasi_pasdin == 'Mega Proyek' || (!empty($klasifikasi) && $klasifikasi > 2000000000000) ? 'selected' : '' }}>
                                                                         Mega Proyek</option>
-                                                                </select>
-                                                                {{-- <input type="text"
+                                                                </select> --}}
+                                                                <input type="text"
                                                                     class="form-control reformat form-control-solid"
                                                                     id="ra-klasifikasi-proyek" name="ra-klasifikasi-proyek"
                                                                     value="{{ $value }}"
-                                                                    placeholder="RA Klasifikasi Proyek" readonly/> --}}
+                                                                    placeholder="RA Klasifikasi Proyek" readonly/>
                                                                 <!--end::Input-->
                                                             </div>
                                                             <!--end::Input group-->
@@ -1606,7 +1608,7 @@
                                                                     class="form-control reformat form-control-solid"
                                                                     id="nilai-rkap" name="nilai-rkap"
                                                                     value="{{ number_format((int) str_replace('.', '', $proyek->nilaiok_awal), 0, '.', '.') }}"
-                                                                    placeholder="Nilai OK (Excludde Ppn)" />
+                                                                    placeholder="Nilai OK (Excludde Ppn)" onfocusout="setRAKlasifikasi()" />
                                                                 <!--end::Input-->
                                                             </div>
                                                             <!--end::Input group-->
@@ -8948,6 +8950,11 @@
 @section('js-script')
     <!--begin:: Dokumen File Upload Max Size-->
     <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            setRAKlasifikasi()
+        })
+    </script>
+    <script>
         var inputs = document.getElementsByTagName('input');
         for (var i = 0; i < inputs.length; i++) {
             if (inputs[i].type.toLowerCase() == 'file') {
@@ -9083,6 +9090,30 @@
         }
     </script>
     {{-- End::Get Data MPA and Ketua Tim Tender --}}
+
+    {{-- Begin::Set RA Klasifikasi Proyek --}}
+    <script>
+        function setRAKlasifikasi() {
+            const nilaiOK = document.querySelector('#nilai-rkap').value
+            const eltRAKlasifikasi = document.querySelector('#ra-klasifikasi-proyek');
+            const nilaiOKParse = parseInt(nilaiOK.replaceAll('.', ''))
+            let kategoriRAKlasifikasi;
+            if (nilaiOKParse > 500000000000 && nilaiOKParse <= 2000000000000) {
+                kategoriRAKlasifikasi = "Proyek Besar"
+            }else if(nilaiOKParse > 250000000000 && nilaiOKParse <= 500000000000) {
+                kategoriRAKlasifikasi = "Proyek Menengah"
+            }else if(nilaiOKParse > 0 && nilaiOKParse <= 250000000000) {
+                kategoriRAKlasifikasi = "Proyek Kecil"
+            }else if(nilaiOKParse > 2000000000000){
+                kategoriRAKlasifikasi = "Mega Proyek"
+            }else{
+                kategoriRAKlasifikasi = ""
+            }
+
+            eltRAKlasifikasi.value = kategoriRAKlasifikasi;
+        }
+    </script>
+    {{-- End::Set RA Klasifikasi Proyek --}}
 
 
 @endsection
