@@ -238,8 +238,10 @@ function createWordRekomendasi(App\Models\Proyek $proyek, \Illuminate\Support\Co
 
     $section = $phpWord->addSection();
     $section_2 = $phpWord->addSection();
+    $nama_proyek = str_replace("&", "dan", $proyek->nama_proyek);
+    
     $section->addText("Hasil Assessment", ['size'=>12, "bold" => true], ['align' => "center"]);
-    $section->addText($proyek->nama_proyek, ['size'=>12, "bold" => true], ['align' => "center"]);
+    $section->addText($nama_proyek, ['size'=>12, "bold" => true], ['align' => "center"]);
 
     $section->addTextBreak(1);
     $table = $section->addTable('myOwnTableStyle',array('borderSize' => 1, 'borderColor' => '999999', 'afterSpacing' => 0, 'Spacing'=> 0, 'cellMargin'=>0  ));
@@ -477,10 +479,13 @@ function createWordPengajuan(App\Models\Proyek $proyek, \Illuminate\Support\Coll
     $table->addCell(500, $TstyleCell)->addText('No', $TfontStyle);
     $table->addCell(2500, $TstyleCell)->addText("Item", $TfontStyle);
     $table->addCell(6000, $TstyleCell)->addText('Uraian', $TfontStyle);
+    
+    $nama_proyek = str_replace("&", "dan", $proyek->nama_proyek);
     $table->addRow();
     $table->addCell(500, $styleCell)->addText('1', $fontStyle);
     $table->addCell(2500, $styleCell)->addText("Nama Proyek", $fontStyle);
-    $table->addCell(6000, $styleCell)->addText($proyek->nama_proyek, $fontStyle);
+    $table->addCell(6000, $styleCell)->addText($nama_proyek, $fontStyle);
+
     $table->addRow();
     $table->addCell(500, $styleCell)->addText('2', $fontStyle);
     $table->addCell(2500, $styleCell)->addText("Lokasi Proyek", $fontStyle);
@@ -529,18 +534,19 @@ function createWordPengajuan(App\Models\Proyek $proyek, \Illuminate\Support\Coll
     $properties->setDescription('Nota Pengajuan Rekomendasi');
     $phpWord->save(public_path($target_path . "/" . $file_name . ".docx"));
     // end :: Add Template docx withoutTTD
-
+    
     // Begin :: SIGNED Template docx
     $templateProcessor = new TemplateProcessor($target_path . "/" . $file_name . ".docx");
     $templateProcessor->setImageValue('tandaTangan', ["path" => "./media/logos/sign.jpg", "height" => 75, "ratio" => false]);
     $ttdFileName = $now->format("dmYHis") . "_signed-nota-pengajuan_$proyek->kode_proyek";
     $templateProcessor->saveAs(public_path($target_path . "/" . $ttdFileName . ".docx"));
     // end :: SIGNED Template docx
-
+    
     File::delete(public_path($target_path . "/" . $file_name . ".docx"));
     // dd($files);
-
+    
     // Begin :: CONVERT Template docx to PDF
+    
     $templatePhpWord = \PhpOffice\PhpWord\IOFactory::load(public_path($target_path . "/" . $ttdFileName . ".docx"));
     $rendererName = \PhpOffice\PhpWord\Settings::PDF_RENDERER_DOMPDF;
     $rendererLibraryPath = realpath('../vendor/dompdf/dompdf');
@@ -606,10 +612,12 @@ function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Co
     $table->addCell(500,$TstyleCell)->addText('No',$TfontStyle);
     $table->addCell(2500,$TstyleCell)->addText("Item", $TfontStyle);
     $table->addCell(6000,$TstyleCell)->addText('Uraian',$TfontStyle);
+
+    $nama_proyek = str_replace("&", "dan", $proyek->nama_proyek);
     $table->addRow();
     $table->addCell(500,$styleCell)->addText('1', $fontStyle);
     $table->addCell(2500,$styleCell)->addText("Nama Proyek", $fontStyle);
-    $table->addCell(6000,$styleCell)->addText($proyek->nama_proyek, $fontStyle);
+    $table->addCell(6000,$styleCell)->addText($nama_proyek, $fontStyle);
     $table->addRow();
     $table->addCell(500,$styleCell)->addText('2', $fontStyle);
     $table->addCell(2500,$styleCell)->addText("Lokasi Proyek", $fontStyle);
