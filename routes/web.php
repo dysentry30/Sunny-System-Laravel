@@ -1883,7 +1883,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                 return $sd = $sd->sumber_dana_id;
             })->unique()->sort()->values();
         } else if($item == "APBD" || $item == "Pemerintah Provinsi") {
-            $data = Provinsi::all();
+            $data = Provinsi::where('country_id', 'ID')->get();
         } else {
             $data = collect();
         }
@@ -2100,7 +2100,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     });
 
     Route::get('/matriks-approval-rekomendasi', function () {
-        $approval_rekomendasi = MatriksApprovalRekomendasi::with(["Pegawai", "Divisi"])->where("start_tahun", "=", (int) date("Y"))->get();
+        $approval_rekomendasi = MatriksApprovalRekomendasi::with(["Pegawai", "Divisi"])->where("start_tahun", "=", (int) date("Y"))->orderBy('updated_at')->get();
         // $jabatans = Jabatan::where("tahun", "=", (int) date("Y"))->get();
         // $unit_kerjas = UnitKerja::whereNotIn("divcode", ["B", "C", "D", "O", "U", "F", "L"])->get();
         $divisi_all = Divisi::all();

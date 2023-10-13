@@ -145,7 +145,6 @@
                                 <thead>
                                     <!--begin::Table row-->
                                     <tr class="text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                        <th class="min-w-auto ps-5 text-white">Tahun</th>
                                         <th class="min-w-auto text-white">Kategori</th>
                                         <th class="min-w-auto text-white">Kriteria Penilaian</th>
                                         <th class="min-w-auto text-white">Klasifikasi</th>
@@ -175,7 +174,6 @@
                                                     $finish_date = Carbon\Carbon::createFromFormat("m/Y", $kriteria->finish_bulan . "/" . $kriteria->finish_tahun)->translatedFormat("F Y");
                                                 }
                                             @endphp
-                                            <td class="text-center">{{$kriteria->tahun}}</td>
                                             <td>{{$kriteria->kategori}}</td>
                                             <td>{{$kriteria->kriteria_penilaian}}</td>
                                             <td>{{$kriteria->klasifikasi}}</td>

@@ -376,7 +376,7 @@ function createWordRekomendasi(App\Models\Proyek $proyek, \Illuminate\Support\Co
     $table->addCell(2000)->addText("Perusahaan berada pada urutan 1 - 20");
     $table->addCell(2000)->addText("Perusahaan berada pada urutan 21 - 45");
     $table->addCell(2000)->addText("Perusahaan tidak berada pada daftar rating Perusahaan");
-    $table->addCell(2000)->addText($rating["score"]);
+    $table->addCell(2000)->addText($rating["score"] ?? 0);
     $table->addCell(2000)->addText("-");
 
     $table->addRow();

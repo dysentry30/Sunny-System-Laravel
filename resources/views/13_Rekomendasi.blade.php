@@ -514,7 +514,35 @@
                                                             </small>
                                                         </td>
                                                         <td>
-                                                            -
+                                                            @php
+                                                                $nilaiKriteriaPenggunaJasa = $proyek->KriteriaPenggunaJasaDetail?->sum('nilai') * 100 ?? null;
+                                                                $style = 'badge-light-dark';
+                                                                $text = 'Belum Ditentukan';
+                                                                if (!empty($nilaiKriteriaPenggunaJasa)) {
+                                                                    $text = App\Models\PenilaianPenggunaJasa::select('nama')->where('dari_nilai', '>', $nilaiKriteriaPenggunaJasa)->where('dari_nilai', '<=', $nilaiKriteriaPenggunaJasa)->first() ?? '-';
+                                                                    switch ($text) {
+                                                                        case 'Risiko Rendah':
+                                                                            $style = 'badge-light-succsess';
+                                                                            break;
+                                                                        case 'Risiko Risiko Tinggi':
+                                                                            $style = 'badge-light-warning';
+                                                                            break;
+                                                                        case 'Risiko Moderat':
+                                                                            $style = 'badge-warning';
+                                                                            break;
+                                                                        case 'Risiko Ekstrem':
+                                                                            $style = 'badge-danger';
+                                                                            break;
+                                                                        
+                                                                        default:
+                                                                            $style = '';
+                                                                            break;
+                                                                    }
+                                                                }
+                                                            @endphp
+                                                                <small class="badge {{ $style }}">
+                                                                    {{ $text }}
+                                                                </small>
                                                         </td>
                                                         <td>
                                                             @if (($proyek->is_request_rekomendasi && !$proyek->review_assessment) || (is_null($proyek->is_draft_recommend_note) || $proyek->is_draft_recommend_note))
@@ -945,7 +973,10 @@
                                 {{-- End :: Tab Content Proyek Persetujuan Rekomendasi --}}
 
                                 {{-- Begin::Tab Content Kriteria Pengguna Jasa --}}
+                                
                                 @foreach ($proyeks_rekomendasi as $proyek)
+                                <form action="/kriteria-pengguna-jasa/detail/save" method="POST" id="form-kriteria-{{ $proyek->kode_proyek }}" enctype="multipart/form-data">
+                                    @csrf
                                     <div class="modal fade" id="kt_user_view_kriteria_{{ $proyek->kode_proyek }}" tabindex="-1" aria-hidden="true">
                                         <!--begin::Modal dialog-->
                                         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-fullscreen">
@@ -970,8 +1001,6 @@
                                 
                                                 <!--begin::Modal body-->
                                                 <div class="modal-body py-lg-6 px-lg-6">
-                                                    <form action="/kriteria-pengguna-jasa/detail/save" method="POST" id="form-kriteria" enctype="multipart/form-data">
-                                                    @csrf
                                                         <input type="hidden" name="modal" value="#kt_user_view_kriteria_{{ $proyek->kode_proyek }}">
                                                         <!--begin::Row Kanan+Kiri-->
                                                         {{-- <div class="row fv-row">
@@ -1115,13 +1144,13 @@
                                                                             <td>{!! nl2br($item->kriteria_3) !!}</td>
                                                                             <td>{!! nl2br($item->kriteria_4) !!}</td>
                                                                             <td>
-                                                                                <input type="number" name="nilai[]" id="nilai" min="0" max="5" class="">
+                                                                                <input type="number" name="nilai[]" form="form-kriteria-{{ $proyek->kode_proyek }}" id="nilai" min="0" max="5">
                                                                             </td>
                                                                             <td>
-                                                                                <textarea name="keterangan[]" id="" cols="30" rows="10"></textarea>
+                                                                                <textarea name="keterangan[]" form="form-kriteria-{{ $proyek->kode_proyek }}" id="" cols="30" rows="10"></textarea>
                                                                             </td>
                                                                             <td>
-                                                                                <input type="file" name="dokumen_kriteria[]" id="dokumen_kriteria" class="form-control form-control-sm form-control-solid">
+                                                                                <input type="file" name="dokumen_penilaian[]" form="form-kriteria-{{ $proyek->kode_proyek }}" id="dokumen_kriteria" class="form-control form-control-sm form-control-solid">
                                                                             </td>
                                                                         </tr>
                                                                     @endforeach
@@ -1129,11 +1158,10 @@
                                                             </table>
                                                             <input type="hidden" name="kode_proyek" value="{{ $proyek->kode_proyek }}">
                                                         </div>
-                                                    </form>
                                     
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white" form="form-kriteria" id="new_save"
+                                                    <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white" form="form-kriteria-{{ $proyek->kode_proyek }}" id="new_save"
                                                         style="background-color:#008CB4">Save</button>
                                 
                                                 </div>
@@ -1143,6 +1171,7 @@
                                         </div>
                                         <!--end::Modal dialog-->
                                     </div>    
+                                </form>
                                 @endforeach
                                 {{-- End::Tab Content Kriteria Pengguna Jasa --}}
                             </div>

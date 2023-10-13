@@ -109,9 +109,9 @@ class KriteriaPenggunaJasaController extends Controller
     public function detailSave(Request $request)
     {
         $data = $request->all();
-        // dd($data);
+        dd($data);
 
-        if (!isset($data['dokumen_kriteria'])) {
+        if (!isset($data['dokumen_penilaian']) || count($data['dokumen_penilaian']) != 6) {
             Alert::error("Success", "Harap masukkan semua dokumen!");
             return redirect()->back()->with("modal", $data["modal"]);
         }
@@ -119,13 +119,13 @@ class KriteriaPenggunaJasaController extends Controller
         $masterKriteriaPenggunaJasa = KriteriaPenggunaJasa::all();
 
         $collectKriteriaDetail = [];
-        $files = $request->file("dokumen_kriteria");
+        $files = collect($request->file("dokumen_penilaian"))->values();
         foreach ($files as $key => $item) {
             $id_document = date("His_") . $key . '_' . str_replace(' ', '-', $item->getClientOriginalName());
             $kriteria_detail = new KriteriaPenggunaJasaDetail();
             $kriteria_detail->kode_proyek = $data['kode_proyek'];
             $kriteria_detail->item = $masterKriteriaPenggunaJasa[$key]->item;
-            $kriteria_detail->keterangan = $data['nilai'][$key];
+            $kriteria_detail->nilai = (int)$data['nilai'][$key];
             $kriteria_detail->keterangan = $data['keterangan'][$key];
             $kriteria_detail->id_document = $id_document;
 
