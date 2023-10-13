@@ -513,33 +513,35 @@
                                                                 @endif
                                                             </small>
                                                         </td>
-                                                        <td>
+                                                        <td class="text-center">
                                                             @php
-                                                                $nilaiKriteriaPenggunaJasa = $proyek->KriteriaPenggunaJasaDetail?->sum('nilai') * 100 ?? null;
+                                                                $nilaiKriteriaPenggunaJasa = ($proyek->KriteriaPenggunaJasaDetail?->sum('nilai')*10) ?? null;
                                                                 $style = 'badge-light-dark';
                                                                 $text = 'Belum Ditentukan';
                                                                 if (!empty($nilaiKriteriaPenggunaJasa)) {
-                                                                    $text = App\Models\PenilaianPenggunaJasa::select('nama')->where('dari_nilai', '>', $nilaiKriteriaPenggunaJasa)->where('dari_nilai', '<=', $nilaiKriteriaPenggunaJasa)->first() ?? '-';
+                                                                    $text = App\Models\PenilaianPenggunaJasa::all()->filter(function($item) use($nilaiKriteriaPenggunaJasa){
+                                                                        return $item->dari_nilai <= $nilaiKriteriaPenggunaJasa && $item->sampai_nilai > $nilaiKriteriaPenggunaJasa;
+                                                                    })->first()->nama ?? '-';
                                                                     switch ($text) {
                                                                         case 'Risiko Rendah':
-                                                                            $style = 'badge-light-succsess';
-                                                                            break;
+                                                                        $style = 'badge-light-succsess';
+                                                                        break;
                                                                         case 'Risiko Risiko Tinggi':
-                                                                            $style = 'badge-light-warning';
-                                                                            break;
+                                                                        $style = 'badge-light-warning';
+                                                                        break;
                                                                         case 'Risiko Moderat':
-                                                                            $style = 'badge-warning';
-                                                                            break;
+                                                                        $style = 'badge-warning';
+                                                                        break;
                                                                         case 'Risiko Ekstrem':
-                                                                            $style = 'badge-danger';
-                                                                            break;
+                                                                        $style = 'badge-danger';
+                                                                        break;
                                                                         
                                                                         default:
-                                                                            $style = '';
-                                                                            break;
+                                                                        $style = '';
+                                                                        break;
                                                                     }
                                                                 }
-                                                            @endphp
+                                                                @endphp
                                                                 <small class="badge {{ $style }}">
                                                                     {{ $text }}
                                                                 </small>
@@ -661,7 +663,7 @@
                                                     <tr>
                                                         <td>
                                                             {{-- <a href="#kt_modal_view_proyek_rekomendasi_{{$proyek->kode_proyek}}" target="_blank" data-bs-toggle="modal" class="text-hover-primary">{{ $proyek->nama_proyek }}</a>    --}}
-                                                            @if ($proyek->KriteriaPenggunaJasaDetail->count() == 6)
+                                                            @if ($proyek->KriteriaPenggunaJasaDetail->count() == \App\Models\KriteriaPenggunaJasa::all()->count())
                                                                 <a href="#kt_modal_view_proyek_rekomendasi_{{$proyek->kode_proyek}}" target="_blank" data-bs-toggle="modal" class="text-hover-primary">{{ $proyek->nama_proyek }}</a>   
                                                             @else
                                                                 <a href="#kt_user_view_kriteria_{{ $proyek->kode_proyek }}" target="_blank" data-bs-toggle="modal" class="text-hover-primary">{{ $proyek->nama_proyek }}</a>

@@ -109,7 +109,7 @@ class KriteriaPenggunaJasaController extends Controller
     public function detailSave(Request $request)
     {
         $data = $request->all();
-        dd($data);
+        // dd($data);
 
         if (!isset($data['dokumen_penilaian']) || count($data['dokumen_penilaian']) != 6) {
             Alert::error("Success", "Harap masukkan semua dokumen!");
