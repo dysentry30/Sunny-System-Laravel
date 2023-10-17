@@ -113,7 +113,10 @@ class AdminAuth
             "download-pareto",
             "download",
             "proyek-datatables",
-            "kriteria-pengguna-jasa"
+            "kriteria-pengguna-jasa",
+            "company-profile",
+            "laporan-keuangan",
+            "AHU"
         ]);
         $allowed_url_team_proyek = join(" ", ["dashboard", "proyek", "contract-management", "review-contract", "draft-contract", "issue-project", "question", "input-risk", "laporan-bulanan", "serah-terima", "claim-management", "approval-claim", "detail-claim", "claim", "document", "user"]);
         $concat_allowed_url = "";
