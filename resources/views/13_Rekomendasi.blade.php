@@ -1022,7 +1022,7 @@
                                                                         <td>
                                                                             @foreach ($legalitasJasa as $key => $item)
                                                                             <div class="form-check" id="kriteria">
-                                                                                <input class="form-check-input" type="radio" name="is_legalitas" id="is_legalitas_{{ $key }}" onchange="setNilaiKriteria(this, '{{ (int)$item->bobot }}', '{{ $key }}')" value="{{ $key+1 }}">
+                                                                        <input class="form-check-input" type="radio" name="is_legalitas" id="is_legalitas_{{ $key }}" onchange="setNilaiKriteria(this, '{{ (int)$item->bobot }}', '{{ $key }}')" value="{{ $key+1 }}">
                                                                                 <label for="is_legalitas_{{ $key }}" class="form-check-label">
                                                                                     {!! nl2br($item->item) !!}
                                                                                 </label>
