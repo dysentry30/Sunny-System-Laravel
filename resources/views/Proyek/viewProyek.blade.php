@@ -1629,7 +1629,8 @@
                                                                 </label>
                                                                 <!--end::Label-->
                                                                 <!--begin::Input-->
-                                                                {{-- <select id="departemen-proyek" name="departemen-proyek"
+                                                                @if (empty($proyek->departemen_proyek))
+                                                                <select id="departemen-proyek" name="departemen-proyek"
                                                                     class="form-select form-select-solid"
                                                                     data-control="select2" data-hide-search="false"
                                                                     data-placeholder="Pilih Departemen">
@@ -1637,12 +1638,14 @@
                                                                     @foreach ($departemen as $depart)
                                                                     <option value="{{ $depart->kode_departemen }}" {{ $depart->kode_departemen == $proyek->departemen_proyek ? "selected" : "" }}>{{ $depart->nama_departemen }}</option>
                                                                     @endforeach
-                                                                </select> --}}
+                                                                </select>
+                                                                @else
                                                                 <input type="text"
                                                                     class="form-control form-control-solid"
                                                                     id="departemen-proyek" name="departemen-proyek"
                                                                     placeholder="Departemen"
                                                                     value="{{ $proyek->Departemen->nama_departemen }}" disabled/>
+                                                                @endif
                                                                 <!--end::Input-->
                                                             </div>
                                                             <!--end::Input group-->
