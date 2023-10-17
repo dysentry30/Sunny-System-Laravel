@@ -127,7 +127,7 @@ class KriteriaPenggunaJasaController extends Controller
         // dd($data);
 
         if (!isset($data['dokumen_penilaian']) || count($data['dokumen_penilaian']) != 6) {
-            Alert::error("Success", "Harap masukkan semua dokumen!");
+            Alert::error("Error", "Harap masukkan semua dokumen!");
             return redirect()->back()->with("modal", $data["modal"]);
         }
 
@@ -139,7 +139,13 @@ class KriteriaPenggunaJasaController extends Controller
             $id_document = date("His_") . $key . '_' . str_replace(' ', '-', $item->getClientOriginalName());
             $kriteria_detail = new KriteriaPenggunaJasaDetail();
             $kriteria_detail->kode_proyek = $data['kode_proyek'];
-            $kriteria_detail->item = $masterKriteriaPenggunaJasa[$key]->item;
+            if ($key < $masterKriteriaPenggunaJasa->count()) {
+                $kriteria_detail->kriteria = $data['is_kriteria_' . $key];
+                $kriteria_detail->item = $masterKriteriaPenggunaJasa[$key]->item;
+            } else {
+                $kriteria_detail->item = null;
+                $kriteria_detail->kriteria = $data['is_legalitas'];
+            }
             $kriteria_detail->nilai = (int)$data['nilai'][$key];
             $kriteria_detail->keterangan = $data['keterangan'][$key];
             $kriteria_detail->id_document = $id_document;
@@ -147,7 +153,7 @@ class KriteriaPenggunaJasaController extends Controller
             $item->move(public_path('file-kriteria-pengguna-jasa'), $id_document);
             $collectKriteriaDetail[] = $kriteria_detail->attributesToArray();
         }
-
+        // dd($collectKriteriaDetail);
         if (KriteriaPenggunaJasaDetail::insert($collectKriteriaDetail)) {
             Alert::success("Success", "Form Kriteria Pengguna Jasa berhasil dibuat!");
             return redirect()->back();

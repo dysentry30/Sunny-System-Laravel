@@ -1399,7 +1399,7 @@ class CustomerController extends Controller
             }
             $companyProfile->file_document = $id_document;
             $companyProfile->nama_file = $nama_file;
-            $file->move(public_path('customer'), $id_document);
+            $file->move(public_path('customer-file'), $id_document);
 
             if ($companyProfile->save()) {
                 if (isset($is_create)) {
@@ -1449,7 +1449,7 @@ class CustomerController extends Controller
             }
             $laporanKeuangan->file_document = $id_document;
             $laporanKeuangan->nama_file = $nama_file;
-            $file->move(public_path('customer'), $id_document);
+            $file->move(public_path('customer-file'), $id_document);
 
             if ($laporanKeuangan->save()) {
                 if (isset($is_create)) {
@@ -1499,7 +1499,7 @@ class CustomerController extends Controller
             }
             $customerAHU->file_document = $id_document;
             $customerAHU->nama_file = $nama_file;
-            $file->move(public_path('customer'), $id_document);
+            $file->move(public_path('customer-file'), $id_document);
 
             if ($customerAHU->save()) {
                 if (isset($is_create)) {

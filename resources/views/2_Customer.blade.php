@@ -654,7 +654,7 @@
 
 @section("js-script")
 <!--begin::Data Tables-->
-<script src="datatables/jquery.dataTables.min.js"></script>
+<script src="/datatables/jquery.dataTables.min.js"></script>
 
 <script>
     $(document).ready(function() {

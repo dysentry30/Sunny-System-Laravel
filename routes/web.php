@@ -65,6 +65,7 @@ use App\Models\JenisProyek;
 use App\Models\PerjanjianKso;
 use App\Models\KriteriaAssessment;
 use App\Models\KriteriaGreenLine;
+use App\Models\LegalitasPerusahaan;
 use App\Models\MataUang;
 use App\Models\MatriksApprovalRekomendasi;
 use App\Models\Pegawai;
@@ -2222,6 +2223,78 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $approval_rekomendasi = MatriksApprovalRekomendasi::find($data["id-matriks-approval"]);
 
         if($approval_rekomendasi->delete()) {
+            Alert::success('Success', "Matriks Approval Rekomendasi berhasil dihapus");
+            return redirect()->back();
+        }
+        Alert::error('Error', "Matriks Approval Rekomendasi gagal dihapus");
+        return redirect()->back();
+    });
+
+    Route::get('/legalitas-perusahaan', function () {
+        $data = LegalitasPerusahaan::all();
+        return view("MasterData/LegalitasPerusahaan", compact(["data"]));
+    });
+
+    Route::post('/legalitas-perusahaan/save', function (Request $request) {
+        $data = $request->all();
+
+        $legalitas = new LegalitasPerusahaan();
+        $legalitas->bobot = $data["bobot"];
+        $legalitas->item = $data["item"];
+        $legalitas->nota_rekomendasi = $data["nota_rekomendasi"];
+        $legalitas->start_tahun = $data["tahun_start"];
+        $legalitas->start_bulan = $data["bulan_start"];
+        $legalitas->is_active = isset($data["isActive"]) ? true : false;
+        if (isset($data["finish_tahun"]) && isset($data["finish_bulan"])) {
+            $legalitas->finish_tahun = $data["tahun_finish"];
+            $legalitas->finish_bulan = $data["bulan_finish"];
+        }
+
+        if ($legalitas->save()) {
+            Alert::success("Success", "Legalitas Perusahaan Berhasil Ditambahkan");
+            return redirect()->back();
+        }
+        Alert::success("Error", "Legalitas Perusahaan Gagal Ditambahkan");
+        return redirect()->back();
+    });
+
+    Route::post('/legalitas-perusahaan/update', function (Request $request, string $id) {
+        $data = $request->all();
+
+        $legalitas = LegalitasPerusahaan::find($id);
+
+        // dd($data, $kriteriaPenggunaJasa);
+
+        if (empty($legalitas)) {
+            Alert::success("Error", "Legalitas Perusahaan Tidak Ditemukan");
+            return redirect()->back();
+        }
+
+        $legalitas->bobot = $data["bobot"];
+        $legalitas->item = $data["item"];
+        $legalitas->nota_rekomendasi = $data["nota_rekomendasi"];
+        $legalitas->start_tahun = $data["tahun_start"];
+        $legalitas->start_bulan = $data["bulan_start"];
+        $legalitas->is_active = isset($data["isActive"]) ? true : false;
+        if (isset($data["finish_tahun"]) && isset($data["finish_bulan"])) {
+            $legalitas->finish_tahun = $data["tahun_finish"];
+            $legalitas->finish_bulan = $data["bulan_finish"];
+        }
+
+        if ($legalitas->save()) {
+            Alert::success("Success", "Legalitas Perusahaan Berhasil Ditambahkan");
+            return redirect()->back();
+        }
+        Alert::success("Error", "Legalitas Perusahaan Gagal Ditambahkan");
+        return redirect()->back();
+    });
+
+    Route::post('/legalitas-perusahaan/delete', function (Request $request) {
+        $data = $request->all();
+        // dd($data);
+        $approval_rekomendasi = LegalitasPerusahaan::find($data["id-matriks-approval"]);
+
+        if ($approval_rekomendasi->delete()) {
             Alert::success('Success', "Matriks Approval Rekomendasi berhasil dihapus");
             return redirect()->back();
         }

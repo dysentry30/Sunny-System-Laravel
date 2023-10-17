@@ -404,7 +404,8 @@ Route::middleware(["web"])->group(function () {
     // Begin - RKAP
     Route::post('/rkap/save', function (Request $request) {
         $is_bpmcsrf_exist = $request->header("BPMCSRF");
-        if (!isset($is_bpmcsrf_exist)) {
+        $token = "L8nuMQHQb9GJBKjYft8crKPeTxAYXKYt3g2VeeJg9bb0n2yWqe";
+        if (empty($is_bpmcsrf_exist) || $is_bpmcsrf_exist != $token) {
             return response()->json([
                 "status" => 401,
                 "msg" => "Tidak Terautentikasi"
@@ -556,7 +557,7 @@ Route::middleware(["web"])->group(function () {
             "status" => 400,
             "msg" => "Group RKAP gagal ditambahkan",
         ], 400);
-    })->middleware("userAuth");
+    });
     // End - RKAP
 
     // Begin - Industry Owner ke SAP

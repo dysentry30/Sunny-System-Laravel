@@ -3,7 +3,7 @@
 {{-- End::Extend Header --}}
 
 {{-- Begin::Title --}}
-@section('title', 'Kriteria Pengguna Jasa')
+@section('title', 'Legalitas Perusahaan')
 {{-- End::Title --}}
 
 <!--begin::Main-->
@@ -32,7 +32,7 @@
                                 data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                                 class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
                                 <!--begin::Title-->
-                                <h1 class="d-flex align-items-center fs-3 my-1">Kriteria Pengguna Jasa
+                                <h1 class="d-flex align-items-center fs-3 my-1">Legalitas Perusahaan
                                 </h1>
                                 <!--end::Title-->
                             </div>
@@ -45,7 +45,7 @@
                                     <!--begin::Button-->
                                     <a  href="#" data-bs-target="#kt_modal_create_otomasi_approval" data-bs-toggle="modal" class="btn btn-sm btn-primary py-3"
                                         style="background-color:#008CB4; padding: 6px">
-                                        Tambah Kriteria Pengguna Jasa</a>
+                                        Tambah Legalitas Perusahaan</a>
 
                                 </div>
                                 <!--end::Actions-->
@@ -85,13 +85,8 @@
                                     <!--begin::Table row-->
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0 bg-primary">
                                         <th class="min-w-auto text-white">No.</th>
-                                        <th class="min-w-auto text-white">Kategori</th>
                                         <th class="min-w-auto text-white">Item</th>
                                         <th class="min-w-auto text-white">Bobot</th>
-                                        <th class="min-w-auto text-white">Kriteria 1</th>
-                                        <th class="min-w-auto text-white">Kriteria 2</th>
-                                        <th class="min-w-auto text-white">Kriteria 3</th>
-                                        <th class="min-w-auto text-white">Kriteria 4</th>
                                         <th class="min-w-auto text-white">Nota Rekomendasi</th>
                                         <th class="min-w-auto text-white">Action</th>
                                     </tr>
@@ -107,13 +102,8 @@
                                     @foreach ($data as $item)
                                         <tr>
                                             <td class="text-center align-middle">{{$no++}}</td>
-                                            <td class="align-middle">{{$item->kategori}}</td>
-                                            <td class="align-middle">{{$item->item}}</td>
+                                            <td class="align-middle">{!! nl2br($item->item) !!}</td>
                                             <td class="text-center align-middle">{{ $item->bobot }}</td>
-                                            <td class="">{!! nl2br($item->kriteria_1) !!}</td>
-                                            <td class="">{!! nl2br($item->kriteria_2) !!}</td>
-                                            <td class="">{!! nl2br($item->kriteria_3) !!}</td>
-                                            <td class="">{!! nl2br($item->kriteria_4) !!}</td>
                                             <td class="text-center align-middle">{{ $item->nota_rekomendasi }}</td>
                                             <td class="text-center align-middle">
                                                 <div class="d-flex justify-content-center">
@@ -160,7 +150,7 @@
                 <!--begin::Modal header-->
                 <div class="modal-header">
                     <!--begin::Modal title-->
-                    <h2>Tambah Kriteria Pengguna Jasa</h2>
+                    <h2>Tambah Legalitas Perusahaan</h2>
                     <!--end::Modal title-->
                     <!--begin::Close-->
                     <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
@@ -174,7 +164,7 @@
                 </div>
                 <!--end::Modal header-->
 
-                <form action="/kriteria-pengguna-jasa/save" method="POST">
+                <form action="/legalitas-perusahaan/save" method="POST">
                     @csrf
                     <input type="hidden" name="modal" value="kt_modal_create_otomasi_approval">
                     <!--begin::Modal body-->
@@ -238,53 +228,11 @@
                             <!--End begin::Col-->
 
                             <!--begin::Col-->
-                            <div class="">
-                                <!--begin::Input group Website-->
-                                <div class="fv-row mb-7">
-                                    <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Kategori</span>
-                                    </label>
-                                    <!--end::Label-->
-                                    <div class="d-flex flex-row gap-2">
-                                        <!--begin::Input-->
-                                        <select id="kategori" name="kategori"
-                                            class="form-select form-select-solid select2-hidden-accessible"
-                                            data-control="select2" data-hide-search="true" data-placeholder="Pilh Nota Rekomendasi..."
-                                            data-select2-id="select2-feature-kategori" tabindex="-1" aria-hidden="true" onchange="setItem(this)">
-                                            <option value="" selected></option>
-                                            {{-- <option value="Legalitas Perusahaan">Legalitas Perusahaan</option> --}}
-                                            <option value="Reputasi Pemberi Kerja">Reputasi Pemberi Kerja</option>
-                                            <option value="Financial">Financial</option>
-                                        </select>
-                                        <!--end::Input-->
-                                    </div>
-                                </div>
-                                <!--end::Input group-->
-                            </div>
-                            <!--End begin::Col-->
-                            
-                            <!--begin::Col-->
-                            <div class="">
-                                <!--begin::Input group Website-->
-                                <div class="fv-row mb-7">
-                                    <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Item</span>
-                                    </label>
-                                    <!--end::Label-->
-                                    <div class="d-flex flex-row gap-2">
-                                        <!--begin::Input-->
-                                        <select id="item" name="item"
-                                            class="form-select form-select-solid select2-hidden-accessible"
-                                            data-control="select2" data-hide-search="true" data-placeholder="Pilh Item"
-                                            data-select2-id="select2-item" tabindex="-1" aria-hidden="true">
-                                            <option value="" selected></option>
-                                        </select>
-                                        <!--end::Input-->
-                                    </div>
-                                </div>
-                                <!--end::Input group-->
+                            <div class="row mb-7">
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="required">Item</span>
+                                </label>
+                                <textarea name="item" id="item" cols="30" rows="10"></textarea>
                             </div>
                             <!--End begin::Col-->
 
@@ -293,34 +241,6 @@
                                     <span class="required">Bobot</span>
                                 </label>
                                 <input type="number" name="bobot" class="form-control form-control-solid">
-                            </div>
-
-                            <div class="row mb-7">
-                                <label class="fs-6 fw-bold form-label mt-3">
-                                    <span class="required">Kriteria 1</span>
-                                </label>
-                                <textarea name="kriteria_1" id="kriteria_1" cols="30" rows="10"></textarea>
-                            </div>
-
-                            <div class="row mb-7">
-                                <label class="fs-6 fw-bold form-label mt-3">
-                                    <span class="required">Kriteria 2</span>
-                                </label>
-                                <textarea name="kriteria_2" id="kriteria_2" cols="30" rows="10"></textarea>
-                            </div>
-
-                            <div class="row mb-7">
-                                <label class="fs-6 fw-bold form-label mt-3">
-                                    <span class="required">Kriteria 3</span>
-                                </label>
-                                <textarea name="kriteria_3" id="kriteria_3" cols="30" rows="10"></textarea>
-                            </div>
-
-                            <div class="row mb-7">
-                                <label class="fs-6 fw-bold form-label mt-3">
-                                    <span class="required">Kriteria 4</span>
-                                </label>
-                                <textarea name="kriteria_4" id="kriteria_4" cols="30" rows="10"></textarea>
                             </div>
 
                             <div class="row mb-7">
@@ -444,7 +364,7 @@
                     </div>
                     <!--end::Modal header-->
 
-                    <form action="/kriteria-pengguna-jasa/update/{{ $item->id }}" method="POST">
+                    <form action="/legalitas-perusahaan/update/{{ $item->id }}" method="POST">
                         @csrf
                         <input type="hidden" name="modal" value="kt_modal_create_otomasi_approval">
                         <!--begin::Modal body-->
@@ -505,61 +425,11 @@
                                 </div>
                                 <!--End begin::Col-->
                                 <!--begin::Col-->
-                                <div class="">
-                                    <!--begin::Input group Website-->
-                                    <div class="fv-row mb-7">
-                                        <!--begin::Label-->
-                                        <label class="fs-6 fw-bold form-label mt-3">
-                                            <span class="required">Kategori</span>
-                                        </label>
-                                        <!--end::Label-->
-                                        <div class="d-flex flex-row gap-2">
-                                            <!--begin::Input-->
-                                            <select id="kategori" name="kategori"
-                                                class="form-select form-select-solid select2-hidden-accessible"
-                                                data-control="select2" data-hide-search="true" data-placeholder="Pilh Nota Rekomendasi..."
-                                                data-select2-id="select2-feature-edit-{{ $item->id }}" tabindex="-1" aria-hidden="true" onchange="setItem(this, '{{ $item->id }}')">
-                                                <option value="" selected></option>
-                                                {{-- <option value="Legalitas Perusahaan" {{ $item->kategori == "Legalitas Perusahaan" ? "selected" : "" }}>Legalitas Perusahaan</option> --}}
-                                                <option value="Reputasi Pemberi Kerja" {{ $item->kategori == "Reputasi Pemberi Kerja" ? "selected" : "" }}>Reputasi Pemberi Kerja</option>
-                                                <option value="Financial" {{ $item->kategori == "Financial" ? "selected" : "" }}>Financial</option>
-                                            </select>
-                                            <!--end::Input-->
-                                        </div>
-                                    </div>
-                                    <!--end::Input group-->
-                                </div>
-                                <!--End begin::Col-->
-
-                                <!--begin::Col-->
-                                <div class="">
-                                    <!--begin::Input group Website-->
-                                    <div class="fv-row mb-7">
-                                        <!--begin::Label-->
-                                        <label class="fs-6 fw-bold form-label mt-3">
-                                            <span class="required">Item</span>
-                                        </label>
-                                        <!--end::Label-->
-                                        <div class="d-flex flex-row gap-2">
-                                            <!--begin::Input-->
-                                            <select id="item-{{ $item->id }}" name="item"
-                                                class="form-select form-select-solid select2-hidden-accessible"
-                                                data-control="select2" data-select2-id="select2-item-{{ $item->id }}" data-hide-search="true" data-placeholder="Pilh Item" tabindex="-1" aria-hidden="true">
-                                                <option value=""></option>
-                                                @if ($item->kategori != "Financial")
-                                                    <option value="{{ $item->item }}" selected>{{ $item->item }}</option>
-                                                @else
-                                                    <option value="Current Ratio" {{ $item->item == "Current Ratio" ? 'selected' : '' }}>Current Ratio</option>
-                                                    <option value="Cash Ratio" {{ $item->item == "Cash Ratio" ? 'selected' : '' }}>Cash Ratio</option>
-                                                    <option value="Debt to Equity Ratio" {{ $item->item == "Debt to Equity Ratio" ? 'selected' : '' }}>Debt to Equity Ratio</option>
-                                                    <option value="Kepatuhan Pembayaran Pajak" {{ $item->item == "Kepatuhan Pembayaran Pajak" ? 'selected' : '' }}>Kepatuhan Pembayaran Pajak</option>
-                                                @endif
-
-                                            </select>
-                                            <!--end::Input-->
-                                        </div>
-                                    </div>
-                                    <!--end::Input group-->
+                                <div class="row mb-7">
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span class="required">Item</span>
+                                    </label>
+                                    <textarea name="item" id="item" cols="30" rows="10">{!! nl2br($item->item) !!}</textarea>
                                 </div>
                                 <!--End begin::Col-->
     
@@ -570,33 +440,6 @@
                                     <input type="number" name="bobot" value="{{ $item->bobot }}" class="form-control form-control-solid">
                                 </div>
     
-                                <div class="row mb-7">
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Kriteria 1</span>
-                                    </label>
-                                    <textarea name="kriteria_1" id="kriteria_1" cols="30" rows="10">{!! $item->kriteria_1 !!}</textarea>
-                                </div>
-    
-                                <div class="row mb-7">
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Kriteria 2</span>
-                                    </label>
-                                    <textarea name="kriteria_2" id="kriteria_2" cols="30" rows="10">{!! $item->kriteria_2 !!}</textarea>
-                                </div>
-    
-                                <div class="row mb-7">
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Kriteria 3</span>
-                                    </label>
-                                    <textarea name="kriteria_3" id="kriteria_3" cols="30" rows="10">{!! $item->kriteria_3 !!}</textarea>
-                                </div>
-    
-                                <div class="row mb-7">
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Kriteria 4</span>
-                                    </label>
-                                    <textarea name="kriteria_4" id="kriteria_4" cols="30" rows="10">{!! $item->kriteria_4 !!}</textarea>
-                                </div>
     
                                 <div class="row mb-7">
                                      <!--begin::Label-->

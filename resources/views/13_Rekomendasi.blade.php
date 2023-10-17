@@ -434,7 +434,7 @@
                                                 <th class="min-w-auto">Kategori Proyek</th>
                                                 <th class="min-w-auto">Mengusulkan</th>
                                                 <th class="min-w-auto">Risiko</th>
-                                                <th class="min-w-auto">Status Pengajuan</th>
+                                                {{-- <th class="min-w-auto">Status Pengajuan</th> --}}
                                                 <th class="min-w-auto">Status Persetujuan</th>
                                                 {{-- <th class="min-w-auto">ID Contract</th> --}}
                                             </tr>
@@ -515,7 +515,7 @@
                                                         </td>
                                                         <td class="text-center">
                                                             @php
-                                                                $nilaiKriteriaPenggunaJasa = ($proyek->KriteriaPenggunaJasaDetail?->sum('nilai')*10) ?? null;
+                                                                $nilaiKriteriaPenggunaJasa = $proyek->KriteriaPenggunaJasaDetail?->sum('nilai') ?? null;
                                                                 $style = 'badge-light-dark';
                                                                 $text = 'Belum Ditentukan';
                                                                 if (!empty($nilaiKriteriaPenggunaJasa)) {
@@ -546,8 +546,8 @@
                                                                     {{ $text }}
                                                                 </small>
                                                         </td>
-                                                        <td>
-                                                            @if (($proyek->is_request_rekomendasi && !$proyek->review_assessment) || (is_null($proyek->is_draft_recommend_note) || $proyek->is_draft_recommend_note))
+                                                        {{-- <td> --}}
+                                                            {{-- @if (($proyek->is_request_rekomendasi && !$proyek->review_assessment) || (is_null($proyek->is_draft_recommend_note) || $proyek->is_draft_recommend_note))
                                                                 @if (!empty(Auth::user()->Pegawai->MatriksApproval) && Auth::user()->Pegawai->MatriksApproval->contains("kategori", "Pengajuan"))
                                                                     <small class="badge badge-light-warning">Request Pengajuan</small>
                                                                 @else
@@ -559,7 +559,7 @@
                                                                 <small class="badge badge-light-success">Pengajuan Disetujui</small>
                                                             @elseif ($proyek->review_assessment == false && $proyek->is_recommended == false && $proyek->is_disetujui == false)
                                                                 <small class="badge badge-light-danger">Pengajuan Ditolak</small>
-                                                            @endif
+                                                            @endif --}}
                                                             {{-- @if ($proyek->review_assessment && $proyek->review_assessment && !$proyek->is_recommended && !$proyek->is_recommended_with_note)
                                                                 <small class="badge badge-light-success">Pengajuan Disetujui</small>
                                                             @elseif($is_pending && $proyek->is_disetujui == null)
@@ -573,7 +573,7 @@
                                                             @elseif(!$is_pending && !$proyek->is_recommended || !$proyek->review_assessment)
                                                                 <small class="badge badge-light-danger">Tidak Direkomendasikan</small>
                                                             @endif --}}
-                                                        </td>
+                                                        {{-- </td> --}}
                                                         <td class="text-center">
                                                             {{-- @if ($proyek->is_disetujui)
                                                                 <small class="badge badge-light-success">
@@ -987,6 +987,84 @@
                                                 <!--begin::Modal header-->
                                                 <div class="modal-header">
                                                     <!--begin::Modal title-->
+                                                    <h2>Form Legalitas Pengguna Jasa</h2>
+                                                    <!--end::Modal title-->
+                                                    <!--begin::Close-->
+                                                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                                                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                                                        <span class="svg-icon svg-icon-1">
+                                                            <i class="bi bi-x-lg"></i>
+                                                        </span>
+                                                        <!--end::Svg Icon-->
+                                                    </div>
+                                                    <!--end::Close-->
+                                                </div>
+                                                <!--end::Modal header-->
+                                
+                                                <!--begin::Modal body-->
+                                                <div class="modal-body py-lg-6 px-lg-6">
+                                                        <input type="hidden" name="modal" value="#kt_user_view_kriteria_{{ $proyek->kode_proyek }}">
+                                                        <div class="row fv-row">
+                                                            <table>
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th class="min-w-50px">Item</th>
+                                                                        <th class="min-w-auto">Nilai</th>
+                                                                        <th class="min-w-auto">Keterangan</th>
+                                                                        <th class="min-w-auto">Upload Dokumen</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @php
+                                                                        $legalitasJasa = App\Models\LegalitasPerusahaan::all();
+                                                                    @endphp
+                                                                    <tr>
+                                                                        <td>
+                                                                            @foreach ($legalitasJasa as $key => $item)
+                                                                            <div class="form-check" id="kriteria">
+                                                                                <input class="form-check-input" type="radio" name="is_legalitas" id="is_legalitas_{{ $key }}" onchange="setNilaiKriteria(this, '{{ (int)$item->bobot }}', '{{ $key }}')" value="{{ $key+1 }}">
+                                                                                <label for="is_legalitas_{{ $key }}" class="form-check-label">
+                                                                                    {!! nl2br($item->item) !!}
+                                                                                </label>
+                                                                            </div>
+                                                                            <br>
+                                                                            @endforeach
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="number" name="nilai[]" form="form-kriteria-{{ $proyek->kode_proyek }}" id="nilai_{{ $key }}">
+                                                                        </td>
+                                                                        <td>
+                                                                            <textarea name="keterangan[]" form="form-kriteria-{{ $proyek->kode_proyek }}" id="" cols="30" rows="10"></textarea>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="file" name="dokumen_penilaian[]" form="form-kriteria-{{ $proyek->kode_proyek }}" id="dokumen_kriteria" class="form-control form-control-sm form-control-solid">
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                            <input type="hidden" name="kode_proyek" value="{{ $proyek->kode_proyek }}">
+                                                        </div>
+                                    
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-sm btn-light btn-active-primary text-white" data-bs-toggle="modal" data-bs-target="#kt_user_modal2_kriteria_{{ $proyek->kode_proyek }}" id="new_save"
+                                                        style="background-color:#008CB4">Next</button>
+                                
+                                                </div>
+                                                    <!--end::Modal body-->
+                                            </div>
+                                            <!--end::Modal content-->
+                                        </div>
+                                        <!--end::Modal dialog-->
+                                    </div> 
+                                    <div class="modal fade" id="kt_user_modal2_kriteria_{{ $proyek->kode_proyek }}" tabindex="-1" aria-hidden="true">
+                                        <!--begin::Modal dialog-->
+                                        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-fullscreen">
+                                            <!--begin::Modal content-->
+                                            <div class="modal-content">
+                                                <!--begin::Modal header-->
+                                                <div class="modal-header">
+                                                    <!--begin::Modal title-->
                                                     <h2>Form Kriteria Pengguna Jasa</h2>
                                                     <!--end::Modal title-->
                                                     <!--begin::Close-->
@@ -1004,120 +1082,6 @@
                                                 <!--begin::Modal body-->
                                                 <div class="modal-body py-lg-6 px-lg-6">
                                                         <input type="hidden" name="modal" value="#kt_user_view_kriteria_{{ $proyek->kode_proyek }}">
-                                                        <!--begin::Row Kanan+Kiri-->
-                                                        {{-- <div class="row fv-row">
-                                                            
-                                                            <!--begin::Col-->
-                                                            <div class="">
-                                                                <!--begin::Input group Website-->
-                                                                <input type="hidden" name="kode_proyek" value="{{ $proyek->kode_proyek }}">
-                                                                <input type="hidden" name="modal" value="kt_user_view_kriteria_{{ $proyek->kode_proyek }}">
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="required">Item</span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-                                                                    <!--begin::Input-->
-                                                                    <select id="item" name="item"
-                                                                        class="form-select form-select-solid select2-hidden-accessible"
-                                                                        data-control="select2" data-hide-search="true" data-placeholder="Pilh Item"
-                                                                        data-select2-id="select2-item-{{ $proyek->kode_proyek }}" tabindex="-1" aria-hidden="true">
-                                                                        <option value="" selected></option>
-                                                                        <optgroup label="Legalitas Perusahaan">
-                                                                            <option value="Legalitas institusi / perusahaan" {{ $proyek->KriteriaPenggunaJasaDetail?->where('item', '=', 'Legalitas institusi / perusahaan')->isNotEmpty() ? 'disabled' : '' }}>Legalitas institusi / perusahaan</option>
-                                                                        </optgroup>
-                                                                        <optgroup label="Reputasi Pemberi Kerja">
-                                                                            <option value="Reputasi Pemberi Kerja Dalam Pemenuhan Kontrak (Historical)"
-                                                                            {{ $proyek->KriteriaPenggunaJasaDetail?->where('item', '=', 'Reputasi Pemberi Kerja Dalam Pemenuhan Kontrak (Historical)')->isNotEmpty() && $proyek->KriteriaPenggunaJasaDetail?->where('item', '=', 'Reputasi Pemberi Kerja Dalam Pemenuhan Kontrak (Historical)')->count() == 4  ? 'disabled' : '' }}>
-                                                                            Reputasi Pemberi Kerja Dalam Pemenuhan Kontrak (Historical)
-                                                                            </option>
-                                                                        </optgroup>
-                                                                        <optgroup label="Financial">
-                                                                            <option value="Current Ratio"
-                                                                            {{ $proyek->KriteriaPenggunaJasaDetail?->where('item', '=', 'Current Ratio')->isNotEmpty() && $proyek->KriteriaPenggunaJasaDetail?->where('item', '=', 'Current Ratio')->count() == 4 ? 'disabled' : '' }}>
-                                                                                Current Ratio
-                                                                            </option>
-                                                                            <option value="Cash Ratio"
-                                                                            {{ $proyek->KriteriaPenggunaJasaDetail?->where('item', '=', 'Cash Ratio')->isNotEmpty() && $proyek->KriteriaPenggunaJasaDetail?->where('item', '=', 'Cash Ratio')->count() == 4 ? 'disabled' : '' }}>
-                                                                                Cash Ratio
-                                                                            </option>
-                                                                            <option value="Debt to Equity Ratio"
-                                                                            {{ $proyek->KriteriaPenggunaJasaDetail?->where('item', '=', 'Debt to Equity Ratio')->isNotEmpty() && $proyek->KriteriaPenggunaJasaDetail?->where('item', '=', 'Debt to Equity Ratio')->count() == 4 ? 'disabled' : '' }}>
-                                                                                Debt to Equity Ratio
-                                                                            </option>
-                                                                            <option value="Kepatuhan Pembayaran Pajak"
-                                                                            {{ $proyek->KriteriaPenggunaJasaDetail?->where('item', '=', 'Kepatuhan Pembayaran Pajak')->isNotEmpty() && $proyek->KriteriaPenggunaJasaDetail?->where('item', '=', 'Kepatuhan Pembayaran Pajak')->count() == 2 ? 'disabled' : '' }}>
-                                                                                Kepatuhan Pembayaran Pajak
-                                                                            </option>
-                                                                        </optgroup>
-                                                                    </select>
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
-                                                            </div>
-                                                            <!--End begin::Col-->
-                                
-                                                            <div class="row mb-7">
-                                                                <label class="fs-6 fw-bold form-label mt-3">
-                                                                    <span class="required">Nilai</span>
-                                                                </label>
-                                                                <input type="number" name="nilai" min="1" max="5" class="form-control form-control-solid">
-                                                            </div>
-                                
-                                                            <div class="row mb-7">
-                                                                <label class="fs-6 fw-bold form-label mt-3">
-                                                                    <span class="required">Kriteria</span>
-                                                                </label>
-                                                                <div class="">
-                                                                    <div class="form-check mb-4">
-                                                                        <input class="form-check-input" type="radio" name="kriteria" value="1" id="is_kriteria_1">
-                                                                        <label class="form-check-label" for="is_kriteria_1">
-                                                                        Kriteria 1
-                                                                        </label>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="">
-                                                                    <div class="form-check mb-4">
-                                                                        <input class="form-check-input" type="radio" name="kriteria" value="2" id="is_kriteria_2">
-                                                                        <label class="form-check-label" for="is_kriteria_2">
-                                                                        Kriteria 2
-                                                                        </label>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="">
-                                                                    <div class="form-check mb-4">
-                                                                        <input class="form-check-input" type="radio" name="kriteria" value="3" id="is_kriteria_3">
-                                                                        <label class="form-check-label" for="is_kriteria_3">
-                                                                        Kriteria 3
-                                                                        </label>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="">
-                                                                    <div class="form-check mb-4">
-                                                                        <input class="form-check-input" type="radio" name="kriteria" value="4" id="is_kriteria_4">
-                                                                        <label class="form-check-label" for="is_kriteria_4">
-                                                                        Kriteria 4
-                                                                        </label>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                
-                                                            <div class="row mb-7">
-                                                                <label class="fs-6 fw-bold form-label mt-3">
-                                                                    <span class="required">Keterangan</span>
-                                                                </label>
-                                                                <textarea name="keterangan" id="keterangan" cols="30" rows="10"></textarea>
-                                                            </div>
-                                
-                                                            <div class="row mb-7">
-                                                                <label class="fs-6 fw-bold form-label mt-3">
-                                                                    <span class="required">Upload Dokumen</span>
-                                                                </label>
-                                                                <input type="file" name="dokumen_kriteria" id="dokumen_kriteria" class="form-control form-control-solid">
-                                                            </div>
-                                                        </div> --}}
-                                                        <!--End::Row Kanan+Kiri-->
                                                         <div class="row fv-row">
                                                             <table>
                                                                 <thead>
@@ -1141,12 +1105,48 @@
                                                                         <tr>
                                                                             <td>{{ $item->kategori }}</td>
                                                                             <td>{{ $item->item }}</td>
-                                                                            <td>{!! nl2br($item->kriteria_1) !!}</td>
-                                                                            <td>{!! nl2br($item->kriteria_2) !!}</td>
-                                                                            <td>{!! nl2br($item->kriteria_3) !!}</td>
-                                                                            <td>{!! nl2br($item->kriteria_4) !!}</td>
                                                                             <td>
-                                                                                <input type="number" name="nilai[]" form="form-kriteria-{{ $proyek->kode_proyek }}" id="nilai" min="0" max="5">
+                                                                                @if (!is_null($item->kriteria_1))
+                                                                                    <div class="form-check" id="kriteria">
+                                                                                        <input class="form-check-input" type="radio" name="is_kriteria_{{ $key }}" id="is_kriteria_{{ $key }}_1" onchange="setNilaiKriteria(this, '{{ (int)$item->bobot * 1 }}', '{{ $key }}')" value="1">
+                                                                                        <label for="is_kriteria_{{ $key }}_1" class="form-check-label">
+                                                                                            {!! nl2br($item->kriteria_1) !!}
+                                                                                        </label>
+                                                                                    </div>
+                                                                                @endif
+                                                                            </td>
+                                                                            <td>
+                                                                                @if (!is_null($item->kriteria_2))
+                                                                                    <div class="form-check" id="kriteria">
+                                                                                        <input class="form-check-input" type="radio" name="is_kriteria_{{ $key }}" id="is_kriteria_{{ $key }}_2" onchange="setNilaiKriteria(this, '{{ (int)$item->bobot * 2 }}', '{{ $key }}')" value="2">
+                                                                                        <label for="is_kriteria_{{ $key }}_2" class="form-check-label">
+                                                                                            {!! nl2br($item->kriteria_2) !!}
+                                                                                        </label>
+                                                                                    </div>
+                                                                                @endif
+                                                                            </td>
+                                                                            <td>
+                                                                                @if (!is_null($item->kriteria_3))
+                                                                                    <div class="form-check" id="kriteria">
+                                                                                        <input class="form-check-input" type="radio" name="is_kriteria_{{ $key }}" id="is_kriteria_{{ $key }}_3" onchange="setNilaiKriteria(this, '{{ (int)$item->bobot * 3 }}', '{{ $key }}')" value="3">
+                                                                                        <label for="is_kriteria_{{ $key }}_3" class="form-check-label">
+                                                                                            {!! nl2br($item->kriteria_3) !!}
+                                                                                        </label>
+                                                                                    </div>
+                                                                                @endif
+                                                                            </td>
+                                                                            <td>
+                                                                                @if (!is_null($item->kriteria_4))
+                                                                                    <div class="form-check" id="kriteria">
+                                                                                        <input class="form-check-input" type="radio" name="is_kriteria_{{ $key }}" id="is_kriteria_{{ $key }}_4" onchange="setNilaiKriteria(this, '{{ (int)$item->bobot * 4 }}', '{{ $key }}')" value="4">
+                                                                                        <label for="is_kriteria_{{ $key }}_4" class="form-check-label">
+                                                                                            {!! nl2br($item->kriteria_4) !!}
+                                                                                        </label>
+                                                                                    </div>
+                                                                                @endif
+                                                                            </td>
+                                                                            <td>
+                                                                                <input type="number" name="nilai[]" form="form-kriteria-{{ $proyek->kode_proyek }}" id="nilai_{{ $key }}">
                                                                             </td>
                                                                             <td>
                                                                                 <textarea name="keterangan[]" form="form-kriteria-{{ $proyek->kode_proyek }}" id="" cols="30" rows="10"></textarea>
@@ -1163,6 +1163,8 @@
                                     
                                                 </div>
                                                 <div class="modal-footer">
+                                                    <button type="button" class="btn btn-sm btn-light btn-secondary" data-bs-toggle="modal" data-bs-target="#kt_user_view_kriteria_{{ $proyek->kode_proyek }}" id="new_save">
+                                                        Back</button>
                                                     <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white" form="form-kriteria-{{ $proyek->kode_proyek }}" id="new_save"
                                                         style="background-color:#008CB4">Save</button>
                                 
@@ -1172,7 +1174,7 @@
                                             <!--end::Modal content-->
                                         </div>
                                         <!--end::Modal dialog-->
-                                    </div>    
+                                    </div> 
                                 </form>
                                 @endforeach
                                 {{-- End::Tab Content Kriteria Pengguna Jasa --}}
@@ -1334,7 +1336,7 @@
                             $approved_persetujuan = collect(json_decode($proyek->approved_persetujuan));
                             $data_approved_merged = collect();
                             if($approved_pengajuan->isNotEmpty() || $approved_penyusun->isNotEmpty() || $approved_rekomendasi->isNotEmpty() || $approved_persetujuan->isNotEmpty()) {
-                                $data_approved_merged = collect()->mergeRecursive(["Pengajuan" => $approved_pengajuan->flatten(), "Penyusunan" => $approved_penyusun->flatten(), "Rekomendasi" => $approved_rekomendasi->flatten(), "Persetujuan" => $approved_persetujuan->flatten()]);
+                                $data_approved_merged = collect()->mergeRecursive(["Pengajuan" => $approved_pengajuan->flatten(), "Verifikasi" => $approved_penyusun->flatten(), "Rekomendasi" => $approved_rekomendasi->flatten(), "Persetujuan" => $approved_persetujuan->flatten()]);
                             }
                         @endphp
                         {{-- Begin :: History --}}
@@ -1763,7 +1765,8 @@
                                         <input type="hidden" value="{{$nip}}" name="user" id="user">
                                     @endif
                                     <input type="hidden" value="{{$proyek->kode_proyek}}" name="kode-proyek" id="kode-proyek">
-                                    
+                                    <label for="" class="text-start"><span class="required">Catatan: </span></label>
+                                    <textarea name="catatan-persetujuan" class="form-control form-control-solid"cols="1" rows="5"></textarea>
                                     <input type="submit" name="persetujuan-setujui" value="Disetujui" class="btn btn-sm btn-success">
                                     <input type="button" data-bs-toggle="modal" data-bs-target="#kt_modal_view_proyek_tolak_persetujuan_{{$proyek->kode_proyek}}" name="persetujuan-tolak" value="Ditolak" class="btn btn-sm btn-danger">
                                 </form>
@@ -1979,5 +1982,13 @@
         }
     </script>
     {{-- End :: show modal rekomendasi ketika pilih ditolak --}}
+
+    <script>
+        function setNilaiKriteria(e, total, key) {
+            
+            let columnNilai = e.parentElement.parentElement.parentElement.querySelector(`#nilai_${key}`);
+            return columnNilai.value = parseInt(total);
+        }
+    </script>
 @endsection
 
