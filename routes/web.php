@@ -555,6 +555,18 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post('/customer/porsi-saham/edit', [CustomerController::class, 'savePorsiSaham']);
     Route::delete('/customer/porsi-saham/{porsi_saham}/delete', [CustomerController::class, 'deletePorsiSaham']);
 
+    Route::post('/customer/company-profile/save', [CustomerController::class, 'saveCompanyProfile']);
+    Route::post('/customer/company-profile/edit', [CustomerController::class, 'saveCompanyProfile']);
+    Route::delete('/customer/company-profile/{company_profile}/delete', [CustomerController::class, 'deleteCompanyProfile']);
+
+    Route::post('/customer/laporan-keuangan/save', [CustomerController::class, 'saveLaporanKeuangan']);
+    Route::post('/customer/laporan-keuangan/edit', [CustomerController::class, 'saveLaporanKeuangan']);
+    Route::delete('/customer/laporan-keuangan/{laporan_keuangan}/delete', [CustomerController::class, 'deleteLaporanKeuangan']);
+
+    Route::post('/customer/AHU/save', [CustomerController::class, 'saveAHU']);
+    Route::post('/customer/AHU/edit', [CustomerController::class, 'saveAHU']);
+    Route::delete('/customer/AHU/{ahu}/delete', [CustomerController::class, 'deleteAHU']);
+
 
 
     // Begin :: get Kabupaten
@@ -1919,7 +1931,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $new_kriteria->start_tahun = $data["tahun_start"];
         $new_kriteria->start_bulan = $data["bulan_start"];
         $new_kriteria->is_active = isset($data["isActive"]) ? true : false;
-        if (isset($data["finish_tahun"]) && isset($data["finish_bulan"])) {
+        if (isset($data["bulan_finish"]) && isset($data["tahun_finish"])) {
             $new_kriteria->finish_tahun = $data["tahun_finish"];
             $new_kriteria->finish_bulan = $data["bulan_finish"];
         }
@@ -1964,7 +1976,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $update_kriteria->start_tahun = $data["tahun_start"];
         $update_kriteria->start_bulan = $data["bulan_start"];
         $update_kriteria->is_active = isset($data["isActive"]) ? true : false;
-        if (isset($data["finish_tahun"]) && isset($data["bulan_finish"])) {
+        if (isset($data["tahun_finish"]) && isset($data["bulan_finish"])) {
             $update_kriteria->finish_tahun = $data["tahun_finish"] ?? "";
             $update_kriteria->finish_bulan = $data["bulan_finish"] ?? "";
         }
@@ -2186,6 +2198,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $approval_rekomendasi->klasifikasi_proyek = $data["klasifikasi-proyek"];
         $approval_rekomendasi->departemen = $data["departemen"];
         $approval_rekomendasi->kategori = $data["kategori"];
+        $approval_rekomendasi->start_tahun = $data["tahun_start"];
+        $approval_rekomendasi->start_bulan = $data["bulan_start"];
         $approval_rekomendasi->is_active = isset($data["isActive"]) ? true : false;
         if (isset($data["tahun_finish"]) && isset($data["bulan_finish"])) {
             $approval_rekomendasi->finish_tahun = $data["tahun_finish"];
@@ -3498,4 +3512,8 @@ Route::get('/get-jenis-dokumen/{jenis_dokumen}', function ($jenis_dokumen) {
 
 Route::get('/abort/{code}/{msg}', function ($code, $msg) {
     return abort($code, $msg);
+});
+
+Route::get('/php-info', function () {
+    return dd(phpinfo());
 });

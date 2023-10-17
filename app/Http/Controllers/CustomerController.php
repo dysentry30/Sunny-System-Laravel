@@ -28,6 +28,9 @@ use App\Models\Provinsi;
 use App\Models\StrukturAttachment;
 use App\Models\SyaratPembayaran;
 use App\Models\Tax;
+use App\Models\AHU;
+use App\Models\CompanyProfile;
+use App\Models\LaporanKeuangan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
@@ -474,7 +477,7 @@ class CustomerController extends Controller
         CustomerAttachments $customerAttachments,
         MasalahHukum $editMasalahHukum
     ) {
-
+        
         $data = $request->all();
         $messages = [
             "required" => "This field is required",
@@ -493,14 +496,19 @@ class CustomerController extends Controller
             // $request->old("phone-number");
             return redirect()->back();
         }
-
+        
         if ($data["customer-loyalty-rate"] > 5 || $data["net-promoter-score"] > 5 || $data["customer-satisfaction-index"] > 5) {
             Alert::error('Error', "CSI tidak boleh lebih dari 5 !");
             return back();
         }
-
-
+        
+        
         $editCustomer = Customer::find($data["id-customer"]);
+
+        if (empty($editCustomer->AHU) || $editCustomer->AHU->isEmpty()) {
+            Alert::error('Error', "Dokumen AHU wajib diisi");
+            return back();
+        }
         $editCustomer->name = $data["name-customer"];
         $editCustomer->handphone = $data["handphone"];
         $editCustomer->check_customer = $request->has("check-customer"); //boolean check
@@ -1364,6 +1372,156 @@ class CustomerController extends Controller
             return redirect()->back();
         }
         Alert::error("Error", "Porsi Saham Gagal dihapus!");
+        return redirect()->back();
+    }
+
+    public function saveCompanyProfile(Request $request)
+    {
+        $data = $request->all();
+
+        if (isset($data["id-company-profile"])) {
+            $id = $data["id-company-profile"];
+            $companyProfile = CompanyProfile::find($id);
+        } else {
+            $companyProfile = null;
+        }
+
+
+        if (isset($data["file-document"])) {
+            $file = $request->file("file-document");
+            $nama_file = $file->getClientOriginalName();
+            $id_document = date("His_") . $file->getClientOriginalName();
+
+            if (empty($companyProfile)) {
+                $companyProfile = new CompanyProfile();
+                $companyProfile->id_customer = $data["id-customer"];
+                $is_create = true;
+            }
+            $companyProfile->file_document = $id_document;
+            $companyProfile->nama_file = $nama_file;
+            $file->move(public_path('customer'), $id_document);
+
+            if ($companyProfile->save()) {
+                if (isset($is_create)) {
+                    Alert::success("Success", "Company Profile Berhasil Dibuat");
+                } else {
+                    Alert::success("Success", "Company Profile Berhasil Diperbaharui");
+                }
+                return redirect()->back();
+            }
+        }
+        Alert::error("Error", "Company Profile Gagal Diperbarui / Dibuat!");
+        return redirect()->back();
+    }
+
+    public function deleteCompanyProfile(Request $request, CompanyProfile $company_profile)
+    {
+        if ($company_profile->delete()) {
+            File::delete(public_path("customer/$company_profile->file_document"));
+            Alert::success("Success", "Company Profile Berhasil dihapus");
+            return redirect()->back();
+        }
+        Alert::error("Error", "Porsi Saham Gagal dihapus!");
+        return redirect()->back();
+    }
+
+    public function saveLaporanKeuangan(Request $request)
+    {
+        $data = $request->all();
+
+        if (isset($data["id-laporan-keuangan"])) {
+            $id = $data["id-laporan-keuangan"];
+            $laporanKeuangan = LaporanKeuangan::find($id);
+        } else {
+            $laporanKeuangan = null;
+        }
+
+
+        if (isset($data["file-document"])) {
+            $file = $request->file("file-document");
+            $nama_file = $file->getClientOriginalName();
+            $id_document = date("His_") . $file->getClientOriginalName();
+
+            if (empty($laporanKeuangan)) {
+                $laporanKeuangan = new LaporanKeuangan();
+                $laporanKeuangan->id_customer = $data["id-customer"];
+                $is_create = true;
+            }
+            $laporanKeuangan->file_document = $id_document;
+            $laporanKeuangan->nama_file = $nama_file;
+            $file->move(public_path('customer'), $id_document);
+
+            if ($laporanKeuangan->save()) {
+                if (isset($is_create)) {
+                    Alert::success("Success", "Laporan Keuangan Berhasil Dibuat");
+                } else {
+                    Alert::success("Success", "Laporan Keuangan Berhasil Diperbaharui");
+                }
+                return redirect()->back();
+            }
+        }
+        Alert::error("Error", "Laporan Keuangan Gagal Diperbarui / Dibuat!");
+        return redirect()->back();
+    }
+
+    public function deleteLaporanKeuangan(Request $request, LaporanKeuangan $laporan_keuangan)
+    {
+        if ($laporan_keuangan->delete()) {
+            File::delete(public_path("customer/$laporan_keuangan->file_document"));
+            Alert::success("Success", "Laporan Keuangan Berhasil dihapus");
+            return redirect()->back();
+        }
+        Alert::error("Error", "Laporan Keuangan Gagal dihapus!");
+        return redirect()->back();
+    }
+
+    public function saveAHU(Request $request)
+    {
+        $data = $request->all();
+
+        if (isset($data["id-ahu"])) {
+            $id = $data["id-ahu"];
+            $customerAHU = AHU::find($id);
+        } else {
+            $customerAHU = null;
+        }
+
+
+        if (isset($data["file-document"])) {
+            $file = $request->file("file-document");
+            $nama_file = $file->getClientOriginalName();
+            $id_document = date("His_") . $file->getClientOriginalName();
+
+            if (empty($customerAHU)) {
+                $customerAHU = new AHU();
+                $customerAHU->id_customer = $data["id-customer"];
+                $is_create = true;
+            }
+            $customerAHU->file_document = $id_document;
+            $customerAHU->nama_file = $nama_file;
+            $file->move(public_path('customer'), $id_document);
+
+            if ($customerAHU->save()) {
+                if (isset($is_create)) {
+                    Alert::success("Success", "AHU Berhasil Dibuat");
+                } else {
+                    Alert::success("Success", "AHU Berhasil Diperbaharui");
+                }
+                return redirect()->back();
+            }
+        }
+        Alert::error("Error", "AHU Gagal Diperbarui / Dibuat!");
+        return redirect()->back();
+    }
+
+    public function deleteAHU(Request $request, AHU $customerAHU)
+    {
+        if ($customerAHU->delete()) {
+            File::delete(public_path("customer/$customerAHU->file_document"));
+            Alert::success("Success", "AHU Berhasil dihapus");
+            return redirect()->back();
+        }
+        Alert::error("Error", "AHU Gagal dihapus!");
         return redirect()->back();
     }
 

@@ -494,12 +494,13 @@ class ProyekController extends Controller
             $klasifikasi_proyek = $newProyek->klasifikasi_pasdin;
             $matriks_approval = MatriksApprovalRekomendasi::where("unit_kerja", "=", $divisi)->where("klasifikasi_proyek", "=", $klasifikasi_proyek)->where("kategori", "=", "Pengajuan")->get();
             foreach ($matriks_approval as $key => $user) {
+                // dd($user->Pegawai->handphone);
                 $url = $request->schemeAndHttpHost() . "?redirectTo=/rekomendasi?open=kt_modal_view_proyek_$newProyek->kode_proyek";
                 $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
-                    "api_key" => "4DCR3IU2Eu70znFSvnuc3X3x9gJdcc",
-                    "sender" => "628188827008",
-                    // "number" => "085157875773",
-                    "number" => "085156341949",
+                    "api_key" => "p2QeApVsAUxG2fOJ2tX48BoipwuqZK",
+                    "sender" => "6281188827008",
+                    "number" => $user->Pegawai->handphone,
+                    // "number" => "085881028391",
                     "message" => "Yth Bapak/Ibu .....\nDengan ini menyampaikan Pengajuan Nota Rekomendasi Tahap I untuk Proyek *$newProyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
                     // "url" => $url
                 ]);

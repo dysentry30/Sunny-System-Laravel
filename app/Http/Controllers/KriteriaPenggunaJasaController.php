@@ -38,6 +38,13 @@ class KriteriaPenggunaJasaController extends Controller
         $kriteriaPenggunaJasa->kriteria_3 = $data["kriteria_3"];
         $kriteriaPenggunaJasa->kriteria_4 = $data["kriteria_4"];
         $kriteriaPenggunaJasa->nota_rekomendasi = $data["nota_rekomendasi"];
+        $kriteriaPenggunaJasa->start_tahun = $data["tahun_start"];
+        $kriteriaPenggunaJasa->start_bulan = $data["bulan_start"];
+        $kriteriaPenggunaJasa->is_active = isset($data["isActive"]) ? true : false;
+        if (isset($data["finish_tahun"]) && isset($data["finish_bulan"])) {
+            $kriteriaPenggunaJasa->finish_tahun = $data["tahun_finish"];
+            $kriteriaPenggunaJasa->finish_bulan = $data["bulan_finish"];
+        }
 
         if ($kriteriaPenggunaJasa->save()) {
             Alert::success("Success", "Kriteria Pengguna Jasa Berhasil Ditambahkan");
@@ -67,6 +74,8 @@ class KriteriaPenggunaJasaController extends Controller
             return redirect()->back();
         }
 
+        // dd($data);
+
         $kriteriaPenggunaJasa->kategori = $data["kategori"];
         $kriteriaPenggunaJasa->bobot = $data["bobot"];
         $kriteriaPenggunaJasa->item = $data["item"];
@@ -75,12 +84,18 @@ class KriteriaPenggunaJasaController extends Controller
         $kriteriaPenggunaJasa->kriteria_3 = $data["kriteria_3"];
         $kriteriaPenggunaJasa->kriteria_4 = $data["kriteria_4"];
         $kriteriaPenggunaJasa->nota_rekomendasi = $data["nota_rekomendasi"];
-
+        $kriteriaPenggunaJasa->start_tahun = $data["tahun_start"];
+        $kriteriaPenggunaJasa->start_bulan = $data["bulan_start"];
+        $kriteriaPenggunaJasa->is_active = isset($data["isActive"]) ? true : false;
+        if (isset($data["tahun_finish"]) && isset($data["tahun_finish"])) {
+            $kriteriaPenggunaJasa->finish_tahun = $data["tahun_finish"];
+            $kriteriaPenggunaJasa->finish_bulan = $data["bulan_finish"];
+        }
         if ($kriteriaPenggunaJasa->save()) {
-            Alert::success("Success", "Kriteria Pengguna Jasa Berhasil Ditambahkan");
+            Alert::success("Success", "Kriteria Pengguna Jasa Berhasil Diperbaharui");
             return redirect()->back();
         }
-        Alert::success("Error", "Kriteria Pengguna Jasa Gagal Ditambahkan");
+        Alert::success("Error", "Kriteria Pengguna Jasa Gagal Diperbaharui");
         return redirect()->back();
     }
 

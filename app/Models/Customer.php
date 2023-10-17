@@ -108,4 +108,19 @@ class Customer extends Model
         return $this->hasOne(Provinsi::class, "province_id", "provinsi");
     }
 
+    public function CompanyProfile()
+    {
+        return $this->hasMany(CompanyProfile::class, "id_customer");
+    }
+
+    public function LaporanKeuangan()
+    {
+        return $this->hasMany(LaporanKeuangan::class, "id_customer");
+    }
+
+    public function AHU()
+    {
+        return $this->hasMany(AHU::class, "id_customer");
+    }
+
 }

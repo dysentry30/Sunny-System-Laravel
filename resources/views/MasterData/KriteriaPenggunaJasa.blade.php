@@ -183,6 +183,60 @@
     
                         <!--begin::Row Kanan+Kiri-->
                         <div class="row fv-row">
+
+                            <!--begin::Col-->
+                            <div class="">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span class="required">Start Periode</span>
+                                    </label>
+                                    @php
+                                        $tahun = (int) date("Y");
+                                    @endphp
+                                    <!--end::Label-->
+                                    <div class="d-flex flex-row gap-2">
+                                        <!--begin::Input-->
+                                        <select id="bulan_start" name="bulan_start"
+                                            class="form-select form-select-solid select2-hidden-accessible"
+                                            data-control="select2" data-hide-search="true" data-placeholder="Pilh Bulan..."
+                                            data-select2-id="select2-bulan-start" tabindex="-1" aria-hidden="true">
+                                            <option value="" selected></option>
+                                            <option value="1">Januari</option>
+                                            <option value="2">Februari</option>
+                                            <option value="3">Maret</option>
+                                            <option value="4">April</option>
+                                            <option value="5">Mei</option>
+                                            <option value="6">Juni</option>
+                                            <option value="7">Juli</option>
+                                            <option value="8">Agustus</option>
+                                            <option value="9">September</option>
+                                            <option value="10">Oktober</option>
+                                            <option value="11">November</option>
+                                            <option value="12">Desember</option>
+                                        </select>
+                                        <!--end::Input-->
+                                        <!--begin::Input-->
+                                        <select id="tahun_start" name="tahun_start"
+                                            class="form-select form-select-solid select2-hidden-accessible"
+                                            data-control="select2" data-hide-search="true" data-placeholder="Pilh Tahun..."
+                                            data-select2-id="select2_tahun_start" tabindex="-1" aria-hidden="true">
+                                            <option value="" selected></option>
+                                            @foreach (range(1, 2) as $item)
+                                                <option value="{{$tahun}}">{{$tahun}}</option>
+                                                @php
+                                                    $tahun++;
+                                                @endphp
+                                            @endforeach
+                                        </select>
+                                        <!--end::Input-->
+                                    </div>
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End begin::Col-->
+
                             <!--begin::Col-->
                             <div class="">
                                 <!--begin::Input group Website-->
@@ -288,6 +342,66 @@
                                     <!--end::Input-->
                                 </div>
                             </div>
+
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7 d-none" id="finish-periode">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="">Finish Periode</span>
+                                </label>
+                                @php
+                                    $tahun = (int) date("Y");
+                                @endphp
+                                <!--end::Label-->
+                                <div class="d-flex flex-row gap-2">
+                                    <!--begin::Input-->
+                                    <select id="bulan_finish" name="bulan_finish"
+                                        class="form-select form-select-solid select2-hidden-accessible"
+                                        data-control="select2" data-hide-search="true" data-placeholder="Pilh Bulan..."
+                                        data-select2-id="select2_bulan_finish" tabindex="-1" aria-hidden="true" disabled>
+                                        <option value="" selected></option>
+                                        <option value="1">Januari</option>
+                                        <option value="2">Februari</option>
+                                        <option value="3">Maret</option>
+                                        <option value="4">April</option>
+                                        <option value="5">Mei</option>
+                                        <option value="6">Juni</option>
+                                        <option value="7">Juli</option>
+                                        <option value="8">Agustus</option>
+                                        <option value="9">September</option>
+                                        <option value="10">Oktober</option>
+                                        <option value="11">November</option>
+                                        <option value="12">Desember</option>
+                                    </select>
+                                    <!--end::Input-->
+                                    <!--begin::Input-->
+                                    <select id="tahun_finish" name="tahun_finish"
+                                        class="form-select form-select-solid select2-hidden-accessible"
+                                        data-control="select2" data-hide-search="true" data-placeholder="Pilh Tahun..."
+                                        data-select2-id="select2_tahun_finish" tabindex="-1" aria-hidden="true" disabled>
+                                        <option value="" selected></option>
+                                        @foreach (range(1, 2) as $item)
+                                            <option value="{{$tahun}}">{{$tahun}}</option>
+                                            @php
+                                                $tahun++;
+                                            @endphp
+                                        @endforeach
+                                    </select>
+                                    <!--end::Input-->
+                                </div>
+                            </div>
+                            <!--end::Input group-->
+
+                            <div class="row ms-1">
+                                <!--Begin::Input Checkbox-->
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="create" name="isActive" id="active-periode" onchange="setActive(this)" checked>
+                                    <label class="form-check-label" for="active-periode">
+                                        Active
+                                    </label>
+                                </div>
+                                <!--End::Input Checkbox-->
+                            </div>
                         </div>
                         <!--End::Row Kanan+Kiri-->    
     
@@ -339,6 +453,57 @@
         
                             <!--begin::Row Kanan+Kiri-->
                             <div class="row fv-row">
+                                 <!--begin::Col-->
+                                 <div class="">
+                                    <!--begin::Input group Website-->
+                                    <div class="fv-row mb-7">
+                                        <!--begin::Label-->
+                                        <label class="fs-6 fw-bold form-label mt-3">
+                                            <span class="required">Start Periode</span>
+                                        </label>
+                                        @php
+                                            $tahun = (int) date("Y");
+                                        @endphp
+                                        <!--end::Label-->
+                                        <div class="d-flex flex-row gap-2">
+                                            <!--begin::Input-->
+                                            <select id="bulan_start" name="bulan_start"
+                                                class="form-select form-select-solid select2-hidden-accessible"
+                                                data-control="select2" data-hide-search="true" data-placeholder="Pilh Bulan..."
+                                                data-select2-id="select2_bulan_start_{{ $item->id }}" tabindex="-1" aria-hidden="true">
+                                                <option value="" selected></option>
+                                                <option value="1" {{ $item->start_bulan == "1" ? "selected" : "" }}>Januari</option>
+                                                <option value="2" {{ $item->start_bulan == "2" ? "selected" : "" }}>Februari</option>
+                                                <option value="3" {{ $item->start_bulan == "3" ? "selected" : "" }}>Maret</option>
+                                                <option value="4" {{ $item->start_bulan == "4" ? "selected" : "" }}>April</option>
+                                                <option value="5" {{ $item->start_bulan == "5" ? "selected" : "" }}>Mei</option>
+                                                <option value="6" {{ $item->start_bulan == "6" ? "selected" : "" }}>Juni</option>
+                                                <option value="7" {{ $item->start_bulan == "7" ? "selected" : "" }}>Juli</option>
+                                                <option value="8" {{ $item->start_bulan == "8" ? "selected" : "" }}>Agustus</option>
+                                                <option value="9" {{ $item->start_bulan == "9" ? "selected" : "" }}>September</option>
+                                                <option value="10" {{ $item->start_bulan == "10" ? "selected" : "" }}>Oktober</option>
+                                                <option value="11" {{ $item->start_bulan == "11" ? "selected" : "" }}>November</option>
+                                                <option value="12" {{ $item->start_bulan == "12" ? "selected" : "" }}>Desember</option>
+                                            </select>
+                                            <!--end::Input-->
+                                            <!--begin::Input-->
+                                            <select id="tahun_start" name="tahun_start"
+                                                class="form-select form-select-solid select2-hidden-accessible"
+                                                data-control="select2" data-hide-search="true" data-placeholder="Pilh Tahun..."
+                                                data-select2-id="select2_tahun_start_{{$item->id }}" tabindex="-1" aria-hidden="true">
+                                                @foreach (range(1, 2) as $index)
+                                                    <option value="{{$tahun}}" {{(!empty($item->start_tahun) && $item->start_tahun == $tahun) ? "selected" : "" }}>{{$tahun}}</option>
+                                                    @php
+                                                        $tahun++;
+                                                    @endphp
+                                                @endforeach
+                                            </select>
+                                            <!--end::Input-->
+                                        </div>
+                                    </div>
+                                    <!--end::Input group-->
+                                </div>
+                                <!--End begin::Col-->
                                 <!--begin::Col-->
                                 <div class="">
                                     <!--begin::Input group Website-->
@@ -367,35 +532,35 @@
                                 <!--End begin::Col-->
 
                                 <!--begin::Col-->
-                            <div class="">
-                                <!--begin::Input group Website-->
-                                <div class="fv-row mb-7">
-                                    <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Item</span>
-                                    </label>
-                                    <!--end::Label-->
-                                    <div class="d-flex flex-row gap-2">
-                                        <!--begin::Input-->
-                                        <select id="item-{{ $item->id }}" name="item"
-                                            class="form-select form-select-solid select2-hidden-accessible"
-                                            data-control="select2" data-hide-search="true" data-placeholder="Pilh Item" tabindex="-1" aria-hidden="true">
-                                            @if ($item->kategori != "Financial")
-                                                <option value="{{ $item->item }}" selected>{{ $item->item }}</option>
-                                            @else
-                                                <option value="Current Ratio" {{ $item->item == "Current Ratio" ? 'selected' : '' }}></option>
-                                                <option value="Cash Ratio" {{ $item->item == "Cash Ratio" ? 'selected' : '' }}></option>
-                                                <option value="Debt to Equity Ratio" {{ $item->item == "Debt to Equity Ratio" ? 'selected' : '' }}></option>
-                                                <option value="Kepatuhan Pembayaran Pajak" {{ $item->item == "Kepatuhan Pembayaran Pajak" ? 'selected' : '' }}></option>
-                                            @endif
+                                <div class="">
+                                    <!--begin::Input group Website-->
+                                    <div class="fv-row mb-7">
+                                        <!--begin::Label-->
+                                        <label class="fs-6 fw-bold form-label mt-3">
+                                            <span class="required">Item</span>
+                                        </label>
+                                        <!--end::Label-->
+                                        <div class="d-flex flex-row gap-2">
+                                            <!--begin::Input-->
+                                            <select id="item-{{ $item->id }}" name="item"
+                                                class="form-select form-select-solid select2-hidden-accessible"
+                                                data-control="select2" data-hide-search="true" data-placeholder="Pilh Item" tabindex="-1" aria-hidden="true">
+                                                @if ($item->kategori != "Financial")
+                                                    <option value="{{ $item->item }}" selected>{{ $item->item }}</option>
+                                                @else
+                                                    <option value="Current Ratio" {{ $item->item == "Current Ratio" ? 'selected' : '' }}></option>
+                                                    <option value="Cash Ratio" {{ $item->item == "Cash Ratio" ? 'selected' : '' }}></option>
+                                                    <option value="Debt to Equity Ratio" {{ $item->item == "Debt to Equity Ratio" ? 'selected' : '' }}></option>
+                                                    <option value="Kepatuhan Pembayaran Pajak" {{ $item->item == "Kepatuhan Pembayaran Pajak" ? 'selected' : '' }}></option>
+                                                @endif
 
-                                        </select>
-                                        <!--end::Input-->
+                                            </select>
+                                            <!--end::Input-->
+                                        </div>
                                     </div>
+                                    <!--end::Input group-->
                                 </div>
-                                <!--end::Input group-->
-                            </div>
-                            <!--End begin::Col-->
+                                <!--End begin::Col-->
     
                                 <div class="row mb-7">
                                     <label class="fs-6 fw-bold form-label mt-3">
@@ -451,6 +616,68 @@
                                         <!--end::Input-->
                                     </div>
                                 </div>
+
+                                
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mt-7 {{ (!empty($item->is_active) && $item->is_active) || is_null($item->is_active) ? 'd-none' : '' }}" id="finish-periode-edit-{{ $item->id }}">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span class="required">Finish Periode</span>
+                                    </label>
+                                    @php
+                                        $tahun = (int) date("Y");
+                                    @endphp
+                                    <!--end::Label-->
+                                    <div class="d-flex flex-row gap-2">
+                                        <!--begin::Input-->
+                                        <select id="bulan_finish" name="bulan_finish"
+                                            class="form-select form-select-solid select2-hidden-accessible"
+                                            data-control="select2" data-hide-search="true" data-placeholder="Pilh Bulan..."
+                                            data-select2-id="select2_bulan_finish_{{ $item->id }}" tabindex="-1" aria-hidden="true" {{ !empty($item->finish_bulan) ? "disabled" : "" }}>
+                                            <option value="" selected></option>
+                                            <option value="1" {{ $item->finish_bulan == "1" ? "selected" : "" }}>Januari</option>
+                                            <option value="2" {{ $item->finish_bulan == "2" ? "selected" : "" }}>Februari</option>
+                                            <option value="3" {{ $item->finish_bulan == "3" ? "selected" : "" }}>Maret</option>
+                                            <option value="4" {{ $item->finish_bulan == "4" ? "selected" : "" }}>April</option>
+                                            <option value="5" {{ $item->finish_bulan == "5" ? "selected" : "" }}>Mei</option>
+                                            <option value="6" {{ $item->finish_bulan == "6" ? "selected" : "" }}>Juni</option>
+                                            <option value="7" {{ $item->finish_bulan == "7" ? "selected" : "" }}>Juli</option>
+                                            <option value="8" {{ $item->finish_bulan == "8" ? "selected" : "" }}>Agustus</option>
+                                            <option value="9" {{ $item->finish_bulan == "9" ? "selected" : "" }}>September</option>
+                                            <option value="10" {{ $item->finish_bulan == "10" ? "selected" : "" }}>Oktober</option>
+                                            <option value="11" {{ $item->finish_bulan == "11" ? "selected" : "" }}>November</option>
+                                            <option value="12" {{ $item->finish_bulan == "12" ? "selected" : "" }}>Desember</option>
+                                        </select>
+                                        <!--end::Input-->
+                                        <!--begin::Input-->
+                                        <select id="tahun_finish_{{$item->id }}" name="tahun_finish"
+                                            class="form-select form-select-solid select2-hidden-accessible"
+                                            data-control="select2" data-hide-search="true" data-placeholder="Pilh Tahun..."
+                                            data-select2-id="select2_tahun_finish_{{$item->id }}" tabindex="-1" aria-hidden="true" {{ !empty($item->finish_bulan) ? "disabled" : "" }}>
+                                            @foreach (range(1, 2) as $index)
+                                                <option value="{{$tahun}}" {{(!empty($item->finish_tahun) && $item->finish_tahun == $tahun) ? "selected" : "" }}>{{$tahun}}</option>
+                                                @php
+                                                    $tahun++;
+                                                @endphp
+                                            @endforeach
+                                        </select>
+                                        <!--end::Input-->
+                                    </div>
+                                </div>
+                                <!--end::Input group-->
+
+                                <div class="row ms-1 my-7">
+                                    <!--Begin::Input Checkbox-->
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="edit" id="active-periode" name="isActive" onchange="setActive(this, '{{ $item->id }}')" {{ (!empty($item->is_active) && $item->is_active) || is_null($item->is_active) ? "checked" : "" }}>
+                                        <label class="form-check-label" for="active-periode">
+                                            Active
+                                        </label>
+                                    </div>
+                                    <!--End::Input Checkbox-->
+                                </div>     
+
+
                             </div>
                             <!--End::Row Kanan+Kiri-->    
         
@@ -610,6 +837,33 @@
                     data: data
                 }) 
             }
+        }
+    }
+
+    function setActive(e, id = null) {
+        if (e.value == "create") {
+            const elementFinish = document.querySelector('#finish-periode');
+            if(e.checked){
+                elementFinish.classList.add('d-none');
+                elementFinish.querySelector('select[name="bulan_finish"]').setAttribute('disabled', true);
+                elementFinish.querySelector('select[name="tahun_finish"]').setAttribute('disabled', true);
+            }else{
+                elementFinish.classList.remove('d-none');
+                elementFinish.querySelector('select[name="bulan_finish"]').removeAttribute('disabled');
+                elementFinish.querySelector('select[name="tahun_finish"]').removeAttribute('disabled');
+            }
+        } else {
+            const elementFinish = document.querySelector(`#finish-periode-edit-${id}`);
+            if(e.checked){
+                elementFinish.classList.add('d-none');
+                elementFinish.querySelector('select[name="bulan_finish"]').setAttribute('disabled', true);
+                elementFinish.querySelector('select[name="tahun_finish"]').setAttribute('disabled', true);
+            }else{
+                console.log(elementFinish);
+                elementFinish.classList.remove('d-none');
+                elementFinish.querySelector('select[name="bulan_finish"]').removeAttribute('disabled');
+                elementFinish.querySelector('select[name="tahun_finish"]').removeAttribute('disabled');
+            }    
         }
     }
 </script>

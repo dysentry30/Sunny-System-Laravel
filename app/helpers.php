@@ -160,14 +160,17 @@ function checkGreenLine($proyek) {
                 if(!empty($customer->group_tier)) {
                     $results->push(App\Models\KriteriaGreenLine::where("item", "=", "Instansi")->where("isi", "=", $customer->jenis_instansi)->where("sub_isi", "=", $customer->group_tier)->count() > 0);
                 } else {
-                    $provinsi = Provinsi::find($customer->provinsi) ?? $customer->provinsi; 
-                    $results->push(App\Models\KriteriaGreenLine::where("item", "=", "Instansi")->where("isi", "=", $customer->jenis_instansi)->where("sub_isi", "=", $provinsi)->count() > 0);
+                    $provinsi = Provinsi::find($customer->provinsi) ?? $customer->provinsi;
+                    $results->push(App\Models\KriteriaGreenLine::where("item", "=", "Instansi")->where("isi", "=", $customer->jenis_instansi)->where("sub_isi", "=", "ID-JK")->count() > 0);
                 }
             } else {
                 $results->push(App\Models\KriteriaGreenLine::where("item", "=", "Instansi")->where("isi", "=", $customer->jenis_instansi)->count() > 0);
             }
         } else {
             $results->push(false);
+        }
+        if ($proyek->is_disetujui) {
+            return true;
         }
         return $results->count() > 1 && $results->every(function($item) {
             return $item === true;
@@ -1021,15 +1024,15 @@ function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Co
     $templateProcessor = new TemplateProcessor($target_path . "/" . $file_name . ".docx");
     foreach ($penyusun as $key => $p) {
         $user = User::find($p->user_id);
-        $templateProcessor->setImageValue('ttdPenyusun' . ++$key, ["path" => "./file-ttd/" . $user->file_ttd, "width" => 10, "ratio" => true]);
+        // $templateProcessor->setImageValue('ttdPenyusun' . ++$key, ["path" => "./file-ttd/" . $user->file_ttd, "width" => 10, "ratio" => true]);
     }
     foreach ($rekomendator as $key => $p) {
         $user = User::find($p->user_id);
-        $templateProcessor->setImageValue('ttdRekomendasi' . ++$key, ["path" => "./file-ttd/" . $user->file_ttd, "width" => 10, "ratio" => true]);
+        // $templateProcessor->setImageValue('ttdRekomendasi' . ++$key, ["path" => "./file-ttd/" . $user->file_ttd, "width" => 10, "ratio" => true]);
     }
     foreach ($penyetuju as $key => $p) {
         $user = User::find($p->user_id);
-        $templateProcessor->setImageValue('ttdPersetujuan' . ++$key, ["path" => "./file-ttd/" . $user->file_ttd, "width" => 10, "ratio" => true]);
+        // $templateProcessor->setImageValue('ttdPersetujuan' . ++$key, ["path" => "./file-ttd/" . $user->file_ttd, "width" => 10, "ratio" => true]);
     }
 
     // Old TTD Method

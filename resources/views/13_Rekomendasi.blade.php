@@ -771,10 +771,10 @@
                                                                 <small class="badge badge-light-danger">Ditolak</small>
                                                             @elseif($proyek->review_assessment == true && is_null($proyek->is_penyusun_approved))
                                                                 @if (!empty(Auth::user()->Pegawai->MatriksApproval) && Auth::user()->Pegawai->MatriksApproval->contains("kategori", "Penyusun"))
-                                                                    <small class="badge badge-light-warning">Request Penyusun</small>
+                                                                    <small class="badge badge-light-warning">Request Verifikasi</small>
                                                                     
                                                                 @else
-                                                                    <small class="badge badge-light-primary">Proses Penyusun</small>
+                                                                    <small class="badge badge-light-primary">Proses Verifikasi</small>
                                                                 @endif
                                                             @elseif($proyek->is_penyusun_approved == true && is_null($proyek->is_recommended))
                                                                 @if (!empty(Auth::user()->Pegawai->MatriksApproval) && Auth::user()->Pegawai->MatriksApproval->contains("kategori", "Rekomendasi"))
@@ -920,10 +920,10 @@
                                                                 <small class="badge badge-light-danger">Ditolak</small>
                                                             @elseif($proyek->review_assessment == true && is_null($proyek->is_penyusun_approved))
                                                                 @if (!empty(Auth::user()->Pegawai->MatriksApproval) && Auth::user()->Pegawai->MatriksApproval->contains("kategori", "Penyusun"))
-                                                                    <small class="badge badge-light-warning">Request Penyusun</small>
+                                                                    <small class="badge badge-light-warning">Request Verifikasi</small>
                                                                     
                                                                 @else
-                                                                    <small class="badge badge-light-primary">Proses Penyusun</small>
+                                                                    <small class="badge badge-light-primary">Proses Verifikasi</small>
                                                                 @endif
                                                             @elseif($proyek->is_penyusun_approved == true && is_null($proyek->is_recommended))
                                                                 @if (!empty(Auth::user()->Pegawai->MatriksApproval) && Auth::user()->Pegawai->MatriksApproval->contains("kategori", "Rekomendasi"))
@@ -1204,7 +1204,7 @@
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
                 <div class="modal-content">
                     <div class="modal-header">
-                    <h5 class="modal-title">Detail Proyek (Readonly)</h5>
+                    <h5 class="modal-title">Detail Proyek</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -1455,14 +1455,24 @@
     @foreach ($proyeks_rekomendasi as $proyek)
         @php
             $hasil_assessment = collect(json_decode($proyek->hasil_assessment));
+            $is_exist_customer = $proyek->proyekBerjalan?->Customer;
             $internal_score = 0;
             $eksternal_score = 0;
+            
+            // if ($is_exist_customer) {
+            //     $internal_score = $scorePenggunaJasa;
+            //     $eksternal_score = $scorePenggunaJasa;
+            // }else{
+            //     $eksternal_score = $scorePenggunaJasa;
+            // }
             if($hasil_assessment->isNotEmpty()) {
-                $internal_score = $hasil_assessment->sum(function($ra) {
-                    if($ra->kategori == "Internal") {
-                        return $ra->score;
-                    }
-                });
+                if (is_null($is_exist_customer)) {
+                    $internal_score = $hasil_assessment->sum(function($ra) {
+                        if($ra->kategori == "Internal") {
+                            return $ra->score;
+                        }
+                    });
+                }
                 $eksternal_score = $hasil_assessment->sum(function($ra) {
                     if($ra->kategori == "Eksternal") {
                         return $ra->score;
@@ -1477,7 +1487,7 @@
                     <form action="" method="GET">
                     @endif
                         <div class="modal-header">
-                            <h5 class="modal-title">Detail Proyek (Readonly)</h5>
+                            <h5 class="modal-title">Detail Proyek</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
@@ -1566,8 +1576,8 @@
                                 dump($)
                             @endphp --}}
                             @if (is_null($proyek->is_recommended))
-                                <label for="note-rekomendasi" class="text-start">Catatan Rekomendasi: </label>
-                                <textarea class="form-control form-control-solid" id="note-rekomendasi" name="note-rekomendasi" {{ !is_null($proyek->is_draft_recommend_note) && !$proyek->is_draft_recommend_note ? 'readonly' : ''}} >{{$proyek->recommended_with_note}}</textarea>
+                                <label for="note-rekomendasi" class="text-start">Catatan: </label>
+                                <textarea class="form-control form-control-solid" id="note-rekomendasi" name="note-rekomendasi" {{ !is_null($proyek->is_draft_recommend_note) && !$proyek->is_draft_recommend_note ? 'readonly' : ''}} >{!! $proyek->recommended_with_note !!}</textarea>
                                 <br>
                                 @csrf
                                 <input type="hidden" name="kode-proyek" value="{{$proyek->kode_proyek}}">
@@ -1594,8 +1604,18 @@
     @foreach ($proyeks_persetujuan as $proyek)
         @php
             $hasil_assessment = collect(json_decode($proyek->hasil_assessment));
+            $is_exist_customer = $proyek->proyekBerjalan?->Customer;
             $internal_score = 0;
             $eksternal_score = 0;
+            $scorePenggunaJasa = $proyek->KriteriaPenggunaJasaDetail->sum('nilai') * 10;
+            
+            if ($is_exist_customer) {
+                $internal_score = $scorePenggunaJasa;
+                $eksternal_score = $scorePenggunaJasa;
+            }else{
+                $eksternal_score = $scorePenggunaJasa;
+            }
+
             if($hasil_assessment->isNotEmpty()) {
                 $internal_score = $hasil_assessment->sum(function($ra) {
                     if($ra->kategori == "Internal") {
@@ -1614,7 +1634,7 @@
                 <div class="modal-content">
                     <form action="" method="GET">
                         <div class="modal-header">
-                            <h5 class="modal-title">Detail Proyek (Readonly)</h5>
+                            <h5 class="modal-title">Detail Proyek</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
@@ -1704,7 +1724,7 @@
                                 $approved_persetujuan = collect(json_decode($proyek->approved_persetujuan));
                                 $is_user_exist_persetujuan = $approved_persetujuan->contains("user_id", Auth::user()->id);
                             @endphp
-                            @if (is_null($proyek->is_penyusun_approved) && $matriks_user->contains("kategori", "Penyusun") && !$is_user_exist_penyusun)
+                            @if (is_null($proyek->is_penyusun_approved) && $matriks_user->contains("kategori", "Verifikasi") && !$is_user_exist_penyusun)
                                 <form action="" method="get">
                                     @csrf
                                     <input type="hidden" value="{{$proyek->kode_proyek}}" name="kode-proyek" id="kode-proyek">

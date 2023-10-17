@@ -122,6 +122,12 @@
                                             Direkomendasikan
                                         </p>
                                     </div>
+                                @elseif($proyek->stage > 1 && $check_green_line )
+                                <div class="" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" data-bs-title="Proyek ini termasuk ke dalam kategori<br><b>Green Lane</b>">
+                                    <p class="mt-4 btn btn-sm btn-success ms-2">
+                                        Direkomendasikan
+                                    </p>
+                                </div>
                                 @elseif($proyek->stage > 1 && $proyek->is_disetujui == false )
                                     <div class="" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" data-bs-title="<b>Rekomendasi Rejected</b><br>Silahkan Lanjut Stage Selanjutnya">
                                         <p class="mt-4 btn btn-sm btn-danger ms-2">
@@ -1580,12 +1586,12 @@
                                                                         @if ($sumberdana->kode_sumber == $proyek->sumber_dana)
                                                                             <option value="{{ $sumberdana->kode_sumber }}"
                                                                                 selected>
-                                                                                {{ $sumberdana->nama_sumber }}
+                                                                                {{ $sumberdana->kode_sumber }}
                                                                             </option>
                                                                         @else
                                                                             <option
                                                                                 value="{{ $sumberdana->kode_sumber }}">
-                                                                                {{ $sumberdana->nama_sumber }}
+                                                                                {{ $sumberdana->kode_sumber }}
                                                                             </option>
                                                                         @endif
                                                                     @endforeach
@@ -1623,16 +1629,20 @@
                                                                 </label>
                                                                 <!--end::Label-->
                                                                 <!--begin::Input-->
-                                                                <select id="departemen-proyek" name="departemen-proyek"
+                                                                {{-- <select id="departemen-proyek" name="departemen-proyek"
                                                                     class="form-select form-select-solid"
                                                                     data-control="select2" data-hide-search="false"
                                                                     data-placeholder="Pilih Departemen">
                                                                     <option value=""></option>
                                                                     @foreach ($departemen as $depart)
-                                                                    {{-- <option value="" selected></option> --}}
                                                                     <option value="{{ $depart->kode_departemen }}" {{ $depart->kode_departemen == $proyek->departemen_proyek ? "selected" : "" }}>{{ $depart->nama_departemen }}</option>
                                                                     @endforeach
-                                                                </select>
+                                                                </select> --}}
+                                                                <input type="text"
+                                                                    class="form-control form-control-solid"
+                                                                    id="departemen-proyek" name="departemen-proyek"
+                                                                    placeholder="Departemen"
+                                                                    value="{{ $proyek->Departemen->nama_departemen }}" disabled/>
                                                                 <!--end::Input-->
                                                             </div>
                                                             <!--end::Input group-->

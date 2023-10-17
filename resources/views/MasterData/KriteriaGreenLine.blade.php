@@ -829,7 +829,7 @@
                             <div class="row ms-1 my-7">
                                 <!--Begin::Input Checkbox-->
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="edit" id="active-periode" name="isActive" onchange="setActive(this, '{{ $kriteria->id_kriteria_green_line }}')" {{ !empty($kriteria->is_active) && $kriteria->is_active ? "checked" : "" }}>
+                                    <input class="form-check-input" type="checkbox" value="edit" id="active-periode" name="isActive" onchange="setActive(this, '{{ $kriteria->id_kriteria_green_line }}')" {{ empty($kriteria->is_active) && $kriteria->is_active ? "checked" : "" }}>
                                     <label class="form-check-label" for="active-periode">
                                         Active
                                     </label>
