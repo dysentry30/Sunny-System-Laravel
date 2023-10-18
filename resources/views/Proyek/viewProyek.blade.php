@@ -106,48 +106,50 @@
                                 @endif
                                 <!--end::Button-->
 
-                                <!--begin::Button-->    
-                                @if ($proyek->is_request_rekomendasi == false && !$check_green_line && $proyek->stage == 1)
-                                    <input type="button" name="proyek-rekomendasi" value="Pengajuan Rekomendasi" class="btn btn-sm btn-success ms-2" id="proyek-rekomendasi" data-bs-toggle="modal" data-bs-target="#modal-send-pengajuan"
-                                        style="background-color:#00b48d">
-                                @elseif($proyek->stage > 1 && $proyek->is_disetujui == true &&  $proyek->is_recommended_with_note)
-                                    <div class="" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" data-bs-title="<b>Rekomendasi Aproved</b><br>Silahkan Lanjut Stage Selanjutnya">
-                                        <p class="mt-4 btn btn-sm btn-success ms-2">
-                                            Direkomendasikan dengan catatan
-                                        </p>
-                                    </div>
-                                @elseif($proyek->stage > 1 && $proyek->is_disetujui == true )
-                                    <div class="" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" data-bs-title="<b>Rekomendasi Aproved</b><br>Silahkan Lanjut Stage Selanjutnya">
-                                        <p class="mt-4 btn btn-sm btn-success ms-2">
-                                            Direkomendasikan
-                                        </p>
-                                    </div>
-                                @elseif($proyek->stage > 1 && $check_green_line )
-                                <div class="" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" data-bs-title="Proyek ini termasuk ke dalam kategori<br><b>Green Lane</b>">
-                                    <p class="mt-4 btn btn-sm btn-success ms-2">
-                                        Direkomendasikan
-                                    </p>
-                                </div>
-                                @elseif($proyek->stage > 1 && $proyek->is_disetujui == false )
-                                    <div class="" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" data-bs-title="<b>Rekomendasi Rejected</b><br>Silahkan Lanjut Stage Selanjutnya">
-                                        <p class="mt-4 btn btn-sm btn-danger ms-2">
-                                            Tidak Direkomendasikan
-                                        </p>
-                                    </div>
-                                @elseif($proyek->stage > 1 && !$check_green_line)
-                                    <div class="" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" data-bs-title="<b>Rekomendasi Aproved</b><br>Silahkan Lanjut Stage Selanjutnya">
-                                        <p class="mt-4 btn btn-sm btn-success ms-2">
-                                            Direkomendasikan
-                                        </p>
-                                    </div>
-                                @elseif($proyek->stage == 1 && $check_green_line)
-                                    <div class="" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" data-bs-title="Proyek ini termasuk ke dalam kategori<br><b>Green Lane</b>">
-                                        <input type="submit" name="proyek-rekomendasi" value="Pengajuan Rekomendasi" class="btn btn-sm btn-secondary ms-2" id="proyek-rekomendasi" disabled >
-                                    </div>
-                                @else 
-                                    <div class="" data-bs-toggle="tooltip" data-bs-title="Sedang Dalam Proses Pengajuan Rekomendasi">
-                                        <input type="submit" name="proyek-rekomendasi" value="Pengajuan Rekomendasi" class="btn btn-sm btn-secondary ms-2" id="proyek-rekomendasi" disabled >
-                                    </div>
+                                <!--begin::Button-->
+                                @if ($proyek->proyekBerjalan?->customer?->jenis_instansi != "Anak dan Turunan BUMN")
+                                    @if ($proyek->is_request_rekomendasi == false && !$check_green_line && $proyek->stage == 1)
+                                        <input type="button" name="proyek-rekomendasi" value="Pengajuan Rekomendasi" class="btn btn-sm btn-success ms-2" id="proyek-rekomendasi" data-bs-toggle="modal" data-bs-target="#modal-send-pengajuan"
+                                            style="background-color:#00b48d">
+                                    @elseif($proyek->stage > 1 && $proyek->is_disetujui == true &&  $proyek->is_recommended_with_note)
+                                        <div class="" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" data-bs-title="<b>Rekomendasi Aproved</b><br>Silahkan Lanjut Stage Selanjutnya">
+                                            <p class="mt-4 btn btn-sm btn-success ms-2">
+                                                Direkomendasikan dengan catatan
+                                            </p>
+                                        </div>
+                                    @elseif($proyek->stage > 1 && $proyek->is_disetujui == true )
+                                        <div class="" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" data-bs-title="<b>Rekomendasi Aproved</b><br>Silahkan Lanjut Stage Selanjutnya">
+                                            <p class="mt-4 btn btn-sm btn-success ms-2">
+                                                Direkomendasikan
+                                            </p>
+                                        </div>
+                                    @elseif($proyek->stage > 1 && $check_green_line )
+                                        <div class="" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" data-bs-title="Proyek ini termasuk ke dalam kategori<br><b>Green Lane</b>">
+                                            <p class="mt-4 btn btn-sm btn-success ms-2">
+                                                Direkomendasikan
+                                            </p>
+                                        </div>
+                                    @elseif($proyek->stage > 1 && $proyek->is_disetujui == false )
+                                        <div class="" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" data-bs-title="<b>Rekomendasi Rejected</b><br>Silahkan Lanjut Stage Selanjutnya">
+                                            <p class="mt-4 btn btn-sm btn-danger ms-2">
+                                                Tidak Direkomendasikan
+                                            </p>
+                                        </div>
+                                    @elseif($proyek->stage > 1 && !$check_green_line)
+                                        <div class="" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" data-bs-title="<b>Rekomendasi Aproved</b><br>Silahkan Lanjut Stage Selanjutnya">
+                                            <p class="mt-4 btn btn-sm btn-success ms-2">
+                                                Direkomendasikan
+                                            </p>
+                                        </div>
+                                    @elseif($proyek->stage == 1 && $check_green_line)
+                                        <div class="" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" data-bs-title="Proyek ini termasuk ke dalam kategori<br><b>Green Lane</b>">
+                                            <input type="submit" name="proyek-rekomendasi" value="Pengajuan Rekomendasi" class="btn btn-sm btn-secondary ms-2" id="proyek-rekomendasi" disabled >
+                                        </div>
+                                    @else 
+                                        <div class="" data-bs-toggle="tooltip" data-bs-title="Sedang Dalam Proses Pengajuan Rekomendasi">
+                                            <input type="submit" name="proyek-rekomendasi" value="Pengajuan Rekomendasi" class="btn btn-sm btn-secondary ms-2" id="proyek-rekomendasi" disabled >
+                                        </div>
+                                    @endif
                                 @endif
                                 <!--end::Button-->
 
@@ -1115,22 +1117,24 @@
                                                         </div>
 
                                                         <div class="col-6 mt-5">
-                                                            <div class="form-check">
-                                                                {{-- <input class="form-check-input" name="is-green-line" disabled type="checkbox" {{(bool) $check_green_line ? "checked" : ""}} disabled id="flexCheckDefault">
-                                                                <label class="form-check-label" for="flexCheckDefault">
-                                                                  Green Lane
-                                                                </label> --}}
-                                                                @if ((bool) $check_green_line)
-                                                                    <span class="px-4 fs-4 badge badge-success">
-                                                                        Green Lane
-                                                                    </span>
-                                                                @else
-                                                                    <span class="px-4 fs-4 badge badge-danger">
-                                                                        Non Green Lane
-                                                                    </span>
-                                                                    
-                                                                @endif
-                                                            </div><br>
+                                                            @if ($proyek->proyekBerjalan?->customer?->jenis_instansi != "Anak dan Turunan BUMN")
+                                                                <div class="form-check">
+                                                                    {{-- <input class="form-check-input" name="is-green-line" disabled type="checkbox" {{(bool) $check_green_line ? "checked" : ""}} disabled id="flexCheckDefault">
+                                                                    <label class="form-check-label" for="flexCheckDefault">
+                                                                    Green Lane
+                                                                    </label> --}}
+                                                                    @if ((bool) $check_green_line)
+                                                                        <span class="px-4 fs-4 badge badge-success">
+                                                                            Green Lane
+                                                                        </span>
+                                                                    @else
+                                                                        <span class="px-4 fs-4 badge badge-danger">
+                                                                            Non Green Lane
+                                                                        </span>
+                                                                        
+                                                                    @endif
+                                                                </div><br>
+                                                            @endif
                                                             <div class="form-check">
                                                                 {{-- <input class="form-check-input" name="is-green-line" disabled type="checkbox" {{(bool) $proyek->is_rkap ? "checked" : ""}} disabled id="flexCheckDefault">
                                                                 <label class="form-check-label" for="flexCheckDefault">
