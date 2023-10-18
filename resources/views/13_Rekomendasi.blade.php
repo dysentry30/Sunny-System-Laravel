@@ -663,7 +663,7 @@
                                                     <tr>
                                                         <td>
                                                             {{-- <a href="#kt_modal_view_proyek_rekomendasi_{{$proyek->kode_proyek}}" target="_blank" data-bs-toggle="modal" class="text-hover-primary">{{ $proyek->nama_proyek }}</a>    --}}
-                                                            @if ($proyek->KriteriaPenggunaJasaDetail->count() == \App\Models\KriteriaPenggunaJasa::all()->count())
+                                                            @if ($proyek->KriteriaPenggunaJasaDetail->count() > \App\Models\KriteriaPenggunaJasa::all()->count())
                                                                 <a href="#kt_modal_view_proyek_rekomendasi_{{$proyek->kode_proyek}}" target="_blank" data-bs-toggle="modal" class="text-hover-primary">{{ $proyek->nama_proyek }}</a>   
                                                             @else
                                                                 <a href="#kt_user_view_kriteria_{{ $proyek->kode_proyek }}" target="_blank" data-bs-toggle="modal" class="text-hover-primary">{{ $proyek->nama_proyek }}</a>
@@ -1008,7 +1008,7 @@
                                                             <table>
                                                                 <thead>
                                                                     <tr>
-                                                                        <th class="min-w-50px">Item</th>
+                                                                        <th class="min-w-auto">Item</th>
                                                                         <th class="min-w-auto">Nilai</th>
                                                                         <th class="min-w-auto">Keterangan</th>
                                                                         <th class="min-w-auto">Upload Dokumen</th>
