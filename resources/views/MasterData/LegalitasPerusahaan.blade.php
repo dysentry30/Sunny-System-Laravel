@@ -86,7 +86,7 @@
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0 bg-primary">
                                         <th class="min-w-auto text-white">No.</th>
                                         <th class="min-w-auto text-white">Item</th>
-                                        <th class="min-w-auto text-white">Bobot</th>
+                                        {{-- <th class="min-w-auto text-white">Bobot</th> --}}
                                         <th class="min-w-auto text-white">Start Periode</th>
                                         <th class="min-w-auto text-white">Finish Periode</th>
                                         <th class="min-w-auto text-white">Nota Rekomendasi</th>
@@ -187,7 +187,7 @@
                                         <tr>
                                             <td class="text-center align-middle">{{$no++}}</td>
                                             <td class="align-middle">{!! nl2br($item->item) !!}</td>
-                                            <td class="text-center align-middle">{{ $item->bobot }}</td>
+                                            {{-- <td class="text-center align-middle">{{ $item->bobot }}</td> --}}
                                             <td class="text-center">{{$start_bulan}}</td>
                                             <td class="text-center">{{$finish_bulan}}</td>
                                             <td class="text-center align-middle">{{ $item->nota_rekomendasi }}</td>
@@ -322,12 +322,12 @@
                             </div>
                             <!--End begin::Col-->
 
-                            <div class="row mb-7">
+                            {{-- <div class="row mb-7">
                                 <label class="fs-6 fw-bold form-label mt-3">
                                     <span class="required">Bobot</span>
                                 </label>
                                 <input type="number" name="bobot" class="form-control form-control-solid">
-                            </div>
+                            </div> --}}
 
                             <div class="row mb-7">
                                  <!--begin::Label-->
@@ -519,12 +519,12 @@
                                 </div>
                                 <!--End begin::Col-->
     
-                                <div class="row mb-7">
+                                {{-- <div class="row mb-7">
                                     <label class="fs-6 fw-bold form-label mt-3">
                                         <span class="required">Bobot</span>
                                     </label>
                                     <input type="number" name="bobot" value="{{ $item->bobot }}" class="form-control form-control-solid">
-                                </div>
+                                </div> --}}
     
     
                                 <div class="row mb-7">

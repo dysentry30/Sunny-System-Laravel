@@ -2239,7 +2239,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $data = $request->all();
 
         $legalitas = new LegalitasPerusahaan();
-        $legalitas->bobot = $data["bobot"];
+        // $legalitas->bobot = $data["bobot"];
         $legalitas->item = $data["item"];
         $legalitas->nota_rekomendasi = $data["nota_rekomendasi"];
         $legalitas->start_tahun = $data["tahun_start"];
@@ -2258,7 +2258,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         return redirect()->back();
     });
 
-    Route::post('/legalitas-perusahaan/update', function (Request $request, string $id) {
+    Route::post('/legalitas-perusahaan/update/{id}', function (Request $request, string $id) {
         $data = $request->all();
 
         $legalitas = LegalitasPerusahaan::find($id);
@@ -2270,7 +2270,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             return redirect()->back();
         }
 
-        $legalitas->bobot = $data["bobot"];
+        // $legalitas->bobot = $data["bobot"];
         $legalitas->item = $data["item"];
         $legalitas->nota_rekomendasi = $data["nota_rekomendasi"];
         $legalitas->start_tahun = $data["tahun_start"];
