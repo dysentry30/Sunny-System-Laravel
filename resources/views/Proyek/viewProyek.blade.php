@@ -107,7 +107,7 @@
                                 <!--end::Button-->
 
                                 <!--begin::Button-->
-                                @if ($proyek->proyekBerjalan?->customer?->jenis_instansi != "Anak dan Turunan BUMN")
+                                @if ($proyek->UnitKerja?->dop != "EA")
                                     @if ($proyek->is_request_rekomendasi == false && !$check_green_line && $proyek->stage == 1)
                                         <input type="button" name="proyek-rekomendasi" value="Pengajuan Rekomendasi" class="btn btn-sm btn-success ms-2" id="proyek-rekomendasi" data-bs-toggle="modal" data-bs-target="#modal-send-pengajuan"
                                             style="background-color:#00b48d">
@@ -1117,7 +1117,7 @@
                                                         </div>
 
                                                         <div class="col-6 mt-5">
-                                                            @if ($proyek->proyekBerjalan?->customer?->jenis_instansi != "Anak dan Turunan BUMN")
+                                                            @if ($proyek->UnitKerja?->dop != "EA")
                                                                 <div class="form-check">
                                                                     {{-- <input class="form-check-input" name="is-green-line" disabled type="checkbox" {{(bool) $check_green_line ? "checked" : ""}} disabled id="flexCheckDefault">
                                                                     <label class="form-check-label" for="flexCheckDefault">
