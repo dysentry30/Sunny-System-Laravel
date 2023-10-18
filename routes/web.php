@@ -2245,7 +2245,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $legalitas->start_tahun = $data["tahun_start"];
         $legalitas->start_bulan = $data["bulan_start"];
         $legalitas->is_active = isset($data["isActive"]) ? true : false;
-        if (isset($data["finish_tahun"]) && isset($data["finish_bulan"])) {
+        if (isset($data["tahun_finish"]) && isset($data["bulan_finish"])) {
             $legalitas->finish_tahun = $data["tahun_finish"];
             $legalitas->finish_bulan = $data["bulan_finish"];
         }
@@ -2276,7 +2276,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $legalitas->start_tahun = $data["tahun_start"];
         $legalitas->start_bulan = $data["bulan_start"];
         $legalitas->is_active = isset($data["isActive"]) ? true : false;
-        if (isset($data["finish_tahun"]) && isset($data["finish_bulan"])) {
+        if (isset($data["tahun_finish"]) && isset($data["bulan_finish"])) {
             $legalitas->finish_tahun = $data["tahun_finish"];
             $legalitas->finish_bulan = $data["bulan_finish"];
         }

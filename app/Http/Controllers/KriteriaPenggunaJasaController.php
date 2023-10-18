@@ -41,7 +41,7 @@ class KriteriaPenggunaJasaController extends Controller
         $kriteriaPenggunaJasa->start_tahun = $data["tahun_start"];
         $kriteriaPenggunaJasa->start_bulan = $data["bulan_start"];
         $kriteriaPenggunaJasa->is_active = isset($data["isActive"]) ? true : false;
-        if (isset($data["finish_tahun"]) && isset($data["finish_bulan"])) {
+        if (isset($data["tahun_finish"]) && isset($data["bulan_finish"])) {
             $kriteriaPenggunaJasa->finish_tahun = $data["tahun_finish"];
             $kriteriaPenggunaJasa->finish_bulan = $data["bulan_finish"];
         }

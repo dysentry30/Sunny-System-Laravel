@@ -32,6 +32,13 @@ class PenilaianPenggunaJasaController extends Controller
         $penilaianPenggunaJasa->nama = $data["nama"];
         $penilaianPenggunaJasa->dari_nilai = $data["dari_nilai"];
         $penilaianPenggunaJasa->sampai_nilai = $data["sampai_nilai"];
+        $penilaianPenggunaJasa->start_tahun = $data["tahun_start"];
+        $penilaianPenggunaJasa->start_bulan = $data["bulan_start"];
+        $penilaianPenggunaJasa->is_active = isset($data["isActive"]) ? true : false;
+        if (isset($data["tahun_finish"]) && isset($data["bulan_finish"])) {
+            $penilaianPenggunaJasa->finish_tahun = $data["tahun_finish"];
+            $penilaianPenggunaJasa->finish_bulan = $data["bulan_finish"];
+        }
 
         if ($penilaianPenggunaJasa->save()) {
             Alert::success("Success", "Kriteria Pengguna Jasa Berhasil Ditambahkan");
@@ -75,6 +82,13 @@ class PenilaianPenggunaJasaController extends Controller
         $penilaianPenggunaJasa->nama = $data["nama"];
         $penilaianPenggunaJasa->dari_nilai = $data["dari_nilai"];
         $penilaianPenggunaJasa->sampai_nilai = $data["sampai_nilai"];
+        $penilaianPenggunaJasa->start_tahun = $data["tahun_start"];
+        $penilaianPenggunaJasa->start_bulan = $data["bulan_start"];
+        $penilaianPenggunaJasa->is_active = isset($data["isActive"]) ? true : false;
+        if (isset($data["tahun_finish"]) && isset($data["bulan_finish"])) {
+            $penilaianPenggunaJasa->finish_tahun = $data["tahun_finish"];
+            $penilaianPenggunaJasa->finish_bulan = $data["bulan_finish"];
+        }
 
         if ($penilaianPenggunaJasa->save()) {
             Alert::success("Success", "Kriteria Pengguna Jasa Berhasil Ditambahkan");
