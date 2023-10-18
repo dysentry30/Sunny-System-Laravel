@@ -108,82 +108,82 @@
                                 <tbody class="fw-bold text-gray-600">
                                     @foreach ($data as $item)
                                     @php
-                                        switch($kriteria->start_bulan){
+                                        switch($item->start_bulan){
                                             case "1":
-                                            $start_bulan = "Januari"."-".$kriteria->start_tahun;
+                                            $start_bulan = "Januari"."-".$item->start_tahun;
                                             break;
                                             case "2":
-                                            $start_bulan = "Februari"."-".$kriteria->start_tahun;
+                                            $start_bulan = "Februari"."-".$item->start_tahun;
                                             break;
                                             case "3":
-                                            $start_bulan = "Maret"."-".$kriteria->start_tahun;
+                                            $start_bulan = "Maret"."-".$item->start_tahun;
                                             break;
                                             case "4":
-                                            $start_bulan = "April"."-".$kriteria->start_tahun;
+                                            $start_bulan = "April"."-".$item->start_tahun;
                                             break;
                                             case "5":
-                                            $start_bulan = "Mei"."-".$kriteria->start_tahun;
+                                            $start_bulan = "Mei"."-".$item->start_tahun;
                                             break;
                                             case "6":
-                                            $start_bulan = "Juni"."-".$kriteria->start_tahun;
+                                            $start_bulan = "Juni"."-".$item->start_tahun;
                                             break;
                                             case "7":
-                                            $start_bulan = "Juli"."-".$kriteria->start_tahun;
+                                            $start_bulan = "Juli"."-".$item->start_tahun;
                                             break;
                                             case "8":
-                                            $start_bulan = "Agustus"."-".$kriteria->start_tahun;
+                                            $start_bulan = "Agustus"."-".$item->start_tahun;
                                             break;
                                             case "9":
-                                            $start_bulan = "September"."-".$kriteria->start_tahun;
+                                            $start_bulan = "September"."-".$item->start_tahun;
                                             break;
                                             case "10":
-                                            $start_bulan = "Oktober"."-".$kriteria->start_tahun;
+                                            $start_bulan = "Oktober"."-".$item->start_tahun;
                                             break;
                                             case "11":
-                                            $start_bulan = "November"."-".$kriteria->start_tahun;
+                                            $start_bulan = "November"."-".$item->start_tahun;
                                             break;
                                             case "12":
-                                            $start_bulan = "Desember"."-".$kriteria->start_tahun;
+                                            $start_bulan = "Desember"."-".$item->start_tahun;
                                             break;
                                             default:
                                             $start_bulan = "-";
                                         }
-                                        switch($kriteria->finish_bulan){
+                                        switch($item->finish_bulan){
                                             case "1":
-                                            $finish_bulan = "Januari"."-".$kriteria->finish_tahun;
+                                            $finish_bulan = "Januari"."-".$item->finish_tahun;
                                             break;
                                             case "2":
-                                            $finish_bulan = "Februari"."-".$kriteria->finish_tahun;
+                                            $finish_bulan = "Februari"."-".$item->finish_tahun;
                                             break;
                                             case "3":
-                                            $finish_bulan = "Maret"."-".$kriteria->finish_tahun;
+                                            $finish_bulan = "Maret"."-".$item->finish_tahun;
                                             break;
                                             case "4":
-                                            $finish_bulan = "April"."-".$kriteria->finish_tahun;
+                                            $finish_bulan = "April"."-".$item->finish_tahun;
                                             break;
                                             case "5":
-                                            $finish_bulan = "Mei"."-".$kriteria->finish_tahun;
+                                            $finish_bulan = "Mei"."-".$item->finish_tahun;
                                             break;
                                             case "6":
-                                            $finish_bulan = "Juni"."-".$kriteria->finish_tahun;
+                                            $finish_bulan = "Juni"."-".$item->finish_tahun;
                                             break;
                                             case "7":
-                                            $finish_bulan = "Juli"."-".$kriteria->finish_tahun;
+                                            $finish_bulan = "Juli"."-".$item->finish_tahun;
                                             break;
                                             case "8":
-                                            $finish_bulan = "Agustus"."-".$kriteria->finish_tahun;
+                                            $finish_bulan = "Agustus"."-".$item->finish_tahun;
                                             break;
                                             case "9":
-                                            $finish_bulan = "September"."-".$kriteria->finish_tahun;
+                                            $finish_bulan = "September"."-".$item->finish_tahun;
                                             break;
                                             case "10":
-                                            $finish_bulan = "Oktober"."-".$kriteria->finish_tahun;
+                                            $finish_bulan = "Oktober"."-".$item->finish_tahun;
                                             break;
                                             case "11":
-                                            $finish_bulan = "November"."-".$kriteria->finish_tahun;
+                                            $finish_bulan = "November"."-".$item->finish_tahun;
                                             break;
                                             case "12":
-                                            $finish_bulan = "Desember"."-".$kriteria->finish_tahun;
+                                            $finish_bulan = "Desember"."-".$item->finish_tahun;
                                             break;
                                             default:
                                             $finish_bulan = "-";
