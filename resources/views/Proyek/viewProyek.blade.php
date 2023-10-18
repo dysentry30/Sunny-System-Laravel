@@ -243,6 +243,7 @@
                                         // $lq_rank = $proyek->proyekBerjalan->customer->lq_rank ?? null;
                                         $industrySector = $proyek->proyekBerjalan->customer->IndustryOwner ?? null;
                                         $masalahHukum = $proyek->proyekBerjalan->customer->MasalahHukum ?? collect([]);
+                                        $fileAHU = $proyek->proyekBerjalan->customer->AHU ?? null;
                                     @endphp
 
                                     <p>Nama Proyek : <b>{{ $proyek->nama_proyek }}</b></p>
@@ -256,6 +257,7 @@
                                     <p>Industry Sector Pemberi Kerja : <b class="{{ $industrySector ?? "text-danger" }}">{{ $industrySector->owner_description ?? "*Belum Ditentukan" }}</b></p>
                                     <p>Industry Attractiveness Pemberi Kerja : <b class="{{ $industrySector ?? "text-danger" }}">{{ $industrySector->owner_attractiveness ?? "*Belum Ditentukan" }}</b></p>
                                     <p>Masalah Hukum Pemberi Kerja : <b class="{{ $masalahHukum->count() == 0 ? "text-success" : "text-danger" }}">{{ $masalahHukum->count() == 0 ? "0 Kasus" : $masalahHukum->count()." Kasus" }}</b></p>
+                                    <p>File AHU : <b class="{{ $fileAHU ?? "text-danger" }}">{{ $fileAHU ? "Sudah" : "*Belum" }}</b></p>
 
                                     <br>
 
@@ -334,7 +336,7 @@
                                                             Pasar Potensial
                                                         </a>
                                                     @else
-                                                        @if ($check_green_line)
+                                                        @if ($check_green_line || $proyek->UnitKerja?->dop == "EA")
                                                             <a href="#"
                                                                 class="stage-button stage-action color-is-default stage-is-not-active"
                                                                 style="outline: 0px; cursor: pointer;" stage="2">
