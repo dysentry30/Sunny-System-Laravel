@@ -21,6 +21,7 @@
         "phpoffice/phpspreadsheet": "dev-NumberFormatMask-Helpers",
         "phpoffice/phpword": "^0.18.3",
         "realrashid/sweet-alert": "^5.1",
+        "simplesoftwareio/simple-qrcode": "~4",
         "twbs/bootstrap-icons": "^1.9"
     },
     "require-dev": {

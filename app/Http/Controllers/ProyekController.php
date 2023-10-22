@@ -399,10 +399,13 @@ class ProyekController extends Controller
 
     public function getDataDepartemen($divcode)
     {
-        $unit_kerja = UnitKerja::where("divcode", "=", $divcode)->first();
-        // dd($unit_kerja);
-        $departemen = Departemen::where("kode_divisi", "=", $unit_kerja->kode_sap)->get();
-        // dd($departemen);
+        if (str_contains($divcode, 'A')) {
+            $departemen = Departemen::where("kode_divisi", "=", $divcode)->get();
+        } else {
+            $unit_kerja = UnitKerja::where("divcode", "=", $divcode)->first();
+            // dd($unit_kerja);
+            $departemen = Departemen::where("kode_divisi", "=", $unit_kerja->kode_sap)->get();
+        }
         if($departemen->isNotEmpty()){
             return response()->json([
                 "status" => "success",
@@ -503,7 +506,7 @@ class ProyekController extends Controller
                     "sender" => "6281188827008",
                     "number" => $isnomorTargetActive ? $user->Pegawai->handphone : $nomorDefault,
                     // "number" => "085881028391",
-                    "message" => "Yth Bapak/Ibu .....\nDengan ini menyampaikan Pengajuan Nota Rekomendasi Tahap I untuk Proyek *$newProyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
+                    "message" => "Yth Bapak/Ibu .....\nDengan ini menyampaikan permohonan tandatangan untuk form pengajuan Nota Rekomendasi I, *" . $newProyek->ProyekBerjalan->name_customer . "* untuk Proyek *$newProyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
                     // "url" => $url
                 ]);
                 $send_msg_to_wa->onError(function ($error) {

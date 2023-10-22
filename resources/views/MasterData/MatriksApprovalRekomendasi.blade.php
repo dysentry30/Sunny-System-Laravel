@@ -147,6 +147,7 @@
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                         <th class="min-w-125px">Nama Pegawai</th>
                                         <th class="min-w-100px">Unit Kerja</th>
+                                        <th class="min-w-100px">Kode Unit Kerja</th>
                                         <th class="min-w-auto">Departemen</th>
                                         <th class="min-w-auto">Klasifikasi Proyek</th>
                                         <th class="min-w-auto">Kategori</th>
@@ -252,6 +253,9 @@
                                                 <a href="#" class="text-hover-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_matriks_update_{{$approval->id_matriks_approval_rekomendasi}}">{{$approval->Pegawai->nama_pegawai}}</a>
                                             </td>
                                             <td>{{$approval->Divisi->nama_kantor}}</td>
+                                            <td>
+                                                {{ $approval->kode_unit_kerja }}
+                                            </td>
                                             <td>
                                                 @if (!empty($approval->Departemen->nama_departemen))
                                                     <p>{{ $approval->Departemen->nama_departemen }} ({{ $approval->Departemen->UnitKerja->unit_kerja }})</p>
@@ -442,10 +446,10 @@
                                             <select id="unit-kerja" name="unit-kerja"
                                                 class="form-select form-select-solid select2-hidden-accessible"
                                                 data-control="select2" data-hide-search="false" data-placeholder="Pilih Unit Kerja..."
-                                                data-select2-id="select2-unit-kerja" tabindex="-1" aria-hidden="true">
+                                                data-select2-id="select2-unit-kerja" tabindex="-1" aria-hidden="true" onchange="setDepartemen(this)">
                                                 <option value="" selected></option>
                                                 @foreach ($divisi_all as $divisi)
-                                                    <option value="{{$divisi->id_divisi}}">{{$divisi->nama_kantor}}</option>
+                                                    <option value="{{$divisi->id_divisi}}" data-sap="{{ $divisi->kode_sap }}">{{$divisi->nama_kantor}}</option>
                                                 @endforeach
                                                 {{-- @foreach ($sumber_danas as $sd)
                                                     <option value="{{$sd->kode}}">{{$sd->kode}}</option>
@@ -457,12 +461,28 @@
                                 </div>
                             </div>
 
+                            <div class="row mb-7">
+                                <div class="col">
+                                    <div class="tier">
+                                        <!--begin::Label-->
+                                        <label class="fs-6 fw-bold form-label mt-3">
+                                            <span class="required">Kode Unit Kerja</span>
+                                        </label>
+                                        <!--end::Label-->
+
+                                        <!--begin::Input-->
+                                        <input type="text" name="kode-unit" class="form-control form-control-solid" placeholder="Input Kode Unit Kerja">
+                                        <!--end::Input-->
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="row mb-7" id="div-departemen">
                                 <div class="col">
                                     <div id="tier">
                                         <!--begin::Label-->
                                         <label class="fs-6 fw-bold form-label mt-3">
-                                            <span class="required">Departemen</span>
+                                            <span class="">Departemen</span>
                                         </label>
                                         <!--end::Label-->
     
@@ -473,9 +493,9 @@
                                                 data-control="select2" data-hide-search="false" data-placeholder="Pilih Departemen"
                                                 data-select2-id="select2-unit-kerja" tabindex="-1" aria-hidden="true">
                                                 <option value=""></option>
-                                                @foreach ($departemens as $departemen)
+                                                {{-- @foreach ($departemens as $departemen)
                                                     <option value="{{$departemen->kode_departemen}}">{{$departemen->nama_departemen}} ({{ $departemen->UnitKerja->unit_kerja ?? "-" }})</option>
-                                                @endforeach
+                                                @endforeach --}}
                                             </select>
                                         </div>
                                         <!--end::Input-->
@@ -534,6 +554,21 @@
                                                 <option value="{{$sd->kode}}">{{$sd->kode}}</option>
                                             @endforeach --}}
                                         </select>
+                                        <!--end::Input-->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-7">
+                                <div class="col">
+                                    <div class="tier">
+                                        <!--begin::Label-->
+                                        <label class="fs-6 fw-bold form-label mt-3">
+                                            <span class="required">Urutan</span>
+                                        </label>
+                                        <!--end::Label-->
+
+                                        <!--begin::Input-->
+                                        <input type="number" name="urutan" class="form-control form-control-solid" min="1" max="10" placeholder="Input Urutan">
                                         <!--end::Input-->
                                     </div>
                                 </div>
@@ -777,6 +812,22 @@
                                 </div>
                             </div>
 
+                            <div class="row mb-7">
+                                <div class="col">
+                                    <div class="tier">
+                                        <!--begin::Label-->
+                                        <label class="fs-6 fw-bold form-label mt-3">
+                                            <span class="required">Kode Unit Kerja</span>
+                                        </label>
+                                        <!--end::Label-->
+
+                                        <!--begin::Input-->
+                                        <input type="text" name="kode-unit" class="form-control form-control-solid" placeholder="Input Kode Unit Kerja" value="{{ $approval->kode_unit_kerja }}">
+                                        <!--end::Input-->
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="row mb-7" id="div-departemen">
                                 <div class="col">
                                     <div id="tier">
@@ -854,6 +905,21 @@
                                                 <option value="{{$sd->kode}}">{{$sd->kode}}</option>
                                             @endforeach --}}
                                         </select>
+                                        <!--end::Input-->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-7">
+                                <div class="col">
+                                    <div class="tier">
+                                        <!--begin::Label-->
+                                        <label class="fs-6 fw-bold form-label mt-3">
+                                            <span class="required">Urutan</span>
+                                        </label>
+                                        <!--end::Label-->
+
+                                        <!--begin::Input-->
+                                        <input type="number" name="urutan" class="form-control form-control-solid" min="1" max="10" placeholder="Input Urutan" value="{{ $approval->urutan }}">
                                         <!--end::Input-->
                                     </div>
                                 </div>
@@ -1149,6 +1215,28 @@
                 elementFinish.querySelector('select[name="bulan_finish"]').removeAttribute('disabled');
                 elementFinish.querySelector('select[name="tahun_finish"]').removeAttribute('disabled');
             }    
+        }
+    }
+</script>
+<script>
+    async function setDepartemen(e){
+        const data = e.options[e.selectedIndex].getAttribute('data-sap');
+        let html = '<option value=""></option>'
+        // console.log(data)
+        if(data == 'A141' || data == 'A142' || data == 'A151' || data == 'A161'){
+            // document.getElementById("div-departemen").style.visibility = ''
+            let departemenElt = document.getElementById("departemen-proyek");
+            const response = await fetch(`/proyek/get-departemen/${data}`, {
+                method: 'GET',
+            }).then(result => result.json())
+
+            response.data.forEach(data => {
+                html += `<option value="${data.kode_departemen}">${data.nama_departemen}</option>`
+            });
+            
+            departemenElt.innerHTML = html;
+        }else{
+            document.getElementById("div-departemen").style.value = null;
         }
     }
 </script>

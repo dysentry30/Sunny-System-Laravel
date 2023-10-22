@@ -108,7 +108,7 @@
 
                                 <!--begin::Button-->
                                 @if ($proyek->UnitKerja?->dop != "EA")
-                                    @if ($proyek->is_request_rekomendasi == false && !$check_green_line && $proyek->stage == 1)
+                                    @if (is_null($proyek->is_request_rekomendasi) && !$check_green_line && $proyek->stage == 1 && is_null($proyek->is_disetujui))
                                         <input type="button" name="proyek-rekomendasi" value="Pengajuan Rekomendasi" class="btn btn-sm btn-success ms-2" id="proyek-rekomendasi" data-bs-toggle="modal" data-bs-target="#modal-send-pengajuan"
                                             style="background-color:#00b48d">
                                     @elseif($proyek->stage > 1 && $proyek->is_disetujui == true &&  $proyek->is_recommended_with_note)
@@ -141,7 +141,7 @@
                                                 Direkomendasikan
                                             </p>
                                         </div>
-                                    @elseif($proyek->stage == 1 && $check_green_line)
+                                    @elseif($proyek->stage == 1 && $check_green_line && is_null($proyek->is_disetujui))
                                         <div class="" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" data-bs-title="Proyek ini termasuk ke dalam kategori<br><b>Green Lane</b>">
                                             <input type="submit" name="proyek-rekomendasi" value="Pengajuan Rekomendasi" class="btn btn-sm btn-secondary ms-2" id="proyek-rekomendasi" disabled >
                                         </div>
@@ -245,7 +245,6 @@
                                         $masalahHukum = $proyek->proyekBerjalan->customer->MasalahHukum ?? collect([]);
                                         $fileAHU = $proyek->proyekBerjalan->customer->AHU ?? null;
                                     @endphp
-
                                     <p>Nama Proyek : <b>{{ $proyek->nama_proyek }}</b></p>
                                     <p>RA Klasifikasi Proyek  : <b class="{{ $proyek->klasifikasi_pasdin ?? "text-danger" }}">{{ $proyek->klasifikasi_pasdin ?? "*Belum Ditentukan" }}</b></p>
                                     <p>Sumber Dana  : <b class="{{ $proyek->SumberDana->nama_sumber ?? "text-danger" }}">{{ $proyek->SumberDana->nama_sumber ?? "*Belum Ditentukan" }}</b></p>
@@ -257,12 +256,12 @@
                                     <p>Industry Sector Pemberi Kerja : <b class="{{ $industrySector ?? "text-danger" }}">{{ $industrySector->owner_description ?? "*Belum Ditentukan" }}</b></p>
                                     <p>Industry Attractiveness Pemberi Kerja : <b class="{{ $industrySector ?? "text-danger" }}">{{ $industrySector->owner_attractiveness ?? "*Belum Ditentukan" }}</b></p>
                                     <p>Masalah Hukum Pemberi Kerja : <b class="{{ $masalahHukum->count() == 0 ? "text-success" : "text-danger" }}">{{ $masalahHukum->count() == 0 ? "0 Kasus" : $masalahHukum->count()." Kasus" }}</b></p>
-                                    <p>File AHU : <b class="{{ $fileAHU ?? "text-danger" }}">{{ $fileAHU ? "Sudah" : "*Belum" }}</b></p>
+                                    <p>File AHU : <b class="{{ !empty($fileAHU) ?? "text-danger" }}">{{ !empty($fileAHU) ? "Sudah" : "*Belum" }}</b></p>
 
                                     <br>
 
                                     {{-- @if (!empty($name_customer) && !empty($proyek->klasifikasi_pasdin) && !empty($proyek->SumberDana->nama_sumber) && !empty($jenis_instansi) && !empty($custNegara) && !empty($custProvinsi) && !empty($forbes_rank) && !empty($lq_rank)) --}}
-                                    @if (!empty($name_customer) && !empty($proyek->klasifikasi_pasdin) && !empty($proyek->SumberDana->nama_sumber) && !empty($jenis_instansi) && !empty($custNegara) && !empty($custProvinsi) && !empty($industrySector))
+                                    @if (!empty($name_customer) && !empty($proyek->klasifikasi_pasdin) && !empty($proyek->SumberDana->nama_sumber) && !empty($jenis_instansi) && !empty($custNegara) && !empty($custProvinsi) && !empty($industrySector) && !empty($fileAHU))
                                         <input class="form-check-input" onclick="sendWa(this)" id="confirm-send-wa" name="confirm-send-wa" type="checkbox">
                                         <i class="fs-6 text-primary">
                                             Saya Setuju Melakukan Pengajuan dan Data Sudah Sudah Terisi Dengan Benar
@@ -336,7 +335,7 @@
                                                             Pasar Potensial
                                                         </a>
                                                     @else
-                                                        @if ($check_green_line || $proyek->UnitKerja?->dop == "EA")
+                                                        @if ($proyek->is_disetujui || $check_green_line || $proyek->UnitKerja?->dop == "EA")
                                                             <a href="#"
                                                                 class="stage-button stage-action color-is-default stage-is-not-active"
                                                                 style="outline: 0px; cursor: pointer;" stage="2">
@@ -1137,6 +1136,14 @@
                                                                     @endif
                                                                 </div><br>
                                                             @endif
+                                                            <div class="form-check">
+                                                                @if ($proyek->is_disetujui)
+                                                                <span class="px-4 fs-4 badge badge-light-success">
+                                                                    Nota Rekomendasi I Disetujui
+                                                                </span>
+                                                                @endif
+                                                            </div>
+                                                            <br>
                                                             <div class="form-check">
                                                                 {{-- <input class="form-check-input" name="is-green-line" disabled type="checkbox" {{(bool) $proyek->is_rkap ? "checked" : ""}} disabled id="flexCheckDefault">
                                                                 <label class="form-check-label" for="flexCheckDefault">
@@ -2183,7 +2190,7 @@
                                                     </div>
                                                     <br> --}}
                                                     <!--Begin::Col-->
-                                                    <div class="fv-row mb-7">
+                                                    {{-- <div class="fv-row mb-7">
                                                         <div class="col-6">
                                                             <label class="fs-6 form-label mt-3">
                                                                 <span>Catatan Nota Rekomendasi<i class="bi bi-lock"></i></span>
@@ -2192,7 +2199,7 @@
                                                                 <textarea id="catatan-nota-rekomendasi" name="catatan-nota-rekomendasi" class="form-control" rows="4" style="cursor: default" readonly></textarea>
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                    </div> --}}
                                                     <!--End::Col-->
                                                     @endif
                                                     <!--End::Rekomendasi-->

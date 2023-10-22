@@ -6,6 +6,7 @@ use App\Models\KriteriaPenggunaJasa;
 use App\Models\KriteriaPenggunaJasaDetail;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Facades\File;
 
 class KriteriaPenggunaJasaController extends Controller
 {
@@ -135,25 +136,29 @@ class KriteriaPenggunaJasaController extends Controller
 
         $collectKriteriaDetail = [];
         $files = collect($request->file("dokumen_penilaian"))->values();
-        foreach ($files as $key => $item) {
-            $id_document = date("His_") . $key . '_' . str_replace(' ', '-', $item->getClientOriginalName());
+        $index = collect($data["index"]);
+        foreach ($index as $key => $item) {
+            $id_document = date("His_") . $key . '_' . str_replace(' ', '-', $files[$key]->getClientOriginalName());
             $kriteria_detail = new KriteriaPenggunaJasaDetail();
             $kriteria_detail->kode_proyek = $data['kode_proyek'];
-            if ($key < $masterKriteriaPenggunaJasa->count()) {
-                $kriteria_detail->kriteria = $data['is_kriteria_' . $key];
-                $kriteria_detail->item = $masterKriteriaPenggunaJasa[$key]->item;
-            } else {
+            if ($key == 0) {
                 $kriteria_detail->item = null;
                 $kriteria_detail->kriteria = $data['is_legalitas'];
+            } else {
+                if ($key <= 5) {
+                    $kriteria_detail->kriteria = $data['is_kriteria_' . $key];
+                    $kriteria_detail->item = $masterKriteriaPenggunaJasa[$key - 1]->item;
+                }
             }
             $kriteria_detail->nilai = (int)$data['nilai'][$key];
             $kriteria_detail->keterangan = $data['keterangan'][$key];
             $kriteria_detail->id_document = $id_document;
+            $kriteria_detail->index = $key;
 
-            $item->move(public_path('file-kriteria-pengguna-jasa'), $id_document);
+            // $files[$key]->move(public_path('file-kriteria-pengguna-jasa'), $id_document);
             $collectKriteriaDetail[] = $kriteria_detail->attributesToArray();
         }
-        // dd($collectKriteriaDetail);
+        // dd($data, $collectKriteriaDetail);
         if (KriteriaPenggunaJasaDetail::insert($collectKriteriaDetail)) {
             Alert::success("Success", "Form Kriteria Pengguna Jasa berhasil dibuat!");
             return redirect()->back();
@@ -161,5 +166,62 @@ class KriteriaPenggunaJasaController extends Controller
 
         Alert::error("Error", "Form Kriteria Pengguna Jasa gagal dibuat!");
         return redirect()->back();
+    }
+
+    public function detailEdit(Request $request)
+    {
+        $data = $request->all();
+
+        // if (isset($data['dokumen_penilaian']) && count($data['dokumen_penilaian']) != KriteriaPenggunaJasaDetail::where('kode_proyek', $data['kode_proyek'])->count()) {
+        //     Alert::error("Error", "Harap masukkan semua dokumen!");
+        //     return redirect()->back()->with("modal", $data["modal"]);
+        // }
+
+        $masterKriteriaPenggunaJasa = KriteriaPenggunaJasa::all();
+
+        // $collectKriteriaDetail = [];
+        $files = collect($request->file("dokumen_penilaian"));
+        try {
+            foreach ($data['id_detail'] as $key => $item) {
+                $kriteria_detail = KriteriaPenggunaJasaDetail::find($data['id_detail'][$key]);
+                $kriteria_detail->kode_proyek = $data['kode_proyek'];
+                if ($key == 0) {
+                    $kriteria_detail->item = null;
+                    $kriteria_detail->kriteria = $data['is_legalitas'];
+                } else {
+                    if ($key != 5) {
+                        $kriteria_detail->kriteria = $data['is_kriteria_' . $key];
+                        $kriteria_detail->item = $masterKriteriaPenggunaJasa[$key]->item;
+                    }
+                }
+                $kriteria_detail->nilai = (int)$data['nilai'][$key];
+                $kriteria_detail->keterangan = $data['keterangan'][$key];
+
+                if (isset($data['dokumen_penilaian'])) {
+                    if (!empty($files[$key])) {
+                        $id_document = date("His_") . $key . '_' . str_replace(' ', '-', $files[$key]->getClientOriginalName());
+                        File::delete(public_path('/file-kriteria-pengguna-jasa//' . $kriteria_detail->id_document));
+                        $kriteria_detail->id_document = $id_document;
+                        $files[$key]->move(public_path('file-kriteria-pengguna-jasa'), $id_document);
+                    }
+                }
+                $kriteria_detail->index = $data['index'][$key];
+
+                $kriteria_detail->save();
+                // $collectKriteriaDetail[] = $kriteria_detail->attributesToArray();
+            }
+            Alert::success("Success", "Form Kriteria Pengguna Jasa berhasil diperbaharui!");
+            return redirect()->back();
+        } catch (\Throwable $th) {
+            dd($th);
+            Alert::error("Error", $th->getMessage());
+            return redirect()->back();
+        }
+        // dd($collectKriteriaDetail);
+        // if (KriteriaPenggunaJasaDetail::insert($collectKriteriaDetail)) {
+        //     Alert::success("Success", "Form Kriteria Pengguna Jasa berhasil dibuat!");
+        //     return redirect()->back();
+        // }
+
     }
 }

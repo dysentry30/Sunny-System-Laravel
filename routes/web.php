@@ -475,7 +475,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     // Route::get('/customer', [CustomerController::class, 'index']);
 
     // Begin Rekomendasi
-    Route::get('/rekomendasi', [RekomendasiController::class, "index"]);
+    Route::get('/rekomendasi', [RekomendasiController::class, "index"])->name('rekomendasi');
     // End Rekomendasi
 
 
@@ -2131,8 +2131,10 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             "nama-pegawai" => "required",
             "unit-kerja" => "required",
             "klasifikasi-proyek" => "required",
-            "departemen" => "required",
+            // "departemen" => "required",
             "kategori" => "required",
+            "kode-unit" => "required",
+            "urutan" => "required",
         ];
         // $is_validate = $request->validateWithBag("post", [
         //     "start_tahun" => "required|numeric",
@@ -2160,6 +2162,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $approval_rekomendasi->klasifikasi_proyek = $data["klasifikasi-proyek"];
         $approval_rekomendasi->kategori = $data["kategori"];
         $approval_rekomendasi->departemen = $data["departemen"];
+        $approval_rekomendasi->kode_unit_kerja = $data["kode-unit"];
+        $approval_rekomendasi->urutan = $data["urutan"];
 
         if($approval_rekomendasi->save()) {
             Alert::success('Success', "Matriks Approval Rekomendasi berhasil ditambahkan");
@@ -2178,7 +2182,9 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             "unit-kerja" => "required",
             "klasifikasi-proyek" => "required",
             "kategori" => "required",
-            "departemen" => "required"
+            "kode-unit" => "required",
+            "urutan" => "required",
+            // "departemen" => "required"
         ];
         // $is_validate = $request->validateWithBag("post", [
         //     "tahun" => "required|numeric",
@@ -2206,6 +2212,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             $approval_rekomendasi->finish_tahun = $data["tahun_finish"];
             $approval_rekomendasi->finish_bulan = $data["bulan_finish"];
         }
+        $approval_rekomendasi->kode_unit_kerja = $data["kode-unit"];
+        $approval_rekomendasi->urutan = $data["urutan"];
 
         // dd($approval_rekomendasi);
 
@@ -2404,6 +2412,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post('/kriteria-pengguna-jasa/update/{id}', [KriteriaPenggunaJasaController::class, 'update']);
     Route::post('/kriteria-pengguna-jasa/delete/{id}', [KriteriaPenggunaJasaController::class, 'destroy']);
     Route::post('/kriteria-pengguna-jasa/detail/save', [KriteriaPenggunaJasaController::class, 'detailSave']);
+    Route::post('/kriteria-pengguna-jasa/detail/edit', [KriteriaPenggunaJasaController::class, 'detailEdit']);
     
     Route::get('/penilaian-pengguna-jasa', [PenilaianPenggunaJasaController::class, 'index']);
     Route::post('/penilaian-pengguna-jasa/save', [PenilaianPenggunaJasaController::class, 'store']);
