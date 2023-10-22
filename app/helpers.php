@@ -169,9 +169,9 @@ function checkGreenLine($proyek) {
         } else {
             $results->push(false);
         }
-        if ($proyek->is_disetujui) {
-            return true;
-        }
+        // if ($proyek->is_disetujui) {
+        //     return true;
+        // }
         return $results->count() > 1 && $results->every(function($item) {
             return $item === true;
         });
@@ -540,7 +540,8 @@ function createWordPengajuan(App\Models\Proyek $proyek, \Illuminate\Support\Coll
     
     // Begin :: SIGNED Template docx
     $templateProcessor = new TemplateProcessor($target_path . "/" . $file_name . ".docx");
-    $templateProcessor->setImageValue('tandaTangan', ["path" => "./media/logos/sign.jpg", "height" => 75, "ratio" => false]);
+    // $templateProcessor->setImageValue('tandaTangan', ["path" => "./media/logos/sign.jpg", "height" => 75, "ratio" => false]);
+    $templateProcessor->setValue('tandaTangan', '<img src="' . public_path('\qr-code' . '\\' . $proyek->kode_proyek . '.svg') . '" width="300" height="300" />');
     $ttdFileName = $now->format("dmYHis") . "_signed-nota-pengajuan_$proyek->kode_proyek";
     $templateProcessor->saveAs(public_path($target_path . "/" . $ttdFileName . ".docx"));
     // end :: SIGNED Template docx
@@ -1025,14 +1026,17 @@ function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Co
     foreach ($penyusun as $key => $p) {
         $user = User::find($p->user_id);
         // $templateProcessor->setImageValue('ttdPenyusun' . ++$key, ["path" => "./file-ttd/" . $user->file_ttd, "width" => 10, "ratio" => true]);
+        $templateProcessor->setValue('ttdPenyusun' . ++$key, '<img src="' . public_path('\qr-code' . '\\' . $proyek->kode_proyek . '.svg') . '" width="300" height="300" />');
     }
     foreach ($rekomendator as $key => $p) {
         $user = User::find($p->user_id);
         // $templateProcessor->setImageValue('ttdRekomendasi' . ++$key, ["path" => "./file-ttd/" . $user->file_ttd, "width" => 10, "ratio" => true]);
+        $templateProcessor->setValue('ttdRekomendasi' . ++$key, '<img src="' . public_path('\qr-code' . '\\' . $proyek->kode_proyek . '.svg') . '" width="300" height="300" />');
     }
     foreach ($penyetuju as $key => $p) {
         $user = User::find($p->user_id);
         // $templateProcessor->setImageValue('ttdPersetujuan' . ++$key, ["path" => "./file-ttd/" . $user->file_ttd, "width" => 10, "ratio" => true]);
+        $templateProcessor->setValue('ttdPersetujuan' . ++$key, '<img src="' . public_path('\qr-code' . '\\' . $proyek->kode_proyek . '.svg') . '" width="300" height="300" />');
     }
 
     // Old TTD Method
