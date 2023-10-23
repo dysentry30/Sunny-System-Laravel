@@ -489,7 +489,7 @@
                                                     $proyek_approval = [];
                                                 }
                                             }else{
-                                                $proyek_approval = $all_proyeks;
+                                                $proyek_approval = $proyeks_proses_rekomendasi;
                                             }
                                         @endphp
                                         <tbody>
@@ -808,7 +808,7 @@
                                                     $proyek_approval_finish = [];
                                                 }
                                             }else{
-                                                $proyek_approval_finish = $all_proyeks;
+                                                $proyek_approval_finish = $proyeks_proses_rekomendasi;
                                             }
                                         @endphp
                                         <tbody>
