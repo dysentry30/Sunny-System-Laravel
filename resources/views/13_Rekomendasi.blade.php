@@ -744,9 +744,7 @@
                                                                                 class="btn btn-sm btn-primary text-white">Submit</a>
                                                                         @elseif ($matriks_user->contains('kategori', 'Penyusun'))
                                                                             @if ($proyek->is_request_rekomendasi)
-                                                                                <a href="#kt_modal_view_proyek_rekomendasi_{{ $proyek->kode_proyek }}"
-                                                                                    target="_blank" data-bs-toggle="modal"
-                                                                                    class="btn btn-sm btn-primary text-white disabled" role="button">Submit</a>
+                                                                                
                                                                             @elseif ($proyek->KriteriaPenggunaJasaDetail->count() > \App\Models\KriteriaPenggunaJasa::all()->count())
                                                                                 <a href="#kt_modal_view_proyek_rekomendasi_{{ $proyek->kode_proyek }}"
                                                                                     target="_blank" data-bs-toggle="modal"
