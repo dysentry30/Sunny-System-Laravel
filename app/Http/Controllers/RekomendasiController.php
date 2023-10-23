@@ -681,9 +681,9 @@ class RekomendasiController extends Controller
             }
         }
         if (!empty($rekomendasi_open)) {
-            return view('13_Rekomendasi', compact(["nip", 'proyeks_pengajuan', "proyeks_persetujuan", "all_super_user_counter", "rekomendasi_open", "proyeks_rekomendasi", "proyeks_penyusun", "proyeks_verifikasi", "is_user_exist_in_matriks_approval", "matriks_user", "matriks_category", "all_proyeks", "proyeks_rekomendasi_final", "proyeks_proses_rekomendasi"]));
+            return view('13_Rekomendasi', compact(["nip", 'proyeks_pengajuan', "proyeks_persetujuan", "all_super_user_counter", "rekomendasi_open", "proyeks_rekomendasi", "proyeks_penyusun", "proyeks_verifikasi", "is_user_exist_in_matriks_approval", "matriks_user", "matriks_category", "proyeks_rekomendasi_final", "proyeks_proses_rekomendasi"]));
         }
-        return view('13_Rekomendasi', compact(["nip", 'proyeks_pengajuan', "proyeks_persetujuan", "all_super_user_counter", "proyeks_rekomendasi", "proyeks_penyusun", "proyeks_verifikasi", "is_user_exist_in_matriks_approval", "matriks_user", "matriks_category", "all_proyeks", "proyeks_rekomendasi_final", "proyeks_proses_rekomendasi"]));
+        return view('13_Rekomendasi', compact(["nip", 'proyeks_pengajuan', "proyeks_persetujuan", "all_super_user_counter", "proyeks_rekomendasi", "proyeks_penyusun", "proyeks_verifikasi", "is_user_exist_in_matriks_approval", "matriks_user", "matriks_category", "proyeks_rekomendasi_final", "proyeks_proses_rekomendasi"]));
     }
 
     private function checkMatriksApproval($unit_kerja, $klasifikasi_proyek, $approved_data, $kategori): bool
