@@ -599,9 +599,10 @@ class RekomendasiController extends Controller
 
                 $proyeks_persetujuan = [];
             } else {
+                /*
                 if ($matriks_user->contains("kategori", "Pengajuan")) {
                     $proyeks_pengajuan = Proyek::whereIn("unit_kerja", $unit_kerjas)->where("stage", "=", 1)->get()->filter(function ($p) use ($matriks_user) {
-                        return ($p->is_request_rekomendasi && !$p->review_assessment && is_null($p->hasil_assessment) && is_null($p->approved_rekomendasi)) && $matriks_user->where("klasifikasi_proyek", $p->klasifikasi_pasdin)->count() > 0;
+                        return ($p->is_request_rekomendasi && !$p->review_assessment && is_null($p->hasil_assessment)) && $matriks_user->where("klasifikasi_proyek", $p->klasifikasi_pasdin)->count() > 0;
                     });
                     $proyeks_rekomendasi_final = Proyek::whereIn("unit_kerja", $unit_kerjas)->where("stage", "=", 1)->get()->filter(function ($p) use ($matriks_user) {
                         return $p->review_assessment == true && (is_null($p->is_draft_recommend_note) || $p->is_draft_recommend_note) && $matriks_user->where("klasifikasi_proyek", $p->klasifikasi_pasdin)->count() > 0;
@@ -658,13 +659,31 @@ class RekomendasiController extends Controller
                 } else {
                     $proyeks_persetujuan = [];
                 }
-                $all_proyeks = collect([]);
+                */
+
+                $proyeks_pengajuan = [];
+                $proyeks_penyusun = [];
+                $proyeks_verifikasi = [];
+                $proyeks_rekomendasi = [];
+                $proyeks_persetujuan = [];
+
+                $proyeks_rekomendasi_final = Proyek::whereIn('unit_kerja', $unit_kerjas)->where("stage", "=", 1)->get()->filter(function ($p) use ($matriks_user) {
+                    return $p->is_disetujui && $matriks_user->where("klasifikasi_proyek", $p->klasifikasi_pasdin)->count() > 0;
+                });
+                $proyeks_proses_rekomendasi = Proyek::whereIn('unit_kerja', $unit_kerjas)->where("stage", "=", 1)->get()->filter(function ($p) use ($matriks_user) {
+                    return is_null($p->is_disetujui) && $matriks_user->where("klasifikasi_proyek", $p->klasifikasi_pasdin)->count() > 0;
+                });
+                $matriks_category = MatriksApprovalRekomendasi::all()->groupBy(['klasifikasi_proyek', 'kategori']);
+                // dd($matriks_category);
+                $all_proyeks = Proyek::whereIn('unit_kerja', $unit_kerjas)->where("stage", "=", 1)->get()->filter(function ($p) use ($matriks_user) {
+                    return $p->is_disetujui && $matriks_user->where("klasifikasi_proyek", $p->klasifikasi_pasdin)->count() > 0;
+                });
             }
         }
         if (!empty($rekomendasi_open)) {
-            return view('13_Rekomendasi', compact(["nip", 'proyeks_pengajuan', "proyeks_persetujuan", "all_super_user_counter", "rekomendasi_open", "proyeks_rekomendasi", "proyeks_penyusun", "proyeks_verifikasi", "is_user_exist_in_matriks_approval", "matriks_user", "matriks_category", "all_proyeks", "proyeks_rekomendasi_final"]));
+            return view('13_Rekomendasi', compact(["nip", 'proyeks_pengajuan', "proyeks_persetujuan", "all_super_user_counter", "rekomendasi_open", "proyeks_rekomendasi", "proyeks_penyusun", "proyeks_verifikasi", "is_user_exist_in_matriks_approval", "matriks_user", "matriks_category", "all_proyeks", "proyeks_rekomendasi_final", "proyeks_proses_rekomendasi"]));
         }
-        return view('13_Rekomendasi', compact(["nip", 'proyeks_pengajuan', "proyeks_persetujuan", "all_super_user_counter", "proyeks_rekomendasi", "proyeks_penyusun", "proyeks_verifikasi", "is_user_exist_in_matriks_approval", "matriks_user", "matriks_category", "all_proyeks", "proyeks_rekomendasi_final"]));
+        return view('13_Rekomendasi', compact(["nip", 'proyeks_pengajuan', "proyeks_persetujuan", "all_super_user_counter", "proyeks_rekomendasi", "proyeks_penyusun", "proyeks_verifikasi", "is_user_exist_in_matriks_approval", "matriks_user", "matriks_category", "all_proyeks", "proyeks_rekomendasi_final", "proyeks_proses_rekomendasi"]));
     }
 
     private function checkMatriksApproval($unit_kerja, $klasifikasi_proyek, $approved_data, $kategori): bool

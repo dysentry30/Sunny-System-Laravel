@@ -468,6 +468,7 @@
                                                 <th class="min-w-auto">Level Risiko</th>
                                                 <th class="min-w-auto">Hasil NR I</th>
                                                 <th class="min-w-auto">Is Cancel</th>
+                                                <th class="min-w-auto">Action</th>
                                             </tr>
                                         </thead>
                                         @php
@@ -492,59 +493,14 @@
                                             }
                                         @endphp
                                         <tbody>
-                                            @if (!empty($proyek_approval))
-                                                @foreach ($proyek_approval as $proyek)
+                                            {{-- @if (!empty($proyek_approval)) --}}
+                                                {{-- @foreach ($proyek_approval as $proyek) --}}
+                                                @foreach ($proyeks_proses_rekomendasi as $proyek)
                                                     <tr>
                                                         <td>{{ $no++ }}</td>
-                                                        @if (empty($matriks_user))
-                                                            <td>
-                                                                @if (!is_null($proyek->is_request_rekomendasi))
-                                                                    @if ($proyek->is_request_rekomendasi && !$proyek->review_assessment)
-                                                                        <a href="#kt_modal_view_proyek_{{ $proyek->kode_proyek }}"
-                                                                            data-bs-toggle="modal"
-                                                                            class="text-hover-primary">{{ $proyek->nama_proyek }}</a>
-                                                                    @elseif ($proyek->review_assessment == true && (is_null($proyek->is_draft_recommend_note) || $proyek->is_draft_recommend_note))
-                                                                        <a href="#kt_modal_view_proyek_rekomendasi_{{ $proyek->kode_proyek }}"
-                                                                            target="_blank" data-bs-toggle="modal"
-                                                                            class="text-hover-primary">{{ $proyek->nama_proyek }}</a>
-                                                                    @else
-                                                                        <a href="#kt_modal_view_proyek_persetujuan_{{ $proyek->kode_proyek }}"
-                                                                            target="_blank" data-bs-toggle="modal"
-                                                                            class="text-hover-primary">{{ $proyek->nama_proyek }}</a>
-                                                                    @endif
-                                                                @endif
-                                                            </td>
-                                                        @else
-                                                            <td>
-                                                                @if ($matriks_user->contains('kategori', 'Persetujuan')  || $matriks_user->contains('kategori', 'Rekomendasi') || $matriks_user->contains('kategori', 'Verifikasi'))
-                                                                    <a href="#kt_modal_view_proyek_persetujuan_{{ $proyek->kode_proyek }}"
-                                                                        target="_blank" data-bs-toggle="modal"
-                                                                        class="text-hover-primary">{{ $proyek->nama_proyek }}</a>
-                                                                @else
-                                                                    @if ($is_user_exist_in_matriks_approval)
-                                                                        @if ($matriks_user->contains('kategori', 'Pengajuan'))
-                                                                            <a href="#kt_modal_view_proyek_{{ $proyek->kode_proyek }}"
-                                                                                data-bs-toggle="modal"
-                                                                                class="text-hover-primary">{{ $proyek->nama_proyek }}</a>
-                                                                        @elseif ($matriks_user->contains('kategori', 'Penyusun'))
-                                                                            @if ($proyek->KriteriaPenggunaJasaDetail->count() > \App\Models\KriteriaPenggunaJasa::all()->count())
-                                                                                <a href="#kt_modal_view_proyek_rekomendasi_{{ $proyek->kode_proyek }}"
-                                                                                    target="_blank" data-bs-toggle="modal"
-                                                                                    class="text-hover-primary">{{ $proyek->nama_proyek }}</a>
-                                                                            @else
-                                                                                <a href="#kt_user_view_kriteria_{{ $proyek->kode_proyek }}"
-                                                                                    target="_blank" data-bs-toggle="modal"
-                                                                                    class="text-hover-primary">{{ $proyek->nama_proyek }}</a>
-                                                                            @endif                                                                        
-                                                                        @endif 
-                                                                    @else
-                                                                        <a href="/proyek/view/{{ $proyek->kode_proyek }}"
-                                                                            target="_blank"
-                                                                            class="text-hover-primary">{{ $proyek->nama_proyek }}</a>
-                                                                    @endif
-                                                                @endif
-                                                            </td>
-                                                        @endif
+                                                        <td>
+                                                            <a href="/proyek/view/{{ $proyek->kode_proyek }}" target="_blank" class="text-hover-primary">{{ $proyek->nama_proyek }}</a>
+                                                        </td>
                                                         <td>
                                                             <small
                                                                 class="badge {{ $proyek->is_rkap ? 'badge-light-primary' : 'badge-light-danger' }}">{{ $proyek->is_rkap ? 'RKAP' : 'Non RKAP' }}</small>
@@ -756,9 +712,62 @@
                                                             </small>
                                                         </td>
                                                         <td>-</td>
+                                                        @if (empty($matriks_user))
+                                                            <td>
+                                                                @if (!is_null($proyek->is_request_rekomendasi))
+                                                                    @if ($proyek->is_request_rekomendasi && !$proyek->review_assessment)
+                                                                        <a href="#kt_modal_view_proyek_{{ $proyek->kode_proyek }}"
+                                                                            data-bs-toggle="modal"
+                                                                            class="btn btn-sm btn-primary text-white">Submit</a>
+                                                                    @elseif ($proyek->review_assessment == true && (is_null($proyek->is_draft_recommend_note) || $proyek->is_draft_recommend_note))
+                                                                        <a href="#kt_modal_view_proyek_rekomendasi_{{ $proyek->kode_proyek }}"
+                                                                            target="_blank" data-bs-toggle="modal"
+                                                                            class="btn btn-sm btn-primary text-white">Submit</a>
+                                                                    @else
+                                                                        <a href="#kt_modal_view_proyek_persetujuan_{{ $proyek->kode_proyek }}"
+                                                                            target="_blank" data-bs-toggle="modal"
+                                                                            class="btn btn-sm btn-primary text-white">Submit</a>
+                                                                    @endif
+                                                                @endif
+                                                            </td>
+                                                        @else
+                                                            <td>
+                                                                @if ($matriks_user->contains('kategori', 'Persetujuan')  || $matriks_user->contains('kategori', 'Rekomendasi') || $matriks_user->contains('kategori', 'Verifikasi'))
+                                                                    <a href="#kt_modal_view_proyek_persetujuan_{{ $proyek->kode_proyek }}"
+                                                                        target="_blank" data-bs-toggle="modal"
+                                                                        class="btn btn-sm btn-primary text-white">Submit</a>
+                                                                @else
+                                                                    @if ($is_user_exist_in_matriks_approval)
+                                                                        @if ($matriks_user->contains('kategori', 'Pengajuan'))
+                                                                            <a href="#kt_modal_view_proyek_{{ $proyek->kode_proyek }}"
+                                                                                data-bs-toggle="modal"
+                                                                                class="btn btn-sm btn-primary text-white">Submit</a>
+                                                                        @elseif ($matriks_user->contains('kategori', 'Penyusun'))
+                                                                            @if ($proyek->is_request_rekomendasi)
+                                                                                <a href="#kt_modal_view_proyek_rekomendasi_{{ $proyek->kode_proyek }}"
+                                                                                    target="_blank" data-bs-toggle="modal"
+                                                                                    class="btn btn-sm btn-primary text-white disabled" role="button">Submit</a>
+                                                                            @elseif ($proyek->KriteriaPenggunaJasaDetail->count() > \App\Models\KriteriaPenggunaJasa::all()->count())
+                                                                                <a href="#kt_modal_view_proyek_rekomendasi_{{ $proyek->kode_proyek }}"
+                                                                                    target="_blank" data-bs-toggle="modal"
+                                                                                    class="btn btn-sm btn-primary text-white">Submit</a>
+                                                                            @else
+                                                                                <a href="#kt_user_view_kriteria_{{ $proyek->kode_proyek }}"
+                                                                                    target="_blank" data-bs-toggle="modal"
+                                                                                    class="btn btn-sm btn-primary text-white">Submit</a>
+                                                                            @endif                                                                        
+                                                                        @endif 
+                                                                    @else
+                                                                        <a href="/proyek/view/{{ $proyek->kode_proyek }}"
+                                                                            target="_blank"
+                                                                            class="btn btn-sm btn-primary text-white">Submit</a>
+                                                                    @endif
+                                                                @endif
+                                                            </td>
+                                                        @endif
                                                     </tr>
                                                 @endforeach
-                                            @endif
+                                            {{-- @endif --}}
                                         </tbody>
                                     </table>
                                 </div>
@@ -1706,7 +1715,7 @@
     <!--end::Root-->
 
     {{-- Begin::Tab Content Kriteria Pengguna Jasa --}}
-    @foreach ($proyek_approval as $proyek)
+    @foreach ($proyeks_proses_rekomendasi as $proyek)
         <form action="/kriteria-pengguna-jasa/detail/save" method="POST" id="form-kriteria-{{ $proyek->kode_proyek }}"
             enctype="multipart/form-data">
             @csrf
@@ -1969,9 +1978,9 @@
             $data = $proyeks_rekomendasi;
         }
         @endphp --}}
-    @foreach ($proyek_approval as $key => $proyek)
+    @foreach ($proyeks_proses_rekomendasi as $key => $proyek)
     @php
-        $is_edit = is_null($proyek->is_verifikasi_approved) && ((!is_null($proyek->is_draft_recommend_note) && $proyek->is_draft_recommend_note) || is_null($proyek->is_draft_recommend_note));
+        $is_edit = !$proyek->is_request_rekomendasi && is_null($proyek->is_verifikasi_approved) && ((!is_null($proyek->is_draft_recommend_note) && $proyek->is_draft_recommend_note) || is_null($proyek->is_draft_recommend_note));
     @endphp
         @if ($is_edit)
             <form action="/kriteria-pengguna-jasa/detail/edit" method="POST"
@@ -2329,7 +2338,7 @@
     @php
         $proyeks = $is_super_user ? $proyeks_persetujuan : $proyeks_pengajuan;
     @endphp
-    @foreach ($proyeks_pengajuan as $proyek)
+    @foreach ($proyeks_proses_rekomendasi as $proyek)
         <div class="modal fade" id="kt_modal_view_proyek_{{ $proyek->kode_proyek }}" tabindex="-1"
             aria-labelledby="kt_modal_view_proyek_{{ $proyek->kode_proyek }}" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
@@ -2491,7 +2500,7 @@
         </div>
     @endforeach
 
-    @foreach ($proyek_approval as $proyek)
+    @foreach ($proyeks_proses_rekomendasi as $proyek)
         @php
             $hasil_assessment = collect(json_decode($proyek->hasil_assessment));
             $is_exist_customer = $proyek->proyekBerjalan?->customer;
@@ -2712,7 +2721,7 @@
         </div>
     @endforeach
 
-    @foreach ($proyek_approval as $proyek)
+    @foreach ($proyeks_proses_rekomendasi as $proyek)
         @php
             $hasil_assessment = collect(json_decode($proyek->hasil_assessment));
             $is_exist_customer = $proyek->proyekBerjalan?->customer;
