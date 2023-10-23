@@ -609,7 +609,7 @@
                                                                         })->first();
 
                                                                         if (empty($select_user)) {
-                                                                            $style = 'bg-secondary text-black';
+                                                                            $style = 'bg-secondary text-dark';
                                                                         }else{
                                                                             if ($select_user->status == "approved" && empty($select_user->alasan)) {
                                                                                 $style = 'bg-success';
