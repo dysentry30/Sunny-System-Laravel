@@ -623,7 +623,7 @@
                                                                 @endphp
                                                                     <div class="circle {{ $style }} text-white"
                                                                         style="height:25px; width:25px; border-radius:50%;">
-                                                                        <small style="font-size: 5px">{{ $matriks->kode_unit_kerja }}</small>
+                                                                        <small style="font-size: 12px">{{ $matriks->kode_unit_kerja }}</small>
                                                                     </div>
                                                                 @endforeach
                                                             </div>
