@@ -11,6 +11,11 @@ use Karriere\PdfMerge\PdfMerge;
 use PhpOffice\PhpWord\IOFactory;
 use Illuminate\Http\UploadedFile;
 use App\Models\KriteriaAssessment;
+use App\Models\KriteriaPenggunaJasa;
+use App\Models\KriteriaPenggunaJasaDetail;
+use App\Models\LegalitasPerusahaan;
+use App\Models\PenilaianPenggunaJasa;
+use App\Models\Proyek;
 use Illuminate\Support\Facades\Log;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -18,6 +23,7 @@ use Illuminate\Support\Facades\File;
 use PhpOffice\PhpWord\TemplateProcessor;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Validator;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 function url_encode($url) {
     return urlencode(urlencode($url));
@@ -222,21 +228,26 @@ function createWordRekomendasi(App\Models\Proyek $proyek, \Illuminate\Support\Co
     $key_client = $hasil_assessment->where("kriteria_penilaian", "=", "Key Client")->first();
     $bowheer = $hasil_assessment->where("kriteria_penilaian", "=", "Pemberi Kerja bermasalah")->first();
     $piutang = $hasil_assessment->where("kriteria_penilaian", "=", "Piutang")->first();
-    if(empty($key_client)) {
-        $key_client = collect(["kategori" => "Internal", "kriteria_penilaian" => "Key Client","score" => 0]);
-        $hasil_assessment->push($key_client);
-    }
-    if(empty($bowheer)) {
-        $bowheer = collect(["kategori" => "Internal", "kriteria_penilaian" => "Pemberi Kerja bermasalah","score" => 10]);
-        $hasil_assessment->push($bowheer);
-    }
-    if(empty($piutang)) {
-        $piutang = collect(["kategori" => "Internal", "kriteria_penilaian" => "Piutang","score" => 10]);
-        $hasil_assessment->push($piutang);
+
+    // dd($bowheer);
+    if ($customer->proyekBerjalans->where("stage", "=", 8)->count() > 0) {
+        if (empty($key_client)) {
+            $key_client = collect(["kategori" => "Internal", "kriteria_penilaian" => "Key Client", "score" => 0]);
+            $hasil_assessment->push($key_client);
+        }
+        if (empty($bowheer)) {
+            $bowheer = collect(["kategori" => "Internal", "kriteria_penilaian" => "Pemberi Kerja bermasalah", "score" => 10]);
+            $hasil_assessment->push($bowheer);
+        }
+        if (empty($piutang)) {
+            $piutang = collect(["kategori" => "Internal", "kriteria_penilaian" => "Piutang", "score" => 10]);
+            $hasil_assessment->push($piutang);
+        }
     }
     $total_score = $hasil_assessment->sum(function($ra) {
         return $ra["score"];
     });
+    // return dd($total_score);
     // dd($top_100, $rating, $industry_attractive);
 
     $section = $phpWord->addSection();
@@ -319,25 +330,25 @@ function createWordRekomendasi(App\Models\Proyek $proyek, \Illuminate\Support\Co
         $table->addRow();
         $table->addCell(2000)->addText("1");
         $table->addCell(4000)->addText("Piutang");
-        $table->addCell(2000)->addText("Tidak Ada Piutang");
-        $table->addCell(2000)->addText(htmlspecialchars("Piutang < 3 Bulan"));
-        $table->addCell(2000)->addText("Piutang > 3 Bulan");
+        $table->addCell(2000, ['bgColor' => $piutang['score'] == 10 ? 'FFB77D' : ''])->addText("Tidak Ada Piutang");
+        $table->addCell(2000, ['bgColor' => $piutang['score'] == 7.5 ? 'FFB77D' : ''])->addText(htmlspecialchars("Piutang < 3 Bulan"));
+        $table->addCell(2000, ['bgColor' => $piutang['score'] == 5 ? 'FFB77D' : ''])->addText("Piutang > 3 Bulan");
         $table->addCell(2000)->addText($piutang["score"] ?? 10);
         $table->addCell(2000)->addText("-");
         
         $table->addRow();
         $table->addCell(2000)->addText("2");
         $table->addCell(4000)->addText("Pemberi Kerja bermasalah");
-        $table->addCell(2000)->addText("Tak berperkara dengan Wika");
-        $table->addCell(2000)->addText("Ada perkara, wika menang");
-        $table->addCell(2000)->addText("Ada Perkara, Wika Kalah");
+        $table->addCell(2000, ["bgColor" => $bowheer["score"] == 10 ? 'FFB77D' : ''])->addText("Tak berperkara dengan Wika");
+        $table->addCell(2000, ["bgColor" => $bowheer["score"] == 7.5 ? 'FFB77D' : ''])->addText("Ada perkara, Wika Menang");
+        $table->addCell(2000, ["bgColor" => $bowheer["score"] == 5 ? 'FFB77D' : ''])->addText("Ada Perkara, Wika Kalah");
         $table->addCell(2000)->addText($bowheer["score"] ?? 10);
         $table->addCell(2000)->addText("-");
         
         $table->addRow();
         $table->addCell(2000)->addText("3");
         $table->addCell(4000)->addText("Key Client");
-        $table->addCell(2000)->addText("Perusahan menjadi bagian Key Client");
+        $table->addCell(2000, ["bgColor" => $key_client['score'] == 10 ? 'FFB77D' : ''])->addText("Perusahan menjadi bagian Key Client");
         $table->addCell(2000, $cellCategoryStyle);
         $table->addCell(2000, $cellCategoryStyle);
         $table->addCell(2000)->addText($key_client["score"] ?? 0);
@@ -356,9 +367,9 @@ function createWordRekomendasi(App\Models\Proyek $proyek, \Illuminate\Support\Co
     $table->addCell(2000)->addText("1");
     $table->addCell(4000)->addText("Industry Attractive
     (Industry Rating untuk melihat industri yang menjadi sasaran)");
-    $table->addCell(2000)->addText("Industri Menarik dan Cenderung Menarik");
-    $table->addCell(2000)->addText("Industri Netral dan Cenderung Waspada");
-    $table->addCell(2000)->addText("Industri Waspada");
+    $table->addCell(2000, ["bgColor" => $industry_attractive['score'] == 10 ? 'FFB77D' : ''])->addText("Industri Menarik dan Cenderung Menarik");
+    $table->addCell(2000, ["bgColor" => $industry_attractive['score'] == 7.5 ? 'FFB77D' : ''])->addText("Industri Netral dan Cenderung Waspada");
+    $table->addCell(2000, ["bgColor" => $industry_attractive['score'] == 5 ? 'FFB77D' : ''])->addText("Industri Waspada");
     $table->addCell(2000)->addText($industry_attractive["score"]);
     $table->addCell(2000)->addText("-");
     
@@ -366,9 +377,9 @@ function createWordRekomendasi(App\Models\Proyek $proyek, \Illuminate\Support\Co
     $table->addCell(2000)->addText("2");
     $table->addCell(4000)->addText("Top 100  Perusahaan terbesar di Indonesia
     (dikeluarkan oleh lembaga terpercaya)");
-    $table->addCell(2000)->addText("Perusahaan berada pada urutan 1 - 50");
-    $table->addCell(2000)->addText("Perusahaan berada pada urutan 51 - 100");
-    $table->addCell(2000)->addText("Perusahaan tidak berada pada daftar Top Perusahaan");
+    $table->addCell(2000, ["bgColor" => $top_100['score'] == 10 ? 'FFB77D' : ''])->addText("Perusahaan berada pada urutan 1 - 50");
+    $table->addCell(2000, ["bgColor" => $top_100['score'] == 7.5 ? 'FFB77D' : ''])->addText("Perusahaan berada pada urutan 51 - 100");
+    $table->addCell(2000, ["bgColor" => $top_100['score'] == 5 ? 'FFB77D' : ''])->addText("Perusahaan tidak berada pada daftar Top Perusahaan");
     $table->addCell(2000)->addText($top_100["score"]);
     $table->addCell(2000)->addText("-");
     
@@ -376,9 +387,9 @@ function createWordRekomendasi(App\Models\Proyek $proyek, \Illuminate\Support\Co
     $table->addCell(2000)->addText("3");
     $table->addCell(4000)->addText("Lembaga lain yang mengeluarkan rating perusahaan di indonesia
     (misal: LQ45)");
-    $table->addCell(2000)->addText("Perusahaan berada pada urutan 1 - 20");
-    $table->addCell(2000)->addText("Perusahaan berada pada urutan 21 - 45");
-    $table->addCell(2000)->addText("Perusahaan tidak berada pada daftar rating Perusahaan");
+    $table->addCell(2000, ["bgColor" => $rating['score'] == 10 ? 'FFB77D' : ''])->addText("Perusahaan berada pada urutan 1 - 20");
+    $table->addCell(2000, ["bgColor" => $rating['score'] == 7.5 ? 'FFB77D' : ''])->addText("Perusahaan berada pada urutan 21 - 45");
+    $table->addCell(2000, ["bgColor" => $rating['score'] == 5 ? 'FFB77D' : ''])->addText("Perusahaan tidak berada pada daftar rating Perusahaan");
     $table->addCell(2000)->addText($rating["score"] ?? 0);
     $table->addCell(2000)->addText("-");
 
@@ -445,13 +456,14 @@ function createWordRekomendasi(App\Models\Proyek $proyek, \Illuminate\Support\Co
     $proyek->save();
 }
 
-function createWordPengajuan(App\Models\Proyek $proyek, \Illuminate\Support\Collection $hasil_assessment = new \Illuminate\Support\Collection(), $is_proyek_mega)
+function createWordPengajuan(App\Models\Proyek $proyek, \Illuminate\Support\Collection $hasil_assessment = new \Illuminate\Support\Collection(), $is_proyek_mega, $fileQrCode)
 {
     $phpWord = new \PhpOffice\PhpWord\PhpWord();
     $customer = $proyek->proyekBerjalan->Customer;
     $target_path = "file-pengajuan";
     $now = Carbon\Carbon::now();
     $file_name = $now->format("dmYHis") . "_nota-pengajuan_$proyek->kode_proyek";
+
     // $file_name = $now->format("dmYHis") . "_nota-pengajuan_$proyek->kode_proyek.pdf";
 
 
@@ -488,18 +500,17 @@ function createWordPengajuan(App\Models\Proyek $proyek, \Illuminate\Support\Coll
     $table->addCell(500, $styleCell)->addText('1', $fontStyle);
     $table->addCell(2500, $styleCell)->addText("Nama Proyek", $fontStyle);
     $table->addCell(6000, $styleCell)->addText($nama_proyek, $fontStyle);
-
     $table->addRow();
     $table->addCell(500, $styleCell)->addText('2', $fontStyle);
     $table->addCell(2500, $styleCell)->addText("Lokasi Proyek", $fontStyle);
-    $table->addCell(6000, $styleCell)->addText(Provinsi::find($proyek->nama_proyek)->province_name ?? "-", $fontStyle);
+    $table->addCell(6000, $styleCell)->addText(Provinsi::find($proyek->provinsi)->province_name ?? "-", $fontStyle);
     $table->addRow();
     $table->addCell(500, $styleCell)->addText('3', $fontStyle);
-    $table->addCell(2500, $styleCell)->addText("Nama Pemberi kerja", $fontStyle);
+    $table->addCell(2500, $styleCell)->addText("Nama Pengguna Jasa", $fontStyle);
     $table->addCell(6000, $styleCell)->addText($proyek->proyekBerjalan->name_customer, $fontStyle);
     $table->addRow();
     $table->addCell(500, $styleCell)->addText('4', $fontStyle);
-    $table->addCell(2500, $styleCell)->addText("Instansi Pemberi Kerja", $fontStyle);
+    $table->addCell(2500, $styleCell)->addText("Instansi Pengguna Jasa", $fontStyle);
     $table->addCell(6000, $styleCell)->addText($proyek->proyekBerjalan->Customer->jenis_instansi, $fontStyle);
     $table->addRow();
     $table->addCell(500, $styleCell)->addText('5', $fontStyle);
@@ -507,7 +518,7 @@ function createWordPengajuan(App\Models\Proyek $proyek, \Illuminate\Support\Coll
     $table->addCell(6000, $styleCell)->addText($proyek->sumber_dana, $fontStyle);
     $table->addRow();
     $table->addCell(500, $styleCell)->addText('6', $fontStyle);
-    $table->addCell(2500, $styleCell)->addText("Nilai Proyek", $fontStyle);
+    $table->addCell(2500, $styleCell)->addText("Perkiraan Nilai Proyek", $fontStyle);
     $table->addCell(6000, $styleCell)->addText(number_format($proyek->nilaiok_awal, 0, ".", "."), $fontStyle);
     $table->addRow();
     $table->addCell(500, $styleCell)->addText('7', $fontStyle);
@@ -520,12 +531,12 @@ function createWordPengajuan(App\Models\Proyek $proyek, \Illuminate\Support\Coll
 
     // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
     $section->addTextBreak(3);
-        $section->addText($now->translatedFormat("d F Y"), ["bold" => true], ["align" => "center"]);
-        $section->addTextBreak(1);
-        $section->addText("$". "{tandaTangan}", ["bold" => false], ["align" => "center"]);
-        $section->addTextBreak(1);
-        $section->addText("( ".Auth::user()->name." )", ["bold" => true, "size" => 7], ["align" => "center"]);
-        $section->addText(Auth::user()->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+    $section->addText($now->translatedFormat("d F Y"), ["bold" => true], ["align" => "center"]);
+    $section->addTextBreak(1);
+    $section->addText("$" . "{tandaTangan}", ["bold" => false], ["align" => "center"]);
+    $section->addTextBreak(1);
+    $section->addText("( " . Auth::user()->name . " )", ["bold" => true, "size" => 7], ["align" => "center"]);
+    $section->addText(Auth::user()->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
     $section->addTextBreak(5);
     $section->addText("Catatan :");
     $section->addText("Dokumen Pemilihan atau dokumen pendukung lainnya harap di upload dalam aplikasi CRM.");
@@ -540,8 +551,8 @@ function createWordPengajuan(App\Models\Proyek $proyek, \Illuminate\Support\Coll
     
     // Begin :: SIGNED Template docx
     $templateProcessor = new TemplateProcessor($target_path . "/" . $file_name . ".docx");
-    // $templateProcessor->setImageValue('tandaTangan', ["path" => "./media/logos/sign.jpg", "height" => 75, "ratio" => false]);
-    $templateProcessor->setValue('tandaTangan', '<img src="' . public_path('\qr-code' . '\\' . $proyek->kode_proyek . '.svg') . '" width="300" height="300" />');
+    $templateProcessor->setImageValue('tandaTangan', ["path" => public_path('qr-code/' . $fileQrCode), "height" => 75, "ratio" => false]);
+    // $templateProcessor->setValue('tandaTangan', '<img src="' . public_path('\qr-code' . '\\' . $proyek->kode_proyek . '.svg') . '" width="300" height="300" />');
     $ttdFileName = $now->format("dmYHis") . "_signed-nota-pengajuan_$proyek->kode_proyek";
     $templateProcessor->saveAs(public_path($target_path . "/" . $ttdFileName . ".docx"));
     // end :: SIGNED Template docx
@@ -567,8 +578,314 @@ function createWordPengajuan(App\Models\Proyek $proyek, \Illuminate\Support\Coll
     $proyek->save();
 }
 
+function createWordProfileRisiko($kode_proyek)
+{
+    $target_path = "file-profile-risiko";
+    $proyek = Proyek::select('kode_proyek', 'nama_proyek')->where('kode_proyek', $kode_proyek)->first();
+    $customer = $proyek->proyekBerjalan?->customer?->name;
+    // dd($customer);
+    $now = Carbon\Carbon::now();
+    $file_name = $now->format("dmYHis") . "_profile-risiko_" . $proyek->kode_proyek . ".docx";
+    $kriteriaPenggunaJasaDetail = KriteriaPenggunaJasaDetail::where('kode_proyek', $kode_proyek)->get();
 
-function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Collection $hasil_assessment = new \Illuminate\Support\Collection(), $is_proyek_besar, $is_proyek_mega) {
+    $cellRowContinue = ['vMerge' => 'continue', 'bgColor' => '8496B0', 'borderSize' => 3, 'borderColor' => '000000', 'afterSpacing' => 0];
+    $cellColSpanKriteria = ['gridSpan' => 4, 'valign' => 'center', 'bgColor' => '8496B0', 'borderSize' => 3, 'borderColor' => '000000', 'afterSpacing' => 0];
+    $cellHCentered = ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER, "color" => "FFFFFF", 'spaceAfter' => 0];
+    $fontStyleHeader = ["color" => "FFFFFF", "bold" => true, 'size' => 5];
+    $cellRowSpan = ['vMerge' => 'restart', 'valign' => 'center', 'bgColor' => '8496B0', 'borderSize' => 3, 'borderColor' => '000000', 'afterSpacing' => 0];
+
+    $phpWord = new PhpWord();
+    $section = $phpWord->addSection(['orientation' => 'landscape', 'marginLeft' => 300, 'marginRight' => 300, 'marginTop' => 300, 'marginBottom' => 300]);
+
+    $section->addText(htmlspecialchars("Pengembangan Kriteria Untuk Pemilihan Pengguna Jasa" . " - " . $customer, ENT_QUOTES), ['size' => 8, "bold" => true], ['align' => "center", 'spaceAfter' => 0]);
+    // $section->addText("Testing", ['size' => 12, "bold" => true], ['align' => "center", 'spaceAfter' => 0]);
+
+    $section->addTextBreak(1);
+    // $table = $section->addTable('myOwnTableStyle', array('borderSize' => 1, 'borderColor' => '999999', 'afterSpacing' => 0, 'Spacing' => 0, 'cellMargin' => 0));
+    // $table->addRow(-0.5, array('exactHeight' => -5));
+
+    $table = $section->addTable('myOwnTableStyle', array('borderSize' => 5, 'borderColor' => '000000', 'afterSpacing' => 0, 'Spacing' => 0, 'cellMargin' => 0, 'spaceAfter' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(0)));
+
+    $table->addRow();
+
+    $cell1 = $table->addCell(300, $cellRowSpan);
+    $textrun1 = $cell1->addTextRun($cellHCentered);
+    $textrun1->addText('No', $fontStyleHeader);
+
+    $cell2 = $table->addCell(3000, $cellRowSpan);
+    $textrun2 = $cell2->addTextRun($cellHCentered);
+    $textrun2->addText('Parameter', $fontStyleHeader);
+
+    $cell3 = $table->addCell(800, $cellRowSpan);
+    $textrun3 = $cell3->addTextRun($cellHCentered);
+    $textrun3->addText('Weight (%)', $fontStyleHeader);
+
+    $cell4 = $table->addCell(5000, $cellColSpanKriteria);
+    $textrun4 = $cell4->addTextRun($cellHCentered);
+    $textrun4->addText('Kriteria', $fontStyleHeader);
+
+    $cell5 = $table->addCell(500, $cellRowSpan);
+    $textrun5 = $cell5->addTextRun($cellHCentered);
+    $textrun5->addText('Nilai', $fontStyleHeader);
+
+    $cell6 = $table->addCell(1000, $cellRowSpan);
+    $textrun6 = $cell6->addTextRun($cellHCentered);
+    $textrun6->addText('Score', $fontStyleHeader);
+
+    $cell7 = $table->addCell(2000, $cellRowSpan);
+    $textrun7 = $cell7->addTextRun($cellHCentered);
+    $textrun7->addText('Keterangan', $fontStyleHeader);
+
+    // Begin :: Thead
+    $table->addRow();
+    $table->addCell(null, $cellRowContinue);
+    $table->addCell(null, $cellRowContinue);
+    $table->addCell(null, $cellRowContinue);
+    $table->addCell(2000, ['bgColor' => '8496B0', 'borderSize' => 3, 'borderColor' => '000000', 'afterSpacing' => 0])->addText('1', $fontStyleHeader, $cellHCentered);
+    $table->addCell(2000, ['bgColor' => '8496B0', 'borderSize' => 3, 'borderColor' => '000000', 'afterSpacing' => 0])->addText('2', $fontStyleHeader, $cellHCentered);
+    $table->addCell(2000, ['bgColor' => '8496B0', 'borderSize' => 3, 'borderColor' => '000000', 'afterSpacing' => 0])->addText('3', $fontStyleHeader, $cellHCentered);
+    $table->addCell(3000, ['bgColor' => '8496B0', 'borderSize' => 3, 'borderColor' => '000000', 'afterSpacing' => 0])->addText('4', $fontStyleHeader, $cellHCentered);
+    $table->addCell(null, $cellRowContinue);
+    $table->addCell(null, $cellRowContinue);
+    $table->addCell(null, $cellRowContinue);
+
+    $table->addRow();
+    $table->addCell(null, $cellRowContinue);
+    $table->addCell(3000, ['bgColor' => '8496B0', 'borderSize' => 3, 'borderColor' => '000000', 'afterSpacing' => 0])->addText('(1)', $fontStyleHeader, $cellHCentered);
+    $table->addCell(800, ['bgColor' => '8496B0', 'borderSize' => 3, 'borderColor' => '000000', 'afterSpacing' => 0])->addText('(2)', $fontStyleHeader, $cellHCentered);
+    $table->addCell(5000, $cellColSpanKriteria)->addText('(3)', $fontStyleHeader, $cellHCentered);
+    $table->addCell(500, ['bgColor' => '8496B0', 'borderSize' => 3, 'borderColor' => '000000', 'afterSpacing' => 0])->addText('(4)', $fontStyleHeader, $cellHCentered);
+    $table->addCell(1000, ['bgColor' => '8496B0', 'borderSize' => 3, 'borderColor' => '000000', 'afterSpacing' => 0])->addText('(5) = (2) * (4)', $fontStyleHeader, $cellHCentered);
+    $table->addCell(2000, ['bgColor' => '8496B0', 'borderSize' => 3, 'borderColor' => '000000', 'afterSpacing' => 0])->addText('(6)', $fontStyleHeader, $cellHCentered);
+
+
+    //Begin::Body
+    //Begin::Legalitas Perusahaan
+    $table->addRow();
+    $table->addCell(null, ['borderSize' => 2, 'borderColor' => '000000', 'bgColor' => 'FFFEA8'])->addTextRun(['spaceAfter' => 0]);
+    $table->addCell(2000, ['gridSpan' => 9, 'borderSize' => 2, 'borderColor' => '000000', 'bgColor' => 'FFFEA8', 'afterSpacing' => 0])->addText('LEGALITAS PERUSAHAAN (area yang harus seluruhnya terpenuhi, setelah itu akan dilakukan scoring)', ['size' => 5, 'bold' => true], ['spaceAfter' => 0]);
+
+
+    $legalitasMasterData = LegalitasPerusahaan::all()->sortBy('created_at')->each(function ($lp, $key) use ($table, $cellHCentered, $kriteriaPenggunaJasaDetail) {
+        if ($key == 0) {
+            $merge = 'restart';
+        } else {
+            $merge = 'continue';
+        }
+
+        $kriteriaIndex0 = $kriteriaPenggunaJasaDetail->where('index', 0)->first();
+
+        if ($kriteriaIndex0->kriteria == $key + 1) {
+            $selectColor = 'FFB77D';
+        } else {
+            $selectColor = '';
+        }
+
+        $table->addRow();
+
+        if ($key == 0) {
+            $table->addCell(300, ['vMerge' => $merge, 'valign' => 'center', 'borderSize' => 2, 'borderColor' => '000000'])->addText('1', ['size' => 5]);
+            $table->addCell(3000, ['vMerge' => $merge, 'valign' => 'center', 'borderSize' => 2, 'borderColor' => '000000'])->addText('Legalitas institusi / perusahaan', ['size' => 5]);
+        } else {
+            $table->addCell(1000, ['vMerge' => $merge, 'valign' => 'center', 'borderSize' => 2, 'borderColor' => '000000'])->addTextRun(['spaceAfter' => 0]);
+            $table->addCell(3000, ['vMerge' => $merge, 'valign' => 'center', 'borderSize' => 2, 'borderColor' => '000000'])->addTextRun(['spaceAfter' => 0]);
+        }
+
+        $table->addCell(800, ['vMerge' => $merge, 'valign' => 'center', 'borderSize' => 2, 'borderColor' => '000000']);
+        $table->addCell(2000, ['vMerge' => $merge, 'valign' => 'center', 'borderSize' => 2, 'borderColor' => '000000', 'bgColor' => 'CFCFCF']);
+        $table->addCell(2000, ['vMerge' => $merge, 'valign' => 'center', 'borderSize' => 2, 'borderColor' => '000000', 'bgColor' => 'CFCFCF']);
+        $table->addCell(2000, ['vMerge' => $merge, 'valign' => 'center', 'borderSize' => 2, 'borderColor' => '000000', 'bgColor' => 'CFCFCF']);
+
+        $cellKriteria = $table->addCell(3000, ['borderSize' => 2, 'borderColor' => '000000', 'bgColor' => $selectColor]);
+        $addTextRun = $cellKriteria->addTextRun(['spaceAfter' => 0]);
+        $text = nl2br(htmlspecialchars($lp->item, ENT_QUOTES));
+        $textExplode = explode('<br />', $text);
+        $addTextRun->addText(array_shift($textExplode), ['size' => 5]);
+        if (count($textExplode) > 1) {
+            foreach ($textExplode as $line) {
+                $addTextRun->addTextBreak();
+                $addTextRun->addText($line, ['size' => 5]);
+            }
+        }
+
+        $table->addCell(500, ['vMerge' => $merge, 'valign' => 'center', 'borderSize' => 2, 'borderColor' => '000000']);
+        $table->addCell(1000, ['vMerge' => $merge, 'valign' => 'center', 'borderSize' => 2, 'borderColor' => '000000']);
+
+        if (!empty($kriteriaIndex0->keterangan) && $kriteriaIndex0->kriteria == $key + 1) {
+            $cellKeterangan0 = $table->addCell(1000, ['valign' => 'center', 'borderSize' => 2, 'borderColor' => '000000']);
+            $addTextRunKeterangan0 = $cellKeterangan0->addTextRun(['spaceAfter' => 0]);
+            $textKeterangan0 = nl2br(htmlspecialchars($kriteriaIndex0->keterangan, ENT_QUOTES));
+            $textExplodeKeterangan0 = explode('<br />', $textKeterangan0);
+            $addTextRunKeterangan0->addText(array_shift($textExplodeKeterangan0), ['size' => 5]);
+            if (count($textExplodeKeterangan0) > 1) {
+                foreach ($textExplodeKeterangan0 as $line) {
+                    $addTextRunKeterangan0->addTextBreak();
+                    $addTextRunKeterangan0->addText($line, ['size' => 5]);
+                }
+            }
+        } else {
+            $table->addCell(1000, ['valign' => 'center', 'borderSize' => 2, 'borderColor' => '000000']);
+        }
+    });
+    //End::Legalitas Perusahaan
+
+
+    //Begin::Kriteria Pengguna Jasa
+
+    $kriteriaMasterData = KriteriaPenggunaJasa::all()->sortBy('created_at')->each(function ($lp, $key) use ($table, $cellHCentered, $kriteriaPenggunaJasaDetail) {
+
+        if ($key == 0 && $lp->kategori != 'Financial') {
+            $table->addRow();
+            $table->addCell(null, ['borderSize' => 2, 'borderColor' => '000000', 'bgColor' => 'FFFEA8'])->addTextRun(['spaceAfter' => 0]);
+            $table->addCell(2000, ['gridSpan' => 9, 'borderSize' => 2, 'borderColor' => '000000', 'bgColor' => 'FFFEA8', 'afterSpacing' => 0])->addText('REPUTASI PEMBERI KERJA', ['size' => 5, 'bold' => true], ['spaceAfter' => 0]);
+        } else {
+            if ($key == 1) {
+                $table->addRow();
+                $table->addCell(null, ['borderSize' => 2, 'borderColor' => '000000', 'bgColor' => 'FFFEA8'])->addTextRun(['spaceAfter' => 0]);
+                $table->addCell(2000, ['gridSpan' => 9, 'borderSize' => 2, 'borderColor' => '000000', 'bgColor' => 'FFFEA8', 'afterSpacing' => 0])->addText('FINANCIAL', ['size' => 5, 'bold' => true], ['spaceAfter' => 0]);
+            }
+        }
+
+        $kriteriaIndex = $kriteriaPenggunaJasaDetail->where('index', $key + 1)->first();
+
+        $table->addRow();
+
+        if ($key == 0 && $lp->kategori != 'Financial') {
+            $table->addCell(300, ['valign' => 'center', 'borderSize' => 2, 'borderColor' => '000000'])->addText('1', ['size' => 5]);
+            $table->addCell(3000, ['borderSize' => 2, 'borderColor' => '000000'])->addText($lp->item, ['size' => 5]);
+        } else {
+            $table->addCell(300, ['valign' => 'center', 'borderSize' => 2, 'borderColor' => '000000'])->addText($key, ['size' => 5]);
+            $table->addCell(3000, ['borderSize' => 2, 'borderColor' => '000000'])->addText($lp->item, ['size' => 5]);
+        }
+
+        $table->addCell(800, ['valign' => 'center', 'borderSize' => 2, 'borderColor' => '000000'])->addTextRun($cellHCentered)->addText($lp->bobot, ['size' => 5]);
+
+        if (!empty($lp->kriteria_1)) {
+            $cellKriteria1 = $table->addCell(2000, ['borderSize' => 2, 'borderColor' => '000000', 'bgColor' => $kriteriaIndex->kriteria == 1 ? 'FFB77D' : '']);
+            $addTextRun1 = $cellKriteria1->addTextRun(['spaceAfter' => 0]);
+            $text1 = nl2br(htmlspecialchars($lp->kriteria_1, ENT_QUOTES));
+            $textExplode1 = explode('<br />', $text1);
+            $addTextRun1->addText(array_shift($textExplode1), ['size' => 5]);
+            if (count($textExplode1) > 1) {
+                foreach ($textExplode1 as $line) {
+                    $addTextRun1->addTextBreak();
+                    $addTextRun1->addText($line, ['size' => 5]);
+                }
+            }
+        } else {
+            $table->addCell(2000, ['borderSize' => 2, 'borderColor' => '000000', 'bgColor' => 'CFCFCF'])->addTextRun(['spaceAfter' => 0]);
+        }
+
+        if (!empty($lp->kriteria_2)) {
+            $cellKriteria2 = $table->addCell(2000, ['borderSize' => 2, 'borderColor' => '000000', 'bgColor' => $kriteriaIndex->kriteria == 2 ? 'FFB77D' : '']);
+            $addTextRun2 = $cellKriteria2->addTextRun(['spaceAfter' => 0]);
+            $text2 = nl2br(htmlspecialchars($lp->kriteria_2, ENT_QUOTES));
+            $textExplode2 = explode('<br />', $text2);
+            $addTextRun2->addText(array_shift($textExplode2), ['size' => 5]);
+            if (count($textExplode2) > 1) {
+                foreach ($textExplode2 as $line) {
+                    $addTextRun2->addTextBreak();
+                    $addTextRun2->addText($line, ['size' => 5]);
+                }
+            }
+        } else {
+            $table->addCell(2000, ['borderSize' => 2, 'borderColor' => '000000', 'bgColor' => 'CFCFCF'])->addTextRun(['spaceAfter' => 0]);
+        }
+
+        if (!empty($lp->kriteria_3)) {
+            $cellKriteria3 = $table->addCell(2000, ['borderSize' => 2, 'borderColor' => '000000', 'bgColor' => $kriteriaIndex->kriteria == 3 ? 'FFB77D' : '']);
+            $addTextRun3 = $cellKriteria3->addTextRun(['spaceAfter' => 0]);
+            $text3 = nl2br(htmlspecialchars($lp->kriteria_3, ENT_QUOTES));
+            $textExplode3 = explode('<br />', $text3);
+            $addTextRun3->addText(array_shift($textExplode3), ['size' => 5]);
+            if (count($textExplode3) > 1) {
+                foreach ($textExplode3 as $line) {
+                    $addTextRun3->addTextBreak();
+                    $addTextRun3->addText($line, ['size' => 5]);
+                }
+            }
+        } else {
+            $table->addCell(2000, ['borderSize' => 2, 'borderColor' => '000000', 'bgColor' => 'CFCFCF'])->addTextRun(['spaceAfter' => 0]);
+        }
+
+        if (!empty($lp->kriteria_4)) {
+            $cellKriteria4 = $table->addCell(3000, ['borderSize' => 2, 'borderColor' => '000000', 'bgColor' => $kriteriaIndex->kriteria == 4 ? 'FFB77D' : '']);
+            $addTextRun4 = $cellKriteria4->addTextRun(['spaceAfter' => 0]);
+            $text4 = nl2br(htmlspecialchars($lp->kriteria_4, ENT_QUOTES));
+            $textExplode4 = explode('<br />', $text4);
+            $addTextRun4->addText(array_shift($textExplode4), ['size' => 5]);
+            if (count($textExplode4) > 1) {
+                foreach ($textExplode4 as $line) {
+                    $addTextRun4->addTextBreak();
+                    $addTextRun4->addText($line, ['size' => 5]);
+                }
+            }
+        } else {
+            $table->addCell(2000, ['borderSize' => 2, 'borderColor' => '000000', 'bgColor' => 'CFCFCF'])->addTextRun(['spaceAfter' => 0]);
+        }
+        // $table->addCell(2000, ['borderSize' => 2, 'borderColor' => '000000', 'bgColor' => 'CFCFCF'])->addText('<');
+
+        $table->addCell(500, ['valign' => 'center', 'borderSize' => 2, 'borderColor' => '000000'])->addTextRun($cellHCentered)->addText($kriteriaIndex->kriteria, ['size' => 5]);
+        $table->addCell(1000, ['valign' => 'center', 'borderSize' => 2, 'borderColor' => '000000'])->addTextRun($cellHCentered)->addText($kriteriaIndex->nilai, ['size' => 5]);
+
+        if (!empty($kriteriaIndex->keterangan)) {
+            $cellKeterangan = $table->addCell(1000, ['borderSize' => 2, 'borderColor' => '000000']);
+            $addTextRunKeterangan = $cellKeterangan->addTextRun(['spaceAfter' => 0]);
+            $textKeterangan = nl2br(htmlspecialchars($kriteriaIndex->keterangan, ENT_QUOTES));
+            $textExplodeKeterangan = explode('<br />', $textKeterangan);
+            $addTextRunKeterangan->addText(array_shift($textExplodeKeterangan), ['size' => 5]);
+            if (count($textExplodeKeterangan) > 1) {
+                foreach ($textExplodeKeterangan as $line) {
+                    $addTextRunKeterangan->addTextBreak();
+                    $addTextRunKeterangan->addText($line, ['size' => 5]);
+                }
+            }
+        } else {
+            $table->addCell(1000, ['valign' => 'center', 'borderSize' => 2, 'borderColor' => '000000'])->addTextRun(['spaceAfter' => 0]);
+        }
+    });
+    //End::Kriteria Pengguna Jasa
+
+    //Begin::Total
+    $totalBobot = KriteriaPenggunaJasa::all()->sum('bobot');
+    $totalScore = $kriteriaPenggunaJasaDetail->sum('nilai') ?? 0;
+    $kriteriaFinal = PenilaianPenggunaJasa::all()->filter(function ($item) use ($totalScore) {
+        return $item->dari_nilai <= $totalScore && $item->sampai_nilai > $totalScore;
+    })->first()->nama ?? '-';
+
+    $table->addRow();
+    $table->addCell(300, ['valign' => 'center', 'bgColor' => '8496B0', 'borderSize' => 3, 'borderColor' => '000000', 'afterSpacing' => 0])->addTextRun(['spaceAfter' => 0]);
+    $table->addCell(3000, ['valign' => 'center', 'bgColor' => '8496B0', 'borderSize' => 3, 'borderColor' => '000000', 'afterSpacing' => 0])->addTextRun($cellHCentered)->addText('TOTAL', ['size' => 5, 'bold' => true, 'color' => 'FFFFFF']);
+    $table->addCell(800, ['valign' => 'center', 'bgColor' => '8496B0', 'borderSize' => 3, 'borderColor' => '000000', 'afterSpacing' => 0])->addTextRun($cellHCentered)->addText($totalBobot, ['size' => 5, 'bold' => true, 'color' => 'FFFFFF']);
+    $table->addCell(5000, ['gridSpan' => 4, 'valign' => 'center', 'bgColor' => '8496B0', 'borderSize' => 3, 'borderColor' => '000000', 'afterSpacing' => 0])->addTextRun(['spaceAfter' => 0]);
+    $table->addCell(500, ['valign' => 'center', 'bgColor' => '8496B0', 'borderSize' => 3, 'borderColor' => '000000', 'afterSpacing' => 0])->addTextRun(['spaceAfter' => 0]);
+    $table->addCell(1000, ['valign' => 'center', 'bgColor' => '8496B0', 'borderSize' => 3, 'borderColor' => '000000', 'afterSpacing' => 0])->addTextRun($cellHCentered)->addText($totalScore, ['size' => 5, 'bold' => true, 'color' => 'FFFFFF']);
+    $table->addCell(2000, ['valign' => 'center', 'bgColor' => '8496B0', 'borderSize' => 3, 'borderColor' => '000000', 'afterSpacing' => 0])->addTextRun($cellHCentered)->addText($kriteriaFinal, ['size' => 5, 'bold' => true, 'color' => 'FFFFFF']);
+
+    //End::Total
+
+    //Begin::Rumus
+    $section->addTextBreak(1);
+    $section->addText("Catatan untuk skoring :", ['size' => 6, 'bold' => true], ['align' => 'left']);
+    $section->addTextRun(['spaceAfter' => 0])->addText(htmlspecialchars("340 <= X <= 400         : Risiko Rendah"), ['size' => 6, 'bgColor' => $kriteriaFinal == "Risiko Rendah" ? 'FFB77D' : ''], ['align' => 'left']);
+    $section->addTextRun(['spaceAfter' => 0])->addText(htmlspecialchars("260 <= X <= 240         : Risiko Moderat"), ['size' => 6, 'bgColor' => $kriteriaFinal == "Risiko Moderat" ? 'FFB77D' : ''], ['align' => 'left']);
+    $section->addTextRun(['spaceAfter' => 0])->addText(htmlspecialchars("180 <= X <= 260         : Risiko Tinggi"), ['size' => 6, 'bgColor' => $kriteriaFinal == "Risiko Tinggi" ? 'FFB77D' : ''], ['align' => 'left']);
+    $section->addTextRun(['spaceAfter' => 0])->addText(htmlspecialchars("100 <= X <= 180         : Risiko Ekstrim"), ['size' => 6, 'bgColor' => $kriteriaFinal == "Risiko Ekstrim" ? 'FFB77D' : ''], ['align' => 'left']);
+    //End::Rumus
+
+    //End::Body
+    $filePath = public_path('/file-profile-risiko//' . $file_name);
+    // $rendererName = \PhpOffice\PhpWord\Settings::PDF_RENDERER_DOMPDF;
+    // $rendererLibraryPath = realpath('../vendor/dompdf/dompdf');
+    // \PhpOffice\PhpWord\Settings::setPdfRenderer($rendererName, $rendererLibraryPath);
+
+    $phpWord->save($filePath);
+    $proyek->file_penilaian_risiko = $file_name;
+    $proyek->save();
+}
+
+function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Collection $hasil_assessment = new \Illuminate\Support\Collection(), $is_proyek_besar, $is_proyek_mega, \Illuminate\Http\Request $request)
+{
     $phpWord = new \PhpOffice\PhpWord\PhpWord();
     $target_path = "file-persetujuan";
     $now = Carbon\Carbon::now();
@@ -584,11 +901,11 @@ function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Co
         }
     });
 
-    $penyusun = json_decode($proyek->approved_penyusun);
+    $penyusun = collect(json_decode($proyek->approved_penyusun))->values()->toArray();
     $rekomendator = json_decode($proyek->approved_rekomendasi_final);
     $penyetuju = json_decode($proyek->approved_persetujuan);
     $max_grid_span = collect([count($penyusun), count($rekomendator), count($penyetuju)])->max();
-    // dd($penyusun, $rekomendator, $penyetuju, $max_grid_span);
+    // dd($penyusun, $rekomendator, $penyetuju);
 
     $section = $phpWord->addSection();
     
@@ -625,14 +942,14 @@ function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Co
     $table->addRow();
     $table->addCell(500,$styleCell)->addText('2', $fontStyle);
     $table->addCell(2500,$styleCell)->addText("Lokasi Proyek", $fontStyle);
-    $table->addCell(6000,$styleCell)->addText(Provinsi::find($proyek->nama_proyek)->province_name ?? "-", $fontStyle);
+    $table->addCell(6000, $styleCell)->addText(Provinsi::find($proyek->provinsi)->province_name ?? "-", $fontStyle);
     $table->addRow();
     $table->addCell(500,$styleCell)->addText('3', $fontStyle);
-    $table->addCell(2500,$styleCell)->addText("Nama Pemberi kerja", $fontStyle);
+    $table->addCell(2500, $styleCell)->addText("Nama Pengguna Jasa", $fontStyle);
     $table->addCell(6000,$styleCell)->addText($proyek->proyekBerjalan->name_customer, $fontStyle);
     $table->addRow();
     $table->addCell(500,$styleCell)->addText('4', $fontStyle);
-    $table->addCell(2500,$styleCell)->addText("Instansi Pemberi Kerja", $fontStyle);
+    $table->addCell(2500, $styleCell)->addText("Instansi Pengguna Jasa", $fontStyle);
     $table->addCell(6000,$styleCell)->addText($proyek->proyekBerjalan->Customer->jenis_instansi, $fontStyle);
     $table->addRow();
     $table->addCell(500,$styleCell)->addText('5', $fontStyle);
@@ -640,7 +957,7 @@ function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Co
     $table->addCell(6000,$styleCell)->addText($proyek->sumber_dana, $fontStyle);
     $table->addRow();
     $table->addCell(500,$styleCell)->addText('6', $fontStyle);
-    $table->addCell(2500,$styleCell)->addText("Nilai Proyek", $fontStyle);
+    $table->addCell(2500, $styleCell)->addText("Perkiraan Nilai Proyek", $fontStyle);
     $table->addCell(6000,$styleCell)->addText(number_format($proyek->nilaiok_awal, 0, ".", "."), $fontStyle);
     $table->addRow();
     $table->addCell(500,$styleCell)->addText('7', $fontStyle);
@@ -657,11 +974,19 @@ function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Co
     $table->addRow();
     $table->addCell(500,$styleCell)->addText('10', $fontStyle);
     $table->addCell(2500,$styleCell)->addText("Catatan", $fontStyle);
-    $table->addCell(6000,$styleCell)->addText($proyek->recommended_with_note ?? "-", $fontStyle);
+    $cell_catatan = $table->addCell(6000, $styleCell);
+    $catatan_list = preg_split("/\n|\r\n?/", htmlspecialchars($penyusun[0]->catatan, ENT_QUOTES));
+    foreach ($catatan_list as $key => $catatan) {
+        $cell_catatan->addText($catatan, ["bold" => false], ["align" => "left"]);
+        if ($catatan == "") {
+            $cell_catatan->addTextBreak(1, ['size' => 5], ['afterSpacing' => 0, 'spacing' => 10]);
+            // $cell_catatan->addText("<w:br/>");
+        }
+    }
 
     $section->addText("Berdasarkan informasi di atas, mengajukan untuk mengikuti aktifitas Perolehan Kontrak (tender) tersebut di atas.");
 
-    $section->addTextBreak(22);
+    $section->addTextBreak(8);
     $section2 = $phpWord->addSection();
 
     $table_ttd = $section2->addTable('ttd_table',array('borderSize' => 1, 'borderColor' => '999999', 'afterSpacing' => 0, 'Spacing'=> 0, 'cellMargin'=>0  ));
@@ -687,6 +1012,13 @@ function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Co
         $cell_2_ttd->addText(User::find($p->user_id)->name, ["bold" => true], ["align" => "center"]);
         $cell_2_ttd->addText(User::find($p->user_id)->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
         $cell_2_ttd->addText("Tanggal: " . $tanggal_ttd->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
+        if ($p->status == "approved" && empty($p->catatan)) {
+            $cell_2_ttd->addText("Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center"]);
+        } elseif ($p->status == "approved" && !empty($p->catatan)) {
+            $cell_2_ttd->addText("Direkomendasikan dengan catatan", ["bold" => true, "size" => 7], ["align" => "center"]);
+        } else {
+            $cell_2_ttd->addText("Tidak Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center"]);
+        }
     }
     
     // $cell_2_ttd = $table_ttd->addCell(500);
@@ -718,6 +1050,13 @@ function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Co
         $cell_2_ttd->addText(User::find($p->user_id)->name, ["bold" => true], ["align" => "center"]);
         $cell_2_ttd->addText(User::find($p->user_id)->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
         $cell_2_ttd->addText("Tanggal: " . $tanggal_ttd->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
+        if ($p->status == "approved" && empty($p->catatan)) {
+            $cell_2_ttd->addText("Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center"]);
+        } elseif ($p->status == "approved" && !empty($p->catatan)) {
+            $cell_2_ttd->addText("Direkomendasikan dengan catatan", ["bold" => true, "size" => 7], ["align" => "center"]);
+        } else {
+            $cell_2_ttd->addText("Tidak Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center"]);
+        }
     }
 
     // $cell_2_ttd = $table_ttd->addCell(500);
@@ -780,9 +1119,16 @@ function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Co
         $cell_2_ttd->addText(User::find($p->user_id)->name ?? Auth::user()->name, ["bold" => true], ["align" => "center"]);
         $cell_2_ttd->addText(User::find($p->user_id)->Pegawai->Jabatan->nama_jabatan ?? Auth::user()->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
         $cell_2_ttd->addText("Tanggal: " . $tanggal_ttd->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
+        if ($p->status == "approved" && empty($p->catatan)) {
+            $cell_2_ttd->addText("Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center"]);
+        } elseif ($p->status == "approved" && !empty($p->catatan)) {
+            $cell_2_ttd->addText("Direkomendasikan dengan catatan", ["bold" => true, "size" => 7], ["align" => "center"]);
+        } else {
+            $cell_2_ttd->addText("Tidak Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center"]);
+        }
     }
     // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
-    
+
     // $cell_2_ttd = $table_ttd->addCell(500);
     // $cell_2_ttd = $table_ttd->addCell(500);
     // // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
@@ -802,7 +1148,7 @@ function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Co
     // $cell_2_ttd->addText(User::find($penyetuju[0]->user_id)->name ?? Auth::user()->name, ["bold" => true], ["align" => "center"]);
     // $cell_2_ttd->addText(User::find($penyetuju[0]->user_id)->Pegawai->Jabatan->nama_jabatan ?? Auth::user()->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
     // $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
-    
+
     // $cell_2_ttd = $table_ttd->addCell(500);
     // $cell_2_ttd = $table_ttd->addCell(500);
     // // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
@@ -860,7 +1206,7 @@ function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Co
     //     $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->name, ["bold" => true], ["align" => "center"]);
     //     $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
     //     $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
-        
+
     //     $cell_2_ttd = $table_ttd->addCell(500);
     //     // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
     //     $cell_2_ttd->addTextBreak(1);
@@ -868,7 +1214,7 @@ function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Co
     //     $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->name, ["bold" => true], ["align" => "center"]);
     //     $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
     //     $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
-        
+
     //     $table_ttd->addRow();
     //     $cell_2_ttd = $table_ttd->addCell(500);
     //     // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
@@ -884,7 +1230,7 @@ function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Co
     //     // $cell_2_ttd->addText("(.......................................................)", ["bold" => true], ["align" => "center"]);
     //     // $cell_2_ttd->addText("SVP Risk Management", ["bold" => true], ["align" => "center"]);
     //     // $cell_2_ttd->addText("Tanggal: ___________________" . $now->translatedFormat("Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
-        
+
     //     $cell_2_ttd = $table_ttd->addCell(500);
     //     // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
     //     $cell_2_ttd->addTextBreak(1);
@@ -892,7 +1238,7 @@ function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Co
     //     $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->name, ["bold" => true], ["align" => "center"]);
     //     $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
     //     $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
-        
+
     //     $table_ttd->addRow();
     //     $header_cell = $table_ttd->addCell(500, ["vMerge" => "restart", "gridSpan" => 3, "bgColor" => "F4B083"]);
     //     $header_cell->addText("Persetujuan oleh,", ["bold" => true], ["align" => "center"]);
@@ -907,7 +1253,7 @@ function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Co
     //     $cell_2_ttd->addText(User::find($penyetuju[0]->user_id)->name ?? Auth::user()->name, ["bold" => true], ["align" => "center"]);
     //     $cell_2_ttd->addText(User::find($penyetuju[0]->user_id)->Pegawai->Jabatan->nama_jabatan ?? Auth::user()->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
     //     $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
-        
+
     //     $cell_2_ttd = $table_ttd->addCell(500);
     //     $cell_2_ttd = $table_ttd->addCell(500);
     //     // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
@@ -963,7 +1309,7 @@ function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Co
     //     $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->name, ["bold" => true], ["align" => "center"]);
     //     $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
     //     $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
-        
+
     //     if($is_infra) {
     //         $cell_2_ttd = $table_ttd->addCell(500);
     //     }
@@ -974,7 +1320,7 @@ function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Co
     //     $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->name, ["bold" => true], ["align" => "center"]);
     //     $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
     //     $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
-        
+
     //     $table_ttd->addRow();
     //     $header_cell = $table_ttd->addCell(500, ["vMerge" => "restart", "gridSpan" => $default_grid_span, 'borderSize' => 1, 'borderColor' => '999999', "bgColor" => "F4B083"]);
     //     $header_cell->addText("Persetujuan oleh,", ["bold" => true], ["align" => "center"]);
@@ -996,7 +1342,7 @@ function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Co
     //     $cell_2_ttd->addText(User::find($penyetuju[0]->user_id)->name ?? Auth::user()->name, ["bold" => true], ["align" => "center"]);
     //     $cell_2_ttd->addText(User::find($penyetuju[0]->user_id)->Pegawai->Jabatan->nama_jabatan ?? Auth::user()->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
     //     $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
-        
+
     //     if(str_contains($proyek->UnitKerja->unit_kerja, "Infra")) {
     //         // $table_ttd->addRow();
     //         // $cell_2_ttd = $table_ttd->addCell(500);
@@ -1013,6 +1359,84 @@ function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Co
     // \PhpOffice\PhpWord\Settings::setPdfRendererPath("path/to/tcpdf");
     // \PhpOffice\PhpWord\Settings::setPdfRendererName('TCPDF');
 
+    //Begin :: Catatan Rekomendasi
+    $section3 = $phpWord->addSection();
+
+    $table_comment = $section3->addTable('comment_table', array('borderSize' => 1, 'borderColor' => '999999', 'afterSpacing' => 0, 'Spacing' => 0, 'cellMargin' => 0));
+    $table_comment->addRow();
+    $header_cell = $table_comment->addCell(500, ["vMerge" => "restart", "gridSpan" => 2, "bgColor" => "F4B083"]);
+    $header_cell->addText("Catatan dari Rekomendasi", ["bold" => true], ["align" => "center"]);
+    foreach ($rekomendator as $key => $p) {
+        $table_comment->addRow();
+
+        $cell_1_note = $table_comment->addCell(200);
+        $cell_2_note = $table_comment->addCell(200);
+        // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
+        $cell_1_note->addText(User::find($p->user_id)->name, ["bold" => true], ["align" => "center"]);
+        // $cell_1_note->addTextBreak(1);
+        // $cell_2_note->addText(preg_replace('/&(?!#?[a-z0-9]+;)/', '&amp;', nl2br($p->catatan)), $fontStyle);
+        // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
+        $catatan_list = preg_split("/\n|\r\n?/", htmlspecialchars($p->catatan, ENT_QUOTES));
+        foreach ($catatan_list as $key => $catatan) {
+            if ($key != 0 && $catatan == "") {
+                $cell_2_note->addTextBreak(1, ['size' => 5], ['afterSpacing' => 0, 'spacing' => 10]);
+            }
+            $cell_2_note->addText($catatan, ["bold" => false], ["align" => "left"]);
+        }
+    }
+    // foreach($rekomendator as $key => $p) {
+    //     $key++;
+    //     if($key > 3) {
+    //         $table_comment->addRow();
+    //     }
+
+    //     $cell_1_note = $table_comment->addCell(500);
+    //     // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
+    //     $cell_1_note->addText(User::find($p->user_id)->name, ["bold" => true], ["align" => "center"]);
+    //     $cell_1_note->addTextBreak(1);
+    //     $cell_1_note->addText(preg_replace('/&(?!#?[a-z0-9]+;)/', '&amp;', nl2br($p->catatan)), $fontStyle);
+    // }
+    //end :: Catatan Rekomendasi
+
+    //Begin :: Catatan Persetujuan
+    $section3->addTextBreak(1);
+    $section4 = $phpWord->addSection();
+
+    $table_comment_penyetuju = $section4->addTable('comment_table', array('borderSize' => 1, 'borderColor' => '999999', 'afterSpacing' => 0, 'Spacing' => 0, 'cellMargin' => 0));
+    $table_comment_penyetuju->addRow();
+    $header_cell = $table_comment_penyetuju->addCell(500, ["vMerge" => "restart", "gridSpan" => 2, "bgColor" => "F4B083"]);
+    $header_cell->addText("Catatan dari Persetujuan", ["bold" => true], ["align" => "center"]);
+    // $table_comment_penyetuju->addRow();
+    foreach ($penyetuju as $key => $p) {
+        $table_comment_penyetuju->addRow();
+
+        $cell_1_note = $table_comment_penyetuju->addCell(200);
+        $cell_2_note = $table_comment_penyetuju->addCell(200);
+        // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
+        $cell_1_note->addText(User::find($p->user_id)->name, ["bold" => true], ["align" => "center"]);
+        // $cell_1_note->addTextBreak(1);
+        $catatan_list = preg_split("/\n|\r\n?/", htmlspecialchars($p->catatan, ENT_QUOTES));
+        foreach ($catatan_list as $key => $catatan) {
+            if ($key != 0 && $catatan == "") {
+                $cell_2_note->addTextBreak(1, ['size' => 5], ['afterSpacing' => 0, 'spacing' => 10]);
+            }
+            $cell_2_note->addText($catatan, ["bold" => false], ["align" => "left"]);
+        }
+    }
+    // foreach($penyetuju as $key => $p) {
+    //     $key++;
+    //     if($key > 3) {
+    //         $table_comment_penyetuju->addRow();
+    //     }
+
+    //     $cell_2_note = $table_comment_penyetuju->addCell(500);
+    //     // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
+    //     $cell_2_note->addText(User::find($p->user_id)->name, ["bold" => true], ["align" => "center"]);
+    //     $cell_2_note->addTextBreak(1);
+    //     $cell_2_note->addText(preg_replace('/&(?!#?[a-z0-9]+;)/', '&amp;', nl2br($p->catatan)), $fontStyle);
+    // }
+    //end :: Catatan Rekomendasi
+
     // Begin :: Add Template docx withoutTTD
     $properties = $phpWord->getDocInfo();
     $properties->setTitle($file_name . ".docx");
@@ -1020,23 +1444,27 @@ function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Co
     $phpWord->save(public_path($target_path . "/" . $file_name . ".docx"));
     // end :: Add Template docx withoutTTD
 
+
     // Begin :: SIGNED Template docx
     // New TTD Method
     $templateProcessor = new TemplateProcessor($target_path . "/" . $file_name . ".docx");
     foreach ($penyusun as $key => $p) {
         $user = User::find($p->user_id);
+        $qrcode = generateQrCode($proyek->kode_proyek, $user->nip, $request->schemeAndHttpHost() . "?nip=" . $user->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_dokumen_persetujuan_$proyek->kode_proyek");
         // $templateProcessor->setImageValue('ttdPenyusun' . ++$key, ["path" => "./file-ttd/" . $user->file_ttd, "width" => 10, "ratio" => true]);
-        $templateProcessor->setValue('ttdPenyusun' . ++$key, '<img src="' . public_path('\qr-code' . '\\' . $proyek->kode_proyek . '.svg') . '" width="300" height="300" />');
+        $templateProcessor->setImageValue('ttdPenyusun' . ++$key, ["path" => public_path("/qr-code//$qrcode"), "width" => 10, "ratio" => true]);
     }
     foreach ($rekomendator as $key => $p) {
         $user = User::find($p->user_id);
+        $qrcode = generateQrCode($proyek->kode_proyek, $user->nip, $request->schemeAndHttpHost() . "?nip=" . $user->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_dokumen_persetujuan_$proyek->kode_proyek");
         // $templateProcessor->setImageValue('ttdRekomendasi' . ++$key, ["path" => "./file-ttd/" . $user->file_ttd, "width" => 10, "ratio" => true]);
-        $templateProcessor->setValue('ttdRekomendasi' . ++$key, '<img src="' . public_path('\qr-code' . '\\' . $proyek->kode_proyek . '.svg') . '" width="300" height="300" />');
+        $templateProcessor->setImageValue('ttdRekomendasi' . ++$key, ["path" => public_path("/qr-code//$qrcode"), "width" => 10, "ratio" => true]);
     }
     foreach ($penyetuju as $key => $p) {
         $user = User::find($p->user_id);
+        $qrcode = generateQrCode($proyek->kode_proyek, $user->nip, $request->schemeAndHttpHost() . "?nip=" . $user->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_dokumen_persetujuan_$proyek->kode_proyek");
         // $templateProcessor->setImageValue('ttdPersetujuan' . ++$key, ["path" => "./file-ttd/" . $user->file_ttd, "width" => 10, "ratio" => true]);
-        $templateProcessor->setValue('ttdPersetujuan' . ++$key, '<img src="' . public_path('\qr-code' . '\\' . $proyek->kode_proyek . '.svg') . '" width="300" height="300" />');
+        $templateProcessor->setImageValue('ttdPersetujuan' . ++$key, ["path" => public_path("/qr-code//$qrcode"), "width" => 10, "ratio" => true]);
     }
 
     // Old TTD Method
@@ -1104,8 +1532,8 @@ function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Co
     $pdf_merger->add(public_path("file-rekomendasi". "/". $proyek->file_rekomendasi));
     $pdf_merger->merge(public_path($target_path. "/". $file_name.".pdf"));
     // End :: Merge PDF
-    // dd("saved");    
     $proyek->file_persetujuan = $file_name . ".pdf";
+    // dd("saved", $proyek->file_persetujuan);    
     $proyek->save();
     // $is_saved = $phpWord->save(public_path($target_path. "\\". $file_name));
 }
@@ -1114,7 +1542,7 @@ function performAssessment(App\Models\Customer $customer, App\Models\Proyek $pro
     $kriteria_assessments = KriteriaAssessment::all();
     $result_assessments = collect();
     $bowheer = collect();
-    $kriteria_assessments->groupBy("kriteria_penilaian")->each(function($ka, $kriteria) use($customer, $result_assessments, $bowheer) {
+    $kriteria_assessments->groupBy("kriteria_penilaian")->each(function ($ka, $kriteria) use ($customer, $result_assessments, $bowheer, $kriteria_assessments) {
         if($customer->proyekBerjalans->where("stage", "=", 8)->count() > 0) {
             foreach($ka as $k) {
                 if($kriteria == "Piutang") {
@@ -1138,18 +1566,42 @@ function performAssessment(App\Models\Customer $customer, App\Models\Proyek $pro
                     }
                 } else if($kriteria == "Bowheer Bermasalah") {
                     if($customer->MasalahHukum->isNotEmpty()) {
-                        $highest_score = $customer->MasalahHukum->map(function($mh) use($k, $bowheer) {
+                        $group_bowheer = $kriteria_assessments->where('kriteria_penilaian', $kriteria)->keyBy('isi');
+                        // dump($group_bowheer);
+                        $highest_score = $customer->MasalahHukum->map(function ($mh) use ($k, $bowheer, $kriteria_assessments, $kriteria, $result_assessments) {
                             $new_class = new stdClass();
                             $new_class->isi = $mh->status;
-                            if(str_contains($k->isi, $mh->status)) {
+                            // $group_bowheer->map(function($item, $key)use($mh, $new_class){
+                            //     if(str_contains($key, $mh->status)) {
+                            //         $new_class->score = (float) $item->nilai;
+                            //     } else {
+                            //         $new_class->score = 0.0;
+                            //     }
+                            // });
+                            if (str_contains($k->isi, $mh->status)) {
                                 $new_class->score = (float) $k->nilai;
+                                $bowheer->push($new_class);
+                                // $final_score = $highest_score->where('score', $highest_score->min('score'))->first();
+                                // dd($final_score);
+                                $result = collect(["kategori" => "Internal", "kriteria_penilaian" => "Pemberi Kerja bermasalah", "score" => (float)$new_class->score]);
+                                $result_assessments->push($result);
                             } else {
                                 $new_class->score = 0.0;
                             }
+                            // // dump(str_contains($k->isi, $mh->status));
+                            // $filter = $group_bowheer->where(function($item, $key)use($mh){
+                            //     // dump($key);
+                            //     return stripos($key, $mh->status);
+                            // })->values()->first();
+                            // $new_class->score = (float)$filter->nilai;
+                            // // dump($filter);
                             return $new_class;
                         });
-                        $bowheer->push($highest_score);
                     }
+                    // else{
+                    //     $result = collect(["kategori" => "Internal", "kriteria_penilaian" => "Pemberi Kerja bermasalah", "score" => (float)$k->nilai]);
+                    //     $result_assessments->push($result);
+                    // }
                 } else if($kriteria == "Key Client") {
                     if($customer->key_client) {
                         $result = collect(["kategori" => "Internal", "kriteria_penilaian" => $kriteria, "score" => (float) $k->nilai]);
@@ -1239,10 +1691,19 @@ function performAssessment(App\Models\Customer $customer, App\Models\Proyek $pro
             }
         }
     });
+    // dd($result_assessments, $bowheer);
     
     return $result_assessments;
 }
 
+function generateQrCode($kode_proyek, $nip, $url)
+{
+    $now = Carbon\Carbon::now();
+    $imageName = $now->format("dmYHis") . "_$nip" . "_$kode_proyek" . ".png";
+    $qrcode = QrCode::format('png')->size(100)->errorCorrection('H')->generate($url, public_path('qr-code/' . $imageName));
+
+    return $imageName;
+}
 /**
  * Display Error Page
  * @param int $status_code

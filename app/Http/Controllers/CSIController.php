@@ -265,6 +265,19 @@ class CSIController extends Controller
                     $progress->progress_fisik_ri = (int)$data_response["progress_fisik_ri"];
                     $progress->lama_proyek = $data_response["lamaproyek"];
                     $progress->laba_kotor_ri = (int)$data_response["laba_kotor_ri"];
+                    $progress->progress_fisik_ra = (int) $data_response["progress_fisik_ra"];
+                    $progress->pu_berelasi = (int) $data_response["pu_berelasi"];
+                    $progress->pu_ketiga = (int) $data_response["pu_ketiga"];
+                    $progress->ra_bl = (int) $data_response["ra_bl"];
+                    $progress->ri_bl = (int) $data_response["ri_bl"];
+                    $progress->ra_btl = (int) $data_response["ra_btl"];
+                    $progress->ri_btl = (int) $data_response["ri_btl"];
+                    $progress->ri_pdpk = (int) $data_response["ri_pdpk"];
+                    $progress->bdd = (int) $data_response["bdd"];
+                    $progress->persekot = (int) $data_response["persekot"];
+                    $progress->laba_kotor_ra = (int) $data_response["laba_kotor_ra"];
+                    $progress->piutang = (int) $data_response["piutang"];
+                    $progress->tagbrut = (int) $data_response["tagbrut"];
                     $progress->periode = $str_current;
                 } else {
                     $progress = new ProyekProgress();
@@ -274,6 +287,19 @@ class CSIController extends Controller
                     $progress->progress_fisik_ri = (int)$data_response["progress_fisik_ri"];
                     $progress->lama_proyek = $data_response["lamaproyek"];
                     $progress->laba_kotor_ri = (int)$data_response["laba_kotor_ri"];
+                    $progress->progress_fisik_ra = (int) $data_response["progress_fisik_ra"];
+                    $progress->pu_berelasi = (int) $data_response["pu_berelasi"];
+                    $progress->pu_ketiga = (int) $data_response["pu_ketiga"];
+                    $progress->ra_bl = (int) $data_response["ra_bl"];
+                    $progress->ri_bl = (int) $data_response["ri_bl"];
+                    $progress->ra_btl = (int) $data_response["ra_btl"];
+                    $progress->ri_btl = (int) $data_response["ri_btl"];
+                    $progress->ri_pdpk = (int) $data_response["ri_pdpk"];
+                    $progress->bdd = (int) $data_response["bdd"];
+                    $progress->persekot = (int) $data_response["persekot"];
+                    $progress->laba_kotor_ra = (int) $data_response["laba_kotor_ra"];
+                    $progress->piutang = (int) $data_response["piutang"];
+                    $progress->tagbrut = (int) $data_response["tagbrut"];
                     $progress->periode = $str_current;
                     // dd($progress);
                 }
@@ -299,7 +325,7 @@ class CSIController extends Controller
                     'periode' => $str_current,
                     'status' => 'FAILED',
                     'progress' => $calculate_progress,
-                    'dataPIS' => $data_response
+                    'dataPIS' => $response
                 ];
 
                 return $this->setLogging("Get_Progress_PIS", "[Progress=>" . $kode_proyek . '=>' . $calculate_progress . ']', $status);

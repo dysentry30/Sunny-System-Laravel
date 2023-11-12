@@ -258,7 +258,7 @@
                                             </td>
                                             <td>
                                                 @if (!empty($approval->Departemen->nama_departemen))
-                                                    <p>{{ $approval->Departemen->nama_departemen }} ({{ $approval->Departemen->UnitKerja->unit_kerja }})</p>
+                                                    <p>{{ $approval->Departemen->nama_departemen }} ({{ $approval->Departemen?->UnitKerja?->unit_kerja }})</p>
                                                 @else
                                                     <p></p>
                                                 @endif

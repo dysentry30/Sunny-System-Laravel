@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\RoleManagements;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,6 +19,10 @@ class AdminAuth
      */
     public function handle(Request $request, Closure $next)
     {
+        if (Auth::user() instanceof RoleManagements) {
+            Auth::setUser(Auth::user()->User);
+        }
+        // dd(Auth::user());
         if (str_contains($request->url(), "api")) {
             if (auth()->user()) {
                 return $next($request);
@@ -79,7 +84,8 @@ class AdminAuth
                                                 "pasal-kontraktual",
                                                 "checklist-manajemen-kontrak",
                                                 "asuransi-pelaksanaan",
-                                                "jaminan-pelaksanaan"
+            "jaminan-pelaksanaan",
+            "get-progress",
                                             ]);
         $allowed_url_user_sales = join(" ", [
             "rekomendasi",
@@ -116,6 +122,8 @@ class AdminAuth
             "kriteria-pengguna-jasa",
             "company-profile",
             "laporan-keuangan",
+            "green-lane",
+            "non-green-lane",
             "AHU"
         ]);
         $allowed_url_team_proyek = join(" ", ["dashboard", "proyek", "contract-management", "review-contract", "draft-contract", "issue-project", "question", "input-risk", "laporan-bulanan", "serah-terima", "claim-management", "approval-claim", "detail-claim", "claim", "document", "user"]);
@@ -131,7 +139,7 @@ class AdminAuth
             if (!str_contains(Auth::user()->email, "@wika-customer")) {
                 $concat_allowed_url .= $allowed_url_user_sales;
             } else {
-                $concat_allowed_url .= join(" ", ["/csi/customer-survey"]);;
+                $concat_allowed_url .= join(" ", ["/csi/customer-survey"]);
             }
 
         }

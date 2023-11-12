@@ -28,6 +28,7 @@ use App\Models\RiskTenderProyek;
 use Illuminate\Http\UploadedFile;
 use Illuminate\support\Facades\DB;
 use App\Models\ContractManagements;
+use App\Models\ContractRFADocument;
 use App\Models\Departemen;
 use App\Models\DokumenDraft;
 use App\Models\DokumenEca;
@@ -84,13 +85,14 @@ class ProyekController extends Controller
         if (Auth::user()->check_administrator) {
             $unitkerjas = UnitKerja::all();
             // dd($unitkerjas);
-            $proyeks = Proyek::with(['UnitKerja', 'Forecasts', 'proyekBerjalan']);
+            // $proyeks = Proyek::with(['UnitKerja', 'Forecasts', 'proyekBerjalan']);
+            $proyeks = Proyek::with(['UnitKerja', 'proyekBerjalan']);
         } else {
             // $proyeks = Proyek::with(['UnitKerja', 'Forecasts', 'proyekBerjalan'])->where("unit_kerja", "=", Auth::user()->unit_kerja);
             $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja);
             if ($unit_kerja_user instanceof \Illuminate\Support\Collection) {
                 $unitkerjas = UnitKerja::all()->whereIn("divcode", $unit_kerja_user->toArray());
-                $proyeks = Proyek::with(['UnitKerja', 'Forecasts', 'proyekBerjalan'])->whereIn("unit_kerja", $unit_kerja_user->toArray());
+                $proyeks = Proyek::with(['UnitKerja', 'proyekBerjalan'])->whereIn("unit_kerja", $unit_kerja_user->toArray());
             }
         }
         $tahun_proyeks = $proyeks->get()->groupBy("tahun_perolehan")->keys();
@@ -160,9 +162,10 @@ class ProyekController extends Controller
             "unit-kerja" => "required",
             "jenis-proyek" => "required",
             "tipe-proyek" => "required",
-            // "nilai-rkap" => "required",
+            "nilai-rkap" => "required",
             // "sumber-dana" => "required",
             "tahun-perolehan" => "required",
+            "departemen-proyek" => "required",
             // "bulan-pelaksanaan" => "required",
         ];
         $validation = Validator::make($dataProyek, $rules, $messages);
@@ -175,10 +178,13 @@ class ProyekController extends Controller
             // $request->old("nilai-rkap");
             // $request->old("sumber-dana");
             $request->old("tahun-perolehan");
+            $request->old("departemen-proyek");
             // $request->old("bulan-pelaksanaan");
             redirect()->back()->with("modal", $dataProyek["modal-name"]);
             // Session::flash('failed', 'Proyek gagal dibuat, Periksa kembali button "NEW" !');
         }
+
+        // dd($dataProyek["departemen-proyek"]);
 
         $validation->validate();
 
@@ -197,6 +203,18 @@ class ProyekController extends Controller
             $newProyek->jenis_jo = 10;
         } else {
             $newProyek->jenis_jo = 20;
+        }
+
+        $nilaiOK = (int) str_replace('.', '', $dataProyek["nilai-rkap"]);
+
+        if ($nilaiOK > 500000000000 && $nilaiOK <= 2000000000000) {
+            $newProyek->klasifikasi_pasdin = "Proyek Besar";
+        } elseif ($nilaiOK > 250000000000 && $nilaiOK <= 500000000000) {
+            $newProyek->klasifikasi_pasdin = "Proyek Menengah";
+        } elseif ($nilaiOK > 0 && $nilaiOK <= 250000000000) {
+            $newProyek->klasifikasi_pasdin = "Proyek Kecil";
+        } elseif ($nilaiOK > 2000000000000) {
+            $newProyek->klasifikasi_pasdin = "Proyek Kecil";
         }
 
         //auto filled by required 
@@ -422,6 +440,7 @@ class ProyekController extends Controller
     public function update(Request $request, Proyek $newProyek, ProyekBerjalans $customerHistory)
     {
         $dataProyek = $request->all();
+        // dd($dataProyek);
         // dd($dataProyek); //console log hasil $dataProyek
         $newProyek = Proyek::find($dataProyek["kode-proyek"]);
 
@@ -494,19 +513,21 @@ class ProyekController extends Controller
         // }
         if (isset($dataProyek["proyek-rekomendasi"]) && isset($dataProyek["confirm-send-wa"]) && isset($dataProyek["ra-klasifikasi-proyek"])&& isset($dataProyek["sumber-dana"]) ) {
             $divisi = $newProyek->UnitKerja->Divisi->id_divisi;
+            // dump($divisi);
             $klasifikasi_proyek = $newProyek->klasifikasi_pasdin;
             $matriks_approval = MatriksApprovalRekomendasi::where("unit_kerja", "=", $divisi)->where("klasifikasi_proyek", "=", $klasifikasi_proyek)->where("kategori", "=", "Pengajuan")->get();
+            // dd($matriks_approval);
             $isnomorTargetActive = false;
             $nomorDefault = "085881028391";
             foreach ($matriks_approval as $key => $user) {
-                // dd($user->Pegawai->handphone);
-                $url = $request->schemeAndHttpHost() . "?redirectTo=/rekomendasi?open=kt_modal_view_proyek_$newProyek->kode_proyek";
+                // dd($user->Pegawai->nama_pegawai);
+                $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_$newProyek->kode_proyek";
                 $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
                     "api_key" => "p2QeApVsAUxG2fOJ2tX48BoipwuqZK",
                     "sender" => "6281188827008",
                     "number" => $isnomorTargetActive ? $user->Pegawai->handphone : $nomorDefault,
                     // "number" => "085881028391",
-                    "message" => "Yth Bapak/Ibu .....\nDengan ini menyampaikan permohonan tandatangan untuk form pengajuan Nota Rekomendasi I, *" . $newProyek->ProyekBerjalan->name_customer . "* untuk Proyek *$newProyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
+                    "message" => "Yth Bapak/Ibu *" . $user->Pegawai->nama_pegawai . "*\nDengan ini menyampaikan permohonan tandatangan untuk form pengajuan Nota Rekomendasi I, *" . $newProyek->ProyekBerjalan->name_customer . "* untuk Proyek *$newProyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
                     // "url" => $url
                 ]);
                 $send_msg_to_wa->onError(function ($error) {
@@ -536,7 +557,7 @@ class ProyekController extends Controller
             Alert::success('Success', "Proyek Berhasil Diajukan");
         }
         // $newProyek->nama_pendek_proyek = $dataProyek["short-name"];
-
+        // dd($dataProyek['negara']);
         // form PASAR POTENSIAL
         $newProyek->negara = $dataProyek["negara"];
         $newProyek->sbu = $dataProyek["sbu"];
@@ -2534,40 +2555,48 @@ class ProyekController extends Controller
         return sprintf('%04X%04X%04X%04X%04X%04X%04X%04X', mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479), mt_rand(32768, 49151), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535));
     }
 
-    public function updateRfaDocument($kode_proyek, $kategori)
+    public function updateRfaDocument(Request $request, $kode_proyek)
     {
-        $proyek = Proyek::where('kode_proyek', '=', $kode_proyek)->first();
-        switch ($kategori) {
-            case "nda":
-                $proyek->is_rfa_nda = true;
-                $proyek->tgl_rfa_nda = new DateTime();
-                break;
-            case "mou":
-                $proyek->is_rfa_mou = true;
-                $proyek->tgl_rfa_mou = new DateTime();
-                break;
-            case "eca":
-                $proyek->is_rfa_eca = true;
-                $proyek->tgl_rfa_eca = new DateTime();
-                break;
-            case "ica":
-                $proyek->is_rfa_ica = true;
-                $proyek->tgl_rfa_ica = new DateTime();
-                break;
-            case "rks":
-                $proyek->is_rfa_rks = true;
-                $proyek->tgl_rfa_rks = new DateTime();
-                break;
-            case "itb-tor":
-                $proyek->is_rfa_itb_tor = true;
-                $proyek->tgl_rfa_itb_tor = new DateTime();
-                break;
-            case "risk":
-                $proyek->is_rfa_risk = true;
-                $proyek->tgl_rfa_risk = new DateTime();
-                break;
-        }
-        if ($proyek->save()) {
+        // $proyek = Proyek::where('kode_proyek', '=', $kode_proyek)->first();
+
+        // switch ($kategori) {
+        //     case "nda":
+        //         $proyek->is_rfa_nda = true;
+        //         $proyek->tgl_rfa_nda = new DateTime();
+        //         break;
+        //     case "mou":
+        //         $proyek->is_rfa_mou = true;
+        //         $proyek->tgl_rfa_mou = new DateTime();
+        //         break;
+        //     case "eca":
+        //         $proyek->is_rfa_eca = true;
+        //         $proyek->tgl_rfa_eca = new DateTime();
+        //         break;
+        //     case "ica":
+        //         $proyek->is_rfa_ica = true;
+        //         $proyek->tgl_rfa_ica = new DateTime();
+        //         break;
+        //     case "rks":
+        //         $proyek->is_rfa_rks = true;
+        //         $proyek->tgl_rfa_rks = new DateTime();
+        //         break;
+        //     case "itb-tor":
+        //         $proyek->is_rfa_itb_tor = true;
+        //         $proyek->tgl_rfa_itb_tor = new DateTime();
+        //         break;
+        //     case "risk":
+        //         $proyek->is_rfa_risk = true;
+        //         $proyek->tgl_rfa_risk = new DateTime();
+        //         break;
+        // }
+
+        $newContractRFA = new ContractRFADocument();
+        $newContractRFA->kode_proyek = $kode_proyek;
+        $newContractRFA->kategori = $request->get('kategori');
+        $newContractRFA->tanggal = new DateTime();
+        $newContractRFA->tgl_komitmen = $request->get('tgl_komitmen');
+
+        if ($newContractRFA->save()) {
             Alert::success("Success", "Request for Approval Berhasil");
             return redirect()->back();
         }

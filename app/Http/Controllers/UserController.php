@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Mail;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Events\NotificationPasswordReset;
 use App\Models\Dop;
+use App\Models\Pegawai;
+use App\Models\RoleManagements;
 use Exception;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Validator;
@@ -26,10 +28,11 @@ class UserController extends Controller
     public function welcome(Request $request)
     {
         $data = $request->all();
-        if(!empty($data["redirectTo"]) && !empty($data["token"])) {
+        // dd($data);
+        if (!empty($data["redirectTo"]) && !empty($data["nip"])) {
             try{
-                $credentials = (array) json_decode(decrypt($data["token"]));
-                $user = User::where("email", $credentials["email"])->first();
+                // $credentials = (array) json_decode(decrypt($data["token"]));
+                $user = User::where("nip", $data["nip"])->first();
                 if(Auth::loginUsingId($user->id)) {
                     return redirect($data["redirectTo"]);
                 }
@@ -81,11 +84,12 @@ class UserController extends Controller
         } else if((bool) $request->isMobile)  {
             return self::loginForMobile($request);
         } else {
-            
+
             $credentials = $request->validate([
                 'email' => ["required"],
                 'password' => ["required"]
             ]);
+
             if($request->ajax()) {
                 // if(Auth::check()) Auth::logout();
                 $user = User::where("email", "=", $request->email)->first();
@@ -121,6 +125,63 @@ class UserController extends Controller
         return back();
     }
 
+    public function authenNew(Request $request)
+    {
+        $data = $request->all();
+        $nip = $data['email'] ?? null;
+
+        if (empty($nip)) {
+            Alert::error('Error', 'Mohon masukkan NIP');
+            return redirect()->back();
+        }
+
+        if (str_contains($nip, '@')) {
+            $credentials = $request->validate([
+                'email' => ["required"],
+                'password' => ["required"]
+            ]);
+            if (Auth::guard('web')->attempt($credentials) && Auth::check()) {
+                $request->session()->regenerate();
+                if (!str_contains(Auth::user()->email, "@wika-customer")) {
+                    if (Auth::user()->is_active) {
+                        $redirect = $request->schemeAndHttpHost() . $request->get("redirect-to");
+                        if (!empty($redirect)) {
+                            return redirect()->intended($redirect);
+                        }
+                        return redirect()->intended("/dashboard");
+                    } else {
+                        Auth::logout();
+                        Alert::error("USER NON ACTIVE", "Hubungi Admin (PIC)");
+                        return redirect()->intended("/");
+                    }
+                } else {
+                    // Alert::success('Selamat Datang', "Silahkan Mengisi Survey Berikut");
+                    return redirect()->intended("/csi/customer-survey");
+                }
+            }
+            Alert::error('LOGIN FAILED', 'Anda tidak bisa login');
+            return redirect()->back();
+        } else {
+            $user = Auth::getProvider()->retrieveByCredentials([
+                'nama_pegawai' => $nip
+            ]);
+            // $user = RoleManagements::find($nip);
+            Auth::login($user);
+            if (Auth::check()) {
+                // $user = Auth::user()->User;
+                if (Auth::user()->is_active) {
+                    // Auth::guard('web')->attempt(['email' => $user->email, 'password' => 'password']);
+                    Auth::guard('role')->setUser(Auth::user());
+                    return redirect()->intended("/dashboard");
+                } else {
+                    Auth::logout();
+                    Alert::error("USER NON ACTIVE", "Hubungi Admin (PIC)");
+                    return redirect()->intended("/");
+                }
+            }
+        }
+    }
+
     function loginForMobile(Request $request) {
         $data = $request->all();
         $user = User::select(["*"])->where("email", "=", $data["UserName"])->get()->first();
@@ -132,9 +193,9 @@ class UserController extends Controller
     
     public function logout(Request $request)
     {
-        auth()->user()->forceFill([
-            "remember_token" => null,
-        ])->save();
+        // auth()->user()->forceFill([
+        //     "remember_token" => null,
+        // ])->save();
 
         
         Request()->session()->invalidate();
@@ -211,8 +272,6 @@ class UserController extends Controller
             $validation = Validator::make($data, $rules, $messages);
             $validation->validate();
         }
-        
-        
         // dd($is_administrator, $is_admin_kontrak, $is_user_sales, $is_team_proyek);
         // $password = Str::random(20);
         $user->nip = $data["nip"];
@@ -227,6 +286,58 @@ class UserController extends Controller
         $user->check_user_sales = $is_user_sales;
         $user->check_team_proyek = $is_team_proyek;
         // $user->password = Hash::make($password);
+        $user->password = Hash::make("password");
+
+        if ($user->save()) {
+            // Mail::to($user->email)->send(new UserPasswordEmail($user, $password));
+            Alert::success("Success", 'User berhasil ditambahkan. Informasi Akun akan dikirimkan melalu email.');
+            return redirect("/user");
+        }
+    }
+
+    public function saveRole(Request $request, User $user)
+    {
+        $data = $request->all();
+        $messages = [
+            "required" => "This field is required",
+            "accepted" => "This field is required",
+        ];
+        $rules = [
+            "nip" => "required",
+        ];
+
+        $validation = Validator::make($data, $rules, $messages);
+
+        $is_administrator = $request->has("administrator") ?? false;
+        $is_admin_kontrak = $request->has("admin-kontrak") ?? false;
+        $is_user_sales = $request->has("user-sales") ?? false;
+        $is_team_proyek = $request->has("team-proyek") ?? false;
+
+        if ($is_administrator == false && $is_admin_kontrak == false && $is_user_sales == false && $is_team_proyek == false) {
+            $rules["administrator"] = "accepted";
+            $rules["admin-kontrak"] = "accepted";
+            $rules["user-sales"] = "accepted";
+            $rules["team-proyek"] = "accepted";
+
+            $validation = Validator::make($data, $rules, $messages);
+            if ($validation->fails()) {
+                Alert::error("Error", "Pilih Hak Akses Terlebih Dahulu");
+                $validation->validate();
+            }
+        }
+
+        $pegawai_selected = Pegawai::where('nip', $data['nip'])->first();
+
+        $user->nip = $pegawai_selected->nip;
+        // dd($data["nip"]);
+        $user->name = $pegawai_selected->nama_pegawai;
+        $user->email = $pegawai_selected->email;
+        $user->no_hp = $pegawai_selected->handphone;
+        $user->unit_kerja = $data["unit-kerja"];
+        $user->check_administrator = $is_administrator;
+        $user->check_admin_kontrak = $is_admin_kontrak;
+        $user->check_user_sales = $is_user_sales;
+        $user->check_team_proyek = $is_team_proyek;
         $user->password = Hash::make("password");
 
         if ($user->save()) {
@@ -258,7 +369,7 @@ class UserController extends Controller
             "name-user" => "required",
             "email" => "required",
             "phone-number" => "required",
-            "upload-ttd" => "required",
+            // "upload-ttd" => "required",
         ];
         $validation = Validator::make($data, $rules, $messages);
 
@@ -266,25 +377,34 @@ class UserController extends Controller
         $is_admin_kontrak = $request->has("admin-kontrak") ?? false;
         $is_user_sales = $request->has("user-sales") ?? false;
         $is_team_proyek = $request->has("team-proyek") ?? false;
+        $role_admin = $request->has("role_admin") ?? false;
+        $role_user = $request->has("role_user") ?? false;
+        $role_approver = $request->has("role_approver") ?? false;
+        $role_risk = $request->has("role_risk") ?? false;
 
 
-        if ($validation->fails()) {
-            $request->old("nip");
-            $request->old("name-user");
-            $request->old("email");
-            $request->old("phone-number");
-            // return redirect()->back();
-            Alert::error('Error', "User Gagal Dibuat, Periksa Kembali !");
+        // if ($validation->fails()) {
+        //     $request->old("nip");
+        //     $request->old("name-user");
+        //     $request->old("email");
+        //     $request->old("phone-number");
+        //     // return redirect()->back();
+        //     Alert::error('Error', "User Gagal Dibuat, Periksa Kembali !");
 
-            $validation->validate();
-            // return redirect()->back();
-        }
+        //     $validation->validate();
+        //     // return redirect()->back();
+        // }
 
-        if ($is_administrator == false && $is_admin_kontrak == false && $is_user_sales == false && $is_team_proyek == false) {
+        if ($is_administrator == false && $is_admin_kontrak == false && $is_user_sales == false && $is_team_proyek == false && $role_admin == false && $role_user == false && $role_approver == false && $role_risk == false) {
             $rules["administrator"] = "accepted";
             $rules["admin-kontrak"] = "accepted";
             $rules["user-sales"] = "accepted";
             $rules["team-proyek"] = "accepted";
+
+            $rules["role_admin"] = "accepted";
+            $rules["role_user"] = "accepted";
+            $rules["role_approver"] = "accepted";
+            $rules["role_risk"] = "accepted";
 
             Alert::error("Error", "Pilih Hak Akses Terlebih Dahulu");
             $request->old("nip");
@@ -295,6 +415,11 @@ class UserController extends Controller
 
             $validation = Validator::make($data, $rules, $messages);
             $validation->validate();
+
+            if ($validation->fails()) {
+                Alert::error("Error", "User Gagal Diperbaharui, Periksa Kembali !");
+                $validation->validate();
+            }
         }
 
         // // loading the source image
@@ -336,6 +461,11 @@ class UserController extends Controller
         $user->check_admin_kontrak = $is_admin_kontrak;
         $user->check_user_sales = $is_user_sales;
         $user->check_team_proyek = $is_team_proyek;
+
+        $user->role_admin = $role_admin;
+        $user->role_user = $role_user;
+        $user->role_approver = $role_approver;
+        $user->role_risk = $role_risk;
         // $user->alamat = $data["alamat"];
         
         if ($user->save()) {

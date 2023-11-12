@@ -108,7 +108,7 @@
                                                         <!--end::Svg Icon-->
                                                         <input type="text" id="nip" name="nip"
                                                             class="form-control form-control-solid ps-12"
-                                                            value="{{ $user->nip }}" placeholder="NIP" />
+                                                            value="{{ $user->nip }}" placeholder="NIP" readonly />
                                                     </div>
                                                     @error('nip')
                                                         <h6 class="text-danger">{{ $message }}</h6>
@@ -125,7 +125,7 @@
                                                         <!--begin::Input-->
                                                         <input type="text" id="name-user" name="name-user"
                                                             class="form-control form-control-solid"
-                                                            value="{{ $user->name }}" placeholder="Name" />
+                                                            value="{{ $user->name }}" placeholder="Name" readonly/>
                                                         @error('name-user')
                                                             <h6 class="text-danger">{{ $message }}eror</h6>
                                                         @enderror
@@ -143,7 +143,7 @@
                                                         <!--begin::Input-->
                                                         <input type="email" class="form-control form-control-solid"
                                                             id="email" name="email" value="{{ $user->email }}"
-                                                            placeholder="Email" />
+                                                            placeholder="Email" readonly/>
                                                         <!--end::Input-->
                                                     </div>
                                                     <!--end::Input group Email-->
@@ -158,13 +158,13 @@
                                                         <!--begin::Input-->
                                                         <input type="text" class="form-control form-control-solid"
                                                             id="phone-number" name="phone-number"
-                                                            value="{{ $user->no_hp }}" placeholder="Phone Number" />
+                                                            value="{{ $user->no_hp }}" placeholder="Phone Number" readonly/>
                                                         <!--end::Input-->
                                                     </div>
                                                     <!--end::Input group Phone-->
 
                                                     <!--begin::Input group TTD-->
-                                                    <div class="fv-row mb-7">
+                                                    {{-- <div class="fv-row mb-7">
                                                         <!--begin::Label-->
                                                         <label class="fs-6 fw-bold form-label mt-3">
                                                             <span class="required">Upload Tanda Tangan</span>
@@ -178,7 +178,7 @@
                                                             <small>File TTD view:</small><br>
                                                             <img src="{{asset("/file-ttd/$user->file_ttd")}}" alt="File TTD" class="img-fluid img-thumbnail">
                                                         @endif
-                                                    </div>
+                                                    </div> --}}
                                                     <!--end::Input group TTD-->
 
                                                     <!--begin::Input group is Active-->
@@ -265,11 +265,11 @@
                                                         <!--begin:::Tab pane Hak Akses-->
                                                         <div class="tab-pane fade show active"
                                                             id="kt_user_view_overview_tab" role="tabpanel">
-
+                                                        
+                                                            <p><b>Aplikasi</b></p>
                                                             <!--begin::Row-->
                                                             <div class="d-flex flex-row h-50px">
                                                                 <!-- begin:: Form Input Group -->
-
                                                                 @if (Auth::user()->check_administrator)
                                                                     <!-- begin:: Form Input Administrator -->
                                                                     <div class="form-check me-12">
@@ -279,10 +279,22 @@
                                                                             name="administrator" id="administrator">
                                                                         <label class="form-check-label"
                                                                             for="administrator">
-                                                                            Administrator
+                                                                            Super Admin
                                                                         </label>
                                                                     </div>
                                                                     <!-- end:: Form Input Administrator -->
+
+                                                                    <!-- begin:: Form Input User Sales -->
+                                                                    <div class="form-check me-12">
+                                                                        <input class="form-check-input" type="checkbox"
+                                                                            value=""
+                                                                            {{ $user->check_user_sales == 1 ? 'checked' : '' }}
+                                                                            name="user-sales" id="user-sales">
+                                                                        <label class="form-check-label" for="user-sales">
+                                                                            CRM
+                                                                        </label>
+                                                                    </div>
+                                                                    <!-- end:: Form Input Admin Kontrak -->
 
                                                                     <!-- begin:: Form Input Admin Kontrak -->
                                                                     <div class="form-check me-12">
@@ -292,7 +304,7 @@
                                                                             name="admin-kontrak" id="admin-kontrak">
                                                                         <label class="form-check-label"
                                                                             for="admin-kontrak">
-                                                                            Admin Kontrak
+                                                                            CCM
                                                                         </label>
                                                                     </div>
                                                                     <!-- end:: Form Input Admin Kontrak -->
@@ -304,26 +316,76 @@
                                                                             {{ $user->check_team_proyek == 1 ? 'checked' : '' }}
                                                                             name="team-proyek" id="team-proyek">
                                                                         <label class="form-check-label" for="team-proyek">
-                                                                            Team Proyek
+                                                                            CSI
                                                                         </label>
                                                                     </div>
                                                                     <!-- end:: Form Input Team Proyek -->
                                                                 @endif
-                                                                <!-- begin:: Form Input User Sales -->
-                                                                <div class="form-check me-12">
-                                                                    <input class="form-check-input" type="checkbox"
-                                                                        value=""
-                                                                        {{ $user->check_user_sales == 1 ? 'checked' : '' }}
-                                                                        name="user-sales" id="user-sales">
-                                                                    <label class="form-check-label" for="user-sales">
-                                                                        User Sales
-                                                                    </label>
-                                                                </div>
-                                                                <!-- end:: Form Input Admin Kontrak -->
 
                                                                 <!-- end:: Form Input Group -->
                                                             </div>
                                                             <!--end::Row-->
+                                                            <hr>
+                                                            <br>
+                                                            <p><b>Role</b></p>
+                                                            <div class="d-flex flex-row h-50px">
+                                                                <!-- begin:: Form Input Group -->
+                                                                @if (Auth::user()->check_administrator)
+                                                                    <!-- begin:: Form Input Administrator -->
+                                                                    <div class="form-check me-12">
+                                                                        <input class="form-check-input" type="checkbox"
+                                                                            value=""
+                                                                            {{ $user->role_admin == 1 ? 'checked' : '' }}
+                                                                            name="role_admin" id="role_admin">
+                                                                        <label class="form-check-label"
+                                                                            for="role_admin">
+                                                                            Admin
+                                                                        </label>
+                                                                    </div>
+                                                                    <!-- end:: Form Input Administrator -->
+                                                                    @cannot('csi')
+                                                                    <!-- begin:: Form Input User Sales -->
+                                                                    <div class="form-check me-12">
+                                                                        <input class="form-check-input" type="checkbox"
+                                                                            value=""
+                                                                            {{ $user->role_user == 1 ? 'checked' : '' }}
+                                                                            name="role_user" id="role_user">
+                                                                        <label class="form-check-label" for="role_user">
+                                                                            User
+                                                                        </label>
+                                                                    </div>
+                                                                    <!-- end:: Form Input Admin Kontrak -->
+
+                                                                    <!-- begin:: Form Input Admin Kontrak -->
+                                                                    <div class="form-check me-12">
+                                                                        <input class="form-check-input" type="checkbox"
+                                                                            value=""
+                                                                            {{ $user->role_approver == 1 ? 'checked' : '' }}
+                                                                            name="role_approver" id="role_approver">
+                                                                        <label class="form-check-label"
+                                                                            for="role_approver">
+                                                                            Approver
+                                                                        </label>
+                                                                    </div>
+                                                                    <!-- end:: Form Input Admin Kontrak -->
+                                                                    @cannot('ccm')
+                                                                    <!-- begin:: Form Input Team Proyek -->
+                                                                    <div class="form-check me-12">
+                                                                        <input class="form-check-input" type="checkbox"
+                                                                            value=""
+                                                                            {{ $user->role_risk == 1 ? 'checked' : '' }}
+                                                                            name="role_risk" id="role_risk">
+                                                                        <label class="form-check-label" for="role_risk">
+                                                                            Risk
+                                                                        </label>
+                                                                    </div>
+                                                                    <!-- end:: Form Input Team Proyek -->
+                                                                    @endcannot
+                                                                    @endcannot
+                                                                @endif
+
+                                                                <!-- end:: Form Input Group -->
+                                                            </div>
                                                             <hr>
                                                             <br>
 

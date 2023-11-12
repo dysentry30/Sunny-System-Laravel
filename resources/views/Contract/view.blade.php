@@ -1546,6 +1546,7 @@
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                         <th class="min-w-125px">Nama</th>
                                         <th class="min-w-125px">Tanggal</th>
+                                        <th class="min-w-125px">Action</th>
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>
@@ -1592,6 +1593,11 @@
                                             </td>
                                         </tr>
                                     @endif --}}
+                                    @if ($contract->project->DokumenNda->isNotEmpty())
+                                    <tr class="bg-primary">
+                                        <td colspan="3" class="text-white">File CRM</td>
+                                    </tr>
+                                    @endif
                                     @forelse ($contract->project->DokumenNda as $nda)
                                         <tr>
                                             <td>
@@ -1603,15 +1609,35 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="2" class="text-center"><b>There is no data</b></td>
+                                            <td colspan="3" class="text-center"><b>There is no data</b></td>
                                         </tr>
+                                    @endforelse
+                                    @if ($contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen NDA")->isNotEmpty())
+                                    <tr class="bg-primary">
+                                        <td colspan="3" class="text-white">File CCM</td>
+                                    </tr>
+                                    @endif
+                                    @forelse ($contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen NDA") as $item)
+                                        <tr>
+                                            <td>
+                                                <a target="_blank" href="{{asset("/words/$item->id_document")}}" class="text-hover-primary">{{$item->nama_document}}</a>
+                                            </td>
+                                            <td>
+                                                {{Carbon\Carbon::createFromTimeString($item->created_at)->translatedFormat("d F Y")}}
+                                            </td>
+                                            <td class="text-center">
+                                                <a href="#" onclick="confirmDeleteFinalDokumen('{{ $item->id }}')" class="btn btn-sm btn-danger p-2 text-white">Delete</a>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        
                                     @endforelse
                                 </tbody>
                                 <!--end::Table body-->
 
                             </table>
                             <!--End:Table: Review-->
-                            @php
+                            {{-- @php
                             $uploadFile = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen NDA")->first();
                             @endphp
                             <!--End:Table: Review-->
@@ -1619,7 +1645,7 @@
                             <a target="_blank" href="{{ asset('words/'.$uploadFile->id_document) }}" class="text-hover-primary">
                             <small><b>Download File :</b> {{ $uploadFile->nama_document }}</small>
                             </a>
-                            @endif
+                            @endif --}}
                             <br>
                             <br>
 
@@ -16832,7 +16858,7 @@
                             <!--begin::Input-->
                             <input type="hidden" name="kategori" value="Dokumen NDA">
                             <input type="hidden" name="status" value="Final">
-                            <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
+                            <input type="file" name="file-document[]" id="file-document" class="form-control form-control-solid" accept=".pdf" multiple>
                             <!--end::Input-->
                         </div>
                             <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
@@ -17861,7 +17887,11 @@ aria-hidden="true">
 @section('js-script')
 <script src="{{ asset('/js/custom/pages/contract/contract.js') }}"></script>
 
+
 <script>
+    const LOADING_BODY = new KTBlockUI(document.querySelector('#kt_body'), {
+        message: '<div class="blockui-message"><span class="spinner-border text-primary"></span> Loading...</div>',
+    })
     async function getProgress() {
         Swal.fire({
             title: '',
@@ -17873,6 +17903,7 @@ aria-hidden="true">
             confirmButtonText: 'Ya'
         }).then(async(result)=>{
             if(result.isConfirmed){
+                LOADING_BODY.block();
                 const formData = new FormData();
                 formData.append("_token", "{{ csrf_token() }}");
                 formData.append("id_contract", "{{ $contract->id_contract }}");

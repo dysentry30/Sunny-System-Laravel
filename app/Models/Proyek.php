@@ -189,4 +189,9 @@ class Proyek extends Model
     {
         return $this->hasMany(KriteriaPenggunaJasaDetail::class, 'kode_proyek');
     }
+
+    public function ContractRFA()
+    {
+        return $this->hasMany(ContractRFADocument::class, 'kode_proyek');
+    }
 }

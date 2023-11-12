@@ -243,11 +243,13 @@
                                         // $lq_rank = $proyek->proyekBerjalan->customer->lq_rank ?? null;
                                         $industrySector = $proyek->proyekBerjalan->customer->IndustryOwner ?? null;
                                         $masalahHukum = $proyek->proyekBerjalan->customer->MasalahHukum ?? collect([]);
-                                        $fileAHU = $proyek->proyekBerjalan->customer->AHU ?? null;
+                                        $fileAHU = $proyek->proyekBerjalan?->customer?->AHU ?? null;
                                     @endphp
                                     <p>Nama Proyek : <b>{{ $proyek->nama_proyek }}</b></p>
                                     <p>RA Klasifikasi Proyek  : <b class="{{ $proyek->klasifikasi_pasdin ?? "text-danger" }}">{{ $proyek->klasifikasi_pasdin ?? "*Belum Ditentukan" }}</b></p>
                                     <p>Sumber Dana  : <b class="{{ $proyek->SumberDana->nama_sumber ?? "text-danger" }}">{{ $proyek->SumberDana->nama_sumber ?? "*Belum Ditentukan" }}</b></p>
+                                    <p>Negara Proyek  : <b class="{{ $proyek->negara ?? "text-danger" }}">{{ $proyek->negara ?? "*Belum Ditentukan" }}</b></p>
+                                    <p>Provinsi Proyek  : <b class="{{ $proyek->Provinsi->province_name ?? "text-danger" }}">{{ $proyek->Provinsi->province_name ?? "*Belum Ditentukan" }}</b></p>
                                     <br>
                                     <p>Nama Pemberi Kerja : <b class="{{ $name_customer ?? "text-danger" }}">{{ $name_customer ?? "*Belum Ditentukan" }}</b></p>
                                     <p>Instansi Pemberi Kerja : <b class="{{ $jenis_instansi ?? "text-danger" }}">{{ $jenis_instansi ?? "*Belum Ditentukan" }}</b></p>
@@ -256,12 +258,11 @@
                                     <p>Industry Sector Pemberi Kerja : <b class="{{ $industrySector ?? "text-danger" }}">{{ $industrySector->owner_description ?? "*Belum Ditentukan" }}</b></p>
                                     <p>Industry Attractiveness Pemberi Kerja : <b class="{{ $industrySector ?? "text-danger" }}">{{ $industrySector->owner_attractiveness ?? "*Belum Ditentukan" }}</b></p>
                                     <p>Masalah Hukum Pemberi Kerja : <b class="{{ $masalahHukum->count() == 0 ? "text-success" : "text-danger" }}">{{ $masalahHukum->count() == 0 ? "0 Kasus" : $masalahHukum->count()." Kasus" }}</b></p>
-                                    <p>File AHU : <b class="{{ !empty($fileAHU) ?? "text-danger" }}">{{ !empty($fileAHU) ? "Sudah" : "*Belum" }}</b></p>
-
+                                    <p>File AHU : <b class="{{ is_null($fileAHU) || $fileAHU->isNotEmpty() ? "text-dark" : "text-danger" }}">{{ is_null($fileAHU) || $fileAHU->isNotEmpty() ? "Sudah" : "*Belum Ditentukan" }}</b></p>
                                     <br>
 
                                     {{-- @if (!empty($name_customer) && !empty($proyek->klasifikasi_pasdin) && !empty($proyek->SumberDana->nama_sumber) && !empty($jenis_instansi) && !empty($custNegara) && !empty($custProvinsi) && !empty($forbes_rank) && !empty($lq_rank)) --}}
-                                    @if (!empty($name_customer) && !empty($proyek->klasifikasi_pasdin) && !empty($proyek->SumberDana->nama_sumber) && !empty($jenis_instansi) && !empty($custNegara) && !empty($custProvinsi) && !empty($industrySector) && !empty($fileAHU))
+                                    @if (!empty($name_customer) && !empty($proyek->klasifikasi_pasdin) && !empty($proyek->SumberDana->nama_sumber) && !empty($jenis_instansi) && !empty($custNegara) && !empty($custProvinsi) && !empty($industrySector) && (!is_null($fileAHU) && $fileAHU->isNotEmpty()) && !empty($proyek->Provinsi->province_name))
                                         <input class="form-check-input" onclick="sendWa(this)" id="confirm-send-wa" name="confirm-send-wa" type="checkbox">
                                         <i class="fs-6 text-primary">
                                             Saya Setuju Melakukan Pengajuan dan Data Sudah Sudah Terisi Dengan Benar
@@ -1657,7 +1658,7 @@
                                                                     class="form-control form-control-solid"
                                                                     id="departemen-proyek" name="departemen-proyek"
                                                                     placeholder="Departemen"
-                                                                    value="{{ $proyek->Departemen->nama_departemen }}" disabled/>
+                                                                    value="{{ $proyek->Departemen->kode_departemen }}" readonly/>
                                                                 @endif
                                                                 <!--end::Input-->
                                                             </div>
@@ -1725,6 +1726,72 @@
                                                         <!--End::Col-->
                                                     </div>
                                                     <!--End::Row Kanan+Kiri-->
+                                                    <div class="row fv-row">
+                                                        <!--begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span class="required">Negara</span>
+                                                                </label>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                <select name="negara" id="negara" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
+                                                                    {{-- onchange="selectNegara(this)" --}}
+                                                                    data-placeholder="Pilih Negara">
+                                                                    <option value=""></option>
+                                                                    @foreach ($data_negara as $negara)
+                                                                        @if ($negara->abbreviation == $customer->negara || $negara->country == $customer->negara)
+                                                                            <option value="{{ $negara->abbreviation }}" selected>{{ $negara->country }}
+                                                                            </option>
+                                                                        @else
+                                                                            <option value="{{ $negara->abbreviation }}">
+                                                                                {{ $negara->country }}</option>
+                                                                        @endif
+                                                                    @endforeach
+                                                                </select>
+                                                                <!--end::Input-->
+                                                            </div>
+                                                            <!--end::Input group-->
+                                                        </div>
+                                                        <!--End begin::Col-->
+                                                        <!--Begin::Col-->
+                                                                <div class="col-6">
+                                                                    <!--begin::Input group Website-->
+                                                                    <div class="fv-row mb-7">
+                                                                        <!--begin::Label-->
+                                                                        <label class="fs-6 fw-bold form-label mt-3">
+                                                                            <span class="required">Provinsi</span>
+                                                                        </label>
+                                                                        <!--end::Label-->
+                                                                        <!--begin::Input-->
+                                                                        <input type="text" class="form-control form-control-solid" id="input-provinsi" name="provinsi"
+                                                                            value="{{ $customer->provinsi }}" placeholder="Provinsi" style="display: none" />
+                                                                        <div id="div-provinsi">
+                                                                            <select name="provinsi" id="provinsi" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
+                                                                                {{-- onchange="selectProvinsi(this)"  --}}
+                                                                                data-placeholder="Pilih Customer Provinsi">
+                                                                                <option value=""></option>
+                                                                                @foreach ($provinsi as $provinsi)
+                                                                                    @if ($provinsi->province_id == $proyek->provinsi)
+                                                                                        <option value="{{ $provinsi->province_id }}" selected>
+                                                                                            {{ ucwords(strtolower($provinsi->province_name)) }}
+                                                                                        </option>
+                                                                                    @else
+                                                                                        <option value="{{ $provinsi->province_id }}">
+                                                                                            {{ ucwords(strtolower($provinsi->province_name)) }}
+                                                                                        </option>
+                                                                                    @endif
+                                                                                @endforeach
+                                                                            </select>
+                                                                        </div>
+                                                                        <!--end::Input-->
+                                                                    </div>
+                                                                    <!--end::Input group-->
+                                                                </div>
+                                                                <!--End begin::Col-->
+                                                    </div>
 
 
                                                     <!--Begin::Title Biru Form: Nilai RKAP Review-->
@@ -2229,7 +2296,7 @@
                                                     <!--begin::Row-->
                                                     <div class="row fv-row">
                                                         <!--begin::Col-->
-                                                        <div class="col-6">
+                                                        {{-- <div class="col-6">
                                                             <!--begin::Input group Website-->
                                                             <div class="fv-row mb-7">
                                                                 <!--begin::Label-->
@@ -2239,11 +2306,6 @@
                                                                 <!--end::Label-->
 
                                                                 <!--begin::Input-->
-                                                                {{-- <input type="text"
-                                                                        class="form-control form-control-solid"
-                                                                        id="negara" name="negara"
-                                                                        value="{{ $proyek->negara }}"
-                                                                        placeholder="Negara" /> --}}
                                                                 <select name="negara" id="negara"
                                                                     class="form-select form-select-solid"
                                                                     data-control="select2" data-hide-search="false"
@@ -2263,7 +2325,7 @@
                                                                 <!--end::Input-->
                                                             </div>
                                                             <!--end::Input group-->
-                                                        </div>
+                                                        </div> --}}
                                                         <!--End begin::Col-->
                                                         <div class="col-6">
                                                             <!--begin::Input group Website-->
@@ -2381,18 +2443,13 @@
 
                                                     <!-- begin::row -->
                                                     <div class="row fv-row">
-                                                        <div class="col-6">
+                                                        {{-- <div class="col-6">
                                                             <div class="fv-row mb-7">
                                                                 <label class="fs-6 fw-bold form-label mt-3">
                                                                     <span>Provinsi</span>
                                                                 </label>
                                                                 <!--end::Label-->
                                                                 <!--begin::Input-->
-                                                                {{-- <input type="text"
-                                                                        class="form-control form-control-solid"
-                                                                        id="provinsi" name="provinsi"
-                                                                        value="{{ $proyek->provinsi }}"
-                                                                        placeholder="Provinsi" /> --}}
                                                                 <select name="provinsi" id="provinsi"
                                                                     class="form-select form-select-solid"
                                                                     data-control="select2" data-hide-search="false"
@@ -2413,7 +2470,7 @@
                                                                 </select>
                                                                 <!--end::Input-->
                                                             </div>
-                                                        </div>
+                                                        </div> --}}
                                                         <!--End begin::Col-->
                                                         <div class="col-6">
                                                             <div class="fv-row mb-7">
@@ -3050,21 +3107,22 @@
                                                         Document NDA <i class="bi bi-journal-text"></i>
                                                         <i class="bi-exclamation-circle" data-bs-toggle="tooltip" data-bs-title="Status ini akan berubah menjadi <b>Waiting for Approval</b> secara otomatis ketika Dokumen sudah diupload dan akan muncul button download dokumen final ketika dokumen final nya sudah tersedia di <b>CCM</b>" data-bs-html="true"></i>
                                                         @php
-                                                            $upload_final = $proyek->ContractManagements?->UploadFinal->where("category", "=", "Dokumen NDA")->first();
+                                                            $DokumenFromCCM = $proyek->ContractManagements?->UploadFinal->where("category", "=", "Dokumen NDA")->first();
                                                             // $status = $proyek->DokumenNda->count() < 1 ? "Document belum diupload" : (empty($upload_final) ? "Waiting for Approval" : "Approved");
                                                             // $class_button = $proyek->DokumenNda->count() <a 1 ? "bg-danger" : (empty($upload_final) ? "bg-info" : "bg-success");
                                                         @endphp
-                                                        @if (empty($proyek->is_rfa_nda) || $proyek->is_rfa_nda == false)
-                                                            <a href="/proyek/{{ $proyek->kode_proyek }}/nda" class="btn btn-sm btn-primary"><b>RFA</b></a>
-                                                        @elseif(!empty($upload_final))
+                                                        @if (empty($proyek->ContractRFA) || $proyek->ContractRFA->isEmpty())
+                                                            {{-- <a href="/proyek/{{ $proyek->kode_proyek }}/nda" class="btn btn-sm btn-primary"><b>RFA</b></a> --}}
+                                                            <a href="#" onclick="setRFADokumen('nda')" class="btn btn-sm btn-primary"><b>RFA</b></a>
+                                                        @elseif(!empty($DokumenFromCCM))
                                                             <span class="badge badge-success"><b>Approved</b></span>
                                                         @else
                                                             <span class="badge badge-warning"><b>Waiting for Approve CCM</b></span>
                                                         @endif
                                                         
-                                                        @if (!empty($upload_final)) 
-                                                            <a href="{{asset("words/". $upload_final->id_document)}}" class="btn btn-sm btn-success"><b>Download Dokumen Final</b></a>
-                                                        @endif
+                                                        {{-- @if (!empty($DokumenFromCCM)) 
+                                                            <a href="{{asset("words/". $DokumenFromCCM->id_document)}}" class="btn btn-sm btn-success"><b>Download Dokumen Final</b></a>
+                                                        @endif --}}
                                                     </h3>
                                                     <br>
                                                     <div class="w-50">
@@ -4058,11 +4116,11 @@
                                                         Risk Tender
                                                         <i class="bi-exclamation-circle" data-bs-toggle="tooltip" data-bs-title="Status ini akan berubah menjadi <b>Waiting for Approval</b> secara otomatis ketika Dokumen sudah diupload dan akan muncul button download dokumen final ketika dokumen final nya sudah tersedia di <b>CCM</b>" data-bs-html="true"></i>
                                                         @php
-                                                            $upload_final = $proyek->ContractManagements?->UploadFinal->where("category", "=", "Dokumen Resiko - Perolehan")->first();
+                                                            $upload_final = $proyek->ContractManagements?->UploadFinal->where("category", "=", "Dokumen Resiko - Perolehan");
                                                             // $class_button = $proyek->RiskTenderProyek->count() < 1 ? "bg-danger" : (empty($upload_final) ? "bg-info" : "bg-success");
                                                             // $status = $proyek->RiskTenderProyek->count() < 1 ? "Document belum diupload" : (empty($upload_final) ? "Waiting for Approval" : "Approved");
                                                         @endphp
-                                                         @if (empty($proyek->is_rfa_risk) || $proyek->is_rfa_risk == false)
+                                                         @if (is_null($proyek->is_rfa_risk))
                                                             <a href="/proyek/{{ $proyek->kode_proyek }}/risk" class="btn btn-sm btn-primary"><b>RFA</b></a>
                                                         @elseif(!empty($upload_final))
                                                             <span class="badge badge-success"><b>Approved</b></span>
@@ -4070,9 +4128,9 @@
                                                             <span class="badge badge-warning"><b>Waiting for Approve CCM</b></span>
                                                         @endif
                                                         
-                                                        @if (!empty($upload_final)) 
+                                                        {{-- @if (!empty($upload_final)) 
                                                             <a href="{{asset("words/". $upload_final->id_document)}}" class="btn btn-sm btn-success"><b>Download Dokumen Final</b></a>
-                                                        @endif
+                                                        @endif --}}
                                                     </h3>
                                                     <small><a class="text-active-primary text-gray"
                                                             href="https://crm.wika.co.id/faqs/104625_RiskTender_Input-Kosong.rev.xlsx">Download
@@ -4097,7 +4155,7 @@
                                                             <tr
                                                                 class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                                                 <th class="w-50px text-center">No.</th>
-                                                                <th class="w-auto">Nama Documnet</th>
+                                                                <th class="w-auto">Nama Dokumen</th>
                                                                 <th class="w-auto">Modified On</th>
                                                                 <th class="w-auto">Upload By</th>
                                                                 <th class="w-100px"></th>
@@ -4110,7 +4168,8 @@
                                                             $no = 1;
                                                         @endphp
                                                         <tbody class="fw-bold text-gray-600">
-                                                            @foreach ($proyek->RiskTenderProyek as $riskTender)
+                                                            @if ($proyek->is_rfa_risk)
+                                                                @forelse ($upload_final as $riskTender)
                                                                 <tr>
                                                                     <!--begin::Nomor-->
                                                                     <td class="text-center">
@@ -4119,14 +4178,14 @@
                                                                     <!--end::Nomor-->
                                                                     <!--begin::Name-->
                                                                     <td>
-                                                                        @if (str_contains("$riskTender->nama_risk_tender", '.xlsx'))
+                                                                        @if (str_contains("$riskTender->nama_document", '.xlsx'))
                                                                             <a target="_blank"
-                                                                                href="{{ asset('words/' . $riskTender->id_document . '.xlsx') }}"
-                                                                                class="text-hover-primary">{{ $riskTender->nama_risk_tender }}</a>
+                                                                                href="{{ asset('words/' . $riskTender->id_document) }}"
+                                                                                class="text-hover-primary">{{ $riskTender->nama_document }}</a>
                                                                         @else
                                                                             <a target="_blank"
-                                                                                href="{{ asset('words/' . $riskTender->id_document . '.pdf') }}"
-                                                                                class="text-hover-primary">{{ $riskTender->nama_risk_tender }}</a>
+                                                                                href="{{ asset('words/' . $riskTender->id_document) }}"
+                                                                                class="text-hover-primary">{{ $riskTender->nama_document }}</a>
                                                                         @endif
                                                                     </td>
                                                                     <!--end::Name-->
@@ -4136,12 +4195,12 @@
                                                                     </td>
                                                                     <!--end::Modified On-->
                                                                     <!--begin::Modified By-->
-                                                                    <td>
+                                                                    {{-- <td>
                                                                         {{ $riskTender->created_by ?? '-' }}
-                                                                    </td>
+                                                                    </td> --}}
                                                                     <!--end::Modified By-->
                                                                     <!--begin::Action-->
-                                                                    <td class="text-center">
+                                                                    {{-- <td class="text-center">
                                                                         <small>
                                                                             <p data-bs-toggle="modal"
                                                                                 data-bs-target="#kt_risk_tender_delete_{{ $riskTender->id }}"
@@ -4150,10 +4209,58 @@
                                                                                 Delete
                                                                             </p>
                                                                         </small>
-                                                                    </td>
+                                                                    </td> --}}
                                                                     <!--end::Action-->
                                                                 </tr>
-                                                            @endforeach
+                                                                @empty
+                                                                    
+                                                                @endforelse
+                                                            @else
+                                                                @foreach ($proyek->RiskTenderProyek as $riskTender)
+                                                                    <tr>
+                                                                        <!--begin::Nomor-->
+                                                                        <td class="text-center">
+                                                                            {{ $no++ }}
+                                                                        </td>
+                                                                        <!--end::Nomor-->
+                                                                        <!--begin::Name-->
+                                                                        <td>
+                                                                            @if (str_contains("$riskTender->nama_risk_tender", '.xlsx'))
+                                                                                <a target="_blank"
+                                                                                    href="{{ asset('words/' . $riskTender->id_document . '.xlsx') }}"
+                                                                                    class="text-hover-primary">{{ $riskTender->nama_risk_tender }}</a>
+                                                                            @else
+                                                                                <a target="_blank"
+                                                                                    href="{{ asset('words/' . $riskTender->id_document . '.pdf') }}"
+                                                                                    class="text-hover-primary">{{ $riskTender->nama_risk_tender }}</a>
+                                                                            @endif
+                                                                        </td>
+                                                                        <!--end::Name-->
+                                                                        <!--begin::Modified On-->
+                                                                        <td>
+                                                                            {{ $riskTender->created_at ?? '-' }}
+                                                                        </td>
+                                                                        <!--end::Modified On-->
+                                                                        <!--begin::Modified By-->
+                                                                        <td>
+                                                                            {{ $riskTender->created_by ?? '-' }}
+                                                                        </td>
+                                                                        <!--end::Modified By-->
+                                                                        <!--begin::Action-->
+                                                                        <td class="text-center">
+                                                                            <small>
+                                                                                <p data-bs-toggle="modal"
+                                                                                    data-bs-target="#kt_risk_tender_delete_{{ $riskTender->id }}"
+                                                                                    id="modal-delete"
+                                                                                    class="btn btn-sm btn-light btn-active-primary">
+                                                                                    Delete
+                                                                                </p>
+                                                                            </small>
+                                                                        </td>
+                                                                        <!--end::Action-->
+                                                                    </tr>
+                                                                @endforeach
+                                                            @endif
                                                         </tbody>
                                                         <!--end::Table body-->
                                                     </table>
@@ -8817,6 +8924,75 @@
         </div>
     </form>
     <!--end::modal Cancel Proyek-->
+
+    <form action="/proyek/{{ $proyek->kode_proyek }}/rfa" method="post">
+        @csrf
+        <div class="modal fade" id="contract_rfa" tabindex="-1"
+            aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-600px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header">
+                        <!--begin::Modal title-->
+                        {{-- <h2>Tanggal Komitmen</h2> --}}
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <i class="bi bi-x-lg"></i>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
+                    </div>
+                    <!--end::Modal header-->
+                    <!--begin::Modal body-->
+                    <div class="modal-body py-lg-6 px-lg-6">
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span>Tanggal Komitmen</span>
+                        </label>
+                        <a href="#" class="btn"
+                            style="background: transparent;"
+                            id="start-date-modal"
+                            onclick="showCalendarModal(this)">
+                            <i class="bi bi-calendar2-plus-fill"
+                                style="color: #008CB4"></i>
+                        </a>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input type="Date"
+                            class="form-control form-control-solid"
+                            id="tgl_komitmen"
+                            name="tgl_komitmen"
+                            placeholder="Pilih tanggal komitmen" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-sm btn-light btn-active-primary">Save</button>
+                    </div>
+                    <!--end::Input group-->
+
+                </div>
+                <!--end::Modal body-->
+            </div>
+            <!--end::Modal content-->
+        </div>
+    </form>
+    <script>
+        function setRFADokumen(kategori) {
+            const modalRFA = document.getElementById('contract_rfa');
+            // const modalHeader = modalRFA.getElementById('modal-header');
+            let temp = modalRFA.children[0].children[0].children[1].innerHTML
+            temp += `
+            <br> 
+            <input type="hidden" name="kategori" value="${kategori}"/>
+            `
+            modalRFA.children[0].children[0].children[1].innerHTML = temp;
+            $('#contract_rfa').modal('show');
+        }
+    </script>
 
     {{-- <!--begin::modal APPROVAL-->
 <form action="/proyek" method="post" enctype="multipart/form-data"> 

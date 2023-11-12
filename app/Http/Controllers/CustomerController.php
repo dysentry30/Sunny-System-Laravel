@@ -505,10 +505,10 @@ class CustomerController extends Controller
         
         $editCustomer = Customer::find($data["id-customer"]);
 
-        if (empty($editCustomer->AHU) || $editCustomer->AHU->isEmpty()) {
-            Alert::error('Error', "Dokumen AHU wajib diisi");
-            return back();
-        }
+        // if (empty($editCustomer->AHU) || $editCustomer->AHU->isEmpty()) {
+        //     Alert::error('Error', "Dokumen AHU wajib diisi");
+        //     return back();
+        // }
         $editCustomer->name = $data["name-customer"];
         $editCustomer->handphone = $data["handphone"];
         $editCustomer->check_customer = $request->has("check-customer"); //boolean check
@@ -1514,8 +1514,14 @@ class CustomerController extends Controller
         return redirect()->back();
     }
 
-    public function deleteAHU(Request $request, AHU $customerAHU)
+    public function deleteAHU(Request $request, $id_ahu)
     {
+        $customerAHU = AHU::find($id_ahu);
+        if (empty($customerAHU)) {
+            Alert::error("Error", "AHU Tidak ditemukan!");
+            return redirect()->back();
+        }
+
         if ($customerAHU->delete()) {
             File::delete(public_path("customer/$customerAHU->file_document"));
             Alert::success("Success", "AHU Berhasil dihapus");

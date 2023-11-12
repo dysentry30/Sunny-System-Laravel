@@ -53,8 +53,12 @@ a{{-- Begin::Extend Header --}}
                                     {{-- <a href="/user/new" class="btn btn-sm btn-primary w-80px"
                                         style="background-color:#008CB4; padding: 7px 30px 7px 30px">
                                         New</a> --}}
-                                    <button class="btn btn-sm btn-primary w-80px" data-bs-toggle="modal"
+                                    {{-- <button class="btn btn-sm btn-primary w-80px" data-bs-toggle="modal"
                                         data-bs-target="#kt_modal_create_user" id="kt_toolbar_primary_button"
+                                        id="kt_toolbar_primary_button" style="background-color:#008CB4; padding: 6px">
+                                        New</button> --}}
+                                    <button class="btn btn-sm btn-primary w-80px" data-bs-toggle="modal"
+                                        data-bs-target="#kt_modal_create_user_new" id="kt_toolbar_primary_button"
                                         id="kt_toolbar_primary_button" style="background-color:#008CB4; padding: 6px">
                                         New</button>
 
@@ -660,6 +664,127 @@ a{{-- Begin::Extend Header --}}
     </form>
     <!--end::Modal New User-->
 
+    <form action="/user/role/save" method="post" enctype="multipart/form-data">
+        @csrf
+        
+        <!--begin::Modal - Create Proyek-->
+        <div class="modal fade" id="kt_modal_create_user_new" aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-800px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header">
+                        <!--begin::Modal title-->
+                        <h2>New User</h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <i class="bi bi-x-lg"></i>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
+                    </div>
+                    <!--end::Modal header-->
+                    
+                    <!--begin::Modal body-->
+                    <div class="modal-body py-lg-6 px-lg-6">
+                        
+                        <!--begin::Get Modal JS-->
+                        <input type="hidden" class="modal-name" name="modal-name">
+                        <!--end::Get Modal JS-->
+
+                        <!--begin::Row Kanan+Kiri-->
+                        <div class="row fv-row">
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="">Name Pegawai</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <div class="d-flex flex-row gap-2">
+                                    <!--begin::Input-->
+                                    <select id="nip-pegawai" name="nip"
+                                        class="form-select form-select-solid select2-hidden-accessible"
+                                        data-control="select2" data-hide-search="false" data-placeholder="Pilh Pegawai"
+                                        tabindex="-1" aria-hidden="true">
+                                        <option value=""></option>
+                                        @foreach ($pegawai_all as $pegawai)
+                                            <option value="{{ $pegawai->nip }}">{{ $pegawai->nip }} - {{ $pegawai->nama_pegawai }}</option>
+                                        @endforeach
+                                    </select>
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input-->
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <!--End::Row Kanan+Kiri-->
+
+                        <!--begin::Options-->
+                        <br>
+                        <label class="fs-6 fw-bold form-label mt-3">Aplikasi</label>
+                        <div class="d-flex" style="flex-direction: row">
+                            <!--begin::Options-->
+                            <label class="form-check form-check-sm form-check-custom form-check-solid me-6 ms-4 align-middle">
+                                <input class="form-check-input" type="checkbox" value="" id="administrator" name="administrator" />
+                                <span class="form-check-label me-8 required"><b>Super Admin</b></span>
+                            </label>
+                            <!--end::Options-->
+                            <!--begin::Options-->
+                            <label class="form-check form-check-sm form-check-custom form-check-solid me-6">
+                                <input class="form-check-input" type="checkbox" value="" id="user-sales" name="user-sales" />
+                                <span class="form-check-label me-8 required"><b>CRM</b></span>
+                            </label>
+                            <!--end::Options-->
+                            <!--begin::Options-->
+                            <label class="form-check form-check-sm form-check-custom form-check-solid me-6">
+                                <input class="form-check-input" type="checkbox" value="" id="team-proyek" name="team-proyek" />
+                                <span class="form-check-label me-8 required"><b>CSI</b></span>
+                            </label>
+                            <!--end::Options-->
+                            <!--begin::Options-->
+                            <label class="form-check form-check-sm form-check-custom form-check-solid me-6">
+                                <input class="form-check-input" type="checkbox" value="" id="admin-kontrak" name="admin-kontrak" />
+                                <span class="form-check-label me-8 required"><b>CCM</b></span>
+                            </label>
+                            <!--end::Options-->
+                        </div>
+                        <br>
+                        <br>
+                        <!--end::Options-->
+                        
+                        <!--begin:: D-flex -->
+                        <div class="row">
+                            <select name="unit-kerja" class="form-select form-select-solid select2-hidden-accessible" data-control="select2" data-hide-search="true" data-placeholder="Unit Kerja" data-select2-id="select2-data-4-1hgp" tabindex="-1" aria-hidden="true">
+                                <option data-select2-id="select2-data-6-c3oy"></option>
+                                @foreach ($unit_kerjas as $unitKerja)
+                                <option value="{{$unitKerja->divcode}}" data-select2-id="{{$unitKerja->divcode}}">{{$unitKerja->unit_kerja}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <br>
+                        <!--end:: D-flex -->
+
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white"
+                                style="background-color:#008CB4">Save</button>
+                        </div>
+                    </div>
+                    <!--end::Modal body-->
+                </div>
+                <!--end::Modal content-->
+            </div>
+            <!--end::Modal dialog-->
+        </div>
+        <!--end::Modal - Create App-->
+    </form>
+
     {{-- begin::modal DELETE --}}
     @foreach ($users as $user)
         <form action="/user/delete/{{ $user->id }}" method="post" enctype="multipart/form-data">
@@ -724,6 +849,10 @@ a{{-- Begin::Extend Header --}}
                 //     'copy', 'csv', 'excel', 'pdf', 'print'
                 // ]
             } );
+
+            $("#nip-pegawai").select2({
+                dropdownParent: $("#kt_modal_create_user_new")
+            });
         } );
     </script>
     <!--end::Data Tables-->

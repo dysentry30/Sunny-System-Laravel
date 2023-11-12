@@ -969,6 +969,25 @@
                 timer: 3000,
                 timerProgressBar: true,
         });
+        const ConfirmDialog = Swal.mixin({
+            title: '',
+            text: "Edited File will be deleted ?",
+            icon: false,
+            showCancelButton: true,
+            confirmButtonColor: '#008CB4',
+            cancelButtonColor: '#BABABA',
+            confirmButtonText: 'Ya'
+        });
+        window.alert = (icon, message) => Toast.fire({
+            icon: icon,
+            title: message,
+        });
+        window.confirm = (icon, title, text, closure) => ConfirmDialog.fire({
+            icon: icon,
+            title: title,
+            text: text,
+        })
+        .then((result) => closure(result));
     </script>
 
     <!--begin:: show calendar-->

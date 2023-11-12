@@ -53,7 +53,8 @@
                     <!--begin::Menu-->
                     <div id="#kt_aside_menu" data-kt-menu="true" style="background-color:#0db0d9;">
 
-                        @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak || auth()->user()->check_user_sales)
+                        {{-- @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak || auth()->user()->check_user_sales) --}}
+                        @canany(['crm', 'ccm', 'super-admin'])
                             <div class="menu-item">
                                 <a class="menu-link " href="/dashboard"
                                     style="color:white; padding-left:20px; padding-top:10px; {{ str_contains(Request::Path(), 'dashboard') ? 'background-color:#008CB4' : '' }}">
@@ -68,160 +69,231 @@
                                     <span class="menu-title" style="font-size: 16px; padding-left: 10px">Dashboard</span>
                                 </a>
                             </div>
-                        @endif
+                        @endcanany
+                        {{-- @endif --}}
 
-                        @if (auth()->user()->check_administrator || auth()->user()->check_user_sales)
-                            <div class="menu-item">
-                                <a class="menu-link " href="/customer"
-                                    style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'customer') ? 'background-color:#008CB4' : '' }}">
-                                    <span class="menu-icon">
-                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-                                        <span class="svg-icon svg-icon-2">
-                                            <img alt="Logo" src="/media/icons/duotune/creatio/account.svg"
-                                                class="h-30px logo" />
-                                        </span>
-                                        <!--end::Svg Icon-->
+                        {{-- @if (auth()->user()->check_administrator || auth()->user()->check_user_sales) --}}
+                        @canany(['super-admin', 'crm'])
+                        <div class="menu-item">
+                            <a class="menu-link " href="/customer"
+                                style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'customer') ? 'background-color:#008CB4' : '' }}">
+                                <span class="menu-icon">
+                                    <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                    <span class="svg-icon svg-icon-2">
+                                        <img alt="Logo" src="/media/icons/duotune/creatio/account.svg"
+                                            class="h-30px logo" />
                                     </span>
-                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Pelanggan</span>
-                                </a>
-                            </div>
-                        @endif
+                                    <!--end::Svg Icon-->
+                                </span>
+                                <span class="menu-title" style="font-size: 16px; padding-left: 10px">Pelanggan</span>
+                            </a>
+                        </div>
+                        @endcanany
+                        {{-- @endif --}}
 
 
-                        @if (auth()->user()->check_administrator || auth()->user()->check_user_sales || auth()->user()->check_team_proyek)
-                            <div class="menu-item">
-                                <a class="menu-link " href="/proyek"
-                                    style="color:white; padding-left:20px; {{ Request::Segment(1) == 'proyek' ? 'background-color:#008CB4' : '' }}">
-                                    <span class="menu-icon">
-                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-                                        <span class="svg-icon svg-icon-2">
-                                            <img alt="Logo" src="/media/icons/duotune/creatio/opportunity.svg"
-                                                class="h-30px logo" />
-                                        </span>
-                                        <!--end::Svg Icon-->
+                        {{-- @if (auth()->user()->check_administrator || auth()->user()->check_user_sales || auth()->user()->check_team_proyek) --}}
+                        @canany(['super-admin', 'crm', 'csi'])
+                        <div class="menu-item">
+                            <a class="menu-link " href="/proyek"
+                                style="color:white; padding-left:20px; {{ Request::Segment(1) == 'proyek' ? 'background-color:#008CB4' : '' }}">
+                                <span class="menu-icon">
+                                    <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                    <span class="svg-icon svg-icon-2">
+                                        <img alt="Logo" src="/media/icons/duotune/creatio/opportunity.svg"
+                                            class="h-30px logo" />
                                     </span>
-                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Proyek</span>
-                                </a>
-                            </div>
-                        @endif
+                                    <!--end::Svg Icon-->
+                                </span>
+                                <span class="menu-title" style="font-size: 16px; padding-left: 10px">Proyek</span>
+                            </a>
+                        </div>
+                        @endcanany
+                        {{-- @endif --}}
 
-                        @if (auth()->user()->check_administrator || auth()->user()->check_user_sales)
-                            <div class="menu-item">
-                                <a class="menu-link " href="/forecast/{{ (int) date("m") }}/{{ (int) date("Y") }}"
-                                    style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'forecast') ? 'background-color:#008CB4' : '' }}">
-                                    <span class="menu-icon">
-                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-                                        <span class="svg-icon svg-icon-2">
-                                            <i class="bi bi-bar-chart-fill text-white"
-                                                style="font-size: 18px; margin-left:7px"></i>
-                                        </span>
-                                        <!--end::Svg Icon-->
+                        {{-- @if (auth()->user()->check_administrator || auth()->user()->check_user_sales) --}}
+                        @canany(['super-admin', 'crm'])
+                        <div class="menu-item">
+                            <a class="menu-link " href="/forecast/{{ (int) date("m") }}/{{ (int) date("Y") }}"
+                                style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'forecast') ? 'background-color:#008CB4' : '' }}">
+                                <span class="menu-icon">
+                                    <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                    <span class="svg-icon svg-icon-2">
+                                        <i class="bi bi-bar-chart-fill text-white"
+                                            style="font-size: 18px; margin-left:7px"></i>
                                     </span>
-                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Forecast</span>
-                                </a>
-                            </div>
-                        @endif
+                                    <!--end::Svg Icon-->
+                                </span>
+                                <span class="menu-title" style="font-size: 16px; padding-left: 10px">Forecast</span>
+                            </a>
+                        </div>
+                        @endcanany
+                        {{-- @endif --}}
 
-                        @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak || auth()->user()->check_team_proyek)
-                            <div class="menu-item">
-                                <a class="menu-link " href="/contract-management"
-                                    style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'contract-management') ? 'background-color:#008CB4' : '' }}">
-                                    <span class="menu-icon">
-                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-                                        <span class="svg-icon svg-icon-2">
-                                            <img alt="Logo" src="/media/icons/duotune/creatio/contract.svg"
-                                                class="h-30px logo" />
-                                        </span>
-                                        <!--end::Svg Icon-->
+                        {{-- @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak || auth()->user()->check_team_proyek) --}}
+                        @canany(['super-admin', 'ccm'])
+                        <div class="menu-item">
+                            <a class="menu-link " href="/contract-management"
+                                style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'contract-management') ? 'background-color:#008CB4' : '' }}">
+                                <span class="menu-icon">
+                                    <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                    <span class="svg-icon svg-icon-2">
+                                        <img alt="Logo" src="/media/icons/duotune/creatio/contract.svg"
+                                            class="h-30px logo" />
                                     </span>
-                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Contract Management</span>
-                                </a>
-                            </div>
-                        @endif
+                                    <!--end::Svg Icon-->
+                                </span>
+                                <span class="menu-title" style="font-size: 16px; padding-left: 10px">Contract Management</span>
+                            </a>
+                        </div>
+                        @endcanany
+                        {{-- @endif --}}
 
-                        @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
-                            <div class="menu-item">
-                                <a class="menu-link " href="/claim-management"
-                                    style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'claim-management') ? 'background-color:#008CB4' : '' }}">
-                                    <span class="menu-icon">
-                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-                                        <span class="svg-icon svg-icon-2">
-                                            <img alt="Logo" src="/media/icons/duotune/creatio/releases.svg"
-                                                class="h-30px logo" />
-                                        </span>
-                                        <!--end::Svg Icon-->
+                        {{-- @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak) --}}
+                        @canany(['super-admin', 'ccm'])
+                        <div class="menu-item">
+                            <a class="menu-link " href="/claim-management"
+                                style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'claim-management') ? 'background-color:#008CB4' : '' }}">
+                                <span class="menu-icon">
+                                    <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                    <span class="svg-icon svg-icon-2">
+                                        <img alt="Logo" src="/media/icons/duotune/creatio/releases.svg"
+                                            class="h-30px logo" />
                                     </span>
-                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Change Management</span>
-                                </a>
-                            </div>
-                        @endif
+                                    <!--end::Svg Icon-->
+                                </span>
+                                <span class="menu-title" style="font-size: 16px; padding-left: 10px">Change Management</span>
+                            </a>
+                        </div>
+                        @endcanany
+                        {{-- @endif --}}
 
-                        @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
-                            <div class="menu-item">
-                                <a class="menu-link " href="/history-approval"
-                                    style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'history-approval') ? 'background-color:#008CB4' : '' }}">
-                                    <span class="menu-icon">
-                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-                                        <span class="svg-icon svg-icon-2">
-                                            <img alt="Logo" src="/media/icons/duotune/creatio/tranzaction.svg"
-                                                class="h-30px logo" />
-                                        </span>
-                                        <!--end::Svg Icon-->
+                        {{-- @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak) --}}
+                        @canany(['super-admin', 'ccm'])
+                        <div class="menu-item">
+                            <a class="menu-link " href="/history-approval"
+                                style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'history-approval') ? 'background-color:#008CB4' : '' }}">
+                                <span class="menu-icon">
+                                    <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                    <span class="svg-icon svg-icon-2">
+                                        <img alt="Logo" src="/media/icons/duotune/creatio/tranzaction.svg"
+                                            class="h-30px logo" />
                                     </span>
-                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Request For Approval</span>
-                                </a>
-                            </div>
-                        @endif
+                                    <!--end::Svg Icon-->
+                                </span>
+                                <span class="menu-title" style="font-size: 16px; padding-left: 10px">Request For Approval</span>
+                            </a>
+                        </div>
+                        @endcanany
+                        {{-- @endif --}}
 
-                        @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
-                            <div class="menu-item">
-                                <a class="menu-link " href="/document"
-                                    style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'document-database') ? 'background-color:#008CB4' : '' }}">
-                                    <span class="menu-icon">
-                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-                                        <span class="svg-icon svg-icon-2">
-                                            <img alt="Logo" src="/media/icons/duotune/creatio/documents.svg"
-                                                class="h-30px logo" />
-                                        </span>
-                                        <!--end::Svg Icon-->
+                        {{-- @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak) --}}
+                        @canany(['super-admin', 'ccm'])
+                        <div class="menu-item">
+                            <a class="menu-link " href="/document"
+                                style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'document-database') ? 'background-color:#008CB4' : '' }}">
+                                <span class="menu-icon">
+                                    <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                    <span class="svg-icon svg-icon-2">
+                                        <img alt="Logo" src="/media/icons/duotune/creatio/documents.svg"
+                                            class="h-30px logo" />
                                     </span>
-                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Document Database</span>
-                                </a>
-                            </div>
-                        @endif
+                                    <!--end::Svg Icon-->
+                                </span>
+                                <span class="menu-title" style="font-size: 16px; padding-left: 10px">Document Database</span>
+                            </a>
+                        </div>
+                        @endcanany
+                        {{-- @endif --}}
                         
-                        @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
-                            <div class="menu-item">
-                                <a class="menu-link " href="/document-template"
-                                    style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'document-template') ? 'background-color:#008CB4' : '' }}">
-                                    <span class="menu-icon">
-                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-                                        <span class="svg-icon svg-icon-2">
-                                            <img alt="Logo" src="/media/icons/duotune/creatio/documents.svg"
-                                                class="h-30px logo" />
-                                        </span>
-                                        <!--end::Svg Icon-->
+                        {{-- @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak) --}}
+                        @canany(['super-admin', 'ccm'])
+                        <div class="menu-item">
+                            <a class="menu-link " href="/document-template"
+                                style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'document-template') ? 'background-color:#008CB4' : '' }}">
+                                <span class="menu-icon">
+                                    <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                    <span class="svg-icon svg-icon-2">
+                                        <img alt="Logo" src="/media/icons/duotune/creatio/documents.svg"
+                                            class="h-30px logo" />
                                     </span>
-                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Document Template</span>
-                                </a>
-                            </div>
-                        @endif
+                                    <!--end::Svg Icon-->
+                                </span>
+                                <span class="menu-title" style="font-size: 16px; padding-left: 10px">Document Template</span>
+                            </a>
+                        </div>
+                        @endcanany
+                        {{-- @endif --}}
 
                         @if (auth()->user()->check_administrator || $adminPIC || auth()->user()->check_user_sales )
-                            <div class="menu-item">
-                                <a class="menu-link " href="/rekomendasi"
-                                    style="color:white; padding-left:20px; {{ str_contains(Request::url(), '/rekomendasi') ? 'background-color:#008CB4' : '' }}">
-                                    <span class="menu-icon">
-                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-                                        <span class="svg-icon svg-icon-2">
-                                            <img alt="Logo" src="/media/icons/duotune/creatio/documents.svg"
-                                                class="h-30px logo" />
+                            @if (str_contains(Request::url(), '/rekomendasi')||
+                                str_contains(Request::url(), '/green-lane') ||
+                                str_contains(Request::url(), '/non-green-lane')
+                            )
+                                <div class="menu-item">
+                                    <a class="menu-link"
+                                        data-bs-toggle="collapse" href="#green-line-collapse" role="button"
+                                        aria-expanded="false" aria-controls="green-line-collapse"
+                                        style="color:white; padding-left:20px; {{ str_contains(Request::url(), '/rekomendasi') ||
+                                        str_contains(Request::url(), '/green-lane') ||
+                                        str_contains(Request::url(), '/non-green-lane')
+                                         ? 'background-color:#008CB4' : '' }}">
+                                        <span class="menu-icon">
+                                            <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                            <span class="svg-icon svg-icon-2">
+                                                <img alt="Logo" src="/media/icons/duotune/creatio/documents.svg"
+                                                    class="h-30px logo" />
+                                            </span>
+                                            <!--end::Svg Icon-->
                                         </span>
-                                        <!--end::Svg Icon-->
-                                    </span>
-                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Nota Rekomendasi 1</span>
-                                </a>
-                            </div>
+                                        <span class="menu-title" style="font-size: 16px; padding-left: 10px">Nota Rekomendasi 1</span>
+                                        <span><i class="bi bi-caret-down-fill text-white"></i></span>
+                                    </a>
+                                </div>
+                                <div class="collapse" id="green-line-collapse">
+                                    <!--begin::Menu Colapse-->
+                                    <div id="#kt_aside_menu" class="p-5" data-kt-menu="true"
+                                        style="background-color:#0ca1c6; {{ Request::Path() == 'green-lane' ? 'background-color:#008CB4' : '' }}">
+                                        <a class="menu-link" href="/green-lane" style="color:white; padding-left:30px;">
+                                            <span class="menu-icon">
+                                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                                <i class="bi bi-building text-white"></i>
+                                                <!--end::Svg Icon-->
+                                            </span>
+                                            <span class="menu-title" style="font-size: 16px; padding-left: 10px">Green Lane</span>
+                                        </a>
+                                    </div>
+                                    <!--end::Menu Colapse-->
+                                    <!--begin::Menu Colapse-->
+                                    <div id="#kt_aside_menu" class="p-5" data-kt-menu="true"
+                                        style="background-color:#0ca1c6; {{ Request::Path() == 'non-green-lane' ? 'background-color:#008CB4' : '' }}">
+                                        <a class="menu-link" href="/non-green-lane" style="color:white; padding-left:30px;">
+                                            <span class="menu-icon">
+                                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                                <i class="bi bi-wallet text-white"></i>
+                                                <!--end::Svg Icon-->
+                                            </span>
+                                            <span class="menu-title" style="font-size: 16px; padding-left: 10px">Non Green Lane</span>
+                                        </a>
+                                    </div>
+                                    <!--end::Menu Colapse-->
+                                </div>
+                            @else
+                                <div class="menu-item">
+                                    <a class="menu-link " href="/rekomendasi"
+                                        style="color:white; padding-left:20px; {{ str_contains(Request::url(), '/rekomendasi') ? 'background-color:#008CB4' : '' }}">
+                                        <span class="menu-icon">
+                                            <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                            <span class="svg-icon svg-icon-2">
+                                                <img alt="Logo" src="/media/icons/duotune/creatio/documents.svg"
+                                                    class="h-30px logo" />
+                                            </span>
+                                            <!--end::Svg Icon-->
+                                        </span>
+                                        <span class="menu-title" style="font-size: 16px; padding-left: 10px">Nota Rekomendasi 1</span>
+                                    </a>
+                                </div>
+                            @endif
                         @endif
 
                         @if (auth()->user()->check_administrator || $adminPIC)
@@ -668,8 +740,8 @@
                                         <a class="menu-link " href="/otomasi-approval" style="color:white; padding-left:20px;">
                                             <span class="menu-icon">
                                                 <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-                                                {{-- <i class="bi bi-buildings text-white"></i>                                                     --}}
-                                                <i class="bi bi-building-fill text-white" style="font-size: 20px"></i>
+                                                {{-- <i class="bi bi-buildings text-white"></i> --}}
+                                                <i class="bi bi-qr-code text-white" style="font-size: 20px"></i>
                                                 <!--end::Svg Icon-->
                                             </span>
                                             <span class="menu-title" style="font-size: 16px; padding-left: 10px">Otomasi Approval</span>
@@ -686,7 +758,7 @@
                                             <span class="menu-icon">
                                                 <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
                                                 {{-- <i class="bi bi-buildings text-white"></i>                                                     --}}
-                                                <i class="bi bi-building-fill text-white" style="font-size: 20px"></i>
+                                                <i class="bi bi-type text-white" style="font-size: 20px"></i>
                                                 <!--end::Svg Icon-->
                                             </span>
                                             <span class="menu-title" style="font-size: 16px; padding-left: 10px">Kriteria Pengguna Jasa</span>
@@ -703,7 +775,7 @@
                                             <span class="menu-icon">
                                                 <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
                                                 {{-- <i class="bi bi-buildings text-white"></i>                                                     --}}
-                                                <i class="bi bi-building-fill text-white" style="font-size: 20px"></i>
+                                                <i class="bi bi-type text-white" style="font-size: 20px"></i>
                                                 <!--end::Svg Icon-->
                                             </span>
                                             <span class="menu-title" style="font-size: 16px; padding-left: 10px">Legalitas Perusahaan</span>
@@ -720,10 +792,27 @@
                                             <span class="menu-icon">
                                                 <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
                                                 {{-- <i class="bi bi-buildings text-white"></i>                                                     --}}
-                                                <i class="bi bi-building-fill text-white" style="font-size: 20px"></i>
+                                                <i class="bi bi-calculator-fill text-white" style="font-size: 20px"></i>
                                                 <!--end::Svg Icon-->
                                             </span>
                                             <span class="menu-title" style="font-size: 16px; padding-left: 10px">Penilaian Risiko Pengguna Jasa</span>
+                                        </a>
+                                    </div>
+                                    <!--end::Menu Colapse-->
+                                    @endif
+                                    
+                                    @if (auth()->user()->check_administrator)
+                                    <!--begin::Menu Colapse-->
+                                    <div id="#kt_aside_menu" data-kt-menu="true"
+                                        style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'penilaian-pengguna-jasa' ? 'background-color:#008CB4' : '' }}">
+                                        <a class="menu-link " href="/role-management" style="color:white; padding-left:20px;">
+                                            <span class="menu-icon">
+                                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                                {{-- <i class="bi bi-buildings text-white"></i> --}}
+                                                <i class="bi bi-fingerprint text-white" style="font-size: 20px"></i>
+                                                <!--end::Svg Icon-->
+                                            </span>
+                                            <span class="menu-title" style="font-size: 16px; padding-left: 10px">Role Managements</span>
                                         </a>
                                     </div>
                                     <!--end::Menu Colapse-->
