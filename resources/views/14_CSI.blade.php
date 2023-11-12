@@ -55,7 +55,7 @@
                                         <li class="nav-item">
                                             <a class="nav-link text-active-primary pb-4 active" data-bs-toggle="tab"
                                                 aria-selected="true" href="#kt_panel_view_1"
-                                                style="font-size:14px;">Progress > 20%</a>
+                                                style="font-size:14px;">Progress 20% - 40%</a>
                                         </li>
                                         <!--end:::Tab item Claim-->
 
@@ -89,7 +89,7 @@
                                                 <th class="min-w-auto">Pemberi Kerja</th>
                                                 <th class="min-w-auto">Nomor SPK</th>
                                                 <th class="min-w-auto">Nama Proyek</th>
-                                                <th class="min-w-auto">Unit Kerja</th>
+                                                {{-- <th class="min-w-auto">Unit Kerja</th> --}}
                                                 <th class="min-w-auto text-center">Progress</th>
                                                 <th class="min-w-auto text-center">Status</th>
                                                 <th class="min-w-auto text-center" width="75px">Action</th>
@@ -101,7 +101,7 @@
                                         <!--begin::Table body-->
                                         <tbody class="fw-bold text-gray-600 fs-6">
                                             @foreach ($proyeks as $proyek)
-                                            @if (!empty($proyek->Csi) && (int) $proyek->progress >= 5 && (int) $proyek->progress <= 89)
+                                            {{-- @if (!empty($proyek->Csi) && (int) $proyek->progress >= 5 && (int) $proyek->progress <= 89)
                                                 @if (!empty($proyek->proyekBerjalan) && !empty($proyek->proyekBerjalan->name_customer))
                                                     <tr>
                                                         <td>
@@ -148,15 +148,93 @@
                                                                         data-bs-target="#modal-send-{{ $proyek->Csi->id_csi }}">Send</button>
                                                                 @endif
                                                             @else
-                                                                {{-- <button class="btn btn-sm btn-light btn-active-primary" data-bs-toggle="modal"
-                                                                    data-bs-target="#modal-create-{{ $proyek->kode_proyek }}">Get Progress</button> --}}
+                                                                <button class="btn btn-sm btn-light btn-active-primary" data-bs-toggle="modal"
+                                                                    data-bs-target="#modal-create-{{ $proyek->kode_proyek }}">Get Progress</button>
                                                             @endempty
                                                         @endif
                                                         </td>
                                                     </tr>
                                                 @endif
-                                            @endif
-                                        @endforeach
+                                            @endif --}}
+                                                @php
+                                                    $proyekProgress = $proyek->Progress->where('periode', date('Ym'))->first();
+                                                    // dump($proyekProgress);
+                                                    $progress = 0;
+                                                    if (!empty($proyekProgress)) {
+                                                        $progress = $proyekProgress->ok_review && $proyekProgress->progress_fisik_ri ? (int)$proyekProgress->progress_fisik_ri / (int)$proyekProgress->ok_review : 0;
+                                                    }
+                                                @endphp
+
+                                                @if ($progress >= 0.2)
+                                                    <tr>
+                                                        <td>
+                                                            <a target="_blank"
+                                                                href="/customer/view/{{ $proyek->Customer->id_customer ?? null }}/{{ $proyek->Customer->name ?? '-' }}"
+                                                                class="text-gray-800 text-hover-primary">{{ $proyek->Customer->name ?? '-' }}</a>
+                                                        </td>
+                                                        <td>{{ $proyek->spk_intern_no }}</td>
+                                                        <td>{{ $proyek->proyek_name }}</td>
+                                                        {{-- <td
+                                                            class="text-center {{ empty($proyek->Csi->progress) ? 'text-danger' : '' }}">
+                                                            {{ $proyek->Csi->progress ?? 'Belum Get Progress' }}
+                                                        </td> --}}
+                                                        <td
+                                                            class="text-center">
+                                                            {{ round($progress, 2)*100 }}%
+                                                        </td>
+                                                        <td class="text-center">
+                                                        @empty(!$proyek->Csi)
+                                                            <span
+                                                                class="px-4 fs-7 badge {{ $proyek->Csi->status == 'Not Sent' ? 'badge-light-danger' : ($proyek->Csi->status == 'Requested' ? 'badge-light-primary' : 'badge-light-success') }} {{ $proyek->Csi->is_setuju == 'f' ? 'badge-light-danger' : ''}}">
+                                                                @if ($proyek->Csi->is_setuju == "f")
+                                                                Rejected                                                                
+                                                                @else
+                                                                {{ $proyek->Csi->status }}
+                                                                @endif
+                                                            </span>
+                                                            @endempty
+                                                        </td>
+                                                        <td class="text-center">
+                                                        @if (!empty($proyek->Csi))
+                                                            @if ($proyek->Csi->status == 'Requested')
+                                                                <span class="px-4 fs-8 badge badge-light-warning">
+                                                                    Waiting for Customer
+                                                                </span>
+                                                            @elseif($proyek->Csi->status == 'Done')
+                                                                <a target="_blank"
+                                                                    href="/csi/customer-survey/{{ $proyek->Csi->id_csi }}"
+                                                                    class="btn fs-8 btn-sm btn-light btn-active-primary text-hover-white">Cek
+                                                                    CSI &nbsp; <i class="bi bi-search"></i></a>
+                                                            @endif
+                                                        @else
+                                                        <button class="btn btn-sm btn-light btn-active-primary" data-bs-toggle="modal"
+                                                            data-bs-target="#modal-send-{{ $proyek->spk_intern_no }}">Send</button>
+                                                        @endif
+                                                        {{-- @if ($proyek->Csi?->is_setuju == "f")
+                                                        <button class="btn btn-sm btn-light btn-active-primary" data-bs-toggle="modal"
+                                                            data-bs-target="#modal-send-{{ $proyek->Csi?->id_csi }}">Send</button>
+                                                        @else
+                                                            @empty(!$proyek->Csi)
+                                                                @if ($proyek->Csi?->status == 'Done')
+                                                                    <a target="_blank"
+                                                                        href="/csi/customer-survey/{{ $proyek->Csi?->id_csi }}"
+                                                                        class="btn fs-8 btn-sm btn-light btn-active-primary text-hover-white">Cek
+                                                                        CSI &nbsp; <i class="bi bi-search"></i></a>
+                                                                @elseif ($proyek->Csi?->status == 'Requested')
+                                                                    <span class="px-4 fs-8 badge badge-light-warning">
+                                                                        Waiting for Customer
+                                                                    </span>
+                                                                @else
+                                                                    <button class="btn btn-sm btn-light btn-active-primary" data-bs-toggle="modal"
+                                                                        data-bs-target="#modal-send-{{ $proyek->Csi?->id_csi }}">Send</button>
+                                                                @endif
+                                                            @else
+                                                            @endempty
+                                                        @endif --}}
+                                                        </td>
+                                                    </tr>
+                                                @endif
+                                            @endforeach
                                 </tbody>
                             </table>
                             <!--end::Table CSI-->
@@ -173,8 +251,8 @@
                                         <th class="min-w-auto">Pemberi Kerja</th>
                                         <th class="min-w-auto">Nomor SPK</th>
                                         <th class="min-w-auto">Nama Proyek</th>
-                                        <th class="min-w-auto">Unit Kerja</th>
-                                        <th class="min-w-auto">Progress</th>
+                                        {{-- <th class="min-w-auto">Unit Kerja</th> --}}
+                                        <th class="min-w-auto text-center">Progress</th>
                                         <th class="min-w-auto text-center">Status</th>
                                         <th class="min-w-auto text-center" width="75px">Action</th>
                                         {{-- <th class="min-w-auto">ID Contract</th> --}}
@@ -184,9 +262,9 @@
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
                                 <tbody class="fw-bold text-gray-600 fs-6">
-                                    @foreach ($proyeks as $proyek)
-                                        {{-- @dd($proyek) --}}
-                                        @if ((int) $proyek->progress >= 90 && !empty($proyek->proyekBerjalan) && !empty($proyek->proyekBerjalan->name_customer))
+                                    {{-- @foreach ($proyeks as $proyek) --}}
+                                    @foreach ($csi as $proyek)
+                                        {{-- @if ((int) $proyek->progress >= 90 && !empty($proyek->proyekBerjalan) && !empty($proyek->proyekBerjalan->name_customer))
                                             <tr>
                                                 <td>
                                                     <a target="_blank"
@@ -216,7 +294,49 @@
                                                     @endif
                                                 </td>
                                             </tr>
-                                        @endif
+                                        @endif --}}
+                                        {{-- @if ($proyek->Csi) --}}
+                                        @php
+                                            $proyekProgress = $proyek->ProyekPIS->Progress->where('periode', date('Ym'))->first();
+                                            // dump($proyekProgress);
+                                            $progress = 0;
+                                            if (!empty($proyekProgress)) {
+                                                $progress = $proyekProgress->ok_review && $proyekProgress->progress_fisik_ri ? (int)$proyekProgress->progress_fisik_ri / (int)$proyekProgress->ok_review : 0;
+                                            }
+                                        @endphp
+                                        <tr>
+                                            <td>
+                                                <a target="_blank"
+                                                    href="/customer/view/{{ $proyek->Struktur?->customer?->id_customer ?? null }}/{{ $proyek->Struktur?->customer?->name ?? '-' }}"
+                                                    class="text-gray-800 text-hover-primary">{{ $proyek->Struktur?->customer?->name ?? '-' }}</a>
+                                            </td>
+                                            {{-- <td>{{ $proyek->no_spk }}</td> --}}
+                                            <td>{{ $proyek->no_spk }}</td>
+                                            {{-- <td>{{ $proyek->nama_proyek }}</td> --}}
+                                            <td>{{ $proyek->ProyekPIS?->proyek_name }}</td>
+                                            {{-- <td>{{ $proyek->UnitKerja->unit_kerja }}</td> --}}
+                                            {{-- <td>{{ $proyek->progress }}</td> --}}
+                                            <td class="text-center">{{ round($progress, 2)*100 }}%</td>
+                                            <td class="text-center">
+                                                <span
+                                                    class="px-4 fs-7 badge {{ $proyek->status == 'Not Sent' ? 'badge-light-danger' : ($proyek->status == 'Requested' ? 'badge-light-primary' : 'badge-light-success') }}">
+                                                    {{ $proyek->status }}
+                                                </span>
+                                            </td>
+                                            <td class="text-center">
+                                                @if ($proyek->status == 'Done')
+                                                    <a target="_blank"
+                                                        href="/csi/customer-survey/{{ $proyek->id_csi }}"
+                                                        class="btn fs-8 btn-sm btn-light btn-active-primary text-hover-white">Cek
+                                                        CSI &nbsp; <i class="bi bi-search"></i></a>
+                                                @else
+                                                    <button class="btn btn-sm btn-light btn-active-primary"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#modal-send-{{ $proyek->id_csi }}">Send</button>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                        {{-- @endif --}}
                                     @endforeach
                                 </tbody>
                             </table>
@@ -243,6 +363,187 @@
 <!--end::Root-->
 <!--end::Modals-->
 
+<!-- begin::modal confirm send wa New-->
+@foreach ($proyeks as $proyek)
+<form action="/csi/send/new/{{ $proyek->spk_intern_no }}" method="post">
+    @csrf
+    <div class="modal fade w-100" style="margin-top: 120px" id="modal-send-{{ $proyek->spk_intern_no }}" tabindex="-1"
+        aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog mw-600px">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Kirim Survey CSI ?</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {{-- @php
+                        $struktur = $c->Proyek->proyekBerjalan->customer->struktur
+                            ->where('proyek_struktur', '=', $c->no_spk)
+                            ->where('id_customer', '=', $c->id_customer)
+                            ->first();
+                        // dd($struktur);
+                    @endphp --}}
+                    <input type="hidden" name="id-pemberi-kerja" value="{{ $proyek->Customer?->id_customer }}" />
+                    <input type="hidden" name="pemberi-kerja" value="{{ $proyek->Customer?->name ?? '-' }}" />
+                    <input type="hidden" name="kode-proyek" value="{{ $proyek->spk_intern_no }}" />
+                    {{-- <input type="hidden" name="nama-penerima" value="{{ $struktur->nama_struktur }}" />
+                    <input type="hidden" name="nomor-penerima" value="{{ $struktur->phone_struktur }}" /> --}}
+
+                    {{-- <p>Nama Proyek : <b>{{ $c->Proyek->nama_proyek }}</b></p> --}}
+                    <p>Nama Proyek : <b>{{ $proyek->proyek_name }}</b></p>
+                    {{-- <p>Pemberi Kerja : <b>{{ $c->Proyek->proyekBerjalan->name_customer ?? '-' }}</b></p> --}}
+                    <p>Pemberi Kerja : <b>{{ $proyek->Customer?->name ?? '-' }}</b></p>
+                    {{-- <p>Nama Penerima : <b>{{ $struktur->nama_struktur }}</b></p>
+                    <p>Kontak Penerima Penerima : <b>{{ $struktur->phone_struktur }}</b></p> --}}
+
+                    <!--begin::Row-->
+                    <div class="row fv-row">
+                        <!--begin::Col-->
+                        <div class="col-6">
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="required">Nama</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" class="form-control form-control-solid" name="nama-penerima" placeholder="Nama" required/>
+                                <!--end::Input-->
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <!--End begin::Col-->
+                        <div class="col-6">
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3 required">
+                                    <span>Kontak Nomor (WA)</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" class="form-control form-control-solid" name="nomor-penerima" placeholder="Kontak Nomor" required/>
+                                <!--end::Input-->
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <!--End begin::Col-->
+                    </div>
+                    <!--End begin::Row-->
+    
+                    <!--begin::Row-->
+                    <div class="row fv-row">
+                        <!--begin::Col-->
+                        <div class="col-6">
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span>Email</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" class="form-control form-control-solid" name="email" placeholder="Email" required/>
+                                <!--end::Input-->
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <!--End begin::Col-->
+                    </div>
+                    <!--End begin::Row-->
+    
+                    <!--begin::Row-->
+                    <div class="row fv-row">
+                        <!--begin::Col-->
+                        <div class="col-6">
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="required">Role</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--Begin::Input-->
+                                <select onchange="pilihSegmen(this, '{{ $proyek->spk_intern_no }}')" id="segmen-{{ $proyek->spk_intern_no }}" name="segmen" class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true" data-placeholder="Pilih Role" required>
+                                    <option></option>
+                                    <option value="Decision Maker">Decision Maker</option>
+                                    <option value="Influencer">Influencer</option>
+                                    <option value="Buyer">Buyer</option>
+                                    <option value="User">User</option>
+                                </select>
+                                <!--end::Input-->
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <!--End begin::Col-->
+                        <div class="col-6">
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="required">Jabatan</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <select id="jabatan-{{ $proyek->spk_intern_no }}" name="jabatan" class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true" data-placeholder="Pilih Jabatan">
+                                    <option value=""></option>
+                                </select>
+                                <script>
+                                    function pilihSegmen(e, id) {
+                                        let jabatan = document.getElementById(`jabatan-${id}`);
+                                        // console.log(e.value, jabatan);
+                                        if (e.value == 'Decision Maker') {
+                                            jabatan.innerHTML = `
+                                            <option value="Menteri">Menteri</option>
+                                            <option value="Eselon I">Eselon I</option>
+                                            <option value="Direktur Utama">Direktur Utama</option>`;
+                                        } else if (e.value == 'Influencer'){
+                                            jabatan.innerHTML = `
+                                            <option value="Eselon II">Eselon II</option>
+                                            <option value="Direksi">Direksi</option>`;
+                                        } else if (e.value == 'Buyer'){
+                                            jabatan.innerHTML = `
+                                            <option value="Kepala Balai">Kepala Balai</option>
+                                            <option value="Eselon III">Eselon III</option>
+                                            <option value="POKJA Pengadaan">POKJA Pengadaan</option>
+                                            <option value="Kepala Pengadaan">Kepala Pengadaan</option>`;
+                                        } else if (e.value == 'User'){
+                                            jabatan.innerHTML = `
+                                            <option value="Eselon IV">Eselon IV</option>
+                                            <option value="PPK/Pimro">PPK/Pimro</option>
+                                            <option value="Kepala Satker">Kepala Satker</option>
+                                            <option value="Kepala Unit Bisnis/Operasi">Kepala Unit Bisnis/Operasi</option>`;
+                                        } else {
+                                            jabatan.innerHTML = ``;
+                                        }
+                                        // console.log(e.value, jabatan, jabatan.value, jabatan.innerHTML);
+                                    }
+                                </script>
+                                <!--end::Input-->
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <!--End begin::Col-->
+                    </div>
+                    <!--End begin::Row-->
+                </div>
+
+                <div class="modal-footer">
+                    {{-- <button type="button" class="btn btn-danger btn-sm" data-bs-dismiss="modal">Cancel</button> --}}
+                    <button type="submit" class="btn btn-success btn-sm">Send <i class="bi bi-send"></i></button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</form>
+@endforeach
+<!-- end::modal confirm send wa New-->
+
 <!-- begin::modal confirm send wa-->
 @foreach ($csi as $c)
 <form action="/csi/send/{{ $c->id_csi }}" method="post">
@@ -266,15 +567,18 @@
                     @endphp --}}
 
                     <input type="hidden" name="id-csi" value="{{ $c->id_csi }}" />
-                    <input type="hidden" name="kode-proyek" value="{{ $c->Proyek->kode_proyek }}" />
+                    {{-- <input type="hidden" name="kode-proyek" value="{{ $c->Proyek->kode_proyek }}" /> --}}
                     {{-- <input type="hidden" name="id-struktur" value="{{ $struktur->id }}" /> --}}
                     <input type="hidden" name="id-pemberi-kerja" value="{{ $c->id_customer }}" />
-                    <input type="hidden" name="pemberi-kerja" value="{{ $c->Proyek->proyekBerjalan->name_customer ?? '-' }}" />
+                    {{-- <input type="hidden" name="pemberi-kerja" value="{{ $c->Proyek->proyekBerjalan->name_customer ?? '-' }}" /> --}}
+                    <input type="hidden" name="pemberi-kerja" value="{{ $c->ProyekPIS?->Customer?->name ?? '-' }}" />
                     {{-- <input type="hidden" name="nama-penerima" value="{{ $struktur->nama_struktur }}" />
                     <input type="hidden" name="nomor-penerima" value="{{ $struktur->phone_struktur }}" /> --}}
 
-                    <p>Nama Proyek : <b>{{ $c->Proyek->nama_proyek }}</b></p>
-                    <p>Pemberi Kerja : <b>{{ $c->Proyek->proyekBerjalan->name_customer ?? '-' }}</b></p>
+                    {{-- <p>Nama Proyek : <b>{{ $c->Proyek->nama_proyek }}</b></p> --}}
+                    <p>Nama Proyek : <b>{{ $c->ProyekPIS?->proyek_name }}</b></p>
+                    {{-- <p>Pemberi Kerja : <b>{{ $c->Proyek->proyekBerjalan->name_customer ?? '-' }}</b></p> --}}
+                    <p>Pemberi Kerja : <b>{{ $c->ProyekPIS?->Customer?->name ?? '-' }}</b></p>
                     {{-- <p>Nama Penerima : <b>{{ $struktur->nama_struktur }}</b></p>
                     <p>Kontak Penerima Penerima : <b>{{ $struktur->phone_struktur }}</b></p> --}}
 
@@ -440,12 +744,16 @@
                 </div>
                 <div class="modal-body">
 
-                    <input type="hidden" name="id-customer" value="{{ $p->proyekBerjalan->id_customer ?? null }}" />
-                    <input type="hidden" name="kode-proyek" value="{{ $p->kode_proyek }}" />
-                    <input type="hidden" name="kode-spk" value="{{ $p->kode_spk ?? '' }}" />
+                    {{-- <input type="hidden" name="id-customer" value="{{ $p->proyekBerjalan->id_customer ?? null }}" /> --}}
+                    <input type="hidden" name="id-customer" value="{{ $p->Customer->id_customer ?? null }}" />
+                    {{-- <input type="hidden" name="kode-proyek" value="{{ $p->kode_proyek }}" /> --}}
+                    {{-- <input type="hidden" name="kode-spk" value="{{ $p->kode_spk ?? '' }}" /> --}}
+                    <input type="hidden" name="kode-spk" value="{{ $p->spk_intern_no ?? '' }}" />
 
-                    <p>Nama Proyek : <b>{{ $p->nama_proyek }}</b></p>
-                    <p>Pemberi Kerja : <b>{{ $p->proyekBerjalan->name_customer ?? '-' }}</b></p>
+                    {{-- <p>Nama Proyek : <b>{{ $p->nama_proyek }}</b></p> --}}
+                    <p>Nama Proyek : <b>{{ $p->proyek_name }}</b></p>
+                    {{-- <p>Pemberi Kerja : <b>{{ $p->proyekBerjalan->name_customer ?? '-' }}</b></p> --}}
+                    <p>Pemberi Kerja : <b>{{ $p->Customer->name ?? '-' }}</b></p>
 
                 </div>
 

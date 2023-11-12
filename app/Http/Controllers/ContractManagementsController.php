@@ -51,8 +51,9 @@ use App\Models\JenisProyek;
 use App\Models\KlarifikasiNegosiasiCda;
 use App\Models\ProyekProgress;
 use App\Models\ProyekPIS;
-use App\Models\ProyekPISNew;
 use App\Models\ReviewPembatalanKontrak;
+use App\Models\ProyekPISNew;
+use App\Models\Csi;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
@@ -3259,7 +3260,7 @@ class ContractManagementsController extends Controller
         ];
         $rules = [
             "id-contract" => "required",
-            "file-document" => "required",
+            "file-document" => "required|file",
         ];
         if (isset($data['status_dokumen'])) {
             $addRules = ['status_dokumen' => "required|string"];
@@ -4123,7 +4124,7 @@ class ContractManagementsController extends Controller
                         ], 200);
                         // dd("success");
                     }
-
+    
                     $status = [
                         'kode_proyek' => $contract->project->kode_proyek,
                         'periode' => $str_current,
@@ -4138,7 +4139,7 @@ class ContractManagementsController extends Controller
                         "status" => "success",
                         "link" => true
                     ], 500);
-
+                    
                     // dd($data);
                 }
             } else {
@@ -4149,7 +4150,7 @@ class ContractManagementsController extends Controller
                 ], 200);
             }
 
-            // return response()->json($response->json(["link" => true]), 200);
+        // return response()->json($response->json(["link" => true]), 200);
 
         }
         toast("Kode SPK belum ada", "error")->autoClose(3000);
@@ -4175,10 +4176,10 @@ class ContractManagementsController extends Controller
 
             if (!empty($token)) {
                 $response = Http::withHeaders(["x-access-token" => $token])
-                    ->post('https://pis.wika.co.id/wpapi/proyek/getProyekResume', [
-                        "no_spk" => $kode_spk,
-                        "period" => $period
-                    ]);
+                ->post('https://pis.wika.co.id/wpapi/proyek/getProyekResume', [
+                    "no_spk" => $kode_spk,
+                    "period" => $period
+                ]);
 
                 if ($response->successful()) {
                     $dataResponse = $response->collect($key = "data");
@@ -4307,8 +4308,13 @@ class ContractManagementsController extends Controller
 
     public function getProgressFromTableProyekPISNew(Request $request)
     {
-        $proyeks = ProyekPISNew::where('entitas_proyek', '!=', 'WIKA')->where('spk_intern_no', '!=', null)->get();
-        dd($proyeks);
+        $proyeks = ProyekPISNew::where('spk_intern_no', '!=', null)->get();
+        if (!empty($proyeks)) {
+            $proyeks->each(function ($proyek) {
+                $this->getDataProgressPISNew($proyek->spk_intern_no);
+            });
+            return true;
+        }
     }
 
     function getDataProgressPISNew($nospk)
@@ -4318,6 +4324,7 @@ class ContractManagementsController extends Controller
         // $contract = ContractManagements::where("id_contract", "=", $data["id_contract"])->first();
         // $kode_spk = $contract->project?->kode_spk;
         $kode_spk = $nospk;
+        $proyek = ProyekPISNew::select('pemberi_kerja_code')->where('spk_intern_no', $kode_spk)->first();
         // dd($kode_spk);
         // $kode_spk = "MJBG08";
         $current = new DateTime();
@@ -4337,6 +4344,14 @@ class ContractManagementsController extends Controller
             if ($response->successful()) {
                 $data_response = $response->collect($key = "data")->first();
                 $calculate_progress = (int)$data_response['ok_review'] && (int)$data_response['progress_fisik_ri'] ? round(((int)$data_response['ok_review'] / (int)$data_response['progress_fisik_ri']), 2) : 0;
+
+                $newCsi = new Csi();
+                $newCsi->id_customer = $proyek->Customer?->id_customer;
+                $newCsi->id_struktur_organisasi = null;
+                $newCsi->no_spk = $kode_spk;
+                $newCsi->tanggal = $current;
+                $newCsi->status = "Not Sent";
+                $newCsi->progress = $calculate_progress;
 
                 if ($is_exist_progress_period) {
                     $data = $is_exist_progress_period;
@@ -4383,7 +4398,7 @@ class ContractManagementsController extends Controller
                     $data->tagbrut = (int) $data_response["tagbrut"];
                     $data->periode = $str_current;
                 }
-                if ($data->save()) {
+                if ($data->save() && $newCsi->save()) {
                     $status = [
                         'kode_proyek' => $nospk,
                         'periode' => $str_current,

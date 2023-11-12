@@ -173,7 +173,8 @@
                                 data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                                 class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
                                 <!--begin::Title-->
-                                <h1 class="d-flex align-items-center fs-3 my-1">KUESIONER KEPUASAN PELANGGAN (&nbsp;<b> {{ $proyek->nama_proyek }} </b>&nbsp;)
+                                {{-- <h1 class="d-flex align-items-center fs-3 my-1">KUESIONER KEPUASAN PELANGGAN (&nbsp;<b> {{ $proyek->nama_proyek }} </b>&nbsp;) --}}
+                                <h1 class="d-flex align-items-center fs-3 my-1">KUESIONER KEPUASAN PELANGGAN (&nbsp;<b> {{ $proyek->proyek_name }} </b>&nbsp;)
                                 </h1>
                                 <!--end::Title-->
                             </div>
@@ -254,7 +255,8 @@
                             <br> 
                             Position : <h4>{{ $csi->Struktur->jabatan_struktur }}</h4>
                             <br> 
-                            Project : <h4>{{ $proyek->nama_proyek }}</h4>
+                            {{-- Project : <h4>{{ $proyek->nama_proyek }}</h4> --}}
+                            Project : <h4>{{ $proyek->proyek_name }}</h4>
                             <br><br>
                             <h4>Kami mohon bantuan Anda dalam mengukur indeks kepuasan pelanggan untuk proyek yang sedang kami jalankan. Sebagai bagian dari komitmen kami untuk menyediakan layanan berkualitas tinggi, kami percaya penting untuk mengevaluasi dan memahami tingkat kepuasan pelanggan kami yang berharga.</h4>
                             <i>We kindly ask for your assistance in measuring the customer satisfaction index for the project which we are currently running. As part of our commitment to provide high-quality services, we believe it is essential to evaluate and understand our valuable customers level of satisfaction.</i>
@@ -317,7 +319,8 @@
                                             <span class="">Nama Proyek : </span>
                                         </div>
                                         <div class="text-dark text-start">
-                                            <b class="fs-6">{{ $proyek->nama_proyek }}</b>
+                                            {{-- <b class="fs-6">{{ $proyek->nama_proyek }}</b> --}}
+                                            <b class="fs-6">{{ $proyek->proyek_name }}</b>
                                         </div>
                                     </div>
                                     <!--end::Input group Name-->

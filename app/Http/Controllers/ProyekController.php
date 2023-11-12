@@ -2555,7 +2555,7 @@ class ProyekController extends Controller
         return sprintf('%04X%04X%04X%04X%04X%04X%04X%04X', mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479), mt_rand(32768, 49151), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535));
     }
 
-    public function updateRfaDocument(Request $request, $kode_proyek)
+    public function updateRfaDocument($kode_proyek, $kategori)
     {
         // $proyek = Proyek::where('kode_proyek', '=', $kode_proyek)->first();
 
