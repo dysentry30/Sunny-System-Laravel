@@ -3219,10 +3219,11 @@ class ContractManagementsController extends Controller
             return Redirect::back()->with("modal", $data["modal-name"]);
     }
 
-    public function uploadDokumenFinal(Request $request, ContractUploadFinal $uploadFinal)
+    public function uploadDokumenFinal(Request $request)
     {
         $data = $request->all();
         $file = $request->file("file-document");
+
         if (is_array($file)) {
             $collectFile = [];
             foreach ($file as $f) {
@@ -3251,7 +3252,14 @@ class ContractManagementsController extends Controller
             "Tinjauan Dokumen Kontrak - Perolehan",
             "Tinjauan Dokumen Kontrak - Pelaksanaan",
             "Usulan Perubahan Draft Kontrak",
-            "Dokumen NDA"
+            "Dokumen NDA",
+            "Dokumen MOU",
+            "Dokumen ECA",
+            "Dokumen ICA",
+            "Dokumen ITB/TOR",
+            "Dokumen RKS / Project Spesification",
+            "Dokumen Draft Kontrak",
+            "Dokumen LOI",
         ];
 
         $messages = [
@@ -3260,7 +3268,7 @@ class ContractManagementsController extends Controller
         ];
         $rules = [
             "id-contract" => "required",
-            "file-document" => "required|file",
+            "file-document" => "required",
         ];
         if (isset($data['status_dokumen'])) {
             $addRules = ['status_dokumen' => "required|string"];
@@ -3292,7 +3300,7 @@ class ContractManagementsController extends Controller
             // dd("insert empty");
             if (is_array($file)) {
                 foreach ($file as $i => $f) {
-                    // dd($f);
+                    $uploadFinal = new ContractUploadFinal();
                     $uploadFinal->id_contract = $contract->id_contract;
                     $uploadFinal->id_document = $collectFile[$i]["id_document"];
                     $uploadFinal->nama_document = $collectFile[$i]["nama_file"];
@@ -3306,12 +3314,19 @@ class ContractManagementsController extends Controller
                     if (isset($data['status_dokumen'])) {
                         $uploadFinal->status_dokumen = $data['status_dokumen'];
                     }
-                    $uploadFinal->save();
+
+
+                    if (!$uploadFinal->save()) {
+                        Alert::error("Error", "Dokumen " . $collectFile[$i]["nama_file"] . " ditambahkan");
+                        return redirect()->back();
+                    }
+                    
                     $f->move(public_path('words'), $collectFile[$i]["id_document"]);
                 }
                 Alert::success("Success", "Dokumen berhasil ditambahkan");
                 return redirect()->back();
             } else {
+                $uploadFinal = new ContractUploadFinal();
                 $uploadFinal->id_contract = $contract->id_contract;
                 $uploadFinal->id_document = $id_document;
                 $uploadFinal->nama_document = $nama_file;
@@ -3350,6 +3365,7 @@ class ContractManagementsController extends Controller
             //     $periode = $data["periode-resiko"] . "-" . $data["tahun-resiko"];
             //     $uploadFinal->periode = $periode;
             // }
+            $uploadFinal = new ContractUploadFinal();
             $uploadFinal->id_contract = $contract->id_contract;
             $uploadFinal->id_document = $id_document;
             $uploadFinal->nama_document = $nama_file;

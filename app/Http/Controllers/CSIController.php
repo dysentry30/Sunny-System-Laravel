@@ -188,7 +188,8 @@ class CSIController extends Controller
         $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
             "api_key" => "4DCR3IU2Eu70znFSvnuc3X3x9gJdcc",
             // "sender" => "628188827008",
-            "sender" => "62811881227",
+            // "sender" => "62811881227",
+            "sender" => env("NO_WHATSAPP_BLAST"),
             "number" => $data['nomor-penerima'],
             "message" => "Salam Hormat, *" . $data['nama-penerima'] . "* dari *" . $data['pemberi-kerja'] . "*.\nKami dari PT. Wijaya Karya (Persero) Tbk, membutuhkan bantuan Anda untuk perbaikan kinerja. Mohon tekan link di bawah ini untuk pengisian survey kepuasan pelanggan.\n\nGunakan User dan password dibawah ini untuk login :  \nUser : *" . $user->email . "*\nPassword : *" . $user->email . "*\n$url\n\n\nHi, *" . $data['nama-penerima'] . "* from *" . $data['pemberi-kerja'] . "*.\nWe are from PT. Wijaya Karya (Persero) Tbk, kindly need your help to improve our performance. Please click bellow link below to complete customer satisfaction survey.\n\nUse the username and password to log in:\nUser : *" . $user->email . "*\nPassword : *" . $user->email . "*\n$url",
             // "url" => $url

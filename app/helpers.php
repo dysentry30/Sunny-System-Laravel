@@ -551,7 +551,7 @@ function createWordPengajuan(App\Models\Proyek $proyek, \Illuminate\Support\Coll
     
     // Begin :: SIGNED Template docx
     $templateProcessor = new TemplateProcessor($target_path . "/" . $file_name . ".docx");
-    $templateProcessor->setImageValue('tandaTangan', ["path" => public_path('qr-code/' . $fileQrCode), "height" => 75, "ratio" => false]);
+    // $templateProcessor->setImageValue('tandaTangan', ["path" => public_path('qr-code/' . $fileQrCode), "height" => 75, "ratio" => false]);
     // $templateProcessor->setValue('tandaTangan', '<img src="' . public_path('\qr-code' . '\\' . $proyek->kode_proyek . '.svg') . '" width="300" height="300" />');
     $ttdFileName = $now->format("dmYHis") . "_signed-nota-pengajuan_$proyek->kode_proyek";
     $templateProcessor->saveAs(public_path($target_path . "/" . $ttdFileName . ".docx"));
@@ -904,7 +904,7 @@ function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Co
     $penyusun = collect(json_decode($proyek->approved_penyusun))->values()->toArray();
     $rekomendator = json_decode($proyek->approved_rekomendasi_final);
     $penyetuju = json_decode($proyek->approved_persetujuan);
-    $max_grid_span = collect([count($penyusun), count($rekomendator), count($penyetuju)])->max();
+    $max_grid_span = collect([!empty($penyusun) ? count($penyusun) : 0, !empty($rekomendator) ? count($rekomendator) : 0, !empty($penyetuju) ? count($penyetuju) : 0])->max();
     // dd($penyusun, $rekomendator, $penyetuju);
 
     $section = $phpWord->addSection();
@@ -998,26 +998,28 @@ function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Co
 
     // New TTD Method
     $table_ttd->addRow();
-    foreach($penyusun as $key => $p) {
-        $key++;
-        if($key > 3) {
-            $table_ttd->addRow();
-        }
-        $tanggal_ttd = Carbon\Carbon::create($p->tanggal);
-        $cell_2_ttd = $table_ttd->addCell(500);
-        // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addTextBreak(1);
-        $cell_2_ttd->addText("$" . "{ttdPenyusun$key}", ["bold" => false], ["align" => "center"]);
-        $cell_2_ttd->addTextBreak(1);
-        $cell_2_ttd->addText(User::find($p->user_id)->name, ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addText(User::find($p->user_id)->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addText("Tanggal: " . $tanggal_ttd->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
-        if ($p->status == "approved" && empty($p->catatan)) {
-            $cell_2_ttd->addText("Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center"]);
-        } elseif ($p->status == "approved" && !empty($p->catatan)) {
-            $cell_2_ttd->addText("Direkomendasikan dengan catatan", ["bold" => true, "size" => 7], ["align" => "center"]);
-        } else {
-            $cell_2_ttd->addText("Tidak Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center"]);
+    if (!empty($penyusun)) {
+        foreach ($penyusun as $key => $p) {
+            $key++;
+            if ($key > 3) {
+                $table_ttd->addRow();
+            }
+            $tanggal_ttd = Carbon\Carbon::create($p->tanggal);
+            $cell_2_ttd = $table_ttd->addCell(500);
+            // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
+            $cell_2_ttd->addTextBreak(1);
+            $cell_2_ttd->addText("$" . "{ttdPenyusun$key}", ["bold" => false], ["align" => "center"]);
+            $cell_2_ttd->addTextBreak(1);
+            $cell_2_ttd->addText(User::find($p->user_id)->name, ["bold" => true], ["align" => "center"]);
+            $cell_2_ttd->addText(User::find($p->user_id)->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+            $cell_2_ttd->addText("Tanggal: " . $tanggal_ttd->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
+            if ($p->status == "approved" && empty($p->catatan)) {
+                $cell_2_ttd->addText("Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center"]);
+            } elseif ($p->status == "approved" && !empty($p->catatan)) {
+                $cell_2_ttd->addText("Direkomendasikan dengan catatan", ["bold" => true, "size" => 7], ["align" => "center"]);
+            } else {
+                $cell_2_ttd->addText("Tidak Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center"]);
+            }
         }
     }
     
@@ -1036,26 +1038,28 @@ function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Co
     // $header_cell->addText(null, ["bold" => true]);
 
     $table_ttd->addRow();
-    foreach($rekomendator as $key => $p) {
-        $key++;
-        if($key > 3) {
-            $table_ttd->addRow();
-        }
-        $tanggal_ttd = Carbon\Carbon::create($p->tanggal);
-        $cell_2_ttd = $table_ttd->addCell(500);
-        // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addTextBreak(1);
-        $cell_2_ttd->addText("$" . "{ttdRekomendasi$key}", ["bold" => false], ["align" => "center"]);
-        $cell_2_ttd->addTextBreak(1);
-        $cell_2_ttd->addText(User::find($p->user_id)->name, ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addText(User::find($p->user_id)->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addText("Tanggal: " . $tanggal_ttd->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
-        if ($p->status == "approved" && empty($p->catatan)) {
-            $cell_2_ttd->addText("Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center"]);
-        } elseif ($p->status == "approved" && !empty($p->catatan)) {
-            $cell_2_ttd->addText("Direkomendasikan dengan catatan", ["bold" => true, "size" => 7], ["align" => "center"]);
-        } else {
-            $cell_2_ttd->addText("Tidak Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center"]);
+    if (!empty($rekomendator)) {
+        foreach ($rekomendator as $key => $p) {
+            $key++;
+            if ($key > 3) {
+                $table_ttd->addRow();
+            }
+            $tanggal_ttd = Carbon\Carbon::create($p->tanggal);
+            $cell_2_ttd = $table_ttd->addCell(500);
+            // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
+            $cell_2_ttd->addTextBreak(1);
+            $cell_2_ttd->addText("$" . "{ttdRekomendasi$key}", ["bold" => false], ["align" => "center"]);
+            $cell_2_ttd->addTextBreak(1);
+            $cell_2_ttd->addText(User::find($p->user_id)->name, ["bold" => true], ["align" => "center"]);
+            $cell_2_ttd->addText(User::find($p->user_id)->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+            $cell_2_ttd->addText("Tanggal: " . $tanggal_ttd->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
+            if ($p->status == "approved" && empty($p->catatan)) {
+                $cell_2_ttd->addText("Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center"]);
+            } elseif ($p->status == "approved" && !empty($p->catatan)) {
+                $cell_2_ttd->addText("Direkomendasikan dengan catatan", ["bold" => true, "size" => 7], ["align" => "center"]);
+            } else {
+                $cell_2_ttd->addText("Tidak Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center"]);
+            }
         }
     }
 
@@ -1106,25 +1110,27 @@ function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Co
 
     // $unit_kerja = $proyek->UnitKerja;
     $table_ttd->addRow();
-    foreach($penyetuju as $key => $p) {
-        $key++;
-        if($key > 3) {
-            $table_ttd->addRow();
-        }
-        $tanggal_ttd = Carbon\Carbon::create($p->tanggal);
-        $cell_2_ttd = $table_ttd->addCell(500);
-        $cell_2_ttd->addTextBreak(1);
-        $cell_2_ttd->addText("$" . "{ttdPersetujuan$key}", ["bold" => false], ["align" => "center"]);
-        $cell_2_ttd->addTextBreak(1);
-        $cell_2_ttd->addText(User::find($p->user_id)->name ?? Auth::user()->name, ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addText(User::find($p->user_id)->Pegawai->Jabatan->nama_jabatan ?? Auth::user()->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
-        $cell_2_ttd->addText("Tanggal: " . $tanggal_ttd->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
-        if ($p->status == "approved" && empty($p->catatan)) {
-            $cell_2_ttd->addText("Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center"]);
-        } elseif ($p->status == "approved" && !empty($p->catatan)) {
-            $cell_2_ttd->addText("Direkomendasikan dengan catatan", ["bold" => true, "size" => 7], ["align" => "center"]);
-        } else {
-            $cell_2_ttd->addText("Tidak Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center"]);
+    if (!empty($penyetuju)) {
+        foreach ($penyetuju as $key => $p) {
+            $key++;
+            if ($key > 3) {
+                $table_ttd->addRow();
+            }
+            $tanggal_ttd = Carbon\Carbon::create($p->tanggal);
+            $cell_2_ttd = $table_ttd->addCell(500);
+            $cell_2_ttd->addTextBreak(1);
+            $cell_2_ttd->addText("$" . "{ttdPersetujuan$key}", ["bold" => false], ["align" => "center"]);
+            $cell_2_ttd->addTextBreak(1);
+            $cell_2_ttd->addText(User::find($p->user_id)->name ?? Auth::user()->name, ["bold" => true], ["align" => "center"]);
+            $cell_2_ttd->addText(User::find($p->user_id)->Pegawai->Jabatan->nama_jabatan ?? Auth::user()->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+            $cell_2_ttd->addText("Tanggal: " . $tanggal_ttd->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
+            if ($p->status == "approved" && empty($p->catatan)) {
+                $cell_2_ttd->addText("Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center"]);
+            } elseif ($p->status == "approved" && !empty($p->catatan)) {
+                $cell_2_ttd->addText("Direkomendasikan dengan catatan", ["bold" => true, "size" => 7], ["align" => "center"]);
+            } else {
+                $cell_2_ttd->addText("Tidak Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center"]);
+            }
         }
     }
     // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
@@ -1366,22 +1372,25 @@ function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Co
     $table_comment->addRow();
     $header_cell = $table_comment->addCell(500, ["vMerge" => "restart", "gridSpan" => 2, "bgColor" => "F4B083"]);
     $header_cell->addText("Catatan dari Rekomendasi", ["bold" => true], ["align" => "center"]);
-    foreach ($rekomendator as $key => $p) {
-        $table_comment->addRow();
 
-        $cell_1_note = $table_comment->addCell(200);
-        $cell_2_note = $table_comment->addCell(200);
-        // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
-        $cell_1_note->addText(User::find($p->user_id)->name, ["bold" => true], ["align" => "center"]);
-        // $cell_1_note->addTextBreak(1);
-        // $cell_2_note->addText(preg_replace('/&(?!#?[a-z0-9]+;)/', '&amp;', nl2br($p->catatan)), $fontStyle);
-        // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
-        $catatan_list = preg_split("/\n|\r\n?/", htmlspecialchars($p->catatan, ENT_QUOTES));
-        foreach ($catatan_list as $key => $catatan) {
-            if ($key != 0 && $catatan == "") {
-                $cell_2_note->addTextBreak(1, ['size' => 5], ['afterSpacing' => 0, 'spacing' => 10]);
+    if (!empty($rekomendator)) {
+        foreach ($rekomendator as $key => $p) {
+            $table_comment->addRow();
+
+            $cell_1_note = $table_comment->addCell(200);
+            $cell_2_note = $table_comment->addCell(200);
+            // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
+            $cell_1_note->addText(User::find($p->user_id)->name, ["bold" => true], ["align" => "center"]);
+            // $cell_1_note->addTextBreak(1);
+            // $cell_2_note->addText(preg_replace('/&(?!#?[a-z0-9]+;)/', '&amp;', nl2br($p->catatan)), $fontStyle);
+            // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
+            $catatan_list = preg_split("/\n|\r\n?/", htmlspecialchars($p->catatan, ENT_QUOTES));
+            foreach ($catatan_list as $key => $catatan) {
+                if ($key != 0 && $catatan == "") {
+                    $cell_2_note->addTextBreak(1, ['size' => 5], ['afterSpacing' => 0, 'spacing' => 10]);
+                }
+                $cell_2_note->addText($catatan, ["bold" => false], ["align" => "left"]);
             }
-            $cell_2_note->addText($catatan, ["bold" => false], ["align" => "left"]);
         }
     }
     // foreach($rekomendator as $key => $p) {
@@ -1407,20 +1416,22 @@ function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Co
     $header_cell = $table_comment_penyetuju->addCell(500, ["vMerge" => "restart", "gridSpan" => 2, "bgColor" => "F4B083"]);
     $header_cell->addText("Catatan dari Persetujuan", ["bold" => true], ["align" => "center"]);
     // $table_comment_penyetuju->addRow();
-    foreach ($penyetuju as $key => $p) {
-        $table_comment_penyetuju->addRow();
+    if (!empty($penyetuju)) {
+        foreach ($penyetuju as $key => $p) {
+            $table_comment_penyetuju->addRow();
 
-        $cell_1_note = $table_comment_penyetuju->addCell(200);
-        $cell_2_note = $table_comment_penyetuju->addCell(200);
-        // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
-        $cell_1_note->addText(User::find($p->user_id)->name, ["bold" => true], ["align" => "center"]);
-        // $cell_1_note->addTextBreak(1);
-        $catatan_list = preg_split("/\n|\r\n?/", htmlspecialchars($p->catatan, ENT_QUOTES));
-        foreach ($catatan_list as $key => $catatan) {
-            if ($key != 0 && $catatan == "") {
-                $cell_2_note->addTextBreak(1, ['size' => 5], ['afterSpacing' => 0, 'spacing' => 10]);
+            $cell_1_note = $table_comment_penyetuju->addCell(200);
+            $cell_2_note = $table_comment_penyetuju->addCell(200);
+            // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
+            $cell_1_note->addText(User::find($p->user_id)->name, ["bold" => true], ["align" => "center"]);
+            // $cell_1_note->addTextBreak(1);
+            $catatan_list = preg_split("/\n|\r\n?/", htmlspecialchars($p->catatan, ENT_QUOTES));
+            foreach ($catatan_list as $key => $catatan) {
+                if ($key != 0 && $catatan == "") {
+                    $cell_2_note->addTextBreak(1, ['size' => 5], ['afterSpacing' => 0, 'spacing' => 10]);
+                }
+                $cell_2_note->addText($catatan, ["bold" => false], ["align" => "left"]);
             }
-            $cell_2_note->addText($catatan, ["bold" => false], ["align" => "left"]);
         }
     }
     // foreach($penyetuju as $key => $p) {
@@ -1448,24 +1459,30 @@ function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Co
     // Begin :: SIGNED Template docx
     // New TTD Method
     $templateProcessor = new TemplateProcessor($target_path . "/" . $file_name . ".docx");
-    foreach ($penyusun as $key => $p) {
-        $user = User::find($p->user_id);
-        $qrcode = generateQrCode($proyek->kode_proyek, $user->nip, $request->schemeAndHttpHost() . "?nip=" . $user->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_dokumen_persetujuan_$proyek->kode_proyek");
-        // $templateProcessor->setImageValue('ttdPenyusun' . ++$key, ["path" => "./file-ttd/" . $user->file_ttd, "width" => 10, "ratio" => true]);
-        $templateProcessor->setImageValue('ttdPenyusun' . ++$key, ["path" => public_path("/qr-code//$qrcode"), "width" => 10, "ratio" => true]);
-    }
-    foreach ($rekomendator as $key => $p) {
-        $user = User::find($p->user_id);
-        $qrcode = generateQrCode($proyek->kode_proyek, $user->nip, $request->schemeAndHttpHost() . "?nip=" . $user->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_dokumen_persetujuan_$proyek->kode_proyek");
-        // $templateProcessor->setImageValue('ttdRekomendasi' . ++$key, ["path" => "./file-ttd/" . $user->file_ttd, "width" => 10, "ratio" => true]);
-        $templateProcessor->setImageValue('ttdRekomendasi' . ++$key, ["path" => public_path("/qr-code//$qrcode"), "width" => 10, "ratio" => true]);
-    }
-    foreach ($penyetuju as $key => $p) {
-        $user = User::find($p->user_id);
-        $qrcode = generateQrCode($proyek->kode_proyek, $user->nip, $request->schemeAndHttpHost() . "?nip=" . $user->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_dokumen_persetujuan_$proyek->kode_proyek");
-        // $templateProcessor->setImageValue('ttdPersetujuan' . ++$key, ["path" => "./file-ttd/" . $user->file_ttd, "width" => 10, "ratio" => true]);
-        $templateProcessor->setImageValue('ttdPersetujuan' . ++$key, ["path" => public_path("/qr-code//$qrcode"), "width" => 10, "ratio" => true]);
-    }
+    // if (!empty($penyusun)) {
+    //     foreach ($penyusun as $key => $p) {
+    //         $user = User::find($p->user_id);
+    //         $qrcode = generateQrCode($proyek->kode_proyek, $user->nip, $request->schemeAndHttpHost() . "?nip=" . $user->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_dokumen_persetujuan_$proyek->kode_proyek");
+    //         // $templateProcessor->setImageValue('ttdPenyusun' . ++$key, ["path" => "./file-ttd/" . $user->file_ttd, "width" => 10, "ratio" => true]);
+    //         $templateProcessor->setImageValue('ttdPenyusun' . ++$key, ["path" => public_path("/qr-code//$qrcode"), "width" => 10, "ratio" => true]);
+    //     }
+    // }
+    // if (!empty($rekomendator)) {
+    //     foreach ($rekomendator as $key => $p) {
+    //         $user = User::find($p->user_id);
+    //         $qrcode = generateQrCode($proyek->kode_proyek, $user->nip, $request->schemeAndHttpHost() . "?nip=" . $user->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_dokumen_persetujuan_$proyek->kode_proyek");
+    //         // $templateProcessor->setImageValue('ttdRekomendasi' . ++$key, ["path" => "./file-ttd/" . $user->file_ttd, "width" => 10, "ratio" => true]);
+    //         $templateProcessor->setImageValue('ttdRekomendasi' . ++$key, ["path" => public_path("/qr-code//$qrcode"), "width" => 10, "ratio" => true]);
+    //     }
+    // }
+    // if (!empty($penyetuju)) {
+    //     foreach ($penyetuju as $key => $p) {
+    //         $user = User::find($p->user_id);
+    //         $qrcode = generateQrCode($proyek->kode_proyek, $user->nip, $request->schemeAndHttpHost() . "?nip=" . $user->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_dokumen_persetujuan_$proyek->kode_proyek");
+    //         // $templateProcessor->setImageValue('ttdPersetujuan' . ++$key, ["path" => "./file-ttd/" . $user->file_ttd, "width" => 10, "ratio" => true]);
+    //         $templateProcessor->setImageValue('ttdPersetujuan' . ++$key, ["path" => public_path("/qr-code//$qrcode"), "width" => 10, "ratio" => true]);
+    //     }
+    // }
 
     // Old TTD Method
     // if($is_proyek_mega) {
