@@ -832,7 +832,7 @@
                                                                                     $value->urutan > 1;
                                                                                 })->count() > 0 && (collect(json_decode($proyek->approved_penyusun))->isEmpty() ||collect(json_decode($proyek->approved_penyusun))->contains('status', 'draft')))))
                                                                                 
-                                                                                @elseif ($proyek->KriteriaPenggunaJasaDetail->count() > \App\Models\KriteriaPenggunaJasa::all()->count())
+                                                                                @elseif ($proyek->KriteriaPenggunaJasaDetail->count() > \App\Models\KriteriaPenggunaJasa::where('nota_rekomendasi', '=', 'Nota Rekomendasi 1')->get()->count())
                                                                                     <a href="#kt_modal_view_proyek_rekomendasi_{{ $proyek->kode_proyek }}"
                                                                                         target="_blank" data-bs-toggle="modal"
                                                                                         class="btn btn-sm btn-primary text-white">{{ $proyek->is_penyusun_approved || (collect(json_decode($proyek->approved_penyusun))?->first()?->user_id == auth()->user()->id && collect(json_decode($proyek->approved_penyusun))?->first()?->status) == 'approved' ? "Rincian" : "Submit" }}</a>
@@ -2391,7 +2391,7 @@
                             <br>
                             @csrf
                             <input type="hidden" name="kode-proyek" value="{{ $proyek->kode_proyek }}">
-                            @if ((is_null($proyek->is_draft_recommend_note) || !$proyek->is_draft_recommend_note) && !empty($matriks_user) && $matriks_user?->contains('kategori', 'Penyusun'))
+                            @if ((is_null($proyek->is_draft_recommend_note) || $proyek->is_draft_recommend_note) && !empty($matriks_user) && $matriks_user?->contains('kategori', 'Penyusun'))
                                 @if (!collect(json_decode($proyek->approved_penyusun))->contains('status', 'approved'))
                                 <input type="submit" name="save-draft-note-rekomendasi" value="Simpan Sebagai Draft"
                                     class="btn btn-sm btn-primary">
