@@ -709,9 +709,14 @@ class UserController extends Controller
             'token' => $token
         ]);
 
-        if ($validateLoginWZone->successfull()) {
+        if ($validateLoginWZone->successfull()) {            
             //Get Data User Login From WZone
             $user = $validateLoginWZone->collect($key = 'data')->first();
+            $nip = $user['NIP'];
+        }
+
+        if (!empty($nip)) {
+            dd("Testing");
         }
     }
 
