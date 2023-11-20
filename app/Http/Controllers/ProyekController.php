@@ -215,7 +215,7 @@ class ProyekController extends Controller
         } elseif ($nilaiOK > 0 && $nilaiOK <= 250000000000) {
             $newProyek->klasifikasi_pasdin = "Proyek Kecil";
         } elseif ($nilaiOK > 2000000000000) {
-            $newProyek->klasifikasi_pasdin = "Proyek Kecil";
+            $newProyek->klasifikasi_pasdin = "Proyek Mega";
         }
 
         //auto filled by required 
