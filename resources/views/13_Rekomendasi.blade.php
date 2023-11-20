@@ -2511,12 +2511,22 @@
                                     </tr>
                                     <tr>
                                         <td>8</td>
-                                        <td>Assessment Eksternal Atas Pengguna Jasa</td>
+                                        <td>
+                                            <a href="/customer/view/{{ $proyek->proyekBerjalan->customer->id_customer }}/{{ $proyek->proyekBerjalan->customer->name }}"
+                                                target="_blank" class="text-hover-primary">
+                                                Assessment Eksternal Atas Pengguna Jasa
+                                            </a>
+                                        </td>
                                         <td>{{ $eksternal_score ?? '-' }}</td>
                                     </tr>
                                     <tr>
                                         <td>9</td>
-                                        <td>Assessment Internal Atas Pengguna Jasa</td>
+                                        <td>
+                                            <a href="/customer/view/{{ $proyek->proyekBerjalan->customer->id_customer }}/{{ $proyek->proyekBerjalan->customer->name }}"
+                                                target="_blank" class="text-hover-primary">
+                                                Assessment Internal Atas Pengguna Jasa
+                                            </a>
+                                        </td>
                                         <td>{{ $internal_score ?? '-' }}</td>
                                     </tr>
                                     <tr>

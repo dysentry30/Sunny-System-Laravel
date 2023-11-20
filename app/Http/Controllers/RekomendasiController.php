@@ -1078,10 +1078,10 @@ class RekomendasiController extends Controller
             //     // $proyeks_persetujuan = [];
 
             // }
-            $proyeks_rekomendasi_final = Proyek::whereIn('unit_kerja', $unit_kerjas)->where("stage", "=", 1)->get()->filter(function ($p) use ($matriks_user) {
+            $proyeks_rekomendasi_final = Proyek::whereIn('unit_kerja', $unit_kerjas)->where('is_request_rekomendasi', '!=', null)->where("stage", "=", 1)->get()->filter(function ($p) use ($matriks_user) {
                 return !is_null($p->is_disetujui) && $matriks_user->where("klasifikasi_proyek", $p->klasifikasi_pasdin)->count() > 0;
             });
-            $proyeks_proses_rekomendasi = Proyek::whereIn('unit_kerja', $unit_kerjas)->where("stage", "=", 1)->get()->filter(function ($p) use ($matriks_user) {
+            $proyeks_proses_rekomendasi = Proyek::whereIn('unit_kerja', $unit_kerjas)->where('is_request_rekomendasi', '!=', null)->where("stage", "=", 1)->get()->filter(function ($p) use ($matriks_user) {
                 return is_null($p->is_disetujui) && $matriks_user->where("klasifikasi_proyek", $p->klasifikasi_pasdin)->count() > 0;
             });
             $matriks_category = MatriksApprovalRekomendasi::all()->groupBy(['klasifikasi_proyek', 'kategori', 'departemen']);

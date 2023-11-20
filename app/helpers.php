@@ -666,7 +666,7 @@ function createWordProfileRisiko($kode_proyek)
     $table->addCell(2000, ['gridSpan' => 9, 'borderSize' => 2, 'borderColor' => '000000', 'bgColor' => 'FFFEA8', 'afterSpacing' => 0])->addText('LEGALITAS PERUSAHAAN (area yang harus seluruhnya terpenuhi, setelah itu akan dilakukan scoring)', ['size' => 5, 'bold' => true], ['spaceAfter' => 0]);
 
 
-    $legalitasMasterData = LegalitasPerusahaan::all()->sortBy('created_at')->each(function ($lp, $key) use ($table, $cellHCentered, $kriteriaPenggunaJasaDetail) {
+    $legalitasMasterData = LegalitasPerusahaan::where('nota_rekomendasi', '=', 'Nota Rekomendasi 1')->get()->sortBy('created_at')->each(function ($lp, $key) use ($table, $cellHCentered, $kriteriaPenggunaJasaDetail) {
         if ($key == 0) {
             $merge = 'restart';
         } else {
@@ -732,7 +732,7 @@ function createWordProfileRisiko($kode_proyek)
 
     //Begin::Kriteria Pengguna Jasa
 
-    $kriteriaMasterData = KriteriaPenggunaJasa::all()->sortBy('created_at')->each(function ($lp, $key) use ($table, $cellHCentered, $kriteriaPenggunaJasaDetail) {
+    $kriteriaMasterData = KriteriaPenggunaJasa::where('nota_rekomendasi', '=', 'Nota Rekomendasi 1')->get()->sortBy('created_at')->each(function ($lp, $key) use ($table, $cellHCentered, $kriteriaPenggunaJasaDetail) {
 
         if ($key == 0 && $lp->kategori != 'Financial') {
             $table->addRow();
