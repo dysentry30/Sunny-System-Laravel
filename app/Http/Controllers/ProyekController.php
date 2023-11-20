@@ -526,7 +526,7 @@ class ProyekController extends Controller
                 $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
                     "api_key" => "p2QeApVsAUxG2fOJ2tX48BoipwuqZK",
                     // "sender" => "6281188827008",
-                    "sender" => env("NO_WHATSAPP_BLAST "),
+                    "sender" => env("NO_WHATSAPP_BLAST"),
                     "number" => $isnomorTargetActive ? $user->Pegawai->handphone : $nomorDefault,
                     // "number" => "085881028391",
                     "message" => "Yth Bapak/Ibu *" . $user->Pegawai->nama_pegawai . "*\nDengan ini menyampaikan permohonan tandatangan untuk form pengajuan Nota Rekomendasi I, *" . $newProyek->ProyekBerjalan->name_customer . "* untuk Proyek *$newProyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
