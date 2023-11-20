@@ -835,7 +835,7 @@
                                                                                 @elseif ($proyek->KriteriaPenggunaJasaDetail->count() > \App\Models\KriteriaPenggunaJasa::where('nota_rekomendasi', '=', 'Nota Rekomendasi 1')->get()->count())
                                                                                     <a href="#kt_modal_view_proyek_rekomendasi_{{ $proyek->kode_proyek }}"
                                                                                         target="_blank" data-bs-toggle="modal"
-                                                                                        class="btn btn-sm btn-primary text-white">{{ $proyek->is_penyusun_approved || (collect(json_decode($proyek->approved_penyusun))?->first()?->user_id == auth()->user()->id && collect(json_decode($proyek->approved_penyusun))?->first()?->status) == 'approved' ? "Rincian" : "Submit" }}</a>
+                                                                                        class="btn btn-sm btn-primary text-white">{{ $proyek->is_penyusun_approved || (collect(json_decode($proyek->approved_penyusun))?->first()?->user_id == auth()->user()->id) && (collect(json_decode($proyek->approved_penyusun))?->first()?->status == 'approved') ? "Rincian" : "Submit" }}</a>
                                                                                 @elseif ($proyek->review_assessment)
                                                                                     <a href="#kt_user_view_kriteria_{{ $proyek->kode_proyek }}"
                                                                                         target="_blank" data-bs-toggle="modal"
