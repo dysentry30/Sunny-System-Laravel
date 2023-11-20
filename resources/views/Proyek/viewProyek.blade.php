@@ -3018,6 +3018,111 @@
                                                         <br>
                                                     @endif
 
+                                                    <br>
+
+                                                    <div class="row">
+                                                        <div class="col-3">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span class="required">Hasil Score Pefindo</span>
+                                                                </label>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                <input type="number" min="1"
+                                                                    class="form-control form-control-solid" id="porsi-jo"
+                                                                    name="score-pefindo" value="{{ $proyek->score_pefindo }}"
+                                                                    placeholder="Hasil Score Pefindo" />
+                                                                <!--end::Input-->
+                                                            </div>
+                                                            <!--end::Input group-->
+                                                        </div>
+                                                    </div>
+                                                    <br>
+
+                                                    <!--Begin::Title Biru Form: Document Prakualifikasi-->
+                                                    <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                                        Document Pefindo
+                                                    </h3>
+                                                    <br>
+                                                    <div class="w-50">
+                                                        <input type="file"
+                                                            class="form-control form-control-sm form-input-solid"
+                                                            name="dokumen-pefindo" accept=".pdf">
+                                                    </div>
+                                                    <h6 id="error-dokumen-pefindo" class="text-danger fw-normal"
+                                                        style="display: none">*File
+                                                        terlalu besar ! Max Size 50Mb</h6>
+                                                    <br>
+                                                    <!--begin::Table-->
+                                                    <table class="table align-middle table-row-dashed w-50 fs-6 gy-2"
+                                                        id="kt_customers_table">
+                                                        <!--begin::Table head-->
+                                                        <thead>
+                                                            <!--begin::Table row-->
+                                                            <tr
+                                                                class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                <th class="w-50px text-center">No.</th>
+                                                                <th class="w-auto">Nama Document</th>
+                                                                <th class="w-auto">Modified On</th>
+                                                                <th class="w-auto text-center"></th>
+                                                            </tr>
+                                                            <!--end::Table row-->
+                                                        </thead>
+                                                        <!--end::Table head-->
+                                                        @php
+                                                            $no = 1;
+                                                        @endphp
+                                                        <!--begin::Table body-->
+                                                        <tbody class="fw-bold text-gray-600">
+                                                            @foreach ($proyek->DokumenPrakualifikasi as $dokumen_prakualifikasi)
+                                                                <tr>
+                                                                    <!--begin::Nomor-->
+                                                                    <td class="text-center">
+                                                                        {{ $no++ }}
+                                                                    </td>
+                                                                    <!--end::Nomor-->
+                                                                    <!--begin::Name-->
+                                                                    <td>
+                                                                        @if (str_contains("$dokumen_prakualifikasi->nama_dokumen", '.doc'))
+                                                                            <a href="/document/view/{{ $dokumen_prakualifikasi->id_dokumen_prakualifikasi }}/{{ $dokumen_prakualifikasi->id_document }}"
+                                                                                class="text-hover-primary">{{ $dokumen_prakualifikasi->nama_dokumen }}</a>
+                                                                        @else
+                                                                            <a target="_blank"
+                                                                                href="{{ asset('words/' . $dokumen_prakualifikasi->id_document . '.pdf') }}"
+                                                                                class="text-hover-primary">{{ $dokumen_prakualifikasi->nama_dokumen }}</a>
+                                                                        @endif
+                                                                    </td>
+                                                                    <!--end::Name-->
+                                                                    <!--begin::Column-->
+                                                                    <td>
+                                                                        {{ Carbon\Carbon::parse($dokumen_prakualifikasi->created_at)->translatedFormat('d F Y') }}
+                                                                    </td>
+                                                                    <!--end::Column-->
+                                                                    <!--begin::Action-->
+                                                                    @if ($proyek->stage < 4)
+                                                                    <td class="text-center">
+                                                                        <small>
+                                                                            <p data-bs-toggle="modal"
+                                                                                data-bs-target="#kt_dokumen_prakualifikasi_delete_{{ $dokumen_prakualifikasi->id_dokumen_prakualifikasi }}"
+                                                                                id="modal-delete"
+                                                                                class="btn btn-sm btn-light btn-active-primary">
+                                                                                Delete
+                                                                            </p>
+                                                                        </small>
+                                                                    </td>
+                                                                    @endif
+                                                                    <!--end::Action-->
+                                                                </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                        <!--end::Table body-->
+                                                    </table>
+                                                    <!--end::Table-->
+                                                    <!--End::Title Biru Form: Document Prakualifikasi-->
+                                                    <br>
+
 
                                                     <!--Begin::Title Biru Form: Document Prakualifikasi-->
                                                     <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">

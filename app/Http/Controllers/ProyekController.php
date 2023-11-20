@@ -36,6 +36,7 @@ use App\Models\DokumenIca;
 use App\Models\DokumenItbTor;
 use App\Models\DokumenMou;
 use App\Models\DokumenNda;
+use App\Models\DokumenPefindo;
 use App\Models\KriteriaPasarProyek;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
@@ -577,6 +578,7 @@ class ProyekController extends Controller
         $newProyek->hps_pagu = (int) str_replace('.', '', $dataProyek["hps-pagu"]);
         $newProyek->porsi_jo = $dataProyek["porsi-jo"];
         $newProyek->ketua_tender = $dataProyek["ketua-tender"];
+        $newProyek->score_pefindo = $dataProyek["score-pefindo"];
         // foreach($allProyek as $proyek) {
         //     if($proyek->ketua_tender == $dataProyek["ketua-tender"] && !($proyek->stage > 8)) {
         //         return redirect()->back()->with("failed", "Ketua Tender sudah terdaftar di proyek lain");
@@ -819,6 +821,9 @@ class ProyekController extends Controller
             }
 
             if ($newProyek->save()) {
+                if (isset($dataProyek["dokumen-pefindo"])) {
+                    self::uploadDokumenPefindo($dataProyek["dokumen-pefindo"], $kode_proyek);
+                }
                 if (isset($dataProyek["dokumen-prakualifikasi"])) {
                     self::uploadDokumenPrakualifikasi($dataProyek["dokumen-prakualifikasi"], $kode_proyek);
                 }
@@ -857,6 +862,9 @@ class ProyekController extends Controller
             return redirect("/proyek/view/" . $kode_proyek);
         } else {
             if ($newProyek->save()) {
+                if (isset($dataProyek["dokumen-pefindo"])) {
+                    self::uploadDokumenPrakualifikasi($dataProyek["dokumen-pefindo"], $kode_proyek);
+                }
                 if (isset($dataProyek["dokumen-prakualifikasi"])) {
                     self::uploadDokumenPrakualifikasi($dataProyek["dokumen-prakualifikasi"], $kode_proyek);
                 }
@@ -1117,6 +1125,35 @@ class ProyekController extends Controller
         File::delete($files);
         $delete->delete();
         Alert::success("Success", "Risk Tender Berhasil Dihapus");
+        return redirect()->back();
+    }
+
+    private function uploadDokumenPefindo(UploadedFile $uploadedFile, $kode_proyek)
+    {
+        $faker = new Uuid();
+        $dokumen_pefindo = new DokumenPefindo();
+        $id_document = $faker->uuid3();
+        $file_name = $uploadedFile->getClientOriginalName();
+        $nama_document = date("His_") . $file_name;
+        // $nama_document = date("His_") . substr($uploadedFile->getClientOriginalName(), 0, strlen($uploadedFile->getClientOriginalName()) - 5);
+        moveFileTemp($uploadedFile, $id_document);
+        $dokumen_pefindo->nama_dokumen = $nama_document;
+        $dokumen_pefindo->id_document = $id_document;
+        $dokumen_pefindo->kode_proyek = $kode_proyek;
+        // dd($dokumen_pefindo);
+        $dokumen_pefindo->save();
+    }
+
+    public function deleteDokumenPefindo($id)
+    {
+        $delete = DokumenPefindo::find($id);
+        // dd($$delete);
+        $files = collect(File::allFiles(public_path("words")))->filter(function ($f) use ($delete) {
+            return str_contains($f->getFilename(), $delete->id_document);
+        })->first();
+        File::delete($files);
+        $delete->delete();
+        Alert::success("Success", "Dokumen Pefindo Berhasil Dihapus");
         return redirect()->back();
     }
 

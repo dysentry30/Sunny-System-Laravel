@@ -1271,7 +1271,7 @@
                                     </thead>
                                     <tbody>
                                         @php
-                                            $legalitasJasa = App\Models\LegalitasPerusahaan::all()->sortBy('position');
+                                            $legalitasJasa = App\Models\LegalitasPerusahaan::where('nota_rekomendasi', '=', 'Nota Rekomendasi 1')->sortBy('position');
                                             $index = 0;
                                         @endphp
                                         <tr>
@@ -1369,7 +1369,7 @@
                                     </thead>
                                     <tbody>
                                         @php
-                                            $kriteriaPengguna = App\Models\KriteriaPenggunaJasa::all()->sortBy('position');
+                                            $kriteriaPengguna = App\Models\KriteriaPenggunaJasa::where('nota_rekomendasi', '=', 'Nota Rekomendasi 1')->sortBy('position');
                                         @endphp
                                         @foreach ($kriteriaPengguna as $key => $item)
                                             <tr>
@@ -1541,7 +1541,7 @@
                                 </thead>
                                 <tbody>
                                     @php
-                                        $legalitasJasa = App\Models\LegalitasPerusahaan::all()->sortBy('position');
+                                        $legalitasJasa = App\Models\LegalitasPerusahaan::where('nota_rekomendasi', '=', 'Nota Rekomendasi 1')->sortBy('position');
                                         $kriteriaDetails = App\Models\KriteriaPenggunaJasaDetail::where('kode_proyek', $proyek->kode_proyek)
                                             ->orderBy('index')
                                             ->get()
@@ -1736,7 +1736,7 @@
                                 </thead>
                                 <tbody>
                                     @php
-                                        $kriteriaPengguna = App\Models\KriteriaPenggunaJasa::all()->sortBy("position");
+                                        $kriteriaPengguna = App\Models\KriteriaPenggunaJasa::where('nota_rekomendasi', '=', 'Nota Rekomendasi 1')->sortBy("position");
                                     @endphp
                                     @foreach ($kriteriaPengguna as $keys => $item)
                                         <tr>

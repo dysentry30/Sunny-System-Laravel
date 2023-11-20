@@ -3,7 +3,7 @@
 {{-- End::Extend Header --}}
 
 {{-- Begin::Title --}}
-@section('title', 'Kriteria Penilaian Pengguna Jasa')
+@section('title', 'Kriteria Selection Non Greenlane')
 {{-- End::Title --}}
 
 <!--begin::Main-->
@@ -32,7 +32,7 @@
                                 data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                                 class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
                                 <!--begin::Title-->
-                                <h1 class="d-flex align-items-center fs-3 my-1">Kriteria Penilaian Pengguna Jasa 
+                                <h1 class="d-flex align-items-center fs-3 my-1">Kriteria Selection Non Greenlane
                                 </h1>
                                 <!--end::Title-->
                             </div>
@@ -43,9 +43,9 @@
                                 <div class="d-flex align-items-center py-1">
 
                                     <!--begin::Button-->
-                                    <a  href="#" data-bs-target="#kt_modal_create_penilaian_pengguna_jasa" data-bs-toggle="modal" class="btn btn-sm btn-primary py-3"
+                                    <a  href="#" data-bs-target="#kt_modal_create_kriteria" data-bs-toggle="modal" class="btn btn-sm btn-primary py-3"
                                         style="background-color:#008CB4; padding: 6px">
-                                        Tambah Penilaian Pengguna Jasa</a>
+                                        Tambah Kriteria Selection Non Greenlane</a>
 
                                 </div>
                                 <!--end::Actions-->
@@ -85,11 +85,11 @@
                                     <!--begin::Table row-->
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0 bg-primary">
                                         <th class="min-w-auto text-white">No.</th>
-                                        <th class="min-w-auto text-white">Nama</th>
-                                        <th class="min-w-auto text-white">Dari Nilai</th>
-                                        <th class="min-w-auto text-white">Sampai Nilai</th>
+                                        <th class="min-w-auto text-white">Parameter</th>
+                                        <th class="min-w-auto text-white">Bobot</th>
                                         <th class="min-w-auto text-white">Start Periode</th>
                                         <th class="min-w-auto text-white">Finish Periode</th>
+                                        <th class="min-w-auto text-white">Nota Rekomendasi</th>
                                         <th class="min-w-auto text-white">Action</th>
                                     </tr>
                                     <!--end::Table row-->
@@ -102,98 +102,98 @@
                                 @endphp
                                 <tbody class="fw-bold text-gray-600">
                                     @foreach ($data as $item)
-                                        @php
-                                            switch($item->start_bulan){
-                                                case "1":
-                                                $start_bulan = "Januari"."-".$item->start_tahun;
-                                                break;
-                                                case "2":
-                                                $start_bulan = "Februari"."-".$item->start_tahun;
-                                                break;
-                                                case "3":
-                                                $start_bulan = "Maret"."-".$item->start_tahun;
-                                                break;
-                                                case "4":
-                                                $start_bulan = "April"."-".$item->start_tahun;
-                                                break;
-                                                case "5":
-                                                $start_bulan = "Mei"."-".$item->start_tahun;
-                                                break;
-                                                case "6":
-                                                $start_bulan = "Juni"."-".$item->start_tahun;
-                                                break;
-                                                case "7":
-                                                $start_bulan = "Juli"."-".$item->start_tahun;
-                                                break;
-                                                case "8":
-                                                $start_bulan = "Agustus"."-".$item->start_tahun;
-                                                break;
-                                                case "9":
-                                                $start_bulan = "September"."-".$item->start_tahun;
-                                                break;
-                                                case "10":
-                                                $start_bulan = "Oktober"."-".$item->start_tahun;
-                                                break;
-                                                case "11":
-                                                $start_bulan = "November"."-".$item->start_tahun;
-                                                break;
-                                                case "12":
-                                                $start_bulan = "Desember"."-".$item->start_tahun;
-                                                break;
-                                                default:
-                                                $start_bulan = "-";
-                                            }
-                                            switch($item->finish_bulan){
-                                                case "1":
-                                                $finish_bulan = "Januari"."-".$item->finish_tahun;
-                                                break;
-                                                case "2":
-                                                $finish_bulan = "Februari"."-".$item->finish_tahun;
-                                                break;
-                                                case "3":
-                                                $finish_bulan = "Maret"."-".$item->finish_tahun;
-                                                break;
-                                                case "4":
-                                                $finish_bulan = "April"."-".$item->finish_tahun;
-                                                break;
-                                                case "5":
-                                                $finish_bulan = "Mei"."-".$item->finish_tahun;
-                                                break;
-                                                case "6":
-                                                $finish_bulan = "Juni"."-".$item->finish_tahun;
-                                                break;
-                                                case "7":
-                                                $finish_bulan = "Juli"."-".$item->finish_tahun;
-                                                break;
-                                                case "8":
-                                                $finish_bulan = "Agustus"."-".$item->finish_tahun;
-                                                break;
-                                                case "9":
-                                                $finish_bulan = "September"."-".$item->finish_tahun;
-                                                break;
-                                                case "10":
-                                                $finish_bulan = "Oktober"."-".$item->finish_tahun;
-                                                break;
-                                                case "11":
-                                                $finish_bulan = "November"."-".$item->finish_tahun;
-                                                break;
-                                                case "12":
-                                                $finish_bulan = "Desember"."-".$item->finish_tahun;
-                                                break;
-                                                default:
-                                                $finish_bulan = "-";
-                                            }
-                                        @endphp
+                                    @php
+                                        switch($item->start_bulan){
+                                            case "1":
+                                            $start_bulan = "Januari"."-".$item->start_tahun;
+                                            break;
+                                            case "2":
+                                            $start_bulan = "Februari"."-".$item->start_tahun;
+                                            break;
+                                            case "3":
+                                            $start_bulan = "Maret"."-".$item->start_tahun;
+                                            break;
+                                            case "4":
+                                            $start_bulan = "April"."-".$item->start_tahun;
+                                            break;
+                                            case "5":
+                                            $start_bulan = "Mei"."-".$item->start_tahun;
+                                            break;
+                                            case "6":
+                                            $start_bulan = "Juni"."-".$item->start_tahun;
+                                            break;
+                                            case "7":
+                                            $start_bulan = "Juli"."-".$item->start_tahun;
+                                            break;
+                                            case "8":
+                                            $start_bulan = "Agustus"."-".$item->start_tahun;
+                                            break;
+                                            case "9":
+                                            $start_bulan = "September"."-".$item->start_tahun;
+                                            break;
+                                            case "10":
+                                            $start_bulan = "Oktober"."-".$item->start_tahun;
+                                            break;
+                                            case "11":
+                                            $start_bulan = "November"."-".$item->start_tahun;
+                                            break;
+                                            case "12":
+                                            $start_bulan = "Desember"."-".$item->start_tahun;
+                                            break;
+                                            default:
+                                            $start_bulan = "-";
+                                        }
+                                        switch($item->finish_bulan){
+                                            case "1":
+                                            $finish_bulan = "Januari"."-".$item->finish_tahun;
+                                            break;
+                                            case "2":
+                                            $finish_bulan = "Februari"."-".$item->finish_tahun;
+                                            break;
+                                            case "3":
+                                            $finish_bulan = "Maret"."-".$item->finish_tahun;
+                                            break;
+                                            case "4":
+                                            $finish_bulan = "April"."-".$item->finish_tahun;
+                                            break;
+                                            case "5":
+                                            $finish_bulan = "Mei"."-".$item->finish_tahun;
+                                            break;
+                                            case "6":
+                                            $finish_bulan = "Juni"."-".$item->finish_tahun;
+                                            break;
+                                            case "7":
+                                            $finish_bulan = "Juli"."-".$item->finish_tahun;
+                                            break;
+                                            case "8":
+                                            $finish_bulan = "Agustus"."-".$item->finish_tahun;
+                                            break;
+                                            case "9":
+                                            $finish_bulan = "September"."-".$item->finish_tahun;
+                                            break;
+                                            case "10":
+                                            $finish_bulan = "Oktober"."-".$item->finish_tahun;
+                                            break;
+                                            case "11":
+                                            $finish_bulan = "November"."-".$item->finish_tahun;
+                                            break;
+                                            case "12":
+                                            $finish_bulan = "Desember"."-".$item->finish_tahun;
+                                            break;
+                                            default:
+                                            $finish_bulan = "-";
+                                        }
+                                    @endphp
                                         <tr>
                                             <td class="text-center align-middle">{{$no++}}</td>
-                                            <td class="align-middle">{{$item->nama}}</td>
-                                            <td class="text-center align-middle">{{ $item->dari_nilai }}</td>
-                                            <td class="text-center align-middle">{{ $item->sampai_nilai }}</td>
+                                            <td class="align-middle">{!! $item->parameter ?? "-" !!}</td>
+                                            <td class="text-center align-middle">{{ $item->bobot }}</td>
                                             <td class="text-center">{{$start_bulan}}</td>
                                             <td class="text-center">{{$finish_bulan}}</td>
+                                            <td class="text-center align-middle">{{ $item->nota_rekomendasi }}</td>
                                             <td class="text-center align-middle">
                                                 <div class="d-flex justify-content-center">
-                                                    <a href="#" data-bs-target="#kt_modal_create_penilaian_pengguna_jasa_{{$item->id }}" data-bs-toggle="modal" class="btn btn-sm btn-primary text-white" style="background-color: #008CB4;">Edit</a>
+                                                    <a href="#" data-bs-target="#kt_modal_edit_kriteria_{{$item->id }}" data-bs-toggle="modal" class="btn btn-sm btn-primary text-white" style="background-color: #008CB4;">Edit</a>
                                                         <input type="hidden" name="id-otomasi" value="{{$item->id }}">
                                                         <button type="button" class="btn btn-sm btn-danger text-white" onclick="deleteItem('{{ $item->id }}')">Delete</button>
                                                 </div>
@@ -227,8 +227,8 @@
     </div>
     <!--end::Root-->
     
-    <!--begin::Modal Tambah Kriteria Green Line-->
-    <div class="modal fade" id="kt_modal_create_penilaian_pengguna_jasa" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal Tambah Kriteria Selection Non Greenlane-->
+    <div class="modal fade" id="kt_modal_create_kriteria" tabindex="-1" aria-hidden="true">
         <!--begin::Modal dialog-->
         <div class="modal-dialog modal-dialog-centered mw-600px">
             <!--begin::Modal content-->
@@ -236,7 +236,7 @@
                 <!--begin::Modal header-->
                 <div class="modal-header">
                     <!--begin::Modal title-->
-                    <h2>Tambah Kriteria Penilaian Pengguna Jasa</h2>
+                    <h2>Tambah Kriteria Selection Non Greenlane</h2>
                     <!--end::Modal title-->
                     <!--begin::Close-->
                     <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
@@ -250,7 +250,7 @@
                 </div>
                 <!--end::Modal header-->
 
-                <form action="/penilaian-pengguna-jasa/save" method="POST">
+                <form action="/kriteria-selection-non-greenlane/save" method="POST">
                     @csrf
                     <input type="hidden" name="modal" value="kt_modal_create_otomasi_approval">
                     <!--begin::Modal body-->
@@ -259,6 +259,7 @@
     
                         <!--begin::Row Kanan+Kiri-->
                         <div class="row fv-row">
+
                             <!--begin::Col-->
                             <div class="">
                                 <!--begin::Input group Website-->
@@ -311,131 +312,104 @@
                                 <!--end::Input group-->
                             </div>
                             <!--End begin::Col-->
+
                             <!--Begin::Col-->
                             <div class="row mb-7">
                                 <!--begin::Label-->
                                 <label class="fs-6 fw-bold form-label mt-3">
-                                   <span class="required">Nota Rekomendasi</span>
-                               </label>
-                               <!--end::Label-->
-                               <div class="d-flex flex-row gap-2">
-                                   <!--begin::Input-->
-                                   <select id="nota_rekomendasi" name="nota_rekomendasi"
-                                       class="form-select form-select-solid select2-hidden-accessible"
-                                       data-control="select2" data-hide-search="true" data-placeholder="Pilh Nota Rekomendasi..."
-                                       data-select2-id="select2-nota" tabindex="-1" aria-hidden="true">
-                                       <option value="" selected></option>
-                                       <option value="Nota Rekomendasi 1">Nota Rekomendasi 1</option>
-                                       <option value="Nota Rekomendasi 2">Nota Rekomendasi 2</option>
-                                   </select>
-                                   <!--end::Input-->
-                               </div>
-                           </div>
-                            <!--End::Col-->
-                            <!--begin::Col-->
-                            <div class="">
-                                <!--begin::Input group Website-->
-                                <div class="fv-row mb-7">
-                                    <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Nama</span>
-                                    </label>
-                                    <!--end::Label-->
-                                    <div class="d-flex flex-row gap-2">
-                                        <!--begin::Input-->
-                                        <select id="nama" name="nama"
-                                            class="form-select form-select-solid select2-hidden-accessible"
-                                            data-control="select2" data-hide-search="true" data-placeholder="Pilh Nota Rekomendasi..."
-                                            data-select2-id="select2-feature" tabindex="-1" aria-hidden="true">
-                                            <option value="" selected></option>
-                                            <option value="Risiko Rendah">Risiko Rendah</option>
-                                            <option value="Risiko Moderat">Risiko Moderat</option>
-                                            <option value="Risiko Tinggi">Risiko Tinggi</option>
-                                            <option value="Risiko Ekstrem">Risiko Ekstrem</option>
-                                        </select>
-                                        <!--end::Input-->
-                                    </div>
+                                    <span class="required">Nota Rekomendasi</span>
+                                </label>
+                                <!--end::Label-->
+                                <div class="d-flex flex-row gap-2">
+                                    <!--begin::Input-->
+                                    <select id="nota_rekomendasi" name="nota_rekomendasi"
+                                        class="form-select form-select-solid select2-hidden-accessible"
+                                        data-control="select2" data-hide-search="true" data-placeholder="Pilh Nota Rekomendasi..."
+                                        data-select2-id="select2-feature" tabindex="-1" aria-hidden="true">
+                                        <option value="" selected></option>
+                                        <option value="Nota Rekomendasi 1">Nota Rekomendasi 1</option>
+                                        <option value="Nota Rekomendasi 2">Nota Rekomendasi 2</option>
+                                    </select>
+                                    <!--end::Input-->
                                 </div>
-                                <!--end::Input group-->
+                            </div>
+                            <!--End::Col-->
+
+                            <!--begin::Col-->
+                            <div class="row mb-7">
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="required">Parameter</span>
+                                </label>
+                                <textarea name="parameter" id="parameter" cols="30" rows="10"></textarea>
                             </div>
                             <!--End begin::Col-->
 
                             <div class="row mb-7">
                                 <label class="fs-6 fw-bold form-label mt-3">
-                                    <span class="required">Dari Nilai</span>
+                                    <span class="required">Bobot</span>
                                 </label>
-                                <input type="number" name="dari_nilai" class="form-control form-control-solid">
+                                <input type="number" name="bobot" class="form-control form-control-solid">
                             </div>
 
-                            <div class="row mb-7">
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7 d-none" id="finish-periode">
+                                <!--begin::Label-->
                                 <label class="fs-6 fw-bold form-label mt-3">
-                                    <span class="required">Sampai Nilai</span>
+                                    <span class="">Finish Periode</span>
                                 </label>
-                                <input type="number" name="sampai_nilai" class="form-control form-control-solid">
+                                @php
+                                    $tahun = (int) date("Y");
+                                @endphp
+                                <!--end::Label-->
+                                <div class="d-flex flex-row gap-2">
+                                    <!--begin::Input-->
+                                    <select id="bulan_finish" name="bulan_finish"
+                                        class="form-select form-select-solid select2-hidden-accessible"
+                                        data-control="select2" data-hide-search="true" data-placeholder="Pilh Bulan..."
+                                        data-select2-id="select2_bulan_finish" tabindex="-1" aria-hidden="true" disabled>
+                                        <option value="" selected></option>
+                                        <option value="1">Januari</option>
+                                        <option value="2">Februari</option>
+                                        <option value="3">Maret</option>
+                                        <option value="4">April</option>
+                                        <option value="5">Mei</option>
+                                        <option value="6">Juni</option>
+                                        <option value="7">Juli</option>
+                                        <option value="8">Agustus</option>
+                                        <option value="9">September</option>
+                                        <option value="10">Oktober</option>
+                                        <option value="11">November</option>
+                                        <option value="12">Desember</option>
+                                    </select>
+                                    <!--end::Input-->
+                                    <!--begin::Input-->
+                                    <select id="tahun_finish" name="tahun_finish"
+                                        class="form-select form-select-solid select2-hidden-accessible"
+                                        data-control="select2" data-hide-search="true" data-placeholder="Pilh Tahun..."
+                                        data-select2-id="select2_tahun_finish" tabindex="-1" aria-hidden="true" disabled>
+                                        <option value="" selected></option>
+                                        @foreach (range(1, 2) as $item)
+                                            <option value="{{$tahun}}">{{$tahun}}</option>
+                                            @php
+                                                $tahun++;
+                                            @endphp
+                                        @endforeach
+                                    </select>
+                                    <!--end::Input-->
+                                </div>
                             </div>
+                            <!--end::Input group-->
 
-                            <div class="">
-                                <!--begin::Input group Website-->
-                                <div class="fv-row mb-7 d-none" id="finish-periode">
-                                    <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="">Finish Periode</span>
+                            <div class="row ms-1">
+                                <!--Begin::Input Checkbox-->
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="create" name="isActive" id="active-periode" onchange="setActive(this)" checked>
+                                    <label class="form-check-label" for="active-periode">
+                                        Active
                                     </label>
-                                    @php
-                                        $tahun = (int) date("Y");
-                                    @endphp
-                                    <!--end::Label-->
-                                    <div class="d-flex flex-row gap-2">
-                                        <!--begin::Input-->
-                                        <select id="bulan_finish" name="bulan_finish"
-                                            class="form-select form-select-solid select2-hidden-accessible"
-                                            data-control="select2" data-hide-search="true" data-placeholder="Pilh Bulan..."
-                                            data-select2-id="select2_bulan_finish" tabindex="-1" aria-hidden="true" disabled>
-                                            <option value="" selected></option>
-                                            <option value="1">Januari</option>
-                                            <option value="2">Februari</option>
-                                            <option value="3">Maret</option>
-                                            <option value="4">April</option>
-                                            <option value="5">Mei</option>
-                                            <option value="6">Juni</option>
-                                            <option value="7">Juli</option>
-                                            <option value="8">Agustus</option>
-                                            <option value="9">September</option>
-                                            <option value="10">Oktober</option>
-                                            <option value="11">November</option>
-                                            <option value="12">Desember</option>
-                                        </select>
-                                        <!--end::Input-->
-                                        <!--begin::Input-->
-                                        <select id="tahun_finish" name="tahun_finish"
-                                            class="form-select form-select-solid select2-hidden-accessible"
-                                            data-control="select2" data-hide-search="true" data-placeholder="Pilh Tahun..."
-                                            data-select2-id="select2_tahun_finish" tabindex="-1" aria-hidden="true" disabled>
-                                            <option value="" selected></option>
-                                            @foreach (range(1, 2) as $item)
-                                                <option value="{{$tahun}}">{{$tahun}}</option>
-                                                @php
-                                                    $tahun++;
-                                                @endphp
-                                            @endforeach
-                                        </select>
-                                        <!--end::Input-->
-                                    </div>
                                 </div>
-                                <!--end::Input group-->
-
-                                <div class="row ms-1">
-                                    <!--Begin::Input Checkbox-->
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="create" name="isActive" id="active-periode" onchange="setActive(this)" checked>
-                                        <label class="form-check-label" for="active-periode">
-                                            Active
-                                        </label>
-                                    </div>
-                                    <!--End::Input Checkbox-->
-                                </div>
+                                <!--End::Input Checkbox-->
                             </div>
-
                         </div>
                         <!--End::Row Kanan+Kiri-->    
     
@@ -452,11 +426,11 @@
         </div>
         <!--end::Modal dialog-->
     </div>
-    <!--end::Modal Tambah Kriteria Green Line-->
+    <!--end::Modal Tambah Kriteria Selection Non Greenlane-->
 
-    <!--begin::Modal Edit Kriteria Green Line-->
+    <!--begin::Modal Edit Kriteria Selection Non Greenlane-->
     @foreach ($data as $item)
-        <div class="modal fade" id="kt_modal_create_penilaian_pengguna_jasa_{{ $item->id }}" tabindex="-1" aria-hidden="true">
+        <div class="modal fade" id="kt_modal_edit_kriteria_{{ $item->id }}" tabindex="-1" aria-hidden="true">
             <!--begin::Modal dialog-->
             <div class="modal-dialog modal-dialog-centered mw-600px">
                 <!--begin::Modal content-->
@@ -464,7 +438,7 @@
                     <!--begin::Modal header-->
                     <div class="modal-header">
                         <!--begin::Modal title-->
-                        <h2>Edit Kriteria Penilaian Pengguna Jasa</h2>
+                        <h2>Edit Kriteria Selection Non Greenlane</h2>
                         <!--end::Modal title-->
                         <!--begin::Close-->
                         <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
@@ -478,7 +452,7 @@
                     </div>
                     <!--end::Modal header-->
 
-                    <form action="/penilaian-pengguna-jasa/update/{{ $item->id }}" method="POST">
+                    <form action="/kriteria-selection-non-greenlane/update/{{ $item->id }}" method="POST">
                         @csrf
                         <input type="hidden" name="modal" value="kt_modal_create_otomasi_approval">
                         <!--begin::Modal body-->
@@ -487,8 +461,8 @@
         
                             <!--begin::Row Kanan+Kiri-->
                             <div class="row fv-row">
-                                <!--begin::Col-->
-                                <div class="">
+                                 <!--begin::Col-->
+                                 <div class="">
                                     <!--begin::Input group Website-->
                                     <div class="fv-row mb-7">
                                         <!--begin::Label-->
@@ -542,113 +516,87 @@
                                 <div class="row mb-7">
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
-                                       <span class="required">Nota Rekomendasi</span>
-                                   </label>
-                                   <!--end::Label-->
-                                   <div class="d-flex flex-row gap-2">
-                                       <!--begin::Input-->
-                                       <select id="nota_rekomendasi" name="nota_rekomendasi"
-                                           class="form-select form-select-solid select2-hidden-accessible"
-                                           data-control="select2" data-hide-search="true" data-placeholder="Pilh Nota Rekomendasi..."
-                                           data-select2-id="select2-feature-{{ $item->id }}-{{ $no++ }}" tabindex="-1" aria-hidden="true">
-                                           <option value="" selected></option>
-                                           <option value="Nota Rekomendasi 1" {{ $item->nota_rekomendasi == "Nota Rekomendasi 1" ? "selected" : ""}}>Nota Rekomendasi 1</option>
-                                           <option value="Nota Rekomendasi 2" {{ $item->nota_rekomendasi == "Nota Rekomendasi 2" ? "selected" : ""}}>Nota Rekomendasi 2</option>
-                                       </select>
-                                       <!--end::Input-->
-                                   </div>
-                               </div>
-                                <!--End::Col-->
-                                <!--begin::Col-->
-                                <div class="">
-                                    <!--begin::Input group Website-->
-                                    <div class="fv-row mb-7">
-                                        <!--begin::Label-->
-                                        <label class="fs-6 fw-bold form-label mt-3">
-                                            <span class="required">Nama</span>
-                                        </label>
-                                        <!--end::Label-->
-                                        <div class="d-flex flex-row gap-2">
-                                            <!--begin::Input-->
-                                            <select id="nama" name="nama"
-                                                class="form-select form-select-solid select2-hidden-accessible"
-                                                data-control="select2" data-hide-search="true" data-placeholder="Pilh Nota Rekomendasi..."
-                                                data-select2-id="select2-feature-{{ $item->id }}" tabindex="-1" aria-hidden="true">
-                                                <option value="" selected></option>
-                                                <option value="Risiko Rendah" {{ $item->nama == "Risiko Rendah" ? "selected" : "" }}>Risiko Rendah</option>
-                                                <option value="Risiko Moderat" {{ $item->nama == "Risiko Moderat" ? "selected" : "" }}>Risiko Moderat</option>
-                                                <option value="Risiko Tinggi" {{ $item->nama == "Risiko Tinggi" ? "selected" : "" }}>Risiko Tinggi</option>
-                                                <option value="Risiko Ekstrem" {{ $item->nama == "Risiko Ekstrem" ? "selected" : "" }}>Risiko Ekstrem</option>
-                                            </select>
-                                            <!--end::Input-->
-                                        </div>
+                                        <span class="required">Nota Rekomendasi</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <div class="d-flex flex-row gap-2">
+                                        <!--begin::Input-->
+                                        <select id="nota_rekomendasi" name="nota_rekomendasi"
+                                            class="form-select form-select-solid select2-hidden-accessible"
+                                            data-control="select2" data-hide-search="true" data-placeholder="Pilh Nota Rekomendasi..."
+                                            data-select2-id="select2-feature-{{ $item->id }}-{{ $no++ }}" tabindex="-1" aria-hidden="true" onchange="showKategori(this,'{{ $item->id }}')">
+                                            <option value="" selected></option>
+                                            <option value="Nota Rekomendasi 1" {{ $item->nota_rekomendasi == "Nota Rekomendasi 1" ? "selected" : ""}}>Nota Rekomendasi 1</option>
+                                            <option value="Nota Rekomendasi 2" {{ $item->nota_rekomendasi == "Nota Rekomendasi 2" ? "selected" : ""}}>Nota Rekomendasi 2</option>
+                                        </select>
+                                        <!--end::Input-->
                                     </div>
-                                    <!--end::Input group-->
+                                </div>
+                                <!--End::Col-->
+
+                                <!--begin::Col-->
+                                <div class="row mb-7">
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span class="required">Parameter</span>
+                                    </label>
+                                    <textarea name="parameter" id="parameter" cols="30" rows="10">{!! $item->parameter !!}</textarea>
                                 </div>
                                 <!--End begin::Col-->
-
+    
                                 <div class="row mb-7">
                                     <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Dari Nilai</span>
+                                        <span class="required">Bobot</span>
                                     </label>
-                                    <input type="number" name="dari_nilai" value="{{ $item->dari_nilai }}" class="form-control form-control-solid">
+                                    <input type="number" name="bobot" value="{{ $item->bobot }}" class="form-control form-control-solid">
                                 </div>
-
-                                <div class="row mb-7">
+                                    
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mt-7 {{ (!empty($item->is_active) && $item->is_active) || is_null($item->is_active) ? 'd-none' : '' }}" id="finish-periode-edit-{{ $item->id }}">
+                                    <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Sampai Nilai</span>
+                                        <span class="required">Finish Periode</span>
                                     </label>
-                                    <input type="number" name="sampai_nilai" value="{{ $item->sampai_nilai }}" class="form-control form-control-solid">
-                                </div>
-
-                                <div class="">
-                                    <!--begin::Input group Website-->
-                                    <div class="fv-row mt-7 {{ (!empty($item->is_active) && $item->is_active) || is_null($item->is_active) ? 'd-none' : '' }}" id="finish-periode-edit-{{ $item->id }}">
-                                        <!--begin::Label-->
-                                        <label class="fs-6 fw-bold form-label mt-3">
-                                            <span class="required">Finish Periode</span>
-                                        </label>
-                                        @php
-                                            $tahun = (int) date("Y");
-                                        @endphp
-                                        <!--end::Label-->
-                                        <div class="d-flex flex-row gap-2">
-                                            <!--begin::Input-->
-                                            <select id="bulan_finish" name="bulan_finish"
-                                                class="form-select form-select-solid select2-hidden-accessible"
-                                                data-control="select2" data-hide-search="true" data-placeholder="Pilh Bulan..."
-                                                data-select2-id="select2_bulan_finish_{{ $item->id }}" tabindex="-1" aria-hidden="true" {{ !empty($item->finish_bulan) ? "disabled" : "" }}>
-                                                <option value="" selected></option>
-                                                <option value="1" {{ $item->finish_bulan == "1" ? "selected" : "" }}>Januari</option>
-                                                <option value="2" {{ $item->finish_bulan == "2" ? "selected" : "" }}>Februari</option>
-                                                <option value="3" {{ $item->finish_bulan == "3" ? "selected" : "" }}>Maret</option>
-                                                <option value="4" {{ $item->finish_bulan == "4" ? "selected" : "" }}>April</option>
-                                                <option value="5" {{ $item->finish_bulan == "5" ? "selected" : "" }}>Mei</option>
-                                                <option value="6" {{ $item->finish_bulan == "6" ? "selected" : "" }}>Juni</option>
-                                                <option value="7" {{ $item->finish_bulan == "7" ? "selected" : "" }}>Juli</option>
-                                                <option value="8" {{ $item->finish_bulan == "8" ? "selected" : "" }}>Agustus</option>
-                                                <option value="9" {{ $item->finish_bulan == "9" ? "selected" : "" }}>September</option>
-                                                <option value="10" {{ $item->finish_bulan == "10" ? "selected" : "" }}>Oktober</option>
-                                                <option value="11" {{ $item->finish_bulan == "11" ? "selected" : "" }}>November</option>
-                                                <option value="12" {{ $item->finish_bulan == "12" ? "selected" : "" }}>Desember</option>
-                                            </select>
-                                            <!--end::Input-->
-                                            <!--begin::Input-->
-                                            <select id="tahun_finish_{{$item->id }}" name="tahun_finish"
-                                                class="form-select form-select-solid select2-hidden-accessible"
-                                                data-control="select2" data-hide-search="true" data-placeholder="Pilh Tahun..."
-                                                data-select2-id="select2_tahun_finish_{{$item->id }}" tabindex="-1" aria-hidden="true" {{ !empty($item->finish_bulan) ? "disabled" : "" }}>
-                                                @foreach (range(1, 2) as $index)
-                                                    <option value="{{$tahun}}" {{(!empty($item->finish_tahun) && $item->finish_tahun == $tahun) ? "selected" : "" }}>{{$tahun}}</option>
-                                                    @php
-                                                        $tahun++;
-                                                    @endphp
-                                                @endforeach
-                                            </select>
-                                            <!--end::Input-->
-                                        </div>
+                                    @php
+                                        $tahun = (int) date("Y");
+                                    @endphp
+                                    <!--end::Label-->
+                                    <div class="d-flex flex-row gap-2">
+                                        <!--begin::Input-->
+                                        <select id="bulan_finish" name="bulan_finish"
+                                            class="form-select form-select-solid select2-hidden-accessible"
+                                            data-control="select2" data-hide-search="true" data-placeholder="Pilh Bulan..."
+                                            data-select2-id="select2_bulan_finish_{{ $item->id }}" tabindex="-1" aria-hidden="true" {{ !empty($item->finish_bulan) ? "disabled" : "" }}>
+                                            <option value="" selected></option>
+                                            <option value="1" {{ $item->finish_bulan == "1" ? "selected" : "" }}>Januari</option>
+                                            <option value="2" {{ $item->finish_bulan == "2" ? "selected" : "" }}>Februari</option>
+                                            <option value="3" {{ $item->finish_bulan == "3" ? "selected" : "" }}>Maret</option>
+                                            <option value="4" {{ $item->finish_bulan == "4" ? "selected" : "" }}>April</option>
+                                            <option value="5" {{ $item->finish_bulan == "5" ? "selected" : "" }}>Mei</option>
+                                            <option value="6" {{ $item->finish_bulan == "6" ? "selected" : "" }}>Juni</option>
+                                            <option value="7" {{ $item->finish_bulan == "7" ? "selected" : "" }}>Juli</option>
+                                            <option value="8" {{ $item->finish_bulan == "8" ? "selected" : "" }}>Agustus</option>
+                                            <option value="9" {{ $item->finish_bulan == "9" ? "selected" : "" }}>September</option>
+                                            <option value="10" {{ $item->finish_bulan == "10" ? "selected" : "" }}>Oktober</option>
+                                            <option value="11" {{ $item->finish_bulan == "11" ? "selected" : "" }}>November</option>
+                                            <option value="12" {{ $item->finish_bulan == "12" ? "selected" : "" }}>Desember</option>
+                                        </select>
+                                        <!--end::Input-->
+                                        <!--begin::Input-->
+                                        <select id="tahun_finish_{{$item->id }}" name="tahun_finish"
+                                            class="form-select form-select-solid select2-hidden-accessible"
+                                            data-control="select2" data-hide-search="true" data-placeholder="Pilh Tahun..."
+                                            data-select2-id="select2_tahun_finish_{{$item->id }}" tabindex="-1" aria-hidden="true" {{ !empty($item->finish_bulan) ? "disabled" : "" }}>
+                                            @foreach (range(1, 2) as $index)
+                                                <option value="{{$tahun}}" {{(!empty($item->finish_tahun) && $item->finish_tahun == $tahun) ? "selected" : "" }}>{{$tahun}}</option>
+                                                @php
+                                                    $tahun++;
+                                                @endphp
+                                            @endforeach
+                                        </select>
+                                        <!--end::Input-->
                                     </div>
-                                    <!--end::Input group-->
+                                </div>
+                                <!--end::Input group-->
 
                                 <div class="row ms-1 my-7">
                                     <!--Begin::Input Checkbox-->
@@ -660,10 +608,10 @@
                                     </div>
                                     <!--End::Input Checkbox-->
                                 </div>     
-                                </div>
+
 
                             </div>
-                            <!--End::Row Kanan+Kiri-->   
+                            <!--End::Row Kanan+Kiri-->    
         
                         </div>
                         <div class="modal-footer">
@@ -679,7 +627,7 @@
             <!--end::Modal dialog-->
         </div>
     @endforeach
-    <!--end::Modal Edit Kriteria Green Line-->
+    <!--end::Modal Edit Kriteria Selection Non Greenlane-->
 
     
     {{-- <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
@@ -718,7 +666,7 @@
                 try {
                     const formData = new FormData();
                     formData.append("_token", "{{ csrf_token() }}");
-                    const req = await fetch(`{{ url('/penilaian-pengguna-jasa/delete/') }}/${id}`, {
+                    const req = await fetch(`{{ url('/kriteria-selection-non-greenlane/delete/') }}/${id}`, {
                         method: 'POST',
                         header: {
                             "content-type": "application/json",

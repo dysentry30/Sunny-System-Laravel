@@ -85,6 +85,7 @@
                                     <!--begin::Table row-->
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0 bg-primary">
                                         <th class="min-w-auto text-white">No.</th>
+                                        <th class="min-w-auto text-white">Kategori</th>
                                         <th class="min-w-auto text-white">Item</th>
                                         {{-- <th class="min-w-auto text-white">Bobot</th> --}}
                                         <th class="min-w-auto text-white">Start Periode</th>
@@ -186,6 +187,7 @@
                                     @endphp
                                         <tr>
                                             <td class="text-center align-middle">{{$no++}}</td>
+                                            <td class="align-middle">{!! $item->kategori ?? "-" !!}</td>
                                             <td class="align-middle">{!! nl2br($item->item) !!}</td>
                                             {{-- <td class="text-center align-middle">{{ $item->bobot }}</td> --}}
                                             <td class="text-center">{{$start_bulan}}</td>
@@ -313,6 +315,55 @@
                             </div>
                             <!--End begin::Col-->
 
+                            <!--Begin::Col-->
+                            <div class="row mb-7">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="required">Nota Rekomendasi</span>
+                                </label>
+                                <!--end::Label-->
+                                <div class="d-flex flex-row gap-2">
+                                    <!--begin::Input-->
+                                    <select id="nota_rekomendasi" name="nota_rekomendasi"
+                                        class="form-select form-select-solid select2-hidden-accessible"
+                                        data-control="select2" data-hide-search="true" data-placeholder="Pilh Nota Rekomendasi..."
+                                        data-select2-id="select2-feature" tabindex="-1" aria-hidden="true" onchange="showKategori(this)">
+                                        <option value="" selected></option>
+                                        <option value="Nota Rekomendasi 1">Nota Rekomendasi 1</option>
+                                        <option value="Nota Rekomendasi 2">Nota Rekomendasi 2</option>
+                                    </select>
+                                    <!--end::Input-->
+                                </div>
+                            </div>
+                            <!--End::Col-->
+
+                            <!--begin::Col-->
+                            <div id="kategori-elt" class="d-none">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span class="required">Kategori</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <div class="d-flex flex-row gap-2">
+                                        <!--begin::Input-->
+                                        <select id="kategori" name="kategori"
+                                            class="form-select form-select-solid select2-hidden-accessible"
+                                            data-control="select2" data-hide-search="true" data-placeholder="Pilih Kategori..."
+                                            data-select2-id="select2-feature-kategori" tabindex="-1" aria-hidden="true">
+                                            <option value="" selected></option>
+                                            <option value="Legalitas institusi / perusahaan ">Legalitas institusi / perusahaan </option>
+                                            <option value="Klasifikasi perusahaan (Partner KSO)">Klasifikasi perusahaan (Partner KSO)</option>
+                                            <option value="Kesesuaian dengan bidang usaha perusahaan">Kesesuaian dengan bidang usaha perusahaan</option>
+                                        </select>
+                                        <!--end::Input-->
+                                    </div>
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End begin::Col-->
+
                             <!--begin::Col-->
                             <div class="row mb-7">
                                 <label class="fs-6 fw-bold form-label mt-3">
@@ -328,26 +379,6 @@
                                 </label>
                                 <input type="number" name="bobot" class="form-control form-control-solid">
                             </div> --}}
-
-                            <div class="row mb-7">
-                                 <!--begin::Label-->
-                                 <label class="fs-6 fw-bold form-label mt-3">
-                                    <span class="required">Nota Rekomendasi</span>
-                                </label>
-                                <!--end::Label-->
-                                <div class="d-flex flex-row gap-2">
-                                    <!--begin::Input-->
-                                    <select id="nota_rekomendasi" name="nota_rekomendasi"
-                                        class="form-select form-select-solid select2-hidden-accessible"
-                                        data-control="select2" data-hide-search="true" data-placeholder="Pilh Nota Rekomendasi..."
-                                        data-select2-id="select2-feature" tabindex="-1" aria-hidden="true">
-                                        <option value="" selected></option>
-                                        <option value="Nota Rekomendasi 1">Nota Rekomendasi 1</option>
-                                        <option value="Nota Rekomendasi 2">Nota Rekomendasi 2</option>
-                                    </select>
-                                    <!--end::Input-->
-                                </div>
-                            </div>
 
                             <!--begin::Input group Website-->
                             <div class="fv-row mb-7 d-none" id="finish-periode">
@@ -510,12 +541,61 @@
                                     <!--end::Input group-->
                                 </div>
                                 <!--End begin::Col-->
+                                <!--Begin::Col-->
+                                <div class="row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span class="required">Nota Rekomendasi</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <div class="d-flex flex-row gap-2">
+                                        <!--begin::Input-->
+                                        <select id="nota_rekomendasi" name="nota_rekomendasi"
+                                            class="form-select form-select-solid select2-hidden-accessible"
+                                            data-control="select2" data-hide-search="true" data-placeholder="Pilh Nota Rekomendasi..."
+                                            data-select2-id="select2-feature-{{ $item->id }}-{{ $no++ }}" tabindex="-1" aria-hidden="true" onchange="showKategori(this,'{{ $item->id }}')">
+                                            <option value="" selected></option>
+                                            <option value="Nota Rekomendasi 1" {{ $item->nota_rekomendasi == "Nota Rekomendasi 1" ? "selected" : ""}}>Nota Rekomendasi 1</option>
+                                            <option value="Nota Rekomendasi 2" {{ $item->nota_rekomendasi == "Nota Rekomendasi 2" ? "selected" : ""}}>Nota Rekomendasi 2</option>
+                                        </select>
+                                        <!--end::Input-->
+                                    </div>
+                                </div>
+                                <!--End::Col-->
+
+                                <!--begin::Col-->
+                                <div class="{{ $item->nota_rekomendasi == "Nota Rekomendasi 1" ? "d-none" : "" }}">
+                                    <!--begin::Input group Website-->
+                                    <div class="fv-row mb-7">
+                                        <!--begin::Label-->
+                                        <label class="fs-6 fw-bold form-label mt-3">
+                                            <span class="required">Kategori</span>
+                                        </label>
+                                        <!--end::Label-->
+                                        <div class="d-flex flex-row gap-2">
+                                            <!--begin::Input-->
+                                            <select id="kategori-{{ $item->id }}" name="kategori"
+                                                class="form-select form-select-solid select2-hidden-accessible"
+                                                data-control="select2" data-hide-search="true" data-placeholder="Pilih Kategori..."
+                                                data-select2-id="select2-feature-kategori-{{ $item->id }}" tabindex="-1" aria-hidden="true">
+                                                <option value="" selected></option>
+                                                <option value="Legalitas institusi / perusahaan" {{ $item->kategori == "Legalitas institusi / perusahaan" ? "selected" : "" }}>Legalitas institusi / perusahaan </option>
+                                                <option value="Klasifikasi perusahaan (Partner KSO)" {{ $item->kategori == "Klasifikasi perusahaan (Partner KSO)" ? "selected" : "" }}>Klasifikasi perusahaan (Partner KSO)</option>
+                                                <option value="Kesesuaian dengan bidang usaha perusahaan" {{ $item->kategori == "Kesesuaian dengan bidang usaha perusahaan" ? "selected" : "" }}>Kesesuaian dengan bidang usaha perusahaan</option>
+                                            </select>
+                                            <!--end::Input-->
+                                        </div>
+                                    </div>
+                                    <!--end::Input group-->
+                                </div>
+                                <!--End begin::Col-->
+
                                 <!--begin::Col-->
                                 <div class="row mb-7">
                                     <label class="fs-6 fw-bold form-label mt-3">
                                         <span class="required">Item</span>
                                     </label>
-                                    <textarea name="item" id="item" cols="30" rows="10">{!! nl2br($item->item) !!}</textarea>
+                                    <textarea name="item" id="item" cols="30" rows="10">{!! $item->item !!}</textarea>
                                 </div>
                                 <!--End begin::Col-->
     
@@ -525,29 +605,7 @@
                                     </label>
                                     <input type="number" name="bobot" value="{{ $item->bobot }}" class="form-control form-control-solid">
                                 </div> --}}
-    
-    
-                                <div class="row mb-7">
-                                     <!--begin::Label-->
-                                     <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Nota Rekomendasi</span>
-                                    </label>
-                                    <!--end::Label-->
-                                    <div class="d-flex flex-row gap-2">
-                                        <!--begin::Input-->
-                                        <select id="nota_rekomendasi" name="nota_rekomendasi"
-                                            class="form-select form-select-solid select2-hidden-accessible"
-                                            data-control="select2" data-hide-search="true" data-placeholder="Pilh Nota Rekomendasi..."
-                                            data-select2-id="select2-feature-{{ $item->id }}-{{ $no++ }}" tabindex="-1" aria-hidden="true">
-                                            <option value="" selected></option>
-                                            <option value="Nota Rekomendasi 1" {{ $item->nota_rekomendasi == "Nota Rekomendasi 1" ? "selected" : ""}}>Nota Rekomendasi 1</option>
-                                            <option value="Nota Rekomendasi 2" {{ $item->nota_rekomendasi == "Nota Rekomendasi 2" ? "selected" : ""}}>Nota Rekomendasi 2</option>
-                                        </select>
-                                        <!--end::Input-->
-                                    </div>
-                                </div>
-
-                                
+                                    
                                 <!--begin::Input group Website-->
                                 <div class="fv-row mt-7 {{ (!empty($item->is_active) && $item->is_active) || is_null($item->is_active) ? 'd-none' : '' }}" id="finish-periode-edit-{{ $item->id }}">
                                     <!--begin::Label-->
@@ -664,7 +722,7 @@
                 try {
                     const formData = new FormData();
                     formData.append("_token", "{{ csrf_token() }}");
-                    const req = await fetch(`{{ url('/kriteria-pengguna-jasa/delete/') }}/${id}`, {
+                    const req = await fetch(`{{ url('/legalitas-perusahaan/delete/') }}/${id}`, {
                         method: 'POST',
                         header: {
                             "content-type": "application/json",
@@ -691,90 +749,18 @@
         })
     }
 
-    function setItem(elt, id=null, text=null) {
-        // if (elt.value == "Legalitas Perusahaan") {
-        //     let data = [
-        //         {
-        //             id: "Legalitas Institusi / Perusahaan",
-        //             text: 'Legalitas Institusi / Perusahaan'
-        //         }
-        //     ]
-        //     if (id != null) {
-        //         $(`#item-${id}`).empty() 
-        //         $(`#item-${id}`)
-        //         $(`#item-${id}`).select2({
-        //             minimumResultsForSearch: -1,
-        //             data: data
-        //         })
-        //     } else {
-        //         $(`#item`).empty() 
-        //         $(`#item`).select2({
-        //             minimumResultsForSearch: -1,
-        //             data: data
-        //         }) 
-        //     }
-        // } else 
-        if(elt.value == "Reputasi Pemberi Kerja") {
-            let data = [
-                {
-                    id: "",
-                    text: ''
-                },
-                {
-                    id: "Reputasi Pemberi Kerja Dalam Pemenuhan Kontrak (Historical)",
-                    text: 'Reputasi Pemberi Kerja Dalam Pemenuhan Kontrak (Historical)'
-                }
-            ]
-            if (id != null) {
-                $(`#item-${id}`).empty() 
-                $(`#item-${id}`)
-                $(`#item-${id}`).select2({
-                    minimumResultsForSearch: -1,
-                    data: data
-                })
-            } else {
-                $(`#item`).empty() 
-                $(`#item`).select2({
-                    minimumResultsForSearch: -1,
-                    data: data
-                }) 
+    function showKategori(elt, id = null){
+        if (id != null) {
+            if (elt.value == "Nota Rekomendasi 2") {
+                document.querySelector(`#kategori-elt-${id}`).className = "";
+            }else{
+                document.querySelector(`#kategori-elt-${id}`).className = "d-none";
             }
-        } else {
-            let data = [
-                {
-                    id: "",
-                    text: ''
-                },
-                {
-                    id: 'Current Ratio',
-                    text: 'Current Ratio'
-                },
-                {
-                    id: 'Cash Ratio',
-                    text: 'Cash Ratio'
-                },
-                {
-                    id: 'Debt to Equity Ratio',
-                    text: 'Debt to Equity Ratio'
-                },
-                {
-                    id: 'Kepatuhan Pembayaran Pajak',
-                    text: 'Kepatuhan Pembayaran Pajak'
-                }
-            ]
-            if (id != null) {
-                $(`#item-${id}`).empty() 
-                $(`#item-${id}`).select2({
-                    minimumResultsForSearch: -1,
-                    data: data
-                })
-                $(`#item-${id}`).val()
-            } else {
-                $(`#item`).empty() 
-                $(`#item`).select2({
-                    minimumResultsForSearch: -1,
-                    data: data
-                }) 
+        }else{
+            if (elt.value == "Nota Rekomendasi 2") {
+                document.querySelector("#kategori-elt").className = "";
+            }else{
+                document.querySelector("#kategori-elt").className = "d-none";
             }
         }
     }

@@ -45,6 +45,7 @@ use App\Http\Controllers\DirektoratController;
 use App\Http\Controllers\DivisiController;
 use App\Http\Controllers\JenisProyekController;
 use App\Http\Controllers\KriteriaPenggunaJasaController;
+use App\Http\Controllers\KriteriaSelectionNonGreenlaneController;
 use App\Http\Controllers\PenilaianPenggunaJasaController;
 use App\Http\Controllers\MataUangController;
 use App\Http\Controllers\OtomasiApprovalController;
@@ -2214,9 +2215,14 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $approval_rekomendasi->start_tahun = $data["tahun_start"];
         $approval_rekomendasi->start_bulan = $data["bulan_start"];
         $approval_rekomendasi->is_active = isset($data["isActive"]) ? true : false;
-        if (isset($data["tahun_finish"]) && isset($data["bulan_finish"])) {
-            $approval_rekomendasi->finish_tahun = $data["tahun_finish"];
-            $approval_rekomendasi->finish_bulan = $data["bulan_finish"];
+        if ($approval_rekomendasi->is_active == true) {
+            $approval_rekomendasi->finish_tahun = null;
+            $approval_rekomendasi->finish_bulan = null;
+        } else {
+            if (isset($data["tahun_finish"]) && isset($data["bulan_finish"])) {
+                $approval_rekomendasi->finish_tahun = $data["tahun_finish"];
+                $approval_rekomendasi->finish_bulan = $data["bulan_finish"];
+            }
         }
         $approval_rekomendasi->kode_unit_kerja = $data["kode-unit"];
         $approval_rekomendasi->urutan = $data["urutan"];
@@ -2259,6 +2265,13 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $legalitas->start_tahun = $data["tahun_start"];
         $legalitas->start_bulan = $data["bulan_start"];
         $legalitas->is_active = isset($data["isActive"]) ? true : false;
+
+        if ($legalitas->nota_rekomendasi == "Nota Rekomendasi 2") {
+            if (isset($data['kategori'])) {
+                $legalitas->kategori = $data['kategori'];
+            }
+        }
+
         if (isset($data["tahun_finish"]) && isset($data["bulan_finish"])) {
             $legalitas->finish_tahun = $data["tahun_finish"];
             $legalitas->finish_bulan = $data["bulan_finish"];
@@ -2290,16 +2303,28 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $legalitas->start_tahun = $data["tahun_start"];
         $legalitas->start_bulan = $data["bulan_start"];
         $legalitas->is_active = isset($data["isActive"]) ? true : false;
-        if (isset($data["tahun_finish"]) && isset($data["bulan_finish"])) {
-            $legalitas->finish_tahun = $data["tahun_finish"];
-            $legalitas->finish_bulan = $data["bulan_finish"];
+
+        if ($legalitas->nota_rekomendasi == "Nota Rekomendasi 2") {
+            if (isset($data['kategori'])) {
+                $legalitas->kategori = $data['kategori'];
+            }
+        }
+
+        if ($legalitas->is_active == true) {
+            $legalitas->finish_tahun = null;
+            $legalitas->finish_bulan = null;
+        } else {
+            if (isset($data["tahun_finish"]) && isset($data["bulan_finish"])) {
+                $legalitas->finish_tahun = $data["tahun_finish"];
+                $legalitas->finish_bulan = $data["bulan_finish"];
+            }
         }
 
         if ($legalitas->save()) {
-            Alert::success("Success", "Legalitas Perusahaan Berhasil Ditambahkan");
+            Alert::success("Success", "Legalitas Perusahaan Berhasil Diubah");
             return redirect()->back();
         }
-        Alert::success("Error", "Legalitas Perusahaan Gagal Ditambahkan");
+        Alert::success("Error", "Legalitas Perusahaan Gagal Diubah");
         return redirect()->back();
     });
 
@@ -2425,6 +2450,11 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post('/penilaian-pengguna-jasa/save', [PenilaianPenggunaJasaController::class, 'store']);
     Route::post('/penilaian-pengguna-jasa/update/{id}', [PenilaianPenggunaJasaController::class, 'update']);
     Route::post('/penilaian-pengguna-jasa/delete/{id}', [PenilaianPenggunaJasaController::class, 'destroy']);
+
+    Route::get('/kriteria-selection-non-greenlane', [KriteriaSelectionNonGreenlaneController::class, 'index']);
+    Route::post('/kriteria-selection-non-greenlane/save', [KriteriaSelectionNonGreenlaneController::class, 'store']);
+    Route::post('/kriteria-selection-non-greenlane/update/{id}', [KriteriaSelectionNonGreenlaneController::class, 'update']);
+    Route::post('/kriteria-selection-non-greenlane/delete/{id}', [KriteriaSelectionNonGreenlaneController::class, 'destroy']);
 
 
     

@@ -20,7 +20,6 @@ use App\Models\Pegawai;
 use App\Models\RoleManagements;
 use Exception;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 
 
@@ -694,25 +693,5 @@ class UserController extends Controller
     //     }
     // }
 
-    /**
-     * TESTING LOGIN VIA SSO WZONE
-     */
-    public function authenticate(Request $request)
-    {
-        $data = $request->all();
-        $token = $data['token'];
-        $nip = null;
-
-        //Check Validate Token WZone
-        $validateLoginWZone = Http::post('https://' . env('WZONE_URL') . '/app/sso/valid', [
-            'app_secret' => env('WZONE_APP_SECRET'),
-            'token' => $token
-        ]);
-
-        if ($validateLoginWZone->successfull()) {
-            //Get Data User Login From WZone
-            $user = $validateLoginWZone->collect($key = 'data')->first();
-        }
-    }
 
 }
