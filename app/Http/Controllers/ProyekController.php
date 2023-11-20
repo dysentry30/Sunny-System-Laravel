@@ -514,9 +514,10 @@ class ProyekController extends Controller
         // }
         if (isset($dataProyek["proyek-rekomendasi"]) && isset($dataProyek["confirm-send-wa"]) && isset($dataProyek["ra-klasifikasi-proyek"])&& isset($dataProyek["sumber-dana"]) ) {
             $divisi = $newProyek->UnitKerja->Divisi->id_divisi;
+            $departemen = $newProyek->departemen_proyek;
             // dump($divisi);
             $klasifikasi_proyek = $newProyek->klasifikasi_pasdin;
-            $matriks_approval = MatriksApprovalRekomendasi::where("unit_kerja", "=", $divisi)->where("klasifikasi_proyek", "=", $klasifikasi_proyek)->where("kategori", "=", "Pengajuan")->get();
+            $matriks_approval = MatriksApprovalRekomendasi::where("unit_kerja", "=", $divisi)->where("klasifikasi_proyek", "=", $klasifikasi_proyek)->where("departemen", $departemen)->where("kategori", "=", "Pengajuan")->get();
             // dd($matriks_approval);
             $isnomorTargetActive = false;
             $nomorDefault = "085881028391";
