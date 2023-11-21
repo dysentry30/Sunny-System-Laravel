@@ -823,6 +823,9 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     // EDIT Peserta Tender 
     Route::post('/proyek/peserta-tender/{id}/edit', [ProyekController::class, 'editTender']);
 
+    // NOTE Peserta Tender 
+    Route::post('/proyek/peserta-tender/{id}/note', [ProyekController::class, 'noteTender']);
+
     // DELETE Peserta Tender 
     Route::delete('proyek/peserta-tender/{id}/delete', [ProyekController::class, 'deleteTender']);
 

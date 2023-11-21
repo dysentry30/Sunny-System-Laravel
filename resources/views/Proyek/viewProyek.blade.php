@@ -4777,7 +4777,93 @@
                                                         </div>
                                                         <!--End begin::Row-->
                                                     </div>
+
+                                                    <br>
                                                     <!--divMenang-->
+
+                                                    <!--Begin::List Peserta Tender--> 
+                                                    <!--Begin::Title Biru Form: List Peserta Tender-->
+                                                    <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                                        List Peserta Tender
+                                                        {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
+                                                            data-bs-target="#kt_modal_peserta_tender">+</a> --}}
+                                                    </h3>
+                                                    <br>
+                                                    <!--begin::Table Kriteria Pasar-->
+                                                    <table class="table align-middle table-row-dashed fs-6 gy-2"
+                                                        id="kt_customers_table">
+                                                        <!--begin::Table head-->
+                                                        <thead>
+                                                            <!--begin::Table row-->
+                                                            <tr
+                                                                class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                <th class="w-50px text-center">No.</th>
+                                                                <th class="w-auto">Nama Peserta Tender</th>
+                                                                <th class="w-auto">Nilai Penawaran</th>
+                                                                <th class="w-auto"><i class="bi bi-percent"></i>OE
+                                                                </th>
+                                                                <th class="w-auto">Status</th>
+                                                                <th class="w-100px"></th>
+                                                            </tr>
+                                                            <!--end::Table row-->
+                                                        </thead>
+                                                        <!--end::Table head-->
+                                                        <!--begin::Table body-->
+                                                        @php
+                                                            $no = 1;
+                                                        @endphp
+                                                        <tbody class="fw-bold text-gray-600">
+                                                            @foreach ($pesertatender as $peserta)
+                                                                <tr>
+                                                                    <!--begin::Name-->
+                                                                    <td class="text-center">
+                                                                        {{ $no++ }}
+                                                                    </td>
+                                                                    <!--end::Name-->
+                                                                    <!--begin::Column-->
+                                                                    <td>
+                                                                        <a href="#"
+                                                                            class="text-gray-800 text-hover-primary"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#kt_modal_edit_tender_{{ $peserta->id }}">{{ $peserta->peserta_tender }}</a>
+                                                                    </td>
+                                                                    <!--end::Column-->
+                                                                    <!--begin::Column-->
+                                                                    <td>
+                                                                        {{ $peserta->nilai_tender_peserta ?? '-' }}
+                                                                    </td>
+                                                                    <!--end::Column-->
+                                                                    <!--begin::Column-->
+                                                                    <td>
+                                                                        {{ $peserta->oe_tender ?? '-' }}
+                                                                    </td>
+                                                                    <!--end::Column-->
+                                                                    <!--begin::Column-->
+                                                                    <td>
+                                                                        {{ $peserta->status ?? '-' }}
+                                                                    </td>
+                                                                    <!--end::Column-->
+                                                                    <!--begin::Action-->
+                                                                    <td class="text-center">
+                                                                        <small></small>
+                                                                            <p data-bs-toggle="modal"
+                                                                                data-bs-target="#kt_tender_catatan_{{ $peserta->id }}"
+                                                                                id="modal-delete"
+                                                                                class="btn btn-sm btn-primary m-0">
+                                                                                Catatan
+                                                                            </p>
+                                                                        </small>
+                                                                    </td>
+                                                                    <!--end::Action-->
+                                                                </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                        <!--end::Table body-->
+                                                    </table>
+                                                    <!--End::Title Biru Form: List Peserta Tender-->
+
+                                                    <br>
+                                                    <!--End::List Peserta Tender--> 
 
                                                     <!--Begin::Title Biru Form: Attachment Menang-->
                                                     <br>
@@ -7368,10 +7454,61 @@
                         <!--end::Modal content-->
                     </div>
                     <!--end::Modal dialog-->
-        </div>
-        </form>
-        @endforeach
-        <!--end::DELETE PESERTA TENDER-->
+                </form>
+            @endforeach
+            <!--end::DELETE PESERTA TENDER-->
+            
+            <!--begin::DELETE PESERTA TENDER-->
+            @foreach ($pesertatender as $peserta)
+                <form action="/proyek/peserta-tender/{{ $peserta->id }}/note" method="post">
+                    @csrf
+                    <div class="modal fade" id="kt_tender_catatan_{{ $peserta->id }}" tabindex="-1"
+                        aria-hidden="true">
+                        <!--begin::Modal dialog-->
+                        <div class="modal-dialog modal-dialog-centered mw-800px">
+                            <!--begin::Modal content-->
+                            <div class="modal-content">
+                                <!--begin::Modal header-->
+                                <div class="modal-header">
+                                    <!--begin::Modal title-->
+                                    <h2>Alasan Gugur : {{ $peserta->peserta_tender }}
+                                    </h2>
+                                    <!--end::Modal title-->
+                                    <!--begin::Close-->
+                                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                                        <span class="svg-icon svg-icon-1">
+                                            <i class="bi bi-x-lg"></i>
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </div>
+                                    <!--end::Close-->
+                                </div>
+                                <!--end::Modal header-->
+                                <!--begin::Modal body-->
+                                <div class="modal-body py-lg-6 px-lg-6">
+                                    <textarea class="form-control" name="catatan" id="catatan" cols="30" rows="10" {{ $proyek->stage > 8 ? 'readonly' : '' }}>{!! $peserta->catatan !!}</textarea>
+                                </div>
+                                <div class="modal-footer">
+                                    @if ($proyek->stage > 8)
+                                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                                        <button class="btn btn-sm btn-light btn-active-primary">Close</button>
+                                    </div>
+                                    @else
+                                    <button class="btn btn-sm btn-light btn-active-primary" type="submit">Save</button>
+                                    @endif
+                                </div>
+                                <!--end::Input group-->
+
+                            </div>
+                            <!--end::Modal body-->
+                        </div>
+                        <!--end::Modal content-->
+                    </div>
+                    <!--end::Modal dialog-->
+                </form>
+            @endforeach
+            <!--end::DELETE PESERTA TENDER-->
 
         <!--begin::modal ADD USER SKAT-->
         <form onsubmit="disabledSubmitButton(this)" action="/proyek/user/add" method="post"
