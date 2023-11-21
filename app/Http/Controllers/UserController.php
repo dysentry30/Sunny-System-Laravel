@@ -704,19 +704,35 @@ class UserController extends Controller
         $nip = null;
 
         //Check Validate Token WZone
-        $validateLoginWZone = Http::post('https://' . env('WZONE_URL') . '/app/sso/valid', [
-            'app_secret' => env('WZONE_APP_SECRET'),
-            'token' => $token
-        ]);
+        try {
+            $validateLoginWZone = Http::get('https://' . env('WZONE_URL') . '/app/sso/valid', [
+                'app_secret' => env('WZONE_APP_SECRET'),
+                'token' => $token
+            ]);
 
-        if ($validateLoginWZone->successfull()) {            
-            //Get Data User Login From WZone
-            $user = $validateLoginWZone->collect($key = 'data')->first();
-            $nip = $user['NIP'];
-        }
+            if ($validateLoginWZone->successfull()) {
+                //Get Data User From WZone
+                $user = $validateLoginWZone->collect($key = 'data')->first();
+                $nip = $user['NIP'];
+            } else {
+                return redirect()->back();
+            }
 
-        if (!empty($nip)) {
-            dd("Testing");
+            if (!empty($nip)) {
+                //Check Pegawai yg login dari WZone ada di CRM atau tidak
+                $checkUserInCRM = User::where('nip', $nip)->first();
+
+                if ($checkUserInCRM->isNotEmpty() && $checkUserInCRM->is_active
+                ) {
+                    Auth::login(['nip' => $nip]);
+                    if (Auth::check()) {
+                        $request->session()->regenerate();
+                        return redirect()->intended("/dashboard");
+                    }
+                }
+            }
+        } catch (\Throwable $th) {
+            dd($th);
         }
     }
 

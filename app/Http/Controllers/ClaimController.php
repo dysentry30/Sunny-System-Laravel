@@ -152,7 +152,7 @@ class ClaimController extends Controller
                 // $unit_kerjas = UnitKerja::whereNotIn("divcode",  $unit_kerja_code)->get();
                 // $proyeks = Proyek::join("contract_managements", "proyeks.kode_proyek", "=", "contract_managements.project_id")->whereNotIn("unit_kerja", $unit_kerja_code)->whereIn("stage", [6, 8, 9])->where("stages", "=", 3)->get();
             } else {
-                $unit_kerja_code =   ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "N"];
+                $unit_kerja_code =   ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "N", "L", "F", "U", "O"];
                 $unitkerjas = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->get("divcode");
                 $unit_kerjas_select = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->get();
                 // $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $filterTahun)->whereNotIn("unit_kerja", $unit_kerja_code)->get();
@@ -179,7 +179,7 @@ class ClaimController extends Controller
             //     }
             // }
             if ($filterBulan == (int) date("m") && $filterTahun == (int) date("Y")) {
-                $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->whereIn("unit_kerja", $unit_kerja_get)->get();
+                $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->whereIn("unit_kerja", $unit_kerja_get)->where('contract_managements.stages', '>', 1)->get();
 
                 $proyeks_all = $proyeks_all->map(function ($proyek) {
                     $result = [];
@@ -264,8 +264,6 @@ class ClaimController extends Controller
                     $item_klaim_asuransi = $cat_klaim_asuransi->count();
                     return [
                         'kode_proyek' => $claim->first()->kode_proyek,
-                        'periode' => $claim->first()->periode,
-                        'tahun' => $claim->first()->tahun,
                         'nama_proyek' => $claim->first()->Proyeks->nama_proyek,
                         'id_contract' => $claim->first()->id_contract,
                         'unit_kerja' => $claim->first()->Proyeks->UnitKerja->unit_kerja,
@@ -317,7 +315,7 @@ class ClaimController extends Controller
             // }
 
             if ($filterBulan == (int) date("m") && $filterTahun == (int) date("Y")) {
-                $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->whereIn("unit_kerja", $unit_kerja_get)->get();
+                $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->whereIn("unit_kerja", $unit_kerja_get)->where('contract_managements.stages', '>', 1)->get();
 
                 $proyeks_all = $proyeks_all->map(function ($proyek) {
                     $result = [];
@@ -397,8 +395,6 @@ class ClaimController extends Controller
                     $item_klaim_asuransi = $cat_klaim_asuransi->count();
                     return [
                         'kode_proyek' => $claim->first()->kode_proyek,
-                        'periode' => $claim->first()->periode,
-                        'tahun' => $claim->first()->tahun,
                         'nama_proyek' => $claim->first()->Proyeks->nama_proyek,
                         'id_contract' => $claim->first()->id_contract,
                         'unit_kerja' => $claim->first()->Proyeks->UnitKerja->unit_kerja,
@@ -470,8 +466,7 @@ class ClaimController extends Controller
         $claims_klaim_asuransi = $claims->where("jenis_perubahan", "=", "Klaim Asuransi");
         // dd($claims_vo);
 
-        return view("claimManagement/viewDetail", compact([
-            "contracts", "claims_vo", "claims_klaim", "claims_anti_klaim", "claims_klaim_asuransi", "proyek", "claim_all", "link", "periode", "user", "tahun"
+        return view("claimManagement/viewDetail", compact(["contracts", "claims_vo", "claims_klaim", "claims_anti_klaim", "claims_klaim_asuransi", "proyek", "claim_all", "link", "periode", "user"
         ]));
     }
 
@@ -615,7 +610,6 @@ class ClaimController extends Controller
         //     return Redirect::back();
         // } else {
         $contract = ContractManagements::where("project_id", "=", $data["kode-proyek"])->first();
-
         $perubahan_kontrak = new PerubahanKontrak();
         $perubahan_kontrak->kode_proyek = $data["kode-proyek"];
         $perubahan_kontrak->id_contract = $contract->id_contract;
@@ -633,6 +627,69 @@ class ClaimController extends Controller
             return redirect()->back();
         }
         Alert::error("Erorr", "Perubahan Kontrak gagal ditambahkan");
+        return Redirect::back()->with("modal", $data["modal-name"]);
+        // }
+    }
+
+    public function editClaim(Request $request, $id)
+    {
+        $data = $request->all();
+        $perubahan_kontrak = PerubahanKontrak::find($id);
+
+        $messages = [
+            "required" => "Field di atas wajib diisi",
+            "string" => "Field di atas wajib diisi string",
+        ];
+        $rules = [
+            "tanggal-perubahan" => "required|string",
+            "uraian-perubahan" => "required|string",
+            "proposal-klaim" => "required|string",
+            "tanggal-pengajuan" => "required|string",
+            // "biaya-pengajuan" => "required|string",
+            // "waktu-pengajuan" => "required|string",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+
+        if ($validation->fails()) {
+            Alert::error('Error', "Perubahan Kontrak gagal diperbaharui");
+            return Redirect::back();
+            // return Redirect::back();
+            // dd($validation->errors());
+        }
+
+        $validation->validate();
+        // if(isset($data["id-perubahan-kontrak"])) {
+        //     $perubahan_kontrak = PerubahanKontrak::find($data["id-perubahan-kontrak"]);
+        //     $perubahan_kontrak->id_contract = $data["id-contract"];
+        //     $perubahan_kontrak->jenis_perubahan = $data["jenis-perubahan"];
+        //     $perubahan_kontrak->tanggal_perubahan = $data["tanggal-perubahan"];
+        //     $perubahan_kontrak->uraian_perubahan = $data["uraian-perubahan"];
+        //     // $perubahan_kontrak->jenis_dokumen = $data["jenis-dokumen"];
+        //     // $perubahan_kontrak->instruksi_owner = $data["instruksi-owner"];
+        //     $perubahan_kontrak->proposal_klaim = $data["proposal-klaim"];
+        //     $perubahan_kontrak->tanggal_pengajuan = $data["tanggal-pengajuan"];
+        //     $perubahan_kontrak->biaya_pengajuan = str_replace(".", "", $data["biaya-pengajuan"]);
+        //     $perubahan_kontrak->waktu_pengajuan = $data["waktu-pengajuan"];
+        //     $perubahan_kontrak->stage = 1;
+        //     if ($perubahan_kontrak->save()) {
+        //         Alert::success("Success", "Perubahan Kontrak berhasil diperbarui");
+        //         return redirect()->back();
+        //     }
+        //     Alert::error("Erorr", "Perubahan Kontrak gagal diperbarui");
+        //     return Redirect::back();
+        // } else {
+        $perubahan_kontrak->tanggal_perubahan = $data["tanggal-perubahan"];
+        $perubahan_kontrak->uraian_perubahan = $data["uraian-perubahan"];
+        $perubahan_kontrak->proposal_klaim = $data["proposal-klaim"];
+        $perubahan_kontrak->tanggal_pengajuan = $data["tanggal-pengajuan"];
+        $perubahan_kontrak->biaya_pengajuan = !empty($data["biaya-pengajuan"]) ? str_replace(".", "", $data["biaya-pengajuan"]) : null;
+        $perubahan_kontrak->waktu_pengajuan = !empty($data["biaya-pengajuan"]) ? $data["waktu-pengajuan"] : null;
+        // dd($perubahan_kontrak);
+        if ($perubahan_kontrak->save()) {
+            Alert::success("Success", "Perubahan Kontrak berhasil diperbaharui");
+            return redirect()->back();
+        }
+        Alert::error("Erorr", "Perubahan Kontrak gagal diperbaharui");
         return Redirect::back()->with("modal", $data["modal-name"]);
         // }
     }

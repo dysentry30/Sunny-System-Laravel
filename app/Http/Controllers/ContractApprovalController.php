@@ -19,7 +19,7 @@ class ContractApprovalController extends Controller
     private function sendDataSAP($id_contract, $periode)
     {
         // $claims_all = PerubahanKontrak::all();
-        $claims_all = ContractApproval::whereIn("jenis_perubahan", ["VO", "Klaim"])->where("id_contract", "=", $id_contract)->where('periode', '=', $periode)->get();
+        $claims_all = ContractApproval::whereIn("jenis_perubahan", ["VO", "Klaim"])->whereIn("stage", [1, 2, 4, 5])->where("id_contract", "=", $id_contract)->where('periode', '=', $periode)->get();
         $data_claims = $claims_all->map(function($item, $key) use($claims_all){
 
             $item_claim = $claims_all->groupBy("jenis_perubahan")->filter(function($i, $key) use($item){
@@ -28,29 +28,58 @@ class ContractApprovalController extends Controller
             })->flatten();
 
             $claim_val = $item_claim->filter(function($ic) use($item){
-                if($item->stage == 1 ){
-                    return $ic->stage == 1;
-                }elseif($item->stage == 2){
-                    return $ic->stage == 2;
+                if ($item->stage == 4) {
+                    return (int) $ic->stage == 4;
                 }elseif($item->stage == 5){
-                    return $ic->stage == 5;
+                    return (int) $ic->stage == 5;
+                } elseif ($item->stage >= 2) {
+                    return (int) $ic->stage >= 2;
+                } elseif ($item->stage >= 1) {
+                    return (int) $ic->stage >= 1;
                 }
             })->count();
 
+            // $claim_val = $item_claim->filter(function($ic) use($item){
+            //     if($item->stage == 1 ){
+            //         return $ic->stage == 1;
+            //     }elseif($item->stage == 2){
+            //         return $ic->stage == 2;
+            //     }elseif($item->stage == 5){
+            //         return $ic->stage == 5;
+            //     }
+            // })->count();
+
+            $uraian_formatted = substr($item->uraian_perubahan, 0, 255);
+
             $profit_center = $item->Proyeks->profit_center;
             $newClass = new stdClass();
+
+            $newClass->NO_PROPOSAL_CLAIM = $item->proposal_klaim;
             $newClass->TANGGAL = (int) date("Ymd");
-            $newClass->PROFIT_CTR = "AD0012303N";
-            $newClass->PROJECT_DEF = "AD0012303N";
+            $newClass->PROFIT_CTR = "$profit_center";
+            $newClass->PROJECT_DEF = "$profit_center";
             $newClass->COMP_CODE = "A000";
-            $newClass->ITEM_CLAIM = "$item->uraian_perubahan";
-            if($item->stage == 2){
-                $newClass->CLAIM_CAT = "ITEM DIAJUKAN";
-            }elseif($item->stage == 1){
-                $newClass->CLAIM_CAT = "ITEM TARGET";
+            $newClass->ITEM_CLAIM = "$uraian_formatted";
+
+            if ($item->stage == 4) {
+                $newClass->CLAIM_CAT = "ITEM NEGOTIATION";
             }elseif($item->stage == 5){
-                $newClass->CLAIM_CAT = "ITEM DISETUJUI";
+                $newClass->CLAIM_CAT = "ITEM APPROVED";
+            } elseif ($item->stage >= 2) {
+                $newClass->CLAIM_CAT = "ITEM SUBMISSION";
+            } elseif ($item->stage >= 1) {
+                $newClass->CLAIM_CAT = "ITEM POTENTIAL";
             };
+
+            // if($item->stage == 2){
+            //     $newClass->CLAIM_CAT = "ITEM DIAJUKAN";
+            // }elseif($item->stage == 1){
+            //     $newClass->CLAIM_CAT = "ITEM TARGET";
+            // }elseif($item->stage == 5){
+            //     $newClass->CLAIM_CAT = "ITEM DISETUJUI";
+            // } elseif ($item->stage == 4) {
+            //     $newClass->CLAIM_CAT = "ITEM NEGOSIASI";
+            // };
 
             $newClass->CLAIM_VAL = $claim_val;
 
@@ -75,33 +104,33 @@ class ContractApprovalController extends Controller
             return $newClass;
         })->values();
 
-        // dd($data_claims);
         // return response()->json($data_claims, 200);
+        // dd($data_claims);
 
         // SAP DEV
-        // FIRST STEP SEND DATA TO BW
-        $csrf_token = "";
-        $content_location = "";
-        // $response = getAPI("https://wtappbw-qas.wika.co.id:44350/sap/bw4/v1/push/dataStores/yodaltes4/requests", [], [], false);
-        // $http = Http::withBasicAuth("WIKA_API", "WikaWika2022");
-        $get_token = Http::withBasicAuth("WIKA_API", "WikaWika2022")->withHeaders(["x-csrf-token" => "Fetch"])->get("https://wtappbw-dev.wika.co.id:44340/sap/bw4/v1/push/dataStores/zosbi006/requests");
-        $csrf_token = $get_token->header("x-csrf-token");
-        $cookie = "";
-        collect($get_token->cookies()->toArray())->each(function ($c) use (&$cookie) {
-            $cookie .= $c["Name"] . "=" . $c["Value"] . ";";
-        });
+        // // FIRST STEP SEND DATA TO BW
+        // $csrf_token = "";
+        // $content_location = "";
+        // // $response = getAPI("https://wtappbw-qas.wika.co.id:44350/sap/bw4/v1/push/dataStores/yodaltes4/requests", [], [], false);
+        // // $http = Http::withBasicAuth("WIKA_API", "WikaWika2022");
+        // $get_token = Http::withBasicAuth("WIKA_API", "WikaWika2022")->withHeaders(["x-csrf-token" => "Fetch"])->get("https://wtappbw-dev.wika.co.id:44340/sap/bw4/v1/push/dataStores/zosbi006/requests");
+        // $csrf_token = $get_token->header("x-csrf-token");
+        // $cookie = "";
+        // collect($get_token->cookies()->toArray())->each(function($c) use(&$cookie) {
+        //     $cookie .= $c["Name"] . "=" . $c["Value"] . ";"; 
+        // });
 
-        // SECOND STEP SEND DATA TO BW
-        $get_content_location = Http::withBasicAuth("WIKA_API", "WikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie])->post("https://wtappbw-dev.wika.co.id:44340/sap/bw4/v1/push/dataStores/zosbi006/requests");
-        $content_location = $get_content_location->header("content-location");
+        // // SECOND STEP SEND DATA TO BW
+        // $get_content_location = Http::withBasicAuth("WIKA_API", "WikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie])->post("https://wtappbw-dev.wika.co.id:44340/sap/bw4/v1/push/dataStores/zosbi006/requests");
+        // $content_location = $get_content_location->header("content-location");
 
 
-        // THIRD STEP SEND DATA TO BW
-        // dd($new_class->toJson());
-        $fill_data = Http::withBasicAuth("WIKA_API", "WikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie, "content-type" => "application/json"])->post("https://wtappbw-dev.wika.co.id:44340/sap/bw4/v1/push/dataStores/zosbi006/dataSend?request=$content_location&datapid=1", $data_claims->toArray());
+        // // THIRD STEP SEND DATA TO BW
+        // // dd($new_class->toJson());
+        // $fill_data = Http::withBasicAuth("WIKA_API", "WikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie, "content-type" => "application/json"])->post("https://wtappbw-dev.wika.co.id:44340/sap/bw4/v1/push/dataStores/zosbi006/dataSend?request=$content_location&datapid=1", $data_claims->toArray());
 
-        // FOURTH STEP SEND DATA TO BW
-        $closed_request = Http::withBasicAuth("WIKA_API", "WikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie])->post("https://wtappbw-dev.wika.co.id:44340/sap/bw4/v1/push/dataStores/zosbi006/requests/$content_location/close");
+        // // FOURTH STEP SEND DATA TO BW
+        // $closed_request = Http::withBasicAuth("WIKA_API", "WikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie])->post("https://wtappbw-dev.wika.co.id:44340/sap/bw4/v1/push/dataStores/zosbi006/requests/$content_location/close");
         // // dd($closed_request, $data_claims, $fill_data);
 
         //-------------------------------------------------------------------------------------//
@@ -110,30 +139,29 @@ class ContractApprovalController extends Controller
         //SAP PRODUCTION
 
         // FIRST STEP SEND DATA TO BW
-        // $csrf_token = "";
-        // $content_location = "";
-        // // $response = getAPI("https://wtappbw-qas.wika.co.id:44350/sap/bw4/v1/push/dataStores/yodaltes4/requests", [], [], false);
-        // // $http = Http::withBasicAuth("WIKA_API", "WikaWika2022");
-        // $get_token = Http::withBasicAuth("WIKA_API", "WikaWika2022")->withHeaders(["x-csrf-token" => "Fetch"])->get("https://wtappbw-prd.wika.co.id:44360/sap/bw4/v1/push/dataStores/zosbi006/requests");
-        // $csrf_token = $get_token->header("x-csrf-token");
-        // $cookie = "";
-        // collect($get_token->cookies()->toArray())->each(function($c) use(&$cookie) {
-        //     $cookie .= $c["Name"] . "=" . $c["Value"] . ";"; 
-        // });
+        $csrf_token = "";
+        $content_location = "";
+        // $response = getAPI("https://wtappbw-qas.wika.co.id:44350/sap/bw4/v1/push/dataStores/yodaltes4/requests", [], [], false);
+        // $http = Http::withBasicAuth("WIKA_API", "WikaWika2022");
+        $get_token = Http::withBasicAuth("WIKA_API", "WikaWikaWika2022")->withHeaders(["x-csrf-token" => "Fetch"])->get("https://wtappbw-prd.wika.co.id:44360/sap/bw4/v1/push/dataStores/zosbi006/requests");
+        $csrf_token = $get_token->header("x-csrf-token");
+        $cookie = "";
+        collect($get_token->cookies()->toArray())->each(function ($c) use (&$cookie) {
+            $cookie .= $c["Name"] . "=" . $c["Value"] . ";";
+        });
 
-        // // SECOND STEP SEND DATA TO BW
-        // $get_content_location = Http::withBasicAuth("WIKA_API", "WikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie])->post("https://wtappbw-prd.wika.co.id:44360/sap/bw4/v1/push/dataStores/zosbi006/requests");
-        // $content_location = $get_content_location->header("content-location");
+        // SECOND STEP SEND DATA TO BW
+        $get_content_location = Http::withBasicAuth("WIKA_API", "WikaWikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie])->post("https://wtappbw-prd.wika.co.id:44360/sap/bw4/v1/push/dataStores/zosbi006/requests");
+        $content_location = $get_content_location->header("content-location");
 
 
-        // // THIRD STEP SEND DATA TO BW
-        // // dd($new_class->toJson());
-        // $fill_data = Http::withBasicAuth("WIKA_API", "WikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie, "content-type" => "application/json"])->post("https://wtappbw-prd.wika.co.id:44360/sap/bw4/v1/push/dataStores/zosbi006/dataSend?request=$content_location&datapid=1", $data_claims->toArray());
+        // THIRD STEP SEND DATA TO BW
+        // dd($new_class->toJson());
+        $fill_data = Http::withBasicAuth("WIKA_API", "WikaWikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie, "content-type" => "application/json"])->post("https://wtappbw-prd.wika.co.id:44360/sap/bw4/v1/push/dataStores/zosbi006/dataSend?request=$content_location&datapid=1", $data_claims->toArray());
 
-        // // FOURTH STEP SEND DATA TO BW
-        // $closed_request = Http::withBasicAuth("WIKA_API", "WikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie])->post("https://wtappbw-prd.wika.co.id:44360/sap/bw4/v1/push/dataStores/zosbi006/requests/$content_location/close");
-        // // dd($closed_request, $data_claims, $fill_data);
-
+        // FOURTH STEP SEND DATA TO BW
+        $closed_request = Http::withBasicAuth("WIKA_API", "WikaWikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie])->post("https://wtappbw-prd.wika.co.id:44360/sap/bw4/v1/push/dataStores/zosbi006/requests/$content_location/close");
+        // dd($closed_request, $data_claims, $fill_data);
 
         if ($fill_data->successful() && $closed_request->successful()) {
 
@@ -163,7 +191,6 @@ class ContractApprovalController extends Controller
 
             return response()->json($response_success);
         }
-
     }
 
     public function index(Request $request){
@@ -175,13 +202,13 @@ class ContractApprovalController extends Controller
         // dd($filterBulan);
 
         $year = (int) date("Y");
-        $month = (int) date("m") - 1;
+        $month = (int) date('m') == 1 ? 12 : ((int)date('d') < 15 ? (int) date('m') : (int) date('m') - 1);
 
         $tahun_proyeks = ContractApproval::get()->sortByDesc("tahun")->groupBy("tahun")->keys();
         $periode = (int)date("m") == 12 ? 1 : (int)date("m")-1;
         $user = Auth::user();
 
-        if ($user->check_administrator || ($user->Pegawai->kode_jabatan == 410 && $user->Pegawai->kode_fungsi_bidang == 30100)) {
+        if (Auth::user()->check_administrator) {
             if ($filterTahun < 2023) {
                 $unit_kerja_code =  ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "N", "P", "J"];
                 $unitkerjas = UnitKerja::whereNoN("divcode", $unit_kerja_code)->get("divcode");
@@ -190,7 +217,7 @@ class ContractApprovalController extends Controller
                 // $unit_kerjas = UnitKerja::whereNotIn("divcode",  $unit_kerja_code)->get();
                 // $proyeks = Proyek::join("contract_managements", "proyeks.kode_proyek", "=", "contract_managements.project_id")->whereNotIn("unit_kerja", $unit_kerja_code)->whereIn("stage", [6, 8, 9])->where("stages", "=", 3)->get();
             } else {
-                $unit_kerja_code =   ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "N"];
+                $unit_kerja_code =   ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "N", "L", "F", "U", "O"];
                 $unitkerjas = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->get("divcode");
                 $unit_kerjas_select = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->get();
                 // $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $filterTahun)->whereNotIn("unit_kerja", $unit_kerja_code)->get();
@@ -214,7 +241,7 @@ class ContractApprovalController extends Controller
 
         }else{
 
-            $unit_user = str_contains($user->unit_kerja, ",") ? collect(explode(",", $user->unit_kerja)) : collect($user->unit_kerja);
+            $unit_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja);
 
             if ($filterTahun < 2023) {
                 $unit_kerja_code =  ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "N", "P", "J"];
@@ -465,9 +492,8 @@ class ContractApprovalController extends Controller
     public function lockApprovalRev(Request $request)
     {
         $data = $request->all();
-        $approval = ContractApproval::where('id_contract', '=', $data['id_contract'])->where('periode', '=', $data['periode'])->get();
-        $claims = PerubahanKontrak::select([
-            'id_perubahan_kontrak as id',
+        $approval = ContractApproval::where('id_contract', '=', $data['id_contract'])->where('periode', '=', $data["periode"])->get();
+        $claims = PerubahanKontrak::select(['id_perubahan_kontrak',
             'kode_proyek',
             'id_contract',
             'jenis_perubahan',
@@ -476,22 +502,65 @@ class ContractApprovalController extends Controller
             'proposal_klaim',
             'tanggal_pengajuan',
             'biaya_pengajuan',
+            'nilai_disetujui',
             'waktu_pengajuan',
+            'waktu_disetujui',
             'stage'
         ])->where('id_contract', '=', $data['id_contract'])->get();
 
         // dd($approval);
         if (!empty($approval->toArray()) || $approval->isNotEmpty()) {
-            $approval->kode_proyek = $data["kode-proyek"];
-            $approval->id_contract = $data['id_contract'];
-            $approval->jenis_perubahan = $data["jenis-perubahan"];
-            $approval->tanggal_perubahan = $data["tanggal-perubahan"];
-            $approval->uraian_perubahan = $data["uraian-perubahan"];
-            $approval->proposal_klaim = $data["proposal-klaim"];
-            $approval->tanggal_pengajuan = $data["tanggal-pengajuan"];
-            $approval->biaya_pengajuan = !empty($data["biaya-pengajuan"]) ? str_replace(".", "", $data["biaya-pengajuan"]) : null;
-            $approval->waktu_pengajuan = !empty($data["biaya-pengajuan"]) ? $data["waktu-pengajuan"] : null;
-            $approval->stage = 1;
+            try {
+                $approval = $approval->keyBy('perubahan_id')->map(function ($item, $key) use ($claims) {
+                    $claim = $claims->where('id_perubahan_kontrak', $key)->first();
+                    $item->tanggal_perubahan = $claim->tanggal_perubahan;
+                    $item->uraian_perubahan = $claim->uraian_perubahan;
+                    $item->proposal_klaim = $claim->proposal_klaim;
+                    $item->tanggal_pengajuan = $claim->tanggal_pengajuan;
+                    $item->biaya_pengajuan = $claim->biaya_pengajuan;
+                    $item->waktu_pengajuan = $claim->waktu_pengajuan;
+                    $item->nilai_disetujui = $claim->nilai_disetujui;
+                    $item->waktu_disetujui = $claim->waktu_disetujui;
+                    $item->stage = $claim->stage;
+                    $item->is_locked = true;
+                    $item->save();
+                    return true;
+                });
+                if ($approval) {
+                    Alert::success("Success", "Contract berhasil dilock");
+                    // toast("Contract berhasil dilock", "success")->autoClose(3000);
+                    return response()->json([
+                        "status" => "success",
+                        "link" => true,
+                    ]);
+                } else {
+                    Alert::error("Error", "Contract gagal dilock");
+                    // toast("Contract gagal dilock", "error")->autoClose(3000);
+                    return response()->json([
+                        "status" => "error",
+                        "link" => false,
+                    ]);
+                }
+            } catch (\Throwable $th) {
+                Alert::error("Error", $th->getMessage());
+                // toast("Contract gagal dilock", "error")->autoClose(3000);
+                return response()->json([
+                    "status" => "error",
+                    "link" => false,
+                ]);
+            }
+            // $approval->kode_proyek = $data["kode-proyek"];
+            // $approval->id_contract = $data['id_contract'];
+            // $approval->jenis_perubahan = $data["jenis-perubahan"];
+            // $approval->tanggal_perubahan = $data["tanggal-perubahan"];
+            // $approval->uraian_perubahan = $data["uraian-perubahan"];
+            // $approval->proposal_klaim = $data["proposal-klaim"];
+            // $approval->tanggal_pengajuan = $data["tanggal-pengajuan"];
+            // $approval->biaya_pengajuan = !empty($data["biaya-pengajuan"]) ? str_replace(".", "", $data["biaya-pengajuan"]) : null;
+            // $approval->waktu_pengajuan = !empty($data["biaya-pengajuan"]) ? $data["waktu-pengajuan"] : null;
+            // $approval->nilai_disetujui = !empty($data["nilai-disetujui"]) ? str_replace(".", "", $data["nilai-disetujui"]) : null;
+            // $approval->waktu_disetujui = !empty($data["waktu-disetujui"]) ? $data["waktu-disetujui"] : null;
+            // $approval->stage = 1;
         } else {
             if ((int)date('d') < 15) {
                 if ((int)date('m') == 1) {
@@ -516,7 +585,7 @@ class ContractApprovalController extends Controller
                 $claim->makeHidden(['Proyek', 'id']); //Untuk menghilangkan relasi agar tidak masuk ke array
                 return $claim;
             });
-            // dd($data_approval);
+            // dd($approval);
             $is_success = $approval->insert($data_approval->toArray());
             if ($is_success) {
                 Alert::success("Success", "Contract berhasil dilock");
@@ -579,8 +648,8 @@ class ContractApprovalController extends Controller
 
     public function setApprove(Request $request, $id_contract){
         $data = $request->all();
-        
-        $month = (int)date("m") == 1 ? 12 : (int)date("m")-1;
+
+        $month = (int) date('m') == 1 ? 12 : ((int)date('d') < 15 ? (int) date('m') : (int) date('m') - 1);
 
         $periode = !empty($data['periode']) ? $data['periode'] : $month;
 
@@ -591,12 +660,13 @@ class ContractApprovalController extends Controller
 
         // $approval->save();
 
+        // dd($this->sendDataSAP($id_contract, $periode));
 
-        if($data["approve"] == 't'){
-            $get_response = $this->sendDataSAP($id_contract, $periode);
-            if ($get_response->original["statusCode"] == 200) {
-                $update = $approval->update(['is_approved' => $data['approve']]);
-                if ($update) {
+        if ($data["approve"] == 't') {
+            $update = $approval->update(['is_approved' => $data['approve']]);
+            if ($update) {
+                $get_response = $this->sendDataSAP($id_contract, $periode);
+                if ($get_response->original["statusCode"] == 200) {
                     Alert::success("success", "Contract berhasil di Approve");
                     return response()->json([
                         "status" => "success",
@@ -609,13 +679,14 @@ class ContractApprovalController extends Controller
                         "link" => false,
                     ]);
                 }
+            } else {
+                Alert::error("error", "Contract gagal di Approve, Hubungi Admin");
+                return response()->json([
+                    "status" => "error",
+                    "link" => false,
+                ]);
             }
 
-            Alert::error("error", "Contract gagal di Approve, Hubungi Admin");
-            return response()->json([
-                "status" => "error",
-                "link" => false,
-            ]);
         }else{
             $update = $approval->update(['is_approved' => $data['approve']]);
             if ($update) {
@@ -625,6 +696,7 @@ class ContractApprovalController extends Controller
                 ]);
             }
         }
+
     }
 
     function setLogging($file, $message, $data)
@@ -634,6 +706,4 @@ class ContractApprovalController extends Controller
             'path' => storage_path("logs/$file.log"),
         ])->info("$message", $data);
     }
-
-
 }

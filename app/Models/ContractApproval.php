@@ -7,8 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class ContractApproval extends Model
 {
-    use HasFactory;
+  use HasFactory;
   protected $table = "contract_approval";
+  protected $primaryKey = "id_perubahan_kontrak";
   public $timestamps = false;
   protected $hidden = ['created_at', 'updated_at'];
 
@@ -19,5 +20,9 @@ class ContractApproval extends Model
   public function Proyeks()
   {
     return  $this->belongsTo(Proyek::class, "kode_proyek");
+  }
+  public function PerubahanKontrak()
+  {
+    return  $this->belongsTo(PerubahanKontrak::class, "perubahan_id", 'id_perubahan_kontrak');
   }
 }

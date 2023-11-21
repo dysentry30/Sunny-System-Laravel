@@ -688,8 +688,8 @@ class DashboardController extends Controller
         $month = date("m");
 
         $tahun = Proyek::get()->groupBy("tahun_perolehan")->keys();
-        
-        if(Auth::user()->check_administrator){
+
+        if (Auth::user()->check_administrator || Auth::user()->is_pic) {
             // $unit_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",",Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja);
         // dd($mounth);
         // $unit_kerjas_all = UnitKerja::whereNotIn("divcode", ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "N"])->get();
@@ -969,7 +969,7 @@ class DashboardController extends Controller
         $year = date("Y");
         $month = date("m");
 
-        if(Auth::user()->check_administrator){
+        if (Auth::user()->check_administrator || Auth::user()->is_pic) {
             // $unit_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",",Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja);
         // dd($mounth);
         // $unit_kerjas_all = UnitKerja::whereNotIn("divcode", ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "N"])->get();
@@ -1183,8 +1183,8 @@ class DashboardController extends Controller
             $totalKontrakFull = $proyeks->map(function($p){
                 return $p->ContractManagements;
             })->sum("value");
-            $total_pengajuan = $proyek->PerubahanKontrak->sum("biaya_pengajuan");
-            if (!empty($proyek->nilai_perolehan)) {
+            $total_pengajuan = $proyek->PerubahanKontrak?->sum("biaya_pengajuan");
+            if (!empty($proyek->nilai_perolehan) && !empty($total_pengajuan)) {
                 $persentasePerubahan = Percentage::fromFractionAndTotal($total_pengajuan, $proyek->nilai_perolehan)->asString();
             } else {
                 $persentasePerubahan = 0;
@@ -1216,7 +1216,7 @@ class DashboardController extends Controller
                     $dispute = 0;
                     $dispute_value = 0;
                     $nilai = 0;
-
+                    
                     // $data = $result[];
                     $result["jenis_perubahan"] = $p;
                     $filterJenisPerubahan = $contracts_perubahan->filter(function ($item) use ($p) {
@@ -1252,7 +1252,7 @@ class DashboardController extends Controller
                     });
 
                     $result["setuju"] = $filterApprove->count();
-                    $result["setuju_value"] = $filterApprove->sum("biaya_pengajuan");
+                    $result["setuju_value"] = $filterApprove->sum("nilai_disetujui");
 
                     $filterTolak = $filterJenisPerubahan->filter(function ($tolak) {
                         return $tolak->stage == 6 && $tolak->is_dispute == false;
@@ -1644,7 +1644,7 @@ class DashboardController extends Controller
             $percen_during_claim = Percentage::fromFractionAndTotal($approve_total_value, $potensial_total_value)->asString();
             $percen_post_claim = Percentage::fromFractionAndTotal($approve_total_value, $submission_total_value)->asString();
 
-            $proyek_progress =$proyek->ProyekProgress->sortByDesc("created_at")->first();
+            $proyek_progress = $proyek->ProyekProgress?->sortByDesc("created_at")->first();
             if($proyek_progress){
                 $total_ok_review = $proyek_progress->ok_review ?? 0;
                 $total_progress_fisik_ri = $proyek_progress->progress_fisik_ri ?? 0;
@@ -2172,7 +2172,7 @@ class DashboardController extends Controller
         $year = date("Y");
         $month = date("m");
 
-        if(Auth::user()->check_administrator){
+        if (Auth::user()->check_administrator || Auth::user()->is_pic) {
             // $unit_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",",Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja);
         // dd($mounth);
         // $unit_kerjas_all = UnitKerja::whereNotIn("divcode", ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "N"])->get();
@@ -2409,7 +2409,7 @@ class DashboardController extends Controller
                     $dispute = 0;
                     $dispute_value = 0;
                     $nilai = 0;
-
+                    
                     // $data = $result[];
                     $result["jenis_perubahan"] = $p;
                     $filterJenisPerubahan = $contracts_perubahan->filter(function ($item) use ($p) {
@@ -2811,11 +2811,11 @@ class DashboardController extends Controller
 
             
             $potensial_total_item = $contracts_perubahan->filter(function($cp){
-                return $cp->stage == 1;
+                return $cp->stage >= 1;
             })->groupBy('jenis_perubahan')->flatten()->count();
 
             $submission_total_item = $contracts_perubahan->filter(function($cp){
-                return $cp->stage == 2;
+                return $cp->stage >= 2;
             })->groupBy('jenis_perubahan')->flatten()->count();
 
             $revision_total_item = $contracts_perubahan->filter(function($cp){

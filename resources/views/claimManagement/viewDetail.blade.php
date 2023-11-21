@@ -90,17 +90,14 @@
                                     Upload</a>
                                 </div>
                                 @php
-                                    $month = (int) date('m') == 1 ? 12 : ((int)date('d') < 15 ? (int) date('m') : (int) date('m') - 1);
-                                    $is_periode = !empty($periode) ? $periode : $month;
-                                    $is_approved = $contracts->ContractApproval?->where('periode', '=', $is_periode)?->where('is_locked', '=', true);
+                                    $month = !empty($periode)? $periode : ((int) date('m') == 1 ? 12 : ((int)date('d') < 15 ? (int) date('m') : (int) date('m') - 1));
+                                    $is_approved = $contracts->ContractApproval?->where('periode', '=', $month)?->where('is_locked', '=', true);
                                 @endphp
-                                {{-- @dump($periode) --}}
-                                
-                                {{-- @if (auth()->user()->is_pic != true) --}}
-                                @if ($user->is_pic != true)
+                                <!--Jika User adalah Manager & Contract Management-->
+                                @if (($user->Pegawai?->kode_jabatan == 410 && $user->Pegawai?->kode_fungsi_bidang == 30100) || auth()->user()->check_administrator)
                                     <!--begin::Button-->
                                     @if ($contracts->where('id_contract', '=', $contracts->id_contract)->where('stages', '!=', 1)->get()->isNotEmpty())
-                                        @if (empty($is_approved) ||$is_approved->isEmpty())
+                                        @if (empty($is_approved) || $is_approved->isEmpty())
                                             <button type="button" class="btn btn-sm btn-primary" id="kt_toolbar_primary_button"
                                                 onclick="lockBulananContract()" style="background-color:#008CB4;">
                                                 <span>Lock</span>
@@ -133,7 +130,7 @@
                                                     formData.append("id_contract", "{{ $contracts->id_contract }}")
                                                     formData.append("kode_proyek", "{{ $contracts->project_id }}")
                                                     formData.append("periode", "{{ $periode }}")
-                                                    formData.append("tahun", "{{ $tahun }}")
+                                                    formData.append("tahun", "{{ (int) date('Y') }}")
                                                     const sendData = await fetch("/contract-management/set-lock", {
                                                         method: "POST",
                                                         body: formData
@@ -298,10 +295,10 @@
                                                                 @forelse ($claims_vo as $vo)
                                                                 <tr>
                                                                     <td>
-                                                                        {{ Carbon\Carbon::parse($vo->tanggal_perubahan)->translatedFormat('d F Y') }}
+                                                                        {{ !empty($vo->tanggal_perubahan) ? Carbon\Carbon::parse($vo->tanggal_perubahan)->translatedFormat('d F Y') : '' }}
                                                                     </td>
                                                                     <td>
-                                                                        <a href="/contract-management/view/{{$vo->id_contract}}/perubahan-kontrak/{{$vo->id_perubahan_kontrak}}?{{ isset($vo->periode) ? "periode=".$vo->periode : "" }}{{ isset($vo->tahun) ? "&tahun=".$vo->tahun : "" }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">
+                                                                        <a href="/contract-management/view/{{$vo->id_contract}}/perubahan-kontrak/{{$vo->id_perubahan_kontrak}}{{ isset($vo->periode) ? "?periode=".$vo->periode."&tahun=".$vo->tahun : "" }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">
                                                                         {{ $vo->uraian_perubahan }}
                                                                         </a>
                                                                     </td>
@@ -309,7 +306,7 @@
                                                                         {{ $vo->proposal_klaim }}
                                                                     </td>
                                                                     <td>
-                                                                        {{ Carbon\Carbon::parse($vo->tanggal_pengajuan)->translatedFormat('d F Y') }}
+                                                                        {{ !empty($vo->tanggal_pengajuan) ? Carbon\Carbon::parse($vo->tanggal_pengajuan)->translatedFormat('d F Y') : '' }}
                                                                     </td>
                                                                      <!--Begin::Dampak Biaya-->
                                                                      <td class="fw-bolder text-center">
@@ -324,7 +321,7 @@
                                                                         {{ !empty($vo->waktu_pengajuan) ? 'Yes' : 'No' }}
                                                                     </td>
                                                                     <td>
-                                                                        {{ Carbon\Carbon::parse($vo->waktu_pengajuan)->translatedFormat('d F Y') }}
+                                                                        {{ !empty($vo->waktu_pengajuan) ? Carbon\Carbon::parse($vo->waktu_pengajuan)->translatedFormat('d F Y') : '' }}
                                                                     </td>
                                                                     <!--end::Dampak Waktu-->
                                                                     @php
@@ -406,10 +403,10 @@
                                                                 @forelse ($claims_klaim as $klaim)
                                                                 <tr>
                                                                     <td>
-                                                                        {{ Carbon\Carbon::parse($klaim->tanggal_perubahan)->translatedFormat('d F Y') }}
+                                                                        {{ !empty($klaim->tanggal_perubahan) ? Carbon\Carbon::parse($klaim->tanggal_perubahan)->translatedFormat('d F Y') : '' }}
                                                                     </td>
                                                                     <td>
-                                                                        <a href="/contract-management/view/{{$klaim->id_contract}}/perubahan-kontrak/{{$klaim->id_perubahan_kontrak}}?{{ isset($klaim->periode) ? "periode=".$klaim->periode : "" }}{{ isset($klaim->tahun) ? "&tahun=".$klaim->tahun : "" }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">
+                                                                        <a href="/contract-management/view/{{$klaim->id_contract}}/perubahan-kontrak/{{$klaim->id_perubahan_kontrak}}{{ isset($klaim->periode) ? "?periode=".$klaim->periode."&tahun=".$klaim->tahun : "" }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">
                                                                         {{ $klaim->uraian_perubahan }}
                                                                         </a>
                                                                     </td>
@@ -417,7 +414,7 @@
                                                                         {{ $klaim->proposal_klaim }}
                                                                     </td>
                                                                     <td>
-                                                                        {{ Carbon\Carbon::parse($klaim->tanggal_pengajuan)->translatedFormat('d F Y') }}
+                                                                        {{ !empty($klaim->tanggal_pengajuan) ? Carbon\Carbon::parse($klaim->tanggal_pengajuan)->translatedFormat('d F Y') : '' }}
                                                                     </td>
                                                                     <!--Begin::Dampak Biaya-->
                                                                      <td class="fw-bolder text-center">
@@ -432,7 +429,7 @@
                                                                         {{ !empty($klaim->waktu_pengajuan) ? 'Yes' : 'No' }}
                                                                     </td>
                                                                     <td>
-                                                                        {{ Carbon\Carbon::parse($klaim->waktu_pengajuan)->translatedFormat('d F Y') }}
+                                                                        {{ !empty($klaim->waktu_pengajuan) ? Carbon\Carbon::parse($klaim->waktu_pengajuan)->translatedFormat('d F Y') : '' }}
                                                                     </td>
                                                                     <!--end::Dampak Waktu-->
                                                                     @php
@@ -514,10 +511,10 @@
                                                                 @forelse ($claims_anti_klaim as $anti_klaim)
                                                                 <tr>
                                                                     <td>
-                                                                        {{ Carbon\Carbon::parse($anti_klaim->tanggal_perubahan)->translatedFormat('d F Y') }}
+                                                                        {{ !empty($anti_klaim->tanggal_perubahan) ? Carbon\Carbon::parse($anti_klaim->tanggal_perubahan)->translatedFormat('d F Y') : '' }}
                                                                     </td>
                                                                     <td>
-                                                                        <a href="/contract-management/view/{{$anti_klaim->id_contract}}/perubahan-kontrak/{{$anti_klaim->id_perubahan_kontrak}}?{{ isset($anti_klaim->periode) ? "periode=".$anti_klaim->periode : "" }}{{ isset($anti_klaim->tahun) ? "&tahun=".$anti_klaim->tahun : "" }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">
+                                                                        <a href="/contract-management/view/{{$anti_klaim->id_contract}}/perubahan-kontrak/{{$anti_klaim->id_perubahan_kontrak}}{{ isset($anti_klaim->periode) ? "?periode=".$anti_klaim->periode."&tahun=".$anti_klaim->tahun : "" }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">
                                                                         {{ $anti_klaim->uraian_perubahan }}
                                                                         </a>
                                                                     </td>
@@ -525,7 +522,7 @@
                                                                         {{ $anti_klaim->proposal_klaim }}
                                                                     </td>
                                                                     <td>
-                                                                        {{ Carbon\Carbon::parse($anti_klaim->tanggal_pengajuan)->translatedFormat('d F Y') }}
+                                                                        {{ !empty($anti_klaim->tanggal_pengajuan) ? Carbon\Carbon::parse($anti_klaim->tanggal_pengajuan)->translatedFormat('d F Y') : '' }}
                                                                     </td>
                                                                     <!--Begin::Dampak Biaya-->
                                                                      <td class="fw-bolder text-center">
@@ -540,7 +537,7 @@
                                                                         {{ !empty($anti_klaim->waktu_pengajuan) ? 'Yes' : 'No' }}
                                                                     </td>
                                                                     <td>
-                                                                        {{ Carbon\Carbon::parse($anti_klaim->waktu_pengajuan)->translatedFormat('d F Y') }}
+                                                                        {{ !empty($anti_klaim->waktu_pengajuan) ? Carbon\Carbon::parse($anti_klaim->waktu_pengajuan)->translatedFormat('d F Y') : '' }}
                                                                     </td>
                                                                     <!--end::Dampak Waktu-->
                                                                     @php
@@ -622,10 +619,10 @@
                                                                 @forelse ($claims_klaim_asuransi as $klaim_asuransi)
                                                                 <tr>
                                                                     <td>
-                                                                        {{ Carbon\Carbon::parse($klaim_asuransi->tanggal_perubahan)->translatedFormat('d F Y') }}
+                                                                        {{ !empty($klaim_asuransi->tanggal_perubahan) ? Carbon\Carbon::parse($klaim_asuransi->tanggal_perubahan)->translatedFormat('d F Y') : '' }}
                                                                     </td>
                                                                     <td>
-                                                                        <a href="/contract-management/view/{{$klaim_asuransi->id_contract}}/perubahan-kontrak/{{$klaim_asuransi->id_perubahan_kontrak}}?{{ isset($klaim_asuransi->periode) ? "periode=".$klaim_asuransi->periode : "" }}{{ isset($klaim_asuransi->tahun) ? "&tahun=".$klaim_asuransi->tahun : "" }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">
+                                                                        <a href="/contract-management/view/{{$klaim_asuransi->id_contract}}/perubahan-kontrak/{{$klaim_asuransi->id_perubahan_kontrak}}{{ isset($klaim_asuransi->periode) ? "?periode=".$klaim_asuransi->periode."&tahun=".$klaim_asuransi->tahun : "" }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">
                                                                         {{ $klaim_asuransi->uraian_perubahan }}
                                                                         </a>
                                                                     </td>
@@ -633,7 +630,7 @@
                                                                         {{ $klaim_asuransi->proposal_klaim }}
                                                                     </td>
                                                                     <td>
-                                                                        {{ Carbon\Carbon::parse($klaim_asuransi->tanggal_pengajuan)->translatedFormat('d F Y') }}
+                                                                        {{ !empty($klaim_asuransi->tanggal_pengajuan) ? Carbon\Carbon::parse($klaim_asuransi->tanggal_pengajuan)->translatedFormat('d F Y') : '' }}
                                                                     </td>
                                                                     <!--Begin::Dampak Biaya-->
                                                                      <td class="fw-bolder text-center">
@@ -648,7 +645,7 @@
                                                                         {{ !empty($klaim_asuransi->waktu_pengajuan) ? 'Yes' : 'No' }}
                                                                     </td>
                                                                     <td>
-                                                                        {{ Carbon\Carbon::parse($klaim_asuransi->waktu_pengajuan)->translatedFormat('d F Y') }}
+                                                                        {{ !empty($klaim_asuransi->waktu_pengajuan) ? Carbon\Carbon::parse($klaim_asuransi->waktu_pengajuan)->translatedFormat('d F Y') : '' }}
                                                                     </td>
                                                                     <!--end::Dampak Waktu-->
                                                                     @php
@@ -743,7 +740,7 @@
                                                                         {{ $claim->proposal_klaim }}
                                                                     </td>
                                                                     <td>
-                                                                        {{ Carbon\Carbon::parse($claim->tanggal_pengajuan)->translatedFormat('d F Y') }}
+                                                                        {{ !empty($claim->tanggal_pengajuan) ? Carbon\Carbon::parse($claim->tanggal_pengajuan)->translatedFormat('d F Y') : '' }}
                                                                     </td>
                                                                     <td>
                                                                         {{ (int) $claim->biaya_pengajuan != 0 ? 'Yes' : 'No' }}
@@ -755,7 +752,7 @@
                                                                         {{ !empty($claim->waktu_pengajuan) ? 'Yes' : 'No' }}
                                                                     </td>
                                                                     <td>
-                                                                        {{ Carbon\Carbon::parse($claim->waktu_pengajuan)->translatedFormat('d F Y') }}
+                                                                        {{ !empty($claim->waktu_pengajuan) ? Carbon\Carbon::parse($claim->waktu_pengajuan)->translatedFormat('d F Y') : '' }}
                                                                     </td>
                                                                     @php
                                                                     $stage = "";

@@ -233,7 +233,7 @@
                                                    
                                             <tr>
                                                 <td>
-                                                    <a href="/claim-management/proyek/{{ $claim['kode_proyek'] }}/{{ $claim['id_contract'] }}?link=kt_user_view_claim_VO&periode={{ $filterBulan }}&tahun={{ $filterTahun }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $claim['kode_proyek'] }}</a>
+                                                    <a href="/claim-management/proyek/{{ $claim['kode_proyek'] }}/{{ $claim['id_contract'] }}?link=kt_user_view_claim_VO" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $claim['kode_proyek'] }}</a>
                                                 </td>
                                                 <td>{{ $claim['nama_proyek'] }}</td>
                                                 <td>{{ $claim['unit_kerja'] }}</td>

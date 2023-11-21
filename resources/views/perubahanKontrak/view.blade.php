@@ -49,6 +49,17 @@
                                 <!--end::Button-->
 
                                 <!--begin::Button-->
+                                @if (isset($perubahan_kontrak->periode))
+                                    @if ($perubahan_kontrak->is_locked != true)
+                                        <a href="#" data-bs-toggle="modal" class="btn btn-sm btn-primary" id="editButton" data-bs-target="#kt_modal_edit_perubahan"
+                                            style="margin-left:10px;">
+                                            Edit</a>
+                                    @endif
+                                @else
+                                <a href="#" data-bs-toggle="modal" class="btn btn-sm btn-primary" id="editButton" data-bs-target="#kt_modal_edit_perubahan"
+                                    style="margin-left:10px;">
+                                    Edit</a>
+                                @endif
                                 <a href="/claim-management/proyek/{{ $contract->project_id }}/{{ $perubahan_kontrak->id_contract }}" class="btn btn-sm btn-primary" id="cloedButton"
                                     style="background-color:#f3f6f9;margin-left:10px;color: black;">
                                     Close</a>
@@ -302,7 +313,7 @@
                                                                     <label class="fs-6 fw-bold form-label">
                                                                         <span style="font-weight: normal">Uraian Perubahan</span>
                                                                     </label>
-                                                                    <textarea cols="4" name="uraian-perubahan" class="form-control">{!! $perubahan_kontrak->uraian_perubahan !!}</textarea>
+                                                                    <textarea cols="4" name="uraian-perubahan" class="form-control" style="cursor:auto" readonly>{!! $perubahan_kontrak->uraian_perubahan !!}</textarea>
                                                                 </div>
                                                                 
                                                             </div>
@@ -335,7 +346,7 @@
                                                                     </label><br>
                                                                         <span style="font-weight: normal">
                                                                             <b class="badge {{ (int) $perubahan_kontrak->biaya_pengajuan != 0 ? 'badge-primary' : 'badge-danger' }}">{{ (int) $perubahan_kontrak->biaya_pengajuan != 0 ? 'Yes' : 'No' }}</b>
-                                                                            <b class="{{$perubahan_kontrak->jenis_perubahan == 'Anti Klaim' ? 'text-danger ' : ''}}">{{ number_format($perubahan_kontrak->biaya_pengajuan, 0, ".", ".") }}</b>
+                                                                            <b class="{{$perubahan_kontrak->jenis_perubahan == 'Anti Klaim' ? 'text-danger ' : ''}}">{{ !empty($perubahan_kontrak->biaya_pengajuan) ? number_format($perubahan_kontrak->biaya_pengajuan, 0, ".", ".") : '-' }}</b>
                                                                         </span>
                                                                     {{-- <input type="text" name="biaya-pengajuan" value="{{ number_format($perubahan_kontrak->biaya_pengajuan, 0, ".", ".") }}" class="form-control form-control-solid reformat" /> --}}
                                                                 </div>
@@ -348,8 +359,8 @@
                                                                         </a> --}}
                                                                     </label><br>
                                                                     <span style="font-weight: normal">
-                                                                        <b class="badge {{ !empty($perubahan_kontrak->biaya_pengajuan) ? 'badge-primary' : 'badge-danger' }}">{{ !empty($perubahan_kontrak->biaya_pengajuan) ? 'Yes' : 'No' }}</b>
-                                                                        <b>{{Carbon\Carbon::create($perubahan_kontrak->waktu_pengajuan)->translatedFormat("d F Y")}}</b>
+                                                                        <b class="badge {{ !empty($perubahan_kontrak->waktu_pengajuan) ? 'badge-primary' : 'badge-danger' }}">{{ !empty($perubahan_kontrak->waktu_pengajuan) ? 'Yes' : 'No' }}</b>
+                                                                        <b>{{ !empty($perubahan_kontrak->waktu_pengajuan) ? Carbon\Carbon::create($perubahan_kontrak->waktu_pengajuan)->translatedFormat("d F Y") : '' }}</b>
                                                                     </span>
                                                                     {{-- <input type="date" name="waktu-pengajuan" value="{{Carbon\Carbon::create($perubahan_kontrak->waktu_pengajuan)->format("Y-m-d")}}" class="form-control form-control-solid" /> --}}
                                                                 </div>
@@ -359,19 +370,19 @@
                                                                     <label class="fs-6 fw-bold form-label">
                                                                         <span style="font-weight: normal">Tanggal Disetujui</span>
                                                                     </label><br>
-                                                                    <b>{{Carbon\Carbon::create($perubahan_kontrak->tanggal_disetujui)->translatedFormat("d F Y")}}</b>
+                                                                    <b>{{!empty($perubahan_kontrak->tanggal_disetujui) ? Carbon\Carbon::create($perubahan_kontrak->tanggal_disetujui)->translatedFormat("d F Y") : ''}}</b>
                                                                 </div>
                                                                 <div class="col">
                                                                     <label class="fs-6 fw-bold form-label">
                                                                         <span style="font-weight: normal">Biaya Disetujui</span>
                                                                     </label><br>
-                                                                    <b>{{number_format($perubahan_kontrak->nilai_disetujui, 0, ".", ".")}}</b>
+                                                                    <b>{{ !empty($perubahan_kontrak->nilai_disetujui) ? number_format($perubahan_kontrak->nilai_disetujui, 0, ".", ".") : '-' }}</b>
                                                                 </div>
                                                                 <div class="col">
                                                                     <label class="fs-6 fw-bold form-label">
                                                                         <span style="font-weight: normal">Waktu Disetujui</span>
                                                                     </label><br>
-                                                                    <b>{{Carbon\Carbon::create($perubahan_kontrak->waktu_disetujui)->translatedFormat("d F Y")}}</b>
+                                                                    <b>{{!empty($perubahan_kontrak->waktu_disetujui) ? Carbon\Carbon::create($perubahan_kontrak->waktu_disetujui)->translatedFormat("d F Y") : ''}}</b>
                                                                 </div>
                                                             </div>
 
@@ -431,7 +442,15 @@
                                                 <!--end::Table head-->
                                                 <!--begin::Table body-->
                                                 <tbody class="fw-bold text-gray-400">
-                                                    @forelse ($perubahan_kontrak->JenisDokumen as $jd)
+                                                    @php
+                                                        if(isset($perubahan_kontrak->periode)){
+                                                            $jenisDokumen = $perubahan_kontrak->PerubahanKontrak->JenisDokumen;
+                                                        }else{
+                                                            $jenisDokumen = $perubahan_kontrak->JenisDokumen;
+                                                        }
+                                                    @endphp
+                                                    {{-- @dd($jenisDokumen) --}}
+                                                    @forelse ($jenisDokumen as $jd)
                                                         @php
                                                             $list_instruksi_owner = explode(",", $jd->list_instruksi_owner);
                                                         @endphp
@@ -520,8 +539,15 @@
                                                     <!--end::Table head-->
                                                     <!--begin::Table body-->
                                                     <tbody class="fw-bold text-gray-400">
-                                                        @if (!empty($perubahan_kontrak->DokumenPendukungs))
-                                                            @forelse ($perubahan_kontrak->DokumenPendukungs as $dokumen_pendukung)
+                                                        @php
+                                                            if(isset($perubahan_kontrak->periode)){
+                                                                $dokumenPendukungs = $perubahan_kontrak->PerubahanKontrak->DokumenPendukungs;
+                                                            }else{
+                                                                $dokumenPendukungs = $perubahan_kontrak->DokumenPendukungs;
+                                                            }
+                                                        @endphp
+                                                        @if (!empty($dokumenPendukungs))
+                                                            @forelse ($dokumenPendukungs as $dokumen_pendukung)
                                                                 <tr>
                                                                     <!--begin::Name-->
                                                                     {{-- <td>
@@ -856,6 +882,120 @@
             <!--end::Modal dialog-->
         </div>
         <!--end::Modal - Input Approve Claim -->
+
+        <!--Begin::Modal - Edit Claim-->
+        <div class="modal fade" id="kt_modal_edit_perubahan" tabindex="-1" aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-900px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header">
+                        <!--begin::Modal title-->
+                        <h2>Edit Change Description</h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <i class="bi bi-x-lg"></i>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
+                    </div>
+                    <!--end::Modal header-->
+                    <!--begin::Modal body-->
+                    <div class="modal-body py-lg-6 px-lg-6">
+    
+                        <!--begin::Input group Website-->
+                        <form action="/perubahan-kontrak/update/{{ $perubahan_kontrak->id_perubahan_kontrak }}" method="POST"
+                            enctype="multipart/form-data">
+                            @csrf
+                            <input type="hidden" class="modal-name" name="modal-name">
+                            {{-- <input type="hidden" id="kode-proyek" name="kode-proyek" value="{{ $proyek->kode_proyek }}"> --}}
+                            <br>
+                            <div class="row">
+                                <div class="col">
+                                    <label class="fs-6 fw-bold form-label">
+                                        <span style="font-weight: normal">Jenis Perubahan</span>
+                                    </label>
+                                    <input type="text" name="jenis-perubahan" class="form-control form-control-solid" value="{{ $perubahan_kontrak->jenis_perubahan }}" disabled/>
+                                </div>
+    
+                                <div class="col">
+                                    <label class="text-center fw-bold form-label">
+                                        <span style="font-weight: normal">Tanggal Kejadian Perubahan</span>
+                                        <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
+                                            <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
+                                        </a>
+                                    </label>
+                                    <input type="date" name="tanggal-perubahan" class="form-control form-control-solid" value="{{ !empty($perubahan_kontrak->tanggal_perubahan) ? Carbon\Carbon::parse($perubahan_kontrak->tanggal_perubahan)->translatedFormat('Y-m-d') : '' }}">
+                                </div>
+                            </div>
+    
+                            <br>
+                            <div class="row">
+                                <div class="col">
+                                    <label class="fs-6 fw-bold form-label">
+                                        <span style="font-weight: normal">Uraian Perubahan</span>
+                                    </label>
+                                    <textarea cols="2" name="uraian-perubahan" class="form-control form-control-solid">{!! $perubahan_kontrak->uraian_perubahan !!}</textarea>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col">
+                                    <label class="fs-6 fw-bold form-label">
+                                        <span style="font-weight: normal">No Proposal Klaim</span>
+                                    </label>
+                                    <input type="text" name="proposal-klaim" class="form-control form-control-solid" value="{{ $perubahan_kontrak->proposal_klaim }}"/>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col">
+                                    <label class="fs-6 fw-bold form-label">
+                                        <span style="font-weight: normal">Tanggal Pengajuan</span>
+                                        <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
+                                            <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
+                                        </a>
+                                    </label>
+                                    <input type="date" name="tanggal-pengajuan" class="form-control form-control-solid" value="{{ !empty($perubahan_kontrak->tanggal_pengajuan) ? Carbon\Carbon::parse($perubahan_kontrak->tanggal_pengajuan)->translatedFormat('Y-m-d') : '' }}"/>
+                                </div>
+                                <div class="col mt-3">
+                                    <label class="fs-6 fw-bold form-label">
+                                        <span style="font-weight: normal">Dampak Biaya</span>
+                                    </label>
+                                    <input type="text" name="biaya-pengajuan" class="form-control form-control-solid reformat" value="{{ $perubahan_kontrak->biaya_pengajuan }}"/>
+                                </div>
+                                <div class="col">
+                                    <label class="fs-6 fw-bold form-150pxbel">
+                                        <span style="font-weight: 150px">Dampak Waktu</span>
+                                        <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
+                                            <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
+                                        </a>
+                                    </label>
+                                    <input type="date" name="waktu-pengajuan" class="form-control form-control-solid" value="{{ !empty($perubahan_kontrak->waktu_pengajuan) ? Carbon\Carbon::parse($perubahan_kontrak->waktu_pengajuan)->translatedFormat('Y-m-d') : '' }}"/>
+                                </div>
+                            </div>
+                            <!--end::Input group-->
+                            <div class="modal-footer mt-4">
+                                <button type="submit" id="save-perubahan-kontrak"
+                                    class="btn btn-sm btn-primary">Save</button>
+                            </div>
+                        </form>
+    
+    
+                    </div>
+                    <!--end::Modal body-->
+
+                </div>
+                <!--end::Modal content-->
+            </div>
+            <!--end::Modal dialog-->
+        </div>
+        <!--End::Modal - Edit Claim-->
 
         <!--end::Content-->
     </div>

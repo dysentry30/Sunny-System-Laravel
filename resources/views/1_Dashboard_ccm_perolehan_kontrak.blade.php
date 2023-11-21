@@ -1035,7 +1035,7 @@
                                             <!--begin::Ketua tender-->
                                             <td>
                                                 <small>
-                                                    {{ $proyek->tipe_proyek == "J" ? "JO" : "NON JO"}}
+                                                    {{ $proyek->jenis_proyek == "J" ? "JO" : "NON JO"}}
                                                 </small>
                                             </td>
                                             <!--end::Ketua tender-->
