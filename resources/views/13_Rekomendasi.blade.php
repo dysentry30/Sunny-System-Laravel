@@ -816,7 +816,7 @@
                                                                         @if ($is_user_exist_in_matriks_approval)
                                                                             @if ($matriks_user->contains('kategori', 'Pengajuan') && $matriks_user->where('kategori', 'Pengajuan')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first())
                                                                                 @if (!empty($proyek->approved_rekomendasi))
-                                                                                    <a href="#kt_modal_view_proyek_rekomendasi_{{ $proyek->kode_proyek }}"
+                                                                                    <a href="#kt_modal_view_proyek_{{ $proyek->kode_proyek }}"
                                                                                         target="_blank" data-bs-toggle="modal"
                                                                                         class="btn btn-sm btn-primary text-white">Lihat Detail</a>
                                                                                 @else
@@ -1128,11 +1128,17 @@
                                                                 {{ $text }}
                                                             </small>
                                                         </td>
+                                                        @if (($matriks_user->contains('kategori', 'Pengajuan') && $matriks_user->where('kategori', 'Pengajuan')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first()) || 
+                                                        ($matriks_user->contains('kategori', 'Penyusun') && $matriks_user->where('kategori', 'Penyusun')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->where('urutan', '>', 1)?->first())
+                                                        )
+                                                            <td></td>
+                                                        @else
                                                         <td class="text-center">
                                                             @if (!empty($proyek->file_penilaian_risiko))
                                                                 <a href="{{ asset('file-profile-risiko' . '\\' . $proyek->file_penilaian_risiko) }}" class="btn btn-sm btn-primary text-white p-1">Download</a>
                                                             @endif
                                                         </td>
+                                                        @endif
                                                         <td>
                                                             @php
                                                                 // if (!empty($proyek->approved_persetujuan)) {
@@ -1195,9 +1201,15 @@
                                                             <small class="d-flex flex-row justify-content-between">
                                                                 <p class="badge {{ $style }}">{{ $status_rekomendasi }}</p>
                                                                 <br>
+                                                                @if (($matriks_user->contains('kategori', 'Pengajuan') && $matriks_user->where('kategori', 'Pengajuan')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first()) ||
+                                                                ($matriks_user->contains('kategori', 'Penyusun') && $matriks_user->where('kategori', 'Penyusun')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->where('urutan', '>', 1)?->first())
+                                                                )
+                                                                    
+                                                                @else
                                                                 <button type="button" class="btn btn-primary p-2" data-bs-toggle="modal" data-bs-target="#kt_modal_view_dokumen_persetujuan_{{ $proyek->kode_proyek }}">
                                                                     View
-                                                                  </button>
+                                                                </button>
+                                                                @endif
                                                                 {{-- <a href="#kt_modal_view_dokumen_persetujuan_{{ $proyek->kode_proyek }}" class="btn btn-sm btn-primary text-white" data-bs-toggle="model">Download</a> --}}
                                                             </small>
                                                         </td>
@@ -2113,7 +2125,7 @@
                         {{-- @php
                             $status_approval = $is_user_id_exist->first();
                         @endphp --}}
-                        @switch($is_user_id_exist->status)
+                        {{-- @switch($is_user_id_exist->status)
                             @case('approved')
                                 <small class="badge badge-light-success">Disetujui</small>
                             @break
@@ -2123,7 +2135,7 @@
                             @break
 
                             @default
-                        @endswitch
+                        @endswitch --}}
                     @endif
                     </div>
                 </div>
@@ -2600,8 +2612,12 @@
 
                                         <input type="submit" name="verifikasi-setujui" value="Setujui"
                                             class="btn btn-sm btn-success">
-                                        <input type="button" data-bs-toggle="modal" data-bs-target="#kt_modal_view_proyek_revisi_{{ $proyek->kode_proyek }}"
-                                            class="btn btn-sm btn-primary" value="Ajukan Revisi">
+                                        
+                                        @if ($matriks_user->contains('kategori', 'Verifikasi') && $matriks_user->where('kategori', 'Verifikasi')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->where('urutan', '=', 1)?->first())
+                                            <input type="button" data-bs-toggle="modal" data-bs-target="#kt_modal_view_proyek_revisi_{{ $proyek->kode_proyek }}"
+                                                class="btn btn-sm btn-primary" value="Ajukan Revisi">
+                                        @endif
+                                            
                                         <input type="submit" name="verifikasi-tolak" value="Ditolak" class="btn btn-sm btn-danger">
                                     </form>
                                 @elseif (is_null($proyek->is_recommended) &&

@@ -20,7 +20,177 @@ class ContractApprovalController extends Controller
     {
         // $claims_all = PerubahanKontrak::all();
         $claims_all = ContractApproval::whereIn("jenis_perubahan", ["VO", "Klaim"])->whereIn("stage", [1, 2, 4, 5])->where("id_contract", "=", $id_contract)->where('periode', '=', $periode)->get();
-        $data_claims = $claims_all->map(function($item, $key) use($claims_all){
+        $data_claims_potential = $claims_all->map(function ($item, $key) use ($claims_all) {
+
+            $item_claim = $claims_all->groupBy("jenis_perubahan")->filter(function ($i, $key) use ($item) {
+                return $key == $item->jenis_perubahan;
+                // return $i->stage == 1;
+            })->flatten();
+
+            $claim_val = $item_claim->filter(function ($ic) use ($item) {
+                if ($item->stage >= 1) {
+                    return (int) $ic->stage >= 1;
+                }
+            })->count();
+
+            // $claim_val = $item_claim->filter(function($ic) use($item){
+            //     if ($item->stage == 4) {
+            //         return (int) $ic->stage == 4;
+            //     }elseif($item->stage == 5){
+            //         return (int) $ic->stage == 5;
+            //     } elseif ($item->stage >= 2) {
+            //         return (int) $ic->stage >= 2;
+            //     } elseif ($item->stage >= 1) {
+            //         return (int) $ic->stage >= 1;
+            //     }
+            // })->count();
+
+            // $claim_val = $item_claim->filter(function($ic) use($item){
+            //     if($item->stage == 1 ){
+            //         return $ic->stage == 1;
+            //     }elseif($item->stage == 2){
+            //         return $ic->stage == 2;
+            //     }elseif($item->stage == 5){
+            //         return $ic->stage == 5;
+            //     }
+            // })->count();
+
+            $uraian_formatted = substr($item->uraian_perubahan, 0, 255);
+
+            $profit_center = $item->Proyeks->profit_center;
+            $newClass = new stdClass();
+
+            $newClass->NO_PROPOSAL_CLAIM = $item->proposal_klaim;
+            $newClass->TANGGAL = (int) date("Ymd");
+            $newClass->PROFIT_CTR = "$profit_center";
+            $newClass->PROJECT_DEF = "$profit_center";
+            $newClass->COMP_CODE = "A000";
+            $newClass->ITEM_CLAIM = "$uraian_formatted";
+
+            if ($item->stage >= 1) {
+                $newClass->CLAIM_CAT = "ITEM POTENTIAL";
+            };
+
+            // if ($item->stage == 4) {
+            //     $newClass->CLAIM_CAT = "ITEM NEGOTIATION";
+            // }elseif($item->stage == 5){
+            //     $newClass->CLAIM_CAT = "ITEM APPROVED";
+            // } elseif ($item->stage >= 2) {
+            //     $newClass->CLAIM_CAT = "ITEM SUBMISSION";
+            // } elseif ($item->stage >= 1) {
+            //     $newClass->CLAIM_CAT = "ITEM POTENTIAL";
+            // };
+
+            // if($item->stage == 2){
+            //     $newClass->CLAIM_CAT = "ITEM DIAJUKAN";
+            // }elseif($item->stage == 1){
+            //     $newClass->CLAIM_CAT = "ITEM TARGET";
+            // }elseif($item->stage == 5){
+            //     $newClass->CLAIM_CAT = "ITEM DISETUJUI";
+            // } elseif ($item->stage == 4) {
+            //     $newClass->CLAIM_CAT = "ITEM NEGOSIASI";
+            // };
+
+            $newClass->CLAIM_VAL = $claim_val;
+
+            if ($item->stage == 5) {
+                $newClass->CLAIM_AMOUNT = (int)$item->nilai_disetujui;
+            } else {
+                $newClass->CLAIM_AMOUNT = (int)$item->biaya_pengajuan;
+            }
+
+            // $newClass->CLAIM_AMOUNT = (int)$item_claim->sum("biaya_pengajuan");
+
+            // $newClass->CLAIM_VAL = $claims_all->groupBy("jenis_perubahan")->map(function($i, $key) use($item){
+            //     return $key = $i->count();
+            // })->get($item->jenis_perubahan);
+
+            if ($item->jenis_perubahan == "Klaim") {
+                $newClass->CATEGORY = "CLAIM";
+            } else {
+                $newClass->CATEGORY = "$item->jenis_perubahan";
+            }
+
+            return $newClass;
+        })->values();
+
+        $data_claims_submission = $claims_all->filter(function ($item) {
+            return $item->stage >= 2;
+        })->map(function ($item, $key) use ($claims_all) {
+
+            $item_claim = $claims_all->groupBy("jenis_perubahan")->filter(function ($i, $key) use ($item) {
+                return $key == $item->jenis_perubahan;
+                // return $i->stage == 1;
+            })->flatten();
+
+            $claim_val = $item_claim->filter(function ($ic) use ($item) {
+                if ($item->stage >= 2) {
+                    return (int) $ic->stage >= 2;
+                }
+            })->count();
+
+            // $claim_val = $item_claim->filter(function($ic) use($item){
+            //     if($item->stage == 1 ){
+            //         return $ic->stage == 1;
+            //     }elseif($item->stage == 2){
+            //         return $ic->stage == 2;
+            //     }elseif($item->stage == 5){
+            //         return $ic->stage == 5;
+            //     }
+            // })->count();
+
+            $uraian_formatted = substr($item->uraian_perubahan, 0, 255);
+
+            $profit_center = $item->Proyeks->profit_center;
+            $newClass = new stdClass();
+
+            $newClass->NO_PROPOSAL_CLAIM = $item->proposal_klaim;
+            $newClass->TANGGAL = (int) date("Ymd");
+            $newClass->PROFIT_CTR = "$profit_center";
+            $newClass->PROJECT_DEF = "$profit_center";
+            $newClass->COMP_CODE = "A000";
+            $newClass->ITEM_CLAIM = "$uraian_formatted";
+
+            if ($item->stage >= 2) {
+                $newClass->CLAIM_CAT = "ITEM SUBMISSION";
+            }
+
+            // if($item->stage == 2){
+            //     $newClass->CLAIM_CAT = "ITEM DIAJUKAN";
+            // }elseif($item->stage == 1){
+            //     $newClass->CLAIM_CAT = "ITEM TARGET";
+            // }elseif($item->stage == 5){
+            //     $newClass->CLAIM_CAT = "ITEM DISETUJUI";
+            // } elseif ($item->stage == 4) {
+            //     $newClass->CLAIM_CAT = "ITEM NEGOSIASI";
+            // };
+
+            $newClass->CLAIM_VAL = $claim_val;
+
+            if ($item->stage == 5) {
+                $newClass->CLAIM_AMOUNT = (int)$item->nilai_disetujui;
+            } else {
+                $newClass->CLAIM_AMOUNT = (int)$item->biaya_pengajuan;
+            }
+
+            // $newClass->CLAIM_AMOUNT = (int)$item_claim->sum("biaya_pengajuan");
+
+            // $newClass->CLAIM_VAL = $claims_all->groupBy("jenis_perubahan")->map(function($i, $key) use($item){
+            //     return $key = $i->count();
+            // })->get($item->jenis_perubahan);
+
+            if ($item->jenis_perubahan == "Klaim") {
+                $newClass->CATEGORY = "CLAIM";
+            } else {
+                $newClass->CATEGORY = "$item->jenis_perubahan";
+            }
+
+            return $newClass;
+        })->values();
+
+        $data_claims_filter = $claims_all->filter(function ($item) {
+            return $item->stage == 4 || $item->stage == 5;
+        })->map(function ($item, $key) use ($claims_all) {
 
             $item_claim = $claims_all->groupBy("jenis_perubahan")->filter(function($i, $key) use($item){
                 return $key == $item->jenis_perubahan;
@@ -32,10 +202,6 @@ class ContractApprovalController extends Controller
                     return (int) $ic->stage == 4;
                 }elseif($item->stage == 5){
                     return (int) $ic->stage == 5;
-                } elseif ($item->stage >= 2) {
-                    return (int) $ic->stage >= 2;
-                } elseif ($item->stage >= 1) {
-                    return (int) $ic->stage >= 1;
                 }
             })->count();
 
@@ -65,11 +231,7 @@ class ContractApprovalController extends Controller
                 $newClass->CLAIM_CAT = "ITEM NEGOTIATION";
             }elseif($item->stage == 5){
                 $newClass->CLAIM_CAT = "ITEM APPROVED";
-            } elseif ($item->stage >= 2) {
-                $newClass->CLAIM_CAT = "ITEM SUBMISSION";
-            } elseif ($item->stage >= 1) {
-                $newClass->CLAIM_CAT = "ITEM POTENTIAL";
-            };
+            }
 
             // if($item->stage == 2){
             //     $newClass->CLAIM_CAT = "ITEM DIAJUKAN";
@@ -104,8 +266,12 @@ class ContractApprovalController extends Controller
             return $newClass;
         })->values();
 
+        $data_claims = $data_claims_potential->merge($data_claims_submission)->merge($data_claims_filter);
+
         // return response()->json($data_claims, 200);
-        // dd($data_claims);
+        dd(
+            $data_claims->toArray()
+        );
 
         // SAP DEV
         // // FIRST STEP SEND DATA TO BW
@@ -138,59 +304,59 @@ class ContractApprovalController extends Controller
 
         //SAP PRODUCTION
 
-        // FIRST STEP SEND DATA TO BW
-        $csrf_token = "";
-        $content_location = "";
-        // $response = getAPI("https://wtappbw-qas.wika.co.id:44350/sap/bw4/v1/push/dataStores/yodaltes4/requests", [], [], false);
-        // $http = Http::withBasicAuth("WIKA_API", "WikaWika2022");
-        $get_token = Http::withBasicAuth("WIKA_API", "WikaWikaWika2022")->withHeaders(["x-csrf-token" => "Fetch"])->get("https://wtappbw-prd.wika.co.id:44360/sap/bw4/v1/push/dataStores/zosbi006/requests");
-        $csrf_token = $get_token->header("x-csrf-token");
-        $cookie = "";
-        collect($get_token->cookies()->toArray())->each(function ($c) use (&$cookie) {
-            $cookie .= $c["Name"] . "=" . $c["Value"] . ";";
-        });
+        // // FIRST STEP SEND DATA TO BW
+        // $csrf_token = "";
+        // $content_location = "";
+        // // $response = getAPI("https://wtappbw-qas.wika.co.id:44350/sap/bw4/v1/push/dataStores/yodaltes4/requests", [], [], false);
+        // // $http = Http::withBasicAuth("WIKA_API", "WikaWika2022");
+        // $get_token = Http::withBasicAuth("WIKA_API", "WikaWikaWika2022")->withHeaders(["x-csrf-token" => "Fetch"])->get("https://wtappbw-prd.wika.co.id:44360/sap/bw4/v1/push/dataStores/zosbi006/requests");
+        // $csrf_token = $get_token->header("x-csrf-token");
+        // $cookie = "";
+        // collect($get_token->cookies()->toArray())->each(function ($c) use (&$cookie) {
+        //     $cookie .= $c["Name"] . "=" . $c["Value"] . ";";
+        // });
 
-        // SECOND STEP SEND DATA TO BW
-        $get_content_location = Http::withBasicAuth("WIKA_API", "WikaWikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie])->post("https://wtappbw-prd.wika.co.id:44360/sap/bw4/v1/push/dataStores/zosbi006/requests");
-        $content_location = $get_content_location->header("content-location");
+        // // SECOND STEP SEND DATA TO BW
+        // $get_content_location = Http::withBasicAuth("WIKA_API", "WikaWikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie])->post("https://wtappbw-prd.wika.co.id:44360/sap/bw4/v1/push/dataStores/zosbi006/requests");
+        // $content_location = $get_content_location->header("content-location");
 
 
-        // THIRD STEP SEND DATA TO BW
-        // dd($new_class->toJson());
-        $fill_data = Http::withBasicAuth("WIKA_API", "WikaWikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie, "content-type" => "application/json"])->post("https://wtappbw-prd.wika.co.id:44360/sap/bw4/v1/push/dataStores/zosbi006/dataSend?request=$content_location&datapid=1", $data_claims->toArray());
+        // // THIRD STEP SEND DATA TO BW
+        // // dd($new_class->toJson());
+        // $fill_data = Http::withBasicAuth("WIKA_API", "WikaWikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie, "content-type" => "application/json"])->post("https://wtappbw-prd.wika.co.id:44360/sap/bw4/v1/push/dataStores/zosbi006/dataSend?request=$content_location&datapid=1", $data_claims->toArray());
 
-        // FOURTH STEP SEND DATA TO BW
-        $closed_request = Http::withBasicAuth("WIKA_API", "WikaWikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie])->post("https://wtappbw-prd.wika.co.id:44360/sap/bw4/v1/push/dataStores/zosbi006/requests/$content_location/close");
-        // dd($closed_request, $data_claims, $fill_data);
+        // // FOURTH STEP SEND DATA TO BW
+        // $closed_request = Http::withBasicAuth("WIKA_API", "WikaWikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie])->post("https://wtappbw-prd.wika.co.id:44360/sap/bw4/v1/push/dataStores/zosbi006/requests/$content_location/close");
+        // // dd($closed_request, $data_claims, $fill_data);
 
-        if ($fill_data->successful() && $closed_request->successful()) {
+        // if ($fill_data->successful() && $closed_request->successful()) {
 
-            $this->setLogging('ccm_approval', "APPROVAL CCM => ", [
-                "KODE_PROYEK" => $claims_all->first()->kode_proyek,
-                "DATA" => $data_claims->toArray(),
-                "STATUS" => "SUCCESS"
-            ]);
+        //     $this->setLogging('ccm_approval', "APPROVAL CCM => ", [
+        //         "KODE_PROYEK" => $claims_all->first()->kode_proyek,
+        //         "DATA" => $data_claims->toArray(),
+        //         "STATUS" => "SUCCESS"
+        //     ]);
 
-            $response_success = [
-                "statusCode" => 200,
-                "message" => "success"
-            ];
+        //     $response_success = [
+        //         "statusCode" => 200,
+        //         "message" => "success"
+        //     ];
 
-            return response()->json($response_success);
-        } else {
-            $this->setLogging('ccm_approval', "APPROVAL CCM => ", [
-                "KODE_PROYEK" => $claims_all->first()->kode_proyek,
-                "DATA" => $data_claims->toArray(),
-                "STATUS" => "FAILED"
-            ]);
+        //     return response()->json($response_success);
+        // } else {
+        //     $this->setLogging('ccm_approval', "APPROVAL CCM => ", [
+        //         "KODE_PROYEK" => $claims_all->first()->kode_proyek,
+        //         "DATA" => $data_claims->toArray(),
+        //         "STATUS" => "FAILED"
+        //     ]);
 
-            $response_success = [
-                "statusCode" => 400,
-                "message" => "failed"
-            ];
+        //     $response_success = [
+        //         "statusCode" => 400,
+        //         "message" => "failed"
+        //     ];
 
-            return response()->json($response_success);
-        }
+        //     return response()->json($response_success);
+        // }
     }
 
     public function index(Request $request){
