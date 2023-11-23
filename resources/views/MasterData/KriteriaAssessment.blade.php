@@ -528,9 +528,9 @@
                                             data-control="select2" data-hide-search="false" data-placeholder="Pilih Isi..."
                                             data-select2-id="select2-rating" tabindex="-1" aria-hidden="true">
                                             <option value="" selected></option>
-                                            <option value="Perusahaan berada pada urutan 1-50">Perusahaan berada pada urutan 1-50</option>
-                                            <option value="Perusahaan berada pada urutan 51-100">Perusahaan berada pada urutan 51-100</option>
-                                            <option value="Perusahaan tidak berada pada daftar Rating Perusahaan">Perusahaan tidak berada pada daftar Rating Perusahaan</option>
+                                            <option value="Perusahaan berada pada urutan 1-20" {{ empty($is_kriteria_rating) && $kriteria->isi == "Perusahaan berada pada urutan 1-20" ? "selected" : "" }}>Perusahaan berada pada urutan 1 - 20</option>
+                                                <option value="Perusahaan berada pada urutan 21-45" {{ empty($is_kriteria_rating) && $kriteria->isi == "Perusahaan berada pada urutan 21-45" ? "selected" : "" }}>Perusahaan berada pada urutan 21 - 45</option>
+                                                <option value="Perusahaan tidak berada pada daftar Rating Perusahaan" {{ empty($is_kriteria_rating) && $kriteria->isi == "Perusahaan tidak berada pada daftar Rating Perusahaan" ? "selected" : "" }}>Perusahaan tidak berada pada daftar Rating Perusahaan</option>
                                                                                         
                                             {{-- @foreach ($instansi as $ins)
                                                 <option value="{{$ins->instansi}}">{{$ins->instansi}}</option>
@@ -970,8 +970,8 @@
                                                 data-control="select2" data-hide-search="false" data-placeholder="Pilih Isi..."
                                                 data-select2-id="select2-rating_{{ $kriteria->id_kriteria_assessment }}" tabindex="-1" aria-hidden="true">
                                                 <option value="" selected></option>
-                                                <option value="Perusahaan berada pada urutan 1-50" {{ empty($is_kriteria_rating) && $kriteria->isi == "Perusahaan berada pada urutan 1-50" ? "selected" : "" }}>Perusahaan berada pada urutan 1-50</option>
-                                                <option value="Perusahaan berada pada urutan 51-100" {{ empty($is_kriteria_rating) && $kriteria->isi == "Perusahaan berada pada urutan 51-100" ? "selected" : "" }}>Perusahaan berada pada urutan 51-100</option>
+                                                <option value="Perusahaan berada pada urutan 1-20" {{ empty($is_kriteria_rating) && $kriteria->isi == "Perusahaan berada pada urutan 1-20" ? "selected" : "" }}>Perusahaan berada pada urutan 1 - 20</option>
+                                                <option value="Perusahaan berada pada urutan 21-45" {{ empty($is_kriteria_rating) && $kriteria->isi == "Perusahaan berada pada urutan 21-45" ? "selected" : "" }}>Perusahaan berada pada urutan 21 - 45</option>
                                                 <option value="Perusahaan tidak berada pada daftar Rating Perusahaan" {{ empty($is_kriteria_rating) && $kriteria->isi == "Perusahaan tidak berada pada daftar Rating Perusahaan" ? "selected" : "" }}>Perusahaan tidak berada pada daftar Rating Perusahaan</option>
                                                                                             
                                                 {{-- @foreach ($instansi as $ins)
