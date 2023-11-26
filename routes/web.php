@@ -53,6 +53,8 @@ use App\Http\Controllers\PegawaiController;
 use App\Http\Controllers\RekomendasiController;
 use App\Http\Controllers\TipeProyekController;
 use App\Http\Controllers\RoleManagementsController;
+use App\Http\Controllers\KonsultanPerencanaController;
+use App\Models\ChecklistCalonMitraKSO;
 use App\Models\ContractChangeNotice;
 use App\Models\ContractChangeOrder;
 use App\Models\ContractChangeProposal;
@@ -2697,6 +2699,144 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post('/role-management/update/{id}', [RoleManagementsController::class, 'edit']);
     Route::post('/role-management/delete/{id}', [RoleManagementsController::class, 'delete']);
     //End :: Role Management
+
+    //Begin::Konsultan Perencana
+    Route::get('/konsultan-perencana', [KonsultanPerencanaController::class, 'index']);
+    Route::post('/konsultan-perencana/save', [KonsultanPerencanaController::class, 'store']);
+    Route::get('/konsultan-perencana/{id}/show', [KonsultanPerencanaController::class, 'show']);
+    Route::post('/konsultan-perencana/{id}/edit', [KonsultanPerencanaController::class, 'update']);
+    Route::post('/konsultan-perencana/{id}/delete', [KonsultanPerencanaController::class, 'destroy']);
+    //End::Konsultan Perencana
+
+    //Begin::Checklist Calon Mitra KSO
+    Route::get('/checklist-calon-mitra-kso', function (Request $request) {
+        return view('MasterData/ChecklistCalonMitraKSO', ['data' => ChecklistCalonMitraKSO::all()]);
+    });
+    Route::post('/checklist-calon-mitra-kso/save', function (Request $request) {
+        $data = $request->all();
+
+        $messages = [
+            "required" => "Field di atas wajib diisi",
+        ];
+        $rules = [
+                "aspek" => 'required|string',
+            ];
+        $validation = Validator::make(
+            $data,
+            $rules,
+            $messages
+        );
+
+        if ($validation->fails()) {
+            Alert::error(
+                'Error',
+                "Checklist Calon Mitra KSO Gagal Ditambahkan. Periksa Kembali!"
+            );
+            return redirect()->back();
+        }
+
+        $validation->validate();
+
+        $checklist = new ChecklistCalonMitraKSO();
+        $checklist->aspek = $data['aspek'];
+        $checklist->start_tahun = $data["tahun_start"];
+        $checklist->start_bulan = $data["bulan_start"];
+        $checklist->is_active = isset($data["isActive"]) ? true : false;
+        if (isset($data["tahun_finish"]) && isset($data["bulan_finish"])) {
+            $checklist->finish_tahun = $data["tahun_finish"];
+            $checklist->finish_bulan = $data["bulan_finish"];
+        }
+        if (isset($data['kategori'])) {
+            $checklist->kategori = $data['kategori'];
+        }
+
+        $checklist->isi = $data['isi'];
+
+        if ($checklist->save()) {
+            Alert::success('Success', "Checklist Calon Mitra KSO Berhasil Ditambahkan");
+            return redirect()->back();
+        }
+        Alert::error('Error', "Checklist Calon Mitra KSO Gagal Ditambahkan");
+        return redirect()->back();
+    });
+
+    Route::post('/checklist-calon-mitra-kso/{id}/edit', function (Request $request, $id) {
+        $data = $request->all();
+
+        $messages = [
+            "required" => "Field di atas wajib diisi",
+        ];
+        $rules = [
+                "aspek" => 'required|string',
+            ];
+        $validation = Validator::make(
+            $data,
+            $rules,
+            $messages
+        );
+
+        if ($validation->fails()) {
+            Alert::error(
+                'Error',
+                "Checklist Calon Mitra KSO Gagal Ditambahkan. Periksa Kembali!"
+            );
+            return redirect()->back();
+        }
+
+        $validation->validate();
+
+        $checklist = ChecklistCalonMitraKSO::find($id);
+
+        if (empty($checklist)) {
+            Alert::success("Error", "Checklist Calon Mitra KSO Tidak Ditemukan");
+            return redirect()->back();
+        }
+
+        $checklist->aspek = $data['aspek'];
+        $checklist->start_tahun = $data["tahun_start"];
+        $checklist->start_bulan = $data["bulan_start"];
+        $checklist->is_active = isset($data["isActive"]) ? true : false;
+        if (isset($data["tahun_finish"]) && isset($data["bulan_finish"])) {
+            $checklist->finish_tahun = $data["tahun_finish"];
+            $checklist->finish_bulan = $data["bulan_finish"];
+        }
+        if (isset($data['kategori'])) {
+            $checklist->kategori = $data['kategori'];
+        }
+
+        $checklist->isi = $data['isi'];
+
+        if ($checklist->save()) {
+            Alert::success('Success', "Checklist Calon Mitra KSO Berhasil Diubah");
+            return redirect()->back();
+        }
+        Alert::error('Error', "Checklist Calon Mitra KSO Gagal Diubah");
+        return redirect()->back();
+    });
+    Route::post('/checklist-calon-mitra-kso/{checklist}/delete', function (ChecklistCalonMitraKSO $checklist) {
+        if (empty($checklist)) {
+            Alert::success("Error", "Checklist Calon Mitra KSO Tidak Ditemukan");
+            return redirect()->back();
+        }
+
+        if ($checklist->delete()) {
+            // Alert::success('Success', "Checklist Calon Mitra KSO Berhasil Dihapus");
+            // return redirect()->back();
+
+            return response()->json([
+                "Success" => true,
+                "Message" => null
+            ]);
+        }
+
+        // Alert::error('Error', "Checklist Calon Mitra KSO Gagal Dihapus");
+        // return redirect()->back();
+        return response()->json([
+            "Success" => false,
+            "Message" => null
+        ]);
+    });
+    //End::Checklist Calon Mitra KSO
 
     // begin RKAP
     Route::get('/rkap', function () {

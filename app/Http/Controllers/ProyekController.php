@@ -30,6 +30,7 @@ use Illuminate\support\Facades\DB;
 use App\Models\ContractManagements;
 use App\Models\ContractRFADocument;
 use App\Models\Departemen;
+use App\Models\DokumenConsentNPWP;
 use App\Models\DokumenDraft;
 use App\Models\DokumenEca;
 use App\Models\DokumenIca;
@@ -822,6 +823,9 @@ class ProyekController extends Controller
             }
 
             if ($newProyek->save()) {
+                if (isset($dataProyek["dokumen-consent-npwp"])) {
+                    self::uploadDokumenConsentNPWP($dataProyek["dokumen-consent-npwp"], $kode_proyek);
+                }
                 if (isset($dataProyek["dokumen-pefindo"])) {
                     self::uploadDokumenPefindo($dataProyek["dokumen-pefindo"], $kode_proyek);
                 }
@@ -1145,6 +1149,22 @@ class ProyekController extends Controller
         $dokumen_pefindo->save();
     }
 
+    private function uploadDokumenConsentNPWP(UploadedFile $uploadedFile, $kode_proyek)
+    {
+        $faker = new Uuid();
+        $dokumen = new DokumenConsentNPWP();
+        $id_document = $faker->uuid3();
+        $file_name = $uploadedFile->getClientOriginalName();
+        $nama_document = date("His_") . $file_name;
+        // $nama_document = date("His_") . substr($uploadedFile->getClientOriginalName(), 0, strlen($uploadedFile->getClientOriginalName()) - 5);
+        moveFileTemp($uploadedFile, $id_document);
+        $dokumen->nama_dokumen = $nama_document;
+        $dokumen->id_document = $id_document;
+        $dokumen->kode_proyek = $kode_proyek;
+        // dd($dokumen);
+        $dokumen->save();
+    }
+
     public function deleteDokumenPefindo($id)
     {
         $delete = DokumenPefindo::find($id);
@@ -1155,6 +1175,19 @@ class ProyekController extends Controller
         File::delete($files);
         $delete->delete();
         Alert::success("Success", "Dokumen Pefindo Berhasil Dihapus");
+        return redirect()->back();
+    }
+
+    public function deleteDokumenConsentNPWP($id)
+    {
+        $delete = DokumenConsentNPWP::find($id);
+        // dd($$delete);
+        $files = collect(File::allFiles(public_path("words")))->filter(function ($f) use ($delete) {
+            return str_contains($f->getFilename(), $delete->id_document);
+        })->first();
+        File::delete($files);
+        $delete->delete();
+        Alert::success("Success", "Dokumen Consent & NPWP Berhasil Dihapus");
         return redirect()->back();
     }
 

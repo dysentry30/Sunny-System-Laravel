@@ -3019,6 +3019,90 @@
                                                     @endif
 
                                                     <br>
+                                                    
+                                                    @can('super-admin')
+                                                    
+                                                    <!--Begin::Title Biru Form: Document Consent NPWP-->
+                                                    <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                                        Document Consent & NPWP
+                                                    </h3>
+                                                    <br>
+                                                    <div class="w-50">
+                                                        <input type="file"
+                                                            class="form-control form-control-sm form-input-solid"
+                                                            name="dokumen-consent-npwp" accept=".pdf">
+                                                    </div>
+                                                    <h6 id="error-dokumen-consent-npwp" class="text-danger fw-normal"
+                                                        style="display: none">*File
+                                                        terlalu besar ! Max Size 50Mb</h6>
+                                                    <br>
+                                                    <!--begin::Table-->
+                                                    <table class="table align-middle table-row-dashed w-50 fs-6 gy-2"
+                                                        id="kt_customers_table">
+                                                        <!--begin::Table head-->
+                                                        <thead>
+                                                            <!--begin::Table row-->
+                                                            <tr
+                                                                class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                <th class="w-50px text-center">No.</th>
+                                                                <th class="w-auto">Nama Document</th>
+                                                                <th class="w-auto">Modified On</th>
+                                                                <th class="w-auto text-center"></th>
+                                                            </tr>
+                                                            <!--end::Table row-->
+                                                        </thead>
+                                                        <!--end::Table head-->
+                                                        @php
+                                                            $no = 1;
+                                                        @endphp
+                                                        <!--begin::Table body-->
+                                                        <tbody class="fw-bold text-gray-600">
+                                                            @foreach ($proyek->DokumenConsentNPWP as $item)
+                                                                <tr>
+                                                                    <!--begin::Nomor-->
+                                                                    <td class="text-center">
+                                                                        {{ $no++ }}
+                                                                    </td>
+                                                                    <!--end::Nomor-->
+                                                                    <!--begin::Name-->
+                                                                    <td>
+                                                                        @if (str_contains("$item->nama_dokumen", '.doc'))
+                                                                            <a href="/document/view/{{ $item->id_dokumen_consent_npwp }}/{{ $item->id_document }}"
+                                                                                class="text-hover-primary">{{ $item->nama_dokumen }}</a>
+                                                                        @else
+                                                                            <a target="_blank"
+                                                                                href="{{ asset('words/' . $item->id_document . '.pdf') }}"
+                                                                                class="text-hover-primary">{{ $item->nama_dokumen }}</a>
+                                                                        @endif
+                                                                    </td>
+                                                                    <!--end::Name-->
+                                                                    <!--begin::Column-->
+                                                                    <td>
+                                                                        {{ Carbon\Carbon::parse($item->created_at)->translatedFormat('d F Y') }}
+                                                                    </td>
+                                                                    <!--end::Column-->
+                                                                    <!--begin::Action-->
+                                                                    @if ($proyek->stage < 4)
+                                                                    <td class="text-center">
+                                                                        <small>
+                                                                            <p data-bs-toggle="modal"
+                                                                                data-bs-target="#kt_consent_npwp_delete_{{ $item->id_dokumen_consent_npwp }}"
+                                                                                id="modal-delete"
+                                                                                class="btn btn-sm btn-light btn-active-primary">
+                                                                                Delete
+                                                                            </p>
+                                                                        </small>
+                                                                    </td>
+                                                                    @endif
+                                                                    <!--end::Action-->
+                                                                </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                        <!--end::Table body-->
+                                                    </table>
+                                                    <!--end::Table-->
+                                                    <!--End::Title Biru Form: Document Consent NPWP-->
+                                                    <br>
 
                                                     <div class="row">
                                                         <div class="col-3">
@@ -3041,7 +3125,7 @@
                                                     </div>
                                                     <br>
 
-                                                    <!--Begin::Title Biru Form: Document Prakualifikasi-->
+                                                    <!--Begin::Title Biru Form: Document Pefindo-->
                                                     <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                                         Document Pefindo
                                                     </h3>
@@ -3076,7 +3160,7 @@
                                                         @endphp
                                                         <!--begin::Table body-->
                                                         <tbody class="fw-bold text-gray-600">
-                                                            @foreach ($proyek->DokumenPrakualifikasi as $dokumen_prakualifikasi)
+                                                            @foreach ($proyek->DokumenPefindo as $item)
                                                                 <tr>
                                                                     <!--begin::Nomor-->
                                                                     <td class="text-center">
@@ -3085,19 +3169,19 @@
                                                                     <!--end::Nomor-->
                                                                     <!--begin::Name-->
                                                                     <td>
-                                                                        @if (str_contains("$dokumen_prakualifikasi->nama_dokumen", '.doc'))
-                                                                            <a href="/document/view/{{ $dokumen_prakualifikasi->id_dokumen_prakualifikasi }}/{{ $dokumen_prakualifikasi->id_document }}"
-                                                                                class="text-hover-primary">{{ $dokumen_prakualifikasi->nama_dokumen }}</a>
+                                                                        @if (str_contains("$item->nama_dokumen", '.doc'))
+                                                                            <a href="/document/view/{{ $item->id_dokumen_pefindo }}/{{ $item->id_document }}"
+                                                                                class="text-hover-primary">{{ $item->nama_dokumen }}</a>
                                                                         @else
                                                                             <a target="_blank"
-                                                                                href="{{ asset('words/' . $dokumen_prakualifikasi->id_document . '.pdf') }}"
-                                                                                class="text-hover-primary">{{ $dokumen_prakualifikasi->nama_dokumen }}</a>
+                                                                                href="{{ asset('words/' . $item->id_document . '.pdf') }}"
+                                                                                class="text-hover-primary">{{ $item->nama_dokumen }}</a>
                                                                         @endif
                                                                     </td>
                                                                     <!--end::Name-->
                                                                     <!--begin::Column-->
                                                                     <td>
-                                                                        {{ Carbon\Carbon::parse($dokumen_prakualifikasi->created_at)->translatedFormat('d F Y') }}
+                                                                        {{ Carbon\Carbon::parse($item->created_at)->translatedFormat('d F Y') }}
                                                                     </td>
                                                                     <!--end::Column-->
                                                                     <!--begin::Action-->
@@ -3105,7 +3189,7 @@
                                                                     <td class="text-center">
                                                                         <small>
                                                                             <p data-bs-toggle="modal"
-                                                                                data-bs-target="#kt_dokumen_prakualifikasi_delete_{{ $dokumen_prakualifikasi->id_dokumen_prakualifikasi }}"
+                                                                                data-bs-target="#kt_pefindo_delete_{{ $item->id_dokumen_pefindo }}"
                                                                                 id="modal-delete"
                                                                                 class="btn btn-sm btn-light btn-active-primary">
                                                                                 Delete
@@ -3120,8 +3204,10 @@
                                                         <!--end::Table body-->
                                                     </table>
                                                     <!--end::Table-->
-                                                    <!--End::Title Biru Form: Document Prakualifikasi-->
+                                                    <!--End::Title Biru Form: Document Pefindo-->
                                                     <br>
+                                                        
+                                                    @endcan
 
 
                                                     <!--Begin::Title Biru Form: Document Prakualifikasi-->
@@ -9113,6 +9199,104 @@
         </form>
     @endforeach
     <!--end::DELETE ATTACHMENT MENANG-->
+
+    <!--begin::DELETE DOKUMEN PEFINDO-->
+    @foreach ($proyek->DokumenPefindo as $dokumen)
+        <form action="/proyek/dokumen-pefindo/{{ $dokumen->id_dokumen_pefindo }}/delete" method="post"
+            enctype="multipart/form-data">
+            @method('delete')
+            @csrf
+            <div class="modal fade" id="kt_pefindo_delete_{{ $dokumen->id_dokumen_pefindo }}" tabindex="-1"
+                aria-hidden="true">
+                <!--begin::Modal dialog-->
+                <div class="modal-dialog modal-dialog-centered mw-800px">
+                    <!--begin::Modal content-->
+                    <div class="modal-content">
+                        <!--begin::Modal header-->
+                        <div class="modal-header">
+                            <!--begin::Modal title-->
+                            <h2>Hapus : {{ $attachment->nama_attachment }}</h2>
+                            <!--end::Modal title-->
+                            <!--begin::Close-->
+                            <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                                <span class="svg-icon svg-icon-1">
+                                    <i class="bi bi-x-lg"></i>
+                                </span>
+                                <!--end::Svg Icon-->
+                            </div>
+                            <!--end::Close-->
+                        </div>
+                        <!--end::Modal header-->
+                        <!--begin::Modal body-->
+                        <div class="modal-body py-lg-6 px-lg-6">
+                            Data yang dihapus tidak dapat dipulihkan, anda yakin ?
+                            <br>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-sm btn-light btn-active-primary">Delete</button>
+                        </div>
+                        <!--end::Input group-->
+
+                    </div>
+                    <!--end::Modal body-->
+                </div>
+                <!--end::Modal content-->
+            </div>
+            <!--end::Modal dialog-->
+            </div>
+        </form>
+    @endforeach
+    <!--end::DELETE DOKUMEN PEFINDO-->
+
+    <!--begin::DELETE DOKUMEN Consent NPWP-->
+    @foreach ($proyek->DokumenConsentNPWP as $dokumen)
+        <form action="/proyek/dokumen-consent-npwp/{{ $dokumen->id_dokumen_consent_npwp }}/delete" method="post"
+            enctype="multipart/form-data">
+            @method('delete')
+            @csrf
+            <div class="modal fade" id="kt_consent_npwp_delete_{{ $dokumen->id_dokumen_consent_npwp }}" tabindex="-1"
+                aria-hidden="true">
+                <!--begin::Modal dialog-->
+                <div class="modal-dialog modal-dialog-centered mw-800px">
+                    <!--begin::Modal content-->
+                    <div class="modal-content">
+                        <!--begin::Modal header-->
+                        <div class="modal-header">
+                            <!--begin::Modal title-->
+                            <h2>Hapus : {{ $dokumen->nama_dokumen }}</h2>
+                            <!--end::Modal title-->
+                            <!--begin::Close-->
+                            <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                                <span class="svg-icon svg-icon-1">
+                                    <i class="bi bi-x-lg"></i>
+                                </span>
+                                <!--end::Svg Icon-->
+                            </div>
+                            <!--end::Close-->
+                        </div>
+                        <!--end::Modal header-->
+                        <!--begin::Modal body-->
+                        <div class="modal-body py-lg-6 px-lg-6">
+                            Data yang dihapus tidak dapat dipulihkan, anda yakin ?
+                            <br>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-sm btn-light btn-active-primary">Delete</button>
+                        </div>
+                        <!--end::Input group-->
+
+                    </div>
+                    <!--end::Modal body-->
+                </div>
+                <!--end::Modal content-->
+            </div>
+            <!--end::Modal dialog-->
+            </div>
+        </form>
+    @endforeach
+    <!--end::DELETE DOKUMEN Consent NPWP-->
 
     <!--begin::modal Cancel Proyek-->
     <form action="/proyek/cancel-modal/{{ $proyek->kode_proyek }}" method="post" enctype="multipart/form-data">

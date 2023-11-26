@@ -194,4 +194,14 @@ class Proyek extends Model
     {
         return $this->hasMany(ContractRFADocument::class, 'kode_proyek');
     }
+
+    public function DokumenPefindo()
+    {
+        return $this->hasMany(DokumenPefindo::class, 'kode_proyek');
+    }
+
+    public function DokumenConsentNPWP()
+    {
+        return $this->hasMany(DokumenConsentNPWP::class, 'kode_proyek');
+    }
 }

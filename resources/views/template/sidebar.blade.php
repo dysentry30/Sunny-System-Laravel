@@ -834,6 +834,23 @@
                                     </div>
                                     <!--end::Menu Colapse-->
                                     @endif
+                                    
+                                    @if (auth()->user()->check_administrator)
+                                    <!--begin::Menu Colapse-->
+                                    <div id="#kt_aside_menu" data-kt-menu="true"
+                                        style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'konsultan-perencana' ? 'background-color:#008CB4' : '' }}">
+                                        <a class="menu-link " href="/konsultan-perencana" style="color:white; padding-left:20px;">
+                                            <span class="menu-icon">
+                                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                                {{-- <i class="bi bi-buildings text-white"></i> --}}
+                                                <i class="bi bi-fingerprint text-white" style="font-size: 20px"></i>
+                                                <!--end::Svg Icon-->
+                                            </span>
+                                            <span class="menu-title" style="font-size: 16px; padding-left: 10px">Konsultan Perencana</span>
+                                        </a>
+                                    </div>
+                                    <!--end::Menu Colapse-->
+                                    @endif
                                 </div>
                                 <!--end::Colapse-->
                                 <!--end::Svg Icon-->
