@@ -1672,14 +1672,13 @@
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                         <th class="min-w-125px">Nama</th>
                                         <th class="min-w-125px">Tanggal</th>
-                                        <th class="min-w-125px">Action</th>
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
                                 <tbody class="fw-bold text-gray-400">
-                                    {{-- @forelse ($contract->project->DokumenMou as $nda)
+                                    @forelse ($contract->project->DokumenMou as $nda)
                                         <tr>
                                             <td>
                                                 <a target="_blank" href="{{asset("/words/$nda->id_document.pdf")}}" class="text-hover-primary">{{$nda->nama_dokumen}}</a>
@@ -1694,45 +1693,6 @@
                                                 <b>There is no data</b>
                                             </td>
                                         </tr>
-                                    @endforelse --}}
-                                    @if ($contract->project->DokumenMou->isNotEmpty())
-                                    <tr class="bg-primary">
-                                        <td colspan="3" class="text-white">File CRM</td>
-                                    </tr>
-                                    @endif
-                                    @forelse ($contract->project->DokumenMou as $mou)
-                                        <tr>
-                                            <td>
-                                                <a target="_blank" href="{{asset("/words/$mou->id_document.pdf")}}" class="text-hover-primary">{{$mou->nama_dokumen}}</a>
-                                            </td>
-                                            <td>
-                                                {{Carbon\Carbon::createFromTimeString($mou->created_at)->translatedFormat("d F Y")}}
-                                            </td>
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="3" class="text-center"><b>There is no data</b></td>
-                                        </tr>
-                                    @endforelse
-                                    @if ($contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen MOU")->isNotEmpty())
-                                    <tr class="bg-primary">
-                                        <td colspan="3" class="text-white">File CCM</td>
-                                    </tr>
-                                    @endif
-                                    @forelse ($contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen MOU") as $item)
-                                        <tr>
-                                            <td>
-                                                <a target="_blank" href="{{asset("/words/$item->id_document")}}" class="text-hover-primary">{{$item->nama_document}}</a>
-                                            </td>
-                                            <td>
-                                                {{Carbon\Carbon::createFromTimeString($item->created_at)->translatedFormat("d F Y")}}
-                                            </td>
-                                            <td class="text-center">
-                                                <a href="#" onclick="confirmDeleteFinalDokumen('{{ $item->id }}')" class="btn btn-sm btn-danger p-2 text-white">Delete</a>
-                                            </td>
-                                        </tr>
-                                    @empty
-                                        
                                     @endforelse
                                 </tbody>
                                 <!--end::Table body-->
@@ -16959,7 +16919,7 @@
                             <!--begin::Input-->
                             <input type="hidden" name="kategori" value="Dokumen MOU">
                             <input type="hidden" name="status" value="Final">
-                            <input type="file" name="file-document[]" id="file-document" class="form-control form-control-solid" accept=".pdf" multiple>
+                            <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                             <!--end::Input-->
                         </div>
                             <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
@@ -17020,7 +16980,7 @@
                             <!--begin::Input-->
                             <input type="hidden" name="kategori" value="Dokumen ECA">
                             <input type="hidden" name="status" value="Final">
-                            <input type="file" name="file-document[]" id="file-document" class="form-control form-control-solid" accept=".pdf" multiple>
+                            <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                             <!--end::Input-->
                         </div>
                             <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
@@ -17081,7 +17041,7 @@
                             <!--begin::Input-->
                             <input type="hidden" name="kategori" value="Dokumen ICA">
                             <input type="hidden" name="status" value="Final">
-                            <input type="file" name="file-document[]" id="file-document" class="form-control form-control-solid" accept=".pdf" multiple>
+                            <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                             <!--end::Input-->
                         </div>
                             <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
@@ -17142,7 +17102,7 @@
                             <!--begin::Input-->
                             <input type="hidden" name="kategori" value="Dokumen ITB/TOR">
                             <input type="hidden" name="status" value="Final">
-                            <input type="file" name="file-document[]" id="file-document" class="form-control form-control-solid" accept=".pdf" multiple>
+                            <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                             <!--end::Input-->
                         </div>
                             <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
@@ -17203,7 +17163,7 @@
                             <!--begin::Input-->
                             <input type="hidden" name="kategori" value="Dokumen RKS / Project Spesification">
                             <input type="hidden" name="status" value="Final">
-                            <input type="file" name="file-document[]" id="file-document" class="form-control form-control-solid" accept=".pdf" multiple>
+                            <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                             <!--end::Input-->
                         </div>
                             <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
@@ -17264,7 +17224,7 @@
                             <!--begin::Input-->
                             <input type="hidden" name="kategori" value="Dokumen Draft Kontrak">
                             <input type="hidden" name="status" value="Final">
-                            <input type="file" name="file-document[]" id="file-document" class="form-control form-control-solid" accept=".pdf" multiple>
+                            <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                             <!--end::Input-->
                         </div>
                             <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
@@ -17325,7 +17285,7 @@
                             <!--begin::Input-->
                             <input type="hidden" name="kategori" value="Dokumen LOI">
                             <input type="hidden" name="status" value="Final">
-                            <input type="file" name="file-document[]" id="file-document" class="form-control form-control-solid" accept=".pdf" multiple>
+                            <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                             <!--end::Input-->
                         </div>
                             <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
