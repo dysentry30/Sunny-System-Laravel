@@ -44,8 +44,10 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\DokumenPrakualifikasi;
 use App\Models\DokumenRks;
 use App\Models\JenisProyek;
+use App\Models\KonsultanPerencana;
 use App\Models\MatriksApprovalRekomendasi;
 use App\Models\Provinsi;
+use App\Models\ProyekKonsultanPerencana;
 use App\Models\TipeProyek;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Session;
@@ -380,6 +382,7 @@ class ProyekController extends Controller
         $pesertatender = PesertaTender::where("kode_proyek", "=", $kode_proyek)->get();
         $proyekberjalans = ProyekBerjalans::where("kode_proyek", "=", $kode_proyek)->get()->first();
         $departemen = Departemen::where("kode_divisi", "=", $proyek->UnitKerja->kode_sap)->get();
+        $konsultan_perencana = KonsultanPerencana::all();
         // $historyForecast = $historyForecast;
         // $porsiJO = $porsiJO;
         // $data_negara = $data_negara;
@@ -389,7 +392,7 @@ class ProyekController extends Controller
             return view(
                 'Proyek/viewProyek',
                 ["proyek" => $proyek, "proyeks" => Proyek::all()],
-                compact(['companies', 'sumberdanas', 'dops', 'sbus', 'unitkerjas', 'customers', 'users', 'kriteriapasar', 'kriteriapasarproyek', 'teams', 'pesertatender', 'proyekberjalans', 'historyForecast', 'porsiJO', 'data_negara', 'mataUang', "provinsi", "departemen"])
+                compact(['companies', 'sumberdanas', 'dops', 'sbus', 'unitkerjas', 'customers', 'users', 'kriteriapasar', 'kriteriapasarproyek', 'teams', 'pesertatender', 'proyekberjalans', 'historyForecast', 'porsiJO', 'data_negara', 'mataUang', "provinsi", "departemen", "konsultan_perencana"])
                 // [
                 //     'companies' => Company::all(),
                 //     'sumberdanas' => SumberDana::all(),
@@ -2445,6 +2448,63 @@ class ProyekController extends Controller
         $deleteTender = PesertaTender::find($id);
         $deleteTender->delete();
         Alert::success("Success", "Peserta Tender Berhasil Dihapus");
+        return redirect()->back();
+    }
+
+    public function tambahKonsultan(Request $request,  ProyekKonsultanPerencana $newKonsultan)
+    {
+        $data = $request->all();
+        $messages = [
+            "required" => "*Kolom Ini Harus Diisi !",
+        ];
+        $rules = [
+            "konsultan-perencana" => "required",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            Alert::error('Error', "Konsultan Perencana Gagal Ditambahkan, Periksa Kembali !");
+        }
+
+        $validation->validate();
+        $newKonsultan->nama_konsultan = $data["konsultan-perencana"];
+        $newKonsultan->kode_proyek = $data["kode-proyek"];
+
+        $newKonsultan->save();
+        Alert::success("Success", "Konsultan Perencana Berhasil Ditambahkan");
+        return redirect()->back();
+    }
+
+    public function editKonsultan(Request $request, $id)
+    {
+        $data = $request->all();
+        // dd($data);
+        $messages = [
+            "required" => "*Kolom Ini Harus Diisi !",
+        ];
+        $rules = [
+            "konsultan-perencana" => "required",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            Alert::error('Error', "Konsultan Perencana Gagal Diubah, Periksa Kembali !");
+        }
+
+        $validation->validate();
+
+        $editKonsultan = ProyekKonsultanPerencana::find($id);
+        $editKonsultan->nama_konsultan = $data["konsultan-perencana"];
+        $editKonsultan->kode_proyek = $data["kode-proyek"];
+
+        $editKonsultan->save();
+        Alert::success("Success", "Konsultan Perencana Berhasil Diubah");
+        return redirect()->back();
+    }
+
+    public function deleteKonsultan($id)
+    {
+        $deleteTender = ProyekKonsultanPerencana::find($id);
+        $deleteTender->delete();
+        Alert::success("Success", "Konsultan Perencana Berhasil Dihapus");
         return redirect()->back();
     }
 

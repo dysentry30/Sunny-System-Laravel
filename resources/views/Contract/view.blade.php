@@ -406,7 +406,7 @@
                                     const formData = new FormData();
                                     formData.append("_token", "{{ csrf_token() }}");
                                     formData.append("id_contract", "{{ $contract->id_contract }}")
-                                    formData.append("kode_proyek", "{{ $contract->project_id }}")
+                                    formData.append("kode_proyek", "{{ $contract->project?_id }}")
                                     formData.append("periode", "{{ (int)date("m")-1 }}")
                                     formData.append("tahun", "{{ (int)date("Y") }}")
                                     const sendData = await fetch("/contract-management/set-lock",{
@@ -617,7 +617,7 @@
                                                 <span class="">Proyek: </span>
                                             </div>
                                             <div class="text-dark text-start">
-                                                <b>{{ $contract->project->nama_proyek ?? '' }}</b>
+                                                <b>{{ $contract->project?->nama_proyek ?? '' }}</b>
                                             </div>
                                         </div>
                                         <!--begin::Input group Website-->
@@ -675,7 +675,7 @@
                                                     <span class="">No. SPK: </span>
                                                 </div>
                                                 <div class="text-dark text-start">
-                                                    <b>{{ $contract->project->kode_spk ?? "-" }}</b>
+                                                    <b>{{ $contract->project?->kode_spk ?? "-" }}</b>
                                                 </div>
                                             </div>
                                             <!--end::Input group Name-->
@@ -687,7 +687,7 @@
                                                     <span class="">Nilai Kontrak Awal: </span>
                                                 </div>
                                                 <div class="text-dark text-start">
-                                                    <b>{{ number_format($contract->project->nilai_rkap ?? 0, 0, '.', '.') }}</b>
+                                                    <b>{{ number_format($contract->project?->nilai_rkap ?? 0, 0, '.', '.') }}</b>
                                                 </div>
                                             </div>
                                             <!--begin::Input group Website-->
@@ -710,7 +710,7 @@
                                                     <span class="">Unit Kerja: </span>
                                                 </div>
                                                 <div class="text-dark text-start">
-                                                    <b>{{ $contract->project->UnitKerja->unit_kerja }}</b>
+                                                    <b>{{ $contract->project?->UnitKerja?->unit_kerja }}</b>
                                                 </div>
                                             </div>
                                             <!--end::Input group Name-->
@@ -722,7 +722,7 @@
                                                     <span class="">Nilai Kontrak Review: </span>
                                                 </div>
                                                 <div class="text-dark text-start">
-                                                    <b>{{ number_format($contract->project->nilaiok_review ?? 0, 0, '.', '.') }}</b>
+                                                    <b>{{ number_format($contract->project?->nilaiok_review ?? 0, 0, '.', '.') }}</b>
                                                 </div>
                                             </div>
                                             <!--begin::Input group Website-->
@@ -755,7 +755,7 @@
                                                     <span class="">Nilai Kontrak Review: </span>
                                                 </div>
                                                 <div class="text-dark text-start">
-                                                    <b>{{ number_format($contract->project->nilaiok_review ?? 0, 0, '.', '.') }}</b>
+                                                    <b>{{ number_format($contract->project?->nilaiok_review ?? 0, 0, '.', '.') }}</b>
                                                 </div>
                                             </div>
                                             <!--begin::Input group Website-->
@@ -778,7 +778,7 @@
                                                 <span class="">Sumber Dana: </span>
                                             </div>
                                             <div class="text-dark text-start">
-                                                <b>{{ $contract->project->sumber_dana ?? '-' }}</b>
+                                                <b>{{ $contract->project?->sumber_dana ?? '-' }}</b>
                                             </div>
                                         </div>
                                     </div>
@@ -788,7 +788,7 @@
                                                 <span class="">Tipe Proyek: </span>
                                             </div>
                                             <div class="text-dark text-start">
-                                                <b>{{App\Models\JenisProyek::find($contract->project->jenis_proyek)->jenis_proyek}}</b>
+                                                <b>{{App\Models\JenisProyek::find($contract->project?->jenis_proyek)->jenis_proyek}}</b>
                                             </div>
                                         </div>
                                     </div>
@@ -1113,11 +1113,11 @@
                                 @php
                                     /*    
                                         {{-- @dump($contract->reviewProjects) --}}
-                                        @if ($contract->reviewProjects->isEmpty() && $contract->project->DokumenTender->isNotEmpty())
+                                        @if ($contract->reviewProjects->isEmpty() && $contract->project?->DokumenTender->isNotEmpty())
                                         {{-- @if (empty($is_approved) || $is_approved->isEmpty()) --}}
                                         <a href="/review-contract/view/{{ $contract->id_contract }}/1" target="_blank" Id="Plus">+</a>
                                         {{-- @endif --}}
-                                        @elseif ($contract->reviewProjects->isNotEmpty() && $contract->project->DokumenTender->isNotEmpty())
+                                        @elseif ($contract->reviewProjects->isNotEmpty() && $contract->project?->DokumenTender->isNotEmpty())
                                             <a class="btn btn-primary btn-sm p-2 gap-3" href="/review-contract/view/{{ $contract->id_contract }}/1" target="_blank">view</a>
                                             {{-- <a class="btn btn-primary btn-sm p-2 px-3 mx-3" data-kt-countup-tabs="true" data-bs-toggle="tab"
                                             href="#kt_user_view_overview_pelaksanaan">Lihat Pelaksanaan</a>     --}}
@@ -1127,7 +1127,7 @@
                                         {{-- @endif --}}
                                     */
                                 @endphp
-                                @if (!empty($contract->project->DokumenTender) || $contract->project->DokumenTender->isNotEmpty())
+                                @if (!empty($contract->project?->DokumenTender) || $contract->project?->DokumenTender->isNotEmpty())
                                     <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_create_tinjauan_dokumen_perolehan">+</a>
                                 @endif
@@ -1334,7 +1334,7 @@
                             {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_input_resiko_perolehan">+</a> --}}
                                 {{-- @if (empty($is_approved) || $is_approved->isEmpty()) --}}
-                                @if ($contract->project->RiskTenderProyek->isNotEmpty())
+                                @if ($contract->project?->RiskTenderProyek->isNotEmpty())
                                     <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_upload_resiko_perolehan">+</a>
                                 @endif
@@ -1530,7 +1530,7 @@
                                 data-bs-custom-class="custom-tooltip"
                                 data-bs-title="Upload dokumen ini ada di <b>CRM Detail Proyek</b>"
                                 data-bs-html="true"></i> --}}
-                                @if (!empty($contract->project->DokumenNda->toArray()))
+                                @if (!empty($contract->project?->DokumenNda?->toArray()))
                                     <a href="#" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_upload_nda" class="btn btn-primary btn-sm p-2 mx-3 text-end">Upload</a>
                                 @endif  
@@ -1593,12 +1593,13 @@
                                             </td>
                                         </tr>
                                     @endif --}}
-                                    @if ($contract->project->DokumenNda->isNotEmpty())
+                                    @if ($contract->project?->DokumenNda->isNotEmpty())
                                     <tr class="bg-primary">
                                         <td colspan="3" class="text-white">File CRM</td>
                                     </tr>
                                     @endif
-                                    @forelse ($contract->project->DokumenNda as $nda)
+                                    @if (!empty($contract->project?->DokumenNda))
+                                    @forelse ($contract->project?->DokumenNda as $nda)
                                         <tr>
                                             <td>
                                                 <a target="_blank" href="{{asset("/words/$nda->id_document.pdf")}}" class="text-hover-primary">{{$nda->nama_dokumen}}</a>
@@ -1612,6 +1613,7 @@
                                             <td colspan="3" class="text-center"><b>There is no data</b></td>
                                         </tr>
                                     @endforelse
+                                    @endif
                                     @if ($contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen NDA")->isNotEmpty())
                                     <tr class="bg-primary">
                                         <td colspan="3" class="text-white">File CCM</td>
@@ -1630,7 +1632,9 @@
                                             </td>
                                         </tr>
                                     @empty
-                                        
+                                    <tr>
+                                        <td colspan="3" class="text-center"><b>There is no data</b></td>
+                                    </tr>
                                     @endforelse
                                 </tbody>
                                 <!--end::Table body-->
@@ -1656,7 +1660,7 @@
                                 data-bs-custom-class="custom-tooltip"
                                 data-bs-title="Upload dokumen ini ada di <b>CRM Detail Proyek</b>"
                                 data-bs-html="true"></i> --}}
-                                @if (!empty($contract->project->DokumenMou->toArray()))
+                                @if (!empty($contract->project?->DokumenMou->toArray()))
                                     <a href="#" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_upload_mou" class="btn btn-primary btn-sm p-2 mx-3 text-end">Upload</a>
                                 @endif
@@ -1672,13 +1676,14 @@
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                         <th class="min-w-125px">Nama</th>
                                         <th class="min-w-125px">Tanggal</th>
+                                        <th class="min-w-125px">Action</th>
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
                                 <tbody class="fw-bold text-gray-400">
-                                    @forelse ($contract->project->DokumenMou as $nda)
+                                    {{-- @forelse ($contract->project?->DokumenMou as $nda)
                                         <tr>
                                             <td>
                                                 <a target="_blank" href="{{asset("/words/$nda->id_document.pdf")}}" class="text-hover-primary">{{$nda->nama_dokumen}}</a>
@@ -1693,6 +1698,47 @@
                                                 <b>There is no data</b>
                                             </td>
                                         </tr>
+                                    @endforelse --}}
+                                    @if ($contract->project?->DokumenMou->isNotEmpty())
+                                    <tr class="bg-primary">
+                                        <td colspan="3" class="text-white">File CRM</td>
+                                    </tr>
+                                    @endif
+                                    @if (!empty($contract->project?->DokumenMou))
+                                    @forelse ($contract->project?->DokumenMou as $mou)
+                                        <tr>
+                                            <td>
+                                                <a target="_blank" href="{{asset("/words/$mou->id_document.pdf")}}" class="text-hover-primary">{{$mou->nama_dokumen}}</a>
+                                            </td>
+                                            <td>
+                                                {{Carbon\Carbon::createFromTimeString($mou->created_at)->translatedFormat("d F Y")}}
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="3" class="text-center"><b>There is no data</b></td>
+                                        </tr>
+                                    @endforelse
+                                    @endif
+                                    @if ($contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen MOU")->isNotEmpty())
+                                    <tr class="bg-primary">
+                                        <td colspan="3" class="text-white">File CCM</td>
+                                    </tr>
+                                    @endif
+                                    @forelse ($contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen MOU") as $item)
+                                        <tr>
+                                            <td>
+                                                <a target="_blank" href="{{asset("/words/$item->id_document")}}" class="text-hover-primary">{{$item->nama_document}}</a>
+                                            </td>
+                                            <td>
+                                                {{Carbon\Carbon::createFromTimeString($item->created_at)->translatedFormat("d F Y")}}
+                                            </td>
+                                            <td class="text-center">
+                                                <a href="#" onclick="confirmDeleteFinalDokumen('{{ $item->id }}')" class="btn btn-sm btn-danger p-2 text-white">Delete</a>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        
                                     @endforelse
                                 </tbody>
                                 <!--end::Table body-->
@@ -1718,7 +1764,7 @@
                                 data-bs-custom-class="custom-tooltip"
                                 data-bs-title="Upload dokumen ini ada di <b>CRM Detail Proyek</b>"
                                 data-bs-html="true"></i> --}}
-                                @if (!empty($contract->project->DokumenEca->toArray()))
+                                @if (!empty($contract->project?->DokumenEca->toArray()))
                                     <a href="#" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_upload_eca" class="btn btn-primary btn-sm p-2 mx-3 text-end">Upload</a>
                                 @endif
@@ -1740,7 +1786,8 @@
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
                                 <tbody class="fw-bold text-gray-400">
-                                    @forelse ($contract->project->DokumenEca as $nda)
+                                    @if (!empty($contract->project?->DokumenEca))
+                                    @forelse ($contract->project?->DokumenEca as $nda)
                                         <tr>
                                             <td>
                                                 <a target="_blank" href="{{asset("/words/$nda->id_document.pdf")}}" class="text-hover-primary">{{$nda->nama_dokumen}}</a>
@@ -1756,6 +1803,7 @@
                                             </td>
                                         </tr>
                                     @endforelse
+                                    @endif
                                 </tbody>
                                 <!--end::Table body-->
 
@@ -1781,7 +1829,7 @@
                                 data-bs-custom-class="custom-tooltip"
                                 data-bs-title="Upload dokumen ini ada di <b>CRM Detail Proyek</b>"
                                 data-bs-html="true"></i> --}}
-                                @if (!empty($contract->project->DokumenIca->toArray()))
+                                @if (!empty($contract->project?->DokumenIca->toArray()))
                                     <a href="#" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_upload_ica" class="btn btn-primary btn-sm p-2 mx-3 text-end">Upload</a>
                                 @endif
@@ -1803,7 +1851,8 @@
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
                                 <tbody class="fw-bold text-gray-400">
-                                    @forelse ($contract->project->DokumenIca as $nda)
+                                    @if (!empty($contract->project?->DokumenIca))
+                                    @forelse ($contract->project?->DokumenIca as $nda)
                                         <tr>
                                             <td>
                                                 <a target="_blank" href="{{asset("/words/$nda->id_document.pdf")}}" class="text-hover-primary">{{$nda->nama_dokumen}}</a>
@@ -1819,6 +1868,7 @@
                                             </td>
                                         </tr>
                                     @endforelse
+                                    @endif
                                 </tbody>
                                 <!--end::Table body-->
 
@@ -1843,7 +1893,7 @@
                                 data-bs-custom-class="custom-tooltip"
                                 data-bs-title="Upload dokumen ini ada di <b>CRM Detail Proyek</b>"
                                 data-bs-html="true"></i> --}}
-                                @if (!empty($contract->project->DokumenItbTor->toArray()))
+                                @if (!empty($contract->project?->DokumenItbTor->toArray()))
                                     <a href="#" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_upload_itb_tor" class="btn btn-primary btn-sm p-2 mx-3 text-end">Upload</a>
                                 @endif
@@ -1865,7 +1915,8 @@
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
                                 <tbody class="fw-bold text-gray-400">
-                                    @forelse ($contract->project->DokumenItbTor as $nda)
+                                    @if (!empty($contract->project?->DokumenItbTor))
+                                    @forelse ($contract->project?->DokumenItbTor as $nda)
                                         <tr>
                                             <td>
                                                 <a target="_blank" href="{{asset("/words/$nda->id_document.pdf")}}" class="text-hover-primary">{{$nda->nama_dokumen}}</a>
@@ -1881,6 +1932,7 @@
                                             </td>
                                         </tr>
                                     @endforelse
+                                    @endif
                                 </tbody>
                                 <!--end::Table body-->
 
@@ -1905,7 +1957,7 @@
                                 data-bs-custom-class="custom-tooltip"
                                 data-bs-title="Upload dokumen ini ada di <b>CRM Detail Proyek</b>"
                                 data-bs-html="true"></i> --}}
-                                @if (!empty($contract->project->DokumenRks->toArray()))
+                                @if (!empty($contract->project?->DokumenRks->toArray()))
                                     <a href="#" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_upload_rks" class="btn btn-primary btn-sm p-2 mx-3 text-end">Upload</a>
                                 @endif
@@ -1927,7 +1979,8 @@
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
                                 <tbody class="fw-bold text-gray-400">
-                                    @forelse ($contract->project->DokumenRks as $nda)
+                                    @if (!empty($contract->project?->DokumenRks))
+                                    @forelse ($contract->project?->DokumenRks as $nda)
                                         <tr>
                                             <td>
                                                 <a target="_blank" href="{{asset("/words/$nda->id_document.pdf")}}" class="text-hover-primary">{{$nda->nama_dokumen}}</a>
@@ -1943,6 +1996,7 @@
                                             </td>
                                         </tr>
                                     @endforelse
+                                    @endif
                                 </tbody>
                                 <!--end::Table body-->
 
@@ -1965,7 +2019,7 @@
                                 data-bs-custom-class="custom-tooltip"
                                 data-bs-title="Upload dokumen ini ada di <b>CRM Detail Proyek</b>"
                                 data-bs-html="true"></i> --}}
-                                @if (!empty($contract->project->DokumenDraft->toArray()))
+                                @if (!empty($contract->project?->DokumenDraft->toArray()))
                                     <a href="#" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_upload_draft" class="btn btn-primary btn-sm p-2 mx-3 text-end">Upload</a>
                                 @endif
@@ -1987,7 +2041,8 @@
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
                                 <tbody class="fw-bold text-gray-400">
-                                    @forelse ($contract->project->DokumenDraft as $nda)
+                                    @if (!empty($contract->project?->DokumenDraft))
+                                    @forelse ($contract->project?->DokumenDraft as $nda)
                                         <tr>
                                             <td>
                                                 <a target="_blank" href="{{asset("/words/$nda->id_document.pdf")}}" class="text-hover-primary">{{$nda->nama_dokumen}}</a>
@@ -2003,6 +2058,7 @@
                                             </td>
                                         </tr>
                                     @endforelse
+                                    @endif
                                 </tbody>
                                 <!--end::Table body-->
 
@@ -2027,7 +2083,7 @@
                                 data-bs-custom-class="custom-tooltip"
                                 data-bs-title="Upload dokumen ini ada di <b>CRM Detail Proyek</b>"
                                 data-bs-html="true"></i> --}}
-                                @if (!empty($contract->project->AttachmentMenang->toArray()))
+                                @if (!empty($contract->project?->AttachmentMenang->toArray()))
                                     <a href="#" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_upload_loi" class="btn btn-primary btn-sm p-2 mx-3 text-end">Upload</a>
                                 @endif
@@ -2049,7 +2105,9 @@
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
                                 <tbody class="fw-bold text-gray-400">
-                                    @forelse ($contract->project->AttachmentMenang as $nda)
+
+                                    @if (!empty($contract->project?->AttachmentMenang))
+                                    @forelse ($contract->project?->AttachmentMenang as $nda)
                                         <tr>
                                             <td>
                                                 <a target="_blank" href="{{asset("/words/$nda->id_document.pdf")}}" class="text-hover-primary">{{$nda->nama_attachment}}</a>
@@ -2065,6 +2123,7 @@
                                             </td>
                                         </tr>
                                     @endforelse
+                                    @endif
                                 </tbody>
                                 <!--end::Table body-->
 
@@ -2450,7 +2509,7 @@
 
                             {{-- <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Klaim Kontrak
-                                <a href="/claim-management/{{ $contract->project->kode_proyek }}/{{ urlencode(urlencode($contract->id_contract)) }}/new"
+                                <a href="/claim-management/{{ $contract->project?->kode_proyek }}/{{ urlencode(urlencode($contract->id_contract)) }}/new"
                                     Id="Plus">+</a>
                             </h3>
                             <!--begin:Table: Claim Contract-->
@@ -2469,8 +2528,8 @@
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
                                 <tbody class="fw-bold text-gray-400">
-                                    @if (isset($contract->project->ClaimManagements))
-                                        @forelse ($contract->project->ClaimManagements as $claimManagement)
+                                    @if (isset($contract->project?->ClaimManagements))
+                                        @forelse ($contract->project?->ClaimManagements as $claimManagement)
                                             <tr>
                                                 <!--begin::Column-->
                                                 <td>
@@ -2915,7 +2974,7 @@
                                 </div>
                             </form> --}}
 
-                            @if ($contract->project->jenis_proyek == "J" )
+                            @if ($contract->project?->jenis_proyek == "J" )
                             <br>
                             <div class="row mt-7">
                                 <div class="col-6">
@@ -3493,7 +3552,7 @@
                                         </td>
                                         <td class="text-center">
                                             <small>
-                                                <a class="badge badge-light-primary" href="/claim-management/proyek/{{ $contract->project->kode_proyek }}/{{ $contract->id_contract }}?link=kt_user_view_claim_VO" target="_blank">Lihat Detail</a>
+                                                <a class="badge badge-light-primary" href="/claim-management/proyek/{{ $contract->project?->kode_proyek }}/{{ $contract->id_contract }}?link=kt_user_view_claim_VO" target="_blank">Lihat Detail</a>
                                             </small>
                                         </td>
                                     </tr>
@@ -3517,7 +3576,7 @@
                                         </td>
                                         <td class="text-center">
                                             <small>
-                                                <a class="badge badge-light-primary" href="/claim-management/proyek/{{ $contract->project->kode_proyek }}/{{ $contract->id_contract }}?link=kt_user_view_claim" target="_blank">Lihat Detail</a>
+                                                <a class="badge badge-light-primary" href="/claim-management/proyek/{{ $contract->project?->kode_proyek }}/{{ $contract->id_contract }}?link=kt_user_view_claim" target="_blank">Lihat Detail</a>
                                             </small>
                                         </td>
                                     </tr>
@@ -3541,7 +3600,7 @@
                                         </td>
                                         <td class="text-center">
                                             <small>
-                                                <a class="badge badge-light-primary" href="/claim-management/proyek/{{ $contract->project->kode_proyek }}/{{ $contract->id_contract }}?link=kt_user_view_overview_anticlaim" target="_blank">Lihat Detail</a>
+                                                <a class="badge badge-light-primary" href="/claim-management/proyek/{{ $contract->project?->kode_proyek }}/{{ $contract->id_contract }}?link=kt_user_view_overview_anticlaim" target="_blank">Lihat Detail</a>
                                             </small>
                                         </td>
                                     </tr>
@@ -3565,7 +3624,7 @@
                                         </td>
                                         <td class="text-center">
                                             <small>
-                                                <a class="badge badge-light-primary" href="/claim-management/proyek/{{ $contract->project->kode_proyek }}/{{ $contract->id_contract }}?link=kt_user_view_overview_asuransi" target="_blank">Lihat Detail</a>
+                                                <a class="badge badge-light-primary" href="/claim-management/proyek/{{ $contract->project?->kode_proyek }}/{{ $contract->id_contract }}?link=kt_user_view_overview_asuransi" target="_blank">Lihat Detail</a>
                                             </small>
                                         </td>
                                     </tr>
@@ -10466,7 +10525,7 @@
         
                     <!--begin::Input group Website-->
                     <div class="fv-row mb-5">
-                        {{-- @dump($contract->project->jenis_proyek) --}}
+                        {{-- @dump($contract->project?->jenis_proyek) --}}
                         <form action="/jaminan-pelaksanaan/upload" method="POST" enctype="multipart/form-data">
                             @csrf
                             <!--begin::Input-->
@@ -10489,7 +10548,7 @@
                                 <option value="Advance Payment">Advance Payment</option>
                                 <option value="Performance">Performance</option>
                                 <option value="Warranty">Warranty</option>
-                                @if ($contract->project->jenis_proyek == "J")
+                                @if ($contract->project?->jenis_proyek == "J")
                                 <option value="Partner">Partner</option>
                                 @endif
                             </select>
@@ -12736,7 +12795,7 @@
                         <input type="text" disabled readonly
                             class="form-control form-control-solid"
                             id="nospk-external" name="nospk-external"
-                            value="{{ $contract->project->nospk_external ?? "Kosong" }}"
+                            value="{{ $contract->project?->nospk_external ?? "Kosong" }}"
                             placeholder="No SPK External" />
                         <!--end::Input-->
                     </div>
@@ -12754,7 +12813,7 @@
                         <!--begin::Input-->
                         <input type="text" disabled readonly
                             class="form-control form-control-solid"
-                            value="{{ $contract->project->jenis_proyek ?? "Kosong" == 'I' ? 'Internal' : ($contract->project->jenis_proyek ?? "Kosong" == 'N' ? 'External' : 'JO') }}"
+                            value="{{ $contract->project?->jenis_proyek ?? "Kosong" == 'I' ? 'Internal' : ($contract->project?->jenis_proyek ?? "Kosong" == 'N' ? 'External' : 'JO') }}"
                             readonly />
                         <!--end::Input-->
                     </div>
@@ -12780,7 +12839,7 @@
                         <input disabled type="text" disabled readonly
                             class="form-control form-control-solid"
                             id="tglspk-internal" name="tglspk-internal"
-                            value="{{ $contract->project->tglspk_internal ?? "Kosong" }}"
+                            value="{{ $contract->project?->tglspk_internal ?? "Kosong" }}"
                             placeholder="Date" />
                         <!--end::Input-->
                     </div>
@@ -12798,8 +12857,8 @@
                         <!--end::Label-->
                         <!--begin::Input-->
                         <input disabled type="text" disabled readonly
-                            class="form-control form-control-solid {{ $contract->project->porsi_jo == null ? 'text-danger' : '' }}"
-                            value="{{ (int) $contract->project->porsi_jo ?? "Kosong" ?? '*Porsi JO Belum Ditentukan' }}"
+                            class="form-control form-control-solid {{ $contract->project?->porsi_jo == null ? 'text-danger' : '' }}"
+                            value="{{ (int) $contract->project?->porsi_jo ?? "Kosong" ?? '*Porsi JO Belum Ditentukan' }}"
                             placeholder="Porsi JO" readonly />
                         <!--end::Input-->
                     </div>
@@ -12832,7 +12891,7 @@
                         <input disabled type="text" disabled readonly
                             class="form-control form-control-solid"
                             id="" name="tahun-ri-perolehan"
-                            value="{{ $contract->project->tahun_ri_perolehan ?? "Kosong" }}"
+                            value="{{ $contract->project?->tahun_ri_perolehan ?? "Kosong" }}"
                             placeholder="Tahun Ri Perolehan" />
                         <!--end::Input-->
                     </div>
@@ -12849,8 +12908,8 @@
                         <!--end::Label-->
                         <!--begin::Input-->
                         <input disabled type="text" disabled readonly
-                            class="form-control form-control-solid reformat {{ $contract->project->nilai_valas_review ?? "Kosong" == null ? 'text-danger' : '' }}"
-                            value="{{ number_format((int) str_replace('.', '', $contract->project->nilai_valas_review ?? "Kosong"), 0, '.', '.') ?? '*Nilai OK Review Belum Ditentukan' }}"
+                            class="form-control form-control-solid reformat {{ $contract->project?->nilai_valas_review ?? "Kosong" == null ? 'text-danger' : '' }}"
+                            value="{{ number_format((int) str_replace('.', '', $contract->project?->nilai_valas_review ?? "Kosong"), 0, '.', '.') ?? '*Nilai OK Review Belum Ditentukan' }}"
                             placeholder="Nilai OK Review (Valas) (Exclude Tax)"
                             readonly />
                         <!--end::Input-->
@@ -12880,40 +12939,40 @@
                             data-placeholder="Pilih Bulan RI Perolehan">
                             <option></option>
                             <option value="1"
-                                {{ $contract->project->bulan_ri_perolehan ?? "Kosong" == '1' ? 'selected' : '' }}>
+                                {{ $contract->project?->bulan_ri_perolehan ?? "Kosong" == '1' ? 'selected' : '' }}>
                                 Januari</option>
                             <option value="2"
-                                {{ $contract->project->bulan_ri_perolehan ?? "Kosong" == '2' ? 'selected' : '' }}>
+                                {{ $contract->project?->bulan_ri_perolehan ?? "Kosong" == '2' ? 'selected' : '' }}>
                                 Februari</option>
                             <option value="3"
-                                {{ $contract->project->bulan_ri_perolehan ?? "Kosong" == '3' ? 'selected' : '' }}>
+                                {{ $contract->project?->bulan_ri_perolehan ?? "Kosong" == '3' ? 'selected' : '' }}>
                                 Maret</option>
                             <option value="4"
-                                {{ $contract->project->bulan_ri_perolehan ?? "Kosong" == '4' ? 'selected' : '' }}>
+                                {{ $contract->project?->bulan_ri_perolehan ?? "Kosong" == '4' ? 'selected' : '' }}>
                                 April</option>
                             <option value="5"
-                                {{ $contract->project->bulan_ri_perolehan ?? "Kosong" == '5' ? 'selected' : '' }}>
+                                {{ $contract->project?->bulan_ri_perolehan ?? "Kosong" == '5' ? 'selected' : '' }}>
                                 Mei</option>
                             <option value="6"
-                                {{ $contract->project->bulan_ri_perolehan ?? "Kosong" == '6' ? 'selected' : '' }}>
+                                {{ $contract->project?->bulan_ri_perolehan ?? "Kosong" == '6' ? 'selected' : '' }}>
                                 Juni</option>
                             <option value="7"
-                                {{ $contract->project->bulan_ri_perolehan ?? "Kosong" == '7' ? 'selected' : '' }}>
+                                {{ $contract->project?->bulan_ri_perolehan ?? "Kosong" == '7' ? 'selected' : '' }}>
                                 Juli</option>
                             <option value="8"
-                                {{ $contract->project->bulan_ri_perolehan ?? "Kosong" == '8' ? 'selected' : '' }}>
+                                {{ $contract->project?->bulan_ri_perolehan ?? "Kosong" == '8' ? 'selected' : '' }}>
                                 Agustus</option>
                             <option value="9"
-                                {{ $contract->project->bulan_ri_perolehan ?? "Kosong" == '9' ? 'selected' : '' }}>
+                                {{ $contract->project?->bulan_ri_perolehan ?? "Kosong" == '9' ? 'selected' : '' }}>
                                 September</option>
                             <option value="10"
-                                {{ $contract->project->bulan_ri_perolehan ?? "Kosong" == '10' ? 'selected' : '' }}>
+                                {{ $contract->project?->bulan_ri_perolehan ?? "Kosong" == '10' ? 'selected' : '' }}>
                                 Oktober</option>
                             <option value="11"
-                                {{ $contract->project->bulan_ri_perolehan ?? "Kosong" == '11' ? 'selected' : '' }}>
+                                {{ $contract->project?->bulan_ri_perolehan ?? "Kosong" == '11' ? 'selected' : '' }}>
                                 November</option>
                             <option value="12"
-                                {{ $contract->project->bulan_ri_perolehan ?? "Kosong" == '12' ? 'selected' : '' }}>
+                                {{ $contract->project?->bulan_ri_perolehan ?? "Kosong" == '12' ? 'selected' : '' }}>
                                 Desember</option>
                         </select>
                         <!--end::Input-->
@@ -12931,8 +12990,8 @@
                         <!--end::Label-->
                         <!--Begin::Input-->
                         <input disabled type="text" disabled readonly
-                            class="form-control form-control-solid {{ $contract->project->mata_uang_review == null && $contract->project->mata_uang_awal == null ? 'text-danger' : '' }}"
-                            value="{{ $contract->project->mata_uang_review ?? ($contract->project->mata_uang_awal ?? '*Mata Uang Belum Ditentukan') }}"
+                            class="form-control form-control-solid {{ $contract->project?->mata_uang_review == null && $contract->project?->mata_uang_awal == null ? 'text-danger' : '' }}"
+                            value="{{ $contract->project?->mata_uang_review ?? ($contract->project?->mata_uang_awal ?? '*Mata Uang Belum Ditentukan') }}"
                             readonly />
                         <!--end::Input-->
                     </div>
@@ -12957,7 +13016,7 @@
                         <div class="d-flex align-items-center position-relative">
                             <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
                             {{-- <span id="view-kontrak" class="svg-icon svg-icon-1 position-absolute ms-4">
-                                    <a href="/contract-management/view/{{ $contract->project->nomor_terkontrak ?? "Kosong" }}" class="text-gray-800 text-hover-primary mb-1">{{ $contract->project->nomor_terkontrak ?? "Kosong" }}</a>
+                                    <a href="/contract-management/view/{{ $contract->project?->nomor_terkontrak ?? "Kosong" }}" class="text-gray-800 text-hover-primary mb-1">{{ $contract->project?->nomor_terkontrak ?? "Kosong" }}</a>
                                 </span>
                                 <input disabled onclick="viewKontrak(this)" type="text" disabled readonly id="fake-terkontrak"
                                     class="form-control form-control-solid"
@@ -12967,7 +13026,7 @@
                                 type="text" disabled readonly
                                 class="form-control form-control-solid"
                                 id="nomor-terkontrak" name="nomor-terkontrak"
-                                value="{{ $contract->project->nomor_terkontrak ?? "Kosong" }}"
+                                value="{{ $contract->project?->nomor_terkontrak ?? "Kosong" }}"
                                 placeholder="" onpaste="return false" />
                         </div>
                         <p style="display: none" id="char-error"
@@ -12988,7 +13047,7 @@
                             //     document.getElementById('fake-terkontrak').style.display = "none";
                             //     document.getElementById('view-kontrak').style.display = "none";
                             //     document.getElementById('nomor-terkontrak').style.display = "";
-                            //     // e.value = "{{ $contract->project->nomor_terkontrak ?? "Kosong" }}";
+                            //     // e.value = "{{ $contract->project?->nomor_terkontrak ?? "Kosong" }}";
                             // }
                             // function displayKontrak(e) {
                             //     document.getElementById('view-kontrak').style.display = "";
@@ -13013,8 +13072,8 @@
                         <!--end::Label-->
                         <!--begin::Input-->
                         <input disabled onkeyup="hitungReview()" type="text" disabled readonly
-                            class="form-control form-control-solid {{ $contract->project->kurs_review == null ? 'text-danger' : '' }}"
-                            value="{{ $contract->project->kurs_review ?? '*Kurs Review Belum Ditentukan' }}"
+                            class="form-control form-control-solid {{ $contract->project?->kurs_review == null ? 'text-danger' : '' }}"
+                            value="{{ $contract->project?->kurs_review ?? '*Kurs Review Belum Ditentukan' }}"
                             placeholder="Kurs Review" readonly />
                         <!--end::Input-->
                     </div>
@@ -13041,7 +13100,7 @@
                         <input disabled type="text" disabled readonly
                             class="form-control form-control-solid"
                             id="tanggal-terkontrak" name="tanggal-terkontrak"
-                            value="{{ $contract->project->tanggal_terkontrak ?? "Kosong" }}"
+                            value="{{ $contract->project?->tanggal_terkontrak ?? "Kosong" }}"
                             placeholder="Date" />
                         <!--end::Input-->
                     </div>
@@ -13049,10 +13108,10 @@
                 </div>
                 <!--End begin::Col-->
                 @php
-                    if ($contract->project->stage == 8 || $contract->project->stage == 9) {
-                        if ($contract->project->nilai_perolehan != null && $contract->project->porsi_jo != null) {
-                            $nilaiPerolehan = (int) str_replace('.', '', $contract->project->nilai_perolehan);
-                            $kontrakKeseluruhan = ($nilaiPerolehan * 100) / (int) $contract->project->porsi_jo;
+                    if ($contract->project?->stage == 8 || $contract->project?->stage == 9) {
+                        if ($contract->project?->nilai_perolehan != null && $contract->project?->porsi_jo != null) {
+                            $nilaiPerolehan = (int) str_replace('.', '', $contract->project?->nilai_perolehan);
+                            $kontrakKeseluruhan = ($nilaiPerolehan * 100) / (int) $contract->project?->porsi_jo;
                             $nilaiKontrakKeseluruhan = number_format((int) str_replace('.', '', round($kontrakKeseluruhan)), 0, '.', '.');
                         }
                     } else {
@@ -13070,8 +13129,8 @@
                         <!--end::Label-->
                         <!--begin::Input-->
                         {{-- <input disabled type="text" disabled readonly
-                                class="form-control form-control-solid reformat {{ $contract->project->nilai_kontrak_keseluruhan == null ? 'text-danger' : '' }}"
-                                value="{{ number_format((int) str_replace('.', '', $contract->project->nilai_kontrak_keseluruhan), 0, '.', '.') ?? '*Nilai Perolehan Belum Ditentukan' }}"
+                                class="form-control form-control-solid reformat {{ $contract->project?->nilai_kontrak_keseluruhan == null ? 'text-danger' : '' }}"
+                                value="{{ number_format((int) str_replace('.', '', $contract->project?->nilai_kontrak_keseluruhan), 0, '.', '.') ?? '*Nilai Perolehan Belum Ditentukan' }}"
                                 id="nilai-kontrak-keseluruhan"
                                 name="nilai-kontrak-keseluruhan"
                                 placeholder="*Nilai Perolehan Belum Ditentukan"
@@ -13109,7 +13168,7 @@
                             class="form-control form-control-solid"
                             id="tanggal-mulai-kontrak"
                             name="tanggal-mulai-kontrak"
-                            value="{{ $contract->project->tanggal_mulai_terkontrak ?? "Kosong" }}"
+                            value="{{ $contract->project?->tanggal_mulai_terkontrak ?? "Kosong" }}"
                             placeholder="Date" />
                         <!--end::Input-->
                     </div>
@@ -13126,8 +13185,8 @@
                         <!--end::Label-->
                         <!--begin::Input-->
                         <input disabled type="text" disabled readonly
-                            class="form-control form-control-solid reformat {{ $contract->project->nilai_perolehan == null ? 'text-danger' : '' }}"
-                            value="{{ number_format((int) str_replace('.', '', $contract->project->nilai_perolehan), 0, '.', '.') ?? '*Nilai Perolehan Belum Ditentukan' }}"
+                            class="form-control form-control-solid reformat {{ $contract->project?->nilai_perolehan == null ? 'text-danger' : '' }}"
+                            value="{{ number_format((int) str_replace('.', '', $contract->project?->nilai_perolehan), 0, '.', '.') ?? '*Nilai Perolehan Belum Ditentukan' }}"
                             placeholder="Nilai Kontrak (Porsi WIKA)" readonly />
                         <!--end::Input-->
                     </div>
@@ -13155,7 +13214,7 @@
                             class="form-control form-control-solid"
                             id="tanggal-akhir-kontrak"
                             name="tanggal-akhir-kontrak"
-                            value="{{ $contract->project->tanggal_akhir_terkontrak ?? "Kosong" }}"
+                            value="{{ $contract->project?->tanggal_akhir_terkontrak ?? "Kosong" }}"
                             placeholder="Date" />
                         <!--end::Input-->
                     </div>
@@ -13175,7 +13234,7 @@
                             class="form-control form-control-solid"
                             id="tanggal-selesai-kontrak-fho"
                             name="tanggal-selesai-kontrak-fho"
-                            value="{{ $contract->project->klasifikasi_terkontrak ?? "Kosong" ?? "" }}"
+                            value="{{ $contract->project?->klasifikasi_terkontrak ?? "Kosong" ?? "" }}"
                             placeholder="" />
                         <!--end::Input-->
                     </div>
@@ -13203,7 +13262,7 @@
                             class="form-control form-control-solid"
                             id="tanggal-selesai-kontrak-pho"
                             name="tanggal-selesai-kontrak-pho"
-                            value="{{ $contract->project->tanggal_selesai_pho ?? "Kosong" }}"
+                            value="{{ $contract->project?->tanggal_selesai_pho ?? "Kosong" }}"
                             placeholder="Date" />
                         <!--end::Input-->
                     </div>
@@ -13223,7 +13282,7 @@
                             class="form-control form-control-solid"
                             id="tanggal-selesai-kontrak-pho"
                             name="tanggal-selesai-kontrak-pho"
-                            value="{{ $contract->project->jenis_terkontrak ?? "Kosong" }}"
+                            value="{{ $contract->project?->jenis_terkontrak ?? "Kosong" }}"
                             placeholder="Date" />
                         <!--end::Input-->
                     </div>
@@ -13250,7 +13309,7 @@
                             class="form-control form-control-solid"
                             id="tanggal-selesai-kontrak-fho"
                             name="tanggal-selesai-kontrak-fho"
-                            value="{{ $contract->project->tanggal_selesai_fho ?? "Kosong" }}"
+                            value="{{ $contract->project?->tanggal_selesai_fho ?? "Kosong" }}"
                             placeholder="Date" />
                         <!--end::Input-->
                     </div>
@@ -13270,7 +13329,7 @@
                             class="form-control form-control-solid"
                             id="tanggal-selesai-kontrak-fho"
                             name="tanggal-selesai-kontrak-fho"
-                            value="{{ $contract->project->sistem_bayar ?? "Kosong" }}"
+                            value="{{ $contract->project?->sistem_bayar ?? "Kosong" }}"
                             placeholder="Date" />
                         {{-- <select disabled id="sistem-bayar" name="sistem-bayar"
                             class="form-select form-select-solid"
@@ -13278,13 +13337,13 @@
                             data-placeholder="Sistem Pembayaran">
                             <option></option>
                             <option value="CPF (Turn Key)"
-                                {{ $contract->project->sistem_bayar ?? "Kosong" == 'CPF (Turn Key)' ? 'selected' : '' }}>
+                                {{ $contract->project?->sistem_bayar ?? "Kosong" == 'CPF (Turn Key)' ? 'selected' : '' }}>
                                 CPF (Turn Key)</option>
                             <option value="Milestone"
-                                {{ $contract->project->sistem_bayar ?? "Kosong" == 'Milestone' ? 'selected' : '' }}>
+                                {{ $contract->project?->sistem_bayar ?? "Kosong" == 'Milestone' ? 'selected' : '' }}>
                                 Milestone</option>
                             <option value="Monthly"
-                                {{ $contract->project->sistem_bayar ?? "Kosong" == 'Monthly' ? 'selected' : '' }}>
+                                {{ $contract->project?->sistem_bayar ?? "Kosong" == 'Monthly' ? 'selected' : '' }}>
                                 Monthly</option>
                         </select> --}}
                         <!--end::Input-->
@@ -13327,7 +13386,7 @@
                         $no = 1;
                     @endphp
                     <tbody class="fw-bold text-gray-600">
-                        @foreach ($contract->project->AdendumProyek ?? "Kosong" as $adendum)
+                        @foreach ($contract->project?->AdendumProyek ?? "Kosong" as $adendum)
                             <tr>
                                 <!--begin::Name-->
                                 <td class="text-center">
@@ -13423,7 +13482,7 @@
                             <!--begin::Input-->
                             <input disabled type="text"
                                 class="form-control form-control-solid reformat"
-                                value="{{ number_format((int) str_replace('.', '', $contract->project->nilai_rkap ?? "Kosong"), 0, '.', '.') }}"
+                                value="{{ number_format((int) str_replace('.', '', $contract->project?->nilai_rkap ?? "Kosong"), 0, '.', '.') }}"
                                 placeholder="Nilai OK" readonly />
                             <!--end::Input-->
                         </div>
@@ -13442,7 +13501,7 @@
                             <input disabled type="text"
                                 class="form-control form-control-solid reformat"
                                 name="piutang-performance"
-                                value="{{ number_format((int) str_replace('.', '', $contract->project->piutang ?? "Kosong"), 0, '.', '.') }}"
+                                value="{{ number_format((int) str_replace('.', '', $contract->project?->piutang ?? "Kosong"), 0, '.', '.') }}"
                                 placeholder="Piutang" />
                             <!--end::Input-->
                         </div>
@@ -13466,7 +13525,7 @@
                             <input disabled type="text"
                                 class="form-control form-control-solid reformat"
                                 name="laba-performance"
-                                value="{{ number_format((int) str_replace('.', '', $contract->project->laba ?? "Kosong"), 0, '.', '.') }}"
+                                value="{{ number_format((int) str_replace('.', '', $contract->project?->laba ?? "Kosong"), 0, '.', '.') }}"
                                 placeholder="Laba" />
                             <!--end::Input-->
                         </div>
@@ -13485,7 +13544,7 @@
                             <input disabled type="text"
                                 class="form-control form-control-solid reformat"
                                 name="rugi-performance"
-                                value="{{ number_format((int) str_replace('.', '', $contract->project->rugi ?? "Kosong"), 0, '.', '.') }}"
+                                value="{{ number_format((int) str_replace('.', '', $contract->project?->rugi ?? "Kosong"), 0, '.', '.') }}"
                                 placeholder="Rugi" />
                             <!--end::Input-->
                         </div>
@@ -13503,7 +13562,7 @@
             </h3>
             <br>
             <div class="form-group">
-                <textarea class="form-control" disabled id="laporan-terkontrak" name="laporan-terkontrak" rows="7">{!! $contract->project->laporan_terkontrak ?? "Kosong" !!}</textarea>
+                <textarea class="form-control" disabled id="laporan-terkontrak" name="laporan-terkontrak" rows="7">{!! $contract->project?->laporan_terkontrak ?? "Kosong" !!}</textarea>
             </div>
             {{-- <!--End::Title Biru Form: Laporan Kualitatif--> --}}
             
@@ -16919,7 +16978,7 @@
                             <!--begin::Input-->
                             <input type="hidden" name="kategori" value="Dokumen MOU">
                             <input type="hidden" name="status" value="Final">
-                            <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
+                            <input type="file" name="file-document[]" id="file-document" class="form-control form-control-solid" accept=".pdf" multiple>
                             <!--end::Input-->
                         </div>
                             <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
@@ -16980,7 +17039,7 @@
                             <!--begin::Input-->
                             <input type="hidden" name="kategori" value="Dokumen ECA">
                             <input type="hidden" name="status" value="Final">
-                            <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
+                            <input type="file" name="file-document[]" id="file-document" class="form-control form-control-solid" accept=".pdf" multiple>
                             <!--end::Input-->
                         </div>
                             <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
@@ -17041,7 +17100,7 @@
                             <!--begin::Input-->
                             <input type="hidden" name="kategori" value="Dokumen ICA">
                             <input type="hidden" name="status" value="Final">
-                            <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
+                            <input type="file" name="file-document[]" id="file-document" class="form-control form-control-solid" accept=".pdf" multiple>
                             <!--end::Input-->
                         </div>
                             <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
@@ -17102,7 +17161,7 @@
                             <!--begin::Input-->
                             <input type="hidden" name="kategori" value="Dokumen ITB/TOR">
                             <input type="hidden" name="status" value="Final">
-                            <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
+                            <input type="file" name="file-document[]" id="file-document" class="form-control form-control-solid" accept=".pdf" multiple>
                             <!--end::Input-->
                         </div>
                             <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
@@ -17163,7 +17222,7 @@
                             <!--begin::Input-->
                             <input type="hidden" name="kategori" value="Dokumen RKS / Project Spesification">
                             <input type="hidden" name="status" value="Final">
-                            <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
+                            <input type="file" name="file-document[]" id="file-document" class="form-control form-control-solid" accept=".pdf" multiple>
                             <!--end::Input-->
                         </div>
                             <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
@@ -17224,7 +17283,7 @@
                             <!--begin::Input-->
                             <input type="hidden" name="kategori" value="Dokumen Draft Kontrak">
                             <input type="hidden" name="status" value="Final">
-                            <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
+                            <input type="file" name="file-document[]" id="file-document" class="form-control form-control-solid" accept=".pdf" multiple>
                             <!--end::Input-->
                         </div>
                             <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
@@ -17285,7 +17344,7 @@
                             <!--begin::Input-->
                             <input type="hidden" name="kategori" value="Dokumen LOI">
                             <input type="hidden" name="status" value="Final">
-                            <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
+                            <input type="file" name="file-document[]" id="file-document" class="form-control form-control-solid" accept=".pdf" multiple>
                             <!--end::Input-->
                         </div>
                             <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"

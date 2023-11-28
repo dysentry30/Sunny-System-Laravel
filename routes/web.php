@@ -415,6 +415,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     // Route::get('claim-management/proyek/{kode_proyek}/{jenis_claim}', [ClaimController::class, 'viewClaim']);
     Route::get('claim-management/proyek/{kode_proyek}/{id_contract}', [ClaimController::class, 'view']);
 
+    Route::get('claim-management/proyek/{profit_center}', [ClaimController::class, 'viewClaimNew']);
+    
     // Route::get('claim-management/view/{kode_proyek}', [ClaimController::class, 'viewClaim']);
 
     Route::get('/claim-management/{proyek}/{contract}/new',  [ClaimController::class, 'new']);
@@ -830,6 +832,16 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     // DELETE Peserta Tender 
     Route::delete('proyek/peserta-tender/{id}/delete', [ProyekController::class, 'deleteTender']);
+
+    // ADD KONSULTAN PERENCANA 
+    Route::post('proyek/konsultan-perencana/add', [ProyekController::class, 'tambahKonsultan'
+    ]);
+
+    // EDIT KONSULTAN PERENCANA 
+    Route::post('/proyek/konsultan-perencana/{id}/edit', [ProyekController::class, 'editKonsultan']);
+
+    // DELETE KONSULTAN PERENCANA 
+    Route::delete('proyek/konsultan-perencana/{id}/delete', [ProyekController::class, 'deleteKonsultan']);
 
     // DELETE Dokumen Prakualifikasi
     Route::delete('proyek/dokumen-prakualifikasi/{id}/delete', [ProyekController::class, 'deleteDokumenPrakualifikasi']);

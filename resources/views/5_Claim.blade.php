@@ -209,7 +209,8 @@
                                         <thead>
                                             <!--begin::Table row-->
                                             <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                <th class="min-w-auto">@sortablelink('kode_proyek','Kode Proyek')</th>
+                                                {{-- <th class="min-w-auto">@sortablelink('kode_proyek','Kode Proyek')</th> --}}
+                                                <th class="min-w-auto">Profit Center</th>
                                                 <th class="min-w-auto">Nama Proyek</th>
                                                 <th class="min-w-auto">Unit Kerja</th>
                                                 <th class="min-w-auto text-center">VO</th>
@@ -233,7 +234,8 @@
                                                    
                                             <tr>
                                                 <td>
-                                                    <a href="/claim-management/proyek/{{ $claim['kode_proyek'] }}/{{ $claim['id_contract'] }}?link=kt_user_view_claim_VO" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $claim['kode_proyek'] }}</a>
+                                                    {{-- <a href="/claim-management/proyek/{{ $claim['kode_proyek'] }}/{{ $claim['id_contract'] }}?link=kt_user_view_claim_VO" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $claim['profit_center'] }}</a> --}}
+                                                    <a href="/claim-management/proyek/{{ ($claim['profit_center']) }}?link=kt_user_view_claim_VO" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $claim['profit_center'] }}</a>
                                                 </td>
                                                 <td>{{ $claim['nama_proyek'] }}</td>
                                                 <td>{{ $claim['unit_kerja'] }}</td>

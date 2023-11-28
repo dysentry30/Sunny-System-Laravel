@@ -111,33 +111,61 @@ class ContractManagements extends Model
     {
         return $this->hasMany(ContractBast::class, "id_contract");
     }
+    // public function SiteInstruction()
+    // {
+    //     return $this->hasMany(SiteInstruction::class, "id_contract");
+    // }
+    // public function TechnicalForm()
+    // {
+    //     return $this->hasMany(TechnicalForm::class, "id_contract");
+    // }
+    // public function TechnicalQuery()
+    // {
+    //     return $this->hasMany(TechnicalQuery::class, "id_contract");
+    // }
+    // public function FieldChange()
+    // {
+    //     return $this->hasMany(FieldChange::class, "id_contract");
+    // }
+    // public function ChangeNotice()
+    // {
+    //     return $this->hasMany(ContractChangeNotice::class, "id_contract");
+    // }
+    // public function ChangeOrder()
+    // {
+    //     return $this->hasMany(ContractChangeOrder::class, "id_contract");
+    // }
+    // public function ChangeProposal()
+    // {
+    //     return $this->hasMany(ContractChangeProposal::class, "id_contract");
+    // }
     public function SiteInstruction()
     {
-        return $this->hasMany(SiteInstruction::class, "id_contract");
+        return $this->hasMany(SiteInstruction::class, "profit_center", "profit_center");
     }
     public function TechnicalForm()
     {
-        return $this->hasMany(TechnicalForm::class, "id_contract");
+        return $this->hasMany(TechnicalForm::class, "profit_center", "profit_center");
     }
     public function TechnicalQuery()
     {
-        return $this->hasMany(TechnicalQuery::class, "id_contract");
+        return $this->hasMany(TechnicalQuery::class, "profit_center", "profit_center");
     }
     public function FieldChange()
     {
-        return $this->hasMany(FieldChange::class, "id_contract");
+        return $this->hasMany(FieldChange::class, "profit_center", "profit_center");
     }
     public function ChangeNotice()
     {
-        return $this->hasMany(ContractChangeNotice::class, "id_contract");
+        return $this->hasMany(ContractChangeNotice::class, "profit_center", "profit_center");
     }
     public function ChangeOrder()
     {
-        return $this->hasMany(ContractChangeOrder::class, "id_contract");
+        return $this->hasMany(ContractChangeOrder::class, "profit_center", "profit_center");
     }
     public function ChangeProposal()
     {
-        return $this->hasMany(ContractChangeProposal::class, "id_contract");
+        return $this->hasMany(ContractChangeProposal::class, "profit_center", "profit_center");
     }
 
     public function PasalKontraktual()
@@ -170,6 +198,11 @@ class ContractManagements extends Model
 
     public function ContractApproval(){
         return $this->hasMany(ContractApproval::class, "id_contract");
+    }
+
+    public function ProyekPISNew()
+    {
+        return $this->hasOne(ProyekPISNew::class, 'profit_center', 'profit_center');
     }
 
     public function getAll()

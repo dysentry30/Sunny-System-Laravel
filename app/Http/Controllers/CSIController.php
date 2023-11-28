@@ -31,7 +31,7 @@ class CSIController extends Controller
         // $proyeks = Proyek::whereIn('unit_kerja', $unit_kerja_filter)->get();
         $proyeks = ProyekPISNew::join('customers', 'pemberi_kerja_code', 'kode_nasabah')->where('entitas_proyek', '=', null)->get();
         // $csi = Proyek::join("proyek_csi", "proyek_csi.no_spk", "=", "proyeks.kode_proyek")->get();
-        // dd($proyeks);
+        // dd($proyeks->first());
         $csi = Csi::all();
         return view("14_CSI", compact(["csi", "proyeks"]));
     }
@@ -181,10 +181,10 @@ class CSIController extends Controller
         $csi->status = "Requested";
         $csi->id_struktur_organisasi = $user->nip;
         // dd($csi, $user);
-        
-        
+
+
         // $url = "https://crm-dev.wika.co.id/customer/view/". $data['id-pemberi-kerja']."/". str_replace(" ", "%20", $data['pemberi-kerja']);
-        $url = "https://crm-dev.wika.co.id/csi-login";
+        $url = "https://crm.wika.co.id/csi-login";
         $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
             "api_key" => "4DCR3IU2Eu70znFSvnuc3X3x9gJdcc",
             // "sender" => "628188827008",
@@ -275,10 +275,10 @@ class CSIController extends Controller
 
 
         // $url = "https://crm-dev.wika.co.id/customer/view/". $data['id-pemberi-kerja']."/". str_replace(" ", "%20", $data['pemberi-kerja']);
-        $url = "https://crm-dev.wika.co.id/csi-login";
+        $url = "https://crm.wika.co.id/csi-login";
         $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
             "api_key" => "p2QeApVsAUxG2fOJ2tX48BoipwuqZK",
-            "sender" => "62811881227",
+            "sender" => env("NO_WHATSAPP_BLAST"),
             "number" => $data['nomor-penerima'],
             // "number" => "085881028391",
             "message" => "Salam Hormat, *" . $data['nama-penerima'] . "* dari *" . $data['pemberi-kerja'] . "*.\nKami dari PT. Wijaya Karya (Persero) Tbk, membutuhkan bantuan Anda untuk perbaikan kinerja. Mohon tekan link di bawah ini untuk pengisian survey kepuasan pelanggan.\n\nGunakan User dan password dibawah ini untuk login :  \nUser : *" . $user->email . "*\nPassword : *" . $user->email . "*\n$url\n\n\nHi, *" . $data['nama-penerima'] . "* from *" . $data['pemberi-kerja'] . "*.\nWe are from PT. Wijaya Karya (Persero) Tbk, kindly need your help to improve our performance. Please click bellow link below to complete customer satisfaction survey.\n\nUse the username and password to log in:\nUser : *" . $user->email . "*\nPassword : *" . $user->email . "*\n$url",

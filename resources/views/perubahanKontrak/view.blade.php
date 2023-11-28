@@ -60,9 +60,12 @@
                                     style="margin-left:10px;">
                                     Edit</a>
                                 @endif
-                                <a href="/claim-management/proyek/{{ $contract->project_id }}/{{ $perubahan_kontrak->id_contract }}" class="btn btn-sm btn-primary" id="cloedButton"
+                                <a href="/claim-management/proyek/{{ $contract->profit_center }}" class="btn btn-sm btn-primary" id="cloedButton"
                                     style="background-color:#f3f6f9;margin-left:10px;color: black;">
                                     Close</a>
+                                {{-- <a href="/claim-management/proyek/{{ $contract->project_id }}/{{ $perubahan_kontrak->id_contract }}" class="btn btn-sm btn-primary" id="cloedButton"
+                                    style="background-color:#f3f6f9;margin-left:10px;color: black;">
+                                    Close</a> --}}
                                     
                                 <!--end::Button-->
 
@@ -651,7 +654,7 @@
                                                 <span style="font-weight: normal">Jenis Dokumen</span>
                                             </label>
                                             <select name="jenis-dokumen" id="jenis-dokumen" class="form-select form-select-solid" data-control="select2"
-                                                data-hide-search="true" onchange="getJenisDokumen(this)" data-placeholder="Pilih Jenis Dokumen" tabindex="-1" aria-hidden="true">
+                                                data-hide-search="true" onchange="getJenisDokumen(this, '{{ $contract->profit_center }}')" data-placeholder="Pilih Jenis Dokumen" tabindex="-1" aria-hidden="true">
                                                 <option value=""></option>
                                                 <option  value="Site Instruction">Site Instruction</option>
                                                 <option  value="Technical Form">Technical Form</option>
@@ -1056,10 +1059,11 @@
 
     {{-- Begin :: Get Jenis Dokumen --}}
     <script>
-        async function getJenisDokumen(e) {
+        async function getJenisDokumen(e, id) {
             const val = e.value;
             let html = `<option value=""></option>`;
-            const getJenisDokumenRes = await fetch(`/get-jenis-dokumen/${val}`).then(res => res.json());
+            // const getJenisDokumenRes = await fetch(`/get-jenis-dokumen/${val}`).then(res => res.json());
+            const getJenisDokumenRes = await fetch(`/get-jenis-dokumen/${val}/${id}`).then(res => res.json());
             if(getJenisDokumenRes.length > 0) {
                 getJenisDokumenRes.forEach(element => {
                     html += `

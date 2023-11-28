@@ -4127,6 +4127,75 @@
                                                     </div>
                                                     <!--End begin::Row-->
 
+                                                    <!--Begin::Konsultan Perencana-->
+                                                    <br>
+                                                    <h3 class="fw-bolder m-0" id="HeadDetail"
+                                                        style="font-size:14px;">Konsultan Perencana
+                                                        <a href="#" Id="Plus" data-bs-toggle="modal"
+                                                            data-bs-target="#kt_modal_konsultan_perencana">+</a>
+                                                    </h3>
+                                                    <br>
+                                                    <!--begin::Col-->
+                                                    <div class="col-6">
+                                                        <!--begin::Table Kompetitor-->
+                                                        <table class="table align-middle table-row-dashed fs-6 gy-2"
+                                                            id="kt_customers_table">
+                                                            <!--begin::Table head-->
+                                                            <thead>
+                                                                <!--begin::Table row-->
+                                                                <tr
+                                                                    class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                    <th class="w-50px text-center">No.</th>
+                                                                    <th class="w-auto">Nama Konsultan Perencana</th>
+                                                                    <th class="w-100px"></th>
+                                                                </tr>
+                                                                <!--end::Table row-->
+                                                            </thead>
+                                                            <!--end::Table head-->
+                                                            <!--begin::Table body-->
+                                                            @php
+                                                                $no = 1;
+                                                            @endphp
+                                                            <tbody class="fw-bold text-gray-600">
+                                                                @if (!empty($proyek->ProyekKonsultanPerencana))
+                                                                @foreach ($proyek->ProyekKonsultanPerencana as $konsultan)
+                                                                    <tr>
+                                                                        <!--begin::Name-->
+                                                                        <td class="text-center">
+                                                                            {{ $no++ }}
+                                                                        </td>
+                                                                        <!--end::Name-->
+                                                                        <!--begin::Column-->
+                                                                        <td>
+                                                                            <a href="#"
+                                                                                class="text-gray-800 text-hover-primary"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#kt_modal_edit_konsultan_{{ $konsultan->id }}">{{ $konsultan->nama_konsultan }}</a>
+                                                                        </td>
+                                                                        <td class="text-center">
+                                                                            <small>
+                                                                                <p data-bs-toggle="modal"
+                                                                                    data-bs-target="#kt_konsultan_delete_{{ $konsultan->id }}"
+                                                                                    id="modal-delete"
+                                                                                    class="btn btn-sm btn-light btn-active-primary">
+                                                                                    Delete
+                                                                                </p>
+                                                                            </small>
+                                                                        </td>
+                                                                        <!--end::Action-->
+                                                                    </tr>
+                                                                @endforeach
+                                                                @endif
+                                                            </tbody>
+                                                            <!--end::Table body-->
+                                                        </table>
+                                                        <!--begin::Table Kompetitor-->
+                                                    </div>
+                                                    <!--End::Col-->
+
+                                                    <!--End::Konsultan Perencana-->
+
+
 
                                                     <!--Begin::Title Biru Form: Document Tender-->
                                                     <br>
@@ -7211,6 +7280,211 @@
 @endforeach --}}
             <!--end::DELETE HISTORY ADENDUM-->
 
+            <!--BEGIN::KONSULTAN PERENCANA-->
+
+            <!--begin::modal ADD KONSULTAN PERENCANA-->
+            <form onsubmit="disabledSubmitButton(this)" action="/proyek/konsultan-perencana/add" method="post"
+                enctype="multipart/form-data">
+                @csrf
+                <div class="modal fade" id="kt_modal_konsultan_perencana" tabindex="-1" aria-hidden="true">
+                    <!--begin::Modal dialog-->
+                    <div class="modal-dialog modal-dialog-centered mw-600px">
+                        <!--begin::Modal content-->
+                        <div class="modal-content">
+                            <!--begin::Modal header-->
+                            <div class="modal-header">
+                                <!--begin::Modal title-->
+                                <h2>Tambah Konsultan Perencana :</h2>
+                                <input type="hidden" name="kode-proyek" value="{{ $proyek->kode_proyek }}">
+                                <!--end::Modal title-->
+                                <!--begin::Close-->
+                                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                                    <span class="svg-icon svg-icon-1">
+                                        <i class="bi bi-x-lg"></i>
+                                    </span>
+                                    <!--end::Svg Icon-->
+                                </div>
+                                <!--end::Close-->
+                            </div>
+                            <!--end::Modal header-->
+
+                            <!--begin::Modal body-->
+                            <div class="modal-body py-lg-6 px-lg-6">
+
+                                <!--begin::Row-->
+                                <div class="row fv-row">
+                                    <!--begin::Col-->
+                                    <div class="col">
+                                        <!--begin::Input group Website-->
+                                        <div class="fv-row mb-7">
+                                            <!--begin::Label-->
+                                            <label class="fs-6 fw-bold form-label mt-3">
+                                                <span class="required">Nama Konsultan Perencana</span>
+                                            </label>
+                                            <!--end::Label-->
+                                            <!--begin::Input-->
+                                            <select id="konsultan-perencana" name="konsultan-perencana"
+                                                class="form-select form-select-solid" data-control="select2"
+                                                data-hide-search="false" data-placeholder="Pilih Konsultan Perencana">
+                                                <option></option>
+                                                @foreach ($konsultan_perencana as $consultan)
+                                                    <option value="{{ $consultan->nama_konsultan }}"> {{ $consultan->nama_konsultan }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            <!--end::Input-->
+                                        </div>
+                                        <!--end::Input group-->
+                                    </div>
+                                </div>
+                                <!--End begin::Row-->
+
+                            </div>
+                            <div class="modal-footer">
+
+                                <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white"
+                                    id="new_save" style="background-color:#008CB4">Save</button>
+
+                            </div>
+                            <!--end::Modal body-->
+                        </div>
+                        <!--end::Modal content-->
+                    </div>
+                    <!--end::Modal dialog-->
+                </div>
+            </form>
+            <!--end::modal ADD KONSULTAN PERENCANA-->
+
+            <!--begin::modal EDIT KONSULTAN PERENCANA-->
+            @foreach ($proyek->ProyekKonsultanPerencana as $konsultan)
+                <form action="/proyek/konsultan-perencana/{{ $konsultan->id }}/edit" method="post"
+                    enctype="multipart/form-data">
+                    @csrf
+                    <input type="hidden" name="kode-proyek" value="{{ $proyek->kode_proyek }}">
+                    <div class="modal fade" id="kt_modal_edit_konsultan_{{ $konsultan->id }}" tabindex="-1"
+                        aria-hidden="true">
+                        <!--begin::Modal dialog-->
+                        <div class="modal-dialog modal-dialog-centered mw-800px">
+                            <!--begin::Modal content-->
+                            <div class="modal-content">
+                                <!--begin::Modal header-->
+                                <div class="modal-header">
+                                    <!--begin::Modal title-->
+                                    <h2>Edit Konsultan Perencana :</h2>
+                                    <!--end::Modal title-->
+                                    <!--begin::Close-->
+                                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                                        <span class="svg-icon svg-icon-1">
+                                            <i class="bi bi-x-lg"></i>
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </div>
+                                    <!--end::Close-->
+                                </div>
+                                <!--end::Modal header-->
+
+                                <!--begin::Modal body-->
+                                <div class="modal-body py-lg-6 px-lg-6">
+
+                                    <!--begin::Row-->
+                                    <div class="row fv-row">
+                                        <!--begin::Col-->
+                                        <div class="col">
+                                            <!--begin::Input group Website-->
+                                            <div class="fv-row mb-7">
+                                                <!--begin::Label-->
+                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                    <span class="required">Nama Konsultan Perencana</span>
+                                                </label>
+                                                <!--end::Label-->
+                                                <!--begin::Input-->
+                                                <select id="konsultan-perencana" name="konsultan-perencana"
+                                                    class="form-select form-select-solid" data-control="select2"
+                                                    data-hide-search="false" data-placeholder="Pilih Konsultan Perencana">
+                                                    <option></option>
+                                                    @foreach ($konsultan_perencana as $consultan)
+                                                        <option value="{{ $consultan->nama_konsultan }}" {{ $konsultan->nama_konsultan == $consultan->nama_konsultan ? 'selected' : '' }}> {{ $consultan->nama_konsultan }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                                <!--end::Input-->
+                                            </div>
+                                            <!--end::Input group-->
+                                        </div>
+                                    </div>
+                                    <!--End begin::Row-->
+
+                                </div>
+                                <div class="modal-footer">
+
+                                    <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white"
+                                        id="new_save" style="background-color:#008CB4">Save</button>
+
+                                </div>
+                                <!--end::Modal body-->
+                            </div>
+                            <!--end::Modal content-->
+                        </div>
+                        <!--end::Modal dialog-->
+                    </div>
+                </form>
+            @endforeach
+            <!--end::modal EDIT KONSULTAN PERENCANA-->
+
+            <!--begin::DELETE KONSULTAN PERENCANA-->
+            @foreach ($proyek->ProyekKonsultanPerencana as $konsultan)
+                <form action="/proyek/konsultan-perencana/{{ $konsultan->id }}/delete" method="post"
+                    enctype="multipart/form-data">
+                    @method('delete')
+                    @csrf
+                    <div class="modal fade" id="kt_konsultan_delete_{{ $konsultan->id }}" tabindex="-1"
+                        aria-hidden="true">
+                        <!--begin::Modal dialog-->
+                        <div class="modal-dialog modal-dialog-centered mw-800px">
+                            <!--begin::Modal content-->
+                            <div class="modal-content">
+                                <!--begin::Modal header-->
+                                <div class="modal-header">
+                                    <!--begin::Modal title-->
+                                    <h2>Hapus Konsultan Perencana : {{ $konsultan->nama_konsultan }}
+                                    </h2>
+                                    <!--end::Modal title-->
+                                    <!--begin::Close-->
+                                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                                        <span class="svg-icon svg-icon-1">
+                                            <i class="bi bi-x-lg"></i>
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </div>
+                                    <!--end::Close-->
+                                </div>
+                                <!--end::Modal header-->
+                                <!--begin::Modal body-->
+                                <div class="modal-body py-lg-6 px-lg-6">
+                                    Data yang dihapus tidak dapat dipulihkan, anda yakin ?
+                                    <br>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-sm btn-light btn-active-primary">Delete</button>
+                                </div>
+                                <!--end::Input group-->
+
+                            </div>
+                            <!--end::Modal body-->
+                        </div>
+                        <!--end::Modal content-->
+                    </div>
+                    <!--end::Modal dialog-->
+                </form>
+            @endforeach
+            <!--end::DELETE KONSULTAN PERENCANA-->
+
+
+            <!--END::KONSULTAN PERENCANA-->
+
             <!--begin::modal ADD PESERTA TENDER-->
             <form onsubmit="disabledSubmitButton(this)" action="/proyek/peserta-tender/add" method="post"
                 enctype="multipart/form-data">
@@ -7544,7 +7818,7 @@
             @endforeach
             <!--end::DELETE PESERTA TENDER-->
             
-            <!--begin::DELETE PESERTA TENDER-->
+            <!--begin::ALASAN GUGUR PESERTA TENDER-->
             @foreach ($pesertatender as $peserta)
                 <form action="/proyek/peserta-tender/{{ $peserta->id }}/note" method="post">
                     @csrf
@@ -7594,7 +7868,7 @@
                     <!--end::Modal dialog-->
                 </form>
             @endforeach
-            <!--end::DELETE PESERTA TENDER-->
+            <!--end::ALASAN GUGUR PESERTA TENDER-->
 
         <!--begin::modal ADD USER SKAT-->
         <form onsubmit="disabledSubmitButton(this)" action="/proyek/user/add" method="post"
@@ -9638,6 +9912,11 @@
         $('#kt_modal_peserta_tender').on('show.bs.modal', function() {
             $("#peserta-tender").select2({
                 dropdownParent: $("#kt_modal_peserta_tender")
+            });
+        });
+        $('#kt_modal_konsultan_perencana').on('show.bs.modal', function() {
+            $("#konsultan-perencana").select2({
+                dropdownParent: $("#kt_modal_konsultan_perencana")
             });
         });
     </script>

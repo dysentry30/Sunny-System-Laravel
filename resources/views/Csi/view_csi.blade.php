@@ -128,6 +128,10 @@
             font-weight: normal;
             
         }
+
+        div#kt_header{
+            left: 0px !important;
+        }
         
         div.dt-button-collection button.dt-button:not(.disabled) {
             font-weight: normal;
@@ -255,7 +259,6 @@
                             <br> 
                             Position : <h4>{{ $csi->Struktur->jabatan_struktur }}</h4>
                             <br> 
-                            {{-- Project : <h4>{{ $proyek->nama_proyek }}</h4> --}}
                             Project : <h4>{{ $proyek->proyek_name }}</h4>
                             <br><br>
                             <h4>Kami mohon bantuan Anda dalam mengukur indeks kepuasan pelanggan untuk proyek yang sedang kami jalankan. Sebagai bagian dari komitmen kami untuk menyediakan layanan berkualitas tinggi, kami percaya penting untuk mengevaluasi dan memahami tingkat kepuasan pelanggan kami yang berharga.</h4>
@@ -270,16 +273,59 @@
                             SvP Strategic Marketing & Transformation</p>
                             <!--end::Row-->
                             <hr> <br>
-                            <!--begin::Col-->
-                            <div class="d-flex align-items-center">
-                                <div class="text-end me-5">
-                                    <input onclick="surveyButton(this)" class="form-check-input" type="checkbox" value="" id="persetujuan" name="persetujuan" {{ empty($csi->jawaban) ? '' : 'checked disabled' }}>
+                            @if ($viewer)
+                                <!--begin::Col-->
+                                <div class="d-flex align-items-center {{ $csi->is_setuju == 't' ? '' : 'd-none'}}">
+                                    <div class="text-end me-5">
+                                        <input class="form-check-input" type="checkbox" value="" id="persetujuan" name="persetujuan" {{ empty($csi->jawaban) ? '' : 'checked disabled' }}>
+                                    </div>
+                                    <div class="text-dark text-start">
+                                        <span class=""><h4>Setuju untuk mengisi survei yang diberikan, saya yang bertanda tangan dibawah ini</h4><i>Agreed to fill out the survey given, signed below</i></span>
+                                    </div>
                                 </div>
-                                <div class="text-dark text-start">
-                                    <span class=""><h4>Setuju untuk mengisi survei yang diberikan, saya yang bertanda tangan dibawah ini</h4><i>Agreed to fill out the survey given, signed below</i></span>
+                                <!--end::Col-->
+                                <!--begin::Col-->
+                                <div class="d-flex align-items-center {{ $csi->is_setuju == 'f' ? '' : 'd-none'}}">
+                                    <div class="text-end me-5">
+                                        <input class="form-check-input" type="checkbox" value="true" id="tidak-setuju" name="tidak-setuju" {{ empty($csi->jawaban) ? '' : 'checked disabled' }}>
+                                    </div>
+                                    <div class="text-dark text-start">
+                                        <span class=""><h4>Tidak setuju mengisi survey</h4><i>Disagreed to fill out survey</i></span>
+                                    </div>
                                 </div>
-                            </div>
-                            <!--end::Col-->
+                                <!--end::Col-->
+                            @else
+                                <!--begin::Col-->
+                                <div class="d-flex align-items-center">
+                                    <div class="text-end me-5">
+                                        {{-- @dump(empty($csi->jawaban), $csi->is_setuju) --}}
+                                        <input onclick="surveyButton(this)" class="form-check-input" type="checkbox" value="" id="persetujuan" name="persetujuan" {{ empty($csi->jawaban) ? '' : 'checked disabled' }}>
+                                    </div>
+                                    <div class="text-dark text-start">
+                                        <span class=""><h4>Setuju untuk mengisi survei yang diberikan, saya yang bertanda tangan dibawah ini</h4><i>Agreed to fill out the survey given, signed below</i></span>
+                                    </div>
+                                </div>
+                                <!--end::Col-->
+                                <br><br>
+                                <form action="/csi/customer-survey-save" method="post">
+                                @csrf
+                                <!--begin::Col-->
+                                <div class="d-flex align-items-center">
+                                    <div class="text-end me-5">
+                                        <input onclick="rejectButton(this)" class="form-check-input" type="checkbox" value="true" id="tidak-setuju" name="tidak-setuju" {{ empty($csi->jawaban) ? '' : 'checked disabled' }}>
+                                    </div>
+                                    <div class="text-dark text-start">
+                                        <span class=""><h4>Tidak setuju mengisi survey</h4><i>Disagreed to fill out survey</i></span>
+                                    </div>
+                                </div>
+                                <br>
+                                <div id="kritik-saran-field" style="display: none">
+                                    <textarea id="kritik-saran" name="kritik-saran" class="form-control form-control-solid" rows="4" {{ $viewer ? 'readonly' : '' }} required>{{ $jawaban["kritik-saran"] ?? '' }}</textarea>
+                                    <button type="submit" class="mt-6 btn btn-primary btn-sm">Submit Survey</button>
+                                </div>
+                                <!--end::Col-->
+                                </form>
+                            @endif
                         </div>
                     </div>
                     <div id="spinner-survey" style="display: none"  class="card card-flush p-12 mx-12">
@@ -302,6 +348,16 @@
                             } else {
                                 document.getElementById('head-survey').style.display = "none";
                                 document.getElementById('body-survey').style.display = "none";
+                            }                       
+                        }
+                        function rejectButton(e) {
+                            // console.log(e.value,e.checked);     
+                            if (e.checked == true) {
+                                document.getElementById('persetujuan').style.display = "none";
+                                document.getElementById('kritik-saran-field').style.display = "";
+                            } else {
+                                document.getElementById('persetujuan').style.display = "";
+                                document.getElementById('kritik-saran-field').style.display = "none";
                             }                       
                         }
                     </script>
@@ -1618,7 +1674,7 @@
                                     <ol style="list-style-type: lower-alpha;">
                                         <li>
                                             <span style="line-height:150%;font-size:12px;"><b>Apabila WIKA dibandingkan dengan (silahkan isi nama kontraktor)</b></span><br>
-                                            <span style="line-height:150%;font-size:12px;"><i>When compared to WIKA (please fill in the name of the contractor)</i></span>
+                                            <span style="line-height:150%;font-size:12px;"><i>When compared to WIKA (please fill in the name of the contractor)</i></span><input type="text" id="kompetitor" name="kompetitor" class="form-control form-control-solid w-25" value="{{ $jawaban["kompetitor"] ?? "" }}"  {{ $viewer ? 'readonly' : '' }}/>
                                             <ol style="list-style-type: lower-roman;">
                                                 <li><span style="line-height:150%;font-size:12px;">Mutu Hasil Pekerjaan</span>
                                                     <ol style="list-style-type: decimal;">

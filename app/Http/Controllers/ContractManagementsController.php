@@ -47,13 +47,14 @@ use App\Models\ContractChecklist;
 use App\Models\ContractJaminan;
 use App\Models\ContractLaw;
 use App\Models\ContractLD;
+use App\Models\ContractApproval;
+use App\Models\Csi;
 use App\Models\JenisProyek;
 use App\Models\KlarifikasiNegosiasiCda;
-use App\Models\ProyekProgress;
 use App\Models\ProyekPIS;
+use App\Models\ProyekProgress;
 use App\Models\ReviewPembatalanKontrak;
 use App\Models\ProyekPISNew;
-use App\Models\Csi;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
@@ -89,7 +90,7 @@ class ContractManagementsController extends Controller
         // $contract_managements = ContractManagements::all();
         // $sorted_contracts = $contract_managements->sortBy("contract_in");
         // return view('4_Contract', ["contracts" => $sorted_contracts]);
-        if (Auth::user()->check_administrator || Auth::user()->is_pic == true) {
+        if (Auth::user()->check_administrator || Auth::user()->is_pic) {
             // $proyeks = Proyek::all()->where("stage", ">", 7)->where("nomor_terkontrak", "!=", "");
             // $proyeks = DB::table("proyeks as p")->select("p.*")->join("contract_managements as c", "c.project_id", "=", "p.kode_proyek")->where("p.stage", ">", 7)->where("p.nomor_terkontrak", "!=", "")->where("c.stages", "<", 3)->get()->sortBy("p.kode_proyek");
             // $proyeks_terkontrak = DB::table("proyeks as p")->select(["p.*", "c.stages"])->join("contract_managements as c", "c.project_id", "=", "p.kode_proyek")->where("c.stages", "<", 3)->get()->sortBy("p.kode_proyek")->map(function ($data) {
@@ -108,6 +109,7 @@ class ContractManagementsController extends Controller
             // $unitkerjas = UnitKerja::get()->whereNotIn("divcode", ["1", "2", "3", "4", "5", "6", "7", "8"]);
             // dd($unitkerjas);
             if ($filterTahun < 2023) {
+                // $unit_kerja_code =  ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "N", "P", "J"];
                 $unit_kerja_code =  ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "N", "P", "J"];
                 $unitkerjas = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->get("divcode");
                 $unit_kerjas_select = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->get();
@@ -115,7 +117,8 @@ class ContractManagementsController extends Controller
                 // $unit_kerjas = UnitKerja::whereNotIn("divcode",  $unit_kerja_code)->get();
                 // $proyeks = Proyek::join("contract_managements", "proyeks.kode_proyek", "=", "contract_managements.project_id")->whereNotIn("unit_kerja", $unit_kerja_code)->whereIn("stage", [6, 8, 9])->where("stages", "=", 3)->get();
             } else {
-                $unit_kerja_code =   ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "N", "L", "F", "U", "O"];
+                // $unit_kerja_code =   ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "N", "L", "F", "U", "O"];
+                $unit_kerja_code =   ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "N"];
                 $unitkerjas = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->get("divcode");
                 $unit_kerjas_select = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->get();
                 // $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $filterTahun)->whereNotIn("unit_kerja", $unit_kerja_code)->get();
@@ -135,15 +138,17 @@ class ContractManagementsController extends Controller
                 $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $filterTahun)->where("bulan_pelaksanaan", "<=", $filterBulan)->whereIn("unit_kerja", $unit_kerja_get)->whereIn("jenis_proyek", $jenis_proyek_get)->get();
             }else{
                 if($filterTahun < 2023 && !empty($filterBulan)){
-                    $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $filterTahun)->where("bulan_pelaksanaan", "<=", $filterBulan)->whereIn("unit_kerja", $unit_kerja_get)->whereIn("jenis_proyek", $jenis_proyek_get)->get();
+                    $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "<=", $filterTahun)->where("bulan_pelaksanaan", "<=", $filterBulan)->whereIn("unit_kerja", $unit_kerja_get)->whereIn("jenis_proyek", $jenis_proyek_get)->get();
                 }elseif($filterTahun < 2023 && empty($filterBulan)){
-                    $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $filterTahun)->where("bulan_pelaksanaan", "<=", 12)->whereIn("unit_kerja", $unit_kerja_get)->whereIn("jenis_proyek", $jenis_proyek_get)->get();
+                    $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "<=", $filterTahun)->where("bulan_pelaksanaan", "<=", 12)->whereIn("unit_kerja", $unit_kerja_get)->whereIn("jenis_proyek", $jenis_proyek_get)->get();
                 }else{
-                    $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $filterTahun)->where("bulan_pelaksanaan", "<=", 12)->whereIn("unit_kerja", $unit_kerja_get)->whereIn("jenis_proyek", $jenis_proyek_get)->get();
+                    $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "<=", $filterTahun)->where("bulan_pelaksanaan", "<=", 12)->whereIn("unit_kerja", $unit_kerja_get)->whereIn("jenis_proyek", $jenis_proyek_get)->get();
                     // dd("test");
                 }
                 
             }
+
+            $proyekPISNew = ProyekPISNew::join("contract_managements", "contract_managements.profit_center", "=", "proyek_pis_new.profit_center")->whereIn("kd_divisi", $unit_kerja_get)->where('contract_managements.stages', '>', 1)->where('contract_managements.profit_center', '!=', null)->where('start_year', '<=', $filterTahun)->get();
 
             // dd($proyeks_all);
 
@@ -197,9 +202,8 @@ class ContractManagementsController extends Controller
             // }
             // dd($proyeks_all);
             $proyeks_perolehan = $proyeks_all->whereIn("stage", [2, 3, 4, 5, 6])->where("is_cancel", "!=", true)->where("is_tidak_lulus_pq", "!=", true);
-            $proyeks_pelaksanaan = $proyeks_all->where("stage", "=", 8)->where("is_cancel", "!=", true)->where("is_tidak_lulus_pq", "!=", true);
+            $proyeks_pelaksanaan = $proyekPISNew;
             $proyeks_pemeliharaan = $proyeks_all->where("is_cancel", "!=", true)->where("stages", "=", 3);
-            // dd($proyeks_perolehan);
         } else {
             // $proyeks = Proyek::join()where("unit_kerja", "=", Auth::user()->unit_kerja)->where("stage", ">", 7)->where("nomor_terkontrak", "!=", "")->get()->sortBy("kode_proyek");
             // $proyeks = DB::table("proyeks as p")->join("contract_managements as c", "c.project_id", "=", "p.kode_proyek")->where("p.unit_kerja", "=", Auth::user()->unit_kerja)->where("stage", ">", 7)->where("p.nomor_terkontrak", "!=", "")->where("c.stages", "<", 3)->get()->sortBy("kode_proyek");
@@ -246,7 +250,7 @@ class ContractManagementsController extends Controller
                 // $unit_kerjas = UnitKerja::whereNotIn("divcode",  $unit_kerja_code)->get();
                 // $proyeks = Proyek::join("contract_managements", "proyeks.kode_proyek", "=", "contract_managements.project_id")->whereNotIn("unit_kerja", $unit_kerja_code)->whereIn("stage", [6, 8, 9])->where("stages", "=", 3)->get();
             } else {
-                $unit_kerja_code =   ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "N", "L", "F", "U", "O"];
+                $unit_kerja_code =   ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "N"];
                 $unitkerjas = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->whereIn("divcode", $unit_user->toArray())->get("divcode");
                 $unit_kerjas_select = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->whereIn("divcode", $unit_user->toArray())->get();
                 // $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $filterTahun)->whereNotIn("unit_kerja", $unit_kerja_code)->get();
@@ -266,18 +270,29 @@ class ContractManagementsController extends Controller
                 $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $filterTahun)->where("bulan_pelaksanaan", "<=", $filterBulan)->whereIn("unit_kerja", $unit_kerja_get)->whereIn("jenis_proyek", $jenis_proyek_get)->get();
             }else{
                 if($filterTahun < 2023 && !empty($filterBulan)){
-                    $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $filterTahun)->where("bulan_pelaksanaan", "<=", $filterBulan)->whereIn("unit_kerja", $unit_kerja_get)->whereIn("jenis_proyek", $jenis_proyek_get)->get();
+                    $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "<=", $filterTahun)->where("bulan_pelaksanaan", "<=", $filterBulan)->whereIn("unit_kerja", $unit_kerja_get)->whereIn("jenis_proyek", $jenis_proyek_get)->get();
                 }elseif($filterTahun < 2023 && empty($filterBulan)){
-                    $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $filterTahun)->where("bulan_pelaksanaan", "<=", 12)->whereIn("unit_kerja", $unit_kerja_get)->whereIn("jenis_proyek", $jenis_proyek_get)->get();
+                    $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "<=", $filterTahun)->where("bulan_pelaksanaan", "<=", 12)->whereIn("unit_kerja", $unit_kerja_get)->whereIn("jenis_proyek", $jenis_proyek_get)->get();
                 }else{
-                    $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $filterTahun)->where("bulan_pelaksanaan", "<=", 12)->whereIn("unit_kerja", $unit_kerja_get)->whereIn("jenis_proyek", $jenis_proyek_get)->get();
+                    $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "<=", $filterTahun)->where("bulan_pelaksanaan", "<=", 12)->whereIn("unit_kerja", $unit_kerja_get)->whereIn("jenis_proyek", $jenis_proyek_get)->get();
                     // dd("test");
                 }
                 
             }
+            $proyekPISNew = ProyekPISNew::join(
+                "contract_managements",
+                "contract_managements.profit_center",
+                "=",
+                "proyek_pis_new.profit_center"
+            )->whereIn("kd_divisi", $unit_kerja_get)->where('contract_managements.stages', '>', 1)->where('contract_managements.profit_center', '!=', null)->where(
+                'start_year',
+                '<=',
+                $filterTahun
+            )->get();
         }
         $proyeks_perolehan = $proyeks_all->whereIn("stage", [2, 3, 4, 5, 6])->where("is_cancel", "!=", true)->where("is_tidak_lulus_pq", "!=", true);
-        $proyeks_pelaksanaan = $proyeks_all->where("stage", ">=", 8)->where("is_cancel", "!=", true)->where("is_tidak_lulus_pq", "!=", true);
+        // $proyeks_pelaksanaan = $proyeks_all->where("stage", ">=", 8)->where("is_cancel", "!=", true)->where("is_tidak_lulus_pq", "!=", true);
+        $proyeks_pelaksanaan = $proyekPISNew;
         $proyeks_pemeliharaan = $proyeks_all->where("is_cancel", "!=", true)->where("stages", "=", 3);
     // return view("4_Contract", compact(["proyeks"]));
         return view("4_Contract", compact(["proyeks_perolehan", "proyeks_pelaksanaan", "proyeks_pemeliharaan", "filterUnit", "filterJenis", "unitkerjas", "tahun_proyeks", "filterTahun", "month", "filterBulan", "unit_kerjas_select"]));
@@ -511,7 +526,7 @@ class ContractManagementsController extends Controller
 
         if ($contract->save()) {
             // moveFileTemp($file, $id_document);
-            Alert::success('Success', "Contract berhasil ditambahkan");
+            Alert::success('Success', "Kontrak berhasil diupdate");
             return Redirect::back();
         }
         Alert::error('Error', "Contract gagal ditambahkan");
@@ -542,7 +557,7 @@ class ContractManagementsController extends Controller
     }
 
 
-    public function viewContract($id_contract)
+    public function viewContractOld($id_contract)
     {
         if (Session::has("pasals")) {
             Session::forget("pasals");
@@ -559,7 +574,7 @@ class ContractManagementsController extends Controller
         $perubahan_anti_klaim = array_key_exists("Anti Klaim", $perubahan_group);       
         $perubahan_klaim_asuransi = array_key_exists("Klaim Asuransi", $perubahan_group);
 
-        $progress = $contract->project->ProyekProgress->sortByDesc("created_at")->first();
+        $progress = $contract->project->ProyekProgress?->sortByDesc("created_at")->first();
         $progress_fisik_ri = $progress->progress_fisik_ri ?? 0;
         $ok_review = $progress->ok_review ?? 0;
         $progress_now = Percentage::fromFractionAndTotal((int)$progress_fisik_ri, (int)$ok_review)->asString();
@@ -578,6 +593,62 @@ class ContractManagementsController extends Controller
         return view('Contract/view', [
             "contract" => $contract,
             "projects" => $projects,
+            "perubahan_group" => $perubahan_group,
+            "perubahan_vo" => $perubahan_vo,
+            "perubahan_klaim" => $perubahan_klaim,
+            "perubahan_anti_klaim" => $perubahan_anti_klaim,
+            "perubahan_klaim_asuransi" => $perubahan_klaim_asuransi,
+            "progress_now" => $progress_now
+            // "asuransi_group" => $asuransi_group
+        ]);
+    }
+
+    public function viewContract($profit_center)
+    {
+        if (Session::has("pasals")) {
+            Session::forget("pasals");
+        }
+
+        // $draftContracts = DraftContracts::join("contract_managements as c", "draft_contracts.profit_center", "=", "c.profit_center")->select("draft_contracts.*")->get();
+        // $review_contracts = ReviewContracts::join("draft_contracts as d", "review_contracts.id_draft_contract", "=", "d.id_draft")->select("review_contracts.*")->get();
+        // $projects = Proyek::all();
+
+        if (Str::isUuid($profit_center)) {
+            $contract = ContractManagements::where("id_contract", "=", $profit_center)->first();
+            $perubahan_kontrak = PerubahanKontrak::where("id_contract", "=", $profit_center)->get();
+            $progress = $contract->project?->ProyekProgress?->sortByDesc("created_at")->first();
+        } else {
+            $contract = ContractManagements::where("profit_center", "=", $profit_center)->first();
+            $perubahan_kontrak = PerubahanKontrak::where("profit_center", "=", $profit_center)->get();
+            $progress = $contract->ProyekPISNew?->ProyekProgress?->sortByDesc("created_at")->first();
+        }
+        $perubahan_group = $perubahan_kontrak->groupBy("jenis_perubahan")->toArray();
+        $perubahan_vo = array_key_exists("VO", $perubahan_group);
+        $perubahan_klaim = array_key_exists("Klaim", $perubahan_group);
+        $perubahan_anti_klaim = array_key_exists("Anti Klaim", $perubahan_group);
+        $perubahan_klaim_asuransi = array_key_exists("Klaim Asuransi", $perubahan_group);
+        if (!empty($progress)) {
+            $progress_fisik_ri = $progress?->progress_fisik_ri ?? 0;
+            $ok_review = $progress->ok_review ?? 0;
+            $progress_now = Percentage::fromFractionAndTotal((int)$progress_fisik_ri, (int)$ok_review)->asString();
+        } else {
+            $progress_fisik_ri = 0;
+            $ok_review = 0;
+            $progress_now = 0;
+        }
+
+        // $asuransis = ContractAsuransi::where("id_contract", "=", $id_contract)->get();
+        // $asuransi_group = $asuransis->groupBy("kategori_asuransi");
+        // $asuransi  = $asuransi_group->map(function($item, $key){
+        //     $test = $item[$key];
+        //     return $test;
+        // });
+        // dd($asuransi_group);
+        // dd($asuransi);
+        // dd(array_key_exists("VO", $perubahan_group), count($perubahan_group["Klaim"]));
+        return view('Contract/view', [
+            "contract" => $contract,
+            // "projects" => $projects,
             "perubahan_group" => $perubahan_group,
             "perubahan_vo" => $perubahan_vo,
             "perubahan_klaim" => $perubahan_klaim,
@@ -1398,7 +1469,7 @@ class ContractManagementsController extends Controller
             "nomor-dokumen-instruction" => "required|string",
             "tanggal-dokumen-instruction" => "required|date",
             "uraian-dokumen-instruction" => "required|string",
-            "id-contract" => "required|string",
+            // "id-contract" => "required|string",
         ];
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
@@ -1412,18 +1483,19 @@ class ContractManagementsController extends Controller
         // Check ID Contract exist
         $is_id_contract_exist = ContractManagements::find($data["id-contract"]);
 
-        if (empty($is_id_contract_exist)) {
-            // Session::flash("failed", "Please fill 'Draft Contract' empty field");$request->old("nomor-dokumen-instruction");
-            Alert::error('Error', "Pastikan contract sudah dibuat terlebih dahulu");
-            return Redirect::back()->with("modal", $data["modal-name"]);
-            // return Redirect::back();
-        }
+        // if (empty($is_id_contract_exist)) {
+        //     // Session::flash("failed", "Please fill 'Draft Contract' empty field");$request->old("nomor-dokumen-instruction");
+        //     Alert::error('Error', "Pastikan contract sudah dibuat terlebih dahulu");
+        //     return Redirect::back()->with("modal", $data["modal-name"]);
+        //     // return Redirect::back();
+        // }
 
         if(isset($data['file-dokumen-instruction'])){
             $uploadFinal = new ContractUploadFinal();
             $uploadFinal->id_contract = $data["id-contract"];
             $uploadFinal->id_document = $id_document;
             $uploadFinal->nama_document = $nama_file;
+            $uploadFinal->profit_center = $data["profit-center"];
             $uploadFinal->category = "Dokumen Site Instruction";
 
             $siteInstruction->nama_document = $nama_file;
@@ -1433,6 +1505,7 @@ class ContractManagementsController extends Controller
         }
 
         $siteInstruction->id_contract = $data["id-contract"];
+        $siteInstruction->profit_center = $data["profit-center"];
         // $siteInstruction->id_document = $id_document;
         $siteInstruction->nomor_dokumen = $data["nomor-dokumen-instruction"];
         $siteInstruction->tanggal_dokumen = $data["tanggal-dokumen-instruction"];
@@ -1467,7 +1540,7 @@ class ContractManagementsController extends Controller
             "nomor-technical-form" => "required|string",
             "tanggal-technical-form" => "required|date",
             "uraian-technical-form" => "required|string",
-            "id-contract" => "required|string",
+            // "id-contract" => "required|string",
         ];
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
@@ -1481,12 +1554,12 @@ class ContractManagementsController extends Controller
         // Check ID Contract exist
         $is_id_contract_exist = ContractManagements::find($data["id-contract"]);
 
-        if (empty($is_id_contract_exist)) {
-            // Session::flash("failed", "Please fill 'Draft Contract' empty field");$request->old("nomor-dokumen-instruction");
-            Alert::error('Error', "Pastikan contract sudah dibuat terlebih dahulu");
-            return Redirect::back()->with("modal", $data["modal-name"]);
-            // return Redirect::back();
-        }
+        // if (empty($is_id_contract_exist)) {
+        //     // Session::flash("failed", "Please fill 'Draft Contract' empty field");$request->old("nomor-dokumen-instruction");
+        //     Alert::error('Error', "Pastikan contract sudah dibuat terlebih dahulu");
+        //     return Redirect::back()->with("modal", $data["modal-name"]);
+        //     // return Redirect::back();
+        // }
 
         if(isset($data['file-technical-form'])){
             $uploadFinal = new ContractUploadFinal();
@@ -1494,6 +1567,7 @@ class ContractManagementsController extends Controller
             $uploadFinal->id_document = $id_document;
             $uploadFinal->nama_document = $nama_file;
             $uploadFinal->category = "Dokumen Technical Form";
+            $uploadFinal->profit_center = $data["profit-center"];
 
             $technicalForm->nama_document = $nama_file;
             $technicalForm->id_document = $id_document;
@@ -1501,6 +1575,7 @@ class ContractManagementsController extends Controller
         }
 
         $technicalForm->id_contract = $data["id-contract"];
+        $technicalForm->profit_center = $data["profit-center"];
         // $technicalForm->id_document = $id_document;
         $technicalForm->nomor_dokumen = $data["nomor-technical-form"];
         $technicalForm->tanggal_dokumen = $data["tanggal-technical-form"];
@@ -1535,7 +1610,7 @@ class ContractManagementsController extends Controller
             "nomor-technical-query" => "required|string",
             "tanggal-technical-query" => "required|date",
             "uraian-technical-query" => "required|string",
-            "id-contract" => "required|string",
+            // "id-contract" => "required|string",
         ];
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
@@ -1549,12 +1624,12 @@ class ContractManagementsController extends Controller
         // Check ID Contract exist
         $is_id_contract_exist = ContractManagements::find($data["id-contract"]);
 
-        if (empty($is_id_contract_exist)) {
-            // Session::flash("failed", "Please fill 'Draft Contract' empty field");$request->old("nomor-dokumen-instruction");
-            Alert::error('Error', "Pastikan contract sudah dibuat terlebih dahulu");
-            return Redirect::back()->with("modal", $data["modal-name"]);
-            // return Redirect::back();
-        }
+        // if (empty($is_id_contract_exist)) {
+        //     // Session::flash("failed", "Please fill 'Draft Contract' empty field");$request->old("nomor-dokumen-instruction");
+        //     Alert::error('Error', "Pastikan contract sudah dibuat terlebih dahulu");
+        //     return Redirect::back()->with("modal", $data["modal-name"]);
+        //     // return Redirect::back();
+        // }
 
         if(isset($data['file-technical-query'])){
             $uploadFinal = new ContractUploadFinal();
@@ -1562,6 +1637,7 @@ class ContractManagementsController extends Controller
             $uploadFinal->id_document = $id_document;
             $uploadFinal->nama_document = $nama_file;
             $uploadFinal->category = "Dokumen Technical Query";
+            $uploadFinal->profit_center = $data["profit-center"];
 
             $technicalQuery->nama_document = $nama_file;
             $technicalQuery->id_document = $id_document;
@@ -1574,6 +1650,8 @@ class ContractManagementsController extends Controller
         $technicalQuery->nomor_dokumen = $data["nomor-technical-query"];
         $technicalQuery->tanggal_dokumen = $data["tanggal-technical-query"];
         $technicalQuery->uraian_dokumen = $data["uraian-technical-query"];
+        $technicalQuery->profit_center = $data["profit-center"];
+
         if ($technicalQuery->save() && $uploadFinal->save()) {
             $file->move(public_path('words'), $id_document);
             // moveFileTemp($file, explode(".", $id_document)[0]);
@@ -1604,7 +1682,7 @@ class ContractManagementsController extends Controller
             "nomor-field-design-change" => "required|string",
             "tanggal-field-design-change" => "required|date",
             "uraian-field-design-change" => "required|string",
-            "id-contract" => "required|string",
+            // "id-contract" => "required|string",
         ];
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
@@ -1618,18 +1696,19 @@ class ContractManagementsController extends Controller
         // Check ID Contract exist
         $is_id_contract_exist = ContractManagements::find($data["id-contract"]);
 
-        if (empty($is_id_contract_exist)) {
-            // Session::flash("failed", "Please fill 'Draft Contract' empty field");$request->old("nomor-dokumen-instruction");
-            Alert::error('Error', "Pastikan contract sudah dibuat terlebih dahulu");
-            return Redirect::back()->with("modal", $data["modal-name"]);
-            // return Redirect::back();
-        }
+        // if (empty($is_id_contract_exist)) {
+        //     // Session::flash("failed", "Please fill 'Draft Contract' empty field");$request->old("nomor-dokumen-instruction");
+        //     Alert::error('Error', "Pastikan contract sudah dibuat terlebih dahulu");
+        //     return Redirect::back()->with("modal", $data["modal-name"]);
+        //     // return Redirect::back();
+        // }
         if(isset($data['file-field-design-change'])){
             $uploadFinal = new ContractUploadFinal();
             $uploadFinal->id_contract = $data["id-contract"];
             $uploadFinal->id_document = $id_document;
             $uploadFinal->nama_document = $nama_file;
             $uploadFinal->category = "Dokumen Field Design Change";
+            $uploadFinal->profit_center = $data["profit-center"];
 
             $fieldChange->nama_document = $nama_file;
             $fieldChange->id_document = $id_document;
@@ -1641,6 +1720,8 @@ class ContractManagementsController extends Controller
         $fieldChange->nomor_dokumen = $data["nomor-field-design-change"];
         $fieldChange->tanggal_dokumen = $data["tanggal-field-design-change"];
         $fieldChange->uraian_dokumen = $data["uraian-field-design-change"];
+        $fieldChange->profit_center = $data["profit-center"];
+
         if ($fieldChange->save() && $uploadFinal->save()) {
             $file->move(public_path('words'), $id_document);
             // moveFileTemp($file, explode(".", $id_document)[0]);
@@ -1671,7 +1752,7 @@ class ContractManagementsController extends Controller
             "nomor-contract-change-notice" => "required|string",
             "tanggal-contract-change-notice" => "required|date",
             "uraian-contract-change-notice" => "required|string",
-            "id-contract" => "required|string",
+            // "id-contract" => "required|string",
         ];
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
@@ -1684,18 +1765,19 @@ class ContractManagementsController extends Controller
         // Check ID Contract exist
         $is_id_contract_exist = ContractManagements::find($data["id-contract"]);
 
-        if (empty($is_id_contract_exist)) {
-            // Session::flash("failed", "Please fill 'Draft Contract' empty field");$request->old("nomor-dokumen-instruction");
-            Alert::error('Error', "Pastikan contract sudah dibuat terlebih dahulu");
-            return Redirect::back()->with("modal", $data["modal-name"]);
-            // return Redirect::back();
-        }
+        // if (empty($is_id_contract_exist)) {
+        //     // Session::flash("failed", "Please fill 'Draft Contract' empty field");$request->old("nomor-dokumen-instruction");
+        //     Alert::error('Error', "Pastikan contract sudah dibuat terlebih dahulu");
+        //     return Redirect::back()->with("modal", $data["modal-name"]);
+        //     // return Redirect::back();
+        // }
         if(isset($data['file-contract-change-notice'])){
             $uploadFinal = new ContractUploadFinal();
             $uploadFinal->id_contract = $data["id-contract"];
             $uploadFinal->id_document = $id_document;
             $uploadFinal->nama_document = $nama_file;
             $uploadFinal->category = "Dokumen Contract Change Notice";
+            $uploadFinal->profit_center = $data["profit-center"];
 
             $changeNotice->nama_document = $nama_file;
             $changeNotice->id_document = $id_document;
@@ -1708,6 +1790,8 @@ class ContractManagementsController extends Controller
         $changeNotice->nomor_dokumen = $data["nomor-contract-change-notice"];
         $changeNotice->tanggal_dokumen = $data["tanggal-contract-change-notice"];
         $changeNotice->uraian_dokumen = $data["uraian-contract-change-notice"];
+        $changeNotice->profit_center = $data["profit-center"];
+
         if ($changeNotice->save() && $uploadFinal->save()) {
             $file->move(public_path('words'), $id_document);
             // moveFileTemp($file, explode(".", $id_document)[0]);
@@ -1738,7 +1822,7 @@ class ContractManagementsController extends Controller
             "nomor-contract-change-order" => "required|string",
             "tanggal-contract-change-order" => "required|date",
             "uraian-contract-change-order" => "required|string",
-            "id-contract" => "required|string",
+            // "id-contract" => "required|string",
         ];
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
@@ -1751,18 +1835,19 @@ class ContractManagementsController extends Controller
         // Check ID Contract exist
         $is_id_contract_exist = ContractManagements::find($data["id-contract"]);
 
-        if (empty($is_id_contract_exist)) {
-            // Session::flash("failed", "Please fill 'Draft Contract' empty field");$request->old("nomor-dokumen-instruction");
-            Alert::error('Error', "Pastikan contract sudah dibuat terlebih dahulu");
-            return Redirect::back()->with("modal", $data["modal-name"]);
-            // return Redirect::back();
-        }
+        // if (empty($is_id_contract_exist)) {
+        //     // Session::flash("failed", "Please fill 'Draft Contract' empty field");$request->old("nomor-dokumen-instruction");
+        //     Alert::error('Error', "Pastikan contract sudah dibuat terlebih dahulu");
+        //     return Redirect::back()->with("modal", $data["modal-name"]);
+        //     // return Redirect::back();
+        // }
         if(isset($data['file-contract-change-order'])){
             $uploadFinal = new ContractUploadFinal();
             $uploadFinal->id_contract = $data["id-contract"];
             $uploadFinal->id_document = $id_document;
             $uploadFinal->nama_document = $nama_file;
             $uploadFinal->category = "Dokumen Contract Change Order";
+            $uploadFinal->profit_center = $data["profit-center"];
 
             $changeOrder->nama_document = $nama_file;
             $changeOrder->id_document = $id_document;
@@ -1774,6 +1859,8 @@ class ContractManagementsController extends Controller
         $changeOrder->nomor_dokumen = $data["nomor-contract-change-order"];
         $changeOrder->tanggal_dokumen = $data["tanggal-contract-change-order"];
         $changeOrder->uraian_dokumen = $data["uraian-contract-change-order"];
+        $changeOrder->profit_center = $data["profit-center"];
+
         if ($changeOrder->save() && $uploadFinal->save()) {
             $file->move(public_path('words'), $id_document);
             // moveFileTemp($file, explode(".", $id_document)[0]);
@@ -1804,7 +1891,7 @@ class ContractManagementsController extends Controller
             "nomor-contract-change-proposal" => "required|string",
             "tanggal-contract-change-proposal" => "required|date",
             "uraian-contract-change-proposal" => "required|string",
-            "id-contract" => "required|string",
+            // "id-contract" => "required|string",
         ];
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
@@ -1817,12 +1904,12 @@ class ContractManagementsController extends Controller
         // Check ID Contract exist
         $is_id_contract_exist = ContractManagements::find($data["id-contract"]);
 
-        if (empty($is_id_contract_exist)) {
-            // Session::flash("failed", "Please fill 'Draft Contract' empty field");$request->old("nomor-dokumen-instruction");
-            Alert::error('Error', "Pastikan contract sudah dibuat terlebih dahulu");
-            return Redirect::back()->with("modal", $data["modal-name"]);
-            // return Redirect::back();
-        }
+        // if (empty($is_id_contract_exist)) {
+        //     // Session::flash("failed", "Please fill 'Draft Contract' empty field");$request->old("nomor-dokumen-instruction");
+        //     Alert::error('Error', "Pastikan contract sudah dibuat terlebih dahulu");
+        //     return Redirect::back()->with("modal", $data["modal-name"]);
+        //     // return Redirect::back();
+        // }
 
         if(isset($data['file-contract-change-proposal'])){
             $uploadFinal = new ContractUploadFinal();
@@ -1830,6 +1917,7 @@ class ContractManagementsController extends Controller
             $uploadFinal->id_document = $id_document;
             $uploadFinal->nama_document = $nama_file;
             $uploadFinal->category = "Dokumen Contract Change Proposal";
+            $uploadFinal->profit_center = $data["profit-center"];
 
             $changeProposal->nama_document = $nama_file;
             $changeProposal->id_document = $id_document;
@@ -1841,6 +1929,8 @@ class ContractManagementsController extends Controller
         $changeProposal->nomor_dokumen = $data["nomor-contract-change-proposal"];
         $changeProposal->tanggal_dokumen = $data["tanggal-contract-change-proposal"];
         $changeProposal->uraian_dokumen = $data["uraian-contract-change-proposal"];
+        $changeProposal->profit_center = $data["profit-center"];
+
         if ($changeProposal->save() && $uploadFinal->save()) {
             $file->move(public_path('words'), $id_document);
             // moveFileTemp($file, explode(".", $id_document)[0]);
@@ -2269,7 +2359,7 @@ class ContractManagementsController extends Controller
         return redirect()->back();
     }
 
-    public function documentBastContractEdit(Request $request, $id_bast)
+    public function documentBastContractEdit(Request $request, $id_bast) 
     {
         $data = $request->all();
         // dd($data);
@@ -2287,6 +2377,7 @@ class ContractManagementsController extends Controller
             moveFileTemp($data['dokumen-bast-1'], $id_document);
             $dokumen->nomor_dokumen = $data["nomor-dokumen"];
             $dokumen->nama_dokumen = $nama_document;
+            $dokumen->id_document = $id_document;
         }
         $dokumen->id_contract =  $data["id-contract"];
         $dokumen->bast =  (int) $data["bast"];
@@ -2295,7 +2386,6 @@ class ContractManagementsController extends Controller
         }
         $dokumen->status_dokumen =  $data["status_dokumen"] ?? "";
         $dokumen->tanggal_dokumen =  $data["tanggal-dokumen"];
-        $dokumen->id_document = $id_document;
         // dd($dokumen);
 
         if ($dokumen->save()) {
@@ -3532,10 +3622,42 @@ class ContractManagementsController extends Controller
     //     }
     // }
 
-    public function perubahanKontrakView($id_contract, PerubahanKontrak $perubahan_kontrak) {
+    public function perubahanKontrakViewOld(Request $request, $id_contract, $id_perubahan_kontrak)
+    {
+
+        $data = $request->all();
+        $filterBulan = isset($data['periode']) ? $data['periode'] : date('m');
+        $filterTahun = isset($data['tahun']) ? $data['tahun'] : date('Y');
+
+        if (isset($data['periode']) && isset($data['tahun'])) {
+            $perubahan_kontrak = ContractApproval::find($id_perubahan_kontrak);
+        } else {
+            $perubahan_kontrak = PerubahanKontrak::find($id_perubahan_kontrak);
+        }
+
         $contract = ContractManagements::find(url_decode($id_contract));
 
-        // dd($contract, $perubahan_kontrak);
+        // dd($data, $perubahan_kontrak);
+        return view("perubahanKontrak/view", compact(["contract", "perubahan_kontrak"]));
+    }
+
+    public function perubahanKontrakView(Request $request, $profit_center, $id_perubahan_kontrak)
+    {
+
+        $data = $request->all();
+        $filterBulan = isset($data['periode']) ? $data['periode'] : date('m');
+        $filterTahun = isset($data['tahun']) ? $data['tahun'] : date('Y');
+
+        if (isset($data['periode']) && isset($data['tahun'])) {
+            $perubahan_kontrak = ContractApproval::find($id_perubahan_kontrak);
+        } else {
+            $perubahan_kontrak = PerubahanKontrak::find($id_perubahan_kontrak);
+        }
+
+        // $contract = ContractManagements::find(url_decode($id_contract));
+        $contract = ContractManagements::where('profit_center', $profit_center)->first();
+
+        // dd($data, $perubahan_kontrak);
         return view("perubahanKontrak/view", compact(["contract", "perubahan_kontrak"]));
     }
 

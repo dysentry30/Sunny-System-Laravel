@@ -70,7 +70,8 @@
                                 @php
                                     // $contract = $contracts->values();
                                 @endphp
-                                <h1 class="d-flex align-items-center fs-3 my-1">Datail Change&nbsp;  - &nbsp; <b>{{ $contracts->project->nama_proyek }}</b>
+                                {{-- <h1 class="d-flex align-items-center fs-3 my-1">Datail Change&nbsp;  - &nbsp; <b>{{ $contracts->project->nama_proyek }}</b> --}}
+                                <h1 class="d-flex align-items-center fs-3 my-1">Datail Change&nbsp;  - &nbsp; <b>{{ $proyek->proyek_name }}</b>
                                 </h1>
                                 <!--end::Title-->
                             </div>
@@ -298,7 +299,8 @@
                                                                         {{ !empty($vo->tanggal_perubahan) ? Carbon\Carbon::parse($vo->tanggal_perubahan)->translatedFormat('d F Y') : '' }}
                                                                     </td>
                                                                     <td>
-                                                                        <a href="/contract-management/view/{{$vo->id_contract}}/perubahan-kontrak/{{$vo->id_perubahan_kontrak}}{{ isset($vo->periode) ? "?periode=".$vo->periode."&tahun=".$vo->tahun : "" }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">
+                                                                        {{-- <a href="/contract-management/view/{{$vo->id_contract}}/perubahan-kontrak/{{$vo->id_perubahan_kontrak}}{{ isset($vo->periode) ? "?periode=".$vo->periode."&tahun=".$vo->tahun : "" }}" id="click-name" class="text-gray-800 text-hover-primary mb-1"> --}}
+                                                                        <a href="/contract-management/view/{{$vo->profit_center}}/perubahan-kontrak/{{$vo->id_perubahan_kontrak}}{{ isset($vo->periode) ? "?periode=".$vo->periode."&tahun=".$vo->tahun : "" }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">
                                                                         {{ $vo->uraian_perubahan }}
                                                                         </a>
                                                                     </td>
@@ -406,7 +408,8 @@
                                                                         {{ !empty($klaim->tanggal_perubahan) ? Carbon\Carbon::parse($klaim->tanggal_perubahan)->translatedFormat('d F Y') : '' }}
                                                                     </td>
                                                                     <td>
-                                                                        <a href="/contract-management/view/{{$klaim->id_contract}}/perubahan-kontrak/{{$klaim->id_perubahan_kontrak}}{{ isset($klaim->periode) ? "?periode=".$klaim->periode."&tahun=".$klaim->tahun : "" }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">
+                                                                        {{-- <a href="/contract-management/view/{{$klaim->id_contract}}/perubahan-kontrak/{{$klaim->id_perubahan_kontrak}}{{ isset($klaim->periode) ? "?periode=".$klaim->periode."&tahun=".$klaim->tahun : "" }}" id="click-name" class="text-gray-800 text-hover-primary mb-1"> --}}
+                                                                        <a href="/contract-management/view/{{$klaim->profit_center}}/perubahan-kontrak/{{$klaim->id_perubahan_kontrak}}{{ isset($klaim->periode) ? "?periode=".$klaim->periode."&tahun=".$klaim->tahun : "" }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">
                                                                         {{ $klaim->uraian_perubahan }}
                                                                         </a>
                                                                     </td>
@@ -514,7 +517,8 @@
                                                                         {{ !empty($anti_klaim->tanggal_perubahan) ? Carbon\Carbon::parse($anti_klaim->tanggal_perubahan)->translatedFormat('d F Y') : '' }}
                                                                     </td>
                                                                     <td>
-                                                                        <a href="/contract-management/view/{{$anti_klaim->id_contract}}/perubahan-kontrak/{{$anti_klaim->id_perubahan_kontrak}}{{ isset($anti_klaim->periode) ? "?periode=".$anti_klaim->periode."&tahun=".$anti_klaim->tahun : "" }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">
+                                                                        {{-- <a href="/contract-management/view/{{$anti_klaim->id_contract}}/perubahan-kontrak/{{$anti_klaim->id_perubahan_kontrak}}{{ isset($anti_klaim->periode) ? "?periode=".$anti_klaim->periode."&tahun=".$anti_klaim->tahun : "" }}" id="click-name" class="text-gray-800 text-hover-primary mb-1"> --}}
+                                                                        <a href="/contract-management/view/{{$anti_klaim->profit_center}}/perubahan-kontrak/{{$anti_klaim->id_perubahan_kontrak}}{{ isset($anti_klaim->periode) ? "?periode=".$anti_klaim->periode."&tahun=".$anti_klaim->tahun : "" }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">
                                                                         {{ $anti_klaim->uraian_perubahan }}
                                                                         </a>
                                                                     </td>
@@ -622,7 +626,8 @@
                                                                         {{ !empty($klaim_asuransi->tanggal_perubahan) ? Carbon\Carbon::parse($klaim_asuransi->tanggal_perubahan)->translatedFormat('d F Y') : '' }}
                                                                     </td>
                                                                     <td>
-                                                                        <a href="/contract-management/view/{{$klaim_asuransi->id_contract}}/perubahan-kontrak/{{$klaim_asuransi->id_perubahan_kontrak}}{{ isset($klaim_asuransi->periode) ? "?periode=".$klaim_asuransi->periode."&tahun=".$klaim_asuransi->tahun : "" }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">
+                                                                        {{-- <a href="/contract-management/view/{{$klaim_asuransi->id_contract}}/perubahan-kontrak/{{$klaim_asuransi->id_perubahan_kontrak}}{{ isset($klaim_asuransi->periode) ? "?periode=".$klaim_asuransi->periode."&tahun=".$klaim_asuransi->tahun : "" }}" id="click-name" class="text-gray-800 text-hover-primary mb-1"> --}}
+                                                                        <a href="/contract-management/view/{{$klaim_asuransi->profit_center}}/perubahan-kontrak/{{$klaim_asuransi->id_perubahan_kontrak}}{{ isset($klaim_asuransi->periode) ? "?periode=".$klaim_asuransi->periode."&tahun=".$klaim_asuransi->tahun : "" }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">
                                                                         {{ $klaim_asuransi->uraian_perubahan }}
                                                                         </a>
                                                                     </td>
@@ -848,16 +853,17 @@
                         <!--end::Modal header-->
                         <!--begin::Modal body-->
                         <div class="modal-body py-lg-6 px-lg-6">
-        
                             <!--begin::Input group Website-->
                             <form action="/perubahan-kontrak/upload" method="POST"
                                 enctype="multipart/form-data">
                                 @csrf
-                                <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                <input type="hidden" value="{{ $contracts->id_contract ?? 0 }}" id="id-contract"
                                     name="id-contract">
                                 <input type="hidden" class="modal-name" name="modal-name">
-                                <input type="hidden" id="kode-proyek" name="kode-proyek" value="{{ $proyek->kode_proyek }}">
+                                {{-- <input type="hidden" id="kode-proyek" name="kode-proyek" value="{{ $proyek->kode_proyek }}"> --}}
+                                <input type="hidden" id="profit-center" name="profit-center" value="{{ $contracts->profit_center }}">
                                 <br>
+
                                 <div class="row">
                                     <div class="col">
                                         <label class="fs-6 fw-bold form-label">
@@ -987,7 +993,8 @@
                                         <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                                         <!--end::Input-->
                                     </div>
-                                        <input type="hidden" value="{{ $contracts->id_contract ?? 0 }}" id="id-contract"
+                                        {{-- <input type="hidden" value="{{ $contracts->id_contract ?? 0 }}" id="id-contract" --}}
+                                        <input type="hidden" value="{{ $proyek->id_contract ?? 0 }}" id="id-contract"
                                             name="id-contract">
                                         <input type="hidden" class="modal-name" name="modal-name">
                                     </div>

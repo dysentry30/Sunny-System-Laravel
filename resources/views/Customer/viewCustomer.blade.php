@@ -2862,12 +2862,14 @@
                                                                     <tbody class="fw-bold text-gray-600">                                                                            
                                                                         <!--begin::Nama Proyek-->
                                                                         @foreach ($customer->Csi as $item)
+                                                                            {{-- @dump($item, $item->proyekPis) --}}
                                                                             @if ($item->status == "Done")
                                                                                 <tr>                                                                                    
                                                                                     <td>
-                                                                                        <a target="_blank" href="/proyek/view/{{ $item->Proyek->kode_proyek }}" class="text-gray-800 text-hover-primary mb-1">
-                                                                                            {{ $item->Proyek->nama_proyek }}                                                                                                
-                                                                                        </a>
+                                                                                        {{ $item->ProyekPIS?->proyek_name }}                                                                                                
+                                                                                        {{-- <a target="_blank" href="/proyek/view/{{ $item->Proyek?->kode_proyek }}" class="text-gray-800 text-hover-primary mb-1">
+                                                                                            {{ $item->Proyek?->nama_proyek }}                                                                                                
+                                                                                        </a> --}}
                                                                                     </td>
                                                                                     <!--end::Name-->
                                                                                     <!--begin::Tanggal CSI-->
@@ -2877,17 +2879,17 @@
                                                                                     <!--end::Tanggal CSI-->
                                                                                     <!--begin::Score CSI-->
                                                                                     <td class="text-center">
-                                                                                        {{ number_format($item->score_csi, 3, '.', '.') }}
+                                                                                        {{ $item->score_csi }}
                                                                                     </td>
                                                                                     <!--end::Score CSI-->  
                                                                                     <!--begin::Score CSI-->
                                                                                     <td class="text-center">
-                                                                                        {{ number_format($item->score_cli, 3, '.', '.') }}
+                                                                                        {{ $item->score_cli }}
                                                                                     </td>
                                                                                     <!--end::Score CSI-->  
                                                                                     <!--begin::Score CSI-->
                                                                                     <td class="text-center">
-                                                                                        {{ number_format($item->score_nps, 3, '.', '.') }}
+                                                                                        {{ $item->score_nps }}
                                                                                     </td>
                                                                                     <!--end::Score CSI-->  
                                                                                     <!--begin::Progress-->

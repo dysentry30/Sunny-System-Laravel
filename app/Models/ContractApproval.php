@@ -25,4 +25,8 @@ class ContractApproval extends Model
   {
     return  $this->belongsTo(PerubahanKontrak::class, "perubahan_id", 'id_perubahan_kontrak');
   }
+  public function ProyekPISNew()
+  {
+    return  $this->hasOne(ProyekPISNew::class, "profit_center");
+  }
 }

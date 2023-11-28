@@ -204,4 +204,9 @@ class Proyek extends Model
     {
         return $this->hasMany(DokumenConsentNPWP::class, 'kode_proyek');
     }
+
+    public function ProyekKonsultanPerencana()
+    {
+        return $this->hasMany(ProyekKonsultanPerencana::class, 'kode_proyek');
+    }
 }
