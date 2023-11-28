@@ -157,7 +157,7 @@
                                                 @endif
                                             @endif --}}
                                                 @php
-                                                    $proyekProgress = $proyek->Progress->where('periode', date('Ym'))->first();
+                                                    $proyekProgress = $proyek->Progress?->where('periode', date('Ym'))->first();
                                                     // dump($proyekProgress);
                                                     $progress = 0;
                                                     if (!empty($proyekProgress)) {
