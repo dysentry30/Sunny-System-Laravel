@@ -8,6 +8,17 @@
 
 <!--begin::Main-->
 @section('content')
+<style>
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
+</style>
 
     <!--begin::Root-->
     <div class="d-flex flex-column flex-root">
@@ -366,11 +377,22 @@
                                 </select>
                             </div>
                             
-                            <div class="row mb-7">
-                                <label class="fs-6 fw-bold form-label mt-3">
-                                    <span class="required">Isi</span>
-                                </label>
-                                <input type="text" name="isi" id="isi" class="form-control form-control-solid">
+                            <div class="">
+                                <div class="row mb-7">
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span class="required">Isi</span>
+                                    </label>
+                                    <input type="text" name="isi" id="isi" class="form-control form-control-solid">
+                                </div>
+                            </div>
+                            
+                            <div class="">
+                                <div class="row mb-7">
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span class="required">Urutan</span>
+                                    </label>
+                                    <input type="number" min="1" name="posisi" id="posisi" class="form-control form-control-solid">
+                                </div>
                             </div>
 
                             <!--begin::Input group Website-->
@@ -588,11 +610,22 @@
                                     </select>
                                 </div>
                                 
-                                <div class="row mb-7">
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Isi</span>
-                                    </label>
-                                    <input type="text" name="isi" id="isi" class="form-control form-control-solid" value="{{ $item->isi }}">
+                                <div class="">
+                                    <div class="row mb-7">
+                                        <label class="fs-6 fw-bold form-label mt-3">
+                                            <span class="required">Isi</span>
+                                        </label>
+                                        <input type="text" name="isi" id="isi" class="form-control form-control-solid" value="{{ $item->isi }}">
+                                    </div>
+                                </div>
+                                
+                                <div class="">
+                                    <div class="row mb-7">
+                                        <label class="fs-6 fw-bold form-label mt-3">
+                                            <span class="required">Urutan</span>
+                                        </label>
+                                        <input type="number" min="1" name="posisi" id="posisi" class="form-control form-control-solid" value="{{ $item->posisi }}">
+                                    </div>
                                 </div>
                                     
                                 <!--begin::Input group Website-->

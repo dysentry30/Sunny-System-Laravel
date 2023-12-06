@@ -2811,6 +2811,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $checklist->aspek = $data['aspek'];
         $checklist->start_tahun = $data["tahun_start"];
         $checklist->start_bulan = $data["bulan_start"];
+        $checklist->posisi = $data["posisi"];
         $checklist->is_active = isset($data["isActive"]) ? true : false;
         if (isset($data["tahun_finish"]) && isset($data["bulan_finish"])) {
             $checklist->finish_tahun = $data["tahun_finish"];
@@ -2829,7 +2830,6 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         Alert::error('Error', "Checklist Calon Mitra KSO Gagal Ditambahkan");
         return redirect()->back();
     });
-
     Route::post('/checklist-calon-mitra-kso/{id}/edit', function (Request $request, $id) {
         $data = $request->all();
 
@@ -2865,6 +2865,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $checklist->aspek = $data['aspek'];
         $checklist->start_tahun = $data["tahun_start"];
         $checklist->start_bulan = $data["bulan_start"];
+        $checklist->posisi = $data["posisi"];
         $checklist->is_active = isset($data["isActive"]) ? true : false;
         if (isset($data["tahun_finish"]) && isset($data["bulan_finish"])) {
             $checklist->finish_tahun = $data["tahun_finish"];
