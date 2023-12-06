@@ -269,7 +269,8 @@
                                             <td class="text-center">{{$start_bulan}}</td>
                                             <td class="text-center">{{$finish_bulan}}</td>
                                             <td class="d-flex flex-column align-items-center gap-2">
-                                                <a href="#kt_modal_edit_{{$approval->id_matriks_approval_rekomendasi }}" data-bs-toggle="modal" class="btn btn-sm btn-primary text-white" style="background-color: #008CB4;">Edit</a>
+                                                {{-- <a href="#kt_modal_edit_{{$approval->id_matriks_approval_rekomendasi }}" data-bs-toggle="modal" class="btn btn-sm btn-primary text-white" style="background-color: #008CB4;">Edit</a> --}}
+                                                <button class="btn btn-sm btn-primary text-white" style="background-color: #008CB4;" onclick="showModal('{{ $approval->id_matriks_approval_rekomendasi }}')">Edit</button>
                                                 <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#kt_modal_matriks_delete_{{$approval->id_matriks_approval_rekomendasi}}">Delete</button>
                                             </td>
                                         </tr>
@@ -747,9 +748,7 @@
                                     <!--begin::Input-->
                                         
                                     <select id="nama-pegawai-{{ $approval->id_matriks_approval_rekomendasi }}" name="nama-pegawai"
-                                        class="form-select form-select-solid select2-hidden-accessible"
-                                        data-control="select2" data-hide-search="false" data-placeholder="Pilih Nama Pegawai..."
-                                        data-select2-id="select2-nama-pegawai-{{ $approval->id_matriks_approval_rekomendasi }}" tabindex="-1" aria-hidden="true">
+                                        class="form-select form-select-solid" data-hide-search="false" data-placeholder="Pilih Nama Pegawai..."aria-hidden="true">
                                         <option value="" selected></option>
                                         @foreach ($pegawai_all as $pegawai)
                                             <option value="{{$pegawai->nip}}" {{ $pegawai->nip == $approval->nama_pegawai ? 'selected' : '' }}>{{$pegawai->nama_pegawai}}</option>
@@ -1238,6 +1237,16 @@
         }else{
             document.getElementById("div-departemen").style.value = null;
         }
+    }
+</script>
+<script>
+    function showModal(id) {
+        let modal = document.getElementById('kt_modal_edit_' + id);
+        $(modal).modal('show');
+        let select2 = document.getElementById('nama-pegawai-' + id);
+        $(select2).select2({
+            dropdownParent: $(modal)
+        });
     }
 </script>
 @endsection

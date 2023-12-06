@@ -209,4 +209,9 @@ class Proyek extends Model
     {
         return $this->hasMany(ProyekKonsultanPerencana::class, 'kode_proyek');
     }
+
+    public function DokumenNotaRekomendasi1()
+    {
+        return $this->hasMany(DokumenNotaRekomendasi1::class, 'kode_proyek');
+    }
 }

@@ -54,7 +54,7 @@
                                 <div class="d-flex align-items-center py-1">
 
                                     <!--begin::Button-->
-                                    <a href="#" data-bs-target="#kt_modal_create_penilaian_pengguna_jasa"
+                                    <a href="#" data-bs-target="#kt_modal_create_fortune_rank"
                                         data-bs-toggle="modal" class="btn btn-sm btn-primary py-3"
                                         style="background-color:#008CB4; padding: 6px">
                                         Tambah Fortune Rank</a>
@@ -165,11 +165,7 @@
                                             <td class="text-center">{{ $item->tahun }}</td>
                                             <td class="text-center align-middle">
                                                 <div class="d-flex justify-content-center">
-                                                    <a href="#"
-                                                        data-bs-target="#kt_modal_create_penilaian_pengguna_jasa_{{ $item->id }}"
-                                                        data-bs-toggle="modal" class="btn btn-sm btn-primary text-white"
-                                                        style="background-color: #008CB4;">Edit</a>
-                                                    <input type="hidden" name="id-otomasi" value="{{ $item->id }}">
+                                                    <button class="btn btn-sm btn-primary text-white" style="background-color: #008CB4;" onclick="showModal('{{ $item->id }}')">Edit</button>
                                                     <button type="button" class="btn btn-sm btn-danger text-white"
                                                         onclick="deleteItem('{{ $item->id }}')">Delete</button>
                                                 </div>
@@ -204,7 +200,7 @@
     <!--end::Root-->
 
     <!--begin::Modal Tambah Kriteria Green Line-->
-    <div class="modal fade" id="kt_modal_create_penilaian_pengguna_jasa" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="kt_modal_create_fortune_rank" tabindex="-1" aria-hidden="true">
         <!--begin::Modal dialog-->
         <div class="modal-dialog modal-dialog-centered mw-600px">
             <!--begin::Modal content-->
@@ -300,18 +296,15 @@
                                     <!--end::Label-->
                                     <div class="d-flex flex-row gap-2">
                                         <!--begin::Input-->
-                                        {{-- <select id="nama" name="nama"
-                                            class="form-select form-select-solid select2-hidden-accessible"
-                                            data-control="select2" data-hide-search="true" data-placeholder="Pilh Nota Rekomendasi..."
-                                            data-select2-id="select2-feature" tabindex="-1" aria-hidden="true">
+                                        <select id="nama_pelanggan" name="nama_pelanggan"
+                                            class="form-select form-select-solid"data-hide-search="false" data-placeholder="Pilh Pelanggan" aria-hidden="true">
                                             <option value="" selected></option>
-                                            <option value="Risiko Rendah">Risiko Rendah</option>
-                                            <option value="Risiko Moderat">Risiko Moderat</option>
-                                            <option value="Risiko Tinggi">Risiko Tinggi</option>
-                                            <option value="Risiko Ekstrem">Risiko Ekstrem</option>
-                                        </select> --}}
-                                        <input type="text" name="nama_pelanggan"
-                                            class="form-control form-control-solid">
+                                            @foreach ($customer as $pelanggan)
+                                            <option value="{{ $pelanggan->id_customer }}">{{ $pelanggan->name }}</option>
+                                            @endforeach
+                                        </select>
+                                        {{-- <input type="text" name="nama_pelanggan"
+                                            class="form-control form-control-solid"> --}}
                                         <!--end::Input-->
                                     </div>
                                 </div>
@@ -346,7 +339,7 @@
 
     <!--begin::Modal Edit Kriteria Green Line-->
     @foreach ($data as $fortune)
-        <div class="modal fade" id="kt_modal_create_penilaian_pengguna_jasa_{{ $fortune->id }}" tabindex="-1"
+        <div class="modal fade" id="kt_modal_edit_fortune_{{ $fortune->id }}" tabindex="-1"
             aria-hidden="true">
             <!--begin::Modal dialog-->
             <div class="modal-dialog modal-dialog-centered mw-600px">
@@ -372,7 +365,7 @@
                     <form action="/master-fortune-rank/{{ $fortune->id }}/edit" method="POST">
                         @csrf
                         <input type="hidden" name="modal"
-                            value="kt_modal_create_penilaian_pengguna_jasa_{{ $fortune->id }}">
+                            value="kt_modal_edit_fortune_{{ $fortune->id }}">
                         <!--begin::Modal body-->
                         <div class="modal-body py-lg-6 px-lg-6">
 
@@ -460,19 +453,16 @@
                                         <!--end::Label-->
                                         <div class="d-flex flex-row gap-2">
                                             <!--begin::Input-->
-                                            {{-- <select id="nama" name="nama"
-                                                class="form-select form-select-solid select2-hidden-accessible"
-                                                data-control="select2" data-hide-search="true" data-placeholder="Pilh Nota Rekomendasi..."
-                                                data-select2-id="select2-feature" tabindex="-1" aria-hidden="true">
+                                            <select id="nama_pelanggan_{{ $fortune->id }}" name="nama_pelanggan"
+                                                class="form-select form-select-solid" data-hide-search="false" data-placeholder="Pilh Pelanggan..." aria-hidden="true">
                                                 <option value="" selected></option>
-                                                <option value="Risiko Rendah">Risiko Rendah</option>
-                                                <option value="Risiko Moderat">Risiko Moderat</option>
-                                                <option value="Risiko Tinggi">Risiko Tinggi</option>
-                                                <option value="Risiko Ekstrem">Risiko Ekstrem</option>
-                                            </select> --}}
-                                            <input type="text" name="nama_pelanggan"
+                                                @foreach ($customer as $pelanggan)
+                                                    <option value="{{ $pelanggan->id_customer }}" {{ $pelanggan->id_customer == $fortune->id_pelanggan ? 'selected' : '' }}>{{ $pelanggan->name }}</option>
+                                                @endforeach
+                                            </select>
+                                            {{-- <input type="text" name="nama_pelanggan"
                                                 class="form-control form-control-solid"
-                                                value="{{ $fortune->nama_pelanggan }}">
+                                                value="{{ $fortune->nama_pelanggan }}"> --}}
                                             <!--end::Input-->
                                         </div>
                                     </div>
@@ -596,6 +586,25 @@
                 }
             }
         }
+    </script>
+
+    <script>
+        function showModal(id) {
+            let modal = document.getElementById('kt_modal_edit_fortune_' + id);
+            $(modal).modal('show');
+            let select2 = document.getElementById('nama_pelanggan_' + id);
+            $(select2).select2({
+                dropdownParent: $(modal)
+            });
+        }
+    </script>
+
+    <script>
+        $(document).ready(function(){
+            $("#nama_pelanggan").select2({
+                dropdownParent: $("#kt_modal_create_fortune_rank")
+            });
+        })
     </script>
 @endsection
 

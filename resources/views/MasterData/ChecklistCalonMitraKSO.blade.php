@@ -236,7 +236,7 @@
                 <!--begin::Modal header-->
                 <div class="modal-header">
                     <!--begin::Modal title-->
-                    <h2>Tambah Kriteria Selection Non Greenlane</h2>
+                    <h2>Tambah Checklist Calon Mitra KSO</h2>
                     <!--end::Modal title-->
                     <!--begin::Close-->
                     <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
@@ -460,7 +460,7 @@
                     <!--begin::Modal header-->
                     <div class="modal-header">
                         <!--begin::Modal title-->
-                        <h2>Edit Kriteria Selection Non Greenlane</h2>
+                        <h2>Edit Checklist Calon Mitra KSO</h2>
                         <!--end::Modal title-->
                         <!--begin::Close-->
                         <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
@@ -574,7 +574,7 @@
                                 </div>
                                 <!--End begin::Col-->
 
-                                <div id="kategori-row-{{ $item->id }}" class="row mb-7 d-none">
+                                <div id="kategori-row-{{ $item->id }}" class="row mb-7 {{ empty($item->kategori) ? "d-none" : '' }}">
                                     <label class="fs-6 fw-bold form-label mt-3">
                                         <span class="required">Kategori</span>
                                     </label>

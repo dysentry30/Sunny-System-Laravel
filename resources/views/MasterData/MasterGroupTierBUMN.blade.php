@@ -3,7 +3,7 @@
 {{-- End::Extend Header --}}
 
 {{-- Begin::Title --}}
-@section('title', 'Master Pefindo')
+@section('title', 'Master Group Tier BUMN')
 {{-- End::Title --}}
 
 <!--begin::Main-->
@@ -43,7 +43,7 @@
                                 data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                                 class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
                                 <!--begin::Title-->
-                                <h1 class="d-flex align-items-center fs-3 my-1">Master Pefindo
+                                <h1 class="d-flex align-items-center fs-3 my-1">Master Group Tier BUMN
                                 </h1>
                                 <!--end::Title-->
                             </div>
@@ -54,9 +54,10 @@
                                 <div class="d-flex align-items-center py-1">
 
                                     <!--begin::Button-->
-                                    <a href="#" data-bs-target="#kt_modal_create_pefindo" data-bs-toggle="modal"
-                                        class="btn btn-sm btn-primary py-3" style="background-color:#008CB4; padding: 6px">
-                                        Tambah Pefindo</a>
+                                    <a href="#" data-bs-target="#kt_modal_create_group_tier"
+                                        data-bs-toggle="modal" class="btn btn-sm btn-primary py-3"
+                                        style="background-color:#008CB4; padding: 6px">
+                                        Tambah Group Tier BUMN</a>
 
                                 </div>
                                 <!--end::Actions-->
@@ -97,8 +98,8 @@
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0 bg-primary">
                                         <th class="min-w-auto text-white">No.</th>
                                         <th class="min-w-auto text-white">Nama Pelanggan</th>
-                                        <th class="min-w-auto text-white">Score</th>
-                                        <th class="min-w-auto text-white">File</th>
+                                        <th class="min-w-auto text-white">Instansi</th>
+                                        <th class="min-w-auto text-white">Kategori</th>
                                         <th class="min-w-auto text-white">Action</th>
                                     </tr>
                                     <!--end::Table row-->
@@ -111,63 +112,14 @@
                                 @endphp
                                 <tbody class="fw-bold text-gray-600">
                                     @foreach ($data as $item)
-                                        @php
-                                            switch ($item->bulan) {
-                                                case 1:
-                                                    $periode = 'Januari';
-                                                    break;
-                                                case 2:
-                                                    $periode = 'Februari';
-                                                    break;
-                                                case 3:
-                                                    $periode = 'Maret';
-                                                    break;
-                                                case 4:
-                                                    $periode = 'April';
-                                                    break;
-                                                case 5:
-                                                    $periode = 'Mei';
-                                                    break;
-                                                case 6:
-                                                    $periode = 'Juni';
-                                                    break;
-                                                case 7:
-                                                    $periode = 'Juli';
-                                                    break;
-                                                case 8:
-                                                    $periode = 'Agustus';
-                                                    break;
-                                                case 9:
-                                                    $periode = 'September';
-                                                    break;
-                                                case 10:
-                                                    $periode = 'Oktober';
-                                                    break;
-                                                case 11:
-                                                    $periode = 'November';
-                                                    break;
-                                                case 12:
-                                                    $periode = 'Desember';
-                                                    break;
-
-                                                default:
-                                                    $periode = '-';
-                                                    break;
-                                            }
-                                        @endphp
                                         <tr>
                                             <td class="text-center align-middle">{{ $no++ }}</td>
                                             <td class="align-middle">{{ $item->nama_pelanggan }}</td>
-                                            <td class="text-center align-middle">{{ $item->score }}</td>
-                                            <td class="text-center align-middle"><a target="_blank"
-                                                    href="{{ asset('pefindo/' . $item->id_document) }}"
-                                                    class="text-hover-primary">{{ $item->id_document }}</a></td>
+                                            <td class="text-center align-middle">BUMN</td>
+                                            <td class="text-center align-middle">{{ $item->kategori }}</td>
                                             <td class="text-center align-middle">
                                                 <div class="d-flex justify-content-center">
-                                                    {{-- <a href="#"
-                                                        data-bs-target="#kt_modal_edit_lq_rank_{{ $item->id }}"
-                                                        data-bs-toggle="modal" class="btn btn-sm btn-primary text-white"
-                                                        style="background-color: #008CB4;">Edit</a> --}}
+                                                    <button class="btn btn-sm btn-primary text-white" style="background-color: #008CB4;" onclick="showModal('{{ $item->id }}')">Edit</button>
                                                     <button type="button" class="btn btn-sm btn-danger text-white"
                                                         onclick="deleteItem('{{ $item->id }}')">Delete</button>
                                                 </div>
@@ -202,7 +154,7 @@
     <!--end::Root-->
 
     <!--begin::Modal Tambah Kriteria Green Line-->
-    <div class="modal fade" id="kt_modal_create_pefindo" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="kt_modal_create_group_tier" tabindex="-1" aria-hidden="true">
         <!--begin::Modal dialog-->
         <div class="modal-dialog modal-dialog-centered mw-600px">
             <!--begin::Modal content-->
@@ -210,7 +162,7 @@
                 <!--begin::Modal header-->
                 <div class="modal-header">
                     <!--begin::Modal title-->
-                    <h2>Tambah Pefindo</h2>
+                    <h2>Tambah Group Tier</h2>
                     <!--end::Modal title-->
                     <!--begin::Close-->
                     <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
@@ -224,15 +176,16 @@
                 </div>
                 <!--end::Modal header-->
 
-                <form action="/master-pefindo/save" method="POST" enctype="multipart/form-data">
+                <form action="/master-group-tier/save" method="POST">
                     @csrf
-                    <input type="hidden" name="modal" value="kt_modal_create_pefindo">
+                    <input type="hidden" name="modal" value="kt_modal_create_otomasi_approval">
                     <!--begin::Modal body-->
                     <div class="modal-body py-lg-6 px-lg-6">
 
 
                         <!--begin::Row Kanan+Kiri-->
                         <div class="row fv-row">
+
                             <!--begin::Col-->
                             <div class="">
                                 <!--begin::Input group Website-->
@@ -245,13 +198,14 @@
                                     <div class="d-flex flex-row gap-2">
                                         <!--begin::Input-->
                                         <select id="nama_pelanggan" name="nama_pelanggan"
-                                            class="form-select form-select-solid" data-hide-search="false" data-placeholder="Pilh Pelanggan..." aria-hidden="true">
+                                            class="form-select form-select-solid"data-hide-search="false" data-placeholder="Pilh Pelanggan" aria-hidden="true">
                                             <option value="" selected></option>
                                             @foreach ($customer as $pelanggan)
-                                                <option value="{{ $pelanggan->id_customer }}">{{ $pelanggan->name }}</option>
+                                            <option value="{{ $pelanggan->id_customer }}">{{ $pelanggan->name }}</option>
                                             @endforeach
                                         </select>
-                                        {{-- <input type="text" name="nama_pelanggan" class="form-control form-control-solid"> --}}
+                                        {{-- <input type="text" name="nama_pelanggan"
+                                            class="form-control form-control-solid"> --}}
                                         <!--end::Input-->
                                     </div>
                                 </div>
@@ -261,16 +215,17 @@
 
                             <div class="">
                                 <label class="fs-6 fw-bold form-label mt-3">
-                                    <span class="required">Score</span>
+                                    <span class="required">Kategori</span>
                                 </label>
-                                <input type="number" name="score" class="form-control form-control-solid">
-                            </div>
-
-                            <div class="">
-                                <label class="fs-6 fw-bold form-label mt-3">
-                                    <span class="required">Upload File</span>
-                                </label>
-                                <input type="file" name="file" class="form-control form-control-solid">
+                                <!--Input-->
+                                <select id="kategori" name="kategori"
+                                    class="form-select form-select-solid"data-hide-search="false" data-placeholder="Pilh Kategori" aria-hidden="true">
+                                    <option value="" selected></option>
+                                    <option value="Tier A">Tier A</option>
+                                    <option value="Tier B">Tier B</option>
+                                    <option value="Tier C">Tier C</option>
+                                </select>
+                                <!--Input-->
                             </div>
                         </div>
                         <!--End::Row Kanan+Kiri-->
@@ -291,8 +246,8 @@
     <!--end::Modal Tambah Kriteria Green Line-->
 
     <!--begin::Modal Edit Kriteria Green Line-->
-    {{-- @foreach ($data as $pefindo)
-        <div class="modal fade" id="kt_modal_edit_lq_rank_{{ $pefindo->id }}" tabindex="-1"
+    @foreach ($data as $item)
+        <div class="modal fade" id="kt_modal_edit_group_{{ $item->id }}" tabindex="-1"
             aria-hidden="true">
             <!--begin::Modal dialog-->
             <div class="modal-dialog modal-dialog-centered mw-600px">
@@ -301,7 +256,7 @@
                     <!--begin::Modal header-->
                     <div class="modal-header">
                         <!--begin::Modal title-->
-                        <h2>Edit Pefindo</h2>
+                        <h2>Edit Group Tier</h2>
                         <!--end::Modal title-->
                         <!--begin::Close-->
                         <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
@@ -315,10 +270,10 @@
                     </div>
                     <!--end::Modal header-->
 
-                    <form action="/master-lq-rank/{{ $lq->id }}/edit" method="POST">
+                    <form action="/master-group-tier/{{ $item->id }}/edit" method="POST">
                         @csrf
                         <input type="hidden" name="modal"
-                            value="kt_modal_edit_lq_rank_{{ $lq->id }}">
+                            value="kt_modal_edit_group_{{ $item->id }}">
                         <!--begin::Modal body-->
                         <div class="modal-body py-lg-6 px-lg-6">
 
@@ -331,84 +286,21 @@
                                     <div class="fv-row mb-7">
                                         <!--begin::Label-->
                                         <label class="fs-6 fw-bold form-label mt-3">
-                                            <span class="required">Periode</span>
-                                        </label>
-                                        @php
-                                            $tahun = (int) date('Y');
-                                        @endphp
-                                        <!--end::Label-->
-                                        <div class="d-flex flex-row gap-2">
-                                            <!--begin::Input-->
-                                            <select id="bulan_{{ $lq->id }}" name="bulan"
-                                                class="form-select form-select-solid select2-hidden-accessible"
-                                                data-control="select2" data-hide-search="true"
-                                                data-placeholder="Pilh Bulan..."
-                                                data-select2-id="select2-bulan_{{ $lq->id }}" tabindex="-1"
-                                                aria-hidden="true">
-                                                <option value="1" {{ $lq->bulan == '1' ? 'selected' : '' }}>
-                                                    Januari</option>
-                                                <option value="2" {{ $lq->bulan == '2' ? 'selected' : '' }}>
-                                                    Februari</option>
-                                                <option value="3" {{ $lq->bulan == '3' ? 'selected' : '' }}>
-                                                    Maret</option>
-                                                <option value="4" {{ $lq->bulan == '4' ? 'selected' : '' }}>
-                                                    April</option>
-                                                <option value="5" {{ $lq->bulan == '5' ? 'selected' : '' }}>Mei
-                                                </option>
-                                                <option value="6" {{ $lq->bulan == '6' ? 'selected' : '' }}>Juni
-                                                </option>
-                                                <option value="7" {{ $lq->bulan == '7' ? 'selected' : '' }}>Juli
-                                                </option>
-                                                <option value="8" {{ $lq->bulan == '8' ? 'selected' : '' }}>
-                                                    Agustus</option>
-                                                <option value="9" {{ $lq->bulan == '9' ? 'selected' : '' }}>
-                                                    September</option>
-                                                <option value="10" {{ $lq->bulan == '10' ? 'selected' : '' }}>
-                                                    Oktober</option>
-                                                <option value="11" {{ $lq->bulan == '11' ? 'selected' : '' }}>
-                                                    November</option>
-                                                <option value="12" {{ $lq->bulan == '12' ? 'selected' : '' }}>
-                                                    Desember</option>
-                                            </select>
-                                            <!--end::Input-->
-                                            <!--begin::Input-->
-                                            <select id="tahun_{{ $lq->id }}" name="tahun"
-                                                class="form-select form-select-solid select2-hidden-accessible"
-                                                data-control="select2" data-hide-search="true"
-                                                data-placeholder="Pilh Tahun..."
-                                                data-select2-id="select2_tahun_{{ $lq->id }}" tabindex="-1"
-                                                aria-hidden="true">
-                                                <option value="" selected></option>
-                                                @foreach (range(1, 2) as $thn)
-                                                    <option value="{{ $tahun }}"
-                                                        {{ !empty($lq->tahun) && $lq->tahun == $tahun ? 'selected' : '' }}>
-                                                        {{ $tahun }}</option>
-                                                    @php
-                                                        $tahun++;
-                                                    @endphp
-                                                @endforeach
-                                            </select>
-                                            <!--end::Input-->
-                                        </div>
-                                    </div>
-                                    <!--end::Input group-->
-                                </div>
-                                <!--End begin::Col-->
-
-                                <!--begin::Col-->
-                                <div class="">
-                                    <!--begin::Input group Website-->
-                                    <div class="fv-row mb-7">
-                                        <!--begin::Label-->
-                                        <label class="fs-6 fw-bold form-label mt-3">
                                             <span class="required">Nama Pelanggan</span>
                                         </label>
                                         <!--end::Label-->
                                         <div class="d-flex flex-row gap-2">
                                             <!--begin::Input-->
-                                            <input type="text" name="nama_pelanggan"
+                                            <select id="nama_pelanggan_{{ $item->id }}" name="nama_pelanggan"
+                                                class="form-select form-select-solid" data-hide-search="false" data-placeholder="Pilh Pelanggan..." aria-hidden="true">
+                                                <option value="" selected></option>
+                                                @foreach ($customer as $pelanggan)
+                                                    <option value="{{ $pelanggan->id_customer }}" {{ $pelanggan->id_customer == $item->id_pelanggan ? 'selected' : '' }}>{{ $pelanggan->name }}</option>
+                                                @endforeach
+                                            </select>
+                                            {{-- <input type="text" name="nama_pelanggan"
                                                 class="form-control form-control-solid"
-                                                value="{{ $lq->nama_pelanggan }}">
+                                                value="{{ $item->nama_pelanggan }}"> --}}
                                             <!--end::Input-->
                                         </div>
                                     </div>
@@ -418,10 +310,17 @@
 
                                 <div class="">
                                     <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Urutan</span>
+                                        <span class="required">Kategori</span>
                                     </label>
-                                    <input type="number" name="urutan" class="form-control form-control-solid"
-                                        min="0" max="100" value="{{ $lq->urutan }}">
+                                    <!--Input-->
+                                    <select id="kategori_{{ $item->id }}" name="kategori"
+                                        class="form-select form-select-solid"data-hide-search="false" data-placeholder="Pilh Kategori" aria-hidden="true">
+                                        <option value="" selected></option>
+                                        <option value="Tier A" {{ $item->kategori == "Tier A" ? "selected" : "" }}>Tier A</option>
+                                        <option value="Tier B" {{ $item->kategori == "Tier B" ? "selected" : "" }}>Tier B</option>
+                                        <option value="Tier C" {{ $item->kategori == "Tier C" ? "selected" : "" }}>Tier C</option>
+                                    </select>
+                                    <!--Input-->
                                 </div>
                             </div>
                             <!--End::Row Kanan+Kiri-->
@@ -439,9 +338,13 @@
             </div>
             <!--end::Modal dialog-->
         </div>
-    @endforeach --}}
+    @endforeach
     <!--end::Modal Edit Kriteria Green Line-->
 
+
+    {{-- <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script> --}}
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
@@ -475,7 +378,7 @@
                     try {
                         const formData = new FormData();
                         formData.append("_token", "{{ csrf_token() }}");
-                        const req = await fetch(`{{ url('/master-pefindo/${id}/delete') }}`, {
+                        const req = await fetch(`{{ url('/master-group-tier/${id}/delete') }}`, {
                             method: 'POST',
                             header: {
                                 "content-type": "application/json",
@@ -529,10 +432,29 @@
             }
         }
     </script>
+
+    <script>
+        function showModal(id) {
+            let modal = document.getElementById('kt_modal_edit_group_' + id);
+            $(modal).modal('show');
+            let select2 = document.getElementById('nama_pelanggan_' + id);
+            let select2Kategori = document.getElementById('kategori_' + id);
+            $(select2).select2({
+                dropdownParent: $(modal)
+            });
+            $(select2Kategori).select2({
+                dropdownParent: $(modal)
+            });
+        }
+    </script>
+
     <script>
         $(document).ready(function(){
             $("#nama_pelanggan").select2({
-                dropdownParent: $("#kt_modal_create_pefindo")
+                dropdownParent: $("#kt_modal_create_group_tier")
+            });
+            $("#kategori").select2({
+                dropdownParent: $("#kt_modal_create_group_tier")
             });
         })
     </script>

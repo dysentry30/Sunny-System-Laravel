@@ -38,6 +38,8 @@ use App\Models\DokumenItbTor;
 use App\Models\DokumenMou;
 use App\Models\DokumenNda;
 use App\Models\DokumenPefindo;
+use App\Models\MasterPefindo;
+use App\Models\DokumenNotaRekomendasi1;
 use App\Models\KriteriaPasarProyek;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
@@ -383,7 +385,20 @@ class ProyekController extends Controller
         $pesertatender = PesertaTender::where("kode_proyek", "=", $kode_proyek)->get();
         $proyekberjalans = ProyekBerjalans::where("kode_proyek", "=", $kode_proyek)->get()->first();
         $departemen = Departemen::where("kode_divisi", "=", $proyek->UnitKerja->kode_sap)->get();
-        $konsultan_perencana = KonsultanPerencana::all();
+        if ($proyek->tipe_proyek == "P") {
+            $konsultan_perencana = KonsultanPerencana::all();
+            $pefindo = null;
+            if (!empty($proyek->proyekBerjalan?->customer) || $proyek->proyekBerjalan?->customer->isNotEmpty()) {
+                $customer = $proyek->proyekBerjalan->customer;
+                $findPefindo = MasterPefindo::where('id_pelanggan', $customer->id_customer)->first();
+                if (!empty($findPefindo)) {
+                    $pefindo = $findPefindo;
+                } else {
+                    $pefindo = null;
+                }
+            }
+            // dd($pefindo);
+        }
         // $historyForecast = $historyForecast;
         // $porsiJO = $porsiJO;
         // $data_negara = $data_negara;
@@ -393,7 +408,7 @@ class ProyekController extends Controller
             return view(
                 'Proyek/viewProyek',
                 ["proyek" => $proyek, "proyeks" => Proyek::all()],
-                compact(['companies', 'sumberdanas', 'dops', 'sbus', 'unitkerjas', 'customers', 'users', 'kriteriapasar', 'kriteriapasarproyek', 'teams', 'pesertatender', 'proyekberjalans', 'historyForecast', 'porsiJO', 'data_negara', 'mataUang', "provinsi", "departemen", "konsultan_perencana"])
+                compact(['companies', 'sumberdanas', 'dops', 'sbus', 'unitkerjas', 'customers', 'users', 'kriteriapasar', 'kriteriapasarproyek', 'teams', 'pesertatender', 'proyekberjalans', 'historyForecast', 'porsiJO', 'data_negara', 'mataUang', "provinsi", "departemen", "konsultan_perencana", "pefindo"])
                 // [
                 //     'companies' => Company::all(),
                 //     'sumberdanas' => SumberDana::all(),
@@ -831,6 +846,9 @@ class ProyekController extends Controller
             }
 
             if ($newProyek->save()) {
+                if (isset($dataProyek["dokumen-nota-rekomendasi-1"])) {
+                    self::uploadDokumenNotaRekomendasi1($dataProyek["dokumen-nota-rekomendasi-1"], $kode_proyek);
+                }
                 if (isset($dataProyek["dokumen-consent-npwp"])) {
                     self::uploadDokumenConsentNPWP($dataProyek["dokumen-consent-npwp"], $kode_proyek);
                 }
@@ -1138,6 +1156,33 @@ class ProyekController extends Controller
         File::delete($files);
         $delete->delete();
         Alert::success("Success", "Risk Tender Berhasil Dihapus");
+        return redirect()->back();
+    }
+
+    private function uploadDokumenNotaRekomendasi1(UploadedFile $uploadedFile, $kode_proyek)
+    {
+        // $faker = new Uuid();
+        $dokumen = new DokumenNotaRekomendasi1();
+        $file_name = $uploadedFile->getClientOriginalName();
+        $id_document = date("dmYHis_") . str_replace(" ", "-", $file_name);
+        $nama_document = $file_name;
+        // dd($uploadedFile);
+        // $nama_document = date("His_") . substr($uploadedFile->getClientOriginalName(), 0, strlen($uploadedFile->getClientOriginalName()) - 5);
+        // moveFileTemp($uploadedFile, $id_document);
+        $dokumen->nama_dokumen = $nama_document;
+        $dokumen->id_document = $id_document;
+        $dokumen->kode_proyek = $kode_proyek;
+        // dd($dokumen);
+        $uploadedFile->move(public_path('dokumen-nota-rekomendasi'), $id_document);
+        $dokumen->save();
+    }
+
+    public function deleteNotaRekomendasi1($id)
+    {
+        $delete = DokumenNotaRekomendasi1::find($id);
+        File::delete(public_path(public_path("dokumen-nota-rekomendasi/$delete->id_document")));
+        $delete->delete();
+        Alert::success("Success", "Dokumen Nota Rekomendasi 1 Berhasil Dihapus");
         return redirect()->back();
     }
 

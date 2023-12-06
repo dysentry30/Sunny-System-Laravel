@@ -61,6 +61,7 @@ use App\Models\ContractChangeProposal;
 use App\Models\FieldChange;
 use App\Models\IndustrySector;
 use App\Models\ClaimManagements;
+use App\Models\Customer;
 use App\Models\Departemen;
 use App\Models\Divisi;
 use App\Models\Dop;
@@ -73,6 +74,7 @@ use App\Models\LegalitasPerusahaan;
 use App\Models\MasterFortuneRank;
 use App\Models\MasterLQRank;
 use App\Models\MasterPefindo;
+use App\Models\MasterGrupTierBUMN;
 use App\Models\MataUang;
 use App\Models\MatriksApprovalRekomendasi;
 use App\Models\Pegawai;
@@ -855,6 +857,9 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     // DELETE KONSULTAN PERENCANA 
     Route::delete('proyek/konsultan-perencana/{id}/delete', [ProyekController::class, 'deleteKonsultan']);
+
+    // DELETE Dokumen Nota Rekomendasi 1 
+    Route::delete('proyek/dokumen-nota-rekomendasi-1/{id}/delete', [ProyekController::class, 'deleteNotaRekomendasi1']);
 
     // DELETE Dokumen Prakualifikasi
     Route::delete('proyek/dokumen-prakualifikasi/{id}/delete', [ProyekController::class, 'deleteDokumenPrakualifikasi']);
@@ -2905,7 +2910,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     //Begin::Master Fortune Rank
     Route::get('/master-fortune-rank', function (Request $request) {
-        return view('MasterData/FortuneRank', ['data' => MasterFortuneRank::all()]);
+        return view('MasterData/FortuneRank', ['customer' => Customer::all(), 'data' => MasterFortuneRank::all()]);
     });
     Route::post('/master-fortune-rank/save', function (Request $request) {
         $data = $request->all();
@@ -2913,8 +2918,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             "required" => "Field di atas wajib diisi",
         ];
         $rules = [
-                "nama_pelanggan" => 'required|string',
-                "urutan" => 'required|integer|min:1|max:100',
+            "nama_pelanggan" => 'required|string',
+            "urutan" => 'required|integer|min:1|max:100',
             ];
         $validation = Validator::make(
             $data,
@@ -2946,9 +2951,12 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         }
 
         $validation->validate();
-        // dd($data);
+
+        $pelanggan = Customer::find($data['nama_pelanggan']);
+
         $fortune = new MasterFortuneRank();
-        $fortune->nama_pelanggan = $data['nama_pelanggan'];
+        $fortune->id_pelanggan = $pelanggan->id_customer;
+        $fortune->nama_pelanggan = $pelanggan->name;
         $fortune->urutan = (int)$data["urutan"];
         $fortune->bulan = $data["bulan"];
         $fortune->tahun = $data["tahun"];
@@ -2999,9 +3007,12 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         }
 
         $validation->validate();
-        // dd($data);
+
+        $pelanggan = Customer::find($data['nama_pelanggan']);
+
         $fortune = MasterFortuneRank::find($id);
-        $fortune->nama_pelanggan = $data['nama_pelanggan'];
+        $fortune->id_pelanggan = $pelanggan->id_customer;
+        $fortune->nama_pelanggan = $pelanggan->name;
         $fortune->urutan = (int)$data["urutan"];
         $fortune->bulan = $data["bulan"];
         $fortune->tahun = $data["tahun"];
@@ -3040,7 +3051,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     //Begin::Master LQ Rank
     Route::get('/master-lq-rank', function (Request $request) {
-        return view('MasterData/LQRank', ['data' => MasterLQRank::all()]);
+        return view('MasterData/LQRank', ['customer' => Customer::all(), 'data' => MasterLQRank::all()]);
     });
     Route::post('/master-lq-rank/save', function (Request $request) {
         $data = $request->all();
@@ -3082,8 +3093,11 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
         $validation->validate();
         // dd($data);
+        $pelanggan = Customer::find($data['nama_pelanggan']);
+
         $lqRank = new MasterLQRank();
-        $lqRank->nama_pelanggan = $data['nama_pelanggan'];
+        $lqRank->id_pelanggan = $pelanggan->id_customer;
+        $lqRank->nama_pelanggan = $pelanggan->name;
         $lqRank->urutan = (int)$data["urutan"];
         $lqRank->bulan = $data["bulan"];
         $lqRank->tahun = $data["tahun"];
@@ -3135,8 +3149,10 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
         $validation->validate();
         // dd($data);
+        $pelanggan = Customer::find($data['nama_pelanggan']);
         $lq = MasterLQRank::find($id);
-        $lq->nama_pelanggan = $data['nama_pelanggan'];
+        $lq->nama_pelanggan = $pelanggan->id_customer;
+        $lq->nama_pelanggan = $pelanggan->name;
         $lq->urutan = (int)$data["urutan"];
         $lq->bulan = $data["bulan"];
         $lq->tahun = $data["tahun"];
@@ -3175,7 +3191,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     //Begin::Master LQ Rank
     Route::get('/master-pefindo', function (Request $request) {
-        return view('MasterData/MasterPefindo', ['data' => MasterPefindo::all()]);
+        return view('MasterData/MasterPefindo', ['customer' => Customer::all(), 'data' => MasterPefindo::all()]);
     });
     Route::post('/master-pefindo/save', function (Request $request) {
         $data = $request->all();
@@ -3226,9 +3242,10 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $validation->validate();
         $file = $request->file("file");
         $id_document = date("His_") . str_replace(' ', '_', $file->getClientOriginalName());
-
+        $pelanggan = Customer::find($data['nama_pelanggan']);
         $pefindo = new MasterPefindo();
-        $pefindo->nama_pelanggan = $data['nama_pelanggan'];
+        $pefindo->id_pelanggan = $pelanggan->id_customer;
+        $pefindo->nama_pelanggan = $pelanggan->name;
         $pefindo->score = (int)$data["score"];
         $pefindo->id_document = $id_document;
 
@@ -3312,7 +3329,144 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             "Message" => "Data Berhasil Dihapus"
         ]);
     });
-    //End::Master LQ Rank
+    //End::Master Pefindo
+
+    //Begin::Master Group Tier
+    Route::get('/master-group-tier', function (Request $request) {
+        $customer = Customer::select(['id_customer', 'name', 'jenis_instansi'])->where('jenis_instansi', 'BUMN')->get();
+        return view('MasterData/MasterGroupTierBUMN', ['customer' => $customer, 'data' => MasterGrupTierBUMN::all()]);
+    });
+    Route::post('/master-group-tier/save', function (Request $request) {
+        $data = $request->all();
+        $messages = [
+            "required" => "Field di atas wajib diisi",
+        ];
+        $rules = [
+                "nama_pelanggan" => 'required|string',
+                "kategori" => 'required|string',
+            ];
+        $validation = Validator::make(
+            $data,
+            $rules,
+            $messages
+        );
+
+        if ($validation->fails()) {
+            $error = collect($validation->errors());
+            if ($error->has("kategori")) {
+                Alert::error(
+                    'Error',
+                    "Kategori wajib diisi. Periksa Kembali!"
+                );
+                return redirect()->back();
+            } elseif ($error->has("nama_pelanggan")) {
+                Alert::error(
+                    'Error',
+                    "Nama Pelanggan wajib diisi. Periksa Kembali!"
+                );
+                return redirect()->back();
+            } else {
+                Alert::error(
+                    'Error',
+                    "LQ Rank gagal ditambahkan. Periksa Kembali!"
+                );
+                return redirect()->back();
+            }
+        }
+
+        $validation->validate();
+        // dd($data);
+        $pelanggan = Customer::find($data['nama_pelanggan']);
+
+        $groupTier = new MasterGrupTierBUMN();
+        $groupTier->id_pelanggan = $pelanggan->id_customer;
+        $groupTier->nama_pelanggan = $pelanggan->name;
+        $groupTier->kategori = $data["kategori"];
+
+        if ($groupTier->save()) {
+            Alert::success('Success', "Group Tier BUMN Berhasil Ditambahkan");
+            return redirect()->back();
+        }
+        Alert::error('Error', "Group Tier BUMN Gagal Ditambahkan");
+        return redirect()->back();
+    });
+    Route::post('/master-group-tier/{id}/edit', function (Request $request, $id) {
+        $data = $request->all();
+        $messages = [
+            "required" => "Field di atas wajib diisi",
+        ];
+        $rules = [
+                "nama_pelanggan" => 'required|string',
+                "kategori" => 'required|string',
+            ];
+        $validation = Validator::make(
+            $data,
+            $rules,
+            $messages
+        );
+
+        if ($validation->fails()) {
+            $error = collect($validation->errors());
+            if ($error->has("kategori")) {
+                Alert::error(
+                    'Error',
+                    "Kategori wajib diisi. Periksa Kembali!"
+                );
+                return redirect()->back();
+            } elseif ($error->has("nama_pelanggan")) {
+                Alert::error(
+                    'Error',
+                    "Nama Pelanggan wajib diisi. Periksa Kembali!"
+                );
+                return redirect()->back();
+            } else {
+                Alert::error(
+                    'Error',
+                    "Fortune Rank gagal ditambahkan. Periksa Kembali!"
+                );
+                return redirect()->back();
+            }
+        }
+
+        $validation->validate();
+        // dd($data);
+        $pelanggan = Customer::find($data['nama_pelanggan']);
+        $groupTier = MasterGrupTierBUMN::find($id);
+        $groupTier->nama_pelanggan = $pelanggan->id_customer;
+        $groupTier->nama_pelanggan = $pelanggan->name;
+        $groupTier->kategori = $data["kategori"];
+
+        if ($groupTier->save()) {
+            Alert::success('Success', "Group Tier BUMN Berhasil Diubah");
+            return redirect()->back();
+        }
+        Alert::error('Error', "Group Tier BUMN Diubah");
+        return redirect()->back();
+    });
+    Route::post('/master-group-tier/{tier}/delete', function (MasterGrupTierBUMN $tier) {
+        if (empty($tier)) {
+            Alert::success("Error", "Group Tier BUMN Tidak Ditemukan");
+            return redirect()->back();
+        }
+
+        if ($tier->delete()) {
+            // Alert::success('Success', "Checklist Calon Mitra KSO Berhasil Dihapus");
+            // return redirect()->back();
+
+            return response()->json([
+                "Success" => true,
+                "Message" => "Group Tier BUMN Berhasil Dihapus"
+            ]);
+        }
+
+        // Alert::error('Error', "Checklist Calon Mitra KSO Gagal Dihapus");
+        // return redirect()->back();
+        return response()->json([
+            "Success" => false,
+            "Message" => "Group Tier BUMN Gagal Dihapus"
+        ]);
+    });
+    //End::Master Group Tier
 
     // begin RKAP
     Route::get('/rkap', function () {
