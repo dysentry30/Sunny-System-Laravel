@@ -327,6 +327,7 @@
                             str_contains(Request::Path(), 'master-fortune-rank') ||
                             str_contains(Request::Path(), 'master-lq-rank') ||
                             str_contains(Request::Path(), 'master-pefindo') ||
+                            str_contains(Request::Path(), 'master-group-tier') ||
                             // str_contains(Request::Path(), 'instansi') ||
                             str_contains(Request::Path(), 'team-proyek') ? 'background-color:#008CB4' : '' }}">
 
@@ -919,6 +920,23 @@
                                                 <!--end::Svg Icon-->
                                             </span>
                                             <span class="menu-title" style="font-size: 16px; padding-left: 10px">Master Pefindo</span>
+                                        </a>
+                                    </div>
+                                    <!--end::Menu Colapse-->
+                                    @endif
+                                    
+                                    @if (auth()->user()->check_administrator)
+                                    <!--begin::Menu Colapse-->
+                                    <div id="#kt_aside_menu" data-kt-menu="true"
+                                        style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'master-group-tier' ? 'background-color:#008CB4' : '' }}">
+                                        <a class="menu-link " href="/master-group-tier" style="color:white; padding-left:20px;">
+                                            <span class="menu-icon">
+                                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                                {{-- <i class="bi bi-buildings text-white"></i> --}}
+                                                <i class="bi bi-collection-fill text-white" style="font-size: 20px"></i>
+                                                <!--end::Svg Icon-->
+                                            </span>
+                                            <span class="menu-title" style="font-size: 16px; padding-left: 10px">Group Tier BUMN</span>
                                         </a>
                                     </div>
                                     <!--end::Menu Colapse-->
